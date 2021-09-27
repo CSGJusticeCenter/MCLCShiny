@@ -7,16 +7,19 @@
 #    User interface for R Shiny app
 #######################################
 
-##################################
-
+#######################################
+#######################################
 # User Interface
-
-##################################
+#######################################
+#######################################
 
 # Define UI
 ui <- fluidPage(theme = shinytheme("cosmo"),
                 navbarPage(
                   
+                  ###############
+                  # 1) Main Page
+                  ###############
                   "More Community, Less Confinement",
                   tabPanel("About", 
                            
@@ -27,6 +30,9 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                            
                            ),#tabPanel
                   
+                  ###############
+                  # 2) Data Table Page
+                  ###############
                   tabPanel("Data Table", 
                            
                              titlePanel("Data Table"),
@@ -37,26 +43,26 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                       selectInput("states",
                                                   "states:",
                                                   c("All",
-                                                    unique(as.character(mclc$states))))
-                               ),
+                                                    unique(as.character(mclc$states))))),
                                column(4,
                                       selectInput("year",
                                                   "year:",
                                                   c("All",
-                                                    unique(as.character(mclc$year))))
-                               ),
+                                                    unique(as.character(mclc$year))))),
                                column(4,
                                       selectInput("metric",
                                                   "metric:",
                                                   c("All",
-                                                    unique(as.character(mclc$metric))))
-                               )
-                             ),
-                             # Create a new row for the table.
+                                                    unique(as.character(mclc$metric)))))
+                             ), #fluidRow
+                             # create table
                              DT::dataTableOutput("table")
                            
                            ),#tabPanel
                   
+                  ###############
+                  # 3) Map Page 
+                  ###############
                   tabPanel("Map", 
                            
                            "This panel is intentionally left blank"
@@ -66,10 +72,26 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                 ) #navbarPage
 ) #fluidPage
 
-# Define server function  
-server <- function(input, output) {
 
-    # Filter data based on selections
+
+#######################################
+#######################################
+# Server
+#######################################
+#######################################
+
+server <- function(input, output) {
+  
+    ###############
+    # 1) Main Page
+    ###############
+  
+    # no code needed
+
+    ###############
+    # 2) Data Table
+    ###############
+    # filter data based on selections
     output$table <- DT::renderDataTable(DT::datatable({
       data <- mclc
       if (input$states != "All") {
@@ -83,8 +105,21 @@ server <- function(input, output) {
       }
       data
     }))
-  
+    
+    ###############
+    # 3) Map
+    ###############
+    
+    # no code needed
 }
 
+
+
+
+#######################################
+#######################################
 # Create Shiny object
+#######################################
+#######################################
+
 shinyApp(ui = ui, server = server)
