@@ -32,7 +32,19 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                   ###############
                   tabPanel("Dashboard", 
                            
+                           #A. Select state
+                           selectInput(inputId = "state", label = "Select State", choices = unique(adm_pop_long$states)),
+                           verbatimTextOutput("state_choice"),
                            
+                           #B. Select adm or pop for plot
+                           selectInput(inputId = "adm_or_pop", label="Admissions or Population", choices = unique(adm_pop_long$adm_or_pop)),
+                           
+                           #C. select metric for plot
+                           selectInput(inputId = "metric", label="Data", unique(adm_pop_long$metric)),
+                           
+                           #D. "Change from 2018-2020", br(), 
+                           plotOutput("barchart")
+                          
                   ), #tabPanel
                   
                   ###############
@@ -42,26 +54,8 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                            
                            titlePanel("View Data"),
                            
-                           # Create a new Row in the UI for selectInputs
-                           fluidRow(
-                             column(4,
-                                    selectInput("states",
-                                                "states:",
-                                                c("All",
-                                                  unique(as.character(mclc$states))))),
-                             column(4,
-                                    selectInput("year",
-                                                "year:",
-                                                c("All",
-                                                  unique(as.character(mclc$year))))),
-                             column(4,
-                                    selectInput("metric",
-                                                "metric:",
-                                                c("All",
-                                                  unique(as.character(mclc$metric)))))
-                           ), #fluidRow
                            # create table
-                           DT::dataTableOutput("table")
+                           DTOutput('table')
                            
                   ),#tabPanel
                   
@@ -76,30 +70,40 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                              # Sidebar panel for inputs 
                              sidebarPanel(
                                
-                               titlePanel("Desired Characteristics"),
+                               titlePanel("Select Data"),
                                
                                #####
-                               # 4b) choose metric
+                               # 4a) Choose state
                                #####
-                               selectInput(inputId = "metric",
-                                           label = "Data Type",
-                                           choices = list("Total Admissions" = "total_admissions", "Total Population" = "total_population")),
-
+                               selectizeInput(
+                                 "stateInput", 'State', choices = "", multiple = FALSE,
+                                 options = list(
+                                   placeholder = 'Please select a state from below')
+                               ),
+                               
+                               #####
+                               # 4b) Choose year
+                               #####
+                               selectInput("yearInput", label = h3("Year"),
+                                           choices = c("2018",
+                                                       "2019",
+                                                       "2020"))
+                               
                              ), #sidebarPanel
                              
                              # Main panel for displaying outputs
                              mainPanel(
                                
-                               # hide errors
-                               tags$style(type = "text/css",
-                                          ".shiny-output-error { visibility: hidden; }",
-                                          ".shiny-output-error:before { visibility: hidden; }"),
+                               # # hide errors
+                               # tags$style(type = "text/css",
+                               #            ".shiny-output-error { visibility: hidden; }",
+                               #            ".shiny-output-error:before { visibility: hidden; }"),
                                
                                #####
                                # 4b) leaflet map
                                #####
                                
-                               leafletOutput("regional_map")
+                               leafletOutput(outputId = "map", height = 800)
                                
                              ) #mainPanel
                            ) #sidebarLayout

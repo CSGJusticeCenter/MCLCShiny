@@ -7,83 +7,149 @@
 #    Creates 50 state interactive map
 #######################################
 
-# references:
-# https://www.r-graph-gallery.com/183-choropleth-map-with-leaflet.html
-# https://stackoverflow.com/questions/46392640/shiny-leaflet-map-filtering-data-by-columns-not-rows?rq=1
-
-# data for now
-dat <- adm20
-dat <- clean_names(dat)
-
-# # leaflet map with states shapefile
-# m <- leaflet() %>%
-#   addProviderTiles(providers$CartoDB.PositronNoLabels)  %>%
-#   setView(lng = -96.25, lat = 39.50, zoom = 4) %>%
-#   addPolygons(data = states,
-#               weight = 1)
-# m
-
-# evaluates whether every element of dat$states is contained in states$NAME
-# is.element(dat$states, states$NAME) %>%
-#   all()
-
 # merge data with shapefile
-states <- merge(states.shp, dat, by.x = 'NAME', by.y = "states", all.x = F)
+mclc.df <- merge(states.shp, wide_data, by.x = 'NAME', by.y = "states")
 
-# drop Hawaii and Alaska for now
-states <- states[!(states$NAME == 'Hawaii' | states$NAME == 'Alaska'), ]
+# drop states
+mclc.df <- mclc.df[!(mclc.df$NAME == 'Commonwealth of the Northern Mariana Islands' | 
+                     mclc.df$NAME == 'American Samoa' |
+                     mclc.df$NAME == 'Guam' |
+                     mclc.df$NAME == 'District of Columbia' |
+                     mclc.df$NAME == 'GUam' | 
+                     mclc.df$NAME == 'Puerto Rico' |
+                     mclc.df$NAME == 'United States Virgin Islands'), ]
 
-# make data numeric
-states$total_violation_admissions <- as.numeric(states$total_violation_admissions)
+# change data format
+# mclc.df$NAME <- as.factor(mclc.df$NAME)
+# mclc.df$state_abbrev <- as.factor(mclc.df$state_abbrev)
+mclc.df$total_admissions_2018 <- as.numeric(mclc.df$total_admissions_2018)
+mclc.df$total_admissions_2019 <- as.numeric(mclc.df$total_admissions_2019)
+mclc.df$total_admissions_2020 <- as.numeric(mclc.df$total_admissions_2020)
 
-# map colors to continuous values, use colorNumeric(), specifying the color palette that values should be mapped to and the values
-paletteNum <- colorNumeric('Blues', domain = states$total_violation_admissions)
 
-# # Alternatively, we can map colors to bins of values instead of doing so continuously
-# values range from ~7 cents to ~19 cents
-# costBins <- c(7:19, Inf)
-# paletteBinned <- colorBin('YlGnBu', domain = states$total_violation_admissions, bins = costBins)
+# UI
+ui <- shinyUI(fluidPage(theme = shinytheme("united"),
+                        titlePanel(HTML("<h1><center><font size=14> Regional Map </font></center></h1>")), 
+                        sidebarLayout(
+                          sidebarPanel(
+                            
+                            ##############
+                            ##############
+                            selectizeInput(
+                              "stateInput", 'State', choices = "", multiple = FALSE,
+                              options = list(
+                                placeholder = 'Please select a state from below')
+                            ),
+                            ##############
+                            ##############
+                            
+                            
+                            ##############
+                            ##############
+                            # selectInput("dataInput", label = h3("Data"),
+                            #             choices = c("Total Admissions",
+                            #                         "Supervision Violation Admissions",
+                            #                         "Probation Violation Admissions",
+                            #                         "New Offense Probation Violation Admissions",
+                            #                         "Technical Probation Violation Admissions",
+                            #                         "Parole Violation Admissions",
+                            #                         "New Offense Parole Violation Admissions",
+                            #                         "Technical Parole Violation Admissions",
+                            #                         "Total Population",
+                            #                         "Supervision Violation Population",
+                            #                         "Probation Violation Population",
+                            #                         "New Offense Probation Violation Population",
+                            #                         "Technical Probation Violation Population",
+                            #                         "Parole Violation Population",
+                            #                         "New Offense Parole Violation Population",
+                            #                         "Technical Parole Violation Population"
+                            #                         )),
+                            ##############
+                            ##############
+                            
+                            ##############
+                            ##############
+                            selectInput("yearInput", label = h3("Year"),
+                                        choices = c("2018",
+                                                    "2019",
+                                                    "2020"))
+                            ##############
+                            ##############
+                            
+                            ),
+                          mainPanel(
+                            
+                            ##############
+                            ##############
+                            leafletOutput(outputId = 'map', 
+                                          height = 800) 
+                            ##############
+                            ##############
+                            
+                          ))
+))
 
-# for labels: use sprintf(), lapply() and HTML() to generate a formatted, HTML-tagged label for each state
-stateLabels <- sprintf('<b>%s</b><br/>%g Violation Admissions',
-                       states$NAME, states$total_violation_admissions) %>%
-               lapply(function(x) HTML(x))
-states <- cbind(states, matrix(stateLabels, ncol = 1, dimnames = list(c(), c('stateLabels'))))
 
-regional_map <- leaflet() %>%
+# SERVER
+server <- shinyServer(function(input, output, session) {
   
-  # map template
-  addProviderTiles(providers$CartoDB.PositronNoLabels,
-                   options = providerTileOptions(opacity = 0)) %>%
+  # selected state
+  updateSelectizeInput(session, "stateInput", choices = mclc.df$NAME,
+                       server = TRUE)
   
-  # set view to US
-  setView(lng = -96.25, lat = 39.50, zoom = 3.5) %>%
+  # selected state
+  selectedState <- reactive({
+    mclc.df[mclc.df$NAME == input$stateInput, ] 
+  })
   
-  addPolygons(data = states,
-              
-              # colors
-              color = 'white',
-              weight = 1,
-              smoothFactor = .3,
-              fillOpacity = .75,
-              fillColor = ~paletteNum(states$total_violation_admissions),
-              
-              # state labels
-              label = ~stateLabels,
-              labelOptions = labelOptions(
-                style = list(color = 'gray30'),
-                textsize = '10px'),
-              
-              # highlight options
-              highlightOptions = highlightOptions(
-                weight = 2,
-                color = 'dodgerblue'
-              )
-  ) %>%
+  # # selected metric
+  # selectedData <- reactive({
+  #   mclc.df[mclc.df$NAME == input$dataInput, ] 
+  # })
   
-  addLegend(pal = paletteNum, 
-            values = states$total_violation_admissions, 
-            title = '<small>2020 Admissions due to <br> Supervision Violations<br></small>', 
-            position = 'bottomleft')
+  # selected year
+  selectedYear <- reactive({switch(input$yearInput, 
+                                   "2018"=mclc.df$total_admissions_2018, 
+                                   "2019"=mclc.df$total_admissions_2019, 
+                                   "2020"=mclc.df$total_admissions_2020)
+  })
+  
+  # color palette
+  pal2 <- colorNumeric(palette = "Blues", domain=NULL)
+  
+  output$map <- renderLeaflet({
+    leaflet(mclc.df) %>% 
+      addProviderTiles(providers$Stamen.TonerLite) %>% 
+      setView(lng = -98.583, lat = 39.833, zoom = 4) %>%
+      addPolygons(data = mclc.df ,fillColor = ~pal2(selectedYear()),
+                  popup = paste0("<strong>State: </strong>", 
+                                 mclc.df$NAME),
+                  color = "#BDBDC3",
+                  fillOpacity = 0.8,
+                  weight = 1)
+    
+  })
+  
+  observeEvent(input$stateInput, {
+    state_popup <- paste0("<strong>State: </strong>", 
+                          selectedState()$NAME, 
+                          "<br><strong>% of smoking adults in 2015: </strong>",
+                          selectedState()$total_admissions_2018,
+                          "<br><strong>% of smoking adults in 2016: </strong>",
+                          selectedState()$total_admissions_2019,
+                          "<br><strong>% of smoking adults in 2017: </strong>",
+                          selectedState()$total_admissions_2020)
+    
+    leafletProxy("map", data = selectedState()) %>%
+      clearGroup(c("st.ate")) %>%
+      addPolygons(group ="st.ate",fillColor = "orange",
+                  popup = state_popup,
+                  color = "#BDBDC3",
+                  fillOpacity = 0.8,
+                  weight = 5)
+  })
+  
+})
 
-regional_map
+# Run app! 
+shinyApp(ui = ui, server = server)

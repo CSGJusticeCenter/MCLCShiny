@@ -102,11 +102,16 @@ pop20$year <- "2020"
 adm <- rbind(adm18, adm19, adm20)
 pop <- rbind(pop18, pop19, pop20)
 
-# add adm and pop data together
-adm_pop <- merge(adm, pop, by = c("States", "State Abbrev", "year"))
-
 # clean names
-adm_pop <- clean_names(adm_pop)
+adm <- clean_names(adm)
+pop <- clean_names(pop)
+
+########
+# Wide form
+########
+
+# add adm and pop data together
+adm_pop <- merge(adm, pop, by = c("states", "state_abbrev", "year"))
 
 # costs
 costs <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Costs")
@@ -170,18 +175,117 @@ region <- adm_pop %>% mutate(region = case_when(
   states == "Arizona" ~ "West"
 )) %>% select(states, region)
 
-# remove data
-mclc <- adm_pop %>% dplyr::select(-state_abbrev)
+# remove abbrev
+adm_pop <- adm_pop %>% dplyr::select(-state_abbrev)
+
+# change data types
+adm_pop$states <- factor(adm_pop$states)
+adm_pop$year <- factor(adm_pop$year)
+adm_pop <- adm_pop %>% mutate_if(is.character,as.numeric)
+
+# make data long form
+mclc <- adm_pop 
 mclc <- gather(mclc, metric, total, total_admissions:technical_parole_violation_population)
 
 # add regions
 mclc <- merge(mclc, region, by = "states")
 
+# remove dups
+mclc <- mclc %>% distinct()
+
+# change data types
+mclc$states <- as.factor(mclc$states)
+mclc$year <- as.factor(mclc$year)
+mclc$metric <- as.factor(mclc$metric)
+mclc$region <- as.factor(mclc$region)
+mclc$total <- as.numeric(mclc$total)
+
+# reorder data
+mclc <- mclc %>% select(states, year, metric, region, total)
+
 # set working directory
 setwd("C:/Users/mroberts/OneDrive - The Council of State Governments/Desktop/csgjc/repos/MCLCShiny")
 
 # read state data
-# states <- readOGR("data/cb_2016_us_state_500k/cb_2016_us_state_500k.shp",
-#                   layer = "cb_2016_us_state_500k")
-# https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html
-states.shp <- readOGR('data/cb_2020_us_all_500k/cb_2020_us_state_500k/cb_2020_us_state_500k.shp')
+states.shp <- readOGR('data/cb_2020_us_all_500k/cb_2020_us_state_500k/cb_2020_us_state_500k.shp',
+                      encoding = "UTF-8", verbose = FALSE)
+
+########
+# Long form
+########
+
+# make data long form
+adm_pop_long <- gather(adm_pop, 
+                       data,
+                       total,
+                       total_admissions:technical_parole_violation_population, 
+                       factor_key=TRUE)
+
+# change text for metrics
+adm_pop_long <- adm_pop_long %>% mutate(metric = case_when(
+  data == "total_admissions"                            ~ "Total",
+  data == "total_violation_admissions"                  ~ "All Supervision",
+  data == "total_probation_violation_admissions"        ~ "All Probation",
+  data == "new_offense_probation_violation_admissions"  ~ "New Offense Probation",
+  data == "technical_probation_violation_admissions"    ~ "Technical Probation",
+  data == "total_parole_violation_admissions"           ~ "All Parole",
+  data == "new_offense_parole_violation_admissions"     ~ "New Offense Parole",
+  data == "technical_parole_violation_admissions"       ~ "Technical Parole",
+  
+  data == "total_population"                            ~ "Total",
+  data == "total_violation_population"                  ~ "All Supervision",
+  data == "total_probation_violation_population"        ~ "All Probation",
+  data == "new_offense_probation_violation_population"  ~ "New Offense Probation",
+  data == "technical_probation_violation_population"    ~ "Technical Probation",
+  data == "total_parole_violation_population"           ~ "All Parole",
+  data == "new_offense_parole_violation_population"     ~ "New Offense Parole",
+  data == "technical_parole_violation_population"       ~ "Technical Parole"
+))
+
+# create probation vs parole variable
+# change text for metrics
+adm_pop_long <- adm_pop_long %>% mutate(prob_vs_parole = case_when(
+  data == "total_admissions"                            ~ "Probation and Parole",
+  data == "total_violation_admissions"                  ~ "Probation and Parole",
+  data == "total_probation_violation_admissions"        ~ "Probation",
+  data == "new_offense_probation_violation_admissions"  ~ "Probation",
+  data == "technical_probation_violation_admissions"    ~ "Probation",
+  data == "total_parole_violation_admissions"           ~ "Parole",
+  data == "new_offense_parole_violation_admissions"     ~ "Parole",
+  data == "technical_parole_violation_admissions"       ~ "Parole",
+  
+  data == "total_population"                            ~ "Probation and Parole",
+  data == "total_violation_population"                  ~ "Probation and Parole",
+  data == "total_probation_violation_population"        ~ "Probation",
+  data == "new_offense_probation_violation_population"  ~ "Probation",
+  data == "technical_probation_violation_population"    ~ "Probation",
+  data == "total_parole_violation_population"           ~ "Parole",
+  data == "new_offense_parole_violation_population"     ~ "Parole",
+  data == "technical_parole_violation_population"       ~ "Parole",
+))
+
+# change text for metrics
+adm_pop_long <- adm_pop_long %>% mutate(tech_vs_nontech = case_when(
+  data == "total_admissions"                            ~ "Technical & Non-Technical",
+  data == "total_violation_admissions"                  ~ "Technical & Non-Technical",
+  data == "total_probation_violation_admissions"        ~ "Technical & Non-Technical",
+  data == "new_offense_probation_violation_admissions"  ~ "Non-Technical",
+  data == "technical_probation_violation_admissions"    ~ "Technical",
+  data == "total_parole_violation_admissions"           ~ "Technical & Non-Technical",
+  data == "new_offense_parole_violation_admissions"     ~ "Non-Technical",
+  data == "technical_parole_violation_admissions"       ~ "Technical",
+  
+  data == "total_population"                            ~ "Technical & Non-Technical",
+  data == "total_violation_population"                  ~ "Technical & Non-Technical",
+  data == "total_probation_violation_population"        ~ "Technical & Non-Technical",
+  data == "new_offense_probation_violation_population"  ~ "Non-Technical",
+  data == "technical_probation_violation_population"    ~ "Technical",
+  data == "total_parole_violation_population"           ~ "Technical & Non-Technical",
+  data == "new_offense_parole_violation_population"     ~ "Non-Technical",
+  data == "technical_parole_violation_population"       ~ "Technical",
+))
+
+# create pop vs adm variable
+adm_pop_long <- adm_pop_long %>% mutate(adm_or_pop = ifelse(
+  grepl("population", data), "Population", "Admissions"
+))
