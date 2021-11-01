@@ -167,7 +167,7 @@ server <- function(input, output, session) {
   # 5) Dashboard________________________________________________________________
   ###############
   
-  # 5A-C) Subset data
+  # 5A-B) Subset data
   dataFilter <- reactive({
     adm_pop_long %>% 
       filter(states == input$state_2 &
@@ -175,18 +175,18 @@ server <- function(input, output, session) {
                metric == "Total")
   })
   
-  # 5D) Print state name selected
+  # 5C) Print state name selected
   output$selected_state_2 <- renderText({ 
     input$state_2
   })
   
-  # 5E) Print graph title
+  # 5D) Print graph title
   output$selected_adm_pop_2 <- renderText({ 
     paste(input$adm_or_pop_2, "")
   })
   
   #########
-  # 5E) Bar chart
+  # 5D) Bar chart
   #########
   output$barchart_2 <- renderPlot({
     
@@ -231,6 +231,24 @@ server <- function(input, output, session) {
       
       # bar sizes
       theme(aspect.ratio = 0.75)
+    
+  }, width = 450, height = 400)
+  
+  #########
+  # 5E) Area chart
+  #########
+  
+  # subset data
+  dataFilter_2 <- reactive({
+    adm_pop_long %>% 
+      filter(states == input$state_2 &
+             adm_or_pop == input$adm_or_pop_2 &
+             metric == "Total")
+  })
+  
+  output$areachart_2 <- renderPlot({
+    
+
     
   }, width = 450, height = 400)
 }

@@ -226,20 +226,20 @@ adm_pop_long <- adm_pop_long %>% mutate(metric = case_when(
   data == "total_admissions"                            ~ "Total",
   data == "total_violation_admissions"                  ~ "All Supervision",
   data == "total_probation_violation_admissions"        ~ "All Probation",
-  data == "new_offense_probation_violation_admissions"  ~ "New Offense Probation",
-  data == "technical_probation_violation_admissions"    ~ "Technical Probation",
+  data == "new_offense_probation_violation_admissions"  ~ "New Offense",
+  data == "technical_probation_violation_admissions"    ~ "Technical",
   data == "total_parole_violation_admissions"           ~ "All Parole",
-  data == "new_offense_parole_violation_admissions"     ~ "New Offense Parole",
-  data == "technical_parole_violation_admissions"       ~ "Technical Parole",
+  data == "new_offense_parole_violation_admissions"     ~ "New Offense",
+  data == "technical_parole_violation_admissions"       ~ "Technical",
   
   data == "total_population"                            ~ "Total",
   data == "total_violation_population"                  ~ "All Supervision",
   data == "total_probation_violation_population"        ~ "All Probation",
-  data == "new_offense_probation_violation_population"  ~ "New Offense Probation",
-  data == "technical_probation_violation_population"    ~ "Technical Probation",
+  data == "new_offense_probation_violation_population"  ~ "New Offense",
+  data == "technical_probation_violation_population"    ~ "Technical",
   data == "total_parole_violation_population"           ~ "All Parole",
-  data == "new_offense_parole_violation_population"     ~ "New Offense Parole",
-  data == "technical_parole_violation_population"       ~ "Technical Parole"
+  data == "new_offense_parole_violation_population"     ~ "New Offense",
+  data == "technical_parole_violation_population"       ~ "Technical"
 ))
 
 # create probation vs parole variable

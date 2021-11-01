@@ -135,16 +135,16 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                            
                            sidebarLayout(
                              sidebarPanel(
-                               #2A) Select state
+                               #5A) Select state
                                selectInput(inputId = "state_2", label = "Select State", choices = unique(adm_pop_long$states)),
                                
-                               #2B) Select adm or pop for plot
+                               #5B) Select adm or pop for plot
                                selectInput(inputId = "adm_or_pop_2", label="Admissions or Population", choices = unique(adm_pop_long$adm_or_pop))
                                
                              ),
                              mainPanel(
                                
-                               #2D) Text output
+                               #5C) Text output
                                textOutput("selected_state_2"),
                                tags$head(tags$style("#selected_state_2{color: #000000;
                                                              font-size: 48px;
@@ -152,15 +152,18 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                                     }")
                                ),
                                
-                               #2E) Plot title
+                               #5D) Plot title
                                textOutput("selected_adm_pop_2"),
                                tags$head(tags$style("#selected_adm_pop_2{color: #000000;
                                                              font-size: 32px;
                                                     }")
                                ),
                                
-                               #2E) Bar chart 
+                               #5D) Bar chart 
                                plotOutput("barchart_2"),
+                               
+                               #5E) Area chart 
+                               plotOutput("areachart_2")
                                
                              ) #mainPanel
                            ) #sidebarLayout
