@@ -7,26 +7,6 @@
 #    Creates 50 state interactive map
 #######################################
 
-# merge data with shapefile
-mclc.df <- merge(states.shp, wide_data, by.x = 'NAME', by.y = "states")
-
-# drop states
-mclc.df <- mclc.df[!(mclc.df$NAME == 'Commonwealth of the Northern Mariana Islands' | 
-                     mclc.df$NAME == 'American Samoa' |
-                     mclc.df$NAME == 'Guam' |
-                     mclc.df$NAME == 'District of Columbia' |
-                     mclc.df$NAME == 'GUam' | 
-                     mclc.df$NAME == 'Puerto Rico' |
-                     mclc.df$NAME == 'United States Virgin Islands'), ]
-
-# change data format
-# mclc.df$NAME <- as.factor(mclc.df$NAME)
-# mclc.df$state_abbrev <- as.factor(mclc.df$state_abbrev)
-mclc.df$total_admissions_2018 <- as.numeric(mclc.df$total_admissions_2018)
-mclc.df$total_admissions_2019 <- as.numeric(mclc.df$total_admissions_2019)
-mclc.df$total_admissions_2020 <- as.numeric(mclc.df$total_admissions_2020)
-
-
 # UI
 ui <- shinyUI(fluidPage(theme = shinytheme("united"),
                         titlePanel(HTML("<h1><center><font size=14> Regional Map </font></center></h1>")), 

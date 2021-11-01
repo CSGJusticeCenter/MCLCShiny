@@ -15,7 +15,7 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                 navbarPage(
                   
                   ###############
-                  # 1) About
+                  # 1) About____________________________________________________
                   ###############
                   "More Community, Less Confinement",
                   tabPanel("About", 
@@ -28,27 +28,48 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                   ),#tabPanel
                   
                   ###############
-                  # 2) Dashboard 
+                  # 2) Dashboard________________________________________________ 
                   ###############
                   tabPanel("Dashboard", 
                            
-                           #A. Select state
-                           selectInput(inputId = "state", label = "Select State", choices = unique(adm_pop_long$states)),
-                           verbatimTextOutput("state_choice"),
-                           
-                           #B. Select adm or pop for plot
-                           selectInput(inputId = "adm_or_pop", label="Admissions or Population", choices = unique(adm_pop_long$adm_or_pop)),
-                           
-                           #C. select metric for plot
-                           selectInput(inputId = "metric", label="Data", unique(adm_pop_long$metric)),
-                           
-                           #D. "Change from 2018-2020", br(), 
-                           plotOutput("barchart")
-                          
+                           sidebarLayout(
+                             sidebarPanel(
+                               #2A) Select state
+                               selectInput(inputId = "state", label = "Select State", choices = unique(adm_pop_long$states)),
+                               
+                               #2B) Select adm or pop for plot
+                               selectInput(inputId = "adm_or_pop", label="Admissions or Population", choices = unique(adm_pop_long$adm_or_pop)),
+                               
+                               #2C) select metric for plot
+                               selectInput(inputId = "metric", label="Data", unique(adm_pop_long$metric))
+                             ),
+                             mainPanel(
+
+                               #2D) Text output
+                               textOutput("selected_state"),
+                               tags$head(tags$style("#selected_state{color: #000000;
+                                                             font-size: 48px;
+                                                             font-style: bold;
+                                                    }")
+                                         ),
+                               
+                               #2E) Plot title
+                               textOutput("selected_var"),
+                               tags$head(tags$style("#selected_var{color: #000000;
+                                                             font-size: 18px;
+                                                    }")
+                               ),
+                               
+                               #2E) Bar chart 
+                               plotOutput("barchart"),
+                               
+                             ) #mainPanel
+                           ) #sidebarLayout
+
                   ), #tabPanel
                   
                   ###############
-                  # 3) View Data 
+                  # 3) View Data________________________________________________ 
                   ###############
                   tabPanel("View Data", 
                            
@@ -60,7 +81,7 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                   ),#tabPanel
                   
                   ###############
-                  # 4) Map  
+                  # 4) Map______________________________________________________  
                   ###############
                   tabPanel("Map", 
                            
@@ -76,7 +97,9 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                # 4a) Choose state
                                #####
                                selectizeInput(
-                                 "stateInput", 'State', choices = "", multiple = FALSE,
+                                 "stateInput", 'State', 
+                                 choices = "",
+                                 multiple = FALSE,
                                  options = list(
                                    placeholder = 'Please select a state from below')
                                ),
@@ -84,7 +107,8 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                #####
                                # 4b) Choose year
                                #####
-                               selectInput("yearInput", label = h3("Year"),
+                               selectInput("yearInput", 
+                                           label = "Year",
                                            choices = c("2018",
                                                        "2019",
                                                        "2020"))
@@ -93,21 +117,57 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                              
                              # Main panel for displaying outputs
                              mainPanel(
-                               
-                               # # hide errors
-                               # tags$style(type = "text/css",
-                               #            ".shiny-output-error { visibility: hidden; }",
-                               #            ".shiny-output-error:before { visibility: hidden; }"),
-                               
+
                                #####
                                # 4b) leaflet map
                                #####
                                
-                               leafletOutput(outputId = "map", height = 800)
+                               leafletOutput(outputId = "map", height = 600)
                                
                              ) #mainPanel
                            ) #sidebarLayout
-                  ) #tabPanel
+                  ), #tabPanel
+                  
+                  ###############
+                  # 5) Dashboard________________________________________________ 
+                  ###############
+                  tabPanel("Dashboard 2", 
+                           
+                           sidebarLayout(
+                             sidebarPanel(
+                               #2A) Select state
+                               selectInput(inputId = "state_2", label = "Select State", choices = unique(adm_pop_long$states)),
+                               
+                               #2B) Select adm or pop for plot
+                               selectInput(inputId = "adm_or_pop_2", label="Admissions or Population", choices = unique(adm_pop_long$adm_or_pop))
+                               
+                             ),
+                             mainPanel(
+                               
+                               #2D) Text output
+                               textOutput("selected_state_2"),
+                               tags$head(tags$style("#selected_state_2{color: #000000;
+                                                             font-size: 48px;
+                                                             font-style: bold;
+                                                    }")
+                               ),
+                               
+                               #2E) Plot title
+                               textOutput("selected_adm_pop_2"),
+                               tags$head(tags$style("#selected_adm_pop_2{color: #000000;
+                                                             font-size: 32px;
+                                                    }")
+                               ),
+                               
+                               #2E) Bar chart 
+                               plotOutput("barchart_2"),
+                               
+                             ) #mainPanel
+                           ) #sidebarLayout
+                           
+                  ), #tabPanel
+                  
+                  
                 ) #navbarPage
 ) #fluidPage
 

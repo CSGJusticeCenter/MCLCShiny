@@ -13,7 +13,7 @@ source("C:/Users/mroberts/OneDrive - The Council of State Governments/Desktop/cs
 # load code files 
 # ui and server code
 source("01_import.R")
-source("02_regional_map.R")
+# source("02_regional_map.R")
 source("03_ui.R")
 source("04_server.R")
 

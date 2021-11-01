@@ -289,3 +289,44 @@ adm_pop_long <- adm_pop_long %>% mutate(tech_vs_nontech = case_when(
 adm_pop_long <- adm_pop_long %>% mutate(adm_or_pop = ifelse(
   grepl("population", data), "Population", "Admissions"
 ))
+
+# create change from 2018 to 2019 to 2020
+adm_pop_long <- adm_pop_long %>%
+    group_by(states) %>%
+    mutate(change = (total/lag(total) - 1) * 100)
+
+# round
+adm_pop_long$change <- round(adm_pop_long$change, 0)
+
+#########################################################################
+# merge data with shapefile
+mclc.df <- merge(states.shp, wide_data, by.x = 'NAME', by.y = "states")
+
+# drop states
+mclc.df <- mclc.df[!(mclc.df$NAME == 'Commonwealth of the Northern Mariana Islands' | 
+                       mclc.df$NAME == 'American Samoa' |
+                       mclc.df$NAME == 'Guam' |
+                       mclc.df$NAME == 'District of Columbia' |
+                       mclc.df$NAME == 'GUam' | 
+                       mclc.df$NAME == 'Puerto Rico' |
+                       mclc.df$NAME == 'United States Virgin Islands'), ]
+
+# change data format
+# mclc.df$NAME <- as.factor(mclc.df$NAME)
+# mclc.df$state_abbrev <- as.factor(mclc.df$state_abbrev)
+mclc.df$total_admissions_2018 <- as.numeric(mclc.df$total_admissions_2018)
+mclc.df$total_admissions_2019 <- as.numeric(mclc.df$total_admissions_2019)
+mclc.df$total_admissions_2020 <- as.numeric(mclc.df$total_admissions_2020)
+
+##################################
+# merge data with shapefile
+adm_pop_long_shp <- merge(states.shp, adm_pop_long, by.x = 'NAME', by.y = "states", duplicateGeoms = TRUE)
+
+# drop states
+adm_pop_long_shp <- adm_pop_long_shp[!(adm_pop_long_shp$NAME == 'Commonwealth of the Northern Mariana Islands' | 
+                                       adm_pop_long_shp$NAME == 'American Samoa' |
+                                       adm_pop_long_shp$NAME == 'Guam' |
+                                       adm_pop_long_shp$NAME == 'District of Columbia' |
+                                       adm_pop_long_shp$NAME == 'GUam' | 
+                                       adm_pop_long_shp$NAME == 'Puerto Rico' |
+                                       adm_pop_long_shp$NAME == 'United States Virgin Islands'), ]
