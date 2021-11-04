@@ -356,8 +356,8 @@ adm_pop_long <- adm_pop_long %>%
 # round
 adm_pop_long$change <- round(adm_pop_long$change, 0)
 
-# change year variable to numeric 
-adm_pop_long$year <- as.integer(adm_pop_long$year)
+# # change year variable to numeric 
+# adm_pop_long$year <- as.numeric(adm_pop_long$year)
 
 #########################################################################
 # merge data with shapefile
