@@ -4,7 +4,7 @@ ui <- fluidPage(
   
   # theme
   # update theme https://medium.com/analytics-vidhya/building-custom-r-shiny-ui-66d446ef4dad
-  theme = shinytheme("flatly"),
+  theme = shinytheme("cosmo"),
   
   navbarPage(
     
@@ -27,30 +27,49 @@ ui <- fluidPage(
     #_________________________________________________________________________________________
     
     tabPanel("Dashboard",
-
+             
              ########
-             # 2A) side bar with drop downs and instructions
+             # 2) add map with clickable element to chose state?????
+             ########
+             
+             ########
+             # 2) side bar with drop downs and instructions
              # eventually would like to have the option to hide the panel????
              # https://stackoverflow.com/questions/42159804/how-to-collapse-sidebarpanel-in-shiny-app
              ########
-             fluidRow(
-                      column(width = 6, 
-                             wellPanel(
-                             #1) Select state
-                             selectInput(inputId = "state", label = "Select State", choices = unique(adm_pop_long$states))
-                             ) #wellPanel
+             fluidRow(# select state
+                      column(width = 6,
+                              wellPanel(
+                              # Select state
+                                div(style = "font-size:16px;",
+                                    selectInput(inputId = "state", label = div(style = "font-size:16px;
+                                                                                        color: #FFFFFF;", 
+                                                "Select State"), 
+                                                choices = unique(adm_pop_long$states)
+                                    )
+                                ),
+                              style = "background: #000000"
+                              ) #wellPanel
                       ),#column
                       
+                      # select population or admissions
                       column(width = 6, 
                              wellPanel(
-                             #2) Select adm or pop for plot
-                             selectInput(inputId = "adm_or_pop", label="Admissions or Population", choices = unique(adm_pop_long$adm_or_pop))
+                             # Select adm or pop for plot
+                               div(style = "font-size:16px;",
+                                   selectInput(inputId = "adm_or_pop", label = div(style = "font-size:16px;
+                                                                                           color: #FFFFFF;", 
+                                              "Admissions or Population"), 
+                                               choices = unique(adm_pop_long$adm_or_pop)
+                                   )
+                               ),                             
+                               style = "background: #000000"
                              ) #wellPanel
                       ) #column
              ), #fluidRow
              
              ########
-             # 2B state title
+             # 2) state title
              ########
              fluidRow(column(width = 1,
                              ""),
@@ -59,8 +78,8 @@ ui <- fluidPage(
                              #1) Text output
                              textOutput("selected_state"),
                              tags$head(tags$style("#selected_state{color: #000000;
-                                                                     font-size: 42px;
-                                                                     font-style: bold;
+                                                                   font-size: 42px;
+                                                                   font-style: bold;
                                                     }")),
                              # add spacing
                              br(),
@@ -81,26 +100,88 @@ ui <- fluidPage(
                              "")
              ), #fluidRow
              
+             
+             fluidRow(# Title admissions or population
+                      column(width = 6, 
+                             textOutput("adm_pop_header"),
+                             tags$head(tags$style("#adm_pop_header{color: #c75d19;
+                                                                   font-size: 22px;
+                                                                   font-style: bold;
+                                                                   text-align: center;
+                                                    }"))),
+                      
+                      # Title for supervision violations admissions or population
+                      column(width = 6, 
+                             textOutput("viol_header"),
+                             tags$head(tags$style("#viol_header{color: #c75d19;
+                                                                font-size: 22px;
+                                                                font-style: bold;
+                                                                text-align: center;
+                                                    }")))
+               
+             ), #fluidRow
+             
              ########
-             # 2C Plots 
+             # 2) Plots 
              ########
              fluidRow(column(width = 6, 
                              # Bar chart 
-                             plotOutput("barchart_2")
+                             div(plotOutput("barchart", height = "100%"), align = "center")
                              ),
                       
                       column(width = 6, 
                              # Area chart 
-                             plotOutput("areachart_2")
+                             div(plotOutput("barchart_2", height = "100%"), align = "center")
                              )
-                      
              ), #fluidRow
              
+             # add spacing
+             br(),
+             br(),
+             
              ########
-             # 2D Changes from 2018 and 2019
+             # 2) Changes from 2018 and 2019
              ########
              
-             
+             fluidRow(# change from 2018
+                      column(width = 2, 
+                             valueBoxOutput("total_change_18")
+                      ), #column
+
+                      # change from 2019
+                      column(width = 2, 
+                             valueBoxOutput("total_change_19")
+                      ), #column
+
+                      # sentence about change
+                      column(width = 2, 
+                             textOutput("total_sentence_change"),
+                             tags$head(tags$style("#total_sentence_change{color: #000000;
+                                                                          font-size: 14px;
+                                                                          text-align: left;
+                                                                          vertical-align: middle;}"))
+                      ), #column
+                      
+                      # change from 2018
+                      column(width = 2, 
+                             valueBoxOutput("viol_change_18")
+                      ), #column
+                     
+                      # change from 2019
+                      column(width = 2, 
+                             valueBoxOutput("viol_change_19")
+                      ), #column
+                     
+                      # sentence about change
+                      column(width = 2, 
+                             textOutput("viol_sentence_change"),
+                             tags$head(tags$style("#viol_sentence_change{color: #000000;
+                                                                         font-size: 14px;
+                                                                         text-align: left;
+                                                                         vertical-align: middle;}"))
+                      ) #column
+
+             ) #fluidRow
              
     ), #tabPanel
     

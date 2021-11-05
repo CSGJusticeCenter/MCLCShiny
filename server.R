@@ -10,20 +10,20 @@ server <- function(input, output, session) {
   # 2) Dashboard
   #_____________________________________________________________________________
   
-  # 2A-B) Subset data
+  # 2) Subset data
   dataFilter <- reactive({
     adm_pop_long %>% 
       filter(states == input$state &
              adm_or_pop == input$adm_or_pop &
-             metric == "All Supervision")
+             metric == "Supervision Violation")
   })
   
-  # 2B) Print state name and adm or pop selected
+  # 2) Print state name and adm or pop selected
   output$selected_state <- renderText({ 
     paste("Prison ", input$adm_or_pop, "Trends in ", input$state)
   })
   
-  # 2B) Print state name and adm or pop selected
+  # 2) Print state name and adm or pop selected
   output$selected_state_adm_pop <- renderText({ 
     paste("States across the country saw changes in their prison admissions and 
           populations due to supervision violations in 2020. But some states were 
@@ -33,16 +33,30 @@ server <- function(input, output, session) {
   })
   
   #########
-  # 2C) Bar chart
+  # 2) Headers
   #########
-  output$barchart_2 <- renderPlot({
+  
+  # 2) Print adm or pop selected
+  output$adm_pop_header <- renderText({ 
+    paste("Total ", input$adm_or_pop)
+  })
+  
+  # 2) Print adm or pop selected for sup viols
+  output$viol_header <- renderText({ 
+    paste("Supervision Violation ", input$adm_or_pop)
+  })
+  
+  #########
+  # 2) Bar chart
+  #########
+  output$barchart <- renderPlot({
     
     ggplot(data = dataFilter(), 
            aes_string(x = 'year', y = 'total', fill = 'year')) + 
       # barchart
       geom_bar(stat = "identity", width = 0.70) +
       # title
-      ggtitle("Total Supervision Violations from 2018 to 2020 \n") +
+      ggtitle("\n") +
       # custom style
       theme_csgjc_plot() +
       # colors and legend
@@ -60,7 +74,7 @@ server <- function(input, output, session) {
   }, width = 450, height = 400)
   
   #########
-  # 2C) Area chart
+  # 2) Area chart
   #########
   
   # create reactive data frame for new offense and technical supervision
@@ -91,7 +105,7 @@ server <- function(input, output, session) {
       mutate(cum = cumsum(total))
   })
   
-  output$areachart_2 <- renderPlot({
+  output$barchart_2 <- renderPlot({
     
     ggplot(dataFilter_2(), 
            aes(x=as.numeric(as.character(year)), 
@@ -110,11 +124,11 @@ server <- function(input, output, session) {
       xlim(2018 - 0.1, 2020 + 0.1) +
       theme_csgjc_plot() +
       # title
-      ggtitle("Supervision Violations by Type from 2018 to 2020 \n") +
+      ggtitle("\n") +
       # custom style
       theme_csgjc_plot_legend() +
       # colors and legend
-      scale_fill_manual(values = c(blue2, orange),
+      scale_fill_manual(values = c(blue2, blue3),
                         name = "") +
       # y and x axis labels
       scale_y_continuous(label = scales::comma) +
@@ -127,6 +141,96 @@ server <- function(input, output, session) {
     # geom_text(data=dataFilter_2b(),aes(x = year,label=ifelse(year == max(year),total)),position = position_stack(vjust = 0.5), check_overlap = TRUE)
     
   }, width = 450, height = 400)
+  
+  #########
+  # 2) Value boxes
+  #########
+
+  ###
+  # Total 
+  ###
+  # filter data
+  dataFilter_2b <- reactive({
+    adm_pop_long %>%
+      filter(states == input$state &
+             adm_or_pop == input$adm_or_pop &
+             year == "2019" &
+             data == "total_admissions")
+  })
+
+  # Total 
+  # Since 2018
+  output$total_change_18 <- renderValueBox({
+    valueBox(
+      paste0(dataFilter_2b()$change, "%"), subtitle = "Since 2018")
+  })
+
+  # filter data
+  dataFilter_2c <- reactive({
+    adm_pop_long %>%
+      filter(states == input$state &
+             adm_or_pop == input$adm_or_pop &
+             year == "2020" &
+             data == "total_admissions")
+  })
+
+  # Total 
+  # Since 2019
+  output$total_change_19 <- renderValueBox({
+    valueBox(
+      paste0(dataFilter_2c()$change, "%"), subtitle = "Since 2019")
+  })
+
+  # 2) Print adm or pop selected
+  output$total_sentence_change <- renderText({ 
+    paste0("Since 2018, the number of prison ", dataFilter_2b()$adm_or_pop_lc, " ",
+           dataFilter_2b()$change_type, "d ", dataFilter_2b()$change,
+           "%. In 2020, the number of prison ",  dataFilter_2c()$adm_or_pop_lc, " ",
+           dataFilter_2c()$change_type, "d ", dataFilter_2c()$change, "%.")
+  })
+  
+  ###
+  # Supervision Violation Admissions
+  ###
+  # filter data
+  dataFilter_2d <- reactive({
+    adm_pop_long %>%
+      filter(states == input$state &
+               adm_or_pop == input$adm_or_pop &
+               year == "2019" &
+               data == "total_violation_admissions")
+  })
+  
+  # Supervision Violation 
+  # Since 2018
+  output$viol_change_18 <- renderValueBox({
+    valueBox(
+      paste0(dataFilter_2d()$change, "%"), subtitle = "Since 2018")
+  })
+  
+  # filter data
+  dataFilter_2e <- reactive({
+    adm_pop_long %>%
+      filter(states == input$state &
+               adm_or_pop == input$adm_or_pop &
+               year == "2020" &
+               data == "total_violation_admissions")
+  })
+  
+  # Supervision Violation 
+  # Since 2019
+  output$viol_change_19 <- renderValueBox({
+    valueBox(
+      paste0(dataFilter_2e()$change, "%"), subtitle = "Since 2019")
+  })
+  
+  # 2) Print adm or pop selected
+  output$viol_sentence_change <- renderText({ 
+    paste0("Since 2018, the number of prison ", dataFilter_2d()$adm_or_pop_lc, " ",
+           dataFilter_2d()$change_type, "d ", dataFilter_2d()$change,
+           "%. In 2020, the number of prison ",  dataFilter_2e()$adm_or_pop_lc, " ",
+           dataFilter_2e()$change_type, "d ", dataFilter_2e()$change, "%.")
+  })
   
   #_____________________________________________________________________________
   # 3) View Data

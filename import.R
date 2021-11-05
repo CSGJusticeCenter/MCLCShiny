@@ -356,6 +356,18 @@ adm_pop_long <- adm_pop_long %>%
 # round
 adm_pop_long$change <- round(adm_pop_long$change, 0)
 
+# create increase or decrease category
+adm_pop_long <- adm_pop_long %>% 
+  mutate(change_type = ifelse(
+    change > 0, "increase", "decrease"
+  ))
+
+# create lowercase adm and pop
+adm_pop_long <- adm_pop_long %>% 
+  mutate(adm_or_pop_lc = ifelse(
+    adm_or_pop == "Admissions", "admissions", "population"
+  ))
+
 # # change year variable to numeric 
 # adm_pop_long$year <- as.numeric(adm_pop_long$year)
 
