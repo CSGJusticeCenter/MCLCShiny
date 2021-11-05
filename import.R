@@ -241,6 +241,14 @@ adm_pop$states <- factor(adm_pop$states)
 adm_pop$year <- factor(adm_pop$year)
 adm_pop <- adm_pop %>% mutate_if(is.character,as.numeric)
 
+# calculate difference between total and Supervision Violation
+adm_pop <- adm_pop %>% mutate(other_admissions = total_admissions-total_violation_admissions,
+                              other_population = total_population-total_violation_population)
+
+#######
+
+#######
+
 # make data long form
 mclc <- adm_pop 
 mclc <- gather(mclc, metric, total, total_admissions:technical_parole_violation_population)
@@ -276,28 +284,30 @@ states.shp <- readOGR('data/cb_2020_us_all_500k/cb_2020_us_state_500k/cb_2020_us
 adm_pop_long <- gather(adm_pop, 
                        data,
                        total,
-                       total_admissions:technical_parole_violation_population, 
+                       total_admissions:other_population, 
                        factor_key=TRUE)
 
 # change text for metrics
 adm_pop_long <- adm_pop_long %>% mutate(metric = case_when(
   data == "total_admissions"                            ~ "Total",
-  data == "total_violation_admissions"                  ~ "All Supervision",
+  data == "total_violation_admissions"                  ~ "Supervision Violation",
   data == "total_probation_violation_admissions"        ~ "All Probation",
   data == "new_offense_probation_violation_admissions"  ~ "New Offense",
   data == "technical_probation_violation_admissions"    ~ "Technical",
   data == "total_parole_violation_admissions"           ~ "All Parole",
   data == "new_offense_parole_violation_admissions"     ~ "New Offense",
   data == "technical_parole_violation_admissions"       ~ "Technical",
+  data == "other_admissions"                            ~ "Other",
   
   data == "total_population"                            ~ "Total",
-  data == "total_violation_population"                  ~ "All Supervision",
+  data == "total_violation_population"                  ~ "Supervision Violation",
   data == "total_probation_violation_population"        ~ "All Probation",
   data == "new_offense_probation_violation_population"  ~ "New Offense",
   data == "technical_probation_violation_population"    ~ "Technical",
   data == "total_parole_violation_population"           ~ "All Parole",
   data == "new_offense_parole_violation_population"     ~ "New Offense",
-  data == "technical_parole_violation_population"       ~ "Technical"
+  data == "technical_parole_violation_population"       ~ "Technical",
+  data == "other_population"                            ~ "Other"
 ))
 
 # create probation vs parole variable
