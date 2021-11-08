@@ -11,15 +11,15 @@ ui <- fluidPage(
     #_________________________________________________________________________________________
     # 1) About
     #_________________________________________________________________________________________
-    
+
     "More Community, Less Confinement",
-    tabPanel("About", 
-             
+    tabPanel("About",
+
              h1("More Community, Less Confinement"),
              h2("A State-by-State Analysis on How Supervision Violations Impacted Prison Populations During the Pandemic"),
              p("This 50-state revocation dashboard explores how supervision violations impacted prison populations during—and prior to—the pandemic. The project was conducted in partnership with the Correctional Leaders Association with support from Arnold Ventures."),
              p("View the national report, 50 state reports, and our research methodology.")
-             
+
     ),#tabPanel
     
     #_________________________________________________________________________________________
@@ -29,17 +29,13 @@ ui <- fluidPage(
     tabPanel("Dashboard",
              
              ########
-             # 2) add map with clickable element to chose state?????
-             ########
-             
-             ########
              # 2) side bar with drop downs and instructions
              # eventually would like to have the option to hide the panel????
              # https://stackoverflow.com/questions/42159804/how-to-collapse-sidebarpanel-in-shiny-app
              ########
              fluidRow(# select state
                       column(width = 6,
-                              wellPanel(
+                             wellPanel(
                               # Select state
                                 div(style = "font-size:16px;",
                                     selectInput(inputId = "state", label = div(style = "font-size:16px;
@@ -58,7 +54,7 @@ ui <- fluidPage(
                              # Select adm or pop for plot
                                div(style = "font-size:16px;",
                                    selectInput(inputId = "adm_or_pop", label = div(style = "font-size:16px;
-                                                                                           color: #FFFFFF;", 
+                                                                                            color: #FFFFFF;", 
                                               "Admissions or Population"), 
                                                choices = unique(adm_pop_long$adm_or_pop)
                                    )
@@ -104,7 +100,7 @@ ui <- fluidPage(
              fluidRow(# Title admissions or population
                       column(width = 6, 
                              textOutput("adm_pop_header"),
-                             tags$head(tags$style("#adm_pop_header{color: #c75d19;
+                             tags$head(tags$style("#adm_pop_header{color: #B05D24;
                                                                    font-size: 22px;
                                                                    font-style: bold;
                                                                    text-align: center;
@@ -113,7 +109,7 @@ ui <- fluidPage(
                       # Title for supervision violations admissions or population
                       column(width = 6, 
                              textOutput("viol_header"),
-                             tags$head(tags$style("#viol_header{color: #c75d19;
+                             tags$head(tags$style("#viol_header{color: #B05D24;
                                                                 font-size: 22px;
                                                                 font-style: bold;
                                                                 text-align: center;
@@ -180,9 +176,7 @@ ui <- fluidPage(
                                                                          text-align: left;
                                                                          vertical-align: middle;}"))
                       ) #column
-
              ) #fluidRow
-             
     ), #tabPanel
     
     #_________________________________________________________________________________________
