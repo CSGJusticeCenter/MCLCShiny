@@ -251,7 +251,15 @@ adm_pop <- adm_pop %>% mutate(other_admissions = total_admissions-total_violatio
 
 # make data long form
 mclc <- adm_pop 
-mclc <- gather(mclc, metric, total, total_admissions:technical_parole_violation_population)
+mclc <- gather(mclc, data, total, total_admissions:technical_parole_violation_population)
+
+# create change from 2018 to 2019 to 2020
+mclc <- mclc %>%
+  group_by(states, data) %>%
+  mutate(change = (total/lag(total) - 1) * 100)
+
+# round
+mclc$change <- round(mclc$change, 0)
 
 # add regions
 mclc <- merge(mclc, region, by = "states")
@@ -259,15 +267,45 @@ mclc <- merge(mclc, region, by = "states")
 # remove dups
 mclc <- mclc %>% distinct()
 
+# add data type
+mclc <- mclc %>% mutate(metric = case_when(
+  data == "total_admissions"                            ~ "Total",
+  data == "total_violation_admissions"                  ~ "Supervision Violations",
+  data == "total_probation_violation_admissions"        ~ "All Probation",
+  data == "new_offense_probation_violation_admissions"  ~ "New Offense",
+  data == "technical_probation_violation_admissions"    ~ "Technical",
+  data == "total_parole_violation_admissions"           ~ "All Parole",
+  data == "new_offense_parole_violation_admissions"     ~ "New Offense",
+  data == "technical_parole_violation_admissions"       ~ "Technical",
+  data == "other_admissions"                            ~ "Other",
+  
+  data == "total_population"                            ~ "Total",
+  data == "total_violation_population"                  ~ "Supervision Violations",
+  data == "total_probation_violation_population"        ~ "All Probation",
+  data == "new_offense_probation_violation_population"  ~ "New Offense",
+  data == "technical_probation_violation_population"    ~ "Technical",
+  data == "total_parole_violation_population"           ~ "All Parole",
+  data == "new_offense_parole_violation_population"     ~ "New Offense",
+  data == "technical_parole_violation_population"       ~ "Technical",
+  data == "other_population"                            ~ "Other"
+))
+
+# create pop vs adm variable
+mclc <- mclc %>% mutate(adm_or_pop = ifelse(
+  grepl("population", data), "Population", "Admissions"
+))
+
 # change data types
 mclc$states <- as.factor(mclc$states)
 mclc$year <- as.factor(mclc$year)
 mclc$metric <- as.factor(mclc$metric)
+mclc$data <- as.factor(mclc$data)
 mclc$region <- as.factor(mclc$region)
 mclc$total <- as.numeric(mclc$total)
 
-# reorder data
-mclc <- mclc %>% select(states, year, metric, region, total)
+########
+# Shapefile
+########
 
 # set working directory
 setwd("C:/Users/mroberts/OneDrive - The Council of State Governments/Desktop/csgjc/repos/MCLCShiny")
@@ -290,7 +328,7 @@ adm_pop_long <- gather(adm_pop,
 # change text for metrics
 adm_pop_long <- adm_pop_long %>% mutate(metric = case_when(
   data == "total_admissions"                            ~ "Total",
-  data == "total_violation_admissions"                  ~ "Supervision Violation",
+  data == "total_violation_admissions"                  ~ "Supervision Violations",
   data == "total_probation_violation_admissions"        ~ "All Probation",
   data == "new_offense_probation_violation_admissions"  ~ "New Offense",
   data == "technical_probation_violation_admissions"    ~ "Technical",
@@ -300,7 +338,7 @@ adm_pop_long <- adm_pop_long %>% mutate(metric = case_when(
   data == "other_admissions"                            ~ "Other",
   
   data == "total_population"                            ~ "Total",
-  data == "total_violation_population"                  ~ "Supervision Violation",
+  data == "total_violation_population"                  ~ "Supervision Violations",
   data == "total_probation_violation_population"        ~ "All Probation",
   data == "new_offense_probation_violation_population"  ~ "New Offense",
   data == "technical_probation_violation_population"    ~ "Technical",
@@ -377,39 +415,3 @@ adm_pop_long <- adm_pop_long %>%
   mutate(adm_or_pop_lc = ifelse(
     adm_or_pop == "Admissions", "admissions", "population"
   ))
-
-# # change year variable to numeric 
-# adm_pop_long$year <- as.numeric(adm_pop_long$year)
-
-#########################################################################
-# merge data with shapefile
-mclc.df <- merge(states.shp, wide_data, by.x = 'NAME', by.y = "states")
-
-# drop states
-mclc.df <- mclc.df[!(mclc.df$NAME == 'Commonwealth of the Northern Mariana Islands' | 
-                       mclc.df$NAME == 'American Samoa' |
-                       mclc.df$NAME == 'Guam' |
-                       mclc.df$NAME == 'District of Columbia' |
-                       mclc.df$NAME == 'GUam' | 
-                       mclc.df$NAME == 'Puerto Rico' |
-                       mclc.df$NAME == 'United States Virgin Islands'), ]
-
-# change data format
-# mclc.df$NAME <- as.factor(mclc.df$NAME)
-# mclc.df$state_abbrev <- as.factor(mclc.df$state_abbrev)
-mclc.df$total_admissions_2018 <- as.numeric(mclc.df$total_admissions_2018)
-mclc.df$total_admissions_2019 <- as.numeric(mclc.df$total_admissions_2019)
-mclc.df$total_admissions_2020 <- as.numeric(mclc.df$total_admissions_2020)
-
-##################################
-# merge data with shapefile
-adm_pop_long_shp <- merge(states.shp, adm_pop_long, by.x = 'NAME', by.y = "states", duplicateGeoms = TRUE)
-
-# drop states
-adm_pop_long_shp <- adm_pop_long_shp[!(adm_pop_long_shp$NAME == 'Commonwealth of the Northern Mariana Islands' | 
-                                       adm_pop_long_shp$NAME == 'American Samoa' |
-                                       adm_pop_long_shp$NAME == 'Guam' |
-                                       adm_pop_long_shp$NAME == 'District of Columbia' |
-                                       adm_pop_long_shp$NAME == 'GUam' | 
-                                       adm_pop_long_shp$NAME == 'Puerto Rico' |
-                                       adm_pop_long_shp$NAME == 'United States Virgin Islands'), ]
