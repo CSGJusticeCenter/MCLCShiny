@@ -100,7 +100,7 @@ ui <- fluidPage(
              fluidRow(# Title admissions or population
                       column(width = 6, 
                              textOutput("adm_pop_header"),
-                             tags$head(tags$style("#adm_pop_header{color: #B05D24;
+                             tags$head(tags$style("#adm_pop_header{color: #000000;
                                                                    font-size: 22px;
                                                                    font-style: bold;
                                                                    text-align: center;
@@ -109,7 +109,7 @@ ui <- fluidPage(
                       # Title for supervision violations admissions or population
                       column(width = 6, 
                              textOutput("viol_header"),
-                             tags$head(tags$style("#viol_header{color: #B05D24;
+                             tags$head(tags$style("#viol_header{color: #000000;
                                                                 font-size: 22px;
                                                                 font-style: bold;
                                                                 text-align: center;
@@ -196,7 +196,50 @@ ui <- fluidPage(
     # 4) Map
     #_________________________________________________________________________________________
     
-    tabPanel("Map") #tabPanel
+    tabPanel("Map",
+             
+             # Sidebar layout with input and output definitions
+             sidebarLayout(
+               
+               # Sidebar panel for inputs 
+               sidebarPanel(
+                 
+                 titlePanel("Select Data"),
+                 
+                 #####
+                 # Choose admissions or population
+                 #####
+                 
+                 
+                 
+                 #####
+                 # Choose data type
+                 #####
+                 
+                 
+                 #####
+                 # Choose year
+                 #####
+                 selectInput("year_map", 
+                             label = "Change from Previous Year",
+                             choices = c("2019",
+                                         "2020"))
+                 
+               ), #sidebarPanel
+               
+               # Main panel for displaying outputs
+               mainPanel(
+                 
+                 #####
+                 # 4b) leaflet map
+                 #####
+                 
+                 leafletOutput(outputId = "map", height = 600)
+                 
+               ) #mainPanel
+             ) #sidebarLayout
+               
+    ) #tabPanel
     
   ) #navbarPage
 ) #fluidPage

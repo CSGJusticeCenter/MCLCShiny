@@ -16,10 +16,15 @@ mclc.df <- mclc.df[!(mclc.df$NAME == 'Commonwealth of the Northern Mariana Islan
                        mclc.df$NAME == 'United States Virgin Islands'), ]
 
 # set colors manually:
-pal <- colorFactor(
-  palette = c('#DEF0F6', '#D3CBC2', '#C7A78D', '#BC8259', '#B05D24'),
-  domain = mclc.df$states
-)
+# paletteNum <- colorFactor(
+#   palette = c('#DEF0F6', '#D3CBC2', '#C7A78D', '#BC8259', '#B05D24'),
+#   # palette = c('#B05D24', '#915D43', '#735D63', '#545D82', '#355DA1'),
+#   domain = mclc.df$states
+# )
+# palette_rev <- rev(brewer.pal(5, "Oranges"))
+
+paletteNum <- colorNumeric(palette = c('#004c6d', '#005f82', '#009bc2', '#00b0d7', '#00dcff'), 
+                           domain = mclc.df$change)
 
 regional_map <- leaflet() %>%
   
@@ -37,18 +42,18 @@ regional_map <- leaflet() %>%
               weight = 1,
               smoothFactor = .3,
               fillOpacity = .75,
-              fillColor = ~pal(mclc.df$total),
+              fillColor = ~paletteNum(mclc.df$change),
               
               # highlight options
               highlightOptions = highlightOptions(
                 weight = 2,
                 color = "#355DA1"
-              )
-  ) %>%
-  
-  addLegend(pal = paletteNum, 
-            values = mclc.df$total, 
-            title = '<small><br></small>', 
-            position = 'topright')
+              )) %>% 
+  addLegend(pal = paletteNum , 
+            values = mclc.df$change, 
+            title = '<small>2018 Avg. Electricity Cost<br>(cents/kWh | source: US EIA)</small>', 
+            position = 'bottomleft')
+   
 
 regional_map
+

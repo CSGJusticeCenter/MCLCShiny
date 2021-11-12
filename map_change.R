@@ -3,14 +3,12 @@ temp <- mclc %>%
          year == "2020",
          metric == "Total")
 
-vec_breaks <- c(      -50,       -20,       -10,         0,        10,        20,        50)
-vec_rgb    <- c("#B05D24", "#B87647", "#BF8E6A", "#C7A78D", "#CFBFB0", "#D6D8D3", "#DEF0F6") 
-
-#Add a colour column, and put in the appropriate RGB value
-for (i in 1:length(temp$change)) {
-  temp$colour[i] <- vec_rgb[min(which(vec_breaks > temp$change[i])) - 1]
-}
-
+# #Add a colour column, and put in the appropriate RGB value
+# vec_breaks <- c(      -70,       -60,      -50,        -40,      -20,        10,        20,        40,         50,        60,        70)
+# vec_rgb    <- c("#2A5B71", "#387A96", "#4698Bc", "#6BADC9", "#B5D6E4", "#DAEAF2", "#E9F4D6", "#A5D35C", "#8FC833", "#72A029", "#56781F")
+# for (i in 1:length(temp$change)) {
+#   temp$colour[i] <- vec_rgb[min(which(vec_breaks > temp$change[i])) - 1]
+# }
 
 # merge data with shapefile
 mclc.df <- merge(states.shp, temp, by.x = 'NAME', by.y = "states")
@@ -24,11 +22,12 @@ mclc.df <- mclc.df[!(mclc.df$NAME == 'Commonwealth of the Northern Mariana Islan
                        mclc.df$NAME == 'Puerto Rico' |
                        mclc.df$NAME == 'United States Virgin Islands'), ]
 
-# # set colors manually:
-# pal <- colorFactor(
-#   palette = c('#DEF0F6', '#D3CBC2', '#C7A78D', '#BC8259', '#B05D24'),
-#   domain = mclc.df$states
-# )
+# set colors manually:
+paletteNum <- colorFactor(
+  palette = c("#2A5B71", "#387A96", "#4698Bc", "#6BADC9", "#B5D6E4", "#DAEAF2", 
+              "#E9F4D6", "#A5D35C", "#8FC833", "#72A029", "#56781F"),
+  domain = mclc.df$states
+)
 
 regional_map <- leaflet() %>%
   
@@ -46,7 +45,7 @@ regional_map <- leaflet() %>%
               weight = 1,
               smoothFactor = .3,
               fillOpacity = .75,
-              fillColor = ~pal(mclc.df$change),
+              fillColor = ~paletteNum(mclc.df$change),
               
               # highlight options
               highlightOptions = highlightOptions(
@@ -55,9 +54,11 @@ regional_map <- leaflet() %>%
               )
   ) %>%
   
-  addLegend(pal = paletteNum, 
-            values = mclc.df$change, 
-            title = '<small><br></small>', 
-            position = 'topright')
+  addLegend("bottomright", 
+            colors =c("#2A5B71", "#387A96", "#4698Bc", "#6BADC9", "#B5D6E4", "#DAEAF2", 
+                      "#E9F4D6", "#A5D35C", "#8FC833", "#72A029", "#56781F", "#FFFFF", "#D3D3D3"),
+            labels= c("-70","-60","-50","-40","-20","10","20","40","50","60","70", "", "No Data"),
+            title= "% Change from Previous Year",
+            opacity = 1)
 
 regional_map

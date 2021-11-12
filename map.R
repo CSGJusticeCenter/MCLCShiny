@@ -34,6 +34,8 @@ server <- function(input, output, session) {
              metric == input$data)
   })
   
+  
+  
 }
 
 

@@ -66,7 +66,7 @@ server <- function(input, output, session) {
       # custom style
       theme_csgjc_plot_legend() +
       # colors and legend
-      scale_fill_manual(values = c("#DEF0F6", "#B05D24"),
+      scale_fill_manual(values = c("#1C3D4B", "#4698BC"),
                         name = "") +
       # y axis commas in labels
       scale_y_continuous(label = scales::comma) +
@@ -74,7 +74,8 @@ server <- function(input, output, session) {
       geom_text(aes(label = scales::comma(total)), 
                 position = position_stack(0.5),
                 size = 4.25,
-                colour = ifelse(dataFilter()$metric == "Other", "black", "white")) +
+                # colour = ifelse(dataFilter()$metric == "Other", "black", "white"))
+                colour = "#FFFFFF") +
       # bar sizes
       theme(aspect.ratio = 0.75)
 
@@ -105,7 +106,7 @@ server <- function(input, output, session) {
       # custom style
       theme_csgjc_plot_legend() +
       # colors and legend
-      scale_fill_manual(values = c("#DEF0F6", "#B05D24"),
+      scale_fill_manual(values = c("#B5D6E4", "#6BADC9"),
                         name = "") +
       # y axis commas in labels
       scale_y_continuous(label = scales::comma) +
