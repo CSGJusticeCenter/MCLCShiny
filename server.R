@@ -224,6 +224,57 @@ server <- function(input, output, session) {
   # 4) Map
   #_____________________________________________________________________________
   
+  # filter data
+  dataFilter_4 <- reactive({
+    mclc.df <- mclc_change %>% 
+    filter(adm_or_pop == input$adm_or_pop_map &
+           year == input$year_map &
+           metric == input$data_map)
+    mclc.df <- sp::merge(states.shp, mclc.df, by.x = 'NAME', by.y = "states", all=F)
+  })
   
+  # set colors manually:
+  paletteNum <- colorFactor(
+    palette = c("#2A5B71", "#387A96", "#4698Bc", "#6BADC9", "#B5D6E4", "#DAEAF2", 
+                "#E9F4D6", "#A5D35C", "#8FC833", "#72A029", "#56781F"),
+    domain = mclc.df$states
+  )
   
+  # leaflet map
+  output$map <- renderLeaflet({
+
+    leaflet() %>%
+      
+      # map template
+      addProviderTiles(providers$CartoDB.PositronNoLabels,
+                       options = providerTileOptions(opacity = 0)) %>%
+      
+      # set view to US
+      setView(lng = -96.25, lat = 39.50, zoom = 3.5) %>%
+      
+      addPolygons(data = dataFilter_4(),
+                  
+                  # colors
+                  color = 'white',
+                  weight = 1,
+                  smoothFactor = .3,
+                  fillOpacity = .75,
+                  fillColor = ~paletteNum(dataFilter_4()$change),
+                  
+                  # highlight options
+                  highlightOptions = highlightOptions(
+                    weight = 2,
+                    color = "#355DA1"
+                  )
+      ) %>%
+      
+      addLegend("bottomright", 
+                colors =c("#2A5B71", "#387A96", "#4698Bc", "#6BADC9", "#B5D6E4", "#DAEAF2", 
+                          "#E9F4D6", "#A5D35C", "#8FC833", "#72A029", "#56781F", "#FFFFF", "#D3D3D3"),
+                labels= c("-70","-60","-50","-40","-20","10","20","40","50","60","70", "", "No Data"),
+                title= "% Change from Previous Year",
+                opacity = 1)
+    
+  }) #renderLeaflet
+
 }

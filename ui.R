@@ -209,22 +209,24 @@ ui <- fluidPage(
                  #####
                  # Choose admissions or population
                  #####
-                 
-                 
+                 selectInput("adm_or_pop_map", 
+                             label = "Change from Previous Year",
+                             choices = unique(mclc_change$adm_or_pop)),
                  
                  #####
                  # Choose data type
                  #####
-                 
+                 selectInput("data_map", 
+                             label = "Select Data",
+                             choices = unique(mclc_change$metric)),
                  
                  #####
                  # Choose year
                  #####
                  selectInput("year_map", 
                              label = "Change from Previous Year",
-                             choices = c("2019",
-                                         "2020"))
-                 
+                             choices = unique(mclc_change$year)),
+                             
                ), #sidebarPanel
                
                # Main panel for displaying outputs
@@ -233,7 +235,6 @@ ui <- fluidPage(
                  #####
                  # 4b) leaflet map
                  #####
-                 
                  leafletOutput(outputId = "map", height = 600)
                  
                ) #mainPanel

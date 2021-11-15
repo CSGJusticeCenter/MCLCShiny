@@ -303,6 +303,9 @@ mclc$data <- as.factor(mclc$data)
 mclc$region <- as.factor(mclc$region)
 mclc$total <- as.numeric(mclc$total)
 
+# remove 2018 since change is missing
+mclc_change <- mclc %>% filter(year != 2018)
+
 ########
 # Shapefile
 ########
@@ -313,6 +316,15 @@ setwd("C:/Users/mroberts/OneDrive - The Council of State Governments/Desktop/csg
 # read state data
 states.shp <- readOGR('data/cb_2020_us_all_500k/cb_2020_us_state_500k/cb_2020_us_state_500k.shp',
                       encoding = "UTF-8", verbose = FALSE)
+
+# drop territories
+states.shp <- states.shp[!(states.shp$NAME == 'Commonwealth of the Northern Mariana Islands' | 
+                           states.shp$NAME == 'American Samoa' |
+                           states.shp$NAME == 'Guam' |
+                           states.shp$NAME == 'District of Columbia' |
+                           states.shp$NAME == 'GUam' | 
+                           states.shp$NAME == 'Puerto Rico' |
+                           states.shp$NAME == 'United States Virgin Islands'),]
 
 ########
 # Long form
