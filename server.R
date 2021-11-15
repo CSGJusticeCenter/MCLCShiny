@@ -237,7 +237,8 @@ server <- function(input, output, session) {
   paletteNum <- colorFactor(
     palette = c("#2A5B71", "#387A96", "#4698Bc", "#6BADC9", "#B5D6E4", "#DAEAF2", 
                 "#E9F4D6", "#A5D35C", "#8FC833", "#72A029", "#56781F"),
-    domain = mclc.df$states
+    domain = mclc.df$states,
+    na.color = "#D3D3D3" # light gray color for NA
   )
   
   # leaflet map
@@ -246,9 +247,9 @@ server <- function(input, output, session) {
     leaflet() %>%
       
       # map template
-      addProviderTiles(providers$CartoDB.PositronNoLabels,
+      addProviderTiles("CartoDB.Positron",
                        options = providerTileOptions(opacity = 0)) %>%
-      
+
       # set view to US
       setView(lng = -96.25, lat = 39.50, zoom = 3.5) %>%
       
@@ -271,7 +272,8 @@ server <- function(input, output, session) {
       addLegend("bottomright", 
                 colors =c("#2A5B71", "#387A96", "#4698Bc", "#6BADC9", "#B5D6E4", "#DAEAF2", 
                           "#E9F4D6", "#A5D35C", "#8FC833", "#72A029", "#56781F", "#FFFFF", "#D3D3D3"),
-                labels= c("-70","-60","-50","-40","-20","10","20","40","50","60","70", "", "No Data"),
+                # labels= c("-70","-60","-50","-40","-20","10","20","40","50","60","70", "", "No Data"),
+                labels= c("Decrease","","","","","","","","","","Increase", "", "No Data"),
                 title= "% Change from Previous Year",
                 opacity = 1)
     

@@ -235,7 +235,9 @@ ui <- fluidPage(
                  #####
                  # 4b) leaflet map
                  #####
-                 leafletOutput(outputId = "map", height = 600)
+                 column(width = 10, 
+                        leafletOutput(outputId = "map", height = 600),
+                        tags$style(HTML(".leaflet-container { background: #FFFFFF;}")))
                  
                ) #mainPanel
              ) #sidebarLayout
