@@ -159,7 +159,7 @@ server <- function(input, output, session) {
       paste0(dataFilter_2c()$change, "%"), subtitle = "Since 2019")
   })
 
-  # 2) Print adm or pop selected
+  # Sentence about changes
   output$total_sentence_change <- renderText({ 
     paste0("Since 2018, the number of prison ", dataFilter_2b()$adm_or_pop_lc, " ",
            dataFilter_2b()$change_type, "d ", dataFilter_2b()$change,
@@ -202,11 +202,11 @@ server <- function(input, output, session) {
       paste0(dataFilter_2e()$change, "%"), subtitle = "Since 2019")
   })
   
-  # 2) Print adm or pop selected
+  # Sentence about changes
   output$viol_sentence_change <- renderText({ 
-    paste0("Since 2018, the number of prison ", dataFilter_2d()$adm_or_pop_lc, " ",
+    paste0("Since 2018, the number of supervision violation ", dataFilter_2d()$adm_or_pop_lc, " ",
            dataFilter_2d()$change_type, "d ", dataFilter_2d()$change,
-           "%. In 2020, the number of prison ",  dataFilter_2e()$adm_or_pop_lc, " ",
+           "%. In 2020, the number of supervision violation ",  dataFilter_2e()$adm_or_pop_lc, " ",
            dataFilter_2e()$change_type, "d ", dataFilter_2e()$change, "%.")
   })
   
