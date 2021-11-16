@@ -29,7 +29,7 @@ ui <- fluidPage(
     tabPanel("Dashboard",
              
              ########
-             # 2) side bar with drop downs and instructions
+             # Side bar with drop downs and instructions
              # eventually would like to have the option to hide the panel????
              # https://stackoverflow.com/questions/42159804/how-to-collapse-sidebarpanel-in-shiny-app
              ########
@@ -65,7 +65,7 @@ ui <- fluidPage(
              ), #fluidRow
              
              ########
-             # 2) state title
+             # State title
              ########
              fluidRow(column(width = 1,
                              ""),
@@ -118,7 +118,7 @@ ui <- fluidPage(
              ), #fluidRow
              
              ########
-             # 2) Plots 
+             # Plots 
              ########
              fluidRow(column(width = 6, 
                              # Bar chart 
@@ -136,7 +136,7 @@ ui <- fluidPage(
              br(),
              
              ########
-             # 2) Changes from 2018 and 2019
+             # Changes from 2018 and 2019
              ########
              
              fluidRow(# change from 2018

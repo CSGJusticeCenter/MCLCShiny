@@ -279,4 +279,4 @@ server <- function(input, output, session) {
     
   }) #renderLeaflet
 
-}
+} #server
