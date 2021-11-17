@@ -72,10 +72,22 @@ server <- function(input, output, session) {
   dataFilter <- reactive({
     adm_pop_long %>% 
       filter(states == input$state &
-               adm_or_pop == input$adm_or_pop) %>% 
+             adm_or_pop == input$adm_or_pop) %>% 
       group_by(metric, year) %>% 
       summarise(total = sum(total)) %>% 
       filter(metric == "Supervision Violations" | metric == "Other")  
+  })
+  
+  # get max y limit value
+  ymax <- reactive({
+    adm_pop_long %>% 
+      filter(states == input$state &
+             adm_or_pop == input$adm_or_pop) %>% 
+      group_by(metric, year) %>% 
+      summarise(total = sum(total)) %>% 
+      filter(metric == "Supervision Violations" | metric == "Other") %>% 
+      ungroup() %>% 
+      top_n(1)
   })
   
   output$barchart <- renderPlot({
@@ -96,9 +108,13 @@ server <- function(input, output, session) {
       scale_fill_manual(values = c("#1C3D4B", "#4698BC"),
                         name = "") +
       # y axis commas in labels
-      scale_y_continuous(label = scales::comma) 
+      scale_y_continuous(label = scales::comma,
+                         limits = c(0, 1.04*max(dataFilter()$total)),
+                         expand = c(0,0)
+                         ) +
+      coord_cartesian(clip = "off")
     
-  }, width = 450, height = 450)
+  }, width = 450, height = 350)
   
   #########
   # Bar chart about supervision violations
@@ -114,8 +130,6 @@ server <- function(input, output, session) {
       filter(metric == "Technical" | metric == "New Offense")  
   })
   
-  max <- max(dataFilter_2()$total)
-  
   output$barchart_2 <- renderPlot({
     
     ggplot(data = dataFilter_2(),
@@ -127,16 +141,20 @@ server <- function(input, output, session) {
       # colors and legend
       scale_fill_manual(values = c("#B5D6E4", "#6BADC9"),
                         name = "") +
-      # y axis commas in labels
-      scale_y_continuous(label = scales::comma) +
       # labels
       geom_text(aes(label = scales::comma(total)), 
                 position = position_dodge(width = 0.5),
                 vjust = -0.25,
                 size = 4.25,
-                colour = "#000000") 
+                colour = "#000000") +
+      # y axis commas in labels
+      scale_y_continuous(label = scales::comma,
+                         limits = c(0, 1.04*max(dataFilter_2()$total)),
+                         expand = c(0,0)
+                         ) +
+      coord_cartesian(clip = "off")
 
-  }, width = 450, height = 450)
+  }, width = 450, height = 350)
   
   #########
   # Value boxes
