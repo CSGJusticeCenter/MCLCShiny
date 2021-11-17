@@ -68,14 +68,13 @@ pop20 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2
 costs <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Costs")
 
 # read state data
-# states.shp <- readOGR('Data/cb_2020_us_all_500k/cb_2020_us_state_500k/cb_2020_us_state_500k.shp',
-#                       encoding = "UTF-8", verbose = FALSE)
+# states.shp <- readOGR(dsn = "Data/cb_2014_us_state_5m/cb_2014_us_state_5m.shp",
+#                       layer = "cb_2014_us_state_5m", verbose = FALSE)
+states.shp <- readOGR('Data/cb_2020_us_all_500k/cb_2020_us_state_500k/cb_2020_us_state_500k.shp',
+                      encoding = "UTF-8", verbose = FALSE)
 
 #set wd 
 setwd("C:/Users/mroberts/OneDrive - The Council of State Governments/Desktop/csgjc/repos/MCLCShiny")
-
-states.shp <- readOGR(dsn = "data/cb_2014_us_state_5m/cb_2014_us_state_5m.shp",
-                      layer = "cb_2014_us_state_5m", verbose = FALSE)
 
 ##########################
 # custom functions
@@ -141,10 +140,10 @@ theme_csgjc_plot_legend <- function(){
 remove.territories = function(.df) {
   subset(.df, 
          .df$id != "AS" &
-           .df$id != "MP" &
-           .df$id != "GU" & 
-           .df$id != "PR" &
-           .df$id != "VI" 
+         .df$id != "MP" &
+         .df$id != "GU" & 
+         .df$id != "PR" &
+         .df$id != "VI" 
   )
 }
 
@@ -153,32 +152,13 @@ remove.territories = function(.df) {
 # move and rescale hawaii and alaska
 ########
 
-x = c("leaflet", "rgdal", "maptools", "mapproj", "rgeos")
-lapply(x, library, character.only = TRUE)
-
-# convert it to Albers equal area
-us_aea <- spTransform(states.shp, CRS("+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs"))
-us_aea@data$id <- rownames(us_aea@data)
-
-# extract, then rotate, shrink & move alaska (and reset projection)
-alaska <- us_aea[us_aea$STATEFP=="02",]
-alaska <- elide(alaska, rotate=-50)
-alaska <- elide(alaska, scale=max(apply(bbox(alaska), 1, diff)) / 2.3)
-alaska <- elide(alaska, shift=c(-2100000, -2500000))
-proj4string(alaska) <- proj4string(us_aea)
-
-# extract, then rotate & shift hawaii
-hawaii <- us_aea[us_aea$STATEFP=="15",]
-hawaii <- elide(hawaii, rotate=-35)
-hawaii <- elide(hawaii, shift=c(5400000, -1400000))
-proj4string(hawaii) <- proj4string(us_aea)
-
-# remove old states and put new ones back in; note the different order
-us_aea <- us_aea[!us_aea$STATEFP %in% c("02", "15", "72"),]
-us_aea <- rbind(us_aea, alaska, hawaii)
-
-# transform data again
-states.shp <- spTransform(us_aea, proj4string(us))
+states.shp <- states.shp[!(states.shp$NAME == "Commonwealth of the Northern Mariana Islands"|
+                           states.shp$NAME == "American Samoa" |
+                           states.shp$NAME == "Guam" |
+                           states.shp$NAME == "District of Columbia" |
+                           states.shp$NAME == "Guam"|
+                           states.shp$NAME == "Puerto Rico" |
+                           states.shp$NAME == "United States Virgin Islands")]
 
 ##########
 # make wide form data
