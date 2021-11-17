@@ -70,11 +70,12 @@ costs <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Costs")
 # read state data
 # states.shp <- readOGR('Data/cb_2020_us_all_500k/cb_2020_us_state_500k/cb_2020_us_state_500k.shp',
 #                       encoding = "UTF-8", verbose = FALSE)
-states.shp <- readOGR(dsn = "Data/cb_2014_us_state_5m/cb_2014_us_state_5m.shp",
-                      layer = "cb_2014_us_state_5m", verbose = FALSE)
 
 #set wd 
 setwd("C:/Users/mroberts/OneDrive - The Council of State Governments/Desktop/csgjc/repos/MCLCShiny")
+
+states.shp <- readOGR(dsn = "data/cb_2014_us_state_5m/cb_2014_us_state_5m.shp",
+                      layer = "cb_2014_us_state_5m", verbose = FALSE)
 
 ##########################
 # custom functions
@@ -125,7 +126,12 @@ theme_csgjc_plot_legend <- function(){
       axis.title.y = element_blank(),
       axis.text.x = element_text(size = 12, 
                                  colour = "#000000"),
-      axis.text.y = element_blank(),
+      axis.text.y = element_text(size = 12, 
+                                 colour = "#000000"),
+      axis.line.x.bottom = element_line(size = 0.75, 
+                                 linetype = "solid", 
+                                 colour = "#000000"),
+      axis.line.y = element_blank(),
       panel.grid.major = element_blank(),
       panel.grid.minor = element_blank(),
       panel.border = element_blank()     

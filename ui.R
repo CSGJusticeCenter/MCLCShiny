@@ -89,7 +89,6 @@ ui <- fluidPage(
                              br(),
                              
                              #2) Paragraph about data
-                             # need to make adm and pop lowercase??????
                              textOutput("selected_state_adm_pop"),
                              tags$head(tags$style("#selected_state_adm_pop{color: #000000;
                                                                            font-size: 16px;
@@ -105,24 +104,45 @@ ui <- fluidPage(
              ), #fluidRow
              
              
-             fluidRow(# Title admissions or population
-                      column(width = 6, 
-                             textOutput("adm_pop_header"),
-                             tags$head(tags$style("#adm_pop_header{color: #000000;
-                                                                   font-size: 22px;
-                                                                   font-style: bold;
-                                                                   text-align: center;
+             # fluidRow(# Title admissions or population
+             #          column(width = 6, 
+             #                 textOutput("adm_pop_header"),
+             #                 tags$head(tags$style("#adm_pop_header{color: #000000;
+             #                                                       font-size: 22px;
+             #                                                       font-style: bold;
+             #                                                       text-align: center;
+             #                                        }"))),
+             #          
+             #          # Title for supervision violations admissions or population
+             #          column(width = 6, 
+             #                 textOutput("viol_header"),
+             #                 tags$head(tags$style("#viol_header{color: #000000;
+             #                                                    font-size: 22px;
+             #                                                    font-style: bold;
+             #                                                    text-align: center;
+             #                                        }")))
+             # ), #fluidRow
+             
+             # add spacing
+             br(),
+
+             fluidRow(# Title for overall graph
+               column(width = 6, 
+                      textOutput("adm_pop_title"),
+                      tags$head(tags$style("#adm_pop_title{color: #000000;
+                                                           font-size: 18px;
+                                                           font-style: bold;
+                                                           text-align: center;
                                                     }"))),
-                      
-                      # Title for supervision violations admissions or population
-                      column(width = 6, 
-                             textOutput("viol_header"),
-                             tags$head(tags$style("#viol_header{color: #000000;
-                                                                font-size: 22px;
-                                                                font-style: bold;
-                                                                text-align: center;
-                                                    }")))
                
+               # Title for supervision violations graph
+               column(width = 6, 
+                      textOutput("viol_title"),
+                      tags$head(tags$style("#viol_title{color: #000000;
+                                                        font-size: 18px;
+                                                        font-style: bold;
+                                                        text-align: center;
+                                                    }")))
              ), #fluidRow
              
              ########

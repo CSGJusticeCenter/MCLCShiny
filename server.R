@@ -37,21 +37,35 @@ server <- function(input, output, session) {
   })
   
   #########
-  # 2) Headers
+  # Headers
+  #########
+  
+  # # Print adm or pop selected
+  # output$adm_pop_header <- renderText({ 
+  #   paste("Overall ", input$adm_or_pop)
+  # })
+  # 
+  # # Print adm or pop selected for sup viols
+  # output$viol_header <- renderText({ 
+  #   paste("Supervision Violation ", input$adm_or_pop)
+  # })
+  
+  #########
+  # Plot titles
   #########
   
   # Print adm or pop selected
-  output$adm_pop_header <- renderText({ 
-    paste("Total ", input$adm_or_pop)
+  output$adm_pop_title <- renderText({ 
+    paste("Overall ", input$adm_or_pop, "by Type")
   })
   
   # Print adm or pop selected for sup viols
-  output$viol_header <- renderText({ 
-    paste("Supervision Violation ", input$adm_or_pop)
+  output$viol_title <- renderText({ 
+    paste("Supervision Violation ", input$adm_or_pop, "by Type")
   })
   
   #########
-  # 2) Bar chart about total admissions or population
+  # Bar chart about total admissions or population
   #########
   
   # Subset data
@@ -75,7 +89,7 @@ server <- function(input, output, session) {
                 size = 4.25,
                 vjust = -0.5,
                 colour = "#000000") +
-      ggtitle("\n") +
+      # ggtitle("\n") +
       # custom style
       theme_csgjc_plot_legend() +
       # colors and legend
@@ -83,11 +97,11 @@ server <- function(input, output, session) {
                         name = "") +
       # y axis commas in labels
       scale_y_continuous(label = scales::comma) 
-
-  }, width = 450, height = 400)
+    
+  }, width = 450, height = 450)
   
   #########
-  # 2) Bar chart about supervision violations
+  # Bar chart about supervision violations
   #########
   
   # Subset data
@@ -100,12 +114,14 @@ server <- function(input, output, session) {
       filter(metric == "Technical" | metric == "New Offense")  
   })
   
+  max <- max(dataFilter_2()$total)
+  
   output$barchart_2 <- renderPlot({
     
     ggplot(data = dataFilter_2(),
            aes_string(x = 'year', y = 'total', fill = 'metric')) +
       geom_bar(stat = "identity", position = "dodge", width = .5) +
-      ggtitle("\n") +
+      # ggtitle("\n") +
       # custom style
       theme_csgjc_plot_legend() +
       # colors and legend
@@ -120,10 +136,10 @@ server <- function(input, output, session) {
                 size = 4.25,
                 colour = "#000000") 
 
-  }, width = 450, height = 400)
+  }, width = 450, height = 450)
   
   #########
-  # 2) Value boxes
+  # Value boxes
   #########
 
   ###
