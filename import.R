@@ -430,3 +430,4 @@ adm_pop_long <- adm_pop_long %>%
   mutate(adm_or_pop_lc = ifelse(
     adm_or_pop == "Admissions", "admissions", "population"
   ))
+

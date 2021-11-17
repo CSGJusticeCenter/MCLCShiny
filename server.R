@@ -66,11 +66,15 @@ server <- function(input, output, session) {
   
   output$barchart <- renderPlot({
     
-    ggplot(data = dataFilter(),
-           aes_string(x = 'year', y = 'total', fill = 'metric')) +
-      # barchart
-      geom_bar(stat = "identity", position = "stack", width = 0.70) +
-      # title
+    ggplot(dataFilter(), 
+           aes_string(fill='metric', y='total', x='year')) + 
+      geom_bar(position="dodge", stat="identity", width = .5) + 
+      # labels
+      geom_text(aes(label=scales::comma(total)),
+                position=position_dodge(0.5),
+                size = 4.25,
+                vjust = -0.5,
+                colour = "#000000") +
       ggtitle("\n") +
       # custom style
       theme_csgjc_plot_legend() +
@@ -78,15 +82,7 @@ server <- function(input, output, session) {
       scale_fill_manual(values = c("#1C3D4B", "#4698BC"),
                         name = "") +
       # y axis commas in labels
-      scale_y_continuous(label = scales::comma) +
-      # labels
-      geom_text(aes(label = scales::comma(total)), 
-                position = position_stack(0.5),
-                size = 4.25,
-                # colour = ifelse(dataFilter()$metric == "Other", "black", "white"))
-                colour = "#FFFFFF") +
-      # bar sizes
-      theme(aspect.ratio = 0.75)
+      scale_y_continuous(label = scales::comma) 
 
   }, width = 450, height = 400)
   
@@ -108,9 +104,7 @@ server <- function(input, output, session) {
     
     ggplot(data = dataFilter_2(),
            aes_string(x = 'year', y = 'total', fill = 'metric')) +
-      # barchart
-      geom_bar(stat = "identity", position = "stack", width = 0.70) +
-      # title
+      geom_bar(stat = "identity", position = "dodge", width = .5) +
       ggtitle("\n") +
       # custom style
       theme_csgjc_plot_legend() +
@@ -121,12 +115,11 @@ server <- function(input, output, session) {
       scale_y_continuous(label = scales::comma) +
       # labels
       geom_text(aes(label = scales::comma(total)), 
-                position = position_stack(0.5),
+                position = position_dodge(width = 0.5),
+                vjust = -0.25,
                 size = 4.25,
-                colour = ifelse(dataFilter()$metric == "Other", "black", "white")) +
-      # bar sizes
-      theme(aspect.ratio = 0.75)
-    
+                colour = "#000000") 
+
   }, width = 450, height = 400)
   
   #########
