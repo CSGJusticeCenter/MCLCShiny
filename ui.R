@@ -193,10 +193,12 @@ ui <- fluidPage(
     
     tabPanel("View Data",
              
-             titlePanel("View Data"),
+             titlePanel(""),
              
-             # create table
-             DTOutput('table')
+             DT::dataTableOutput("dt"),
+             
+             downloadButton(outputId = "download_filtered",
+                            label = "Download Filtered Data")
              
     ), #tabPanel
     
@@ -206,49 +208,46 @@ ui <- fluidPage(
     
     tabPanel("Map",
              
-             # Sidebar layout with input and output definitions
-             sidebarLayout(
+             fluidRow(# title
+               column(width = 12,
+                      
+                      # choose admissions or population
+                      selectInput("adm_or_pop_map", 
+                                  label = "Change from Previous Year",
+                                  choices = unique(mclc_change$adm_or_pop))
+               ), #column
                
-               # Sidebar panel for inputs 
-               sidebarPanel(
-                 
-                 titlePanel("Select Data"),
-                 
-                 #####
-                 # Choose admissions or population
-                 #####
-                 selectInput("adm_or_pop_map", 
-                             label = "Change from Previous Year",
-                             choices = unique(mclc_change$adm_or_pop)),
-                 
-                 #####
-                 # Choose data type
-                 #####
-                 selectInput("data_map", 
-                             label = "Select Data",
-                             choices = unique(mclc_change$metric)),
-                 
-                 #####
-                 # Choose year
-                 #####
-                 selectInput("year_map", 
-                             label = "Change from Previous Year",
-                             choices = unique(mclc_change$year)),
-                             
-               ), #sidebarPanel
+               column(width = 12,
+                      
+                      # select data
+                      selectInput("data_map", 
+                                  label = "Select Data",
+                                  choices = unique(mclc_change$metric)),
+               ), #column
                
-               # Main panel for displaying outputs
-               mainPanel(
-                 
-                 #####
-                 # 4b) leaflet map
-                 #####
-                 column(width = 10, 
-                        leafletOutput(outputId = "map", height = 600),
-                        tags$style(HTML(".leaflet-container { background: #FFFFFF;}")))
-                 
-               ) #mainPanel
-             ) #sidebarLayout
+               column(width = 12,
+                      
+                      # select year
+                      selectInput("year_map", 
+                                  label = "Change from Previous Year",
+                                  choices = unique(mclc_change$year)),
+               ) #column
+             ), #fluidRow
+             
+             fluidRow(# title
+               column(width = 12,
+                      
+                      "Title of Map"
+                      
+               ) #column
+             ), #fluidRow
+             
+             fluidRow(# title
+               column(width = 12,
+                      leafletOutput(outputId = "map", height = 600),
+                      tags$style(HTML(".leaflet-container { background: #FFFFFF;}"))
+               ) #column
+             ) #fluidRow
                
     ) #tabPanel
     

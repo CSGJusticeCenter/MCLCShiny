@@ -216,11 +216,28 @@ server <- function(input, output, session) {
   # 3) View Data
   #_____________________________________________________________________________
   
-  output$table <- renderDT(mclc,
-                           filter = "top",
-                           options = list(
-                           pageLength = 50
-                           ))
+  output$dt <- 
+    DT::renderDataTable(
+      datatable(mclc_datatable,
+                filter = "top"),
+      server = FALSE
+      )
+  
+  output$filtered_row <- 
+    renderPrint({
+      input[["dt_rows_all"]]
+    })
+  
+  output$download_filtered <- 
+    downloadHandler(
+      filename = function() {
+        paste('mclc-filtered-', Sys.Date(), '.csv', sep='')
+      },
+      content = function(file){
+        write.csv(mclc_datatable[input[["dt_rows_all"]], ],
+                  file)
+      }
+    )
   
   #_____________________________________________________________________________
   # 4) Map
@@ -246,14 +263,16 @@ server <- function(input, output, session) {
   # leaflet map
   output$map <- renderLeaflet({
 
-    leaflet() %>%
+    leaflet(options = leafletOptions(zoomControl = FALSE,
+                                     minZoom = 4.5, maxZoom = 4.5,
+                                     dragging = FALSE)) %>%  
       
       # map template
       addProviderTiles("CartoDB.Positron",
                        options = providerTileOptions(opacity = 0)) %>%
 
       # set view to US
-      setView(lng = -96.25, lat = 39.50, zoom = 3.5) %>%
+      setView(lng = -96.25, lat = 39.50, zoom = 4.5) %>%
       
       addPolygons(data = dataFilter_4(),
                   
