@@ -1,3 +1,11 @@
+#######################################
+# Project: MCLCShiny
+# File: ui.R
+# Authors: Mari Roberts
+# Date: November 11, 2021
+# Description: 
+#    User interface
+#######################################
 
 # define UI
 ui <- fluidPage(

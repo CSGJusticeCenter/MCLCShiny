@@ -2,11 +2,14 @@
 # Project: MCLCShiny
 # File: import.R
 # Authors: Mari Roberts
-# Date: September 27, 2021
+# Date: November 11, 2021
 # Description: 
+#    Defines custom functions
+#    Loads packages
 #    Imports data
 #    Combines data by year
 #    Cleans variable names
+#    Creates data files for app
 
 # Input:
 #    "Data for web team v13.xlsx"
@@ -40,6 +43,31 @@ for(p in requiredPackages){
   if(!require(p,character.only = TRUE)) install.packages(p)
   library(p,character.only = TRUE)
 }
+
+########
+# Import data
+########
+
+#set wd to teams (for collaboration) - change user name to read in data
+setwd("C:/Users/mroberts/The Council of State Governments/JC Research - 50 State Revocations Project/50 State Survey (2021)")
+
+# read charge data for 2019 and 2020
+adm18 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2018")
+adm19 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2019")
+adm20 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2020")
+
+# pop
+pop18 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2018")
+pop19 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2019")
+pop20 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2020")
+
+# costs
+costs <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Costs")
+
+# read state data
+states.shp <- readOGR('Data/cb_2020_us_all_500k/cb_2020_us_state_500k/cb_2020_us_state_500k.shp',
+                      encoding = "UTF-8", verbose = FALSE)
+
 
 ##########################
 # plot functions
@@ -95,25 +123,18 @@ theme_csgjc_plot_legend <- function(){
     )
 }
 
-##########################
-# import data
-##########################
+########
+# clean shapefile
+########
 
-#set wd to teams (for collaboration) - change user name to read in data
-setwd("C:/Users/mroberts/The Council of State Governments/JC Research - 50 State Revocations Project/50 State Survey (2021)")
-
-# read charge data for 2019 and 2020
-adm18 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2018")
-adm19 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2019")
-adm20 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2020")
-
-# pop
-pop18 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2018")
-pop19 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2019")
-pop20 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2020")
-
-# costs
-costs <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Costs")
+# drop territories
+states.shp <- states.shp[!(states.shp$NAME == 'Commonwealth of the Northern Mariana Islands' | 
+                           states.shp$NAME == 'American Samoa' |
+                           states.shp$NAME == 'Guam' |
+                           states.shp$NAME == 'District of Columbia' |
+                           states.shp$NAME == 'GUam' | 
+                           states.shp$NAME == 'Puerto Rico' |
+                           states.shp$NAME == 'United States Virgin Islands'),]
 
 ##########
 # make wide form data
@@ -271,20 +292,20 @@ mclc <- mclc %>% distinct()
 mclc <- mclc %>% mutate(metric = case_when(
   data == "total_admissions"                            ~ "Total",
   data == "total_violation_admissions"                  ~ "Supervision Violations",
-  data == "total_probation_violation_admissions"        ~ "All Probation",
+  data == "total_probation_violation_admissions"        ~ "Probation",
   data == "new_offense_probation_violation_admissions"  ~ "New Offense",
   data == "technical_probation_violation_admissions"    ~ "Technical",
-  data == "total_parole_violation_admissions"           ~ "All Parole",
+  data == "total_parole_violation_admissions"           ~ "Parole",
   data == "new_offense_parole_violation_admissions"     ~ "New Offense",
   data == "technical_parole_violation_admissions"       ~ "Technical",
   data == "other_admissions"                            ~ "Other",
   
   data == "total_population"                            ~ "Total",
   data == "total_violation_population"                  ~ "Supervision Violations",
-  data == "total_probation_violation_population"        ~ "All Probation",
+  data == "total_probation_violation_population"        ~ "Probation",
   data == "new_offense_probation_violation_population"  ~ "New Offense",
   data == "technical_probation_violation_population"    ~ "Technical",
-  data == "total_parole_violation_population"           ~ "All Parole",
+  data == "total_parole_violation_population"           ~ "Parole",
   data == "new_offense_parole_violation_population"     ~ "New Offense",
   data == "technical_parole_violation_population"       ~ "Technical",
   data == "other_population"                            ~ "Other"
@@ -307,26 +328,6 @@ mclc$total <- as.numeric(mclc$total)
 mclc_change <- mclc %>% filter(year != 2018)
 
 ########
-# Shapefile
-########
-
-# set working directory
-setwd("C:/Users/mroberts/OneDrive - The Council of State Governments/Desktop/csgjc/repos/MCLCShiny")
-
-# read state data
-states.shp <- readOGR('data/cb_2020_us_all_500k/cb_2020_us_state_500k/cb_2020_us_state_500k.shp',
-                      encoding = "UTF-8", verbose = FALSE)
-
-# drop territories
-states.shp <- states.shp[!(states.shp$NAME == 'Commonwealth of the Northern Mariana Islands' | 
-                           states.shp$NAME == 'American Samoa' |
-                           states.shp$NAME == 'Guam' |
-                           states.shp$NAME == 'District of Columbia' |
-                           states.shp$NAME == 'GUam' | 
-                           states.shp$NAME == 'Puerto Rico' |
-                           states.shp$NAME == 'United States Virgin Islands'),]
-
-########
 # Long form
 ########
 
@@ -341,20 +342,20 @@ adm_pop_long <- gather(adm_pop,
 adm_pop_long <- adm_pop_long %>% mutate(metric = case_when(
   data == "total_admissions"                            ~ "Total",
   data == "total_violation_admissions"                  ~ "Supervision Violations",
-  data == "total_probation_violation_admissions"        ~ "All Probation",
+  data == "total_probation_violation_admissions"        ~ "Probation",
   data == "new_offense_probation_violation_admissions"  ~ "New Offense",
   data == "technical_probation_violation_admissions"    ~ "Technical",
-  data == "total_parole_violation_admissions"           ~ "All Parole",
+  data == "total_parole_violation_admissions"           ~ "Parole",
   data == "new_offense_parole_violation_admissions"     ~ "New Offense",
   data == "technical_parole_violation_admissions"       ~ "Technical",
   data == "other_admissions"                            ~ "Other",
   
   data == "total_population"                            ~ "Total",
   data == "total_violation_population"                  ~ "Supervision Violations",
-  data == "total_probation_violation_population"        ~ "All Probation",
+  data == "total_probation_violation_population"        ~ "Probation",
   data == "new_offense_probation_violation_population"  ~ "New Offense",
   data == "technical_probation_violation_population"    ~ "Technical",
-  data == "total_parole_violation_population"           ~ "All Parole",
+  data == "total_parole_violation_population"           ~ "Parole",
   data == "new_offense_parole_violation_population"     ~ "New Offense",
   data == "technical_parole_violation_population"       ~ "Technical",
   data == "other_population"                            ~ "Other"

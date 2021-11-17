@@ -1,3 +1,12 @@
+#######################################
+# Project: MCLCShiny
+# File: server.R
+# Authors: Mari Roberts
+# Date: November 11, 2021
+# Description: 
+#    Server
+#######################################
+
 server <- function(input, output, session) { 
   
   #_____________________________________________________________________________
