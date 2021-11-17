@@ -29,6 +29,9 @@ requiredPackages = c('dplyr',
                      'ggplot2',
                      'leaflet',
                      'maps',
+                     'maptools',
+                     'mapproj',
+                     'rgeos',
                      'geojsonio',
                      'rgdal',
                      'tigris',
@@ -130,13 +133,13 @@ theme_csgjc_plot_legend <- function(){
 ########
 
 # drop territories
-states.shp <- states.shp[!(states.shp$NAME == 'Commonwealth of the Northern Mariana Islands' | 
-                           states.shp$NAME == 'American Samoa' |
-                           states.shp$NAME == 'Guam' |
-                           states.shp$NAME == 'District of Columbia' |
-                           states.shp$NAME == 'GUam' | 
-                           states.shp$NAME == 'Puerto Rico' |
-                           states.shp$NAME == 'United States Virgin Islands'),]
+# states.shp <- states.shp[!(states.shp$NAME == 'Commonwealth of the Northern Mariana Islands' | 
+#                            states.shp$NAME == 'American Samoa' |
+#                            states.shp$NAME == 'Guam' |
+#                            states.shp$NAME == 'District of Columbia' |
+#                            states.shp$NAME == 'GUam' | 
+#                            states.shp$NAME == 'Puerto Rico' |
+#                            states.shp$NAME == 'United States Virgin Islands'),]
 
 ##########
 # make wide form data
@@ -328,6 +331,43 @@ mclc$total <- as.numeric(mclc$total)
 
 # remove 2018 since change is missing
 mclc_change <- mclc %>% filter(year != 2018)
+
+########
+# Data for table
+########
+
+# change text for metrics
+mclc_datatable <- mclc %>% mutate(data = case_when(
+  data == "total_admissions"                            ~ "Total",
+  data == "total_violation_admissions"                  ~ "Supervision Violations",
+  data == "total_probation_violation_admissions"        ~ "Probation",
+  data == "new_offense_probation_violation_admissions"  ~ "New Offense",
+  data == "technical_probation_violation_admissions"    ~ "Technical",
+  data == "total_parole_violation_admissions"           ~ "Parole",
+  data == "new_offense_parole_violation_admissions"     ~ "New Offense",
+  data == "technical_parole_violation_admissions"       ~ "Technical",
+
+  data == "total_population"                            ~ "Total",
+  data == "total_violation_population"                  ~ "Supervision Violations",
+  data == "total_probation_violation_population"        ~ "Probation",
+  data == "new_offense_probation_violation_population"  ~ "New Offense",
+  data == "technical_probation_violation_population"    ~ "Technical",
+  data == "total_parole_violation_population"           ~ "Parole",
+  data == "new_offense_parole_violation_population"     ~ "New Offense",
+  data == "technical_parole_violation_population"       ~ "Technical"
+))
+
+# select variables
+mclc_datatable <- mclc_datatable %>% select(State = states,
+                                  Year = year,
+                                  Data = data,
+                                  Type = adm_or_pop,
+                                  Count = total,
+                                  Region = region)
+
+# change data types
+mclc_datatable$Data <- as.factor(mclc_datatable$Data)
+mclc_datatable$Type <- as.factor(mclc_datatable$Type)
 
 ########
 # Long form
