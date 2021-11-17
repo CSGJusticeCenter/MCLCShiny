@@ -68,6 +68,8 @@ costs <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Costs")
 states.shp <- readOGR('Data/cb_2020_us_all_500k/cb_2020_us_state_500k/cb_2020_us_state_500k.shp',
                       encoding = "UTF-8", verbose = FALSE)
 
+#set wd 
+setwd("C:/Users/mroberts/OneDrive - The Council of State Governments/Desktop/csgjc/repos/MCLCShiny")
 
 ##########################
 # plot functions
