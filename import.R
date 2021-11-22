@@ -70,11 +70,15 @@ costs <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Costs")
 # read state data
 # states.shp <- readOGR(dsn = "Data/cb_2014_us_state_5m/cb_2014_us_state_5m.shp",
 #                       layer = "cb_2014_us_state_5m", verbose = FALSE)
-states.shp <- readOGR('Data/cb_2020_us_all_500k/cb_2020_us_state_500k/cb_2020_us_state_500k.shp',
-                      encoding = "UTF-8", verbose = FALSE)
+# states.shp <- readOGR('Data/cb_2020_us_all_500k/cb_2020_us_state_500k/cb_2020_us_state_500k.shp',
+#                       encoding = "UTF-8", verbose = FALSE)
 
 #set wd 
 setwd("C:/Users/mroberts/OneDrive - The Council of State Governments/Desktop/csgjc/repos/MCLCShiny")
+
+# From https://www.census.gov/geo/maps-data/data/cbf/cbf_state.html
+us <- readOGR(dsn = "data/cb_2014_us_state_5m/cb_2014_us_state_5m.shp",
+              layer = "cb_2014_us_state_5m", verbose = FALSE)
 
 ##########################
 # custom functions
@@ -137,58 +141,36 @@ theme_csgjc_plot_legend <- function(){
     )
 }
 
-remove.territories = function(.df) {
-  subset(.df, 
-         .df$id != "AS" &
-         .df$id != "MP" &
-         .df$id != "GU" & 
-         .df$id != "PR" &
-         .df$id != "VI" 
-  )
-}
-
 ########
 # clean shapefile
 # move and rescale hawaii and alaska
 ########
 
-states.shp <- states.shp[!(states.shp$NAME == "Commonwealth of the Northern Mariana Islands"|
-                           states.shp$NAME == "American Samoa" |
-                           states.shp$NAME == "Guam" |
-                           states.shp$NAME == "District of Columbia" |
-                           states.shp$NAME == "Guam"|
-                           states.shp$NAME == "Puerto Rico" |
-                           states.shp$NAME == "United States Virgin Islands")]
+# convert it to Albers equal area
+us_aea <- spTransform(us, CRS("+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs"))
+us_aea@data$id <- rownames(us_aea@data)
 
-##########
-# make wide form data
-##########
+# extract, then rotate, shrink & move alaska (and reset projection)
+# need to use state IDs via # https://www.census.gov/geo/reference/ansi_statetables.html
+alaska <- us_aea[us_aea$STATEFP=="02",]
+alaska <- elide(alaska, rotate=-50)
+alaska <- elide(alaska, scale=max(apply(bbox(alaska), 1, diff)) / 2.3)
+alaska <- elide(alaska, shift=c(-2100000, -2500000))
+proj4string(alaska) <- proj4string(us_aea)
 
-# add year to end of variable names
-vars <- c("Total admissions", "Total violation admissions",                
-          "Total probation violation admissions", "New offense probation violation admissions",
-          "Technical probation violation admissions", "Total parole violation admissions",         
-          "New offense parole violation admissions", "Technical parole violation admissions")
-adm18wide <- rename.vars(adm18, from=vars, to=paste0(vars, "_2018"))
-adm19wide <- rename.vars(adm19, from=vars, to=paste0(vars, "_2019"))
-adm20wide <- rename.vars(adm20, from=vars, to=paste0(vars, "_2020"))
-vars <- c("Total population", "Total violation population",                
-          "Total probation violation population", "New offense probation violation population",
-          "Technical probation violation population", "Total parole violation population",         
-          "New offense parole violation population", "Technical parole violation population")
-pop18wide <- rename.vars(pop18, from=vars, to=paste0(vars, "_2018"))
-pop19wide <- rename.vars(pop19, from=vars, to=paste0(vars, "_2019"))
-pop20wide <- rename.vars(pop20, from=vars, to=paste0(vars, "_2020"))
+# extract, then rotate & shift hawaii
+hawaii <- us_aea[us_aea$STATEFP=="15",]
+hawaii <- elide(hawaii, rotate=-35)
+hawaii <- elide(hawaii, shift=c(5400000, -1400000))
+proj4string(hawaii) <- proj4string(us_aea)
 
-# merge all pop and adm together
-wide_data <- merge(adm18wide, adm19wide, by = c("State Abbrev", "States"))
-wide_data <- merge(wide_data, adm20wide, by = c("State Abbrev", "States"))
-wide_data <- merge(wide_data, pop18wide, by = c("State Abbrev", "States"))
-wide_data <- merge(wide_data, pop19wide, by = c("State Abbrev", "States"))
-wide_data <- merge(wide_data, pop20wide, by = c("State Abbrev", "States"))
-
-# clean names
-wide_data <- clean_names(wide_data)
+# remove old states and put new ones back in; note the different order
+# we're also removing puerto rico in this example but you can move it
+# between texas and florida via similar methods to the ones we just used
+us_aea <- us_aea[!us_aea$STATEFP %in% c("02", "15", "72"),]
+us_aea <- rbind(us_aea, alaska, hawaii)
+# transform data again
+us_aea2 <- spTransform(us_aea, proj4string(us))
 
 ##########
 # create long form data
@@ -291,12 +273,12 @@ adm_pop <- adm_pop %>% mutate(other_admissions = total_admissions-total_violatio
                               other_population = total_population-total_violation_population)
 
 #######
-
+# make long form
 #######
 
 # make data long form
 mclc <- adm_pop 
-mclc <- gather(mclc, data, total, total_admissions:technical_parole_violation_population)
+mclc <- gather(mclc, data, total, total_admissions:other_population)
 
 # create change from 2018 to 2019 to 2020
 mclc <- mclc %>%
@@ -350,6 +332,10 @@ mclc$total <- as.numeric(mclc$total)
 
 # remove 2018 since change is missing
 mclc_change <- mclc %>% filter(year != 2018)
+
+# remove inf and NaN
+mclc_change[mapply(is.infinite, mclc_change)] <- NA
+mclc_change$change[mclc_change$change %in% "NaN"] <- NA
 
 ########
 # Data for table

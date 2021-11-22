@@ -72,7 +72,7 @@ server <- function(input, output, session) {
   dataFilter <- reactive({
     adm_pop_long %>% 
       filter(states == input$state &
-             adm_or_pop == input$adm_or_pop) %>% 
+               adm_or_pop == input$adm_or_pop) %>% 
       group_by(metric, year) %>% 
       summarise(total = sum(total)) %>% 
       filter(metric == "Supervision Violations" | metric == "Other")  
@@ -82,7 +82,7 @@ server <- function(input, output, session) {
   ymax <- reactive({
     adm_pop_long %>% 
       filter(states == input$state &
-             adm_or_pop == input$adm_or_pop) %>% 
+               adm_or_pop == input$adm_or_pop) %>% 
       group_by(metric, year) %>% 
       summarise(total = sum(total)) %>% 
       filter(metric == "Supervision Violations" | metric == "Other") %>% 
@@ -111,7 +111,7 @@ server <- function(input, output, session) {
       scale_y_continuous(label = scales::comma,
                          limits = c(0, 1.04*max(dataFilter()$total)),
                          expand = c(0,0)
-                         ) +
+      ) +
       coord_cartesian(clip = "off")
     
   }, width = 450, height = 350)
@@ -151,15 +151,15 @@ server <- function(input, output, session) {
       scale_y_continuous(label = scales::comma,
                          limits = c(0, 1.04*max(dataFilter_2()$total)),
                          expand = c(0,0)
-                         ) +
+      ) +
       coord_cartesian(clip = "off")
-
+    
   }, width = 450, height = 350)
   
   #########
   # Value boxes
   #########
-
+  
   ###
   # Total 
   ###
@@ -167,34 +167,34 @@ server <- function(input, output, session) {
   dataFilter_2b <- reactive({
     adm_pop_long %>%
       filter(states == input$state &
-             adm_or_pop == input$adm_or_pop &
-             year == "2019" &
-             data == "total_admissions")
+               adm_or_pop == input$adm_or_pop &
+               year == "2019" &
+               data == "total_admissions")
   })
-
+  
   # Total 
   # Since 2018
   output$total_change_18 <- renderValueBox({
     valueBox(
       paste0(dataFilter_2b()$change, "%"), subtitle = "Since 2018")
   })
-
+  
   # filter data
   dataFilter_2c <- reactive({
     adm_pop_long %>%
       filter(states == input$state &
-             adm_or_pop == input$adm_or_pop &
-             year == "2020" &
-             data == "total_admissions")
+               adm_or_pop == input$adm_or_pop &
+               year == "2020" &
+               data == "total_admissions")
   })
-
+  
   # Total 
   # Since 2019
   output$total_change_19 <- renderValueBox({
     valueBox(
       paste0(dataFilter_2c()$change, "%"), subtitle = "Since 2019")
   })
-
+  
   # Sentence about changes
   output$total_sentence_change <- renderText({ 
     paste0("Since 2018, the number of prison ", dataFilter_2b()$adm_or_pop_lc, " ",
@@ -255,7 +255,7 @@ server <- function(input, output, session) {
       datatable(mclc_datatable,
                 filter = "top"),
       server = FALSE
-      )
+    )
   
   output$filtered_row <- 
     renderPrint({
@@ -280,41 +280,45 @@ server <- function(input, output, session) {
   # filter data
   dataFilter_4 <- reactive({
     mclc.df <- mclc_change %>% 
-    filter(adm_or_pop == input$adm_or_pop_map &
-           year == input$year_map &
-           metric == input$data_map)
-    mclc.df <- sp::merge(states.shp, mclc.df, by.x = 'NAME', by.y = "states", all=F)
+      dplyr::filter(adm_or_pop == input$adm_or_pop_map &
+                    year == input$year_map &
+                    metric == input$data_map)
+    mclc.df <- sp::merge(us_aea2, mclc.df, by.x = 'NAME', by.y = "states", all=F)
   })
   
-  # set colors manually:
-  paletteNum <- colorFactor(
-    palette = c("#2A5B71", "#387A96", "#4698Bc", "#6BADC9", "#B5D6E4", "#DAEAF2", 
-                "#E9F4D6", "#A5D35C", "#8FC833", "#72A029", "#56781F"),
-    domain = mclc.df$states,
-    na.color = "#D3D3D3" # light gray color for NA
-  )
+  # # set colors manually:
+  # paletteNum <- colorFactor(
+  #   palette = c("#2A5B71", "#387A96", "#4698Bc", "#6BADC9", "#B5D6E4", "#DAEAF2",
+  #               "#E9F4D6", "#A5D35C", "#8FC833", "#72A029", "#56781F"),
+  #   domain = mclc_change$change,
+  #   na.color = "#D3D3D3" # light gray color for NA
+  # )
+  
+  # color palette
+  paletteNum <- colorNumeric(palette = "Blues", domain=NULL)
   
   # leaflet map
   output$map <- renderLeaflet({
-
+    
     leaflet(options = leafletOptions(zoomControl = FALSE,
-                                     minZoom = 4.5, maxZoom = 4.5,
+                                     minZoom = 4.5, 
+                                     maxZoom = 4.5,
                                      dragging = FALSE)) %>%  
       
       # map template
       addProviderTiles("CartoDB.Positron",
                        options = providerTileOptions(opacity = 0)) %>%
-
+      
       # set view to US
       setView(lng = -96.25, lat = 39.50, zoom = 4.5) %>%
       
       addPolygons(data = dataFilter_4(),
                   
                   # colors
+                  opacity = 1.0,
                   color = 'white',
-                  weight = 1,
-                  smoothFactor = .3,
-                  fillOpacity = .75,
+                  fillOpacity = 0.9, 
+                  smoothFactor = 0.3,
                   fillColor = ~paletteNum(dataFilter_4()$change),
                   
                   # highlight options
@@ -322,16 +326,8 @@ server <- function(input, output, session) {
                     weight = 2,
                     color = "#355DA1"
                   )
-      ) %>%
-      
-      addLegend("bottomright", 
-                colors =c("#2A5B71", "#387A96", "#4698Bc", "#6BADC9", "#B5D6E4", "#DAEAF2", 
-                          "#E9F4D6", "#A5D35C", "#8FC833", "#72A029", "#56781F", "#FFFFF", "#D3D3D3"),
-                # labels= c("-70","-60","-50","-40","-20","10","20","40","50","60","70", "", "No Data"),
-                labels= c("Decrease","","","","","","","","","","Increase", "", "No Data"),
-                title= "% Change from Previous Year",
-                opacity = 1)
+      )        
     
   }) #renderLeaflet
-
+  
 } #server
