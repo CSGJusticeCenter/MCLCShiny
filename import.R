@@ -341,38 +341,43 @@ mclc_change$change[mclc_change$change %in% "NaN"] <- NA
 # Data for table
 ########
 
-# change text for metrics
-mclc_datatable <- mclc %>% mutate(data = case_when(
-  data == "total_admissions"                            ~ "Total",
-  data == "total_violation_admissions"                  ~ "Supervision Violations",
-  data == "total_probation_violation_admissions"        ~ "Probation",
-  data == "new_offense_probation_violation_admissions"  ~ "New Offense",
-  data == "technical_probation_violation_admissions"    ~ "Technical",
-  data == "total_parole_violation_admissions"           ~ "Parole",
-  data == "new_offense_parole_violation_admissions"     ~ "New Offense",
-  data == "technical_parole_violation_admissions"       ~ "Technical",
-
-  data == "total_population"                            ~ "Total",
-  data == "total_violation_population"                  ~ "Supervision Violations",
-  data == "total_probation_violation_population"        ~ "Probation",
-  data == "new_offense_probation_violation_population"  ~ "New Offense",
-  data == "technical_probation_violation_population"    ~ "Technical",
-  data == "total_parole_violation_population"           ~ "Parole",
-  data == "new_offense_parole_violation_population"     ~ "New Offense",
-  data == "technical_parole_violation_population"       ~ "Technical"
-))
+# # change text for metrics
+# mclc_datatable <- mclc %>% mutate(data = case_when(
+#   data == "total_admissions"                            ~ "Total",
+#   data == "total_violation_admissions"                  ~ "Supervision Violations",
+#   data == "total_probation_violation_admissions"        ~ "Probation",
+#   data == "new_offense_probation_violation_admissions"  ~ "New Offense",
+#   data == "technical_probation_violation_admissions"    ~ "Technical",
+#   data == "total_parole_violation_admissions"           ~ "Parole",
+#   data == "new_offense_parole_violation_admissions"     ~ "New Offense",
+#   data == "technical_parole_violation_admissions"       ~ "Technical",
+# 
+#   data == "total_population"                            ~ "Total",
+#   data == "total_violation_population"                  ~ "Supervision Violations",
+#   data == "total_probation_violation_population"        ~ "Probation",
+#   data == "new_offense_probation_violation_population"  ~ "New Offense",
+#   data == "technical_probation_violation_population"    ~ "Technical",
+#   data == "total_parole_violation_population"           ~ "Parole",
+#   data == "new_offense_parole_violation_population"     ~ "New Offense",
+#   data == "technical_parole_violation_population"       ~ "Technical"
+# ))
 
 # select variables
-mclc_datatable <- mclc_datatable %>% select(State = states,
+mclc_datatable <- mclc %>% select(State = states,
                                   Year = year,
-                                  Data = data,
+                                  Data = metric,
                                   Type = adm_or_pop,
                                   Count = total,
                                   Region = region)
 
 # change data types
+mclc_datatable$State <- as.factor(mclc_datatable$State)
 mclc_datatable$Data <- as.factor(mclc_datatable$Data)
 mclc_datatable$Type <- as.factor(mclc_datatable$Type)
+mclc_datatable$Region <- as.factor(mclc_datatable$Region)
+
+# arrange data
+mclc_datatable <- mclc_datatable %>% arrange(State, Year, Data, Type)
 
 ########
 # Long form

@@ -233,7 +233,7 @@ ui <- fluidPage(
                       
                       # choose admissions or population
                       selectInput("adm_or_pop_map", 
-                                  label = "Change from Previous Year",
+                                  label = "Admissions or Population",
                                   choices = unique(mclc_change$adm_or_pop))
                ), #column
                

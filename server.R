@@ -167,9 +167,9 @@ server <- function(input, output, session) {
   dataFilter_2b <- reactive({
     adm_pop_long %>%
       filter(states == input$state &
-               adm_or_pop == input$adm_or_pop &
-               year == "2019" &
-               data == "total_admissions")
+             adm_or_pop == input$adm_or_pop &
+             year == "2019" &
+             data == "total_admissions")
   })
   
   # Total 
@@ -295,7 +295,7 @@ server <- function(input, output, session) {
   # )
   
   # color palette
-  paletteNum <- colorNumeric(palette = "Blues", domain=NULL)
+  paletteNum <- colorNumeric(palette = "Blues", domain = NULL)
   
   # leaflet map
   output$map <- renderLeaflet({
@@ -317,6 +317,7 @@ server <- function(input, output, session) {
                   # colors
                   opacity = 1.0,
                   color = 'white',
+                  weight = 1,
                   fillOpacity = 0.9, 
                   smoothFactor = 0.3,
                   fillColor = ~paletteNum(dataFilter_4()$change),
@@ -325,8 +326,7 @@ server <- function(input, output, session) {
                   highlightOptions = highlightOptions(
                     weight = 2,
                     color = "#355DA1"
-                  )
-      )        
+                  )) 
     
   }) #renderLeaflet
   
