@@ -10,6 +10,9 @@
 # define UI
 ui <- fluidPage(
   
+  # change font of entire dashboard
+  tags$head(tags$style(HTML('* {font-family: "Arial"};'))),
+  
   # theme
   # update theme https://medium.com/analytics-vidhya/building-custom-r-shiny-ui-66d446ef4dad
   theme = shinytheme("cosmo"),
@@ -167,14 +170,21 @@ ui <- fluidPage(
              # Changes from 2018 and 2019
              ########
              
+             tags$style(".small-box.bg-green {background-color: #FFFFFF !important; color: #000000 !important; }"),
+             tags$style(".small-box.bg-red   {background-color: #FFFFFF !important; color: #000000 !important; }"),
+             tags$style(".small-box          {border: 1px; border-style: groove; border-color: #000000 !important; 
+                                              border-radius: 0px; padding: 0.5em; }"),
+             
              fluidRow(# change from 2018
-                      column(width = 2, 
-                             valueBoxOutput("total_change_18")
+                      column(width = 1),
+                      
+                      column(width = 1, 
+                             valueBoxOutput("total_change_18", width = 25)
                       ), #column
 
                       # change from 2019
-                      column(width = 2, 
-                             valueBoxOutput("total_change_19")
+                      column(width = 1, 
+                             valueBoxOutput("total_change_19", width = 25)
                       ), #column
 
                       # sentence about change
@@ -186,14 +196,16 @@ ui <- fluidPage(
                                                                           vertical-align: middle;}"))
                       ), #column
                       
+                      column(width = 2),
+                      
                       # change from 2018
-                      column(width = 2, 
-                             valueBoxOutput("viol_change_18")
+                      column(width = 1, 
+                             valueBoxOutput("viol_change_18", width = 25)
                       ), #column
                      
                       # change from 2019
-                      column(width = 2, 
-                             valueBoxOutput("viol_change_19")
+                      column(width = 1, 
+                             valueBoxOutput("viol_change_19", width = 25)
                       ), #column
                      
                       # sentence about change
@@ -203,7 +215,8 @@ ui <- fluidPage(
                                                                          font-size: 14px;
                                                                          text-align: left;
                                                                          vertical-align: middle;}"))
-                      ) #column
+                      ), #column
+                      column(width = 1)
              ) #fluidRow
     ), #tabPanel
     
@@ -228,47 +241,44 @@ ui <- fluidPage(
     
     tabPanel("Map",
              
-             fluidRow(# title
-               column(width = 12,
-                      
-                      # choose admissions or population
-                      selectInput("adm_or_pop_map", 
-                                  label = "Admissions or Population",
-                                  choices = unique(mclc_change$adm_or_pop))
-               ), #column
+             sidebarLayout(
                
-               column(width = 12,
-                      
-                      # select data
-                      selectInput("data_map", 
-                                  label = "Select Data",
-                                  choices = unique(mclc_change$metric)),
-               ), #column
+               # side bar to select data
+               sidebarPanel(
+                 
+                 # choose admissions or population
+                 selectInput("adm_or_pop_map", 
+                             label = "Admissions or Population",
+                             choices = unique(mclc_change$adm_or_pop)),
+                 
+                 # select data
+                 selectInput("data_map", 
+                             label = "Select Data",
+                             choices = unique(mclc_change$metric)),
+                 
+                 # select year
+                 selectInput("year_map", 
+                             label = "Select Year",
+                             choices = unique(mclc_change$year)),
+                 
+                 
+               ),
                
-               column(width = 12,
-                      
-                      # select year
-                      selectInput("year_map", 
-                                  label = "Change from Previous Year",
-                                  choices = unique(mclc_change$year)),
-               ) #column
-             ), #fluidRow
+               # Show a plot of the generated distribution
+               mainPanel(
+                 
+                 textOutput("map_title"),
+                 tags$head(tags$style("#map_title{color: #000000;
+                                                      font-size: 22px;
+                                                      font-style: bold;
+                                                      text-align: left;
+                                                    }")), 
+                 
+                 leafletOutput(outputId = "map", height = 600),
+                 tags$style(HTML(".leaflet-container { background: #FFFFFF;}"))
+               )
+             )
              
-             fluidRow(# title
-               column(width = 12,
-                      
-                      "Title of Map"
-                      
-               ) #column
-             ), #fluidRow
-             
-             fluidRow(# title
-               column(width = 12,
-                      leafletOutput(outputId = "map", height = 600),
-                      tags$style(HTML(".leaflet-container { background: #FFFFFF;}"))
-               ) #column
-             ) #fluidRow
-               
     ) #tabPanel
     
   ) #navbarPage
