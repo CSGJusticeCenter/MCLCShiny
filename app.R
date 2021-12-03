@@ -21,3 +21,21 @@ shinyApp(ui = ui, server = server)
 # https://stackoverflow.com/questions/56690624/how-can-i-make-an-horizontal-legend-in-leaflet
 # https://shiny.rstudio.com/articles/layout-guide.html
 # https://medium.com/ibm-data-ai/center-diverging-colors-on-leaflet-map-515e69d7f81f
+
+# to do
+# change locations of total and sup viols to have their own rows
+# compare data to BJS
+# add donut charts
+
+
+# blue colors
+#DAEAF2
+#B5D6E4
+#90C1D7
+#6BADC9
+#4698BC
+#387A96
+#215B71
+
+# orange
+#E18731

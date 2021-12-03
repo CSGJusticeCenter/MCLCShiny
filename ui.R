@@ -11,7 +11,7 @@
 ui <- fluidPage(
   
   # change font of entire dashboard
-  tags$head(tags$style(HTML('* {font-family: "Arial"};'))),
+  tags$head(tags$style(HTML('*{generic-family: "sans-serif"};'))),
   
   # theme
   # update theme https://medium.com/analytics-vidhya/building-custom-r-shiny-ui-66d446ef4dad
@@ -28,7 +28,7 @@ ui <- fluidPage(
 
              h1("More Community, Less Confinement"),
              h2("A State-by-State Analysis on How Supervision Violations Impacted Prison Populations During the Pandemic"),
-             p("This 50-state revocation dashboard explores how supervision violations impacted prison populations during—and prior to—the pandemic. The project was conducted in partnership with the Correctional Leaders Association with support from Arnold Ventures."),
+             p("This 50-state revocation dashboard explores how supervision violations impacted prison populations during and prior to the pandemic. The project was conducted in partnership with the Correctional Leaders Association with support from Arnold Ventures."),
              p("View the national report, 50 state reports, and our research methodology.")
 
     ),#tabPanel
@@ -50,12 +50,12 @@ ui <- fluidPage(
                               # Select state
                                 div(style = "font-size:16px;",
                                     selectInput(inputId = "state", label = div(style = "font-size:16px;
-                                                                                        color: #FFFFFF;", 
+                                                                                        color: #000000;", 
                                                 "Select State"), 
                                                 choices = unique(adm_pop_long$states)
                                     )
                                 ),
-                              style = "background: #000000"
+                              style = "background: #E7E7E7"
                               ) #wellPanel
                       ),#column
                       
@@ -65,12 +65,12 @@ ui <- fluidPage(
                              # Select adm or pop for plot
                                div(style = "font-size:16px;",
                                    selectInput(inputId = "adm_or_pop", label = div(style = "font-size:16px;
-                                                                                            color: #FFFFFF;", 
+                                                                                            color: #000000;", 
                                               "Admissions or Population"), 
                                                choices = unique(adm_pop_long$adm_or_pop)
                                    )
                                ),                             
-                               style = "background: #000000"
+                               style = "background: #E7E7E7"
                              ) #wellPanel
                       ) #column
              ), #fluidRow
@@ -94,7 +94,7 @@ ui <- fluidPage(
                              #2) Paragraph about data
                              textOutput("selected_state_adm_pop"),
                              tags$head(tags$style("#selected_state_adm_pop{color: #000000;
-                                                                           font-size: 16px;
+                                                                           font-size: 20px;
                                                     }")),
                              
                              # add spacing
@@ -129,36 +129,48 @@ ui <- fluidPage(
              # add spacing
              br(),
 
-             fluidRow(# Title for overall graph
-               column(width = 6, 
+             fluidRow(
+               column(width = 1),
+               
+               # Title for overall graph
+               column(width = 4, 
                       textOutput("adm_pop_title"),
-                      tags$head(tags$style("#adm_pop_title{color: #000000;
-                                                           font-size: 18px;
+                      tags$head(tags$style("#adm_pop_title{color: #FFFFFF;
+                                                           font-size: 20px;
                                                            font-style: bold;
                                                            text-align: center;
+                                                           background-color:#000000;
+                                                           line-height: 32px;
                                                     }"))),
+               column(width = 2),
                
                # Title for supervision violations graph
-               column(width = 6, 
+               column(width = 4, 
                       textOutput("viol_title"),
-                      tags$head(tags$style("#viol_title{color: #000000;
-                                                        font-size: 18px;
+                      tags$head(tags$style("#viol_title{color: #FFFFFF;
+                                                        font-size: 20px;
                                                         font-style: bold;
                                                         text-align: center;
-                                                    }")))
+                                                        background-color:#000000;
+                                                        line-height: 32px;
+                                                    }"))),
+               column(width = 1)
+               
              ), #fluidRow
+             
+             br(),
              
              ########
              # Plots 
              ########
              fluidRow(column(width = 6, 
                              # Bar chart 
-                             div(plotOutput("barchart", height = "100%"), align = "center")
+                             div(plotlyOutput("barchart", height = "75%", width = "75%"), align = "center")
                              ),
                       
                       column(width = 6, 
                              # Area chart 
-                             div(plotOutput("barchart_2", height = "100%"), align = "center")
+                             div(plotlyOutput("barchart_2", height = "75%", width = "75%"), align = "center")
                              )
              ), #fluidRow
              
@@ -172,26 +184,34 @@ ui <- fluidPage(
              
              tags$style(".small-box.bg-green {background-color: #FFFFFF !important; color: #000000 !important; }"),
              tags$style(".small-box.bg-red   {background-color: #FFFFFF !important; color: #000000 !important; }"),
-             tags$style(".small-box          {border: 1px; border-style: groove; border-color: #000000 !important; 
-                                              border-radius: 0px; padding: 0.5em; }"),
+             tags$style(".small-box          {border: 3px; border-style: solid; border-color: #E7E7E7 !important; 
+                                              border-radius: 5px; padding: 0.5em; }"),
              
              fluidRow(# change from 2018
                       column(width = 1),
                       
                       column(width = 1, 
-                             valueBoxOutput("total_change_18", width = 25)
+                             valueBoxOutput("total_change_18", width = 25),
+                             tags$head(tags$style("#total_change_18{color: #000000;
+                                                                    font-size: 16px;
+                                                                    text-alight: left;
+                             }"))
                       ), #column
 
                       # change from 2019
                       column(width = 1, 
-                             valueBoxOutput("total_change_19", width = 25)
+                             valueBoxOutput("total_change_19", width = 25),
+                             tags$head(tags$style("#total_change_19{color: #000000;
+                                                                    font-size: 16px;
+                                                                    text-alight: left;
+                             }"))
                       ), #column
 
                       # sentence about change
                       column(width = 2, 
                              textOutput("total_sentence_change"),
                              tags$head(tags$style("#total_sentence_change{color: #000000;
-                                                                          font-size: 14px;
+                                                                          font-size: 16px;
                                                                           text-align: left;
                                                                           vertical-align: middle;}"))
                       ), #column
@@ -200,24 +220,36 @@ ui <- fluidPage(
                       
                       # change from 2018
                       column(width = 1, 
-                             valueBoxOutput("viol_change_18", width = 25)
+                             valueBoxOutput("viol_change_18", width = 25),
+                             tags$head(tags$style("#viol_change_18{color: #000000;
+                                                                  font-size: 16px;
+                                                                  text-alight: left;
+                             }"))
                       ), #column
                      
                       # change from 2019
                       column(width = 1, 
-                             valueBoxOutput("viol_change_19", width = 25)
+                             valueBoxOutput("viol_change_19", width = 25),
+                             tags$head(tags$style("#viol_change_19{color: #000000;
+                                                                  font-size: 16px;
+                                                                  text-alight: left;
+                             }"))
                       ), #column
                      
                       # sentence about change
                       column(width = 2, 
                              textOutput("viol_sentence_change"),
                              tags$head(tags$style("#viol_sentence_change{color: #000000;
-                                                                         font-size: 14px;
+                                                                         font-size: 16px;
                                                                          text-align: left;
                                                                          vertical-align: middle;}"))
                       ), #column
                       column(width = 1)
-             ) #fluidRow
+             ), #fluidRow
+             
+             br(),
+             br()
+             
     ), #tabPanel
     
     #_________________________________________________________________________________________

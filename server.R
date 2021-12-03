@@ -68,93 +68,85 @@ server <- function(input, output, session) {
   # Bar chart about total admissions or population
   #########
   
-  # Subset data
-  dataFilter <- reactive({
-    adm_pop_long %>% 
-      filter(states == input$state &
-               adm_or_pop == input$adm_or_pop) %>% 
-      group_by(metric, year) %>% 
-      summarise(total = sum(total)) %>% 
-      filter(metric == "Supervision Violations" | metric == "Other")  
-  })
-  
-  # get max y limit value
-  ymax <- reactive({
-    adm_pop_long %>% 
-      filter(states == input$state &
-               adm_or_pop == input$adm_or_pop) %>% 
-      group_by(metric, year) %>% 
-      summarise(total = sum(total)) %>% 
-      filter(metric == "Supervision Violations" | metric == "Other") %>% 
-      ungroup() %>% 
-      top_n(1)
-  })
-  
-  output$barchart <- renderPlot({
+  output$barchart <- renderPlotly({
     
-    ggplot(dataFilter(), 
-           aes_string(fill='metric', y='total', x='year')) + 
-      geom_bar(position="dodge", stat="identity", width = .5) + 
-      # labels
-      geom_text(aes(label=scales::comma(total)),
-                position=position_dodge(0.5),
-                size = 4.25,
-                vjust = -0.5,
-                colour = "#000000") +
-      # ggtitle("\n") +
-      # custom style
+    dataFilter <- 
+      adm_pop_long %>% 
+      filter(states == input$state &
+               adm_or_pop == input$adm_or_pop) %>% 
+      group_by(metric, year) %>% 
+      summarise(total = sum(total)) %>% 
+      filter(metric == "Other" | metric == "Supervision Violations")  
+
+    totals <- dataFilter %>%
+      group_by(year) %>%
+      summarise(total = sum(total))
+    
+    p <- ggplot(data = dataFilter,
+                aes_string(x = 'year', y = 'total', fill = 'metric')) +
+      geom_bar(stat = "identity", position = "stack", width = .5) +
+      geom_text(data = totals,
+                size = 4,
+                aes(year, total,
+                    label = format(total, big.mark = ","),
+                    fill = NULL),
+                vjust = 0.5) +
       theme_csgjc_plot_legend() +
-      # colors and legend
-      scale_fill_manual(values = c("#1C3D4B", "#4698BC"),
+      theme(plot.margin = margin(0.1, 0.1, 0.1, 0.1, "cm")) +
+      scale_fill_manual(values = c("#B5D6E4", "#6BADC9"),
                         name = "") +
-      # y axis commas in labels
-      scale_y_continuous(label = scales::comma,
-                         limits = c(0, 1.04*max(dataFilter()$total)),
-                         expand = c(0,0)
-      ) +
-      coord_cartesian(clip = "off")
+      scale_y_continuous(label = scales::comma) 
     
-  }, width = 450, height = 350)
+    plotly::ggplotly(p) %>% layout(xaxis = list(fixedrange = TRUE), 
+                                   yaxis = list(fixedrange = TRUE),
+                                   # font = list(family = "Arial"),
+                                   textfont = list(size = 4.5),
+                                   legend = list(orientation = "h",
+                                                 x = 0.2),
+                                   hovermode = "x") 
+  })
   
   #########
   # Bar chart about supervision violations
   #########
   
-  # Subset data
-  dataFilter_2 <- reactive({
-    adm_pop_long %>% 
+  output$barchart_2 <- renderPlotly({
+    
+    dataFilter_2 <- 
+      adm_pop_long %>% 
       filter(states == input$state &
-               adm_or_pop == input$adm_or_pop) %>% 
+             adm_or_pop == input$adm_or_pop) %>% 
       group_by(metric, year) %>% 
       summarise(total = sum(total)) %>% 
       filter(metric == "Technical" | metric == "New Offense")  
-  })
-  
-  output$barchart_2 <- renderPlot({
     
-    ggplot(data = dataFilter_2(),
-           aes_string(x = 'year', y = 'total', fill = 'metric')) +
-      geom_bar(stat = "identity", position = "dodge", width = .5) +
-      # ggtitle("\n") +
-      # custom style
+    totals <- dataFilter_2 %>%
+      group_by(year) %>%
+      summarise(total = sum(total))
+    
+    p <- ggplot(data = dataFilter_2,
+                aes_string(x = 'year', y = 'total', fill = 'metric')) +
+      geom_bar(stat = "identity", position = "stack", width = .5) +
+      geom_text(data = totals,
+                size = 4,
+                aes(year, total,
+                    label = format(total, big.mark = ","),
+                    fill = NULL),
+                vjust = 0.5) +
       theme_csgjc_plot_legend() +
-      # colors and legend
-      scale_fill_manual(values = c("#B5D6E4", "#6BADC9"),
+      theme(plot.margin = margin(0.1, 0.1, 0.1, 0.1, "cm")) +
+      scale_fill_manual(values = c("#90C1D7", "#4698BC"),
                         name = "") +
-      # labels
-      geom_text(aes(label = scales::comma(total)), 
-                position = position_dodge(width = 0.5),
-                vjust = -0.25,
-                size = 4.25,
-                colour = "#000000") +
-      # y axis commas in labels
-      scale_y_continuous(label = scales::comma,
-                         limits = c(0, 1.04*max(dataFilter_2()$total)),
-                         expand = c(0,0)
-      ) +
-      coord_cartesian(clip = "off")
+      scale_y_continuous(label = scales::comma) 
     
-  }, width = 450, height = 350)
+    plotly::ggplotly(p) %>% layout(xaxis = list(fixedrange = TRUE), 
+                                   yaxis = list(fixedrange = TRUE),
+                                   # font = list(family = "Arial"),
+                                   textfont = list(size = 4.5),
+                                   legend = list(orientation = "h",
+                                                 x = 0.25),
+                                   hovermode = "x") 
+  })
   
   #########
   # Value boxes
@@ -176,7 +168,7 @@ server <- function(input, output, session) {
   # Since 2018
   output$total_change_18 <- renderValueBox({
     valueBox(
-      paste0(dataFilter_2b()$change, "%"), subtitle = "Since 2018", color = "green")
+      paste0(dataFilter_2b()$change, "%"), subtitle = "2018-2019", color = "green")
   })
   
   # filter data
@@ -192,12 +184,12 @@ server <- function(input, output, session) {
   # Since 2019
   output$total_change_19 <- renderValueBox({
     valueBox(
-      paste0(dataFilter_2c()$change, "%"), subtitle = "Since 2019", color = "red")
+      paste0(dataFilter_2c()$change, "%"), subtitle = "2019-2020", color = "red")
   })
   
   # Sentence about changes
   output$total_sentence_change <- renderText({ 
-    paste0("Since 2018, the number of prison ", dataFilter_2b()$adm_or_pop_lc, " ",
+    paste0("Between 2018 and 2019, the number of prison ", dataFilter_2b()$adm_or_pop_lc, " ",
            dataFilter_2b()$change_type, "d ", dataFilter_2b()$change,
            "%. In 2020, the number of prison ",  dataFilter_2c()$adm_or_pop_lc, " ",
            dataFilter_2c()$change_type, "d ", dataFilter_2c()$change, "%.")
@@ -219,7 +211,7 @@ server <- function(input, output, session) {
   # Since 2018
   output$viol_change_18 <- renderValueBox({
     valueBox(
-      paste0(dataFilter_2d()$change, "%"), subtitle = "Since 2018", color = "green")
+      paste0(dataFilter_2d()$change, "%"), subtitle = "2018-2019", color = "green")
   })
   
   # filter data
@@ -235,12 +227,12 @@ server <- function(input, output, session) {
   # Since 2019
   output$viol_change_19 <- renderValueBox({
     valueBox(
-      paste0(dataFilter_2e()$change, "%"), subtitle = "Since 2019", color = "red")
+      paste0(dataFilter_2e()$change, "%"), subtitle = "2019-2020", color = "red")
   })
   
   # Sentence about changes
   output$viol_sentence_change <- renderText({ 
-    paste0("Since 2018, the number of supervision violation ", dataFilter_2d()$adm_or_pop_lc, " ",
+    paste0("Between 2018 and 2019, the number of supervision violation ", dataFilter_2d()$adm_or_pop_lc, " ",
            dataFilter_2d()$change_type, "d ", dataFilter_2d()$change,
            "%. In 2020, the number of supervision violation ",  dataFilter_2e()$adm_or_pop_lc, " ",
            dataFilter_2e()$change_type, "d ", dataFilter_2e()$change, "%.")

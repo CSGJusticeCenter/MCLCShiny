@@ -27,6 +27,8 @@ requiredPackages = c('dplyr',
                      'shinydashboard',
                      'shinythemes',
                      'ggplot2',
+                     'plotly',
+                     'gapminder',
                      'leaflet',
                      'maps',
                      'maptools',
@@ -341,27 +343,6 @@ mclc_change$change[mclc_change$change %in% "NaN"] <- NA
 # Data for table
 ########
 
-# # change text for metrics
-# mclc_datatable <- mclc %>% mutate(data = case_when(
-#   data == "total_admissions"                            ~ "Total",
-#   data == "total_violation_admissions"                  ~ "Supervision Violations",
-#   data == "total_probation_violation_admissions"        ~ "Probation",
-#   data == "new_offense_probation_violation_admissions"  ~ "New Offense",
-#   data == "technical_probation_violation_admissions"    ~ "Technical",
-#   data == "total_parole_violation_admissions"           ~ "Parole",
-#   data == "new_offense_parole_violation_admissions"     ~ "New Offense",
-#   data == "technical_parole_violation_admissions"       ~ "Technical",
-# 
-#   data == "total_population"                            ~ "Total",
-#   data == "total_violation_population"                  ~ "Supervision Violations",
-#   data == "total_probation_violation_population"        ~ "Probation",
-#   data == "new_offense_probation_violation_population"  ~ "New Offense",
-#   data == "technical_probation_violation_population"    ~ "Technical",
-#   data == "total_parole_violation_population"           ~ "Parole",
-#   data == "new_offense_parole_violation_population"     ~ "New Offense",
-#   data == "technical_parole_violation_population"       ~ "Technical"
-# ))
-
 # select variables
 mclc_datatable <- mclc %>% select(State = states,
                                   Year = year,
@@ -480,4 +461,14 @@ adm_pop_long <- adm_pop_long %>%
   mutate(adm_or_pop_lc = ifelse(
     adm_or_pop == "Admissions", "admissions", "population"
   ))
+
+########
+# National numbers
+########
+
+# group by year and data type to get national numbers
+################### switch this out with multiple imputation data
+national <- mclc %>% 
+  group_by(year, data) %>% 
+  summarise(total = sum(total, na.rm = TRUE))
 
