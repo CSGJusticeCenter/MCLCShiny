@@ -26,6 +26,7 @@ requiredPackages = c('dplyr',
                      'shiny',
                      'shinydashboard',
                      'shinythemes',
+                     'shinyWidgets',
                      'ggplot2',
                      'plotly',
                      'ggiraph',
@@ -49,39 +50,6 @@ for(p in requiredPackages){
   if(!require(p,character.only = TRUE)) install.packages(p)
   library(p,character.only = TRUE)
 }
-
-########
-# Import data
-########
-
-#set wd to teams (for collaboration) - change user name to read in data
-setwd("C:/Users/mroberts/The Council of State Governments/JC Research - 50 State Revocations Project/50 State Survey (2021)")
-
-# read charge data for 2019 and 2020
-adm18 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2018")
-adm19 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2019")
-adm20 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2020")
-
-# pop
-pop18 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2018")
-pop19 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2019")
-pop20 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2020")
-
-# costs
-costs <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Costs")
-
-# read state data
-# states.shp <- readOGR(dsn = "Data/cb_2014_us_state_5m/cb_2014_us_state_5m.shp",
-#                       layer = "cb_2014_us_state_5m", verbose = FALSE)
-# states.shp <- readOGR('Data/cb_2020_us_all_500k/cb_2020_us_state_500k/cb_2020_us_state_500k.shp',
-#                       encoding = "UTF-8", verbose = FALSE)
-
-#set wd 
-setwd("C:/Users/mroberts/OneDrive - The Council of State Governments/Desktop/csgjc/repos/MCLCShiny")
-
-# From https://www.census.gov/geo/maps-data/data/cbf/cbf_state.html
-us <- readOGR(dsn = "data/cb_2014_us_state_5m/cb_2014_us_state_5m.shp",
-              layer = "cb_2014_us_state_5m", verbose = FALSE)
 
 ##########################
 # custom functions
@@ -135,14 +103,49 @@ theme_csgjc_plot_legend <- function(){
       axis.text.y = element_text(size = 12, 
                                  colour = "#000000"),
       axis.line.x.bottom = element_line(size = 0.75, 
-                                 linetype = "solid", 
-                                 colour = "#000000"),
+                                        linetype = "solid", 
+                                        colour = "#000000"),
       axis.line.y = element_blank(),
       panel.grid.major = element_blank(),
       panel.grid.minor = element_blank(),
       panel.border = element_blank()     
     )
 }
+
+########
+# Import data
+########
+
+#set wd to teams (for collaboration) - change user name to read in data
+# setwd("C:/Users/mroberts/The Council of State Governments/JC Research - 50 State Revocations Project/50 State Survey (2021)")
+setwd("~/The Council of State Governments/JC Research - 50 State Survey (2021)")
+
+# read charge data for 2019 and 2020
+adm18 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2018")
+adm19 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2019")
+adm20 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2020")
+
+# pop
+pop18 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2018")
+pop19 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2019")
+pop20 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2020")
+
+# costs
+costs <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Costs")
+
+# read state data
+# states.shp <- readOGR(dsn = "Data/cb_2014_us_state_5m/cb_2014_us_state_5m.shp",
+#                       layer = "cb_2014_us_state_5m", verbose = FALSE)
+# states.shp <- readOGR('Data/cb_2020_us_all_500k/cb_2020_us_state_500k/cb_2020_us_state_500k.shp',
+#                       encoding = "UTF-8", verbose = FALSE)
+
+#set wd 
+# setwd("C:/Users/mroberts/OneDrive - The Council of State Governments/Desktop/csgjc/repos/MCLCShiny")
+setwd("~/csgjc/MCLCShiny")
+
+# From https://www.census.gov/geo/maps-data/data/cbf/cbf_state.html
+us <- readOGR(dsn = "data/cb_2014_us_state_5m/cb_2014_us_state_5m.shp",
+              layer = "cb_2014_us_state_5m", verbose = FALSE)
 
 ########
 # clean shapefile

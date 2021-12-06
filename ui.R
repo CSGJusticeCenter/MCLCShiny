@@ -12,8 +12,7 @@ ui <- fluidPage(
   
   # change font of entire dashboard
   tags$head(tags$style(HTML('*{generic-family: "sans-serif"};'))),
-  
-  # theme
+
   # update theme https://medium.com/analytics-vidhya/building-custom-r-shiny-ui-66d446ef4dad
   theme = shinytheme("cosmo"),
   
@@ -26,21 +25,20 @@ ui <- fluidPage(
     "More Community, Less Confinement",
     tabPanel("About",
 
-             fluidRow(column(width = 1),
-                      column(width = 10,
-                             
-                             h1("More Community, Less Confinement")),
-                             h2("A State-by-State Analysis on How Supervision Violations Impacted Prison Populations During the Pandemic"),
-                             p("This 50-state revocation dashboard explores how supervision violations impacted prison populations during and prior to the pandemic. The project was conducted in partnership with the Correctional Leaders Association with support from Arnold Ventures."),
-                             p("View the national report, 50 state reports, and our research methodology."),
-                            
-                      
-                             br(),
-                             br()
-                             
+             fluidRow(# title and text of national page
+                      column(width = 2),
+                      column(width = 8,
+                             br(), br(),
+                             div(" More Community, Less Confinement", style = "font-size:48px;
+                                                                              font-style: bold;
+                                                                              text-align: left;
+                                                                              color: #000000;"), br(), 
+                             div("A State-by-State Analysis on How Supervision Violations Impacted Prison Populations During the Pandemic",
+                                 style = "font-size:32px;
+                                          text-align: left;
+                                          color: #000000;")
                       ), #column
-                      column(width = 1,
-                             "")
+                      column(width = 2)
              ), #fluidRow
              br()
 
@@ -58,35 +56,33 @@ ui <- fluidPage(
              # https://stackoverflow.com/questions/42159804/how-to-collapse-sidebarpanel-in-shiny-app
              ########
              
-             fluidRow(# select state
-                      column(width = 6,
+             fluidRow(column(width = 1),
+                      # select state
+                      column(width = 5,
                              wellPanel(
                               # Select state
                                 div(style = "font-size:16px;",
                                     selectInput(inputId = "state", label = div(style = "font-size:16px;
                                                                                         color: #000000;", 
                                                 "Select State"), 
-                                                choices = unique(adm_pop_long$states)
-                                    )
-                                ),
+                                                choices = unique(adm_pop_long$states))),
                               style = "background: #E7E7E7"
                               ) #wellPanel
                       ),#column
                       
                       # select population or admissions
-                      column(width = 6, 
+                      column(width = 5, 
                              wellPanel(
                              # Select adm or pop for plot
                                div(style = "font-size:16px;",
                                    selectInput(inputId = "adm_or_pop", label = div(style = "font-size:16px;
                                                                                             color: #000000;", 
                                               "Admissions or Population"), 
-                                               choices = unique(adm_pop_long$adm_or_pop)
-                                   )
-                               ),                             
+                                               choices = unique(adm_pop_long$adm_or_pop))),                             
                                style = "background: #E7E7E7"
                              ) #wellPanel
-                      ) #column
+                      ), #column
+                      column(width = 1)
              ), #fluidRow
              
              ########
@@ -330,7 +326,51 @@ ui <- fluidPage(
     ), #tabPanel
     
     #_________________________________________________________________________________________
-    # 4) Map
+    # 4) Map - Counts
+    #_________________________________________________________________________________________
+    
+    tabPanel("Map (Counts)",
+             
+             fluidRow(column(width = 1),
+                      # select population or admissions
+                      column(width = 5,
+                             wellPanel(
+                               div(style = "font-size:16px;",
+                                   selectInput(inputId = "adm_or_pop_map_counts", 
+                                               label = div(style = "font-size:16px;
+                                                                    color: #000000;", 
+                                                       "Admissions or Population"), 
+                                               choices = unique(adm_pop_long$adm_or_pop))),
+                               style = "background: #E7E7E7"
+                             ) #wellPanel
+                      ),#column
+                      
+                      # select data
+                      column(width = 5, 
+                             wellPanel(
+                               div(style = "font-size:16px;",
+                                   selectInput(inputId = "data_map_counts", 
+                                               label = div(style = "font-size:16px;
+                                                                    color: #000000;", 
+                                                       "Select Data"), 
+                                               choices = unique(adm_pop_long$metric))),                             
+                               style = "background: #E7E7E7"
+                             ) #wellPanel
+                      ), #column
+                      column(width = 1)
+             ), #fluidRow
+             
+             fluidRow(
+               column(width = 1),
+               column(width = 5,
+                      sliderInput("year_map_counts", label = "Year", min = 2018, max = 2020, value = 2018, step = 1)
+               ), #column
+               column(width = 6)
+             ) #fluidRow
+    ), #tabPanel
+    
+    #_________________________________________________________________________________________
+    # 5) Map - Changes
     #_________________________________________________________________________________________
     
     tabPanel("Map",
@@ -372,8 +412,6 @@ ui <- fluidPage(
                  tags$style(HTML(".leaflet-container { background: #FFFFFF;}"))
                )
              )
-             
     ) #tabPanel
-    
   ) #navbarPage
 ) #fluidPage

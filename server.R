@@ -178,7 +178,7 @@ server <- function(input, output, session) {
                 vjust = 0.5) +
       theme_csgjc_plot_legend() +
       theme(plot.margin = margin(0.1, 0.1, 0.1, 0.1, "cm")) +
-      scale_fill_manual(values = c("#BCDE85", "#6BBB5D"),
+      scale_fill_manual(values = c("#8BC8D3", "#4698BC"),
                         name = "") +
       scale_y_continuous(label = scales::comma) 
     
@@ -225,7 +225,7 @@ server <- function(input, output, session) {
     donut_plot_supviols <- ggplot(df_donutchart_supviols, aes_string(y = 'total', fill = 'metric')) +
       geom_bar_interactive(aes(x = 1, tooltip = hover_text),width = 0.5,stat = "identity",show.legend = FALSE) +
       annotate(geom = "text",x = 0,y = 0,label = df_donutchart_supviols[["percentage_label"]][df_donutchart_supviols[["metric"]] == "Technical"],size = 20,color = "#000000") +
-      scale_fill_manual(values = c(`New Offense` = "#BCDE85", Technical = "#6BBB5D")) +
+      scale_fill_manual(values = c(`New Offense` = "#8BC8D3", Technical = "#4698BC")) +
       coord_polar(theta = "y") +
       theme_void() +
       ggtitle("Technical Violations \n In 2020") +
@@ -369,7 +369,7 @@ server <- function(input, output, session) {
                 vjust = 0.5) +
       theme_csgjc_plot_legend() +
       theme(plot.margin = margin(0.1, 0.1, 0.1, 0.1, "cm")) +
-      scale_fill_manual(values = c("#F5AC91", "#E18731"),
+      scale_fill_manual(values = c("#BCDE85", "#6BBB5D"),
                         name = "") +
       scale_y_continuous(label = scales::comma) 
     
@@ -427,7 +427,7 @@ server <- function(input, output, session) {
         size = 20,
         color = "#000000"
       ) +
-      scale_fill_manual(values = c(`New Offense` = "#F5AC91", Technical = "#E18731")) +
+      scale_fill_manual(values = c(`New Offense` = "#BCDE85", Technical = "#6BBB5D")) +
       coord_polar(theta = "y") +
       theme_void() +
       ggtitle("Technical Violations \n In 2020") +
@@ -468,7 +468,7 @@ server <- function(input, output, session) {
                 vjust = 0.5) +
       theme_csgjc_plot_legend() +
       theme(plot.margin = margin(0.1, 0.1, 0.1, 0.1, "cm")) +
-      scale_fill_manual(values = c("#B4ACE3", "#A86CC5"), name = "") +
+      scale_fill_manual(values = c("#BCDE85", "#6BBB5D"), name = "") +
       scale_y_continuous(label = scales::comma) 
     
     plotly::ggplotly(p) %>% layout(xaxis = list(fixedrange = TRUE), 
@@ -526,7 +526,7 @@ server <- function(input, output, session) {
         size = 20,
         color = "#000000"
       ) +
-      scale_fill_manual(values = c(`New Offense` = "#B4ACE3", Technical = "#A86CC5")) +
+      scale_fill_manual(values = c(`New Offense` = "#BCDE85", Technical = "#6BBB5D")) +
       coord_polar(theta = "y") +
       theme_void() +
       ggtitle("Technical Violations \n In 2020") +
