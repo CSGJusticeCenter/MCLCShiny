@@ -43,7 +43,9 @@ requiredPackages = c('dplyr',
                      'spData',
                      'sf',
                      'tmap',
-                     'grid')
+                     'grid',
+                     'classInt',
+                     'RColorBrewer')
 
 # only downloads packages if needed
 for(p in requiredPackages){
@@ -464,6 +466,9 @@ adm_pop_long <- adm_pop_long %>%
   mutate(adm_or_pop_lc = ifelse(
     adm_or_pop == "Admissions", "admissions", "population"
   ))
+
+# change data types
+adm_pop_long$year <- as.factor(adm_pop_long$year)
 
 ########
 # National numbers

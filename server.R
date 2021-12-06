@@ -7,6 +7,10 @@
 #    Server
 #######################################
 
+library(RColorBrewer)
+pal <- brewer.pal(7, "OrRd") # we select 7 colors from the palette
+class(pal)
+
 server <- function(input, output, session) { 
   
   #_____________________________________________________________________________
@@ -63,7 +67,7 @@ server <- function(input, output, session) {
       group_by(metric, year) %>% 
       summarise(total = sum(total)) %>% 
       filter(metric == "Other" | metric == "Supervision Violations")  
-
+    
     totals <- dataFilter %>%
       group_by(year) %>%
       summarise(total = sum(total))
@@ -102,7 +106,7 @@ server <- function(input, output, session) {
     df_donutchart <- 
       adm_pop_long %>% 
       filter(states == input$state &
-             adm_or_pop == input$adm_or_pop,
+               adm_or_pop == input$adm_or_pop,
              year == 2020) %>% 
       group_by(metric, year) %>% 
       summarise(total = sum(total)) %>% 
@@ -146,8 +150,8 @@ server <- function(input, output, session) {
                                       hjust = 0.5))
     
     ggiraph(ggobj = donut_plot)
-
-    })
+    
+  })
   
   ##################################
   # Bar chart about supervision violations
@@ -158,7 +162,7 @@ server <- function(input, output, session) {
     dataFilter_2 <- 
       adm_pop_long %>% 
       filter(states == input$state &
-             adm_or_pop == input$adm_or_pop) %>% 
+               adm_or_pop == input$adm_or_pop) %>% 
       group_by(metric, year) %>% 
       summarise(total = sum(total)) %>% 
       filter(metric == "Technical" | metric == "New Offense")  
@@ -243,9 +247,9 @@ server <- function(input, output, session) {
   dataFilter_2b <- reactive({
     adm_pop_long %>%
       filter(states == input$state &
-             adm_or_pop == input$adm_or_pop &
-             year == "2019" &
-             data == "total_admissions")
+               adm_or_pop == input$adm_or_pop &
+               year == "2019" &
+               data == "total_admissions")
   })
   
   # Total 
@@ -348,8 +352,8 @@ server <- function(input, output, session) {
     df_prob <- 
       adm_pop_long %>% 
       filter(states == input$state &
-             adm_or_pop == input$adm_or_pop &
-             prob_vs_parole == "Probation") %>% 
+               adm_or_pop == input$adm_or_pop &
+               prob_vs_parole == "Probation") %>% 
       filter(metric == "Technical" | metric == "New Offense")  %>% 
       group_by(metric, year) %>% 
       summarise(total = sum(total)) 
@@ -391,9 +395,9 @@ server <- function(input, output, session) {
     df_donutchart_prob <- 
       adm_pop_long %>% 
       filter(states == input$state &
-             adm_or_pop == input$adm_or_pop &
-             prob_vs_parole == "Probation" &
-             year == 2020) %>% 
+               adm_or_pop == input$adm_or_pop &
+               prob_vs_parole == "Probation" &
+               year == 2020) %>% 
       filter(metric == "New Offense" | metric == "Technical") %>% 
       group_by(metric, year) %>% 
       summarise(total = sum(total)) 
@@ -447,8 +451,8 @@ server <- function(input, output, session) {
     df_parole <- 
       adm_pop_long %>% 
       filter(states == input$state &
-             adm_or_pop == input$adm_or_pop &
-             prob_vs_parole == "Parole") %>% 
+               adm_or_pop == input$adm_or_pop &
+               prob_vs_parole == "Parole") %>% 
       filter(metric == "Technical" | metric == "New Offense")  %>% 
       group_by(metric, year) %>% 
       summarise(total = sum(total)) 
@@ -483,7 +487,7 @@ server <- function(input, output, session) {
   ############
   # Donut chart for parole
   ############
-
+  
   output$donutchart_parole <- renderGirafe({ 
     
     # filter data depending on input
@@ -576,24 +580,38 @@ server <- function(input, output, session) {
   # create map
   output$map_counts <- renderLeaflet({
     
+    # filter data
     df_map_counts <- mclc %>% 
       dplyr::filter(adm_or_pop == input$adm_or_pop_map_counts &
                       year == input$year_map_counts &
                       metric == input$data_map_counts)
     
+    # merge data with shp file
     df_map_counts <- sp::merge(us_aea2, df_map_counts, by.x = 'NAME', by.y = "states", all = F)
     
-    # create a palette function
-    palette <- colorNumeric(palette = "Blues", domain = df_map_counts$total, na.color = "#D3D3D3")
+    # get quantile breaks
+    breaks_qt <- classIntervals(c(min(df_map_counts$total) - .00001, df_map_counts$total), 
+                                n = 7, 
+                                style = "quantile",
+                                dataPrecision = 0)
     
-    # use the palette function created above to add the appropriate RGB value to our dataframe
-    df_map_counts$color <- palette(df_map_counts$total)
+    # round up to nearest 10th
+    breaks_qt$brks <- round(breaks_qt$brks, digits = -1)
+    
+    # create a palette function
+    pal_fun <- colorQuantile(palette = "Blues", domain = NULL, na.color = "#D3D3D3", n = 7)
     
     # add popup
     df_map_counts$popup_text <- 
       paste0('<strong>', df_map_counts$NAME, '</strong>',
              '<br/>', '<strong>','Count: ', '</strong>', df_map_counts$total, sep = "", ' ') %>% 
       lapply(htmltools::HTML)
+    
+    # # format labels
+    # labels <- sprintf(
+    #   "<strong>%s</strong><br/>%s",
+    #   states$name, prettyNum(states$density, big.mark = ",")
+    # ) %>% lapply(htmltools::HTML)
     
     # create leaflet map
     map_counts <- leaflet(data = df_map_counts,
@@ -604,7 +622,7 @@ server <- function(input, output, session) {
       
       setView(lng = -99.25, lat = 29.50, zoom = 4.5) %>%
       
-      addPolygons(fillColor = df_map_counts$color, 
+      addPolygons(fillColor = ~pal_fun(total), 
                   fillOpacity = 1, 
                   weight = 1, 
                   color = "#C4D9ED", 
@@ -615,14 +633,12 @@ server <- function(input, output, session) {
       ) %>% 
       
       addLegend(position = "topright",
-                pal = palette,
-                opacity = 0.7,
-                values = df_map_counts$total,
+                colors = brewer.pal(7, "Blues"), 
+                opacity = 1,
+                labels = paste0("up to ", format(breaks_qt$brks[-1], digits = 2, big.mark = ",")),
                 title = "<strong>Count</strong>")
     map_counts
   })
-  
-  
   
   #_____________________________________________________________________________
   # Map - Changes
@@ -637,9 +653,9 @@ server <- function(input, output, session) {
   output$map <- renderLeaflet({
     
     df_map <- mclc_change %>% 
-          dplyr::filter(adm_or_pop == input$adm_or_pop_map &
-                        year == input$year_map &
-                        metric == input$data_map)
+      dplyr::filter(adm_or_pop == input$adm_or_pop_map &
+                      year == input$year_map &
+                      metric == input$data_map)
     df_map <- sp::merge(us_aea2, df_map, by.x = 'NAME', by.y = "states", all = F)
     
     # create a palette function
@@ -671,7 +687,7 @@ server <- function(input, output, session) {
                   highlightOptions = highlightOptions(
                     weight = 2,
                     color = "#FFFFFF")
-                  ) %>% 
+      ) %>% 
       
       addLegend(position = "bottomright",
                 pal = palette,
@@ -680,7 +696,7 @@ server <- function(input, output, session) {
                 labFormat = labelFormat(suffix="%"),
                 title = "<strong>% Change</strong>")
     map_1
-
+    
   })
   
 } #server
