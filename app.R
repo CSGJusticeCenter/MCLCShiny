@@ -39,3 +39,11 @@ shinyApp(ui = ui, server = server)
 
 # orange
 #E18731
+
+# greens
+#6BBB5D
+#BCDE85
+
+# purples
+#A86CC5
+#B4ACE3

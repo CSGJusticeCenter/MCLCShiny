@@ -26,10 +26,23 @@ ui <- fluidPage(
     "More Community, Less Confinement",
     tabPanel("About",
 
-             h1("More Community, Less Confinement"),
-             h2("A State-by-State Analysis on How Supervision Violations Impacted Prison Populations During the Pandemic"),
-             p("This 50-state revocation dashboard explores how supervision violations impacted prison populations during and prior to the pandemic. The project was conducted in partnership with the Correctional Leaders Association with support from Arnold Ventures."),
-             p("View the national report, 50 state reports, and our research methodology.")
+             fluidRow(column(width = 1),
+                      column(width = 10,
+                             
+                             h1("More Community, Less Confinement")),
+                             h2("A State-by-State Analysis on How Supervision Violations Impacted Prison Populations During the Pandemic"),
+                             p("This 50-state revocation dashboard explores how supervision violations impacted prison populations during and prior to the pandemic. The project was conducted in partnership with the Correctional Leaders Association with support from Arnold Ventures."),
+                             p("View the national report, 50 state reports, and our research methodology."),
+                            
+                      
+                             br(),
+                             br()
+                             
+                      ), #column
+                      column(width = 1,
+                             "")
+             ), #fluidRow
+             br()
 
     ),#tabPanel
     
@@ -37,13 +50,14 @@ ui <- fluidPage(
     # 2) Dashboard
     #_________________________________________________________________________________________
     
-    tabPanel("Dashboard",
+    tabPanel("State Reports",
              
              ########
-             # Side bar with drop downs and instructions
-             # eventually would like to have the option to hide the panel????
+             # Drop downs
+             # eventually would like to have the option to hide the panel
              # https://stackoverflow.com/questions/42159804/how-to-collapse-sidebarpanel-in-shiny-app
              ########
+             
              fluidRow(# select state
                       column(width = 6,
                              wellPanel(
@@ -78,6 +92,7 @@ ui <- fluidPage(
              ########
              # State title
              ########
+             
              fluidRow(column(width = 1,
                              ""),
                       align = "center",
@@ -105,33 +120,14 @@ ui <- fluidPage(
                       column(width = 1,
                              "")
              ), #fluidRow
-             
-             
-             # fluidRow(# Title admissions or population
-             #          column(width = 6, 
-             #                 textOutput("adm_pop_header"),
-             #                 tags$head(tags$style("#adm_pop_header{color: #000000;
-             #                                                       font-size: 22px;
-             #                                                       font-style: bold;
-             #                                                       text-align: center;
-             #                                        }"))),
-             #          
-             #          # Title for supervision violations admissions or population
-             #          column(width = 6, 
-             #                 textOutput("viol_header"),
-             #                 tags$head(tags$style("#viol_header{color: #000000;
-             #                                                    font-size: 22px;
-             #                                                    font-style: bold;
-             #                                                    text-align: center;
-             #                                        }")))
-             # ), #fluidRow
-             
-             # add spacing
              br(),
-
+             
+             ########
+             # 1st Headers
+             ########
+             
              fluidRow(
                column(width = 1),
-               
                # Title for overall graph
                column(width = 4, 
                       textOutput("adm_pop_title"),
@@ -143,7 +139,6 @@ ui <- fluidPage(
                                                            line-height: 32px;
                                                     }"))),
                column(width = 2),
-               
                # Title for supervision violations graph
                column(width = 4, 
                       textOutput("viol_title"),
@@ -155,7 +150,6 @@ ui <- fluidPage(
                                                         line-height: 32px;
                                                     }"))),
                column(width = 1)
-               
              ), #fluidRow
              
              br(),
@@ -163,15 +157,25 @@ ui <- fluidPage(
              ########
              # Plots 
              ########
-             fluidRow(column(width = 6, 
-                             # Bar chart 
-                             div(plotlyOutput("barchart", height = "75%", width = "75%"), align = "center")
+             
+             fluidRow(column(width = 1),
+                      column(width = 3, 
+                             # bar chart 
+                             div(plotlyOutput("barchart", height = "100%", width = "100%"), align = "center")),
+                      column(width = 1, 
+                             br(),br(),br(),br(),br(),
+                             # donut chart 
+                             div(girafeOutput("donutchart", height = "100%", width = "100%"), align = "left")),
+                      column(width = 2),
+                      column(width = 3, 
+                             # barchart
+                             div(plotlyOutput("barchart_supviols", height = "100%", width = "100%"), align = "center")
                              ),
-                      
-                      column(width = 6, 
-                             # Area chart 
-                             div(plotlyOutput("barchart_2", height = "75%", width = "75%"), align = "center")
-                             )
+                      column(width = 1,
+                             br(),br(),br(),br(),br(),
+                             # donut chart 
+                             div(girafeOutput("donutchart_supviols", height = "100%", width = "100%"), align = "left")),
+                      column(width = 1)
              ), #fluidRow
              
              # add spacing
@@ -247,6 +251,64 @@ ui <- fluidPage(
                       column(width = 1)
              ), #fluidRow
              
+             br(),
+             br(),
+             br(),
+             
+             ########
+             # 2nd Headers
+             ########
+             
+             fluidRow(
+               column(width = 1),
+               # Title for probation graph
+               column(width = 4, 
+                      textOutput("prob_title"),
+                      tags$head(tags$style("#prob_title{color: #FFFFFF;
+                                                        font-size: 20px;
+                                                        font-style: bold;
+                                                        text-align: center;
+                                                        background-color:#000000;
+                                                        line-height: 32px;
+                                                        }"))),
+               column(width = 2),
+               # Title for parole graph
+               column(width = 4, 
+                      textOutput("parole_title"),
+                      tags$head(tags$style("#parole_title{color: #FFFFFF;
+                                                          font-size: 20px;
+                                                          font-style: bold;
+                                                          text-align: center;
+                                                          background-color:#000000;
+                                                          line-height: 32px;
+                                                          }"))),
+               column(width = 1)
+             ), #fluidRow
+             
+             br(),
+             
+             ########
+             # Probation and parole plots
+             ########
+             
+             fluidRow(column(width = 1),
+                      column(width = 3, 
+                             # bar chart 
+                             div(plotlyOutput("barchart_prob", height = "100%", width = "100%"), align = "center")),
+                      column(width = 1, 
+                             br(),br(),br(),br(),br(),
+                             div(girafeOutput("donutchart_prob", height = "100%", width = "100%"), align = "left")),
+                      column(width = 2),
+                      column(width = 3, 
+                             div(plotlyOutput("barchart_parole", height = "100%", width = "100%"), align = "center")
+                      ),
+                      column(width = 1, 
+                             br(),br(),br(),br(),br(),
+                             div(girafeOutput("donutchart_parole", height = "100%", width = "100%"), align = "left")),
+                      column(width = 1)
+             ), #fluidRow
+             
+             # add spacing
              br(),
              br()
              

@@ -19,9 +19,9 @@ server <- function(input, output, session) {
   # 2) Dashboard
   #_____________________________________________________________________________
   
-  #########
-  # 2) Main header and paragraph
-  #########
+  ##################################
+  # Main header and paragraph
+  ##################################
   
   # Print state name and adm or pop selected
   output$selected_state <- renderText({ 
@@ -36,23 +36,9 @@ server <- function(input, output, session) {
           prior to the pandemic. This snapshot shows available data for ", input$state, " from 2018 to 2020.")
   })
   
-  #########
-  # Headers
-  #########
-  
-  # # Print adm or pop selected
-  # output$adm_pop_header <- renderText({ 
-  #   paste("Overall ", input$adm_or_pop)
-  # })
-  # 
-  # # Print adm or pop selected for sup viols
-  # output$viol_header <- renderText({ 
-  #   paste("Supervision Violation ", input$adm_or_pop)
-  # })
-  
-  #########
-  # Plot titles
-  #########
+  ##################################
+  # 1st plot titles
+  ##################################
   
   # Print adm or pop selected
   output$adm_pop_title <- renderText({ 
@@ -64,9 +50,9 @@ server <- function(input, output, session) {
     paste("Supervision Violation ", input$adm_or_pop, "by Type")
   })
   
-  #########
+  ##################################
   # Bar chart about total admissions or population
-  #########
+  ##################################
   
   output$barchart <- renderPlotly({
     
@@ -93,7 +79,7 @@ server <- function(input, output, session) {
                 vjust = 0.5) +
       theme_csgjc_plot_legend() +
       theme(plot.margin = margin(0.1, 0.1, 0.1, 0.1, "cm")) +
-      scale_fill_manual(values = c("#B5D6E4", "#6BADC9"),
+      scale_fill_manual(values = c("#8BC8D3", "#4698BC"),
                         name = "") +
       scale_y_continuous(label = scales::comma) 
     
@@ -106,11 +92,68 @@ server <- function(input, output, session) {
                                    hovermode = "x") 
   })
   
-  #########
-  # Bar chart about supervision violations
-  #########
+  ##################################
+  # Donut chart about supervision violations
+  ##################################
   
-  output$barchart_2 <- renderPlotly({
+  output$donutchart <- renderGirafe({ 
+    
+    # filter data depending on input
+    df_donutchart <- 
+      adm_pop_long %>% 
+      filter(states == input$state &
+             adm_or_pop == input$adm_or_pop,
+             year == 2020) %>% 
+      group_by(metric, year) %>% 
+      summarise(total = sum(total)) %>% 
+      filter(metric == "Other" | metric == "Supervision Violations") %>% 
+      select(-year)
+    
+    # sum 
+    df_donutchart$overall <- sum(df_donutchart$total)
+    
+    # create variables
+    df_donutchart <- df_donutchart %>% group_by(metric) %>% 
+      mutate(percentage = total / overall,
+             hover_text = paste0(metric, ": ", total)) %>%
+      mutate(percentage_label = paste0(round(100 * percentage, 0), "%")) %>% 
+      select(-overall)
+    
+    # make dataframe
+    df_donutchart <- as.data.frame(df_donutchart)
+    
+    # donut plot
+    donut_plot <- ggplot(df_donutchart, aes_string(y = 'total', fill = 'metric')) +
+      geom_bar_interactive(
+        aes(x = 1, tooltip = hover_text),
+        width = 0.5,
+        stat = "identity",
+        show.legend = FALSE
+      ) +
+      annotate(
+        geom = "text",
+        x = 0,
+        y = 0,
+        label = df_donutchart[["percentage_label"]][df_donutchart[["metric"]] == "Supervision Violations"],
+        size = 20,
+        color = "#000000"
+      ) +
+      scale_fill_manual(values = c(Other = "#8BC8D3", `Supervision Violations` = "#4698BC")) +
+      coord_polar(theta = "y") +
+      theme_void() +
+      ggtitle("Supervision Violations \n In 2020") +
+      theme(plot.title = element_text(size = 40,
+                                      hjust = 0.5))
+    
+    ggiraph(ggobj = donut_plot)
+
+    })
+  
+  ##################################
+  # Bar chart about supervision violations
+  ##################################
+  
+  output$barchart_supviols <- renderPlotly({
     
     dataFilter_2 <- 
       adm_pop_long %>% 
@@ -135,7 +178,7 @@ server <- function(input, output, session) {
                 vjust = 0.5) +
       theme_csgjc_plot_legend() +
       theme(plot.margin = margin(0.1, 0.1, 0.1, 0.1, "cm")) +
-      scale_fill_manual(values = c("#90C1D7", "#4698BC"),
+      scale_fill_manual(values = c("#BCDE85", "#6BBB5D"),
                         name = "") +
       scale_y_continuous(label = scales::comma) 
     
@@ -148,13 +191,54 @@ server <- function(input, output, session) {
                                    hovermode = "x") 
   })
   
-  #########
-  # Value boxes
-  #########
+  ##################################
+  # Donut chart about supervision violations
+  ##################################
   
-  ###
-  # Total 
-  ###
+  output$donutchart_supviols <- renderGirafe({ 
+    
+    # filter data depending on input
+    df_donutchart_supviols <- 
+      adm_pop_long %>% 
+      filter(states == input$state &
+               adm_or_pop == input$adm_or_pop,
+             year == 2020) %>% 
+      group_by(metric, year) %>% 
+      summarise(total = sum(total)) %>% 
+      filter(metric == "Technical" | metric == "New Offense") %>% 
+      select(-year)
+    
+    # sum 
+    df_donutchart_supviols$overall <- sum(df_donutchart_supviols$total)
+    
+    # create variables
+    df_donutchart_supviols <- df_donutchart_supviols %>% group_by(metric) %>% 
+      mutate(percentage = total / overall,
+             hover_text = paste0(metric, ": ", total)) %>%
+      mutate(percentage_label = paste0(round(100 * percentage, 0), "%")) %>% 
+      select(-overall)
+    
+    # make dataframe
+    df_donutchart_supviols <- as.data.frame(df_donutchart_supviols)
+    
+    # donut plot
+    donut_plot_supviols <- ggplot(df_donutchart_supviols, aes_string(y = 'total', fill = 'metric')) +
+      geom_bar_interactive(aes(x = 1, tooltip = hover_text),width = 0.5,stat = "identity",show.legend = FALSE) +
+      annotate(geom = "text",x = 0,y = 0,label = df_donutchart_supviols[["percentage_label"]][df_donutchart_supviols[["metric"]] == "Technical"],size = 20,color = "#000000") +
+      scale_fill_manual(values = c(`New Offense` = "#BCDE85", Technical = "#6BBB5D")) +
+      coord_polar(theta = "y") +
+      theme_void() +
+      ggtitle("Technical Violations \n In 2020") +
+      theme(plot.title = element_text(size = 40,hjust = 0.5))
+    
+    ggiraph(ggobj = donut_plot_supviols)
+    
+  })
+  
+  ##################################
+  # Value boxes
+  ##################################
+  
   # filter data
   dataFilter_2b <- reactive({
     adm_pop_long %>%
@@ -236,6 +320,221 @@ server <- function(input, output, session) {
            dataFilter_2d()$change_type, "d ", dataFilter_2d()$change,
            "%. In 2020, the number of supervision violation ",  dataFilter_2e()$adm_or_pop_lc, " ",
            dataFilter_2e()$change_type, "d ", dataFilter_2e()$change, "%.")
+  })
+  
+  ##################################
+  # 2nd plot titles
+  ##################################
+  
+  # Print adm or pop selected
+  output$prob_title <- renderText({ 
+    paste("Probation ", input$adm_or_pop, "by Type")
+  })
+  
+  # Print adm or pop selected for sup viols
+  output$parole_title <- renderText({ 
+    paste("Parole ", input$adm_or_pop, "by Type")
+  })
+  
+  ##################################
+  # Probation and parole plots
+  ##################################
+  
+  ############
+  # Barplot for probation
+  ############
+  output$barchart_prob <- renderPlotly({
+    
+    df_prob <- 
+      adm_pop_long %>% 
+      filter(states == input$state &
+             adm_or_pop == input$adm_or_pop &
+             prob_vs_parole == "Probation") %>% 
+      filter(metric == "Technical" | metric == "New Offense")  %>% 
+      group_by(metric, year) %>% 
+      summarise(total = sum(total)) 
+    
+    totals <- df_prob %>%
+      group_by(year) %>%
+      summarise(total = sum(total))
+    
+    p <- ggplot(data = df_prob,
+                aes_string(x = 'year', y = 'total', fill = 'metric')) +
+      geom_bar(stat = "identity", position = "stack", width = .5) +
+      geom_text(data = totals,
+                size = 4,
+                aes(year, total,
+                    label = format(total, big.mark = ","),
+                    fill = NULL),
+                vjust = 0.5) +
+      theme_csgjc_plot_legend() +
+      theme(plot.margin = margin(0.1, 0.1, 0.1, 0.1, "cm")) +
+      scale_fill_manual(values = c("#F5AC91", "#E18731"),
+                        name = "") +
+      scale_y_continuous(label = scales::comma) 
+    
+    plotly::ggplotly(p) %>% layout(xaxis = list(fixedrange = TRUE), 
+                                   yaxis = list(fixedrange = TRUE),
+                                   # font = list(family = "Arial"),
+                                   textfont = list(size = 4.5),
+                                   legend = list(orientation = "h",
+                                                 x = 0.25),
+                                   hovermode = "x") 
+  })
+  
+  ############
+  # Donut chart for probation
+  ############
+  output$donutchart_prob <- renderGirafe({ 
+    
+    # filter data depending on input
+    df_donutchart_prob <- 
+      adm_pop_long %>% 
+      filter(states == input$state &
+             adm_or_pop == input$adm_or_pop &
+             prob_vs_parole == "Probation" &
+             year == 2020) %>% 
+      filter(metric == "New Offense" | metric == "Technical") %>% 
+      group_by(metric, year) %>% 
+      summarise(total = sum(total)) 
+    
+    # sum 
+    df_donutchart_prob$overall <- sum(df_donutchart_prob$total)
+    
+    # create variables
+    df_donutchart_prob <- df_donutchart_prob %>% group_by(metric) %>% 
+      mutate(percentage = total / overall,
+             hover_text = paste0(metric, ": ", total)) %>%
+      mutate(percentage_label = paste0(round(100 * percentage, 0), "%")) %>% 
+      select(-overall)
+    
+    # make dataframe
+    df_donutchart_prob <- as.data.frame(df_donutchart_prob)
+    
+    # donut plot
+    donut_plot_prob <- ggplot(df_donutchart_prob, aes_string(y = 'total', fill = 'metric')) +
+      geom_bar_interactive(
+        aes(x = 1, tooltip = hover_text),
+        width = 0.5,
+        stat = "identity",
+        show.legend = FALSE
+      ) +
+      annotate(
+        geom = "text",
+        x = 0,
+        y = 0,
+        label = df_donutchart_prob[["percentage_label"]][df_donutchart_prob[["metric"]] == "Technical"],
+        size = 20,
+        color = "#000000"
+      ) +
+      scale_fill_manual(values = c(`New Offense` = "#F5AC91", Technical = "#E18731")) +
+      coord_polar(theta = "y") +
+      theme_void() +
+      ggtitle("Technical Violations \n In 2020") +
+      theme(plot.title = element_text(size = 40,
+                                      hjust = 0.5))
+    
+    ggiraph(ggobj = donut_plot_prob)
+    
+  })
+  
+  ############
+  # Barchart for parole
+  ############
+  
+  output$barchart_parole <- renderPlotly({
+    
+    df_parole <- 
+      adm_pop_long %>% 
+      filter(states == input$state &
+             adm_or_pop == input$adm_or_pop &
+             prob_vs_parole == "Parole") %>% 
+      filter(metric == "Technical" | metric == "New Offense")  %>% 
+      group_by(metric, year) %>% 
+      summarise(total = sum(total)) 
+    
+    totals <- df_parole %>%
+      group_by(year) %>%
+      summarise(total = sum(total))
+    
+    p <- ggplot(data = df_parole,
+                aes_string(x = 'year', y = 'total', fill = 'metric')) +
+      geom_bar(stat = "identity", position = "stack", width = .5) +
+      geom_text(data = totals,
+                size = 4,
+                aes(year, total,
+                    label = format(total, big.mark = ","),
+                    fill = NULL),
+                vjust = 0.5) +
+      theme_csgjc_plot_legend() +
+      theme(plot.margin = margin(0.1, 0.1, 0.1, 0.1, "cm")) +
+      scale_fill_manual(values = c("#B4ACE3", "#A86CC5"), name = "") +
+      scale_y_continuous(label = scales::comma) 
+    
+    plotly::ggplotly(p) %>% layout(xaxis = list(fixedrange = TRUE), 
+                                   yaxis = list(fixedrange = TRUE),
+                                   # font = list(family = "Arial"),
+                                   textfont = list(size = 4.5),
+                                   legend = list(orientation = "h",
+                                                 x = 0.25),
+                                   hovermode = "x") 
+  })
+  
+  ############
+  # Donut chart for parole
+  ############
+
+  output$donutchart_parole <- renderGirafe({ 
+    
+    # filter data depending on input
+    df_donutchart_parole <- 
+      adm_pop_long %>% 
+      filter(states == input$state &
+               adm_or_pop == input$adm_or_pop &
+               prob_vs_parole == "Parole" &
+               year == 2020) %>% 
+      filter(metric == "New Offense" | metric == "Technical") %>% 
+      group_by(metric, year) %>% 
+      summarise(total = sum(total)) 
+    
+    # sum 
+    df_donutchart_parole$overall <- sum(df_donutchart_parole$total)
+    
+    # create variables
+    df_donutchart_parole <- df_donutchart_parole %>% group_by(metric) %>% 
+      mutate(percentage = total / overall,
+             hover_text = paste0(metric, ": ", total)) %>%
+      mutate(percentage_label = paste0(round(100 * percentage, 0), "%")) %>% 
+      select(-overall)
+    
+    # make dataframe
+    df_donutchart_parole <- as.data.frame(df_donutchart_parole)
+    
+    # donut plot
+    donut_plot_parole <- ggplot(df_donutchart_parole, aes_string(y = 'total', fill = 'metric')) +
+      geom_bar_interactive(
+        aes(x = 1, tooltip = hover_text),
+        width = 0.5,
+        stat = "identity",
+        show.legend = FALSE
+      ) +
+      annotate(
+        geom = "text",
+        x = 0,
+        y = 0,
+        label = df_donutchart_parole[["percentage_label"]][df_donutchart_parole[["metric"]] == "Technical"],
+        size = 20,
+        color = "#000000"
+      ) +
+      scale_fill_manual(values = c(`New Offense` = "#B4ACE3", Technical = "#A86CC5")) +
+      coord_polar(theta = "y") +
+      theme_void() +
+      ggtitle("Technical Violations \n In 2020") +
+      theme(plot.title = element_text(size = 40,
+                                      hjust = 0.5))
+    
+    ggiraph(ggobj = donut_plot_parole)
+    
   })
   
   #_____________________________________________________________________________
