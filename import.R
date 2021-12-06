@@ -271,7 +271,6 @@ adm_pop <- adm_pop %>% dplyr::select(-state_abbrev)
 
 # change data types
 adm_pop$states <- factor(adm_pop$states)
-adm_pop$year <- factor(adm_pop$year)
 adm_pop <- adm_pop %>% mutate_if(is.character,as.numeric)
 
 # calculate difference between total and Supervision Violation
@@ -330,7 +329,7 @@ mclc <- mclc %>% mutate(adm_or_pop = ifelse(
 
 # change data types
 mclc$states <- as.factor(mclc$states)
-mclc$year <- as.factor(mclc$year)
+mclc$year <- as.numeric(mclc$year)
 mclc$metric <- as.factor(mclc$metric)
 mclc$data <- as.factor(mclc$data)
 mclc$region <- as.factor(mclc$region)

@@ -27,7 +27,6 @@ shinyApp(ui = ui, server = server)
 # compare data to BJS
 # add donut charts
 
-
 # blue colors
 #DAEAF2
 #B5D6E4

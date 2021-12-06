@@ -316,57 +316,94 @@ ui <- fluidPage(
     
     tabPanel("View Data",
              
-             titlePanel(""),
-             
-             DT::dataTableOutput("dt"),
-             
-             downloadButton(outputId = "download_filtered",
-                            label = "Download Filtered Data")
-             
+             fluidRow(
+               column(width = 1),
+               column(width = 10,
+                      
+                      titlePanel(""),
+                      
+                      DT::dataTableOutput("dt"),
+                      
+                      downloadButton(outputId = "download_filtered",
+                                     label = "Download Filtered Data")
+                      
+                      ),
+               column(width = 1)
+             )
+
     ), #tabPanel
     
     #_________________________________________________________________________________________
     # 4) Map - Counts
     #_________________________________________________________________________________________
     
-    tabPanel("Map (Counts)",
+    tabPanel("Map 2",
              
              fluidRow(column(width = 1),
-                      # select population or admissions
+                      # select state
                       column(width = 5,
                              wellPanel(
                                div(style = "font-size:16px;",
-                                   selectInput(inputId = "adm_or_pop_map_counts", 
-                                               label = div(style = "font-size:16px;
-                                                                    color: #000000;", 
-                                                       "Admissions or Population"), 
-                                               choices = unique(adm_pop_long$adm_or_pop))),
+                                   selectInput(inputId = "data_map_counts", label = div(style = "font-size:16px;
+                                                                                                 color: #000000;", 
+                                                         "Select Data"), 
+                                               choices = unique(mclc$metric))),
                                style = "background: #E7E7E7"
                              ) #wellPanel
                       ),#column
                       
-                      # select data
+                      # select population or admissions
                       column(width = 5, 
                              wellPanel(
                                div(style = "font-size:16px;",
-                                   selectInput(inputId = "data_map_counts", 
-                                               label = div(style = "font-size:16px;
-                                                                    color: #000000;", 
-                                                       "Select Data"), 
-                                               choices = unique(adm_pop_long$metric))),                             
+                                   selectInput(inputId = "adm_or_pop_map_counts", label = div(style = "font-size:16px;
+                                                                                                       color: #000000;", 
+                                                         "Admissions or Population"), 
+                                               choices = unique(mclc$adm_or_pop))),                             
                                style = "background: #E7E7E7"
                              ) #wellPanel
                       ), #column
                       column(width = 1)
              ), #fluidRow
              
-             fluidRow(
-               column(width = 1),
-               column(width = 5,
-                      sliderInput("year_map_counts", label = "Year", min = 2018, max = 2020, value = 2018, step = 1)
-               ), #column
-               column(width = 6)
+             fluidRow(column(width = 1),
+                      column(width = 5,
+                             
+                             sliderInput("year_map_counts", "Year",
+                                         min = min(mclc$year), max = max(mclc$year),
+                                         sep = "", value = min(mclc$year), step = 1),
+                             
+                      ),#column
+                      column(width = 6)
+             ), #fluidRow     
+             
+             fluidRow(column(width = 1),
+                      column(width = 10,
+                             
+                             textOutput("map_title_counts"),
+                             tags$head(tags$style("#map_title_counts{color: #000000;
+                                                                     font-size: 22px;
+                                                                     font-style: bold;
+                                                                     text-align: left;
+                                                    }")), 
+                             br(),
+                             br()
+                      ),#column
+                      column(width = 1)
+             ), #fluidRow
+             
+             fluidRow(column(width = 1),
+                      column(width = 10,
+                             
+                             leafletOutput(outputId = "map_counts", height = 600),
+                             tags$style(HTML(".leaflet-container { background: #FFFFFF;}")),
+                             tags$style(type = "text/css", "#map_counts {height: calc(100vh - 53px) !important;}"),
+                             br(), br(), br()
+                             
+                      ),#column
+                      column(width = 1)
              ) #fluidRow
+             
     ), #tabPanel
     
     #_________________________________________________________________________________________
@@ -412,6 +449,11 @@ ui <- fluidPage(
                  tags$style(HTML(".leaflet-container { background: #FFFFFF;}"))
                )
              )
-    ) #tabPanel
+    ), #tabPanel
+    
+    tags$style(type = "text/css", ".container-fluid {padding-left:0px; padding-right:0px;}"),
+    tags$style(type = "text/css", ".navbar {margin-bottom: .5px;}"),
+    tags$style(type = "text/css", ".container-fluid .navbar-header .navbar-brand {margin-left: 0px;}")
+    
   ) #navbarPage
 ) #fluidPage

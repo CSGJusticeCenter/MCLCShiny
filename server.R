@@ -565,7 +565,67 @@ server <- function(input, output, session) {
     )
   
   #_____________________________________________________________________________
-  # 4) Map
+  # Map - Counts
+  #_____________________________________________________________________________
+  
+  # print map title
+  output$map_title_counts <- renderText({ 
+    paste(input$data_map_counts, " ", input$adm_or_pop_map_counts, " in ", input$year_map_counts)
+  })
+  
+  # create map
+  output$map_counts <- renderLeaflet({
+    
+    df_map_counts <- mclc %>% 
+      dplyr::filter(adm_or_pop == input$adm_or_pop_map_counts &
+                      year == input$year_map_counts &
+                      metric == input$data_map_counts)
+    
+    df_map_counts <- sp::merge(us_aea2, df_map_counts, by.x = 'NAME', by.y = "states", all = F)
+    
+    # create a palette function
+    palette <- colorNumeric(palette = "Blues", domain = df_map_counts$total, na.color = "#D3D3D3")
+    
+    # use the palette function created above to add the appropriate RGB value to our dataframe
+    df_map_counts$color <- palette(df_map_counts$total)
+    
+    # add popup
+    df_map_counts$popup_text <- 
+      paste0('<strong>', df_map_counts$NAME, '</strong>',
+             '<br/>', '<strong>','Count: ', '</strong>', df_map_counts$total, sep = "", ' ') %>% 
+      lapply(htmltools::HTML)
+    
+    # create leaflet map
+    map_counts <- leaflet(data = df_map_counts,
+                          options = leafletOptions(zoomControl = TRUE,
+                                                   minZoom = 2, 
+                                                   maxZoom = 4.5,
+                                                   dragging = TRUE)) %>% 
+      
+      setView(lng = -99.25, lat = 29.50, zoom = 4.5) %>%
+      
+      addPolygons(fillColor = df_map_counts$color, 
+                  fillOpacity = 1, 
+                  weight = 1, 
+                  color = "#C4D9ED", 
+                  popup = df_map_counts$popup_text,
+                  highlightOptions = highlightOptions(
+                    weight = 2,
+                    color = "#FFFFFF")
+      ) %>% 
+      
+      addLegend(position = "topright",
+                pal = palette,
+                opacity = 0.7,
+                values = df_map_counts$total,
+                title = "<strong>Count</strong>")
+    map_counts
+  })
+  
+  
+  
+  #_____________________________________________________________________________
+  # Map - Changes
   #_____________________________________________________________________________
   
   # print map title
@@ -599,7 +659,7 @@ server <- function(input, output, session) {
                      options = leafletOptions(zoomControl = FALSE,
                                               minZoom = 4.5, 
                                               maxZoom = 4.5,
-                                              dragging = FALSE)) %>% 
+                                              dragging = TRUE)) %>% 
       
       setView(lng = -96.25, lat = 39.50, zoom = 4) %>%
       
