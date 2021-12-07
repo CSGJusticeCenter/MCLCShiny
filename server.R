@@ -601,6 +601,20 @@ server <- function(input, output, session) {
     # create a palette function
     pal_fun <- colorQuantile(palette = "Blues", domain = NULL, na.color = "#D3D3D3", n = 7)
     
+    # # set colors manually:
+    # pal_fun <- colorFactor(
+    #   palette = c("#2A5B71", "#387A96", "#4698Bc", "#6BADC9", "#B5D6E4", "#DAEAF2",
+    #               "#E9F4D6", "#A5D35C", "#8FC833", "#72A029", "#56781F"),
+    #   domain = df_map_counts$total,
+    #   na.color = "#D3D3D3" # light gray color for NA
+    # )
+    
+    # pal_fun <- colorQuantile(
+    #   palette = colorRampPalette(c('#DAEAF2', '#4698BC'))(length(df_map_counts$total)), 
+    #   domain = df_map_counts$total,
+    #   na.color = "#D3D3D3", # light gray color for NA
+    #   n = 6)
+    
     # add popup
     df_map_counts$popup_text <- 
       paste0('<strong>', df_map_counts$NAME, '</strong>',
@@ -617,10 +631,10 @@ server <- function(input, output, session) {
     map_counts <- leaflet(data = df_map_counts,
                           options = leafletOptions(zoomControl = TRUE,
                                                    minZoom = 2, 
-                                                   maxZoom = 4.5,
+                                                   maxZoom = 4.75,
                                                    dragging = TRUE)) %>% 
       
-      setView(lng = -99.25, lat = 29.50, zoom = 4.5) %>%
+      setView(lng = -96.25, lat = 29.50, zoom = 4.75) %>%
       
       addPolygons(fillColor = ~pal_fun(total), 
                   fillOpacity = 1, 
@@ -629,15 +643,21 @@ server <- function(input, output, session) {
                   popup = df_map_counts$popup_text,
                   highlightOptions = highlightOptions(
                     weight = 2,
-                    color = "#FFFFFF")
+                    color = "#4698BC")
       ) %>% 
       
+      # addLegend(pal = pal_fun, 
+      #           opacity = 1,
+      #           values = df_map_counts$total)
+      
       addLegend(position = "topright",
-                colors = brewer.pal(7, "Blues"), 
+                colors = brewer.pal(7, "Blues"),
                 opacity = 1,
                 labels = paste0("up to ", format(breaks_qt$brks[-1], digits = 2, big.mark = ",")),
                 title = "<strong>Count</strong>")
+      
     map_counts
+    
   })
   
   #_____________________________________________________________________________
@@ -645,57 +665,61 @@ server <- function(input, output, session) {
   #_____________________________________________________________________________
   
   # print map title
-  output$map_title <- renderText({ 
-    paste("Change in ", input$data_map, " ", input$adm_or_pop_map, "in ", input$year_map)
+  output$map_title_change <- renderText({ 
+    paste("Change in ", input$data_map_change, " ", input$adm_or_pop_map_change, "in ", input$year_map_change)
   })
-  
+ 
   # create map
-  output$map <- renderLeaflet({
+  output$map_change <- renderLeaflet({
     
-    df_map <- mclc_change %>% 
-      dplyr::filter(adm_or_pop == input$adm_or_pop_map &
-                      year == input$year_map &
-                      metric == input$data_map)
-    df_map <- sp::merge(us_aea2, df_map, by.x = 'NAME', by.y = "states", all = F)
+    # filter data
+    df_map_change <- mclc_change %>% 
+      dplyr::filter(adm_or_pop == input$adm_or_pop_map_change &
+                    year == input$year_map_change &
+                    metric == input$data_map_change)
+    
+    # merge data with shp file
+    df_map_change <- sp::merge(us_aea2, df_map_change, by.x = 'NAME', by.y = "states", all = F)
     
     # create a palette function
-    palette <- colorNumeric(palette = "Blues", domain = df_map$change, na.color = "#D3D3D3")
+    pal_fun <- colorNumeric(palette = "Blues", domain = df_map_change$change, na.color = "#D3D3D3")
     
     # use the palette function created above to add the appropriate RGB value to our dataframe
-    df_map$color <- palette(df_map$change)
+    df_map_change$color <- pal_fun(df_map_change$change)
     
     # add popup
-    df_map$popup_text <- 
-      paste0('<strong>', df_map$NAME, '</strong>',
-             '<br/>', '<strong>','Change: ', '</strong>', df_map$change,"%", sep = "", ' ') %>% 
+    df_map_change$popup_text <- 
+      paste0('<strong>', df_map_change$NAME, '</strong>',
+             '<br/>', '<strong>','Change: ', '</strong>', df_map_change$change, "%", sep = "", ' ') %>% 
       lapply(htmltools::HTML)
     
     # create leaflet map
-    map_1 <- leaflet(data = df_map,
-                     options = leafletOptions(zoomControl = FALSE,
-                                              minZoom = 4.5, 
-                                              maxZoom = 4.5,
-                                              dragging = TRUE)) %>% 
+    map_change <- leaflet(data = df_map_change,
+                          options = leafletOptions(zoomControl = TRUE,
+                                                   minZoom = 2, 
+                                                   maxZoom = 4.75,
+                                                   dragging = TRUE)) %>% 
       
-      setView(lng = -96.25, lat = 39.50, zoom = 4) %>%
+      setView(lng = -96.25, lat = 29.50, zoom = 4.75) %>%
       
-      addPolygons(fillColor = df_map$color, 
+      addPolygons(fillColor = ~pal_fun(change), 
                   fillOpacity = 1, 
                   weight = 1, 
                   color = "#C4D9ED", 
-                  popup = df_map$popup_text,
+                  popup = df_map_change$popup_text,
                   highlightOptions = highlightOptions(
                     weight = 2,
-                    color = "#FFFFFF")
+                    color = "#4698BC")
       ) %>% 
       
-      addLegend(position = "bottomright",
-                pal = palette,
-                opacity = 0.7,
-                values = df_map$change,
+      addLegend(position = "topright",
+                pal = pal_fun,
+                opacity = 1,
+                values = df_map_change$change,
                 labFormat = labelFormat(suffix="%"),
                 title = "<strong>% Change</strong>")
-    map_1
+    
+    map_change
     
   })
   

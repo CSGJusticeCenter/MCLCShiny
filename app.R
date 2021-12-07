@@ -9,6 +9,7 @@
 
 # run R files
 source("import.R")
+# source("multiple_imputation.R")
 source("ui.R")
 source("server.R")
 
@@ -18,6 +19,7 @@ shinyApp(ui = ui, server = server)
 # notes
 # https://bootcamp.uxdesign.cc/how-i-built-a-data-visualization-color-palette-for-a-fortune-500-company-cf01d8a66451
 # https://shiny.rstudio.com/articles/layout-guide.html
+# https://jokergoo.github.io/2020/05/21/make-circular-heatmaps/
 
 # map notes
 # https://cengel.github.io/R-spatial/mapping.html

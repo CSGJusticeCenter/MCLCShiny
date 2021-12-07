@@ -119,8 +119,8 @@ theme_csgjc_plot_legend <- function(){
 ########
 
 #set wd to teams (for collaboration) - change user name to read in data
-# setwd("C:/Users/mroberts/The Council of State Governments/JC Research - 50 State Revocations Project/50 State Survey (2021)")
-setwd("~/The Council of State Governments/JC Research - 50 State Survey (2021)")
+setwd("C:/Users/mroberts/The Council of State Governments/JC Research - 50 State Revocations Project/50 State Survey (2021)")
+# setwd("~/The Council of State Governments/JC Research - 50 State Survey (2021)")
 
 # read charge data for 2019 and 2020
 adm18 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2018")
@@ -142,8 +142,8 @@ costs <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Costs")
 #                       encoding = "UTF-8", verbose = FALSE)
 
 #set wd 
-# setwd("C:/Users/mroberts/OneDrive - The Council of State Governments/Desktop/csgjc/repos/MCLCShiny")
-setwd("~/csgjc/MCLCShiny")
+setwd("C:/Users/mroberts/OneDrive - The Council of State Governments/Desktop/csgjc/repos/MCLCShiny")
+# setwd("~/csgjc/MCLCShiny")
 
 # From https://www.census.gov/geo/maps-data/data/cbf/cbf_state.html
 us <- readOGR(dsn = "data/cb_2014_us_state_5m/cb_2014_us_state_5m.shp",
@@ -472,11 +472,33 @@ adm_pop_long$year <- as.factor(adm_pop_long$year)
 
 ########
 # National numbers
+# get data from website 
+# https://csgjusticecenter.org/publications/more-community-less-confinement/
 ########
 
-# group by year and data type to get national numbers
-################### switch this out with multiple imputation data
-national <- mclc %>% 
-  group_by(year, data) %>% 
-  summarise(total = sum(total, na.rm = TRUE))
+year2018 <- c(629811, 259927, 1237179, 288959, 108904)
+year2019 <- c(610192, 246096, 1217876, 271804, 91216)
+year2020 <- c(410601, 172753, 1051101, 214773, 74849)
+metric <- c("overall_admissions", 
+            "admissions_for_violations", 
+            "overall_population",
+            "violator_population",
+            "technical_violator_population")
+mclc_report <- cbind(metric, year2018, year2019, year2020)
+mclc_report <- as.data.frame(mclc_report)
+
+# transform data to long form
+mclc_report <- gather(mclc_report, yearname, total, year2018:year2020)
+
+# rename years
+mclc_report <- mclc_report %>% mutate(year = case_when(
+  yearname == "year2018" ~ 2018,
+  yearname == "year2019" ~ 2019,
+  yearname == "year2020" ~ 2020
+)) %>% select(-yearname)
+
+# remove comma and round
+mclc_report$total <- as.numeric(gsub(",", "", mclc_report$total))
+mclc_report$total <- round(mclc_report$total, 0)
+
 

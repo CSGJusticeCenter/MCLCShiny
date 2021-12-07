@@ -28,15 +28,27 @@ ui <- fluidPage(
              fluidRow(# title and text of national page
                       column(width = 2),
                       column(width = 8,
-                             br(), br(),
+                             br(), 
+                             br(),
                              div(" More Community, Less Confinement", style = "font-size:48px;
                                                                               font-style: bold;
                                                                               text-align: left;
-                                                                              color: #000000;"), br(), 
+                                                                              color: #000000;"), 
+                             br(), 
                              div("A State-by-State Analysis on How Supervision Violations Impacted Prison Populations During the Pandemic",
                                  style = "font-size:32px;
                                           text-align: left;
-                                          color: #000000;")
+                                          color: #000000;"),
+                             br(),
+                             tags$div("View the ",
+                                      tags$a(href="https://csgjusticecenter.org/publications/more-community-less-confinement/", "national report, "),
+                                      tags$a(href="https://csgjusticecenter.org/publications/more-community-less-confinement/state-reports/", "50 state reports, "), "and our ",
+                                      tags$a(href="https://csgjusticecenter.org/publications/more-community-less-confinement/methodology/", "research methodology."),
+                                 style = "font-size:24px;
+                                          text-align: left;
+                                          color: #000000;"),
+                             
+                             
                       ), #column
                       column(width = 2)
              ), #fluidRow
@@ -320,6 +332,25 @@ ui <- fluidPage(
                column(width = 1),
                column(width = 10,
                       
+                      br(), br(),
+                      div("View Data", style = "font-size:32px;
+                                                font-style: bold;
+                                                text-align: left;
+                                                color: #000000;"), br(), 
+                      
+                      div("This dataset contains prison admissions and population data by state between 2018 and 2020.",
+                          style = "font-size:18px;
+                                  text-align: left;
+                                  color: #000000;")
+                      
+               ),
+               column(width = 1)
+             ),
+             
+             fluidRow(
+               column(width = 1),
+               column(width = 10,
+                      
                       titlePanel(""),
                       
                       DT::dataTableOutput("dt"),
@@ -337,7 +368,7 @@ ui <- fluidPage(
     # 4) Map - Counts
     #_________________________________________________________________________________________
     
-    tabPanel("Map 2",
+    tabPanel("Map",
              
              fluidRow(column(width = 1),
                       # select state
@@ -410,45 +441,73 @@ ui <- fluidPage(
     # 5) Map - Changes
     #_________________________________________________________________________________________
     
-    tabPanel("Map",
+    tabPanel("Map - Changes",
              
-             sidebarLayout(
-               
-               # side bar to select data
-               sidebarPanel(
-                 
-                 # choose admissions or population
-                 selectInput("adm_or_pop_map", 
-                             label = "Admissions or Population",
-                             choices = unique(mclc_change$adm_or_pop)),
-                 
-                 # select data
-                 selectInput("data_map", 
-                             label = "Select Data",
-                             choices = unique(mclc_change$metric)),
-                 
-                 # select year
-                 selectInput("year_map", 
-                             label = "Select Year",
-                             choices = unique(mclc_change$year)),
-                 
-                 
-               ),
-               
-               # Show a plot of the generated distribution
-               mainPanel(
-                 
-                 textOutput("map_title"),
-                 tags$head(tags$style("#map_title{color: #000000;
-                                                      font-size: 22px;
-                                                      font-style: bold;
-                                                      text-align: left;
+             fluidRow(column(width = 1),
+                      # select state
+                      column(width = 5,
+                             wellPanel(
+                               div(style = "font-size:16px;",
+                                   selectInput(inputId = "data_map_change", label = div(style = "font-size:16px;
+                                                                                                 color: #000000;", 
+                                                         "Select Data"), 
+                                               choices = unique(mclc_change$metric))),
+                               style = "background: #E7E7E7"
+                             ) #wellPanel
+                      ),#column
+                      
+                      # select population or admissions
+                      column(width = 5, 
+                             wellPanel(
+                               div(style = "font-size:16px;",
+                                   selectInput(inputId = "adm_or_pop_map_change", label = div(style = "font-size:16px;
+                                                                                                       color: #000000;", 
+                                                         "Admissions or Population"), 
+                                               choices = unique(mclc_change$adm_or_pop))),                             
+                               style = "background: #E7E7E7"
+                             ) #wellPanel
+                      ), #column
+                      column(width = 1)
+             ), #fluidRow
+             
+             fluidRow(column(width = 1),
+                      column(width = 5,
+                             
+                             sliderInput("year_map_change", "Year",
+                                         min = min(mclc_change$year), max = max(mclc_change$year),
+                                         sep = "", value = min(mclc_change$year), step = 1),
+                             
+                      ),#column
+                      column(width = 6)
+             ), #fluidRow     
+             
+             fluidRow(column(width = 1),
+                      column(width = 10,
+                             
+                             textOutput("map_title_change"),
+                             tags$head(tags$style("#map_title_change{color: #000000;
+                                                                     font-size: 22px;
+                                                                     font-style: bold;
+                                                                     text-align: left;
                                                     }")), 
-                 
-                 leafletOutput(outputId = "map", height = 600),
-                 tags$style(HTML(".leaflet-container { background: #FFFFFF;}"))
-               )
-             )
+                             br(),
+                             br()
+                      ),#column
+                      column(width = 1)
+             ), #fluidRow
+             
+             fluidRow(column(width = 1),
+                      column(width = 10,
+                             
+                             leafletOutput(outputId = "map_change", height = 600),
+                             tags$style(HTML(".leaflet-container { background: #FFFFFF;}")),
+                             tags$style(type = "text/css", "#map_change {height: calc(100vh - 53px) !important;}"),
+                             br(), br(), br()
+                             
+                      ),#column
+                      column(width = 1)
+             ) #fluidRow
+             
     ), #tabPanel
     
     tags$style(type = "text/css", ".container-fluid {padding-left:0px; padding-right:0px;}"),
