@@ -32,6 +32,11 @@ shinyApp(ui = ui, server = server)
 # change locations of total and sup viols to have their own rows
 # compare data to BJS
 
+# csg color
+# Red: B05D24 (any type on this color should be white, not black, for accessibility)
+# Dark blue: 355DA1 (any type on this color should be white, not black, for accessibility)
+# Light Blue: DEF0F6 (any type on this color should be black, dark blue, or bold red, not white, for accessibility)
+
 # blue colors
 #DAEAF2
 #B5D6E4

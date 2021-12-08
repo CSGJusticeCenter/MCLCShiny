@@ -42,6 +42,7 @@ ui <- fluidPage(
                              br(),
                              tags$div("View the ",
                                       tags$a(href="https://csgjusticecenter.org/publications/more-community-less-confinement/", "national report, "),
+                                      tags$a(href="https://csgjusticecenter.org/projects/course-corrections/cost-calculator/", "Cost Calculator, "),
                                       tags$a(href="https://csgjusticecenter.org/publications/more-community-less-confinement/state-reports/", "50 state reports, "), "and our ",
                                       tags$a(href="https://csgjusticecenter.org/publications/more-community-less-confinement/methodology/", "research methodology."),
                                  style = "font-size:24px;
@@ -52,8 +53,26 @@ ui <- fluidPage(
                       ), #column
                       column(width = 2)
              ), #fluidRow
+             br(),
+             
+             fluidRow(column(width = 1),
+                      
+                      # admissions plot
+                      column(width = 5,
+                             
+                             
+                             ),
+                      
+                      # population plot
+                      column(width = 5,
+                             
+                             
+                             ),
+                      column(width = 1)
+             ), #fluidRow
+             br(),
              br()
-
+             
     ),#tabPanel
     
     #_________________________________________________________________________________________
@@ -161,6 +180,7 @@ ui <- fluidPage(
              ), #fluidRow
              
              br(),
+             br(),
              
              ########
              # Plots 
@@ -169,7 +189,7 @@ ui <- fluidPage(
              fluidRow(column(width = 1),
                       column(width = 3, 
                              # bar chart 
-                             div(plotlyOutput("barchart", height = "100%", width = "100%"), align = "center")),
+                             div(plotOutput("barchart"), align = "center")),
                       column(width = 1, 
                              br(),br(),br(),br(),br(),
                              # donut chart 
@@ -177,7 +197,7 @@ ui <- fluidPage(
                       column(width = 2),
                       column(width = 3, 
                              # barchart
-                             div(plotlyOutput("barchart_supviols", height = "100%", width = "100%"), align = "center")
+                             div(plotOutput("barchart_supviols"), align = "center")
                              ),
                       column(width = 1,
                              br(),br(),br(),br(),br(),
@@ -294,6 +314,7 @@ ui <- fluidPage(
              ), #fluidRow
              
              br(),
+             br(),
              
              ########
              # Probation and parole plots
@@ -302,13 +323,13 @@ ui <- fluidPage(
              fluidRow(column(width = 1),
                       column(width = 3, 
                              # bar chart 
-                             div(plotlyOutput("barchart_prob", height = "100%", width = "100%"), align = "center")),
+                             div(plotOutput("barchart_prob"), align = "center")),
                       column(width = 1, 
                              br(),br(),br(),br(),br(),
                              div(girafeOutput("donutchart_prob", height = "100%", width = "100%"), align = "left")),
                       column(width = 2),
                       column(width = 3, 
-                             div(plotlyOutput("barchart_parole", height = "100%", width = "100%"), align = "center")
+                             div(plotOutput("barchart_parole"), align = "center")
                       ),
                       column(width = 1, 
                              br(),br(),br(),br(),br(),
@@ -318,6 +339,72 @@ ui <- fluidPage(
              
              # add spacing
              br(),
+             
+             tags$style(".small-box.bg-green {background-color: #FFFFFF !important; color: #000000 !important; }"),
+             tags$style(".small-box.bg-red   {background-color: #FFFFFF !important; color: #000000 !important; }"),
+             tags$style(".small-box          {border: 3px; border-style: solid; border-color: #E7E7E7 !important; 
+                                              border-radius: 5px; padding: 0.5em; }"),
+             
+             fluidRow(# change from 2018
+               column(width = 1),
+               
+               column(width = 1, 
+                      valueBoxOutput("prob_change_18", width = 25),
+                      tags$head(tags$style("#prob_change_18{color: #000000;
+                                                                    font-size: 16px;
+                                                                    text-alight: left;
+                             }"))
+               ), #column
+               
+               # change from 2019
+               column(width = 1, 
+                      valueBoxOutput("prob_change_19", width = 25),
+                      tags$head(tags$style("#prob_change_19{color: #000000;
+                                              font-size: 16px;
+                                              text-alight: left;
+                             }"))
+               ), #column
+               
+               # sentence about change
+               column(width = 2, 
+                      textOutput("prob_change_sentence"),
+                      tags$head(tags$style("#prob_change_sentence{color: #000000;
+                                                    font-size: 16px;
+                                                    text-align: left;
+                                                    vertical-align: middle;}"))
+               ), #column
+               
+               column(width = 2),
+               
+               # change from 2018
+               column(width = 1, 
+                      valueBoxOutput("parole_change_18", width = 25),
+                      tags$head(tags$style("#parole_change_18{color: #000000;
+                                                font-size: 16px;
+                                                text-alight: left;
+                             }"))
+               ), #column
+               
+               # change from 2019
+               column(width = 1, 
+                      valueBoxOutput("parole_change_19", width = 25),
+                      tags$head(tags$style("#parole_change_19{color: #000000;
+                                                font-size: 16px;
+                                                text-alight: left;
+                             }"))
+               ), #column
+               
+               # sentence about change
+               column(width = 2, 
+                      textOutput("parole_change_sentence"),
+                      tags$head(tags$style("#parole_change_sentence{color: #000000;
+                                                       font-size: 16px;
+                                                       text-align: left;
+                                                       vertical-align: middle;}"))
+               ), #column
+               column(width = 1)
+             ), #fluidRow
+             
              br()
              
     ), #tabPanel
@@ -365,7 +452,7 @@ ui <- fluidPage(
     ), #tabPanel
     
     #_________________________________________________________________________________________
-    # 4) Map - Counts
+    # Map - Counts
     #_________________________________________________________________________________________
     
     tabPanel("Map",
@@ -426,7 +513,7 @@ ui <- fluidPage(
              fluidRow(column(width = 1),
                       column(width = 10,
                              
-                             leafletOutput(outputId = "map_counts", height = 600),
+                             leafletOutput(outputId = "map_counts", height = 300),
                              tags$style(HTML(".leaflet-container { background: #FFFFFF;}")),
                              tags$style(type = "text/css", "#map_counts {height: calc(100vh - 53px) !important;}"),
                              br(), br(), br()
@@ -438,7 +525,7 @@ ui <- fluidPage(
     ), #tabPanel
     
     #_________________________________________________________________________________________
-    # 5) Map - Changes
+    # Map - Changes
     #_________________________________________________________________________________________
     
     tabPanel("Map - Changes",
@@ -499,7 +586,7 @@ ui <- fluidPage(
              fluidRow(column(width = 1),
                       column(width = 10,
                              
-                             leafletOutput(outputId = "map_change", height = 600),
+                             leafletOutput(outputId = "map_change", height = 300),
                              tags$style(HTML(".leaflet-container { background: #FFFFFF;}")),
                              tags$style(type = "text/css", "#map_change {height: calc(100vh - 53px) !important;}"),
                              br(), br(), br()

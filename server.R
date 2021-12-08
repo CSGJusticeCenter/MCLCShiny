@@ -13,15 +13,15 @@ class(pal)
 
 server <- function(input, output, session) { 
   
-  #_____________________________________________________________________________
+  #__________________________________________________________________________________________________________________________________________________________
   # 1) About
-  #_____________________________________________________________________________
+  #__________________________________________________________________________________________________________________________________________________________
   
   # no code needed
   
-  #_____________________________________________________________________________
+  #__________________________________________________________________________________________________________________________________________________________
   # 2) Dashboard
-  #_____________________________________________________________________________
+  #__________________________________________________________________________________________________________________________________________________________
   
   ##################################
   # Main header and paragraph
@@ -54,46 +54,46 @@ server <- function(input, output, session) {
     paste("Supervision Violation ", input$adm_or_pop, "by Type")
   })
   
-  ##################################
+  ##############################################################################
+  ##############################################################################
   # Bar chart about total admissions or population
-  ##################################
+  ##############################################################################
+  ##############################################################################
   
-  output$barchart <- renderPlotly({
+  output$barchart <- renderPlot({
     
-    dataFilter <- 
+    df_totals <- 
       adm_pop_long %>% 
       filter(states == input$state &
-               adm_or_pop == input$adm_or_pop) %>% 
+             adm_or_pop == input$adm_or_pop) %>% 
       group_by(metric, year) %>% 
       summarise(total = sum(total)) %>% 
       filter(metric == "Other" | metric == "Supervision Violations")  
     
-    totals <- dataFilter %>%
+    totals <- df_totals %>%
       group_by(year) %>%
       summarise(total = sum(total))
     
-    p <- ggplot(data = dataFilter,
-                aes_string(x = 'year', y = 'total', fill = 'metric')) +
-      geom_bar(stat = "identity", position = "stack", width = .5) +
-      geom_text(data = totals,
-                size = 4,
-                aes(year, total,
-                    label = format(total, big.mark = ","),
-                    fill = NULL),
-                vjust = 0.5) +
+    dodger = position_dodge(width = 0.9)
+    
+    ggplot(data = df_totals,
+           aes_string(x = 'year', y = 'total', fill = 'metric')) +
+      geom_bar(stat = "identity", position = "dodge") +
+      geom_text(aes(label=scales::comma(total)),
+                position=dodger,
+                size = 5.5,
+                colour = "#000000",
+                vjust = -0.5) +
       theme_csgjc_plot_legend() +
       theme(plot.margin = margin(0.1, 0.1, 0.1, 0.1, "cm")) +
-      scale_fill_manual(values = c("#8BC8D3", "#4698BC"),
+      scale_fill_manual(values = c("#DEF0F6", "#E18731"),
                         name = "") +
-      scale_y_continuous(label = scales::comma) 
+      scale_y_continuous(label = scales::comma,
+                         limits = c(0, 1.17*max(df_totals$total)),
+                         expand = c(0,0)
+      ) +
+      coord_cartesian(clip = "off")
     
-    plotly::ggplotly(p) %>% layout(xaxis = list(fixedrange = TRUE), 
-                                   yaxis = list(fixedrange = TRUE),
-                                   # font = list(family = "Arial"),
-                                   textfont = list(size = 4.5),
-                                   legend = list(orientation = "h",
-                                                 x = 0.2),
-                                   hovermode = "x") 
   })
   
   ##################################
@@ -142,7 +142,7 @@ server <- function(input, output, session) {
         size = 20,
         color = "#000000"
       ) +
-      scale_fill_manual(values = c(Other = "#8BC8D3", `Supervision Violations` = "#4698BC")) +
+      scale_fill_manual(values = c(Other = "#DEF0F6", `Supervision Violations` = "#E18731")) +
       coord_polar(theta = "y") +
       theme_void() +
       ggtitle("Supervision Violations \n In 2020") +
@@ -157,9 +157,9 @@ server <- function(input, output, session) {
   # Bar chart about supervision violations
   ##################################
   
-  output$barchart_supviols <- renderPlotly({
+  output$barchart_supviols <- renderPlot({
     
-    dataFilter_2 <- 
+    df_supviols <- 
       adm_pop_long %>% 
       filter(states == input$state &
                adm_or_pop == input$adm_or_pop) %>% 
@@ -167,32 +167,30 @@ server <- function(input, output, session) {
       summarise(total = sum(total)) %>% 
       filter(metric == "Technical" | metric == "New Offense")  
     
-    totals <- dataFilter_2 %>%
+    totals <- df_supviols %>%
       group_by(year) %>%
       summarise(total = sum(total))
     
-    p <- ggplot(data = dataFilter_2,
-                aes_string(x = 'year', y = 'total', fill = 'metric')) +
-      geom_bar(stat = "identity", position = "stack", width = .5) +
-      geom_text(data = totals,
-                size = 4,
-                aes(year, total,
-                    label = format(total, big.mark = ","),
-                    fill = NULL),
-                vjust = 0.5) +
+    dodger = position_dodge(width = 0.9)
+    
+    ggplot(data = df_supviols,
+           aes_string(x = 'year', y = 'total', fill = 'metric')) +
+      geom_bar(stat = "identity", position = "dodge") +
+      geom_text(aes(label=scales::comma(total)),
+                position=dodger,
+                size = 5.5,
+                colour = "#000000",
+                vjust = -0.5) +
       theme_csgjc_plot_legend() +
       theme(plot.margin = margin(0.1, 0.1, 0.1, 0.1, "cm")) +
-      scale_fill_manual(values = c("#8BC8D3", "#4698BC"),
+      scale_fill_manual(values = c("#DEF0F6", "#E18731"),
                         name = "") +
-      scale_y_continuous(label = scales::comma) 
+      scale_y_continuous(label = scales::comma,
+                         limits = c(0, 1.17*max(df_supviols$total)),
+                         expand = c(0,0)
+      ) +
+      coord_cartesian(clip = "off")
     
-    plotly::ggplotly(p) %>% layout(xaxis = list(fixedrange = TRUE), 
-                                   yaxis = list(fixedrange = TRUE),
-                                   # font = list(family = "Arial"),
-                                   textfont = list(size = 4.5),
-                                   legend = list(orientation = "h",
-                                                 x = 0.25),
-                                   hovermode = "x") 
   })
   
   ##################################
@@ -229,7 +227,7 @@ server <- function(input, output, session) {
     donut_plot_supviols <- ggplot(df_donutchart_supviols, aes_string(y = 'total', fill = 'metric')) +
       geom_bar_interactive(aes(x = 1, tooltip = hover_text),width = 0.5,stat = "identity",show.legend = FALSE) +
       annotate(geom = "text",x = 0,y = 0,label = df_donutchart_supviols[["percentage_label"]][df_donutchart_supviols[["metric"]] == "Technical"],size = 20,color = "#000000") +
-      scale_fill_manual(values = c(`New Offense` = "#8BC8D3", Technical = "#4698BC")) +
+      scale_fill_manual(values = c(`New Offense` = "#DEF0F6", Technical = "#E18731")) +
       coord_polar(theta = "y") +
       theme_void() +
       ggtitle("Technical Violations \n In 2020") +
@@ -340,14 +338,16 @@ server <- function(input, output, session) {
     paste("Parole ", input$adm_or_pop, "by Type")
   })
   
-  ##################################
+  ##############################################################################
+  ##############################################################################
   # Probation and parole plots
-  ##################################
+  ##############################################################################
+  ##############################################################################
   
   ############
   # Barplot for probation
   ############
-  output$barchart_prob <- renderPlotly({
+  output$barchart_prob <- renderPlot({
     
     df_prob <- 
       adm_pop_long %>% 
@@ -362,28 +362,26 @@ server <- function(input, output, session) {
       group_by(year) %>%
       summarise(total = sum(total))
     
-    p <- ggplot(data = df_prob,
-                aes_string(x = 'year', y = 'total', fill = 'metric')) +
-      geom_bar(stat = "identity", position = "stack", width = .5) +
-      geom_text(data = totals,
-                size = 4,
-                aes(year, total,
-                    label = format(total, big.mark = ","),
-                    fill = NULL),
-                vjust = 0.5) +
+    dodger = position_dodge(width = 0.9)
+    
+    ggplot(data = df_prob,
+           aes_string(x = 'year', y = 'total', fill = 'metric')) +
+      geom_bar(stat = "identity", position = "dodge") +
+      geom_text(aes(label=scales::comma(total)),
+                position=dodger,
+                size = 5.5,
+                colour = "#000000",
+                vjust = -0.5) +
       theme_csgjc_plot_legend() +
       theme(plot.margin = margin(0.1, 0.1, 0.1, 0.1, "cm")) +
-      scale_fill_manual(values = c("#BCDE85", "#6BBB5D"),
+      scale_fill_manual(values = c("#DEF0F6", "#E18731"),
                         name = "") +
-      scale_y_continuous(label = scales::comma) 
+      scale_y_continuous(label = scales::comma,
+                         limits = c(0, 1.17*max(df_prob$total)),
+                         expand = c(0,0)
+      ) +
+      coord_cartesian(clip = "off")
     
-    plotly::ggplotly(p) %>% layout(xaxis = list(fixedrange = TRUE), 
-                                   yaxis = list(fixedrange = TRUE),
-                                   # font = list(family = "Arial"),
-                                   textfont = list(size = 4.5),
-                                   legend = list(orientation = "h",
-                                                 x = 0.25),
-                                   hovermode = "x") 
   })
   
   ############
@@ -431,7 +429,7 @@ server <- function(input, output, session) {
         size = 20,
         color = "#000000"
       ) +
-      scale_fill_manual(values = c(`New Offense` = "#BCDE85", Technical = "#6BBB5D")) +
+      scale_fill_manual(values = c(`New Offense` = "#DEF0F6", Technical = "#E18731")) +
       coord_polar(theta = "y") +
       theme_void() +
       ggtitle("Technical Violations \n In 2020") +
@@ -446,7 +444,7 @@ server <- function(input, output, session) {
   # Barchart for parole
   ############
   
-  output$barchart_parole <- renderPlotly({
+  output$barchart_parole <- renderPlot({
     
     df_parole <- 
       adm_pop_long %>% 
@@ -461,27 +459,26 @@ server <- function(input, output, session) {
       group_by(year) %>%
       summarise(total = sum(total))
     
-    p <- ggplot(data = df_parole,
-                aes_string(x = 'year', y = 'total', fill = 'metric')) +
-      geom_bar(stat = "identity", position = "stack", width = .5) +
-      geom_text(data = totals,
-                size = 4,
-                aes(year, total,
-                    label = format(total, big.mark = ","),
-                    fill = NULL),
-                vjust = 0.5) +
+    dodger = position_dodge(width = 0.9)
+    
+    ggplot(data = df_parole,
+           aes_string(x = 'year', y = 'total', fill = 'metric')) +
+      geom_bar(stat = "identity", position = "dodge") +
+      geom_text(aes(label=scales::comma(total)),
+                position=dodger,
+                size = 5.5,
+                colour = "#000000",
+                vjust = -0.5) +
       theme_csgjc_plot_legend() +
       theme(plot.margin = margin(0.1, 0.1, 0.1, 0.1, "cm")) +
-      scale_fill_manual(values = c("#BCDE85", "#6BBB5D"), name = "") +
-      scale_y_continuous(label = scales::comma) 
-    
-    plotly::ggplotly(p) %>% layout(xaxis = list(fixedrange = TRUE), 
-                                   yaxis = list(fixedrange = TRUE),
-                                   # font = list(family = "Arial"),
-                                   textfont = list(size = 4.5),
-                                   legend = list(orientation = "h",
-                                                 x = 0.25),
-                                   hovermode = "x") 
+      scale_fill_manual(values = c("#DEF0F6", "#E18731"),
+                        name = "") +
+      scale_y_continuous(label = scales::comma,
+                         limits = c(0, 1.17*max(df_parole$total)),
+                         expand = c(0,0)
+      ) +
+      coord_cartesian(clip = "off")
+
   })
   
   ############
@@ -530,7 +527,7 @@ server <- function(input, output, session) {
         size = 20,
         color = "#000000"
       ) +
-      scale_fill_manual(values = c(`New Offense` = "#BCDE85", Technical = "#6BBB5D")) +
+      scale_fill_manual(values = c(`New Offense` = "#DEF0F6", Technical = "#E18731")) +
       coord_polar(theta = "y") +
       theme_void() +
       ggtitle("Technical Violations \n In 2020") +
@@ -541,9 +538,53 @@ server <- function(input, output, session) {
     
   })
   
-  #_____________________________________________________________________________
+  ##################################
+  # Value boxes
+  ##################################
+  
+  # Probation
+  # Since 2018
+  df_prob <- reactive({
+    adm_pop_long %>%
+      filter(states == input$state &
+             adm_or_pop == input$adm_or_pop &
+             year == "2019" &
+             metric == "Probation")
+  })
+  
+  output$prob_change_18 <- renderValueBox({
+    
+    valueBox(paste0(df_prob()$change, "%"), subtitle = "2018-2019", color = "green")
+    
+  })
+  
+  # Parole
+  # Since 2019
+  df_prob_2 <- reactive({
+    adm_pop_long %>%
+      filter(states == input$state &
+             adm_or_pop == input$adm_or_pop &
+             year == "2020" &
+             metric == "Probation")
+  })
+  
+  output$prob_change_19 <- renderValueBox({
+    
+    valueBox(paste0(df_prob_2()$change, "%"), subtitle = "2019-2020", color = "green")
+    
+  })
+  
+  # Sentence about probation changes
+  output$prob_change_sentence <- renderText({ 
+    paste0("Between 2018 and 2019, the number of probation violation ", df_prob()$adm_or_pop_lc, " ",
+           df_prob()$change_type, "d ", df_prob()$change,
+           "%. In 2020, the number of probation violation ",  df_prob_2()$adm_or_pop_lc, " ",
+           df_prob_2()$change_type, "d ", df_prob_2()$change, "%.")
+  })
+  
+  #__________________________________________________________________________________________________________________________________________________________
   # 3) View Data
-  #_____________________________________________________________________________
+  #__________________________________________________________________________________________________________________________________________________________
   
   output$dt <- 
     DT::renderDataTable(
@@ -568,9 +609,9 @@ server <- function(input, output, session) {
       }
     )
   
-  #_____________________________________________________________________________
+  #__________________________________________________________________________________________________________________________________________________________
   # Map - Counts
-  #_____________________________________________________________________________
+  #__________________________________________________________________________________________________________________________________________________________
   
   # print map title
   output$map_title_counts <- renderText({ 
@@ -583,8 +624,8 @@ server <- function(input, output, session) {
     # filter data
     df_map_counts <- mclc %>% 
       dplyr::filter(adm_or_pop == input$adm_or_pop_map_counts &
-                      year == input$year_map_counts &
-                      metric == input$data_map_counts)
+                    year == input$year_map_counts &
+                    metric == input$data_map_counts)
     
     # merge data with shp file
     df_map_counts <- sp::merge(us_aea2, df_map_counts, by.x = 'NAME', by.y = "states", all = F)
@@ -603,14 +644,14 @@ server <- function(input, output, session) {
     
     # # set colors manually:
     # pal_fun <- colorFactor(
-    #   palette = c("#2A5B71", "#387A96", "#4698Bc", "#6BADC9", "#B5D6E4", "#DAEAF2",
+    #   palette = c("#2A5B71", "#387A96", "#4698Bc", "#6BADC9", "#B5D6E4", "#DEF0F6",
     #               "#E9F4D6", "#A5D35C", "#8FC833", "#72A029", "#56781F"),
     #   domain = df_map_counts$total,
     #   na.color = "#D3D3D3" # light gray color for NA
     # )
     
     # pal_fun <- colorQuantile(
-    #   palette = colorRampPalette(c('#DAEAF2', '#4698BC'))(length(df_map_counts$total)), 
+    #   palette = colorRampPalette(c('#DEF0F6', '#4698BC'))(length(df_map_counts$total)), 
     #   domain = df_map_counts$total,
     #   na.color = "#D3D3D3", # light gray color for NA
     #   n = 6)
@@ -660,9 +701,9 @@ server <- function(input, output, session) {
     
   })
   
-  #_____________________________________________________________________________
+  #__________________________________________________________________________________________________________________________________________________________
   # Map - Changes
-  #_____________________________________________________________________________
+  #__________________________________________________________________________________________________________________________________________________________
   
   # print map title
   output$map_title_change <- renderText({ 

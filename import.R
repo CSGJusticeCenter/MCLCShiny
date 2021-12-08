@@ -93,16 +93,16 @@ theme_csgjc_plot_legend <- function(){
     
     theme(
       legend.position = "top", 
-      legend.text = element_text(size=12),
+      legend.text = element_text(size=16),
       plot.title = element_text(hjust = 0.5, 
                                 # face = "bold",
                                 size = 18,
                                 colour = "#000000"),
       axis.title.x = element_blank(),
       axis.title.y = element_blank(),
-      axis.text.x = element_text(size = 12, 
+      axis.text.x = element_text(size = 16, 
                                  colour = "#000000"),
-      axis.text.y = element_text(size = 12, 
+      axis.text.y = element_text(size = 16, 
                                  colour = "#000000"),
       axis.line.x.bottom = element_line(size = 0.75, 
                                         linetype = "solid", 
@@ -472,7 +472,8 @@ adm_pop_long$year <- as.factor(adm_pop_long$year)
 
 ########
 # National numbers
-# get data from website 
+# get data from website for now 
+# state data will change so national numbers will change
 # https://csgjusticecenter.org/publications/more-community-less-confinement/
 ########
 
@@ -500,5 +501,3 @@ mclc_report <- mclc_report %>% mutate(year = case_when(
 # remove comma and round
 mclc_report$total <- as.numeric(gsub(",", "", mclc_report$total))
 mclc_report$total <- round(mclc_report$total, 0)
-
-
