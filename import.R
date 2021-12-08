@@ -147,7 +147,7 @@ costs <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Costs")
 # setwd("~/csgjc/MCLCShiny")
 
 # From https://www.census.gov/geo/maps-data/data/cbf/cbf_state.html
-us <- readOGR(dsn = "data/cb_2014_us_state_5m/cb_2014_us_state_5m.shp",
+us <- readOGR(dsn = "Data/cb_2014_us_state_5m/cb_2014_us_state_5m.shp",
               layer = "cb_2014_us_state_5m", verbose = FALSE)
 
 ########
@@ -505,5 +505,5 @@ mclc_report <- mclc_report %>% mutate(year = case_when(
 mclc_report$total <- as.numeric(gsub(",", "", mclc_report$total))
 mclc_report$total <- round(mclc_report$total, 0)
 
-# save Rdata
-save.image(file = "mclc.RData")
+# # save Rdata
+# save.image(file = "mclc.RData")
