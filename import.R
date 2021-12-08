@@ -14,37 +14,36 @@
 #    "Data for web team v13.xlsx"
 #######################################
 
-# load necessary packages
-requiredPackages = c('dplyr',
-                     'janitor',
-                     'readxl',
-                     'DT',
-                     'tidyverse',
-                     'gdata',
-                     'ggthemes',
-                     'shiny',
-                     'shinydashboard',
-                     'shinythemes',
-                     'shinyWidgets',
-                     'ggplot2',
-                     'plotly',
-                     'ggiraph',
-                     'gapminder',
-                     'leaflet',
-                     'maps',
-                     'maptools',
-                     'mapproj',
-                     'rgeos',
-                     'geojsonio',
-                     'rgdal',
-                     'tigris',
-                     'tidycensus',
-                     'spData',
-                     'sf',
-                     'tmap',
-                     'grid',
-                     'classInt',
-                     'RColorBrewer')
+# load libraries
+library(shiny)
+library(shinythemes)
+library(shinydashboard)
+library(shinyWidgets)
+library(RColorBrewer)
+library(classInt)
+library(grid)
+library(tmap)
+library(sf)
+library(spData)
+library(tigris)
+library(maps)
+library(maptools)
+library(mapproj)
+library(leaflet)
+library(rgeos)
+library(geojsonio)
+library(rgdal)
+library(gapminder)
+library(ggiraph)
+library(plotly)
+library(ggplot2)
+library(ggthemes)
+library(gdata)
+library(tidyverse)
+library(DT)
+library(readxl)
+library(janitor)
+library(dplyr)
 
 # only downloads packages if needed
 for(p in requiredPackages){

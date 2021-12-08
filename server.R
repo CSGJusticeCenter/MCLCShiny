@@ -7,10 +7,6 @@
 #    Server
 #######################################
 
-library(RColorBrewer)
-pal <- brewer.pal(7, "OrRd") # we select 7 colors from the palette
-class(pal)
-
 server <- function(input, output, session) { 
   
   #__________________________________________________________________________________________________________________________________________________________
@@ -749,59 +745,115 @@ server <- function(input, output, session) {
   output$map_title_change <- renderText({ 
     paste("Change in ", input$data_map_change, " ", input$adm_or_pop_map_change, "in ", input$year_map_change)
   })
- 
-  # create map
+  
+  # filter data
+  dataFilter_4 <- reactive({
+    df_map_change <- mclc_change %>% 
+      filter(adm_or_pop == input$adm_or_pop_map_change &
+             year == input$year_map_change &
+             metric == input$data_map_change)
+    df_map_change <- sp::merge(us_aea2, df_map_change, by.x = 'NAME', by.y = "states", all = F)
+  })
+  
+  paletteNum <- reactive({
+    testpaletteNum <- colorBin(
+      palette = c("#2A5B71", "#387A96", "#4698Bc", "#6BADC9", "#B5D6E4", "#DAEAF2", 
+                  "#E9F4D6", "#A5D35C", "#8FC833", "#72A029", "#56781F"),
+      domain = dataFilter_4()$change, 
+      na.color = "#D3D3D3" # light gray color for NA
+    )
+  })
+  
+  # leaflet map
   output$map_change <- renderLeaflet({
     
-    # filter data
-    df_map_change <- mclc_change %>% 
-      dplyr::filter(adm_or_pop == input$adm_or_pop_map_change &
-                    year == input$year_map_change &
-                    metric == input$data_map_change)
-    
-    # merge data with shp file
-    df_map_change <- sp::merge(us_aea2, df_map_change, by.x = 'NAME', by.y = "states", all = F)
-    
-    # create a palette function
-    pal_fun <- colorNumeric(palette = "Blues", domain = df_map_change$change, na.color = "#D3D3D3")
-    
-    # use the palette function created above to add the appropriate RGB value to our dataframe
-    df_map_change$color <- pal_fun(df_map_change$change)
-    
-    # add popup
-    df_map_change$popup_text <- 
-      paste0('<strong>', df_map_change$NAME, '</strong>',
-             '<br/>', '<strong>','Change: ', '</strong>', df_map_change$change, "%", sep = "", ' ') %>% 
-      lapply(htmltools::HTML)
-    
-    # create leaflet map
-    map_change <- leaflet(data = df_map_change,
-                          options = leafletOptions(zoomControl = TRUE,
-                                                   minZoom = 2, 
-                                                   maxZoom = 4.75,
-                                                   dragging = TRUE)) %>% 
+    leaflet(dataFilter_4(), options = leafletOptions(zoomControl = TRUE,
+                                                     minZoom = 2, 
+                                                     maxZoom = 4.75,
+                                                     dragging = TRUE)) %>% 
       
+      # map template
+      addProviderTiles("CartoDB.Positron",
+                       options = providerTileOptions(opacity = 0)) %>%
+      
+      # set view to US
       setView(lng = -96.25, lat = 29.50, zoom = 4.75) %>%
       
-      addPolygons(fillColor = ~pal_fun(change), 
-                  fillOpacity = 1, 
-                  weight = 1, 
-                  color = "#C4D9ED", 
-                  popup = df_map_change$popup_text,
-                  highlightOptions = highlightOptions(
-                    weight = 2,
-                    color = "#4698BC")
-      ) %>% 
+      addPolygons(# colors
+        color = 'white',
+        weight = 1,
+        smoothFactor = .3,
+        fillOpacity = 1,
+        opacity = 1,
+        fillColor = ~paletteNum()(dataFilter_4()$change),
+        
+        # highlight options
+        highlightOptions = highlightOptions(
+          weight = 2,
+          color = "#355DA1"
+        )
+      ) %>%
       
-      addLegend(position = "topright",
-                pal = pal_fun,
-                opacity = 1,
-                values = df_map_change$change,
-                labFormat = labelFormat(suffix="%"),
-                title = "<strong>% Change</strong>")
+      addLegend(pal = paletteNum(), 
+                values = ~dataFilter_4()$change, 
+                opacity = 1, 
+                title = "% Change from Previous Year",
+                position = "topright")
     
-    map_change
-    
-  })
+  }) #renderLeaflet
+ 
+  # # create map
+  # output$map_change <- renderLeaflet({
+  #   
+  #   # filter data
+  #   df_map_change <- mclc_change %>% 
+  #     dplyr::filter(adm_or_pop == input$adm_or_pop_map_change &
+  #                   year == input$year_map_change &
+  #                   metric == input$data_map_change)
+  #   
+  #   # merge data with shp file
+  #   df_map_change <- sp::merge(us_aea2, df_map_change, by.x = 'NAME', by.y = "states", all = F)
+  #   
+  #   # create a palette function
+  #   pal_fun <- colorNumeric(palette = "Blues", domain = df_map_change$change, na.color = "#D3D3D3")
+  #   
+  #   # use the palette function created above to add the appropriate RGB value to our dataframe
+  #   df_map_change$color <- pal_fun(df_map_change$change)
+  #   
+  #   # add popup
+  #   df_map_change$popup_text <- 
+  #     paste0('<strong>', df_map_change$NAME, '</strong>',
+  #            '<br/>', '<strong>','Change: ', '</strong>', df_map_change$change, "%", sep = "", ' ') %>% 
+  #     lapply(htmltools::HTML)
+  #   
+  #   # create leaflet map
+  #   map_change <- leaflet(data = df_map_change,
+  #                         options = leafletOptions(zoomControl = TRUE,
+  #                                                  minZoom = 2, 
+  #                                                  maxZoom = 4.75,
+  #                                                  dragging = TRUE)) %>% 
+  #     
+  #     setView(lng = -96.25, lat = 29.50, zoom = 4.75) %>%
+  #     
+  #     addPolygons(fillColor = ~pal_fun(change), 
+  #                 fillOpacity = 1, 
+  #                 weight = 1, 
+  #                 color = "#C4D9ED", 
+  #                 popup = df_map_change$popup_text,
+  #                 highlightOptions = highlightOptions(
+  #                   weight = 2,
+  #                   color = "#4698BC")
+  #     ) %>% 
+  #     
+  #     addLegend(position = "topright",
+  #               pal = pal_fun,
+  #               opacity = 1,
+  #               values = df_map_change$change,
+  #               labFormat = labelFormat(suffix="%"),
+  #               title = "<strong>% Change</strong>")
+  #   
+  #   map_change
+  #   
+  # })
   
 } #server
