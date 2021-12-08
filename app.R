@@ -9,6 +9,7 @@
 
 # run R files
 source("import.R")
+source("functions.R")
 # source("multiple_imputation.R")
 # load("mclc.RData")
 source("ui.R")
