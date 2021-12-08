@@ -45,12 +45,6 @@ library(readxl)
 library(janitor)
 library(dplyr)
 
-# only downloads packages if needed
-for(p in requiredPackages){
-  if(!require(p,character.only = TRUE)) install.packages(p)
-  library(p,character.only = TRUE)
-}
-
 ########
 # Import data
 ########
@@ -433,5 +427,8 @@ mclc_report <- mclc_report %>% mutate(year = case_when(
 mclc_report$total <- as.numeric(gsub(",", "", mclc_report$total))
 mclc_report$total <- round(mclc_report$total, 0)
 
-# # save Rdata
+########
+# save Rdata
+########
+
 # save.image(file = "mclc.RData")
