@@ -340,6 +340,10 @@ ui <- fluidPage(
              # add spacing
              br(),
              
+             ########
+             # Probation and parole value boxes
+             ########
+             
              tags$style(".small-box.bg-green {background-color: #FFFFFF !important; color: #000000 !important; }"),
              tags$style(".small-box.bg-red   {background-color: #FFFFFF !important; color: #000000 !important; }"),
              tags$style(".small-box          {border: 3px; border-style: solid; border-color: #E7E7E7 !important; 
@@ -380,8 +384,8 @@ ui <- fluidPage(
                column(width = 1, 
                       valueBoxOutput("parole_change_18", width = 25),
                       tags$head(tags$style("#parole_change_18{color: #000000;
-                                                font-size: 16px;
-                                                text-alight: left;
+                                                              font-size: 16px;
+                                                              text-alight: left;
                              }"))
                ), #column
                
@@ -389,8 +393,8 @@ ui <- fluidPage(
                column(width = 1, 
                       valueBoxOutput("parole_change_19", width = 25),
                       tags$head(tags$style("#parole_change_19{color: #000000;
-                                                font-size: 16px;
-                                                text-alight: left;
+                                                              font-size: 16px;
+                                                              text-alight: left;
                              }"))
                ), #column
                
@@ -398,9 +402,9 @@ ui <- fluidPage(
                column(width = 2, 
                       textOutput("parole_change_sentence"),
                       tags$head(tags$style("#parole_change_sentence{color: #000000;
-                                                       font-size: 16px;
-                                                       text-align: left;
-                                                       vertical-align: middle;}"))
+                                                                   font-size: 16px;
+                                                                   text-align: left;
+                                                                   vertical-align: middle;}"))
                ), #column
                column(width = 1)
              ), #fluidRow

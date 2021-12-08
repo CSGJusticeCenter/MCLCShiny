@@ -8,8 +8,9 @@
 #######################################
 
 # run R files
-source("import.R")
+# source("import.R")
 # source("multiple_imputation.R")
+load("mclc.RData")
 source("ui.R")
 source("server.R")
 

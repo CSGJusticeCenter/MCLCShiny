@@ -119,8 +119,9 @@ theme_csgjc_plot_legend <- function(){
 ########
 
 #set wd to teams (for collaboration) - change user name to read in data
-setwd("C:/Users/mroberts/The Council of State Governments/JC Research - 50 State Revocations Project/50 State Survey (2021)")
+# setwd("C:/Users/mroberts/The Council of State Governments/JC Research - 50 State Revocations Project/50 State Survey (2021)")
 # setwd("~/The Council of State Governments/JC Research - 50 State Survey (2021)")
+setwd("/Users/mr4909/csgjc/MCLCShiny")
 
 # read charge data for 2019 and 2020
 adm18 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2018")
@@ -142,7 +143,7 @@ costs <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Costs")
 #                       encoding = "UTF-8", verbose = FALSE)
 
 #set wd 
-setwd("C:/Users/mroberts/OneDrive - The Council of State Governments/Desktop/csgjc/repos/MCLCShiny")
+# setwd("C:/Users/mroberts/OneDrive - The Council of State Governments/Desktop/csgjc/repos/MCLCShiny")
 # setwd("~/csgjc/MCLCShiny")
 
 # From https://www.census.gov/geo/maps-data/data/cbf/cbf_state.html
@@ -361,6 +362,7 @@ mclc_datatable$State <- as.factor(mclc_datatable$State)
 mclc_datatable$Data <- as.factor(mclc_datatable$Data)
 mclc_datatable$Type <- as.factor(mclc_datatable$Type)
 mclc_datatable$Region <- as.factor(mclc_datatable$Region)
+mclc_datatable$Year <- as.factor(mclc_datatable$Year)
 
 # arrange data
 mclc_datatable <- mclc_datatable %>% arrange(State, Year, Data, Type)
@@ -449,8 +451,9 @@ adm_pop_long <- adm_pop_long %>% mutate(adm_or_pop = ifelse(
 
 # create change from 2018 to 2019 to 2020
 adm_pop_long <- adm_pop_long %>%
-    group_by(states) %>%
-    mutate(change = (total/lag(total) - 1) * 100)
+  group_by(states, data) %>%
+  arrange(states, data, year) %>% 
+  mutate(change = (total/lag(total) - 1) * 100)
 
 # round
 adm_pop_long$change <- round(adm_pop_long$change, 0)
@@ -501,3 +504,6 @@ mclc_report <- mclc_report %>% mutate(year = case_when(
 # remove comma and round
 mclc_report$total <- as.numeric(gsub(",", "", mclc_report$total))
 mclc_report$total <- round(mclc_report$total, 0)
+
+# save Rdata
+save.image(file = "mclc.RData")

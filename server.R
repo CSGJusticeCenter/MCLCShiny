@@ -242,86 +242,86 @@ server <- function(input, output, session) {
   ##################################
   
   # filter data
-  dataFilter_2b <- reactive({
+  df_total_18 <- reactive({
     adm_pop_long %>%
       filter(states == input$state &
                adm_or_pop == input$adm_or_pop &
                year == "2019" &
-               data == "total_admissions")
+               metric == "Total")
   })
   
   # Total 
   # Since 2018
   output$total_change_18 <- renderValueBox({
     valueBox(
-      paste0(dataFilter_2b()$change, "%"), subtitle = "2018-2019", color = "green")
+      paste0(df_total_18()$change, "%"), subtitle = "2018-2019", color = "green")
   })
   
   # filter data
-  dataFilter_2c <- reactive({
+  df_total_19 <- reactive({
     adm_pop_long %>%
       filter(states == input$state &
                adm_or_pop == input$adm_or_pop &
                year == "2020" &
-               data == "total_admissions")
+               metric == "Total")
   })
   
   # Total 
   # Since 2019
   output$total_change_19 <- renderValueBox({
     valueBox(
-      paste0(dataFilter_2c()$change, "%"), subtitle = "2019-2020", color = "red")
+      paste0(df_total_19()$change, "%"), subtitle = "2019-2020", color = "red")
   })
   
   # Sentence about changes
   output$total_sentence_change <- renderText({ 
-    paste0("Between 2018 and 2019, the number of prison ", dataFilter_2b()$adm_or_pop_lc, " ",
-           dataFilter_2b()$change_type, "d ", dataFilter_2b()$change,
-           "%. In 2020, the number of prison ",  dataFilter_2c()$adm_or_pop_lc, " ",
-           dataFilter_2c()$change_type, "d ", dataFilter_2c()$change, "%.")
+    paste0("Between 2018 and 2019, the number of prison ", df_total_18()$adm_or_pop_lc, " ",
+           df_total_18()$change_type, "d ", df_total_18()$change,
+           "%. In 2020, the number of prison ",  df_total_19()$adm_or_pop_lc, " ",
+           df_total_19()$change_type, "d ", df_total_19()$change, "%.")
   })
   
   ###
   # Supervision Violation Admissions
   ###
   # filter data
-  dataFilter_2d <- reactive({
+  df_supviols_18 <- reactive({
     adm_pop_long %>%
       filter(states == input$state &
                adm_or_pop == input$adm_or_pop &
                year == "2019" &
-               data == "total_violation_admissions")
+               metric == "Supervision Violations")
   })
   
   # Supervision Violation 
   # Since 2018
   output$viol_change_18 <- renderValueBox({
     valueBox(
-      paste0(dataFilter_2d()$change, "%"), subtitle = "2018-2019", color = "green")
+      paste0(df_supviols_18()$change, "%"), subtitle = "2018-2019", color = "green")
   })
   
   # filter data
-  dataFilter_2e <- reactive({
+  df_supviols_19 <- reactive({
     adm_pop_long %>%
       filter(states == input$state &
                adm_or_pop == input$adm_or_pop &
                year == "2020" &
-               data == "total_violation_admissions")
+               metric == "Supervision Violations")
   })
   
   # Supervision Violation 
   # Since 2019
   output$viol_change_19 <- renderValueBox({
     valueBox(
-      paste0(dataFilter_2e()$change, "%"), subtitle = "2019-2020", color = "red")
+      paste0(df_supviols_19()$change, "%"), subtitle = "2019-2020", color = "red")
   })
   
   # Sentence about changes
   output$viol_sentence_change <- renderText({ 
-    paste0("Between 2018 and 2019, the number of supervision violation ", dataFilter_2d()$adm_or_pop_lc, " ",
-           dataFilter_2d()$change_type, "d ", dataFilter_2d()$change,
-           "%. In 2020, the number of supervision violation ",  dataFilter_2e()$adm_or_pop_lc, " ",
-           dataFilter_2e()$change_type, "d ", dataFilter_2e()$change, "%.")
+    paste0("Between 2018 and 2019, the number of supervision violation ", df_supviols_18()$adm_or_pop_lc, " ",
+           df_supviols_18()$change_type, "d ", df_supviols_18()$change,
+           "%. In 2020, the number of supervision violation ",  df_supviols_19()$adm_or_pop_lc, " ",
+           df_supviols_19()$change_type, "d ", df_supviols_19()$change, "%.")
   })
   
   ##################################
@@ -558,7 +558,7 @@ server <- function(input, output, session) {
     
   })
   
-  # Parole
+  # Probation
   # Since 2019
   df_prob_2 <- reactive({
     adm_pop_long %>%
@@ -580,6 +580,46 @@ server <- function(input, output, session) {
            df_prob()$change_type, "d ", df_prob()$change,
            "%. In 2020, the number of probation violation ",  df_prob_2()$adm_or_pop_lc, " ",
            df_prob_2()$change_type, "d ", df_prob_2()$change, "%.")
+  })
+  
+  # Parole
+  # Since 2018
+  df_parole <- reactive({
+    adm_pop_long %>%
+      filter(states == input$state &
+               adm_or_pop == input$adm_or_pop &
+               year == "2019" &
+               metric == "Parole")
+  })
+  
+  output$parole_change_18 <- renderValueBox({
+    
+    valueBox(paste0(df_parole()$change, "%"), subtitle = "2018-2019", color = "green")
+    
+  })
+  
+  # Parole
+  # Since 2019
+  df_parole_2 <- reactive({
+    adm_pop_long %>%
+      filter(states == input$state &
+               adm_or_pop == input$adm_or_pop &
+               year == "2020" &
+               metric == "Parole")
+  })
+  
+  output$parole_change_19 <- renderValueBox({
+    
+    valueBox(paste0(df_parole_2()$change, "%"), subtitle = "2019-2020", color = "green")
+    
+  })
+  
+  # Sentence about Parole changes
+  output$parole_change_sentence <- renderText({ 
+    paste0("Between 2018 and 2019, the number of parole violation ", df_parole()$adm_or_pop_lc, " ",
+           df_parole()$change_type, "d ", df_parole()$change,
+           "%. In 2020, the number of parole violation ",  df_parole_2()$adm_or_pop_lc, " ",
+           df_parole_2()$change_type, "d ", df_parole_2()$change, "%.")
   })
   
   #__________________________________________________________________________________________________________________________________________________________
