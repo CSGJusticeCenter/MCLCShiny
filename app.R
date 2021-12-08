@@ -42,9 +42,9 @@ library(dplyr)
 
 # run R files
 # source("import.R")
-# source("functions.R")
 # source("multiple_imputation.R")
 load("mclc.RData")
+source("functions.R")
 source("ui.R")
 source("server.R")
 

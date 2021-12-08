@@ -21,7 +21,7 @@
 #set wd to teams (for collaboration) - change user name to read in data
 # setwd("C:/Users/mroberts/The Council of State Governments/JC Research - 50 State Revocations Project/50 State Survey (2021)")
 # setwd("~/The Council of State Governments/JC Research - 50 State Survey (2021)")
-setwd("~/csgjc/MCLCShiny")
+setwd("C:/Users/mroberts/OneDrive - The Council of State Governments/Desktop/csgjc/repos/MCLCShiny")
 
 # read charge data for 2019 and 2020
 adm18 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2018")
