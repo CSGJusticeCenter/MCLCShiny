@@ -14,37 +14,6 @@
 #    "Data for web team v13.xlsx"
 #######################################
 
-# load libraries
-library(shiny)
-library(shinythemes)
-library(shinydashboard)
-library(shinyWidgets)
-library(RColorBrewer)
-library(classInt)
-library(grid)
-library(tmap)
-library(sf)
-library(spData)
-library(tigris)
-library(maps)
-library(maptools)
-library(mapproj)
-library(leaflet)
-library(rgeos)
-library(geojsonio)
-library(rgdal)
-library(gapminder)
-library(ggiraph)
-library(plotly)
-library(ggplot2)
-library(ggthemes)
-library(gdata)
-library(tidyverse)
-library(DT)
-library(readxl)
-library(janitor)
-library(dplyr)
-
 ########
 # Import data
 ########
@@ -52,7 +21,7 @@ library(dplyr)
 #set wd to teams (for collaboration) - change user name to read in data
 # setwd("C:/Users/mroberts/The Council of State Governments/JC Research - 50 State Revocations Project/50 State Survey (2021)")
 # setwd("~/The Council of State Governments/JC Research - 50 State Survey (2021)")
-setwd("/Users/mr4909/csgjc/MCLCShiny")
+setwd("~/csgjc/MCLCShiny")
 
 # read charge data for 2019 and 2020
 adm18 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2018")

@@ -14,7 +14,7 @@ ui <- fluidPage(
   tags$head(tags$style(HTML('*{generic-family: "sans-serif"};'))),
 
   # update theme https://medium.com/analytics-vidhya/building-custom-r-shiny-ui-66d446ef4dad
-  theme = shinytheme("cosmo"),
+  # theme = shinytheme("cosmo"),
   
   navbarPage(
     
