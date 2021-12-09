@@ -21,7 +21,7 @@
 #set wd to teams (for collaboration) - change user name to read in data
 # setwd("C:/Users/mroberts/The Council of State Governments/JC Research - 50 State Revocations Project/50 State Survey (2021)")
 # setwd("~/The Council of State Governments/JC Research - 50 State Survey (2021)")
-setwd("C:/Users/jmallett/The Council of State Governments/JC Research - Documents/50 State Revocations Project/50 State Survey (2021)")
+# setwd("C:/Users/jmallett/The Council of State Governments/JC Research - Documents/50 State Revocations Project/50 State Survey (2021)")
 
 # read charge data for 2019 and 2020
 adm18 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2018")
@@ -40,6 +40,9 @@ costs <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Costs")
 # From https://www.census.gov/geo/maps-data/data/cbf/cbf_state.html
 us <- readOGR(dsn = "Data/cb_2014_us_state_5m/cb_2014_us_state_5m.shp",
               layer = "cb_2014_us_state_5m", verbose = FALSE)
+
+# BJS data
+
 
 ########
 # clean shapefile
@@ -371,14 +374,16 @@ adm_pop_long$year <- as.factor(adm_pop_long$year)
 # https://csgjusticecenter.org/publications/more-community-less-confinement/
 ########
 
-year2018 <- c(629811, 259927, 1237179, 288959, 108904)
-year2019 <- c(610192, 246096, 1217876, 271804, 91216)
-year2020 <- c(410601, 172753, 1051101, 214773, 74849)
+year2018 <- c(629811, 259927, 1237179, 288959, 108904, 369884, 948220)
+year2019 <- c(610192, 246096, 1217876, 271804, 91216, 364096, 946072)
+year2020 <- c(410601, 172753, 1051101, 214773, 74849, 237848, 836328)
 metric <- c("overall_admissions", 
             "admissions_for_violations", 
             "overall_population",
             "violator_population",
-            "technical_violator_population")
+            "technical_violator_population",
+            "other_admissions",
+            "other_population")
 mclc_report <- cbind(metric, year2018, year2019, year2020)
 mclc_report <- as.data.frame(mclc_report)
 
@@ -395,6 +400,26 @@ mclc_report <- mclc_report %>% mutate(year = case_when(
 # remove comma and round
 mclc_report$total <- as.numeric(gsub(",", "", mclc_report$total))
 mclc_report$total <- round(mclc_report$total, 0)
+# add comma for labels in area chart
+mclc_report$total1 <- comma(mclc_report$total)
+
+# admissions table
+df_adm <- mclc_report %>% 
+  filter(metric == "admissions_for_violations" |
+           metric == "other_admissions") %>% arrange(desc(metric))
+df_adm$year <- as.numeric(df_adm$year)
+
+# order factor for plotting
+df_adm$metric <- factor(df_adm$metric, levels=c("other_admissions","admissions_for_violations"))
+
+# population table
+df_pop <- mclc_report %>% 
+  filter(metric == "violator_population" |
+           metric == "other_population") %>% arrange(metric)
+df_pop$year <- as.numeric(df_pop$year)
+
+# order factor for plotting
+df_pop$metric <- factor(df_pop$metric, levels=c("other_population","violator_population"))
 
 ########
 # save Rdata
@@ -404,3 +429,5 @@ save(us_aea2,        file="us_aea2.Rda")
 save(mclc_change,    file="mclc_change.Rda")
 save(mclc,           file="mclc.Rda")
 save(adm_pop_long,   file="adm_pop_long.Rda")
+save(df_adm,         file="df_adm.Rda")
+save(df_pop,         file="df_pop.Rda")

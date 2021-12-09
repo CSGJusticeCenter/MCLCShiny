@@ -27,8 +27,11 @@ ui <- fluidPage(
 
     "More Community, Less Confinement",
     tabPanel("About",
-
-             fluidRow(# title and text of national page
+             
+             ########
+             # title and text of national page
+             ########
+             fluidRow(
                       column(width = 2),
                       column(width = 8,
                              br(), 
@@ -57,21 +60,61 @@ ui <- fluidPage(
                       column(width = 2)
              ), #fluidRow
              br(),
+             br(),
+             br(),
              
-             fluidRow(column(width = 1),
+             ########
+             # title of area charts
+             ########
+             fluidRow(
+               column(width = 3),
+               column(width = 2,
+                      br(), 
+                      br(),
+                      div("Prison Admissions", style = "font-size:20px;
+                                                        font-style: bold;
+                                                        text-align: center;
+                                                        color: #FFFFFF;
+                                                        background-color:#000000;
+                                                        line-height: 32px;"),
+                      br(), 
+                      br()
+               ),
+               column(width = 2),
+               column(width = 2,
+                      br(), 
+                      br(),
+                      div("Prison Population", style = "font-size:20px;
+                                                        font-style: bold;
+                                                        text-align: center;
+                                                        color: #FFFFFF;
+                                                        background-color:#000000;
+                                                        line-height: 32px;"),
+                      br(), 
+                      br()
+               ),
+               column(width = 3)
+             ), #fluidRow 
+             
+             ########
+             # area charts
+             ########
+             fluidRow(column(width = 2),
                       
                       # admissions plot
-                      column(width = 5,
+                      column(width = 4,
                              
+                             div(plotOutput("areachart_adm"), align = "center")
                              
                              ),
                       
                       # population plot
-                      column(width = 5,
+                      column(width = 4,
                              
+                             div(plotOutput("areachart_pop"), align = "center")
                              
                              ),
-                      column(width = 1)
+                      column(width = 2)
              ), #fluidRow
              br(),
              br()

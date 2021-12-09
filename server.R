@@ -16,7 +16,40 @@ server <- function(input, output, session) {
   # 1) About
   #__________________________________________________________________________________________________________________________________________________________
   
-  # no code needed
+  ##################################
+  # Area chart about national admissions
+  ##################################
+  
+  output$areachart_adm <- renderPlot({ 
+    
+    ggplot(df_adm, aes(x=year, y=total, fill=metric)) + 
+      geom_area()+
+      theme_csgjc_areaplot() +
+      geom_text(size = 5.5, aes(label=ifelse(year != min(year) & year != max(year),total1, NA)),position = position_stack(vjust = 0.5), check_overlap = TRUE) +
+      geom_text(size = 5.5, aes(x = year + 0.18,label=ifelse(year == min(year),total1, NA)),position = position_stack(vjust = 0.5), check_overlap = TRUE) +
+      geom_text(size = 5.5, aes(x = year - 0.18,label=ifelse(year == max(year),total1, NA)),position = position_stack(vjust = 0.5), check_overlap = TRUE) +
+      scale_fill_manual(values = c("#DEF0F6","#E18731"), 
+                        labels = c("Other", "Supervision Violations"), 
+                        breaks = c("other_admissions", "admissions_for_violations"),
+                        name = "") +  
+      scale_x_continuous(breaks = c(2018,2019,2020), labels = c("2018", "2019", "2020")) 
+    })
+  
+  output$areachart_pop<- renderPlot({ 
+    
+    ggplot(df_pop, aes(x=year, y=total, fill=metric)) + 
+      geom_area()+
+      theme_csgjc_areaplot() +
+      geom_text(size = 5.5, aes(label=ifelse(year != min(year) & year != max(year),total1, NA)),position = position_stack(vjust = 0.5), check_overlap = TRUE) +
+      geom_text(size = 5.5, aes(x = year + 0.18,label=ifelse(year == min(year),total1, NA)),position = position_stack(vjust = 0.5), check_overlap = TRUE) +
+      geom_text(size = 5.5, aes(x = year - 0.18,label=ifelse(year == max(year),total1, NA)),position = position_stack(vjust = 0.5), check_overlap = TRUE) +
+      scale_fill_manual(values = c("#DEF0F6","#E18731"), 
+                        labels = c("Other", "Supervision Violations"), 
+                        breaks = c("other_population", "violator_population"),
+                        name = "") +  
+      scale_x_continuous(breaks = c(2018,2019,2020), labels = c("2018", "2019", "2020")) 
+  })
+  
   
   #__________________________________________________________________________________________________________________________________________________________
   # 2) Dashboard

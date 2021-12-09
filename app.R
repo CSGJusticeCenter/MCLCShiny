@@ -24,7 +24,7 @@ shinyApp(ui = ui, server = server)
 # https://medium.com/ibm-data-ai/center-diverging-colors-on-leaflet-map-515e69d7f81f
 # https://stackoverflow.com/questions/61622436/how-do-i-make-a-reactive-palette-which-changes-the-colour-of-polygons-on-a-map
 # https://stackoverflow.com/questions/56690624/how-can-i-make-an-horizontal-legend-in-leaflet
-# https://stackoverflow.com/questions/36925152/r-leaflet-legend-colorbin-removing-decimals-in-between-breaks
+# https://stackoverflow.com/questions/36925152/r-leaflet-legend-colorbin-removing-decimals-in-between-breakspng 
 
 # to do
 # change locations of total and sup viols to have their own rows

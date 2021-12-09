@@ -11,7 +11,7 @@
 # custom functions
 ##########################
 
-theme_csgjc_plot <- function(){ 
+theme_csgjc_areaplot <- function(){ 
   
   # assign font family up front
   font <- "Arial"   
@@ -20,15 +20,15 @@ theme_csgjc_plot <- function(){
   theme_minimal() %+replace%    
     
     theme(
-      legend.position = "none", 
-      legend.text = element_text(size=12),
+      legend.position = "top", 
+      legend.text = element_text(size=16),
       plot.title = element_text(hjust = 0.5, 
                                 # face = "bold",
                                 size = 18,
                                 colour = "#000000"),
       axis.title.x = element_blank(),
       axis.title.y = element_blank(),
-      axis.text.x = element_text(size = 12, 
+      axis.text.x = element_text(size = 16, 
                                  colour = "#000000"),
       axis.text.y = element_blank(),
       panel.grid.major = element_blank(),
