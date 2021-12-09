@@ -7,44 +7,7 @@
 #    Runs app
 #######################################
 
-# clear working environment
-rm(list=ls())
-
-# load libraries
-library(shiny)
-library(shinydashboard)
-library(shinyWidgets)
-library(RColorBrewer)
-library(classInt)
-library(grid)
-library(tmap)
-library(sf)
-library(spData)
-library(tigris)
-library(maps)
-library(maptools)
-library(mapproj)
-library(leaflet)
-library(rgeos)
-library(geojsonio)
-library(rgdal)
-library(gapminder)
-library(ggiraph)
-library(plotly)
-library(ggplot2)
-library(ggthemes)
-library(gdata)
-library(tidyverse)
-library(DT)
-library(readxl)
-library(janitor)
-library(dplyr)
-
 # run R files
-# source("import.R")
-# source("multiple_imputation.R")
-load("mclc.RData")
-source("functions.R")
 source("ui.R")
 source("server.R")
 

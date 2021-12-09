@@ -8,6 +8,9 @@
 # User-specific files
 .Ruserdata
 
+# Permanent R Data frames
+*.Rda
+
 # Example code in package build process
 *-Ex.R
 
@@ -37,3 +40,5 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+*.dcf
