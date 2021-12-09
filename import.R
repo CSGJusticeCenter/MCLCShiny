@@ -14,6 +14,8 @@
 #    "Data for web team v13.xlsx"
 #######################################
 
+library(readxl)
+
 ########
 # Import data
 ########
@@ -411,6 +413,15 @@ df_adm$year <- as.numeric(df_adm$year)
 
 # order factor for plotting
 df_adm$metric <- factor(df_adm$metric, levels=c("other_admissions","admissions_for_violations"))
+
+# population table
+df_pop <- mclc_report %>% 
+  filter(metric == "violator_population" |
+           metric == "other_population") %>% arrange(metric)
+df_pop$year <- as.numeric(df_pop$year)
+
+# order factor for plotting
+df_pop$metric <- factor(df_pop$metric, levels=c("other_population","violator_population"))
 
 ########
 # save Rdata
