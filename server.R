@@ -791,11 +791,15 @@ server <- function(input, output, session) {
     df_map_change <- sp::merge(us_aea2, df_map_change, by.x = 'NAME', by.y = "states", all = F)
   })
   
+  # set colors manually:
+  # bins <- c(-25,-20,-15,-10,-5,0,5,10,15,20)
+  
   paletteNum <- reactive({
     testpaletteNum <- colorBin(
-      palette = c("#2A5B71", "#387A96", "#4698Bc", "#6BADC9", "#B5D6E4", "#DAEAF2", 
+      palette = c("#2A5B71", "#4698Bc", "#6BADC9", "#B5D6E4", "#DAEAF2", 
                   "#E9F4D6", "#A5D35C", "#8FC833", "#72A029", "#56781F"),
       domain = dataFilter_4()$change, 
+      # bins = bins,
       na.color = "#D3D3D3" # light gray color for NA
     )
   })
@@ -833,7 +837,8 @@ server <- function(input, output, session) {
       addLegend(pal = paletteNum(), 
                 values = ~dataFilter_4()$change, 
                 opacity = 1, 
-                title = "% Change from Previous Year",
+                labFormat = labelFormat(suffix="%"),
+                title = "% Change",
                 position = "topright")
     
   }) #renderLeaflet

@@ -8,6 +8,7 @@
 #######################################
 
 source("data_libraries.R")
+source("functions.R")
 
 #################################################################
 # define UI
@@ -117,7 +118,45 @@ ui <- fluidPage(
                       column(width = 2)
              ), #fluidRow
              br(),
-             br()
+             br(),
+             
+             ########
+             # Compare BJS
+             ########
+             fluidRow(
+               column(width = 2),
+               column(width = 8,
+                      br(), 
+                      br(),
+                      br(), 
+                      div("Despite the reductions seen during the pandemic, supervision violations remain a large portion of prison admissions and account for a substantial share of prison populations.",
+                          style = "font-size:28px;
+                                  text-align: left;
+                                  color: #000000;"),
+                      br(),
+                      br()
+               ), #column
+               column(width = 2)
+             ), #fluidRow
+             
+             ########
+             # Compare BJS
+             ########
+             fluidRow(
+               column(width = 2),
+               column(width = 8,
+                      br(), 
+                      br(),
+                      br(), 
+                      div("The Bureau of Justice Statistics provides a complementary/different picture of prison admissions and population in the US.",
+                          style = "font-size:28px;
+                                  text-align: left;
+                                  color: #000000;"),
+                      br(),
+                      br()
+               ), #column
+               column(width = 2)
+             ) #fluidRow
              
     ),#tabPanel
     
@@ -565,8 +604,8 @@ ui <- fluidPage(
                       column(width = 1)
              ), #fluidRow
              
-             fluidRow(column(width = 1),
-                      column(width = 10,
+             fluidRow(column(width = 2),
+                      column(width = 8,
                              
                              leafletOutput(outputId = "map_counts", height = 300),
                              tags$style(HTML(".leaflet-container { background: #FFFFFF;}")),
@@ -574,7 +613,7 @@ ui <- fluidPage(
                              br(), br(), br()
                              
                       ),#column
-                      column(width = 1)
+                      column(width = 2)
              ) #fluidRow
              
     ), #tabPanel
@@ -638,8 +677,8 @@ ui <- fluidPage(
                       column(width = 1)
              ), #fluidRow
              
-             fluidRow(column(width = 1),
-                      column(width = 10,
+             fluidRow(column(width = 2),
+                      column(width = 8,
                              
                              leafletOutput(outputId = "map_change", height = 300),
                              tags$style(HTML(".leaflet-container { background: #FFFFFF;}")),
@@ -649,7 +688,7 @@ ui <- fluidPage(
                              br()
                              
                       ),#column
-                      column(width = 1)
+                      column(width = 2)
              ) #fluidRow
              
     ), #tabPanel
