@@ -99,7 +99,7 @@ ui <- fluidPage(
                                                 choices = unique(adm_pop_long$states))),
                               style = "background: #E7E7E7"
                               ) #wellPanel
-                      ),#column
+                      ), #column
                       
                       # select population or admissions
                       column(width = 5, 
@@ -120,10 +120,9 @@ ui <- fluidPage(
              # State title
              ########
              
-             fluidRow(column(width = 1,
-                             ""),
-                      align = "center",
+             fluidRow(column(width = 1),
                       column(width = 10,
+                             align = "center",
                              #1) Text output
                              textOutput("selected_state"),
                              tags$head(tags$style("#selected_state{color: #000000;
@@ -191,7 +190,11 @@ ui <- fluidPage(
                              # bar chart 
                              div(plotOutput("barchart"), align = "center")),
                       column(width = 1, 
-                             br(),br(),br(),br(),br(),
+                             br(),
+                             br(),
+                             br(),
+                             br(),
+                             br(),
                              # donut chart 
                              div(girafeOutput("donutchart", height = "100%", width = "100%"), align = "left")),
                       column(width = 2),
@@ -200,7 +203,11 @@ ui <- fluidPage(
                              div(plotOutput("barchart_supviols"), align = "center")
                              ),
                       column(width = 1,
-                             br(),br(),br(),br(),br(),
+                             br(),
+                             br(),
+                             br(),
+                             br(),
+                             br(),
                              # donut chart 
                              div(girafeOutput("donutchart_supviols", height = "100%", width = "100%"), align = "left")),
                       column(width = 1)
@@ -408,7 +415,6 @@ ui <- fluidPage(
                ), #column
                column(width = 1)
              ), #fluidRow
-             
              br()
              
     ), #tabPanel
@@ -422,18 +428,17 @@ ui <- fluidPage(
              fluidRow(
                column(width = 1),
                column(width = 10,
-                      
-                      br(), br(),
+                      br(), 
+                      br(),
                       div("View Data", style = "font-size:32px;
                                                 font-style: bold;
                                                 text-align: left;
-                                                color: #000000;"), br(), 
-                      
+                                                color: #000000;"), 
+                      br(), 
                       div("This dataset contains prison admissions and population data by state between 2018 and 2020.",
                           style = "font-size:18px;
                                   text-align: left;
                                   color: #000000;")
-                      
                ),
                column(width = 1)
              ),
@@ -593,7 +598,9 @@ ui <- fluidPage(
                              leafletOutput(outputId = "map_change", height = 300),
                              tags$style(HTML(".leaflet-container { background: #FFFFFF;}")),
                              tags$style(type = "text/css", "#map_change {height: calc(100vh - 53px) !important;}"),
-                             br(), br(), br()
+                             br(), 
+                             br(), 
+                             br()
                              
                       ),#column
                       column(width = 1)
