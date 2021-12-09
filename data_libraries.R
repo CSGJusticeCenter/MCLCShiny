@@ -11,6 +11,7 @@ library(shinythemes)
 library(ggiraph)
 library(shinydashboard)
 library(leaflet)
+library(DT)
 
 # library(scales)
 # library(grid)
@@ -29,7 +30,7 @@ library(leaflet)
 # library(tidyverse)
 # library(readxl)
 # library(janitor)
-# library(DT)
+
 
 #______________________________________________________
 #read in R data
