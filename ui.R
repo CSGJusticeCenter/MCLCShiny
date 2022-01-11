@@ -61,40 +61,41 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                         
                         tabItem(tabName = "State_Reports",
                                 fluidPage(
-                                  
                                   # headerPanel("header 2"),
                                   # titlePanel(h2("title 2")),
                                   br(),
-                                  
                                   wellPanel(tags$style(type="text/css", '#leftPanel { width:200px; float:left;}'), id = "leftPanel",
-                                            
                                             selectInput("state", "Select State", choices = unique(adm_pop_long$states)),
                                             radioButtons("adm_or_pop", "Type",   choices = unique(adm_pop_long$adm_or_pop))
                                             # radioButtons("year", "Year",       choices = unique(adm_pop_long$year))
-                                            
                                   ),
                                   
                                   mainPanel(
+                                    
                                     ######
                                     # State title
                                     ######
-                                    
                                     textOutput("selected_state"),
                                     tags$head(tags$style("#selected_state{color: #000000;
                                                                           font-size: 24px;
-                                                                          font-style: bold;
-                                                    }")),
+                                                                          font-style: bold;}")),
                                     br(),
-                                    
-                                    
+                                    textOutput("selected_state_adm_pop"),
+                                    tags$head(tags$style("#selected_state_adm_pop{color: #000000;
+                                                                                  font-size: 14px
+                                                                                  font-style: regular;}")),
+                                    br(),
                                     tabsetPanel(
                                       ###################
                                       # Overview of state report
                                       ###################
                                       tabPanel(value="1","Overview", 
                                                br(),
-                                               
-                                               
+                                               fluidRow(
+                                               # total
+                                               box(plotOutput("barchart", height = 250)),
+                                               box("Text")
+                                               ) #fluidRow
                                       ),
                                       ###################
                                       # How your state compares
@@ -141,9 +142,47 @@ server <- function(input, output, session) {
     paste("Prison ", input$adm_or_pop, "Trends in ", input$state)
   })  
   
+  # Print state name and adm or pop selected
+  output$selected_state_adm_pop <- renderText({ 
+    paste("This snapshot shows available data for ", input$state, " from 2018 to 2020.")
+  })
   
-  
-  
+  # Totals barchart
+  output$barchart <- renderPlot({
+    
+    df_totals <- 
+      adm_pop_long %>% 
+      filter(states == input$state &
+               adm_or_pop == input$adm_or_pop) %>% 
+      group_by(metric, year) %>% 
+      summarise(total = sum(total)) %>% 
+      filter(metric == "Other" | metric == "Supervision Violations")  
+    
+    totals <- df_totals %>%
+      group_by(year) %>%
+      summarise(total = sum(total))
+    
+    dodger = position_dodge(width = 0.9)
+    
+    ggplot(data = df_totals,
+           aes_string(x = 'year', y = 'total', fill = 'metric')) +
+      geom_bar(stat = "identity", position = "dodge") +
+      geom_text(aes(label=scales::comma(total)),
+                position=dodger,
+                size = 4.5,
+                colour = "#000000",
+                vjust = -0.5) +
+      theme_csgjc_plot_legend() +
+      theme(plot.margin = margin(0.1, 0.1, 0.1, 0.1, "cm")) +
+      scale_fill_manual(values = c("#DEF0F6", "#E18731"),
+                        name = "") +
+      scale_y_continuous(label = scales::comma,
+                         limits = c(0, 1.17*max(df_totals$total)),
+                         expand = c(0,0)
+      ) +
+      coord_cartesian(clip = "off")
+    
+  })
   
 }
 
