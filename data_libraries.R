@@ -51,7 +51,7 @@ customTheme <- shinyDashboardThemeDIY(
   
   ,headerButtonBackColor = "#355DA1"
   ,headerButtonIconColor = "#DCDCDC"
-  ,headerButtonBackColorHover = "#F8F8F8"
+  ,headerButtonBackColorHover = "#646464"
   ,headerButtonIconColorHover = "#3C3C3C"
   
   ,headerBackColor = "#355DA1"
@@ -59,7 +59,7 @@ customTheme <- shinyDashboardThemeDIY(
   ,headerBoxShadowSize = "0px 0px 0px"
   
   ### sidebar
-  ,sidebarBackColor = "#F5F5F5"
+  ,sidebarBackColor = "#3C3C3C"
   ,sidebarPadding = "0"
   
   ,sidebarMenuBackColor = "transparent"
@@ -75,7 +75,7 @@ customTheme <- shinyDashboardThemeDIY(
   ,sidebarSearchIconColor = "#646464"
   ,sidebarSearchBorderColor = "#DCDCDC"
   
-  ,sidebarTabTextColor = "#646464"
+  ,sidebarTabTextColor = "#F5F5F5"
   ,sidebarTabTextSize = "14"
   ,sidebarTabBorderStyle = "none"
   ,sidebarTabBorderColor = "none"
@@ -85,7 +85,7 @@ customTheme <- shinyDashboardThemeDIY(
   ,sidebarTabTextColorSelected = "#000000"
   ,sidebarTabRadiusSelected = "0px"
   
-  ,sidebarTabBackColorHover = "#F0F0F0"
+  ,sidebarTabBackColorHover = "#F5F5F5"
   ,sidebarTabTextColorHover = "#000000"
   ,sidebarTabBorderStyleHover = "none solid none none"
   ,sidebarTabBorderColorHover = "#C8C8C8"
@@ -94,7 +94,7 @@ customTheme <- shinyDashboardThemeDIY(
   
   ### boxes
   ,boxBackColor = "#FFFFFF"
-  ,boxBorderRadius = "2"
+  ,boxBorderRadius = "5"
   ,boxShadowSize = "none"
   ,boxShadowColor = ""
   ,boxTitleSize = "18"
@@ -109,9 +109,9 @@ customTheme <- shinyDashboardThemeDIY(
   ,tabBoxTabTextSize = "14"
   ,tabBoxTabTextColor = "#646464"
   ,tabBoxTabTextColorSelected = "#2D2D2D"
-  ,tabBoxBackColor = "#FFFFFF"
+  ,tabBoxBackColor = "#F8F8F8"
   ,tabBoxHighlightColor = "#C8C8C8"
-  ,tabBoxBorderRadius = "2"
+  ,tabBoxBorderRadius = "5"
   
   ### inputs
   ,buttonBackColor = "#D7D7D7"
