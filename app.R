@@ -26,6 +26,10 @@ shinyApp(ui = ui, server = server)
 # https://stackoverflow.com/questions/56690624/how-can-i-make-an-horizontal-legend-in-leaflet
 # https://stackoverflow.com/questions/36925152/r-leaflet-legend-colorbin-removing-decimals-in-between-breakspng 
 
+# hex map notes
+# https://rud.is/b/2015/05/14/geojson-hexagonal-statebins-in-r/
+# https://www.r-graph-gallery.com/328-hexbin-map-of-the-usa.html
+
 # to do
 # change locations of total and sup viols to have their own rows
 # compare data to BJS

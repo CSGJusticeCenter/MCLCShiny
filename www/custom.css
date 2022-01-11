@@ -1,0 +1,14 @@
+.main-header .logo {
+  font-family: "Georgia", Times, "Times New Roman", serif;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.skin-blue .main-header .logo {
+          background-color: #3c8dbc;
+}
+.skin-blue .main-header .logo:hover {
+          background-color: #3c8dbc;
+}
+
+*{font-family: Times;}

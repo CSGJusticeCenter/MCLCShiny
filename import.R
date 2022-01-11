@@ -23,57 +23,75 @@
 # setwd("~/The Council of State Governments/JC Research - 50 State Survey (2021)")
 # setwd("C:/Users/jmallett/The Council of State Governments/JC Research - Documents/50 State Revocations Project/50 State Survey (2021)")
 
-# read charge data for 2019 and 2020
-adm18 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2018")
-adm19 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2019")
-adm20 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2020")
+# load sp file
+spdf <- geojson_read("Data/us_states_hexgrid.geojson",  what = "sp")
+
+# load state abb
+stateAbb <- read_csv("Data/stateAbb.csv")
+
+# load charge data for 2019 and 2020
+adm18 <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2018")
+adm19 <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2019")
+adm20 <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2020")
 
 # pop
-pop18 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2018")
-pop19 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2019")
-pop20 <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2020")
+pop18 <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2018")
+pop19 <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2019")
+pop20 <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2020")
 
 # costs
-costs <- read_xlsx("Data/Data for web team 2021 v13.xlsx", sheet = "Costs")
+costs <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Costs")
 
-# read state data
+# load state data
 # From https://www.census.gov/geo/maps-data/data/cbf/cbf_state.html
 us <- readOGR(dsn = "Data/cb_2014_us_state_5m/cb_2014_us_state_5m.shp",
               layer = "cb_2014_us_state_5m", verbose = FALSE)
 
-# BJS data
+# prepare a color scale coming from the viridis color palette
+my_palette <- rev(mako(8))[c(-1,-8)]
 
+########
+# clean shapefile for hex map
+########
+
+# remove US text from name
+spdf@data = spdf@data %>%
+  mutate(google_name = gsub(" \\(United States\\)", "", google_name))
+spdf_fortified <- tidy(spdf, region = "google_name")
+
+# calculate the centroid of each hexagon to add the label
+centers <- cbind.data.frame(data.frame(gCentroid(spdf, byid=TRUE), id=spdf@data$iso3166_2))
 
 ########
 # clean shapefile
 # move and rescale hawaii and alaska
 ########
 
-# convert it to Albers equal area
-us_aea <- spTransform(us, CRS("+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs"))
-us_aea@data$id <- rownames(us_aea@data)
-
-# extract, then rotate, shrink & move alaska (and reset projection)
-# need to use state IDs via # https://www.census.gov/geo/reference/ansi_statetables.html
-alaska <- us_aea[us_aea$STATEFP=="02",]
-alaska <- elide(alaska, rotate=-50)
-alaska <- elide(alaska, scale=max(apply(bbox(alaska), 1, diff)) / 2.3)
-alaska <- elide(alaska, shift=c(-2100000, -2500000))
-proj4string(alaska) <- proj4string(us_aea)
-
-# extract, then rotate & shift hawaii
-hawaii <- us_aea[us_aea$STATEFP=="15",]
-hawaii <- elide(hawaii, rotate=-35)
-hawaii <- elide(hawaii, shift=c(5400000, -1400000))
-proj4string(hawaii) <- proj4string(us_aea)
-
-# remove old states and put new ones back in; note the different order
-# we're also removing puerto rico in this example but you can move it
-# between texas and florida via similar methods to the ones we just used
-us_aea <- us_aea[!us_aea$STATEFP %in% c("02", "15", "72"),]
-us_aea <- rbind(us_aea, alaska, hawaii)
-# transform data again
-us_aea2 <- spTransform(us_aea, proj4string(us))
+# # convert it to Albers equal area
+# us_aea <- spTransform(us, CRS("+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs"))
+# us_aea@data$id <- rownames(us_aea@data)
+# 
+# # extract, then rotate, shrink & move alaska (and reset projection)
+# # need to use state IDs via # https://www.census.gov/geo/reference/ansi_statetables.html
+# alaska <- us_aea[us_aea$STATEFP=="02",]
+# alaska <- elide(alaska, rotate=-50)
+# alaska <- elide(alaska, scale=max(apply(bbox(alaska), 1, diff)) / 2.3)
+# alaska <- elide(alaska, shift=c(-2100000, -2500000))
+# proj4string(alaska) <- proj4string(us_aea)
+# 
+# # extract, then rotate & shift hawaii
+# hawaii <- us_aea[us_aea$STATEFP=="15",]
+# hawaii <- elide(hawaii, rotate=-35)
+# hawaii <- elide(hawaii, shift=c(5400000, -1400000))
+# proj4string(hawaii) <- proj4string(us_aea)
+# 
+# # remove old states and put new ones back in; note the different order
+# # we're also removing puerto rico in this example but you can move it
+# # between texas and florida via similar methods to the ones we just used
+# us_aea <- us_aea[!us_aea$STATEFP %in% c("02", "15", "72"),]
+# us_aea <- rbind(us_aea, alaska, hawaii)
+# # transform data again
+# us_aea2 <- spTransform(us_aea, proj4string(us))
 
 ##########
 # create long form data
@@ -412,13 +430,23 @@ df_adm$year <- as.numeric(df_adm$year)
 # order factor for plotting
 df_adm$metric <- factor(df_adm$metric, levels=c("other_admissions","admissions_for_violations"))
 
+# population table
+df_pop <- mclc_report %>% 
+  filter(metric == "violator_population" |
+           metric == "other_population") %>% arrange(desc(metric))
+df_pop$year <- as.numeric(df_pop$year)
+
+# order factor for plotting
+df_pop$metric <- factor(df_pop$metric, levels=c("other_population","violator_population"))
+
 ########
 # save Rdata
 ########
 save(mclc_datatable, file="mclc_datatable.Rda")
-save(us_aea2,        file="us_aea2.Rda")
 save(mclc_change,    file="mclc_change.Rda")
 save(mclc,           file="mclc.Rda")
 save(adm_pop_long,   file="adm_pop_long.Rda")
 save(df_adm,         file="df_adm.Rda")
 save(df_pop,         file="df_pop.Rda")
+save(spdf_fortified, file="spdf_fortified.Rda")
+save(centers,        file="centers.Rda")
