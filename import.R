@@ -14,8 +14,6 @@
 #    "Data for web team v13.xlsx"
 #######################################
 
-library(readxl)
-
 ########
 # Import data
 ########
@@ -49,8 +47,96 @@ costs <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Costs")
 us <- readOGR(dsn = "Data/cb_2014_us_state_5m/cb_2014_us_state_5m.shp",
               layer = "cb_2014_us_state_5m", verbose = FALSE)
 
-# prepare a color scale coming from the viridis color palette
-my_palette <- rev(mako(8))[c(-1,-8)]
+# load probation data
+load("Data/Annual Probation Survey, 2014/DS0001/36343-0001-Data.rda")
+load("Data/Annual Probation Survey, 2015/DS0001/36618-0001-Data.rda")
+load("Data/Annual Probation Survey, 2016/DS0001/37459-0001-Data.rda")
+load("Data/Annual Probation Survey, 2017/DS0001/37482-0001-Data.rda")
+load("Data/Annual Probation Survey, 2018/DS0001/38057-0001-Data.rda")
+
+# load parole data
+load("Data/Annual Parole Survey, 2014/DS0001/36320-0001-Data.rda")
+load("Data/Annual Parole Survey, 2015/DS0001/36619-0001-Data.rda")
+load("Data/Annual Parole Survey, 2016/DS0001/37441-0001-Data.rda")
+load("Data/Annual Parole Survey, 2017/DS0001/37471-0001-Data.rda")
+load("Data/Annual Parole Survey, 2018/DS0001/38058-0001-Data.rda")
+
+########
+# clean probation and parole data from BJS
+########
+
+# rename probation dfs
+prob_14 <- da36343.0001 %>% mutate(year = 2014)
+prob_15 <- da36618.0001 %>% mutate(year = 2015)
+prob_16 <- da37459.0001 %>% mutate(year = 2016)
+prob_17 <- da37482.0001 %>% mutate(year = 2017)
+prob_18 <- da38057.0001 %>% mutate(year = 2018)
+  
+# rename parole dfs
+parole_14 <- da36320.0001 %>% mutate(year = 2014)
+parole_15 <- da36619.0001 %>% mutate(year = 2015)
+parole_16 <- da37441.0001 %>% mutate(year = 2016)
+parole_17 <- da37471.0001 %>% mutate(year = 2017)
+parole_18 <- da38058.0001 %>% mutate(year = 2018)
+  
+# remove probation and parole dfs
+rm(da36343.0001, da36618.0001, da37459.0001, da37482.0001, da38057.0001)
+rm(da36320.0001, da36619.0001, da37441.0001, da37471.0001, da38058.0001)
+
+# add data together
+prob <- rbind(prob_14, prob_15, prob_16, prob_17, prob_18)
+parole <- rbind(parole_14, parole_15, parole_16, parole_17, parole_18)
+
+# clean names
+prob <- clean_names(prob)
+parole <- clean_names(parole)
+
+# remove punctuation and numbers from state name
+prob$stateid <- gsub('[[:punct:]]+','',prob$stateid)
+prob$stateid <- gsub('[[:digit:]]+', '', prob$stateid)
+parole$stateid <- gsub('[[:punct:]]+','',parole$stateid)
+parole$stateid <- gsub('[[:digit:]]+', '', parole$stateid)
+prob$stateid <- trimws(prob$stateid, whitespace = "[\\h\\v]")
+parole$stateid <- trimws(parole$stateid, whitespace = "[\\h\\v]")
+
+# remove federal and DC
+prob <- prob %>% filter(stateid != "Federal" & stateid != "District of Columbia")
+parole <- parole %>% filter(stateid != "Federal" & stateid != "District of Columbia")
+
+# rename state variable
+prob <- prob %>% rename(state_abb = state, state = stateid)
+parole <- parole %>% rename(state_abb = state, state = stateid)
+
+# select variables
+prob <- prob %>% select(state, state_abb, year,
+                         total_pop_start = totbeg, 
+                         total_entries = toten, 
+                         total_discharges = totex, 
+                         total_pop_end = totend)
+parole <- parole %>% select(state, state_abb, year,
+                            total_pop_start = totbeg, 
+                            total_entries = toten, 
+                            total_discharges = totex, 
+                            total_pop_end = totend)
+
+# add types
+prob$type <- "Probation"
+parole$type <- "Parole"
+
+# add data together
+prob_parole <- rbind(prob, parole)
+
+# remove data labels
+prob_parole <- remove_labels(prob_parole)
+
+# change from wide to long form
+df_prob_parole <- gather(prob_parole, data, total, total_pop_start:total_pop_end)
+
+# create admissions and population tab
+df_prob_parole <- df_prob_parole %>% mutate(adm_or_pop = case_when(data == "total_pop_start" ~ "Population",
+                                                                   data == "total_pop_end" ~ "Population (EOY)",
+                                                                   data == "total_entries" ~ "Admissions (entries)",
+                                                                   data == "total_discharges" ~ "Admissions"))
 
 ########
 # clean shapefile for hex map
@@ -435,11 +521,7 @@ df_adm$metric <- factor(df_adm$metric, levels=c("other_admissions","admissions_f
 # population table
 df_pop <- mclc_report %>% 
   filter(metric == "violator_population" |
-<<<<<<< HEAD
-           metric == "other_population") %>% arrange(desc(metric))
-=======
-           metric == "other_population") %>% arrange(metric)
->>>>>>> 3a79044c3de06d1dcce0df408bf4bf657f261fbd
+         metric == "other_population") %>% arrange(desc(metric))
 df_pop$year <- as.numeric(df_pop$year)
 
 # order factor for plotting
@@ -453,10 +535,9 @@ save(mclc_change,    file="mclc_change.Rda")
 save(mclc,           file="mclc.Rda")
 save(adm_pop_long,   file="adm_pop_long.Rda")
 save(df_adm,         file="df_adm.Rda")
-<<<<<<< HEAD
 save(df_pop,         file="df_pop.Rda")
 save(spdf_fortified, file="spdf_fortified.Rda")
 save(centers,        file="centers.Rda")
-=======
 save(df_pop,         file="df_pop.Rda")
->>>>>>> 3a79044c3de06d1dcce0df408bf4bf657f261fbd
+save(df_prob_parole, file="df_prob_parole.Rda")
+

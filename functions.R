@@ -21,14 +21,14 @@ theme_csgjc_areaplot <- function(){
     
     theme(
       legend.position = "top", 
-      legend.text = element_text(size=16),
+      legend.text = element_text(size=14),
       plot.title = element_text(hjust = 0.5, 
                                 # face = "bold",
-                                size = 18,
+                                size = 16,
                                 colour = "#000000"),
       axis.title.x = element_blank(),
       axis.title.y = element_blank(),
-      axis.text.x = element_text(size = 16, 
+      axis.text.x = element_text(size = 14, 
                                  colour = "#000000"),
       axis.text.y = element_blank(),
       panel.grid.major = element_blank(),
@@ -64,5 +64,36 @@ theme_csgjc_plot_legend <- function(){
       panel.grid.major = element_blank(),
       panel.grid.minor = element_blank(),
       panel.border = element_blank()     
+    )
+}
+
+theme_csgjc_prob_parole <- function(){ 
+  
+  # assign font family up front
+  font <- "Arial"   
+  
+  # replace elements we want to change
+  theme_minimal() %+replace%    
+    
+    theme(
+      legend.direction="horizontal",
+      legend.position = "top",
+      legend.background = element_blank(),
+      legend.title = element_blank(),
+      legend.box = "horizontal",
+      legend.text = element_text(size=14),
+      plot.title = element_text(hjust = 0.5, 
+                                # face = "bold",
+                                size = 16,
+                                colour = "#000000"),
+      axis.title.x = element_blank(),
+      axis.title.y = element_blank(),
+      axis.text.x = element_text(size = 14, 
+                                 colour = "#000000"),
+      axis.text.y =  element_text(size = 14, 
+                                  colour = "#000000"),
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      panel.border = element_blank()    
     )
 }

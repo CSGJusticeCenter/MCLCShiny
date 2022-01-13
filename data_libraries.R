@@ -20,6 +20,8 @@ library(rgeos)
 library(viridis)
 library(readxl)
 library(janitor)
+library(dashboardthemes)
+library(labelled)
 
 #______________________________________________________
 #read in R data
@@ -34,6 +36,15 @@ load("df_pop.Rda")
 load("df_pop.Rda")
 load("spdf_fortified.Rda")
 load("centers.Rda")
+load("prob_parole.Rda")
+
+par_cols <- c("Parole Entries"="#7B898F",
+              "Parole Exits"="#FA9F8D",
+              "Parole Population"="#ECE9E9")
+
+prob_cols <- c("Probation Entries"="#7B898F",
+               "Probation Exits"="#FA9F8D",
+               "Probation Population"="#ECE9E9")
 
 customTheme <- shinyDashboardThemeDIY(
   ### general
@@ -47,14 +58,14 @@ customTheme <- shinyDashboardThemeDIY(
   ,bodyBackColor = "#FFFFFF"
   
   ### header
-  ,logoBackColor = "#355DA1"
+  ,logoBackColor = "#3C3C3C"
   
-  ,headerButtonBackColor = "#355DA1"
-  ,headerButtonIconColor = "#DCDCDC"
-  ,headerButtonBackColorHover = "#646464"
+  ,headerButtonBackColor = "#3C3C3C"
+  ,headerButtonIconColor = "#FFFFFF"
+  ,headerButtonBackColorHover = "#DCDCDC"
   ,headerButtonIconColorHover = "#3C3C3C"
   
-  ,headerBackColor = "#355DA1"
+  ,headerBackColor = "#3C3C3C"
   ,headerBoxShadowColor = ""
   ,headerBoxShadowSize = "0px 0px 0px"
   
@@ -71,22 +82,22 @@ customTheme <- shinyDashboardThemeDIY(
   
   ,sidebarUserTextColor = "#737373"
   
-  ,sidebarSearchBackColor = "#F0F0F0"
+  ,sidebarSearchBackColor = "#FFFFFF"
   ,sidebarSearchIconColor = "#646464"
   ,sidebarSearchBorderColor = "#DCDCDC"
   
-  ,sidebarTabTextColor = "#F5F5F5"
+  ,sidebarTabTextColor = "#FFFFFF"
   ,sidebarTabTextSize = "14"
   ,sidebarTabBorderStyle = "none"
   ,sidebarTabBorderColor = "none"
   ,sidebarTabBorderWidth = "0"
   
   ,sidebarTabBackColorSelected = "#E6E6E6"
-  ,sidebarTabTextColorSelected = "#000000"
+  ,sidebarTabTextColorSelected = "#2D2D2D"
   ,sidebarTabRadiusSelected = "0px"
   
   ,sidebarTabBackColorHover = "#F5F5F5"
-  ,sidebarTabTextColorHover = "#000000"
+  ,sidebarTabTextColorHover = "#2D2D2D"
   ,sidebarTabBorderStyleHover = "none solid none none"
   ,sidebarTabBorderColorHover = "#C8C8C8"
   ,sidebarTabBorderWidthHover = "4"
@@ -94,24 +105,24 @@ customTheme <- shinyDashboardThemeDIY(
   
   ### boxes
   ,boxBackColor = "#FFFFFF"
-  ,boxBorderRadius = "5"
+  ,boxBorderRadius = "3"
   ,boxShadowSize = "none"
   ,boxShadowColor = ""
-  ,boxTitleSize = "18"
-  ,boxDefaultColor = "#E1E1E1"
+  ,boxTitleSize = "16"
+  ,boxDefaultColor = "#2D2D2D"
   ,boxPrimaryColor = "#5F9BD5"
-  ,boxInfoColor = "#B4B4B4"
+  ,boxInfoColor = "#C8C8C8"
   ,boxSuccessColor = "#70AD47"
-  ,boxWarningColor = "#ED7D31"
-  ,boxDangerColor = "#E84C22"
+  ,boxWarningColor = "#2D2D2D"
+  ,boxDangerColor = "#2D2D2D"
   
   ,tabBoxTabColor = "#F8F8F8"
   ,tabBoxTabTextSize = "14"
   ,tabBoxTabTextColor = "#646464"
   ,tabBoxTabTextColorSelected = "#2D2D2D"
-  ,tabBoxBackColor = "#F8F8F8"
+  ,tabBoxBackColor = "#FFFFFF"
   ,tabBoxHighlightColor = "#C8C8C8"
-  ,tabBoxBorderRadius = "5"
+  ,tabBoxBorderRadius = "2"
   
   ### inputs
   ,buttonBackColor = "#D7D7D7"

@@ -78,30 +78,38 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                     textOutput("selected_state"),
                                     tags$head(tags$style("#selected_state{font-size: 24px;
                                                                           font-style: bold;}")),
-                                    br(),
-                                    textOutput("selected_state_adm_pop"),
-                                    tags$head(tags$style("#selected_state_adm_pop{font-size: 14px
-                                                                                  font-style: regular;}")),
+                                    # br(),
+                                    # textOutput("selected_state_adm_pop"),
+                                    # tags$head(tags$style("#selected_state_adm_pop{font-size: 14px
+                                    #                                               font-style: regular;}")),
                                     br(),
                                     tabsetPanel(
                                       ###################
                                       # Overview of state report
-                                      ###################
                                       tabPanel(value="1","Overview", 
                                                br(),
                                                fluidRow(
-                                               # total
-                                               box(plotOutput("barchart", height = 250)),
-                                               # box(plotlyOutput("barchart")),
-                                               box(plotOutput("areachart",height = 250))
+                                                        box(plotOutput("areachart", height = 250)),
+                                                        box(plotOutput("barchart",  height = 250))
                                                ) #fluidRow
                                       ),
                                       ###################
-                                      # How your state compares
+                                      # Parole
                                       ###################
-                                      tabPanel("Compare", 
+                                      tabPanel("Parole", 
                                                br(),
-                                               "How Your State Compares"
+                                               fluidRow(
+                                                 plotOutput("barchart_parole", height = 300, width = 450)
+                                               ) #fluidRow
+                                      ),
+                                      ###################
+                                      # Probation
+                                      ###################
+                                      tabPanel("Probation", 
+                                               br(),
+                                               fluidRow(
+                                                 plotOutput("barchart_prob", height = 300, width = 450)
+                                               ) #fluidRow
                                       ),
                                       id = "tb2")
                                   ) #mainPanel
@@ -128,96 +136,3 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                       ) #tabItems
                     ) #dashboardBody
 ) #dashboardPage
-
-server <- function(input, output, session) {
-  
-  
-  #-------------------------------------------------------------------------------
-  # State Reports
-  #-------------------------------------------------------------------------------
-  
-  # Print state name and adm or pop selected
-  output$selected_state <- renderText({ 
-    paste("Trends in ", input$state)
-  })  
-  
-  # Print state name and adm or pop selected
-  output$selected_state_adm_pop <- renderText({ 
-    paste("This snapshot shows available data for ", input$state, " from 2018 to 2020.")
-  })
-  
-  # Totals areachart
-  output$areachart <- renderPlot({ 
-    
-    df_totals <- 
-      adm_pop_long %>% 
-      filter(states == input$state &
-               adm_or_pop == input$adm_or_pop) %>% 
-      group_by(metric, year) %>% 
-      summarise(total = sum(total)) %>% 
-      filter(metric == "Other" | metric == "Supervision Violations")  
-    
-    totals <- df_totals %>%
-      group_by(year) %>%
-      summarise(total = sum(total))
-    
-    dodger = position_dodge(width = 0.9)
-    
-    title <- paste0(input$adm_or_pop, " in " ,input$state, " by Type\n")
-    
-    ggplot(df_totals, aes(x=year, y=total, fill=metric)) + 
-      geom_area()+
-      theme_csgjc_areaplot() +
-      geom_text(size = 5.5, aes(label=ifelse(year != min(year) & year != max(year),total1, NA)),position = position_stack(vjust = 0.5), check_overlap = TRUE) +
-      geom_text(size = 5.5, aes(x = year + 0.18,label=ifelse(year == min(year),total1, NA)),position = position_stack(vjust = 0.5), check_overlap = TRUE) +
-      geom_text(size = 5.5, aes(x = year - 0.18,label=ifelse(year == max(year),total1, NA)),position = position_stack(vjust = 0.5), check_overlap = TRUE) +
-      scale_fill_manual(values = c("#DEF0F6","#E18731"), 
-                        labels = c("Other", "Supervision Violations"), 
-                        breaks = c("other_admissions", "admissions_for_violations"),
-                        name = "") +  
-      scale_x_continuous(breaks = c(2018,2019,2020), labels = c("2018", "2019", "2020")) 
-  })
-  
-  # Totals barchart
-  output$barchart <- renderPlot({
-    
-    df_totals <- 
-      adm_pop_long %>% 
-      filter(states == input$state &
-             adm_or_pop == input$adm_or_pop) %>% 
-      group_by(metric, year) %>% 
-      summarise(total = sum(total)) %>% 
-      filter(metric == "Other" | metric == "Supervision Violations")  
-    
-    totals <- df_totals %>%
-      group_by(year) %>%
-      summarise(total = sum(total))
-    
-    dodger = position_dodge(width = 0.9)
-    
-    title <- paste0(input$adm_or_pop, " in " ,input$state, " by Type\n")
-    
-    ggplot(data = df_totals,
-           aes_string(x = 'year', y = 'total', fill = 'metric')) +
-      geom_bar(stat = "identity", position = "dodge") +
-      geom_text(aes(label=scales::comma(total)),
-                position=dodger,
-                size = 4.5,
-                colour = "#000000",
-                vjust = -0.5) +
-      ggtitle(title) +
-      theme_csgjc_plot_legend() +
-      theme(plot.margin = margin(0.1, 0.1, 0.1, 0.1, "cm")) +
-      scale_fill_manual(values = c("#DEF0F6", "#E18731"),
-                        name = "") +
-      scale_y_continuous(label = scales::comma,
-                         limits = c(0, 1.17*max(df_totals$total)),
-                         expand = c(0,0)
-      ) +
-      coord_cartesian(clip = "off")
-    
-  })
-  
-}
-
-shinyApp(ui = ui, server = server)
