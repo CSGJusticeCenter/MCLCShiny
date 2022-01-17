@@ -8,8 +8,8 @@ server <- function(input, output, session) {
     
     df_map <- mclc_change %>% 
       filter(adm_or_pop == input$adm_or_pop_map_counts &
-               year == input$year_map_counts &
-               metric == input$data_map_counts)
+             year == input$year_map_counts &
+             metric == input$data_map_counts)
     df_map <- sp::merge(us, df_map, by.x = 'iso3166_2', by.y = "Code")
     
     # map
@@ -28,14 +28,14 @@ server <- function(input, output, session) {
                         show_guide=FALSE)
     colours = c("#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#08589e")
 
-    gg <- gg + 
+    gg <- gg +
       geom_text(data=centers, aes(label=id, x=x, y=y), color="white", size=3) +
       scale_fill_gradientn("Number of People",
-                           colours = colours, 
+                           colours = colours,
                            na.value="#D3D3D3",
                            labels=scales::comma,
-                           guide = guide_legend(keyheight = unit(3, units = "mm"), keywidth=unit(12, units = "mm"), label.position = "bottom", title.position = 'top', nrow=1) 
-      ) +
+                           guide = guide_legend(keyheight = unit(3, units = "mm"), keywidth=unit(12, units = "mm"), label.position = "bottom", title.position = 'top', nrow=1)
+      ) 
       # scale_fill_distiller(palette="BlGr", na.value="#D3D3D3") + # using distiller for discrete vs continuous
       coord_map() +
       labs(x=NULL, y=NULL) +
