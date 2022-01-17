@@ -1,5 +1,28 @@
 server <- function(input, output, session) {
   
+  #-------------------------------------------------------------------------------
+  # View and download data
+  #-------------------------------------------------------------------------------
+
+  output$table_out <- DT::renderDataTable(
+    datatable(data = mclc_datatable, 
+              extensions = 'Buttons',
+              filter = "top",
+              selection = 'single', 
+              options = list( 
+                 dom = "Blfrtip", 
+                 buttons = 
+                   list("copy", list(
+                     extend = "collection", buttons = c("csv", "excel", "pdf"), 
+                     text = "Download")), # end of buttons customization
+                 # customize the length menu
+                 lengthMenu = list(c(25, 50, 100, -1), # declare values
+                                   c(25, 50, 100, "All") # declare titles
+                 ), # end of lengthMenu customization
+                 pageLength = 25
+               ) # end of options
+    ) 
+  )
   
   #-------------------------------------------------------------------------------
   # State Reports
@@ -37,7 +60,7 @@ server <- function(input, output, session) {
     totals_tech <- df_totals %>% 
       filter(metric == "Technical")
     
-    title <- paste0("Prison ", input$adm_or_pop, " in " ,input$state,"\n")
+    title <- paste0("Prison ", input$adm_or_pop,"\n")
     
     df_totals$year <- as.numeric(df_totals$year)
     df_totals$metric <- as.factor(df_totals$metric)
@@ -50,7 +73,7 @@ server <- function(input, output, session) {
       ggtitle(title) +
       theme_csgjc_areaplot() +
       theme(plot.margin = margin(0.1, 0.1, 0.1, 0.1, "cm")) +
-      geom_hline(yintercept=0, colour="black", size = 1) +
+      # geom_hline(yintercept=0, colour="black", size = 1) +
       # totals
       geom_text(size = 4.5, aes(x = year + 0.15,label=ifelse(year == min(year),scales::comma(total), NA), fill = NULL),     data = totals, position = position_stack(vjust = 1.25), check_overlap = TRUE) +
       geom_text(size = 4.5, aes(label=ifelse(year != min(year) & year != max(year),scales::comma(total), NA), fill = NULL), data = totals, position = position_stack(vjust = 1.23), check_overlap = TRUE) +
@@ -88,7 +111,7 @@ server <- function(input, output, session) {
     
     dodger = position_dodge(width = 0.9)
     
-    title <- paste0("Supervision Violations in " ,input$state, " by Type\n")
+    title <- paste0("Prison ",input$adm_or_pop, " due to\nSupervision Violations by Type\n")
     
     ggplot(data = df_totals,
            aes_string(x = 'year', y = 'total', fill = 'metric')) +
@@ -129,7 +152,7 @@ server <- function(input, output, session) {
       data == "total_discharges" & type == "Parole" ~ "Parole Exits"
     ))
     
-    title <- paste0("Parole Population, Entries and Exits in ", input$state,"\n")
+    title <- paste0("Parole Population, Entries and Exits\n")
     
     entry <- df %>% filter(metric == "Parole Entries")
     exit <- df %>% filter(metric == "Parole Exits")
@@ -168,7 +191,7 @@ server <- function(input, output, session) {
       data == "total_discharges" & type == "Parole" ~ "Parole Exits"
     ))
     
-    title <- paste0("Probation Population, Entries and Exits in ", input$state,"\n")
+    title <- paste0("Probation Population, Entries and Exits\n")
     
     entry <- df %>% filter(metric == "Probation Entries")
     exit <- df %>% filter(metric == "Probation Exits")
@@ -189,5 +212,9 @@ server <- function(input, output, session) {
       theme_csgjc_prob_parole()
     
   })
+  
+  #######################################View data for state
+
+  
   
 }

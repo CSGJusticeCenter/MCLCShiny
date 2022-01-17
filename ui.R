@@ -23,7 +23,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                         # National Page
                         #-------------------------------------------------------
                         
-                        tabItem(tabName = "National",
+                        tabItem(tabName = "About",
                                 
                                 fluidPage(theme = shinytheme("united"), 
                                           
@@ -43,8 +43,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                                 choices = c("gr1","gr2","gr3"),
                                                                 selected = "gr1",
                                                                 multiple = TRUE),
-                                                    br(),
-                                                    actionButton(inputId = "GoButton_1", label = "Go",  icon("refresh"))
+                                                    br()
                                           ),
                                           mainPanel(                          
                                             tabsetPanel(
@@ -89,8 +88,12 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                       tabPanel(value="1","Overview", 
                                                br(),
                                                fluidRow(
-                                                        box(plotOutput("areachart", height = 250)),
-                                                        box(plotOutput("barchart",  height = 250))
+                                                        # box(plotOutput("areachart", height = 250)),
+                                                        # box(plotOutput("barchart",  height = 250))
+                                                 column(width = 7, 
+                                                        plotOutput("areachart", height = 310)),
+                                                 column(width = 5,
+                                                        plotOutput("barchart",  height = 300))
                                                ) #fluidRow
                                       ),
                                       ###################
@@ -99,7 +102,9 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                       tabPanel("Parole", 
                                                br(),
                                                fluidRow(
-                                                 plotOutput("barchart_parole", height = 300, width = 450)
+                                                 column(width = 1),
+                                                 column(width = 7,
+                                                        plotOutput("barchart_parole", height = 300, width = 450))
                                                ) #fluidRow
                                       ),
                                       ###################
@@ -108,7 +113,9 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                       tabPanel("Probation", 
                                                br(),
                                                fluidRow(
-                                                 plotOutput("barchart_prob", height = 300, width = 450)
+                                                 column(width = 1),
+                                                 column(width = 7,
+                                                        plotOutput("barchart_prob", height = 300, width = 450))
                                                ) #fluidRow
                                       ),
                                       id = "tb2")
@@ -122,17 +129,18 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                         
                         tabItem(tabName = "View_Data",
                                 fluidPage(
-                                  
+
                                   # headerPanel("header 3"),
-                                  titlePanel(h2("title 3")),
-                                  
-                                  mainPanel(                          
-                                    
-                                    "Text"
-                                  
+                                  # titlePanel(h2("title 3")),
+
+                                  mainPanel(
+
+                                    br(),
+                                    DT::dataTableOutput("table_out")
+
                                   ) #mainPanel
                                 ) #fluidPage
-                        ) #tabItem 
+                        ) #tabItem
                       ) #tabItems
                     ) #dashboardBody
 ) #dashboardPage
