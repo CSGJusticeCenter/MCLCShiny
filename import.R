@@ -24,7 +24,7 @@
 # setwd("C:/Users/jmallett/The Council of State Governments/JC Research - Documents/50 State Revocations Project/50 State Survey (2021)")
 
 # load sp file
-spdf <- geojson_read("Data/us_states_hexgrid.geojson",  what = "sp")
+us <- geojson_read("Data/us_states_hexgrid.geojson", what = "sp")
 
 # load state abb
 stateAbb <- read_csv("Data/stateAbb.csv")
@@ -42,10 +42,10 @@ pop20 <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Population 
 # costs
 costs <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Costs")
 
-# load state data
-# From https://www.census.gov/geo/maps-data/data/cbf/cbf_state.html
-us <- readOGR(dsn = "Data/cb_2014_us_state_5m/cb_2014_us_state_5m.shp",
-              layer = "cb_2014_us_state_5m", verbose = FALSE)
+# # load state data
+# # From https://www.census.gov/geo/maps-data/data/cbf/cbf_state.html
+# us <- readOGR(dsn = "Data/cb_2014_us_state_5m/cb_2014_us_state_5m.shp",
+#               layer = "cb_2014_us_state_5m", verbose = FALSE)
 
 # load probation data
 load("Data/Annual Probation Survey, 2014/DS0001/36343-0001-Data.rda")
@@ -142,13 +142,16 @@ df_prob_parole <- df_prob_parole %>% mutate(adm_or_pop = case_when(data == "tota
 # clean shapefile for hex map
 ########
 
-# remove US text from name
-spdf@data = spdf@data %>%
-  mutate(google_name = gsub(" \\(United States\\)", "", google_name))
-spdf_fortified <- tidy(spdf, region = "google_name")
+# # remove US text from name
+# spdf@data = spdf@data %>%
+#   mutate(google_name = gsub(" \\(United States\\)", "", google_name))
+# spdf_fortified <- tidy(spdf, region = "google_name")
+# 
+# # calculate the centroid of each hexagon to add the label
+# centers <- cbind.data.frame(data.frame(gCentroid(spdf, byid=TRUE), id=spdf@data$iso3166_2))
 
-# calculate the centroid of each hexagon to add the label
-centers <- cbind.data.frame(data.frame(gCentroid(spdf, byid=TRUE), id=spdf@data$iso3166_2))
+us_map <- fortify(us, region="iso3166_2")
+centers <- cbind.data.frame(data.frame(gCentroid(us, byid=TRUE), id=us@data$iso3166_2))
 
 ########
 # clean shapefile
@@ -332,7 +335,7 @@ mclc <- mclc %>% mutate(adm_or_pop = ifelse(
 
 # change data types
 mclc$states <- as.factor(mclc$states)
-mclc$year <- as.numeric(mclc$year)
+mclc$year <- as.factor(mclc$year)
 mclc$metric <- as.factor(mclc$metric)
 mclc$data <- as.factor(mclc$data)
 mclc$region <- as.factor(mclc$region)
@@ -344,6 +347,9 @@ mclc_change <- mclc %>% filter(year != 2018)
 # remove inf and NaN
 mclc_change[mapply(is.infinite, mclc_change)] <- NA
 mclc_change$change[mclc_change$change %in% "NaN"] <- NA
+
+# add state abb
+mclc_change <- merge(mclc_change, stateAbb, by.x = "states", by.y = "State")
 
 ########
 # Data for table
@@ -536,7 +542,8 @@ save(mclc,           file="mclc.Rda")
 save(adm_pop_long,   file="adm_pop_long.Rda")
 save(df_adm,         file="df_adm.Rda")
 save(df_pop,         file="df_pop.Rda")
-save(spdf_fortified, file="spdf_fortified.Rda")
+save(us_map,         file="us_map.Rda")
+save(us,             file="us.Rda")
 save(centers,        file="centers.Rda")
 save(df_pop,         file="df_pop.Rda")
 save(df_prob_parole, file="df_prob_parole.Rda")

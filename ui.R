@@ -7,7 +7,7 @@ library(dashboardthemes)
 ui <- dashboardPage(dashboardHeader(title = "MCLC"), 
                     sidebar = dashboardSidebar(
                       sidebarMenu(id = "tabs",
-                                  menuItem(text = "National",tabName = "National",icon = icon("chart-bar")),
+                                  menuItem(text = "Map Explorer",tabName = "Map_Explorer",icon = icon("map-pin")),
                                   menuItem(text = "State Reports",tabName = "State_Reports",icon = icon("search-location")),
                                   menuItem(text = "View Data",tabName = "View_Data",icon = icon("table"))
                       )
@@ -18,38 +18,22 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                       customTheme,
                       
                       tabItems(
-                        
                         #-------------------------------------------------------
                         # National Page
                         #-------------------------------------------------------
                         
-                        tabItem(tabName = "About",
+                        tabItem(tabName = "Map_Explorer",
                                 
-                                fluidPage(theme = shinytheme("united"), 
+                                fluidPage(# headerPanel("header for title 1"),
+                                          # titlePanel(h3("title for category 1")),
                                           
-                                          headerPanel("header for title 1"),
-                                          titlePanel(h3("title for category 1")),
-                                          
-                                          wellPanel(tags$style(type="text/css", '#leftPanel { width:200px; float:left;}'),
-                                                    id = "leftPanel",
-                                                    conditionalPanel(condition="input.tb1=='1'",
-                                                                     textInput("sc_number", h5("Enter a Number:"), 10)
-                                                    ),
-                                                    conditionalPanel(condition="input.tb1=='2'",
-                                                                     textInput("string_1", h5("Enter String:"), "string here")
-                                                    ),
-                                                    br(),
-                                                    selectInput("group_text_1", "Select Groups",
-                                                                choices = c("gr1","gr2","gr3"),
-                                                                selected = "gr1",
-                                                                multiple = TRUE),
-                                                    br()
+                                          wellPanel(tags$style(type="text/css", '#leftPanel { width:200px; float:left;}'), id = "leftPanel",
+                                                    selectInput("data_map_counts", "Data",         choices = unique(adm_pop_long$metric)),
+                                                    radioButtons("adm_or_pop_map_counts", "Type",  choices = unique(adm_pop_long$adm_or_pop)),
+                                                    radioButtons("year_map_counts", "Year",        choices = unique(adm_pop_long$year))
                                           ),
-                                          mainPanel(                          
-                                            tabsetPanel(
-                                              tabPanel(value="1", "Tab #1", hr(), DT::dataTableOutput("sc_table_number")),
-                                              tabPanel(value="2", "Tab #2" , hr(), DT::dataTableOutput("sc_table_date")),
-                                              id = "tb1")
+                                          mainPanel(  
+                                            plotOutput("map_counts")
                                           )
                                 )
                         ), #tabItem
@@ -64,7 +48,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                   # titlePanel(h2("title 2")),
                                   br(),
                                   wellPanel(tags$style(type="text/css", '#leftPanel { width:200px; float:left;}'), id = "leftPanel",
-                                            selectInput("state", "Select State", choices = unique(adm_pop_long$states)),
+                                            selectInput("state", "State", choices = unique(adm_pop_long$states)),
                                             radioButtons("adm_or_pop", "Type",   choices = unique(adm_pop_long$adm_or_pop))
                                             # radioButtons("year", "Year",       choices = unique(adm_pop_long$year))
                                   ),
@@ -136,7 +120,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                   mainPanel(
 
                                     br(),
-                                    DT::dataTableOutput("table_out")
+                                    "TEXT"
 
                                   ) #mainPanel
                                 ) #fluidPage

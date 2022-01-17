@@ -1,28 +1,78 @@
 server <- function(input, output, session) {
   
   #-------------------------------------------------------------------------------
+  # Map Explorer
+  #-------------------------------------------------------------------------------
+  
+  output$map_counts <- renderPlot({
+    
+    df_map <- mclc_change %>% 
+      filter(adm_or_pop == input$adm_or_pop_map_counts &
+               year == input$year_map_counts &
+               metric == input$data_map_counts)
+    df_map <- sp::merge(us, df_map, by.x = 'iso3166_2', by.y = "Code")
+    
+    # map
+    gg <- ggplot()
+    # add outline
+    gg <- gg + geom_map(data=us_map, map=us_map,
+                        aes(x=long, y=lat, map_id=id),
+                        color="white", size=0.5)
+    # add data
+    gg <- gg + geom_map(data=df_map@data, map=us_map,
+                        aes(fill=total, map_id=iso3166_2))
+    # Overlay borders without ugly line on legend
+    gg <- gg + geom_map(data=df_map@data, map=us_map,
+                        aes(map_id=iso3166_2),
+                        fill="#ffffff", alpha=0, color="white",
+                        show_guide=FALSE)
+    colours = c("#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#08589e")
+
+    gg <- gg + 
+      geom_text(data=centers, aes(label=id, x=x, y=y), color="white", size=3) +
+      scale_fill_gradientn("Number of People",
+                           colours = colours, 
+                           na.value="#D3D3D3",
+                           labels=scales::comma,
+                           guide = guide_legend(keyheight = unit(3, units = "mm"), keywidth=unit(12, units = "mm"), label.position = "bottom", title.position = 'top', nrow=1) 
+      ) +
+      # scale_fill_distiller(palette="BlGr", na.value="#D3D3D3") + # using distiller for discrete vs continuous
+      coord_map() +
+      labs(x=NULL, y=NULL) +
+      theme_bw() +
+      theme(panel.border=element_blank(),
+            legend.position = c(0.5, 0.9),
+            panel.grid=element_blank(),
+            axis.ticks=element_blank(),
+            axis.text=element_blank())
+    gg
+
+  })
+ 
+  
+  #-------------------------------------------------------------------------------
   # View and download data
   #-------------------------------------------------------------------------------
 
-  output$table_out <- DT::renderDataTable(
-    datatable(data = mclc_datatable, 
-              extensions = 'Buttons',
-              filter = "top",
-              selection = 'single', 
-              options = list( 
-                 dom = "Blfrtip", 
-                 buttons = 
-                   list("copy", list(
-                     extend = "collection", buttons = c("csv", "excel", "pdf"), 
-                     text = "Download")), # end of buttons customization
-                 # customize the length menu
-                 lengthMenu = list(c(25, 50, 100, -1), # declare values
-                                   c(25, 50, 100, "All") # declare titles
-                 ), # end of lengthMenu customization
-                 pageLength = 25
-               ) # end of options
-    ) 
-  )
+  # output$table_out <- DT::renderDataTable(
+  #   datatable(data = mclc_datatable, 
+  #             extensions = 'Buttons',
+  #             filter = "top",
+  #             selection = 'single', 
+  #             options = list( 
+  #                dom = "Blfrtip", 
+  #                buttons = 
+  #                  list("copy", list(
+  #                    extend = "collection", buttons = c("csv", "excel", "pdf"), 
+  #                    text = "Download")), # end of buttons customization
+  #                # customize the length menu
+  #                lengthMenu = list(c(25, 50, 100, -1), # declare values
+  #                                  c(25, 50, 100, "All") # declare titles
+  #                ), # end of lengthMenu customization
+  #                pageLength = 25
+  #              ) # end of options
+  #   ) 
+  # )
   
   #-------------------------------------------------------------------------------
   # State Reports
