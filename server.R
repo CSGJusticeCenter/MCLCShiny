@@ -26,16 +26,26 @@ server <- function(input, output, session) {
                         aes(map_id=iso3166_2),
                         fill="#ffffff", alpha=0, color="white",
                         show_guide=FALSE)
+    
+    # colours = c("#264d59", "#43978d", "#f9e07f", "#f9ad6a", "#d46c4e")
     colours = c("#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#08589e")
-
-    gg <- gg +
+    
+    # value1 <- quantile(df_map$total, 0.25, names = FALSE, 'na.rm' = TRUE)
+    # value2 <- quantile(df_map$total, 0.50, names = FALSE, 'na.rm' = TRUE)
+    # value3 <- quantile(df_map$total, 0.75, names = FALSE, 'na.rm' = TRUE)
+    # value4 <- quantile(df_map$total, 1, names = FALSE, 'na.rm' = TRUE)
+    # 
+    # qnt <- quantile(df_map$total,seq(0,1,.25), na.rm = TRUE)
+    # df_map$legend <- cut(df_map$total,unique(qnt),include.lowest=TRUE)
+    
+    gg <- gg + 
       geom_text(data=centers, aes(label=id, x=x, y=y), color="white", size=3) +
       scale_fill_gradientn("Number of People",
-                           colours = colours,
+                           colours = colours, 
                            na.value="#D3D3D3",
                            labels=scales::comma,
-                           guide = guide_legend(keyheight = unit(3, units = "mm"), keywidth=unit(12, units = "mm"), label.position = "bottom", title.position = 'top', nrow=1)
-      ) 
+                           guide = guide_legend(keyheight = unit(3, units = "mm"), keywidth=unit(12, units = "mm"), label.position = "bottom", title.position = 'top', nrow=1) 
+      ) +
       # scale_fill_distiller(palette="BlGr", na.value="#D3D3D3") + # using distiller for discrete vs continuous
       coord_map() +
       labs(x=NULL, y=NULL) +
@@ -46,6 +56,7 @@ server <- function(input, output, session) {
             axis.ticks=element_blank(),
             axis.text=element_blank())
     gg
+
 
   })
  
