@@ -28,12 +28,16 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                           # titlePanel(h3("title for category 1")),
                                           
                                           wellPanel(tags$style(type="text/css", '#leftPanel { width:200px; float:left;}'), id = "leftPanel",
-                                                    selectInput("data_map_counts", "Data",         choices = unique(adm_pop_long$metric)),
-                                                    radioButtons("adm_or_pop_map_counts", "Type",  choices = unique(adm_pop_long$adm_or_pop)),
-                                                    radioButtons("year_map_counts", "Year",        choices = unique(adm_pop_long$year))
+                                                    selectInput("data_map_counts", "Data",        choices = unique(adm_pop_long$metric)),
+                                                    selectInput("adm_or_pop_map_counts", "Type",  choices = unique(adm_pop_long$adm_or_pop)),
+                                                    radioButtons("choice_map_counts", "Value",    choices = c("Count", "% Change from Previous Year")),
+                                                    selectInput("year_map_counts", "Year",       choices = unique(adm_pop_long$year))
                                           ),
                                           mainPanel(  
-                                            plotOutput("map_counts")
+                                            fluidRow(plotOutput("map_counts")),
+                                            br(), br(),
+                                            # fluidRow(column(width = 12, DT::dataTableOutput("table_map_counts")))
+                                            fluidRow(reactableOutput("table_map_counts"))
                                           )
                                 )
                         ), #tabItem

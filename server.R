@@ -4,13 +4,29 @@ server <- function(input, output, session) {
   # Map Explorer
   #-------------------------------------------------------------------------------
   
-  output$map_counts <- renderPlot({
-    
-    df_map <- mclc_change %>% 
+  df_map_counts <- reactive({
+    mclc %>% 
       filter(adm_or_pop == input$adm_or_pop_map_counts &
              year == input$year_map_counts &
-             metric == input$data_map_counts)
-    df_map <- sp::merge(us, df_map, by.x = 'iso3166_2', by.y = "Code")
+             metric == input$data_map_counts) 
+  })
+  
+  df_table_map_counts <- reactive({
+    df_map_counts() %>% 
+      arrange(desc(total)) %>% 
+      select(State = states,
+             Year = year,
+             Data = metric,
+             Type = adm_or_pop,
+             Value = total) 
+  })
+  
+  output$map_counts <- renderPlot({
+    
+    df_map <- sp::merge(us, df_map_counts(), by.x = 'iso3166_2', by.y = "Code")
+    
+    # title
+    title <- paste0(input$data_map_counts, " Prison ", input$adm_or_pop_map_counts, " in ", input$year_map_counts)
     
     # map
     gg <- ggplot()
@@ -21,69 +37,103 @@ server <- function(input, output, session) {
     # add data
     gg <- gg + geom_map(data=df_map@data, map=us_map,
                         aes(fill=total, map_id=iso3166_2))
-    # Overlay borders without ugly line on legend
+    # overlay borders without ugly line on legend
     gg <- gg + geom_map(data=df_map@data, map=us_map,
                         aes(map_id=iso3166_2),
                         fill="#ffffff", alpha=0, color="white",
                         show_guide=FALSE)
-    
-    # colours = c("#264d59", "#43978d", "#f9e07f", "#f9ad6a", "#d46c4e")
-    colours = c("#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#08589e")
-    
-    # value1 <- quantile(df_map$total, 0.25, names = FALSE, 'na.rm' = TRUE)
-    # value2 <- quantile(df_map$total, 0.50, names = FALSE, 'na.rm' = TRUE)
-    # value3 <- quantile(df_map$total, 0.75, names = FALSE, 'na.rm' = TRUE)
-    # value4 <- quantile(df_map$total, 1, names = FALSE, 'na.rm' = TRUE)
-    # 
-    # qnt <- quantile(df_map$total,seq(0,1,.25), na.rm = TRUE)
-    # df_map$legend <- cut(df_map$total,unique(qnt),include.lowest=TRUE)
-    
-    gg <- gg + 
-      geom_text(data=centers, aes(label=id, x=x, y=y), color="white", size=3) +
+    gg + 
+      geom_text(data=centers, aes(label = id, x = x, y = y), color = "white", size = 4) +
       scale_fill_gradientn("Number of People",
-                           colours = colours, 
+                           colours = colours,
                            na.value="#D3D3D3",
-                           labels=scales::comma,
-                           guide = guide_legend(keyheight = unit(3, units = "mm"), keywidth=unit(12, units = "mm"), label.position = "bottom", title.position = 'top', nrow=1) 
-      ) +
-      # scale_fill_distiller(palette="BlGr", na.value="#D3D3D3") + # using distiller for discrete vs continuous
+                           label = scales::comma,
+                           guide = guide_legend(keyheight = unit(3, units = "mm"),
+                                                keywidth=unit(12, units = "mm"),
+                                                label.position = "bottom",
+                                                title.position = 'top', nrow=1)) +
       coord_map() +
       labs(x=NULL, y=NULL) +
+      ggtitle(title) +
       theme_bw() +
       theme(panel.border=element_blank(),
-            legend.position = c(0.5, 0.9),
             panel.grid=element_blank(),
+            legend.position = c(0.5, 0.9),
+            legend.title=element_text(size=14), 
+            legend.text=element_text(size=14),
             axis.ticks=element_blank(),
-            axis.text=element_blank())
-    gg
-
-
+            axis.text=element_blank(),
+            plot.title = element_text(hjust = 0.5,
+                                      face = "bold",
+                                      size = 16))
   })
- 
+  
+  # output$table_map_counts <- DT::renderDataTable(
+  #   datatable(data = df_table_map_counts(),
+  #             class = list(stripe = FALSE),
+  #             # extensions = 'Buttons',
+  #             selection = 'single',
+  #             rownames = FALSE,
+  #             options = list(
+  #                searching = FALSE,
+  #                dom = "Blfrtip",
+  #                lengthMenu = list(c(10, 25, -1), 
+  #                                  c(10, 25, "All")), 
+  #                pageLength = 10
+  #              ) # end of options
+  #   )
+  # )
+  
+  output$table_map_counts <- renderReactable({
+    df_table_map_counts() %>%
+    reactable(highlight = TRUE,
+              pagination = TRUE,
+              showSortable = TRUE) 
+              # outlined = TRUE,
+              # borderless = TRUE,
+              # width = 650,
+              # theme = reactableTheme(highlightColor = "#deebf7",
+              #                        headerStyle = list(background = "#deebf7"),
+              #                        style = list(#fontFamily = "Cambria",
+              #                                     fontSize = 14)))
+  })
+  
+  # output$table_map_counts <- DT::renderDataTable(
+  #     df_table_map_counts() %>%
+  #     datatable(#extensions = 'Buttons',
+  #               options = list(
+  #                 pageLength = 10,
+  #                 scrollX=TRUE,
+  #                 dom = 'T<"clear">lBfrtip')) %>%
+  #     formatRound(5,
+  #                 digits = 0,
+  #                 interval = 3,
+  #                 mark = ",")
+  # )
   
   #-------------------------------------------------------------------------------
   # View and download data
   #-------------------------------------------------------------------------------
 
-  # output$table_out <- DT::renderDataTable(
-  #   datatable(data = mclc_datatable, 
-  #             extensions = 'Buttons',
-  #             filter = "top",
-  #             selection = 'single', 
-  #             options = list( 
-  #                dom = "Blfrtip", 
-  #                buttons = 
-  #                  list("copy", list(
-  #                    extend = "collection", buttons = c("csv", "excel", "pdf"), 
-  #                    text = "Download")), # end of buttons customization
-  #                # customize the length menu
-  #                lengthMenu = list(c(25, 50, 100, -1), # declare values
-  #                                  c(25, 50, 100, "All") # declare titles
-  #                ), # end of lengthMenu customization
-  #                pageLength = 25
-  #              ) # end of options
-  #   ) 
-  # )
+# output$table_out <- DT::renderDataTable(
+#   datatable(data = mclc_datatable,
+#             extensions = 'Buttons',
+#             filter = "top",
+#             selection = 'single',
+#             options = list(
+#                dom = "Blfrtip",
+#                buttons =
+#                  list("copy", list(
+#                    extend = "collection", buttons = c("csv", "excel", "pdf"),
+#                    text = "Download")), # end of buttons customization
+#                # customize the length menu
+#                lengthMenu = list(c(25, 50, 100, -1), # declare values
+#                                  c(25, 50, 100, "All") # declare titles
+#                ), # end of lengthMenu customization
+#                pageLength = 25
+#              ) # end of options
+#   )
+# )
   
   #-------------------------------------------------------------------------------
   # State Reports

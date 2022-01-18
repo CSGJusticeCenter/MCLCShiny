@@ -347,9 +347,12 @@ mclc_change <- mclc %>% filter(year != 2018)
 # remove inf and NaN
 mclc_change[mapply(is.infinite, mclc_change)] <- NA
 mclc_change$change[mclc_change$change %in% "NaN"] <- NA
+mclc[mapply(is.infinite, mclc)] <- NA
+mclc$change[mclc$change %in% "NaN"] <- NA
 
 # add state abb
 mclc_change <- merge(mclc_change, stateAbb, by.x = "states", by.y = "State")
+mclc <- merge(mclc, stateAbb, by.x = "states", by.y = "State")
 
 ########
 # Data for table

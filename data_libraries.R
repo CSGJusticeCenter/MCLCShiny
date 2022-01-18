@@ -1,5 +1,6 @@
-# load libraries
-library(shiny)
+#______________________________________________________
+# load packages
+#______________________________________________________
 library(shinyWidgets)
 library(RColorBrewer)
 library(classInt)
@@ -22,9 +23,10 @@ library(readxl)
 library(janitor)
 library(dashboardthemes)
 library(labelled)
+library(reactable)
 
 #______________________________________________________
-#read in R data
+# read in R data
 #______________________________________________________
 load("adm_pop_long.Rda")
 load("mclc.Rda")
@@ -38,6 +40,13 @@ load("us_map.Rda")
 load("centers.Rda")
 load("prob_parole.Rda")
 
+#______________________________________________________
+# colors
+#______________________________________________________
+
+# colours = c("#264d59", "#43978d", "#f9e07f", "#f9ad6a", "#d46c4e")
+colours = c("#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#08589e")
+
 par_cols <- c("Parole Entries"="#7B898F",
               "Parole Exits"="#FA9F8D",
               "Parole Population"="#ECE9E9")
@@ -46,6 +55,9 @@ prob_cols <- c("Probation Entries"="#7B898F",
                "Probation Exits"="#FA9F8D",
                "Probation Population"="#ECE9E9")
 
+#______________________________________________________
+# custom theme
+#______________________________________________________
 customTheme <- shinyDashboardThemeDIY(
   ### general
   appFontFamily = "Arial"
