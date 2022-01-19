@@ -30,8 +30,16 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                           wellPanel(tags$style(type="text/css", '#leftPanel { width:200px; float:left;}'), id = "leftPanel",
                                                     selectInput("data_map_counts", "Data",        choices = unique(adm_pop_long$metric)),
                                                     selectInput("adm_or_pop_map_counts", "Type",  choices = unique(adm_pop_long$adm_or_pop)),
-                                                    radioButtons("choice_map_counts", "Value",    choices = c("Count", "% Change from Previous Year")),
-                                                    selectInput("year_map_counts", "Year",       choices = unique(adm_pop_long$year))
+                                                    radioButtons("choice_map_counts", "Value",    choices = c("Count", "Change from Previous Year"), selected = "Count"),
+                                                    # selectInput("year_map_counts", "Year",  choices = unique(adm_pop_long$year)),
+                                                    conditionalPanel(
+                                                      condition = "input.choice_map_counts == 'Count'",
+                                                      selectInput("year_map_counts", "Year", choices = c(2018, 2019, 2020))
+                                                    ),
+                                                    conditionalPanel(
+                                                      condition = "input.choice_map_counts == 'Change from Previous Year'",
+                                                      selectInput("year_map_counts", "Year", choices = c(2019, 2020))
+                                                    )
                                           ),
                                           mainPanel(  
                                             fluidRow(plotOutput("map_counts")),

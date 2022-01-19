@@ -24,6 +24,7 @@ library(janitor)
 library(dashboardthemes)
 library(labelled)
 library(reactable)
+library(shiny)
 
 #______________________________________________________
 # read in R data
@@ -38,7 +39,7 @@ load("df_pop.Rda")
 load("us.Rda")
 load("us_map.Rda")
 load("centers.Rda")
-load("prob_parole.Rda")
+load("df_prob_parole.Rda")
 
 #______________________________________________________
 # colors

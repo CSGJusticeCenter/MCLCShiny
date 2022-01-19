@@ -354,6 +354,10 @@ mclc$change[mclc$change %in% "NaN"] <- NA
 mclc_change <- merge(mclc_change, stateAbb, by.x = "states", by.y = "State")
 mclc <- merge(mclc, stateAbb, by.x = "states", by.y = "State")
 
+# remove total from mclc_change and rename change variable
+mclc_change <- mclc_change %>% select(-total)
+mclc_change <- mclc_change %>% rename(total = change)
+
 ########
 # Data for table
 ########

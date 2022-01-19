@@ -4,21 +4,27 @@ server <- function(input, output, session) {
   # Map Explorer
   #-------------------------------------------------------------------------------
   
+  datasetInput <- reactive({
+    switch(input$choice_map_counts,
+           "Count" = mclc,
+           "Change from Previous Year" = mclc_change)
+  })
+  
   df_map_counts <- reactive({
-    mclc %>% 
+    datasetInput() %>%
       filter(adm_or_pop == input$adm_or_pop_map_counts &
              year == input$year_map_counts &
-             metric == input$data_map_counts) 
+             metric == input$data_map_counts)
   })
   
   df_table_map_counts <- reactive({
-    df_map_counts() %>% 
-      arrange(desc(total)) %>% 
+    df_map_counts() %>%
+      arrange(desc(total)) %>%
       select(State = states,
              Year = year,
              Data = metric,
              Type = adm_or_pop,
-             Value = total) 
+             Value = total)
   })
   
   output$map_counts <- renderPlot({
