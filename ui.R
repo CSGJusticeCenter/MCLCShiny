@@ -1,9 +1,3 @@
-library(shiny)
-library(shinythemes)
-library(wordcloud2)
-library(shinydashboard)
-library(dashboardthemes)
-
 ui <- dashboardPage(dashboardHeader(title = "MCLC"), 
                     sidebar = dashboardSidebar(
                       sidebarMenu(id = "tabs",
@@ -24,14 +18,11 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                         
                         tabItem(tabName = "Map_Explorer",
                                 
-                                fluidPage(# headerPanel("header for title 1"),
-                                          # titlePanel(h3("title for category 1")),
-                                          
-                                          wellPanel(tags$style(type="text/css", '#leftPanel { width:200px; float:left;}'), id = "leftPanel",
+                                fluidPage(wellPanel(tags$style(type="text/css", '#leftPanel { width:200px; float:left;}'), id = "leftPanel",
                                                     selectInput("data_map_counts", "Data",        choices = unique(adm_pop_long$metric)),
                                                     selectInput("adm_or_pop_map_counts", "Type",  choices = unique(adm_pop_long$adm_or_pop)),
                                                     radioButtons("choice_map_counts", "Value",    choices = c("Count", "Change from Previous Year"), selected = "Count"),
-                                                    # selectInput("year_map_counts", "Year",  choices = unique(adm_pop_long$year)),
+                                                    
                                                     conditionalPanel(
                                                       condition = "input.choice_map_counts == 'Count'",
                                                       selectInput("year_map_counts", "Year", choices = c(2018, 2019, 2020))

@@ -10,15 +10,15 @@ server <- function(input, output, session) {
            "Change from Previous Year" = mclc_change)
   })
   
-  df_map_counts <- reactive({
+  df_map <- reactive({
     datasetInput() %>%
       filter(adm_or_pop == input$adm_or_pop_map_counts &
              year == input$year_map_counts &
              metric == input$data_map_counts)
   })
   
-  df_table_map_counts <- reactive({
-    df_map_counts() %>%
+  df_map_table <- reactive({
+    df_map() %>%
       arrange(desc(total)) %>%
       select(State = states,
              Year = year,
@@ -29,7 +29,7 @@ server <- function(input, output, session) {
   
   output$map_counts <- renderPlot({
     
-    df_map <- sp::merge(us, df_map_counts(), by.x = 'iso3166_2', by.y = "Code")
+    df_map <- sp::merge(us, df_map(), by.x = 'iso3166_2', by.y = "Code")
     
     # title
     title <- paste0(input$data_map_counts, " Prison ", input$adm_or_pop_map_counts, " in ", input$year_map_counts)
@@ -75,7 +75,7 @@ server <- function(input, output, session) {
   })
   
   # output$table_map_counts <- DT::renderDataTable(
-  #   datatable(data = df_table_map_counts(),
+  #   datatable(data = df_map_table(),
   #             class = list(stripe = FALSE),
   #             # extensions = 'Buttons',
   #             selection = 'single',
@@ -91,7 +91,7 @@ server <- function(input, output, session) {
   # )
   
   output$table_map_counts <- renderReactable({
-    df_table_map_counts() %>%
+    df_map_table() %>%
     reactable(highlight = TRUE,
               pagination = TRUE,
               showSortable = TRUE) 
@@ -105,7 +105,7 @@ server <- function(input, output, session) {
   })
   
   # output$table_map_counts <- DT::renderDataTable(
-  #     df_table_map_counts() %>%
+  #     df_map_table() %>%
   #     datatable(#extensions = 'Buttons',
   #               options = list(
   #                 pageLength = 10,
