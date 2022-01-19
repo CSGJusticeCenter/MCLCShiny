@@ -4,16 +4,18 @@ server <- function(input, output, session) {
   # Map Explorer
   #-------------------------------------------------------------------------------
   
-  datasetInput <- reactive({
-    switch(input$choice_map_counts,
-           "Count" = mclc,
-           "Change from Previous Year" = mclc_change)
+  df_map_temp <- reactive ({
+    if(input$choice_map_counts == "Count"){     if(input$year_map_counts == "2018"){filter(mclc_explorer, year=="2018" & choice == "Count")}
+                                           else if(input$year_map_counts == "2019"){filter(mclc_explorer, year=="2019" & choice == "Count")}
+                                           else if(input$year_map_counts == "2020"){filter(mclc_explorer, year=="2020" & choice == "Count")}
+                                          }
+    else if(input$choice_map_counts == "Change from Previous Year" & input$year_map_counts2 == "2019"){filter(mclc_explorer, year == "2019" & choice == "Change from Previous Year")} 
+    else if(input$choice_map_counts == "Change from Previous Year" & input$year_map_counts2 == "2020"){filter(mclc_explorer, year == "2020" & choice == "Change from Previous Year")}
   })
   
-  df_map <- reactive({
-    datasetInput() %>%
-      filter(adm_or_pop == input$adm_or_pop_map_counts &
-             year == input$year_map_counts &
+  df_map <- reactive({ 
+    df_map_temp() %>% 
+      filter(adm_or_pop == input$adm_or_pop_map_counts,
              metric == input$data_map_counts)
   })
   
@@ -24,16 +26,17 @@ server <- function(input, output, session) {
              Year = year,
              Data = metric,
              Type = adm_or_pop,
-             Value = total)
+             Value = total,
+             choice)
   })
   
   output$map_counts <- renderPlot({
-    
+
     df_map <- sp::merge(us, df_map(), by.x = 'iso3166_2', by.y = "Code")
-    
+
     # title
     title <- paste0(input$data_map_counts, " Prison ", input$adm_or_pop_map_counts, " in ", input$year_map_counts)
-    
+
     # map
     gg <- ggplot()
     # add outline
@@ -48,7 +51,7 @@ server <- function(input, output, session) {
                         aes(map_id=iso3166_2),
                         fill="#ffffff", alpha=0, color="white",
                         show_guide=FALSE)
-    gg + 
+    gg +
       geom_text(data=centers, aes(label = id, x = x, y = y), color = "white", size = 4) +
       scale_fill_gradientn("Number of People",
                            colours = colours,
@@ -65,7 +68,7 @@ server <- function(input, output, session) {
       theme(panel.border=element_blank(),
             panel.grid=element_blank(),
             legend.position = c(0.5, 0.9),
-            legend.title=element_text(size=14), 
+            legend.title=element_text(size=14),
             legend.text=element_text(size=14),
             axis.ticks=element_blank(),
             axis.text=element_blank(),
@@ -74,48 +77,77 @@ server <- function(input, output, session) {
                                       size = 16))
   })
   
-  # output$table_map_counts <- DT::renderDataTable(
-  #   datatable(data = df_map_table(),
-  #             class = list(stripe = FALSE),
-  #             # extensions = 'Buttons',
-  #             selection = 'single',
-  #             rownames = FALSE,
-  #             options = list(
-  #                searching = FALSE,
-  #                dom = "Blfrtip",
-  #                lengthMenu = list(c(10, 25, -1), 
-  #                                  c(10, 25, "All")), 
-  #                pageLength = 10
-  #              ) # end of options
-  #   )
-  # )
+  # output$table_map_counts <- renderReactable({
+  #   df_map_table() %>%
+  #     reactable(highlight = TRUE,
+  #               pagination = TRUE,
+  #               showSortable = TRUE) 
+  #   # outlined = TRUE,
+  #   # borderless = TRUE,
+  #   # width = 650,
+  #   # theme = reactableTheme(highlightColor = "#deebf7",
+  #   #                        headerStyle = list(background = "#deebf7"),
+  #   #                        style = list(#fontFamily = "Cambria",
+  #   #                                     fontSize = 14)))
+  # })
   
-  output$table_map_counts <- renderReactable({
-    df_map_table() %>%
-    reactable(highlight = TRUE,
-              pagination = TRUE,
-              showSortable = TRUE) 
-              # outlined = TRUE,
-              # borderless = TRUE,
-              # width = 650,
-              # theme = reactableTheme(highlightColor = "#deebf7",
-              #                        headerStyle = list(background = "#deebf7"),
-              #                        style = list(#fontFamily = "Cambria",
-              #                                     fontSize = 14)))
-  })
-  
-  # output$table_map_counts <- DT::renderDataTable(
-  #     df_map_table() %>%
-  #     datatable(#extensions = 'Buttons',
-  #               options = list(
-  #                 pageLength = 10,
-  #                 scrollX=TRUE,
-  #                 dom = 'T<"clear">lBfrtip')) %>%
-  #     formatRound(5,
-  #                 digits = 0,
-  #                 interval = 3,
-  #                 mark = ",")
-  # )
+  output$table_map_counts <- DT::renderDataTable(
+    
+    if(input$choice_map_counts == "Count"){
+      
+      df_map_table() %>% 
+        datatable(extensions = 'Buttons',
+                  selection = 'single',
+                  rownames = FALSE,
+                  options = list(
+                    searching = FALSE,
+                    # hide choice column
+                    columnDefs = list(list(visible=FALSE, targets=c(5))),
+                    dom = "Blfrtip",
+                    buttons =
+                      list("copy", list(
+                        extend = "collection", buttons = c("csv", "excel", "pdf"),
+                        text = "Download")), 
+                    lengthMenu = list(c(5, 10, 20, -1), 
+                                      c(5, 10, 20, "All")),                 
+                    pageLength = 5)) %>% 
+        # format color not working
+        formatStyle("Type", target = 'row', 
+                    backgroundColor = "#FFFFFF") %>% 
+        # add commas
+        formatRound('Value', interval = 3, digits = 0, mark = ",") 
+      
+    }
+    else if(input$choice_map_counts == "Change from Previous Year"){
+      
+      # df_map_table()$Value <- df_map_table()$Value/100
+        
+      df_map_table() %>% 
+        mutate(Value = Value/100) %>% 
+        arrange(Value) %>% 
+        datatable(extensions = 'Buttons',
+                  selection = 'single',
+                  rownames = FALSE,
+                  options = list(
+                    searching = FALSE,
+                    # hide choice column
+                    columnDefs = list(list(visible=FALSE, targets=c(5))),
+                    dom = "Blfrtip",
+                    buttons =
+                      list("copy", list(
+                        extend = "collection", buttons = c("csv", "excel", "pdf"),
+                        text = "Download")), 
+                    lengthMenu = list(c(5, 10, 20, -1), 
+                                      c(5, 10, 20, "All")),                 
+                    pageLength = 5)) %>% 
+        # format color not working
+        formatStyle("Type", target = 'row', 
+                    backgroundColor = "#FFFFFF") %>% 
+        # add % sign
+        formatPercentage('Value', digits = 2) 
+    }
+    
+  )
   
   #-------------------------------------------------------------------------------
   # View and download data

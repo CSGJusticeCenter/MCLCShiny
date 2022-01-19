@@ -296,8 +296,8 @@ mclc <- mclc %>%
   group_by(states, data) %>%
   mutate(change = (total/lag(total) - 1) * 100)
 
-# round
-mclc$change <- round(mclc$change, 0)
+# # round
+# mclc$change <- round(mclc$change, 0)
 
 # add regions
 mclc <- merge(mclc, region, by = "states")
@@ -357,6 +357,12 @@ mclc <- merge(mclc, stateAbb, by.x = "states", by.y = "State")
 # remove total from mclc_change and rename change variable
 mclc_change <- mclc_change %>% select(-total)
 mclc_change <- mclc_change %>% rename(total = change)
+
+# add variable for type of dataset used in conditional filter
+mclc_change$choice <- "Change from Previous Year"
+mclc$choice <- "Count"
+temp <- mclc %>% select(-change)
+mclc_explorer <- rbind(temp, mclc_change)
 
 ########
 # Data for table
@@ -546,6 +552,7 @@ df_pop$metric <- factor(df_pop$metric, levels=c("other_population","violator_pop
 save(mclc_datatable, file="mclc_datatable.Rda")
 save(mclc_change,    file="mclc_change.Rda")
 save(mclc,           file="mclc.Rda")
+save(mclc_explorer,  file="mclc_explorer.Rda")
 save(adm_pop_long,   file="adm_pop_long.Rda")
 save(df_adm,         file="df_adm.Rda")
 save(df_pop,         file="df_pop.Rda")

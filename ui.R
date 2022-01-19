@@ -21,22 +21,25 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                 fluidPage(wellPanel(tags$style(type="text/css", '#leftPanel { width:200px; float:left;}'), id = "leftPanel",
                                                     selectInput("data_map_counts", "Data",        choices = unique(adm_pop_long$metric)),
                                                     selectInput("adm_or_pop_map_counts", "Type",  choices = unique(adm_pop_long$adm_or_pop)),
-                                                    radioButtons("choice_map_counts", "Value",    choices = c("Count", "Change from Previous Year"), selected = "Count"),
                                                     
+                                                    radioButtons("choice_map_counts", "Value",    choices = c("Count", "Change from Previous Year"), selected = "Count"),
                                                     conditionalPanel(
                                                       condition = "input.choice_map_counts == 'Count'",
                                                       selectInput("year_map_counts", "Year", choices = c(2018, 2019, 2020))
                                                     ),
                                                     conditionalPanel(
                                                       condition = "input.choice_map_counts == 'Change from Previous Year'",
-                                                      selectInput("year_map_counts", "Year", choices = c(2019, 2020))
+                                                      selectInput("year_map_counts2", "Year", choices = c(2019, 2020))
                                                     )
                                           ),
                                           mainPanel(  
                                             fluidRow(plotOutput("map_counts")),
                                             br(), br(),
-                                            # fluidRow(column(width = 12, DT::dataTableOutput("table_map_counts")))
-                                            fluidRow(reactableOutput("table_map_counts"))
+                                            fluidRow(
+                                              column(width = 2),
+                                              column(width = 8, DT::dataTableOutput("table_map_counts"))),
+                                              column(width = 2)
+                                            # fluidRow(reactableOutput("table_map_counts"))
                                           )
                                 )
                         ), #tabItem
