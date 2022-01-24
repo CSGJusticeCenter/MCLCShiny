@@ -551,6 +551,7 @@ df_pop$metric <- factor(df_pop$metric, levels=c("other_population","violator_pop
 
 
 csg <- adm_pop_long %>% rename(state = states)
+bjs <- df_prob_parole
 
 ########
 # save Rdata
