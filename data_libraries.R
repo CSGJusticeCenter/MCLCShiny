@@ -25,6 +25,8 @@ library(dashboardthemes)
 library(labelled)
 library(reactable)
 library(shiny)
+library(scico)
+library(leaflegend)
 
 #______________________________________________________
 # read in R data
@@ -41,21 +43,34 @@ load("us.Rda")
 load("us_map.Rda")
 load("centers.Rda")
 load("df_prob_parole.Rda")
+load("csg.Rda")
+load("bjs.Rda")
 
 #______________________________________________________
 # colors
 #______________________________________________________
 
-# colours = c("#264d59", "#43978d", "#f9e07f", "#f9ad6a", "#d46c4e")
-colours = c("#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#08589e")
+change_colors = c("#264d59", "#43978d", "#f9e07f", "#f9ad6a", "#d46c4e")
+count_colors = c("#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#08589e")
 
-par_cols <- c("Parole Entries"="#7B898F",
-              "Parole Exits"="#FA9F8D",
-              "Parole Population"="#ECE9E9")
+par_cols <- c("Parole Entries"="#B05D24",
+              "Parole Exits"="#355DA1",
+              "Parole Population"="#DEF0F6")
 
-prob_cols <- c("Probation Entries"="#7B898F",
-               "Probation Exits"="#FA9F8D",
-               "Probation Population"="#ECE9E9")
+prob_cols <- c("Probation Entries"="#B05D24",
+               "Probation Exits"="#355DA1",
+               "Probation Population"="#DEF0F6")
+
+total_co <- "#DEF0F6"
+viol_co <- "#B05D24"
+tech_co <- "#F3A63F"
+new_o_co <- "#B6DEEB"
+
+tech_pp_co <- "#F3A63F"
+new_o_pp_co <- "#B6DEEB"
+
+entries <- "#B05D24"
+exits <- "#355DA1"
 
 #______________________________________________________
 # custom theme
@@ -122,7 +137,7 @@ customTheme <- shinyDashboardThemeDIY(
   ,boxBorderRadius = "3"
   ,boxShadowSize = "none"
   ,boxShadowColor = ""
-  ,boxTitleSize = "16"
+  ,boxTitleSize = "14"
   ,boxDefaultColor = "#2D2D2D"
   ,boxPrimaryColor = "#5F9BD5"
   ,boxInfoColor = "#C8C8C8"

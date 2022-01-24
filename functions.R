@@ -11,6 +11,34 @@
 # custom functions
 ##########################
 
+theme_csgjc_donut_plot <- function(){ 
+  
+  # assign font family up front
+  font <- "Arial"   
+  
+  # replace elements we want to change
+  theme_minimal() %+replace%    
+    
+    theme(
+      legend.position = "none", 
+      plot.title = element_text(hjust = 0.5, 
+                                # face = "bold",
+                                size = 25,
+                                colour = "#000000"),
+      axis.title.x = element_blank(),
+      axis.title.y = element_blank(),
+      axis.text.x = element_blank(),
+      axis.text.y = element_blank(),
+      # axis.line.x.bottom = element_line(size = 0.75, 
+      #                                   linetype = "solid", 
+      #                                   colour = "#000000"),
+      axis.line.y = element_blank(),
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      panel.border = element_blank()     
+    )
+}
+
 theme_csgjc_areaplot <- function(){ 
   
   # assign font family up front
@@ -26,6 +54,7 @@ theme_csgjc_areaplot <- function(){
                                 # face = "bold",
                                 size = 16,
                                 colour = "#000000"),
+      plot.caption = element_text(hjust = 0.5, face = "italic"),
       axis.title.x = element_blank(),
       axis.title.y = element_blank(),
       axis.text.x = element_text(size = 14, 
@@ -52,6 +81,7 @@ theme_csgjc_plot_legend <- function(){
                                 # face = "bold",
                                 size = 16,
                                 colour = "#000000"),
+      plot.caption = element_text(hjust = 0.5, face = "italic"),
       axis.title.x = element_blank(),
       axis.title.y = element_blank(),
       axis.text.x = element_text(size = 14, 
@@ -86,6 +116,7 @@ theme_csgjc_prob_parole <- function(){
                                 # face = "bold",
                                 size = 16,
                                 colour = "#000000"),
+      plot.caption = element_text(hjust = 0.5, face = "italic"),
       axis.title.x = element_blank(),
       axis.title.y = element_blank(),
       axis.text.x = element_text(size = 14, 
@@ -96,4 +127,32 @@ theme_csgjc_prob_parole <- function(){
       panel.grid.minor = element_blank(),
       panel.border = element_blank()    
     )
+}
+
+
+valueBox2 <- function(value, title, subtitle, icon = NULL, color = "aqua", width = 4, href = NULL){
+  
+  shinydashboard:::validateColor(color)
+  
+  if (!is.null(icon))
+    shinydashboard:::tagAssert(icon, type = "i")
+  
+  boxContent <- div(
+    class = paste0("small-box bg-", color),
+    div(
+      class = "inner",
+      tags$small(title),
+      h3(value),
+      p(subtitle)
+    ),
+    if (!is.null(icon)) div(class = "icon-large", icon)
+  )
+  
+  if (!is.null(href)) 
+    boxContent <- a(href = href, boxContent)
+  
+  div(
+    class = if (!is.null(width)) paste0("col-sm-", width), 
+    boxContent
+  )
 }

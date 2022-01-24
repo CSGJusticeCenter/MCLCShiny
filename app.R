@@ -32,15 +32,19 @@ shinyApp(ui = ui, server = server)
 # https://rud.is/b/2015/05/14/geojson-hexagonal-statebins-in-r/
 # https://www.r-graph-gallery.com/328-hexbin-map-of-the-usa.html
 
+# scales
+# https://stackoverflow.com/questions/48215003/labels-for-custom-diverging-color-gradient-in-ggplot
+# https://github.com/thomasp85/scico/issues/6
+
 # to do
 # change locations of total and sup viols to have their own rows
 # compare data to BJS
 
 #final palette
-total_co <- "#ECE9E9"
-viol_co <- "#FA9F8D"
-tech_co <- "#7B898F"
-new_o_co <- "#C1CAC7"
+# total_co <- "#ECE9E9"
+# viol_co <- "#FA9F8D"
+# tech_co <- "#7B898F"
+# new_o_co <- "#C1CAC7"
 
 # csg color
 # Red: B05D24 (any type on this color should be white, not black, for accessibility)

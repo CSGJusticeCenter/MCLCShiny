@@ -4,6 +4,9 @@ server <- function(input, output, session) {
   # Map Explorer
   #-------------------------------------------------------------------------------
   
+  # change sidebar depending on selection 
+  # change from previous year only includes years 2019-2020
+  # count includes years 2018-2020
   df_map_temp <- reactive ({
     if(input$choice_map_counts == "Count"){     if(input$year_map_counts == "2018"){filter(mclc_explorer, year=="2018" & choice == "Count")}
                                            else if(input$year_map_counts == "2019"){filter(mclc_explorer, year=="2019" & choice == "Count")}
@@ -13,12 +16,14 @@ server <- function(input, output, session) {
     else if(input$choice_map_counts == "Change from Previous Year" & input$year_map_counts2 == "2020"){filter(mclc_explorer, year == "2020" & choice == "Change from Previous Year")}
   })
   
+  # filter data depending on choice above
   df_map <- reactive({ 
     df_map_temp() %>% 
       filter(adm_or_pop == input$adm_or_pop_map_counts,
              metric == input$data_map_counts)
   })
   
+  # format for datatable
   df_map_table <- reactive({
     df_map() %>%
       arrange(desc(total)) %>%
@@ -30,12 +35,13 @@ server <- function(input, output, session) {
              choice)
   })
   
+  ##############
+  # Hex map
+  ##############
+  
   output$map_counts <- renderPlot({
 
     df_map <- sp::merge(us, df_map(), by.x = 'iso3166_2', by.y = "Code")
-
-    # title
-    title <- paste0(input$data_map_counts, " Prison ", input$adm_or_pop_map_counts, " in ", input$year_map_counts)
 
     # map
     gg <- ggplot()
@@ -51,19 +57,10 @@ server <- function(input, output, session) {
                         aes(map_id=iso3166_2),
                         fill="#ffffff", alpha=0, color="white",
                         show_guide=FALSE)
-    gg +
+    gg <- gg +
       geom_text(data=centers, aes(label = id, x = x, y = y), color = "white", size = 4) +
-      scale_fill_gradientn("Number of People",
-                           colours = colours,
-                           na.value="#D3D3D3",
-                           label = scales::comma,
-                           guide = guide_legend(keyheight = unit(3, units = "mm"),
-                                                keywidth=unit(12, units = "mm"),
-                                                label.position = "bottom",
-                                                title.position = 'top', nrow=1)) +
       coord_map() +
       labs(x=NULL, y=NULL) +
-      ggtitle(title) +
       theme_bw() +
       theme(panel.border=element_blank(),
             panel.grid=element_blank(),
@@ -75,39 +72,59 @@ server <- function(input, output, session) {
             plot.title = element_text(hjust = 0.5,
                                       face = "bold",
                                       size = 16))
-  })
+    
+    if(input$choice_map_counts == "Count"){
+      
+      title <- paste0(input$data_map_counts, " Prison ", input$adm_or_pop_map_counts, " in ", input$year_map_counts)
+      gg + scale_fill_gradientn("Number of People",
+                                colours = count_colors,
+                                na.value="#D3D3D3",
+                                label = scales::comma,
+                                guide = guide_legend(keyheight = unit(3, units = "mm"),
+                                                     keywidth=unit(12, units = "mm"),
+                                                     label.position = "bottom",
+                                                     title.position = 'top', nrow=1)) +
+           ggtitle(title)
+    }
+    
+    else if(input$choice_map_counts == "Change from Previous Year"){
+      
+      change_year <- as.numeric(input$year_map_counts2)
+      change_year <- change_year - 1
+      title <- paste0("Change in ", input$data_map_counts, " Prison ", input$adm_or_pop_map_counts, " between ", change_year, " and ", input$year_map_counts2)
+      
+      gg + scale_fill_scico("Change from Previous Year",
+                            palette = "vik", 
+                            na.value="#D3D3D3",
+                            label = scales::percent,
+                            limits = c(-1, 1)*max(abs(df_map()$total)),
+                            guide = guide_legend(keyheight = unit(3, units = "mm"),
+                                                 keywidth=unit(12, units = "mm"),
+                                                 label.position = "bottom",
+                                                 title.position = 'top', nrow=1)) +
+           ggtitle(title)
+    }
+    
+  }, height="auto")
   
-  # output$table_map_counts <- renderReactable({
-  #   df_map_table() %>%
-  #     reactable(highlight = TRUE,
-  #               pagination = TRUE,
-  #               showSortable = TRUE) 
-  #   # outlined = TRUE,
-  #   # borderless = TRUE,
-  #   # width = 650,
-  #   # theme = reactableTheme(highlightColor = "#deebf7",
-  #   #                        headerStyle = list(background = "#deebf7"),
-  #   #                        style = list(#fontFamily = "Cambria",
-  #   #                                     fontSize = 14)))
-  # })
+  ##############
+  # Table changes depending on count vs change
+  ##############
   
   output$table_map_counts <- DT::renderDataTable(
     
     if(input$choice_map_counts == "Count"){
       
       df_map_table() %>% 
-        datatable(extensions = 'Buttons',
+        datatable(#extensions = 'Buttons',
                   selection = 'single',
                   rownames = FALSE,
                   options = list(
-                    searching = FALSE,
+                    searching = TRUE,
                     # hide choice column
                     columnDefs = list(list(visible=FALSE, targets=c(5))),
-                    dom = "Blfrtip",
-                    buttons =
-                      list("copy", list(
-                        extend = "collection", buttons = c("csv", "excel", "pdf"),
-                        text = "Download")), 
+                    # dom = "Blfrtip",
+                    # buttons = list("copy", list(extend = "collection", buttons = c("csv", "excel", "pdf"),text = "Download")), 
                     lengthMenu = list(c(5, 10, 20, -1), 
                                       c(5, 10, 20, "All")),                 
                     pageLength = 5)) %>% 
@@ -120,23 +137,17 @@ server <- function(input, output, session) {
     }
     else if(input$choice_map_counts == "Change from Previous Year"){
       
-      # df_map_table()$Value <- df_map_table()$Value/100
-        
       df_map_table() %>% 
-        mutate(Value = Value/100) %>% 
         arrange(Value) %>% 
-        datatable(extensions = 'Buttons',
+        datatable(#extensions = 'Buttons',
                   selection = 'single',
                   rownames = FALSE,
                   options = list(
-                    searching = FALSE,
+                    searching = TRUE,
                     # hide choice column
                     columnDefs = list(list(visible=FALSE, targets=c(5))),
-                    dom = "Blfrtip",
-                    buttons =
-                      list("copy", list(
-                        extend = "collection", buttons = c("csv", "excel", "pdf"),
-                        text = "Download")), 
+                    # dom = "Blfrtip",
+                    # buttons = list("copy", list(extend = "collection", buttons = c("csv", "excel", "pdf"),text = "Download")), 
                     lengthMenu = list(c(5, 10, 20, -1), 
                                       c(5, 10, 20, "All")),                 
                     pageLength = 5)) %>% 
@@ -146,11 +157,10 @@ server <- function(input, output, session) {
         # add % sign
         formatPercentage('Value', digits = 2) 
     }
-    
   )
   
   #-------------------------------------------------------------------------------
-  # View and download data
+  # Leaflet Map
   #-------------------------------------------------------------------------------
 
 # output$table_out <- DT::renderDataTable(
@@ -172,6 +182,52 @@ server <- function(input, output, session) {
 #              ) # end of options
 #   )
 # )
+  
+  output$leaflet_map <- renderLeaflet({
+    
+    df_map <- sp::merge(us, df_map(), by.x = 'iso3166_2', by.y = "Code")
+    
+    # pal_fun <- colorQuantile("YlOrRd", NULL, n = 5)
+    pal_fun <- colorNumeric('inferno', df_map$total)
+    
+    p_popup <- paste0(df_map$states, ": ", round(df_map$total, 2), "%")
+    
+    leaflet(df_map, options = leafletOptions(zoomControl = FALSE,
+                                             minZoom = 3.5, 
+                                             maxZoom = 3.5,
+                                             dragging = FALSE)) %>%
+      
+      addPolygons(stroke = FALSE, # remove borders
+                  fillColor = ~pal_fun(total), 
+                  color = "white",
+                  fillOpacity = 0.8, 
+                  smoothFactor = 0.5, 
+                  popup = p_popup) %>% 
+      
+      # set view to US
+      setView(lng = -96.25, lat = 30.50, zoom = 3.5) 
+    
+      # %>%
+      # addLegend(position = "topright",
+      #           # colors = brewer.pal(7, "Blues"),
+      #           pal = pal_fun,
+      #           values = ~df_map$total,
+      #           opacity = 1,
+      #           # labels = paste0("up to ", format(breaks_qt$brks[-1], digits = 2, big.mark = ",")),
+      #           labFormat = labelFormat(suffix="%"),
+      #           title = "<strong>Count</strong>") 
+    
+      # %>%
+      # addLegendNumeric(pal = pal_fun,
+      #                  values = df_map$total,
+      #                  orientation = 'horizontal',
+      #                  position = 'topleft',
+      #                  width = 150,
+      #                  height = 20,
+      #                  labFormat = labelFormat(suffix="%"),
+      #                  title = '% Change')
+
+  })
   
   #-------------------------------------------------------------------------------
   # State Reports
@@ -209,7 +265,7 @@ server <- function(input, output, session) {
     totals_tech <- df_totals %>% 
       filter(metric == "Technical")
     
-    title <- paste0("Prison ", input$adm_or_pop,"\n")
+    title <- paste0("Prison ", input$adm_or_pop, " by Type\n")
     
     df_totals$year <- as.numeric(df_totals$year)
     df_totals$metric <- as.factor(df_totals$metric)
@@ -232,15 +288,16 @@ server <- function(input, output, session) {
       geom_text(size = 4.5, aes(label=ifelse(year != min(year) & year != max(year),scales::comma(total), NA), fill = NULL), data = totals_viols, position = position_stack(vjust = 1.5), check_overlap = TRUE) +
       geom_text(size = 4.5, aes(x = year - 0.15,label=ifelse(year == max(year),scales::comma(total), NA), fill = NULL),     data = totals_viols, position = position_stack(vjust = 1.65), check_overlap = TRUE) +
       # tech viols
-      geom_text(size = 4.5, aes(x = year + 0.15,label=ifelse(year == min(year),scales::comma(total), NA), fill = NULL),     data = totals_tech, position = position_stack(vjust = 1.22), check_overlap = TRUE) +
-      geom_text(size = 4.5, aes(label=ifelse(year != min(year) & year != max(year),scales::comma(total), NA), fill = NULL), data = totals_tech, position = position_stack(vjust = 1.22), check_overlap = TRUE) +
-      geom_text(size = 4.5, aes(x = year - 0.15,label=ifelse(year == max(year),scales::comma(total), NA), fill = NULL),     data = totals_tech, position = position_stack(vjust = 1.26), check_overlap = TRUE) +
+      geom_text(color = "white", size = 4.5, aes(x = year + 0.15,label=ifelse(year == min(year),scales::comma(total), NA), fill = NULL),     data = totals_tech, position = position_stack(vjust = 1.22), check_overlap = TRUE) +
+      geom_text(color = "white", size = 4.5, aes(label=ifelse(year != min(year) & year != max(year),scales::comma(total), NA), fill = NULL), data = totals_tech, position = position_stack(vjust = 1.22), check_overlap = TRUE) +
+      geom_text(color = "white", size = 4.5, aes(x = year - 0.15,label=ifelse(year == max(year),scales::comma(total), NA), fill = NULL),     data = totals_tech, position = position_stack(vjust = 1.26), check_overlap = TRUE) +
       # colors
       scale_fill_manual(values = c(total_co, viol_co, tech_co), 
                         labels = c("Total", "Supervision Violation", "Technical Violation"), 
                         breaks = c("Other", "Supervision Violations", "Technical"),
                         name = "") +  
       scale_x_continuous(breaks = c(1,2,3), labels = c("            2018", "2019", "2020             ")) 
+      # labs(caption="\nSource: More Community, Less Confinement (2020)")
   })
   
   # Totals barchart
@@ -280,12 +337,196 @@ server <- function(input, output, session) {
       scale_y_continuous(label = scales::comma,
                          limits = c(0, 1.17*max(df_totals$total)),
                          expand = c(0,0)) +
+      coord_cartesian(clip = "off") 
+      # labs(caption="\nSource: More Community, Less Confinement (2020)")
+    
+  })
+  
+  ##############
+  # Donut charts and value boxes
+  ##############
+  
+  # output$donutchart_sup <- renderGirafe({
+  #   
+  #   # filter data depending on input
+  #   df_donutchart <- 
+  #     adm_pop_long %>% 
+  #     filter(states == input$state &
+  #              adm_or_pop == input$adm_or_pop,
+  #            year == 2020) %>% 
+  #     group_by(metric, year) %>% 
+  #     summarise(total = sum(total)) %>% 
+  #     filter(metric == "Other" | metric == "Supervision Violations") %>% 
+  #     select(-year)
+  #   
+  #   # sum 
+  #   df_donutchart$overall <- sum(df_donutchart$total)
+  #   
+  #   # create variables
+  #   df_donutchart <- df_donutchart %>% group_by(metric) %>% 
+  #     mutate(percentage = total / overall,
+  #            hover_text = paste0(metric, ": ", total)) %>%
+  #     mutate(percentage_label = paste0(round(100 * percentage, 0), "%")) %>% 
+  #     select(-overall)
+  #   
+  #   # make dataframe
+  #   df_donutchart <- as.data.frame(df_donutchart)
+  #   
+  #   # donut plot
+  #   donut_plot <- ggplot(df_donutchart, aes_string(y = 'total', fill = 'metric')) +
+  #     geom_bar_interactive(
+  #       aes(x = 1, tooltip = hover_text),
+  #       width = 0.5,
+  #       stat = "identity",
+  #       show.legend = FALSE
+  #     ) +
+  #     annotate(
+  #       geom = "text",
+  #       x = 0,
+  #       y = 0,
+  #       label = df_donutchart[["percentage_label"]][df_donutchart[["metric"]] == "Supervision Violations"],
+  #       size = 20,
+  #       color = "#000000"
+  #     ) +
+  #     scale_fill_manual(values = c(Other = "#DEF0F6", `Supervision Violations` = "#E18731")) +
+  #     coord_polar(theta = "y") +
+  #     ggtitle("Proportion of Prison Admissions\nThat Are Supervision Violations") +
+  #     theme_void() +
+  #     theme(plot.title = element_text(size = 20,
+  #                                     hjust = 0.5))
+  #   
+  #   ggiraph(ggobj = donut_plot)
+  # })
+  
+  # filter data
+  df_total_18 <- reactive({
+    adm_pop_long %>%
+      filter(states == input$state &
+             adm_or_pop == input$adm_or_pop &
+             year == "2019" &
+             metric == "Total")
+  })
+  
+  vb <- valueBox2(
+    value = "10,080",
+    title = "Admissions in 2020",
+    subtitle = tagList(HTML("&darr;"), "25% from 2019"),
+    # icon = icon("arrow-down"),
+    # width = 10,
+    color = "green",
+    href = NULL
+  )
+  
+  vb2 <- valueBox2(
+    value = "4,761",
+    title = "Supervision Violations in 2020",
+    subtitle = tagList(HTML("&darr;"), "30% from 2019"),
+    # icon = icon("arrow-down"),
+    # width = 10,
+    color = "green",
+    href = NULL
+  )
+  
+  vb3 <- valueBox2(
+    value = "2,080",
+    title = "Technical Violations in 2020",
+    subtitle = tagList(HTML("&darr;"), "19% from 2019"),
+    # icon = icon("arrow-down"),
+    # width = 10,
+    color = "green",
+    href = NULL
+  )
+  
+  output$total_change <- renderValueBox(vb)
+  
+  output$sup_change <- renderValueBox(vb2)
+  
+  output$tech_change <- renderValueBox(vb3)
+  
+  ##################################
+  # Probation and Parole Charts
+  ##################################
+  
+  # parole plot
+  output$barchart_parole <- renderPlot({
+    
+    df_parole <- 
+      adm_pop_long %>% 
+      filter(states == input$state &
+               adm_or_pop == input$adm_or_pop &
+               prob_vs_parole == "Parole") %>% 
+      filter(metric == "Technical" | metric == "New Offense")  %>% 
+      group_by(metric, year) %>% 
+      summarise(total = sum(total)) 
+    
+    totals <- df_parole %>%
+      group_by(year) %>%
+      summarise(total = sum(total))
+    
+    title <- paste0("Parole ",input$adm_or_pop, " by Type\n")
+    
+    ggplot(data = df_parole,
+           aes_string(x = 'year', y = 'total', fill = 'metric')) +
+      geom_bar(stat = "identity", position = "dodge", alpha = 1) +
+      geom_text(aes(label=scales::comma(total)),
+                position=position_dodge(width = 0.9),
+                size = 4.5,
+                colour = "#000000",
+                vjust = -0.5) +
+      theme_csgjc_plot_legend() +
+      ggtitle(title) +
+      theme(plot.margin = margin(0.1, 0.1, 0.1, 0.1, "cm")) +
+      scale_fill_manual(values = c(new_o_co, tech_co),
+                        name = "") +
+      scale_y_continuous(label = scales::comma,
+                         limits = c(0, 1.17*max(df_parole$total)),
+                         expand = c(0,0)
+      ) +
+      coord_cartesian(clip = "off")
+    
+  })
+  
+  # prob plot
+  output$barchart_prob <- renderPlot({
+    
+    df_prob <- 
+      adm_pop_long %>% 
+      filter(states == input$state &
+               adm_or_pop == input$adm_or_pop &
+               prob_vs_parole == "Probation") %>% 
+      filter(metric == "Technical" | metric == "New Offense")  %>% 
+      group_by(metric, year) %>% 
+      summarise(total = sum(total)) 
+    
+    totals <- df_prob %>%
+      group_by(year) %>%
+      summarise(total = sum(total))
+    
+    title <- paste0("Probation ",input$adm_or_pop, " by Type\n")
+    
+    ggplot(data = df_prob,
+           aes_string(x = 'year', y = 'total', fill = 'metric')) +
+      geom_bar(stat = "identity", position = "dodge", alpha = 1) +
+      geom_text(aes(label=scales::comma(total)),
+                position=position_dodge(width = 0.9),
+                size = 4.5,
+                colour = "#000000",
+                vjust = -0.5) +
+      theme_csgjc_plot_legend() +
+      ggtitle(title) +
+      theme(plot.margin = margin(0.1, 0.1, 0.1, 0.1, "cm")) +
+      scale_fill_manual(values = c(new_o_co, tech_co),
+                        name = "") +
+      scale_y_continuous(label = scales::comma,
+                         limits = c(0, 1.17*max(df_prob$total)),
+                         expand = c(0,0)
+      ) +
       coord_cartesian(clip = "off")
     
   })
   
   # prob parole bar and line chart
-  output$barchart_parole <- renderPlot({
+  output$barchart_bjs_parole <- renderPlot({
     
     df <- 
       df_prob_parole %>% 
@@ -310,8 +551,8 @@ server <- function(input, output, session) {
     ggplot()+
       geom_bar(data = areas, aes(x=year, y=total, fill=metric),
                stat="identity", width = 0.5) +
-      geom_line(data = entry, aes(x = year, y= total), size=1.25, color = "#7B898F")+
-      geom_line(data = exit, aes(x = year, y= total), size=1.25, color = "#FA9F8D")+
+      geom_line(data = entry, aes(x = year, y= total), size=1.25, color = entries)+
+      geom_line(data = exit, aes(x = year, y= total), size=1.25, color = exits)+
       geom_text(data = areas, aes(x = year, y = total, label = scales::comma(total)),
                 position=position_dodge(0.8), vjust = -0.6, size = 5) +
       scale_fill_manual(values=par_cols) +
@@ -319,12 +560,13 @@ server <- function(input, output, session) {
                          limits = c(0, 1.15*max(areas$total)),
                          expand = c(0,0)) +
       ggtitle(title)+
-      theme_csgjc_prob_parole()
+      theme_csgjc_prob_parole() +
+      labs(caption="\nSource: BJS Annual Parole Survey (2018)")
     
   })
   
   # prob parole bar and line chart
-  output$barchart_prob <- renderPlot({
+  output$barchart_bjs_prob <- renderPlot({
     
     df <- 
       df_prob_parole %>% 
@@ -349,8 +591,8 @@ server <- function(input, output, session) {
     ggplot()+
       geom_bar(data = areas, aes(x=year, y=total, fill=metric),
                stat="identity", width = 0.5) +
-      geom_line(data = entry, aes(x = year, y= total), size=1.25, color = "#7B898F")+
-      geom_line(data = exit, aes(x = year, y= total), size=1.25, color = "#FA9F8D")+
+      geom_line(data = entry, aes(x = year, y= total), size=1.25, color = entries)+
+      geom_line(data = exit, aes(x = year, y= total), size=1.25, color = exits)+
       geom_text(data = areas, aes(x = year, y = total, label = scales::comma(total)),
                 position=position_dodge(0.8), vjust = -0.6, size = 5) +
       scale_fill_manual(values=prob_cols) +
@@ -358,12 +600,29 @@ server <- function(input, output, session) {
                          limits = c(0, 1.15*max(areas$total)),
                          expand = c(0,0)) +
       ggtitle(title)+
-      theme_csgjc_prob_parole()
+      theme_csgjc_prob_parole() +
+      labs(caption="\nSource: BJS Annual Probation Survey (2018)")
     
   })
   
-  #######################################View data for state
-
+  #-------------------------------------------------------------------------------
+  # Download Data
+  #-------------------------------------------------------------------------------
+  
+  datasetInput <- reactive({
+    dataset <- switch(input$dataset,
+                      "Bureau of Justice Statistics" = bjs,
+                      "More Community, Less Confinement (CSG)" = csg)
+    dataset <- dataset %>% filter(year %in% input$year_table |
+                                    year %in% input$year_table2) %>% 
+      filter(state %in% input$state_table |
+             state %in% input$state_table2)
+  })
+  
+  # Generate a summary of the dataset ----
+  output$main_table <- DT::renderDataTable({
+    datatable(datasetInput())
+  })
   
   
 }

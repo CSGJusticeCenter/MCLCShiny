@@ -206,6 +206,7 @@ pop <- rbind(pop18, pop19, pop20)
 adm <- clean_names(adm)
 pop <- clean_names(pop)
 
+
 ########
 # Wide form
 ########
@@ -294,7 +295,7 @@ mclc <- gather(mclc, data, total, total_admissions:other_population)
 # create change from 2018 to 2019 to 2020
 mclc <- mclc %>%
   group_by(states, data) %>%
-  mutate(change = (total/lag(total) - 1) * 100)
+  mutate(change = total/lag(total) - 1)
 
 # # round
 # mclc$change <- round(mclc$change, 0)
@@ -546,6 +547,11 @@ df_pop$year <- as.numeric(df_pop$year)
 # order factor for plotting
 df_pop$metric <- factor(df_pop$metric, levels=c("other_population","violator_population"))
 
+
+
+
+csg <- adm_pop_long %>% rename(state = states)
+
 ########
 # save Rdata
 ########
@@ -561,4 +567,11 @@ save(us,             file="us.Rda")
 save(centers,        file="centers.Rda")
 save(df_pop,         file="df_pop.Rda")
 save(df_prob_parole, file="df_prob_parole.Rda")
+save(bjs,            file="bjs.Rda")
+save(csg,            file="csg.Rda")
+
+
+
+
+
 
