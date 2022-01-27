@@ -463,7 +463,7 @@ server <- function(input, output, session) {
       group_by(year) %>%
       summarise(total = sum(total))
     
-    title <- paste0("Parole ",input$adm_or_pop, " by Type\n")
+    title <- paste0("Prison ",input$adm_or_pop, " due to Parole Violations by Type\n")
     
     ggplot(data = df_parole,
            aes_string(x = 'year', y = 'total', fill = 'metric')) +
