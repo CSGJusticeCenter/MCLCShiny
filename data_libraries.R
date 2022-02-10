@@ -27,6 +27,7 @@ library(reactable)
 library(shiny)
 library(scico)
 library(leaflegend)
+library(mapproj)
 
 #______________________________________________________
 # read in R data

@@ -1,3 +1,6 @@
+source("data_libraries.R")
+source("functions.R")
+
 ui <- dashboardPage(dashboardHeader(title = "MCLC"), 
                     sidebar = dashboardSidebar(
                       sidebarMenu(id = "tabs",
