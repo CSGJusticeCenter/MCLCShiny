@@ -8,8 +8,6 @@
 #######################################
 
 # run R files
-source("data_libraries.R")
-source("functions.R")
 source("ui.R")
 source("server.R")
 

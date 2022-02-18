@@ -14,6 +14,8 @@
 #    "Data for web team v13.xlsx"
 #######################################
 
+library(formattable)
+
 ########
 # Import data
 ########
