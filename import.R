@@ -217,7 +217,6 @@ pop <- rbind(pop18, pop19, pop20)
 adm <- clean_names(adm)
 pop <- clean_names(pop)
 
-
 ########
 # Wide form
 ########
@@ -505,6 +504,67 @@ adm_pop_long <- adm_pop_long %>%
 adm_pop_long$year <- as.factor(adm_pop_long$year)
 
 ########
+# State table under graph
+########
+
+# select variables
+state_table <- adm_pop_long %>% select(states,
+                                       year,
+                                       data,
+                                       total,
+                                       metric,
+                                       adm_or_pop)
+
+# make wide form
+state_table <- spread(state_table, key = year, value = total)
+
+# remove totals
+state_table <- state_table %>% ungroup() %>% 
+  filter(data != "total_violation_admissions" &
+         data != "total_violation_population" &
+         data != "other_admissions" &
+         data != "other_population")
+
+state_table <- state_table %>% mutate(type = case_when(
+  data == "total_admissions"                            ~ "Total",
+  data == "total_probation_violation_admissions"        ~ "Supervision Violations",
+  data == "new_offense_probation_violation_admissions"  ~ "New Offense",
+  data == "technical_probation_violation_admissions"    ~ "Technical",
+  data == "total_parole_violation_admissions"           ~ "Supervision Violations",
+  data == "new_offense_parole_violation_admissions"     ~ "New Offense",
+  data == "technical_parole_violation_admissions"       ~ "Technical",
+  
+  data == "total_population"                            ~ "Total",
+  data == "total_probation_violation_population"        ~ "Supervision Violations",
+  data == "new_offense_probation_violation_population"  ~ "New Offense",
+  data == "technical_probation_violation_population"    ~ "Technical",
+  data == "total_parole_violation_population"           ~ "Supervision Violations",
+  data == "new_offense_parole_violation_population"     ~ "New Offense",
+  data == "technical_parole_violation_population"       ~ "Technical",
+))
+
+state_table <- state_table %>% mutate(text = case_when(
+  data == "total_admissions"                            ~ "Total Admissions",
+  data == "total_probation_violation_admissions"        ~ "Probation Admissions",
+  data == "new_offense_probation_violation_admissions"  ~ "Probation Admissions",
+  data == "technical_probation_violation_admissions"    ~ "Probation Admissions",
+  data == "total_parole_violation_admissions"           ~ "Parole Admissions",
+  data == "new_offense_parole_violation_admissions"     ~ "Parole Admissions",
+  data == "technical_parole_violation_admissions"       ~ "Parole Admissions",
+  
+  data == "total_population"                            ~ "Total Population",
+  data == "total_probation_violation_population"        ~ "Probation Population",
+  data == "new_offense_probation_violation_population"  ~ "Probation Population",
+  data == "technical_probation_violation_population"    ~ "Probation Population",
+  data == "total_parole_violation_population"           ~ "Parole Population",
+  data == "new_offense_parole_violation_population"     ~ "Parole Population",
+  data == "technical_parole_violation_population"       ~ "Parole Population",
+))
+
+# rearrange data
+state_table <- state_table %>% select(states, metric, adm_or_pop, type, text, data, everything())
+
+########
 # National numbers
 # get data from website for now 
 # state data will change so national numbers will change
@@ -572,6 +632,7 @@ save(mclc_change,    file="mclc_change.Rda")
 save(mclc,           file="mclc.Rda")
 save(mclc_explorer,  file="mclc_explorer.Rda")
 save(adm_pop_long,   file="adm_pop_long.Rda")
+save(state_table,    file="state_table.Rda")
 save(df_adm,         file="df_adm.Rda")
 save(df_pop,         file="df_pop.Rda")
 save(us_map,         file="us_map.Rda")

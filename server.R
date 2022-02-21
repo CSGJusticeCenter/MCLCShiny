@@ -163,26 +163,6 @@ server <- function(input, output, session) {
   # Leaflet Map
   #-------------------------------------------------------------------------------
 
-# output$table_out <- DT::renderDataTable(
-#   datatable(data = mclc_datatable,
-#             extensions = 'Buttons',
-#             filter = "top",
-#             selection = 'single',
-#             options = list(
-#                dom = "Blfrtip",
-#                buttons =
-#                  list("copy", list(
-#                    extend = "collection", buttons = c("csv", "excel", "pdf"),
-#                    text = "Download")), # end of buttons customization
-#                # customize the length menu
-#                lengthMenu = list(c(25, 50, 100, -1), # declare values
-#                                  c(25, 50, 100, "All") # declare titles
-#                ), # end of lengthMenu customization
-#                pageLength = 25
-#              ) # end of options
-#   )
-# )
-  
   output$leaflet_map <- renderLeaflet({
     
     df_map <- sp::merge(us, df_map(), by.x = 'iso3166_2', by.y = "Code")
@@ -206,26 +186,6 @@ server <- function(input, output, session) {
       
       # set view to US
       setView(lng = -96.25, lat = 30.50, zoom = 3.5) 
-    
-      # %>%
-      # addLegend(position = "topright",
-      #           # colors = brewer.pal(7, "Blues"),
-      #           pal = pal_fun,
-      #           values = ~df_map$total,
-      #           opacity = 1,
-      #           # labels = paste0("up to ", format(breaks_qt$brks[-1], digits = 2, big.mark = ",")),
-      #           labFormat = labelFormat(suffix="%"),
-      #           title = "<strong>Count</strong>") 
-    
-      # %>%
-      # addLegendNumeric(pal = pal_fun,
-      #                  values = df_map$total,
-      #                  orientation = 'horizontal',
-      #                  position = 'topleft',
-      #                  width = 150,
-      #                  height = 20,
-      #                  labFormat = labelFormat(suffix="%"),
-      #                  title = '% Change')
 
   })
   
@@ -238,34 +198,29 @@ server <- function(input, output, session) {
     paste("Trends in ", input$state)
   })  
   
-  # # Print state name and adm or pop selected
-  # output$selected_state_adm_pop <- renderText({ 
-  #   paste("This snapshot shows available data for ", input$state, " from 2018 to 2020.")
-  # })
-  
-  # Totals areachart
-  output$areachart <- renderPlot({ 
+  # Total admissions and sup viols chart
+  output$totals_chart <- renderPlot({ 
     
-    df_totals <- 
-      adm_pop_long %>% 
+    df_totals <-
+      adm_pop_long %>%
       filter(states == input$state &
-               adm_or_pop == input$adm_or_pop) %>% 
-      group_by(metric, year) %>% 
-      summarise(total = sum(total)) %>% 
-      filter(metric == "Other" | metric == "Technical" | metric == "Supervision Violations")  
+             adm_or_pop == input$adm_or_pop) %>%
+      group_by(metric, year) %>%
+      summarise(total = sum(total)) %>%
+      filter(metric == "Other" | metric == "Technical" | metric == "Supervision Violations")
     
     totals <- df_totals %>%
-      filter(metric != "Technical") %>% 
+      filter(metric != "Technical") %>%
       group_by(year) %>%
-      summarise(total = sum(total)) 
+      summarise(total = sum(total))
     
-    totals_viols <- df_totals %>% 
+    totals_viols <- df_totals %>%
       filter(metric == "Supervision Violations")
     
-    totals_tech <- df_totals %>% 
+    totals_tech <- df_totals %>%
       filter(metric == "Technical")
     
-    title <- paste0("Prison ", input$adm_or_pop, " by Type\n")
+    title <- paste0("Prison ", input$adm_or_pop, "\n")
     
     df_totals$year <- as.numeric(df_totals$year)
     df_totals$metric <- as.factor(df_totals$metric)
@@ -273,12 +228,19 @@ server <- function(input, output, session) {
     totals_viols$year <- as.numeric(totals_viols$year)
     totals_tech$year <- as.numeric(totals_tech$year)
     
-    ggplot(df_totals, aes(x=year, y=total, fill=metric)) + 
+    total <-
+      adm_pop_long %>%
+      filter(states == input$state &
+             adm_or_pop == input$adm_or_pop &
+             metric == "Total")
+      
+    max <- max(total$total, na.rm = FALSE)
+    
+    ggplot(df_totals, aes(x=year, y=total, fill=metric)) +
       geom_area()+
       ggtitle(title) +
-      theme_csgjc_areaplot() +
-      theme(plot.margin = margin(0.1, 0.1, 0.1, 0.1, "cm")) +
-      # geom_hline(yintercept=0, colour="black", size = 1) +
+      theme_csgjc_horizontal_legend() +
+      coord_cartesian(ylim=c(0,max*1.3), expand = FALSE ) +
       # totals
       geom_text(size = 4.5, aes(x = year + 0.15,label=ifelse(year == min(year),scales::comma(total), NA), fill = NULL),     data = totals, position = position_stack(vjust = 1.25), check_overlap = TRUE) +
       geom_text(size = 4.5, aes(label=ifelse(year != min(year) & year != max(year),scales::comma(total), NA), fill = NULL), data = totals, position = position_stack(vjust = 1.23), check_overlap = TRUE) +
@@ -288,22 +250,58 @@ server <- function(input, output, session) {
       geom_text(size = 4.5, aes(label=ifelse(year != min(year) & year != max(year),scales::comma(total), NA), fill = NULL), data = totals_viols, position = position_stack(vjust = 1.5), check_overlap = TRUE) +
       geom_text(size = 4.5, aes(x = year - 0.15,label=ifelse(year == max(year),scales::comma(total), NA), fill = NULL),     data = totals_viols, position = position_stack(vjust = 1.65), check_overlap = TRUE) +
       # tech viols
-      geom_text(color = "white", size = 4.5, aes(x = year + 0.15,label=ifelse(year == min(year),scales::comma(total), NA), fill = NULL),     data = totals_tech, position = position_stack(vjust = 1.22), check_overlap = TRUE) +
-      geom_text(color = "white", size = 4.5, aes(label=ifelse(year != min(year) & year != max(year),scales::comma(total), NA), fill = NULL), data = totals_tech, position = position_stack(vjust = 1.22), check_overlap = TRUE) +
-      geom_text(color = "white", size = 4.5, aes(x = year - 0.15,label=ifelse(year == max(year),scales::comma(total), NA), fill = NULL),     data = totals_tech, position = position_stack(vjust = 1.26), check_overlap = TRUE) +
+      geom_text(size = 4.5, aes(x = year + 0.15,label=ifelse(year == min(year),scales::comma(total), NA), fill = NULL),     data = totals_tech, position = position_stack(vjust = 1.22), check_overlap = TRUE) +
+      geom_text(size = 4.5, aes(label=ifelse(year != min(year) & year != max(year),scales::comma(total), NA), fill = NULL), data = totals_tech, position = position_stack(vjust = 1.22), check_overlap = TRUE) +
+      geom_text(size = 4.5, aes(x = year - 0.15,label=ifelse(year == max(year),scales::comma(total), NA), fill = NULL),     data = totals_tech, position = position_stack(vjust = 1.26), check_overlap = TRUE) +
       # colors
-      scale_fill_manual(values = c(total_co, viol_co, tech_co), 
-                        labels = c("Total", "Supervision Violation", "Technical Violation"), 
+      scale_fill_manual(values = c(total_co, viol_co, tech_co),
+                        labels = c("Total", "Supervision Violation", "Technical Violation"),
                         breaks = c("Other", "Supervision Violations", "Technical"),
-                        name = "") +  
-      scale_x_continuous(breaks = c(1,2,3), labels = c("            2018", "2019", "2020             ")) 
-      # labs(caption="\nSource: More Community, Less Confinement (2020)")
+                        name = "") +
+      scale_x_continuous(breaks = c(1,2,3), labels = c("            2018", "2019", "2020             "))
+    # labs(caption="\nSource: More Community, Less Confinement (2020)")
+    
+    # df <- adm_pop_long %>%
+    #   filter(states == input$state &
+    #          adm_or_pop == input$adm_or_pop &
+    #          metric == "Total") 
+    # df$year <- as.numeric(df$year)
+    # 
+    # title <- paste0("Total ", input$adm_or_pop, "\n")
+    # 
+    # ggplot(df, aes(x=year, y = total)) +
+    #   geom_area(fill = blue2, color = blue2, alpha = 0.5) +
+    #   geom_text(data = df, aes(x = year, y = total, label = scales::comma(total)),
+    #             position=position_dodge(0.8), vjust = -1, size = 5) +
+    #   scale_y_continuous(label = scales::comma,
+    #                      limits = c(0, 1.15*max(df$total)),
+    #                      expand = c(0,0)) +
+    #   theme_csgjc_horizontal_legend() +
+    #   theme(axis.text.y = element_blank(),
+    #         axis.line.x = element_line(colour = 'black', size=1, linetype='solid')) +
+    #   scale_x_continuous(breaks = c(1,2,3), labels = c("2018", "2019", "2020")) +
+    #   ggtitle(title)
+    
+    # df %>%
+    #   ggplot(aes(year, total)) +
+    #   stat_smooth(geom = 'area', fill = "red", alpha = 0.5) +
+    #   geom_text(data = df, aes(x = year, y = total, label = scales::comma(total)),
+    #             position=position_dodge(0.8), vjust = -1, size = 5) +
+    #   scale_y_continuous(label = scales::comma,
+    #                      limits = c(0, 1.15*max(df$total)),
+    #                      expand = c(0,0)) +
+    #   theme_csgjc_horizontal_legend() +
+    #   theme(axis.text.y = element_blank(),
+    #         axis.line.x = element_line(colour = 'black', size=1, linetype='solid')) +
+    #   scale_x_continuous(breaks = c(1,2,3), labels = c("2018", "2019", "2020")) +
+    #   ggtitle(title) 
+    
   })
   
-  # Totals barchart
-  output$barchart <- renderPlot({
+  # Supervision violations by type chart
+  output$sup_viols_type_chart <- renderPlot({
     
-    df_totals <- 
+    df <- 
       adm_pop_long %>% 
       filter(states == input$state &
                adm_or_pop == input$adm_or_pop) %>% 
@@ -311,15 +309,16 @@ server <- function(input, output, session) {
       summarise(total = sum(total)) %>% 
       filter(metric == "New Offense" | metric == "Technical")  
     
-    totals <- df_totals %>%
-      group_by(year) %>%
-      summarise(total = sum(total))
+    total <- adm_pop_long %>%
+      filter(states == input$state &
+             adm_or_pop == input$adm_or_pop &
+             metric == "Supervision Violations") 
     
     dodger = position_dodge(width = 0.9)
     
-    title <- paste0("Prison ",input$adm_or_pop, " due to\nSupervision Violations by Type\n")
+    title <- paste0("Supervision Violation ",input$adm_or_pop, " by Type\n")
     
-    ggplot(data = df_totals,
+    ggplot(data = df,
            aes_string(x = 'year', y = 'total', fill = 'metric')) +
       geom_bar(stat = "identity", position = "dodge", alpha = 1) +
       geom_text(aes(label=scales::comma(total)),
@@ -329,13 +328,14 @@ server <- function(input, output, session) {
                 vjust = -0.5) +
       ggtitle(title) +
       theme_csgjc_plot_legend() +
-      theme(plot.margin = margin(0.1, 0.1, 0.1, 0.1, "cm")) +
+      theme(axis.text.y = element_blank(),
+            axis.line.x = element_line(colour = 'black', size=1, linetype='solid')) +
       scale_fill_manual(values = c(new_o_co, tech_co),
                         labels = c("New Offense", "Technical Violation"), 
                         breaks = c("New Offense", "Technical"),
                         name = "") +
       scale_y_continuous(label = scales::comma,
-                         limits = c(0, 1.17*max(df_totals$total)),
+                         limits = c(0, 1.17*max(total$total)),
                          expand = c(0,0)) +
       coord_cartesian(clip = "off") 
       # labs(caption="\nSource: More Community, Less Confinement (2020)")
@@ -343,60 +343,8 @@ server <- function(input, output, session) {
   })
   
   ##############
-  # Donut charts and value boxes
+  # Value boxes
   ##############
-  
-  # output$donutchart_sup <- renderGirafe({
-  #   
-  #   # filter data depending on input
-  #   df_donutchart <- 
-  #     adm_pop_long %>% 
-  #     filter(states == input$state &
-  #              adm_or_pop == input$adm_or_pop,
-  #            year == 2020) %>% 
-  #     group_by(metric, year) %>% 
-  #     summarise(total = sum(total)) %>% 
-  #     filter(metric == "Other" | metric == "Supervision Violations") %>% 
-  #     select(-year)
-  #   
-  #   # sum 
-  #   df_donutchart$overall <- sum(df_donutchart$total)
-  #   
-  #   # create variables
-  #   df_donutchart <- df_donutchart %>% group_by(metric) %>% 
-  #     mutate(percentage = total / overall,
-  #            hover_text = paste0(metric, ": ", total)) %>%
-  #     mutate(percentage_label = paste0(round(100 * percentage, 0), "%")) %>% 
-  #     select(-overall)
-  #   
-  #   # make dataframe
-  #   df_donutchart <- as.data.frame(df_donutchart)
-  #   
-  #   # donut plot
-  #   donut_plot <- ggplot(df_donutchart, aes_string(y = 'total', fill = 'metric')) +
-  #     geom_bar_interactive(
-  #       aes(x = 1, tooltip = hover_text),
-  #       width = 0.5,
-  #       stat = "identity",
-  #       show.legend = FALSE
-  #     ) +
-  #     annotate(
-  #       geom = "text",
-  #       x = 0,
-  #       y = 0,
-  #       label = df_donutchart[["percentage_label"]][df_donutchart[["metric"]] == "Supervision Violations"],
-  #       size = 20,
-  #       color = "#000000"
-  #     ) +
-  #     scale_fill_manual(values = c(Other = "#DEF0F6", `Supervision Violations` = "#E18731")) +
-  #     coord_polar(theta = "y") +
-  #     ggtitle("Proportion of Prison Admissions\nThat Are Supervision Violations") +
-  #     theme_void() +
-  #     theme(plot.title = element_text(size = 20,
-  #                                     hjust = 0.5))
-  #   
-  #   ggiraph(ggobj = donut_plot)
-  # })
   
   # filter data
   df_total_18 <- reactive({
@@ -442,6 +390,15 @@ server <- function(input, output, session) {
   output$sup_change <- renderValueBox(vb2)
   
   output$tech_change <- renderValueBox(vb3)
+  
+  ##################################
+  # State table under graphs
+  ##################################
+  
+  # State table under graphs
+  output$state_table <- DT::renderDataTable({
+    datatable(adm_pop_long)
+  })
   
   ##################################
   # Probation and Parole Charts
@@ -525,85 +482,53 @@ server <- function(input, output, session) {
     
   })
   
-  # prob parole bar and line chart
-  output$barchart_bjs_parole <- renderPlot({
+  ##################################
+  # BJS Probation and Parole Charts
+  ##################################
+  
+  # prob prob bar and line chart
+  output$barchart_bjs_prob_total <- renderPlot({
     
-    df <- 
-      df_prob_parole %>% 
-      filter(state == input$state)
-    df <- df %>% filter(adm_or_pop != "Population (EOY)")
-    df <- df %>% mutate(metric = case_when(
-      data == "total_pop_start" & type == "Probation" ~ "Probation Population",
-      data == "total_entries" & type == "Probation" ~ "Probation Entries",
-      data == "total_discharges" & type == "Probation" ~ "Probation Exits",
-      
-      data == "total_pop_start" & type == "Parole" ~ "Parole Population",
-      data == "total_entries" & type == "Parole" ~ "Parole Entries",
-      data == "total_discharges" & type == "Parole" ~ "Parole Exits"
-    ))
+    entries_woi <- bjs_prob %>% 
+      filter(state == input$state &
+               adm_or_pop == input$adm_or_pop &
+               data == "entries_wo_inc")
+
+    total <-  bjs_prob %>% 
+      filter(state == input$state &
+               adm_or_pop == input$adm_or_pop &
+               data == "entries_total")
     
-    title <- paste0("Parole Population, Entries and Exits\n")
+    title <- paste0("Probation Entries\n")
     
-    entry <- df %>% filter(metric == "Parole Entries")
-    exit <- df %>% filter(metric == "Parole Exits")
-    areas <- df %>% dplyr::filter(metric == "Parole Population")
-    
-    ggplot()+
-      geom_bar(data = areas, aes(x=year, y=total, fill=metric),
-               stat="identity", width = 0.5) +
-      geom_line(data = entry, aes(x = year, y= total), size=1.25, color = entries)+
-      geom_line(data = exit, aes(x = year, y= total), size=1.25, color = exits)+
-      geom_text(data = areas, aes(x = year, y = total, label = scales::comma(total)),
+    ggplot() + 
+      geom_bar(data = entries_woi, aes(x = year, y = total, fill = "Probation Entries without Incarceration"), stat="identity") +
+      geom_line(data = total, aes(x = year, y = total, group = 1, color = metric), size = 1.25) +
+      geom_text(data = entries_woi, aes(x = year, y = total, label = scales::comma(total)),
                 position=position_dodge(0.8), vjust = -0.6, size = 5) +
-      scale_fill_manual(values=par_cols) +
+      geom_text(data = total, aes(x = year, y = total, label = scales::comma(total)),
+                position=position_dodge(0.8), vjust = -0.6, size = 5) +
       scale_y_continuous(label = scales::comma,
-                         limits = c(0, 1.15*max(areas$total)),
+                         limits = c(0, 1.15*max(total$total)),
                          expand = c(0,0)) +
-      ggtitle(title)+
-      theme_csgjc_prob_parole() +
-      labs(caption="\nSource: BJS Annual Parole Survey (2018)")
-    
+      scale_colour_manual(" ", values=c("Total Probation Entries" = red))+
+      scale_fill_manual("",values=blue2)+
+      theme_csgjc_horizontal_legend() +
+      theme(legend.key=element_blank(),
+            legend.title=element_blank(),
+            legend.position = "top",
+            legend.box="horizontal",
+            axis.text.y = element_blank()) +
+      ggtitle(title) 
+
   })
   
-  # prob parole bar and line chart
-  output$barchart_bjs_prob <- renderPlot({
-    
-    df <- 
-      df_prob_parole %>% 
-      filter(state == input$state)
-    df <- df %>% filter(adm_or_pop != "Population (EOY)")
-    df <- df %>% mutate(metric = case_when(
-      data == "total_pop_start" & type == "Probation" ~ "Probation Population",
-      data == "total_entries" & type == "Probation" ~ "Probation Entries",
-      data == "total_discharges" & type == "Probation" ~ "Probation Exits",
-      
-      data == "total_pop_start" & type == "Parole" ~ "Parole Population",
-      data == "total_entries" & type == "Parole" ~ "Parole Entries",
-      data == "total_discharges" & type == "Parole" ~ "Parole Exits"
-    ))
-    
-    title <- paste0("Probation Population, Entries and Exits\n")
-    
-    entry <- df %>% filter(metric == "Probation Entries")
-    exit <- df %>% filter(metric == "Probation Exits")
-    areas <- df %>% dplyr::filter(metric == "Probation Population")
-    
-    ggplot()+
-      geom_bar(data = areas, aes(x=year, y=total, fill=metric),
-               stat="identity", width = 0.5) +
-      geom_line(data = entry, aes(x = year, y= total), size=1.25, color = entries)+
-      geom_line(data = exit, aes(x = year, y= total), size=1.25, color = exits)+
-      geom_text(data = areas, aes(x = year, y = total, label = scales::comma(total)),
-                position=position_dodge(0.8), vjust = -0.6, size = 5) +
-      scale_fill_manual(values=prob_cols) +
-      scale_y_continuous(label = scales::comma,
-                         limits = c(0, 1.15*max(areas$total)),
-                         expand = c(0,0)) +
-      ggtitle(title)+
-      theme_csgjc_prob_parole() +
-      labs(caption="\nSource: BJS Annual Probation Survey (2018)")
-    
-  })
+  # # prob barchart
+  # output$barchart_bjs_prob <- renderPlot({
+  #   
+  #   
+  #   
+  # })
   
   #-------------------------------------------------------------------------------
   # Download Data

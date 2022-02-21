@@ -107,11 +107,19 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                ############
                                                fluidRow(
                                                  column(width = 7, 
-                                                        plotOutput("areachart", height = 300)),
+                                                        plotOutput("totals_chart", height = 350)),
                                                  column(width = 5,
-                                                        plotOutput("barchart",  height = 300))
+                                                        plotOutput("sup_viols_type_chart",  height = 350))
                                                         # girafeOutput("barchart"))
                                                ), #fluidRow
+                                               ############
+                                               # Tables
+                                               ############
+                                               fluidRow(
+                                                 column(width = 12,
+                                                        DT::dataTableOutput("state_table")
+                                                        )
+                                               ),
                                                br()
                                       ),
                                       ###################
@@ -128,7 +136,9 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                br(),
                                                fluidRow(
                                                  column(width = 7,
-                                                        plotOutput("barchart_bjs_parole", height = 300)),
+                                                        # plotOutput("barchart_bjs_parole", height = 300)
+                                                        "TEMP"
+                                                        ),
                                                  column(width = 5)
                                                ) #fluidRow
                                       ),
@@ -139,14 +149,15 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                br(),
                                                fluidRow(
                                                  column(width = 1),
-                                                 column(width = 5,
-                                                        plotOutput("barchart_prob", height = 300)),
-                                                 column(width = 6)
+                                                 column(width = 6,
+                                                        plotOutput("barchart_bjs_prob_total")
+                                                        ),
+                                                 column(width = 4,
+                                                        plotOutput("barchart_prob"))
                                                ),
                                                br(),
                                                fluidRow(
-                                                 column(width = 7,
-                                                        plotOutput("barchart_bjs_prob", height = 300)),
+                                                 column(width = 7),
                                                  column(width = 5)
                                                ) #fluidRow
                                       ),

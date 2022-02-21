@@ -66,15 +66,22 @@ count_colors = c("#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#08589e")
 # yellow <- "#f0de0b"
 # orange <- "#f89c1b"
 
-blue1 <- "#DEF0F6"
-blue3 <- "#355DA1"
-orange <- "#f89c1b"
-red <- "#B05D24"
+# blue1 <- "#DEF0F6"
+# blue3 <- "#355DA1"
+# orange <- "#f89c1b"
+# red <- "#B05D24"
+# yellow <- "#F5CB5C"
+# drab <- "#3C362A"
 
-total_co <- blue1
-viol_co <- blue3
-tech_co <-  orange
-new_o_co <- red
+lightorange <- "#FFBB78"
+orange <- "#FF7F0E"
+lightblue <- "#AEC7E8"
+darkblue <- "#1F77B4"
+
+total_co <- lightorange
+viol_co <- orange
+tech_co <-  lightblue
+new_o_co <- darkblue
 
 #______________________________________________________
 # custom theme
