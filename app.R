@@ -38,12 +38,6 @@ shinyApp(ui = ui, server = server)
 # change locations of total and sup viols to have their own rows
 # compare data to BJS
 
-#final palette
-# total_co <- "#ECE9E9"
-# viol_co <- "#FA9F8D"
-# tech_co <- "#7B898F"
-# new_o_co <- "#C1CAC7"
-
 # csg color
 # Red: B05D24 (any type on this color should be white, not black, for accessibility)
 # Dark blue: 355DA1 (any type on this color should be white, not black, for accessibility)

@@ -97,7 +97,7 @@ theme_csgjc_plot_legend <- function(){
     )
 }
 
-theme_csgjc_prob_parole <- function(){ 
+theme_csgjc_horizontal_legend <- function(){ 
   
   # assign font family up front
   font <- "Arial"   
@@ -117,6 +117,36 @@ theme_csgjc_prob_parole <- function(){
                                 size = 16,
                                 colour = "#000000"),
       plot.caption = element_text(hjust = 0.5, face = "italic"),
+      axis.line.x = element_line(colour = 'black', size=1, linetype='solid'),
+      axis.title.x = element_blank(),
+      axis.title.y = element_blank(),
+      axis.text.x = element_text(size = 14, 
+                                 colour = "#000000"),
+      axis.text.y =  element_blank(),
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      panel.border = element_blank()    
+    )
+}
+
+theme_csgjc_right_legend <- function(){ 
+  
+  # assign font family up front
+  font <- "Arial"   
+  
+  # replace elements we want to change
+  theme_minimal() %+replace%    
+    
+    theme(
+      legend.position = "top",
+      legend.background = element_blank(),
+      legend.title = element_blank(),
+      legend.text = element_text(size=14),
+      plot.title = element_text(hjust = 0.5, 
+                                # face = "bold",
+                                size = 16,
+                                colour = "#000000"),
+      plot.caption = element_text(hjust = 0.5, face = "italic"),
       axis.title.x = element_blank(),
       axis.title.y = element_blank(),
       axis.text.x = element_text(size = 14, 
@@ -128,7 +158,6 @@ theme_csgjc_prob_parole <- function(){
       panel.border = element_blank()    
     )
 }
-
 
 valueBox2 <- function(value, title, subtitle, icon = NULL, color = "aqua", width = 4, href = NULL){
   

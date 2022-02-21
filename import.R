@@ -73,17 +73,17 @@ prob_15 <- da36618.0001 %>% mutate(year = 2015)
 prob_16 <- da37459.0001 %>% mutate(year = 2016)
 prob_17 <- da37482.0001 %>% mutate(year = 2017)
 prob_18 <- da38057.0001 %>% mutate(year = 2018)
-  
+
 # rename parole dfs
 parole_14 <- da36320.0001 %>% mutate(year = 2014)
 parole_15 <- da36619.0001 %>% mutate(year = 2015)
 parole_16 <- da37441.0001 %>% mutate(year = 2016)
 parole_17 <- da37471.0001 %>% mutate(year = 2017)
 parole_18 <- da38058.0001 %>% mutate(year = 2018)
-  
-# remove probation and parole dfs
-rm(da36343.0001, da36618.0001, da37459.0001, da37482.0001, da38057.0001)
-rm(da36320.0001, da36619.0001, da37441.0001, da37471.0001, da38058.0001)
+
+# # remove probation and parole dfs
+# rm(da36343.0001, da36618.0001, da37459.0001, da37482.0001, da38057.0001)
+# rm(da36320.0001, da36619.0001, da37441.0001, da37471.0001, da38058.0001)
 
 # add data together
 prob <- rbind(prob_14, prob_15, prob_16, prob_17, prob_18)
@@ -109,36 +109,45 @@ parole <- parole %>% filter(stateid != "Federal" & stateid != "District of Colum
 prob <- prob %>% rename(state_abb = state, state = stateid)
 parole <- parole %>% rename(state_abb = state, state = stateid)
 
-# select variables
+# remove data labels
+prob <- remove_labels(prob)
+
+# select variables and rename
 prob <- prob %>% select(state, state_abb, year,
-                         total_pop_start = totbeg, 
-                         total_entries = toten, 
-                         total_discharges = totex, 
-                         total_pop_end = totend)
-parole <- parole %>% select(state, state_abb, year,
-                            total_pop_start = totbeg, 
-                            total_entries = toten, 
-                            total_discharges = totex, 
-                            total_pop_end = totend)
+                            total_pop_end = totend,          # prob population end of year 
+                            entries_w_inc = eninc,           # entries with incarceration
+                            entries_wo_inc = ennoinc,        # entries without incarceration
+                            entries_total = toten,           # total entries to prob
+                            inc_new_sentence = exincnew,     # incarceration with new sentence
+                            inc_current_sentence = exincurr  # incarceration with current sentence
+)
 
 # add types
 prob$type <- "Probation"
-parole$type <- "Parole"
 
-# add data together
-prob_parole <- rbind(prob, parole)
+# make long form
+bjs_prob <- gather(prob, data, total, total_pop_end:inc_current_sentence)
+# bjs_prob <- gather(prob, data, total, entries_w_inc:inc_current_sentence)
 
-# remove data labels
-prob_parole <- remove_labels(prob_parole)
+# descriptions
+bjs_prob <- bjs_prob %>% mutate(metric = case_when(
+  data == "entries_total"         & type == "Probation" ~ "Total Probation Entries",
+  data == "entries_w_inc"         & type == "Probation" ~ "Probation Entries with Incarceration",
+  data == "entries_wo_inc"        & type == "Probation" ~ "Probation Entries without Incarceration",
+  data == "inc_current_sentence"  & type == "Probation" ~ "Incarcerated under Current Sentence",
+  data == "inc_new_sentence"      & type == "Probation" ~ "Incarcerated with Current Sentence",
+  data == "total_pop_end"         & type == "Probation" ~ "Probation Population (EOY)"
+))
 
-# change from wide to long form
-df_prob_parole <- gather(prob_parole, data, total, total_pop_start:total_pop_end)
-
-# create admissions and population tab
-df_prob_parole <- df_prob_parole %>% mutate(adm_or_pop = case_when(data == "total_pop_start" ~ "Population",
-                                                                   data == "total_pop_end" ~ "Population (EOY)",
-                                                                   data == "total_entries" ~ "Admissions (entries)",
-                                                                   data == "total_discharges" ~ "Admissions"))
+# assign admissions and population variable
+bjs_prob <- bjs_prob %>% mutate(adm_or_pop = case_when(
+  data == "entries_total"         ~ "Admissions",
+  data == "entries_w_inc"         ~ "Admissions",
+  data == "entries_wo_inc"        ~ "Admissions",
+  data == "inc_current_sentence"  ~ "Population",
+  data == "inc_new_sentence"      ~ "Population",
+  data == "total_pop_end"         ~ "Population"
+))
 
 ########
 # clean shapefile for hex map
@@ -543,7 +552,7 @@ df_adm$metric <- factor(df_adm$metric, levels=c("other_admissions","admissions_f
 # population table
 df_pop <- mclc_report %>% 
   filter(metric == "violator_population" |
-         metric == "other_population") %>% arrange(desc(metric))
+           metric == "other_population") %>% arrange(desc(metric))
 df_pop$year <- as.numeric(df_pop$year)
 
 # order factor for plotting
@@ -553,7 +562,7 @@ df_pop$metric <- factor(df_pop$metric, levels=c("other_population","violator_pop
 
 
 csg <- adm_pop_long %>% rename(state = states)
-bjs <- df_prob_parole
+bjs <- bjs_prob
 
 ########
 # save Rdata
@@ -569,12 +578,7 @@ save(us_map,         file="us_map.Rda")
 save(us,             file="us.Rda")
 save(centers,        file="centers.Rda")
 save(df_pop,         file="df_pop.Rda")
-save(df_prob_parole, file="df_prob_parole.Rda")
+# save(df_prob_parole, file="df_prob_parole.Rda")
 save(bjs,            file="bjs.Rda")
+save(bjs_prob,       file="bjs_prob.Rda")
 save(csg,            file="csg.Rda")
-
-
-
-
-
-

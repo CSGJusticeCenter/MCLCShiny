@@ -54,24 +54,27 @@ load("bjs.Rda")
 change_colors = c("#264d59", "#43978d", "#f9e07f", "#f9ad6a", "#d46c4e")
 count_colors = c("#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#08589e")
 
-par_cols <- c("Parole Entries"="#B05D24",
-              "Parole Exits"="#355DA1",
-              "Parole Population"="#DEF0F6")
+# assign colors for visualizations
+# blue2  <- "#9ed4ef"
+# blue3  <- "#71cfee"
+# blue4  <- "#007392"
+# blue5  <- "#00475d"
+# red    <- "#B05D24"
+# green3 <- "#7fc241"
+# green4 <- "#5c922f"
+# green5 <- "#315c15"
+# yellow <- "#f0de0b"
+# orange <- "#f89c1b"
 
-prob_cols <- c("Probation Entries"="#B05D24",
-               "Probation Exits"="#355DA1",
-               "Probation Population"="#DEF0F6")
+blue1 <- "#DEF0F6"
+blue3 <- "#355DA1"
+orange <- "#f89c1b"
+red <- "#B05D24"
 
-total_co <- "#DEF0F6"
-viol_co <- "#B05D24"
-tech_co <- "#F3A63F"
-new_o_co <- "#B6DEEB"
-
-tech_pp_co <- "#F3A63F"
-new_o_pp_co <- "#B6DEEB"
-
-entries <- "#B05D24"
-exits <- "#355DA1"
+total_co <- blue1
+viol_co <- blue3
+tech_co <-  orange
+new_o_co <- red
 
 #______________________________________________________
 # custom theme
