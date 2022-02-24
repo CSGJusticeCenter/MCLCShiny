@@ -28,6 +28,7 @@ library(shiny)
 library(scico)
 library(leaflegend)
 library(mapproj)
+library(dataui)
 
 #______________________________________________________
 # read in R data
@@ -73,10 +74,18 @@ count_colors = c("#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#08589e")
 # yellow <- "#F5CB5C"
 # drab <- "#3C362A"
 
-lightorange <- "#FFBB78"
-orange <- "#FF7F0E"
-lightblue <- "#AEC7E8"
-darkblue <- "#1F77B4"
+# lightorange <- "#FFBB78"
+# orange <- "#FF7F0E"
+# lightblue <- "#AEC7E8"
+# darkblue <- "#1F77B4"
+
+lightorange <- "#fcccac"
+orange <- "#fc9c54"
+lightblue <- "#9cccec"
+darkblue <- "#2c6c9c"
+regblue <- "#3c97da"
+brown <- "#b26e39"
+gray <- "#dcdcdc"
 
 total_co <- lightorange
 viol_co <- orange

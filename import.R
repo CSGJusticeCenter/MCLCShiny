@@ -505,6 +505,52 @@ adm_pop_long$year <- as.factor(adm_pop_long$year)
 
 ########
 # State table under graph
+# Draft 1 - all data
+########
+
+# select variables
+state_table <- adm_pop_long %>% select(states,
+                                       year,
+                                       data,
+                                       total,
+                                       metric,
+                                       adm_or_pop)
+
+# summarise by type
+state_table <- state_table %>% 
+  group_by(states, year, metric, adm_or_pop) %>% 
+  summarise(total = sum(total))
+
+# remove probation, parole and other
+state_table <- state_table %>% 
+  filter(metric != "Probation" &
+         metric != "Parole" &
+         metric != "Other")
+
+# make wide form
+state_table <- spread(state_table, key = year, value = total)
+
+# create text for table
+state_table <- state_table %>% mutate(text = case_when(
+  metric == "New Offense" & adm_or_pop == "Admissions"            ~ "New Offense Admissions",
+  metric == "Supervision Violations" & adm_or_pop == "Admissions" ~ "Supervision Violation Admissions",
+  metric == "Technical" & adm_or_pop == "Admissions"              ~ "Technical Admissions",
+  metric == "Total" & adm_or_pop == "Admissions"                  ~ "Total Admissions",
+  
+  metric == "New Offense" & adm_or_pop == "Population"            ~ "New Offense Population",
+  metric == "Supervision Violations" & adm_or_pop == "Population" ~ "Supervision Violation Population",
+  metric == "Technical" & adm_or_pop == "Population"              ~ "Technical Population",
+  metric == "Total" & adm_or_pop == "Population"                  ~ "Total Population"
+))
+
+# rearrange data
+state_table <- state_table %>% select(states, text, adm_or_pop, everything()) %>% 
+  ungroup() %>% 
+  select(-metric)
+
+########
+# State table under graph
+# Draft 2 - all data
 ########
 
 # select variables
@@ -518,51 +564,13 @@ state_table <- adm_pop_long %>% select(states,
 # make wide form
 state_table <- spread(state_table, key = year, value = total)
 
-# remove totals
+# include totals
 state_table <- state_table %>% ungroup() %>% 
-  filter(data != "total_violation_admissions" &
-         data != "total_violation_population" &
+  filter(data == "total_violation_admissions" &
+         data == "total_violation_population" &
+           
          data != "other_admissions" &
          data != "other_population")
-
-state_table <- state_table %>% mutate(type = case_when(
-  data == "total_admissions"                            ~ "Total",
-  data == "total_probation_violation_admissions"        ~ "Supervision Violations",
-  data == "new_offense_probation_violation_admissions"  ~ "New Offense",
-  data == "technical_probation_violation_admissions"    ~ "Technical",
-  data == "total_parole_violation_admissions"           ~ "Supervision Violations",
-  data == "new_offense_parole_violation_admissions"     ~ "New Offense",
-  data == "technical_parole_violation_admissions"       ~ "Technical",
-  
-  data == "total_population"                            ~ "Total",
-  data == "total_probation_violation_population"        ~ "Supervision Violations",
-  data == "new_offense_probation_violation_population"  ~ "New Offense",
-  data == "technical_probation_violation_population"    ~ "Technical",
-  data == "total_parole_violation_population"           ~ "Supervision Violations",
-  data == "new_offense_parole_violation_population"     ~ "New Offense",
-  data == "technical_parole_violation_population"       ~ "Technical",
-))
-
-state_table <- state_table %>% mutate(text = case_when(
-  data == "total_admissions"                            ~ "Total Admissions",
-  data == "total_probation_violation_admissions"        ~ "Probation Admissions",
-  data == "new_offense_probation_violation_admissions"  ~ "Probation Admissions",
-  data == "technical_probation_violation_admissions"    ~ "Probation Admissions",
-  data == "total_parole_violation_admissions"           ~ "Parole Admissions",
-  data == "new_offense_parole_violation_admissions"     ~ "Parole Admissions",
-  data == "technical_parole_violation_admissions"       ~ "Parole Admissions",
-  
-  data == "total_population"                            ~ "Total Population",
-  data == "total_probation_violation_population"        ~ "Probation Population",
-  data == "new_offense_probation_violation_population"  ~ "Probation Population",
-  data == "technical_probation_violation_population"    ~ "Probation Population",
-  data == "total_parole_violation_population"           ~ "Parole Population",
-  data == "new_offense_parole_violation_population"     ~ "Parole Population",
-  data == "technical_parole_violation_population"       ~ "Parole Population",
-))
-
-# rearrange data
-state_table <- state_table %>% select(states, metric, adm_or_pop, type, text, data, everything())
 
 ########
 # National numbers

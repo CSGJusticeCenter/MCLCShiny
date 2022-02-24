@@ -33,10 +33,7 @@ shinyApp(ui = ui, server = server)
 # scales
 # https://stackoverflow.com/questions/48215003/labels-for-custom-diverging-color-gradient-in-ggplot
 # https://github.com/thomasp85/scico/issues/6
-
-# to do
-# change locations of total and sup viols to have their own rows
-# compare data to BJS
+# https://chartio.com/learn/charts/how-to-choose-colors-data-visualization/
 
 # csg color
 # Red: B05D24 (any type on this color should be white, not black, for accessibility)

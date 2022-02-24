@@ -112,13 +112,15 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                         plotOutput("sup_viols_type_chart",  height = 350))
                                                         # girafeOutput("barchart"))
                                                ), #fluidRow
+                                               br(), 
                                                ############
                                                # Tables
                                                ############
                                                fluidRow(
-                                                 column(width = 12,
-                                                        DT::dataTableOutput("state_table")
-                                                        )
+                                                 column(width = 9,
+                                                        reactableOutput("state_table")
+                                                        ),
+                                                 column(width = 3)
                                                ),
                                                br()
                                       ),

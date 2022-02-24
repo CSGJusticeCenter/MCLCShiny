@@ -396,8 +396,51 @@ server <- function(input, output, session) {
   ##################################
   
   # State table under graphs
-  output$state_table <- DT::renderDataTable({
-    datatable(adm_pop_long)
+  output$state_table <- renderReactable({
+    
+    # filter data
+    df <- state_table %>% 
+      filter(states == input$state &
+               adm_or_pop == input$adm_or_pop) %>% 
+      select(-c(states, adm_or_pop, metric, data))
+    
+    # overview table with expandable rows
+    reactable(df,
+              groupBy = "type",
+              defaultSortOrder = 'desc',
+              defaultSorted = 'type',
+              striped = FALSE,
+              highlight = TRUE,
+              pagination = FALSE,
+              # compact = TRUE,
+              # showSortable = TRUE,
+              outlined = TRUE,
+              borderless = TRUE,
+              # theme = reactableTheme(
+              #   borderColor = "#C8C8C8",
+              #   stripedColor = "#F5F5F5",
+              #   highlightColor = "#C8C8C8",
+              #   cellPadding = "4px 6px",
+              #   headerStyle = list(background = "#C8C8C8"),
+              #   style = list(#fontFamily = "Cambria", 
+              #                fontSize = 14)),
+              defaultColDef = colDef(
+                format = colFormat(separators = TRUE)),
+              
+              columns = list(
+                type             = colDef(name = "Breakdown",
+                                          html = TRUE,
+                                          align = "left",
+                                          minWidth = 250,
+                                          style = list(fontWeight = "bold")),
+                text              = colDef(name = "Metric",
+                                           minWidth = 160),
+                `2018`            = colDef(aggregate = "sum"),
+                `2019`            = colDef(aggregate = "sum"),
+                `2020`            = colDef(aggregate = "sum")
+              )
+    )
+    
   })
   
   ##################################
