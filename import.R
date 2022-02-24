@@ -359,6 +359,52 @@ mclc_datatable$Year <- as.factor(mclc_datatable$Year)
 mclc_datatable <- mclc_datatable %>% arrange(State, Year, Data, Type)
 
 ########
+# Area chart data
+########
+
+df_area <- adm_pop %>% mutate(
+  violation_admissions_notech         = total_violation_admissions - (technical_probation_violation_admissions + technical_parole_violation_admissions),
+  violation_population_notech         = total_violation_population - (technical_probation_violation_population + technical_parole_violation_population),
+  total_admissions_notech_nosupviols  = total_admissions - total_violation_admissions,
+  total_population_notech_nosupviols  = total_population - total_violation_population,
+  technical_violation_admissions      = technical_probation_violation_admissions + technical_parole_violation_admissions,
+  technical_violation_population      = technical_probation_violation_population + technical_parole_violation_population)
+
+# make data long form
+df_area <- gather(df_area, 
+                  data,
+                  total,
+                  total_admissions:technical_violation_population, 
+                  factor_key=TRUE)
+
+# select data needed for area chart (tech, other, sup viols)
+df_area <- df_area %>% 
+  filter(data == "violation_admissions_notech" |
+         data == "violation_population_notech" |
+         data == "total_admissions_notech_nosupviols" |
+         data == "total_population_notech_nosupviols" |
+         data == "technical_violation_admissions"|
+         data == "technical_violation_population")
+
+# create pop vs adm variable
+df_area <- df_area %>% mutate(adm_or_pop = ifelse(
+  grepl("population", data), "Population", "Admissions"
+))
+
+# rename
+df_area <- df_area %>% 
+  mutate(metric =
+  case_when(data == "violation_admissions_notech"        ~ "Supervision Violations",
+            data == "violation_population_notech"        ~ "Supervision Violations",
+            data == "total_admissions_notech_nosupviols" ~ "Total",
+            data == "total_population_notech_nosupviols" ~ "Total",
+            data == "technical_violation_admissions"     ~ "Technical",
+            data == "technical_violation_population"     ~ "Technical",))
+
+# factor
+df_area$year <- as.factor(df_area$year)
+
+########
 # Long form
 ########
 
@@ -600,6 +646,7 @@ save(state_table,      file="state_table.Rda")
 save(state_table_wide, file="state_table_wide.Rda")
 save(df_adm,           file="df_adm.Rda")
 save(df_pop,           file="df_pop.Rda")
+save(df_area,          file="df_area.Rda")
 save(us_map,           file="us_map.Rda")
 save(us,               file="us.Rda")
 save(centers,          file="centers.Rda")

@@ -107,21 +107,18 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                ############
                                                fluidRow(
                                                  column(width = 7, 
-                                                        plotOutput("totals_chart", height = 350)),
+                                                        plotlyOutput("totals_chart", height = 375)),
                                                  column(width = 5,
-                                                        plotOutput("sup_viols_type_chart",  height = 350))
-                                                        # girafeOutput("barchart"))
+                                                        plotlyOutput("sup_viols_type_chart", height = 375))
                                                ), #fluidRow
                                                br(), 
                                                ############
                                                # Tables
                                                ############
                                                fluidRow(
-                                                 column(width = 9,
+                                                 column(width = 12,
                                                         reactableOutput("state_table")
-                                                        ),
-                                                 column(width = 3)
-                                               ),
+                                                        )                                               ),
                                                br()
                                       ),
                                       ###################
@@ -130,18 +127,17 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                       tabPanel("Parole", 
                                                br(),
                                                fluidRow(
-                                                 column(width = 1),
-                                                 column(width = 5,
-                                                        plotOutput("barchart_parole", height = 300)),
-                                                 column(width = 6)
+                                                 column(width = 6,
+                                                        plotlyOutput("areachart_parole", height = 300)),
+                                                 column(width = 6,
+                                                        plotlyOutput("barchart_parole", height = 300)),
                                                ),
                                                br(),
                                                fluidRow(
-                                                 column(width = 7,
-                                                        # plotOutput("barchart_bjs_parole", height = 300)
-                                                        "TEMP"
+                                                 column(width = 6,
+                                                        #plotlyOutput("barchart_bjs_parole", height = 300)
                                                         ),
-                                                 column(width = 5)
+                                                 column(width = 6)
                                                ) #fluidRow
                                       ),
                                       ###################
@@ -150,17 +146,17 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                       tabPanel("Probation", 
                                                br(),
                                                fluidRow(
-                                                 column(width = 1),
                                                  column(width = 6,
-                                                        plotOutput("barchart_bjs_prob_total")
-                                                        ),
-                                                 column(width = 4,
-                                                        plotOutput("barchart_prob"))
+                                                        plotlyOutput("areachart_prob", height = 300)),
+                                                 column(width = 6,
+                                                        plotlyOutput("barchart_prob", height = 300))
                                                ),
                                                br(),
                                                fluidRow(
-                                                 column(width = 7),
-                                                 column(width = 5)
+                                                 column(width = 6,
+                                                        #plotlyOutput("barchart_bjs_prob", height = 300)
+                                                 ),
+                                                 column(width = 6)
                                                ) #fluidRow
                                       ),
                                       id = "tb2")
@@ -220,5 +216,6 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                 ) #fluidPage
                         ) #tabItem
                       ) #tabItems
-                    ) #dashboardBody
+                    ), #dashboardBody
+                    tags$head(tags$style(HTML('* {font-family: "Arial"};')))
 ) #dashboardPage

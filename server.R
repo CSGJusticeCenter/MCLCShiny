@@ -1,8 +1,10 @@
 server <- function(input, output, session) {
   
-  #-------------------------------------------------------------------------------
+  ################################################################################
+  ################################################################################
   # Map Explorer
-  #-------------------------------------------------------------------------------
+  ################################################################################
+  ################################################################################
   
   # change sidebar depending on selection 
   # change from previous year only includes years 2019-2020
@@ -159,9 +161,11 @@ server <- function(input, output, session) {
     }
   )
   
-  #-------------------------------------------------------------------------------
+  ################################################################################
+  ################################################################################
   # Leaflet Map
-  #-------------------------------------------------------------------------------
+  ################################################################################
+  ################################################################################
 
   output$leaflet_map <- renderLeaflet({
     
@@ -189,158 +193,16 @@ server <- function(input, output, session) {
 
   })
   
-  #-------------------------------------------------------------------------------
+  ################################################################################
+  ################################################################################
   # State Reports
-  #-------------------------------------------------------------------------------
+  ################################################################################
+  ################################################################################
   
   # Print state name and adm or pop selected
   output$selected_state <- renderText({ 
     paste("Trends in ", input$state)
   })  
-  
-  # Total admissions and sup viols chart
-  output$totals_chart <- renderPlot({ 
-    
-    df_totals <-
-      adm_pop_long %>%
-      filter(states == input$state &
-             adm_or_pop == input$adm_or_pop) %>%
-      group_by(metric, year) %>%
-      summarise(total = sum(total)) %>%
-      filter(metric == "Other" | metric == "Technical" | metric == "Supervision Violations")
-    
-    totals <- df_totals %>%
-      filter(metric != "Technical") %>%
-      group_by(year) %>%
-      summarise(total = sum(total))
-    
-    totals_viols <- df_totals %>%
-      filter(metric == "Supervision Violations")
-    
-    totals_tech <- df_totals %>%
-      filter(metric == "Technical")
-    
-    title <- paste0("Prison ", input$adm_or_pop, "\n")
-    
-    df_totals$year <- as.numeric(df_totals$year)
-    df_totals$metric <- as.factor(df_totals$metric)
-    totals$year <- as.numeric(totals$year)
-    totals_viols$year <- as.numeric(totals_viols$year)
-    totals_tech$year <- as.numeric(totals_tech$year)
-    
-    total <-
-      adm_pop_long %>%
-      filter(states == input$state &
-             adm_or_pop == input$adm_or_pop &
-             metric == "Total")
-      
-    max <- max(total$total, na.rm = FALSE)
-    
-    ggplot(df_totals, aes(x=year, y=total, fill=metric)) +
-      geom_area()+
-      ggtitle(title) +
-      theme_csgjc_horizontal_legend() +
-      coord_cartesian(ylim=c(0,max*1.3), expand = FALSE ) +
-      # totals
-      geom_text(size = 4.5, aes(x = year + 0.15,label=ifelse(year == min(year),scales::comma(total), NA), fill = NULL),     data = totals, position = position_stack(vjust = 1.25), check_overlap = TRUE) +
-      geom_text(size = 4.5, aes(label=ifelse(year != min(year) & year != max(year),scales::comma(total), NA), fill = NULL), data = totals, position = position_stack(vjust = 1.23), check_overlap = TRUE) +
-      geom_text(size = 4.5, aes(x = year - 0.15,label=ifelse(year == max(year),scales::comma(total), NA), fill = NULL),     data = totals, position = position_stack(vjust = 1.37), check_overlap = TRUE) +
-      # sup viols
-      geom_text(size = 4.5, aes(x = year + 0.15,label=ifelse(year == min(year),scales::comma(total), NA), fill = NULL),     data = totals_viols, position = position_stack(vjust = 1.53), check_overlap = TRUE) +
-      geom_text(size = 4.5, aes(label=ifelse(year != min(year) & year != max(year),scales::comma(total), NA), fill = NULL), data = totals_viols, position = position_stack(vjust = 1.5), check_overlap = TRUE) +
-      geom_text(size = 4.5, aes(x = year - 0.15,label=ifelse(year == max(year),scales::comma(total), NA), fill = NULL),     data = totals_viols, position = position_stack(vjust = 1.65), check_overlap = TRUE) +
-      # tech viols
-      geom_text(size = 4.5, aes(x = year + 0.15,label=ifelse(year == min(year),scales::comma(total), NA), fill = NULL),     data = totals_tech, position = position_stack(vjust = 1.22), check_overlap = TRUE) +
-      geom_text(size = 4.5, aes(label=ifelse(year != min(year) & year != max(year),scales::comma(total), NA), fill = NULL), data = totals_tech, position = position_stack(vjust = 1.22), check_overlap = TRUE) +
-      geom_text(size = 4.5, aes(x = year - 0.15,label=ifelse(year == max(year),scales::comma(total), NA), fill = NULL),     data = totals_tech, position = position_stack(vjust = 1.26), check_overlap = TRUE) +
-      # colors
-      scale_fill_manual(values = c(total_co, viol_co, tech_co),
-                        labels = c("Total", "Supervision Violation", "Technical Violation"),
-                        breaks = c("Other", "Supervision Violations", "Technical"),
-                        name = "") +
-      scale_x_continuous(breaks = c(1,2,3), labels = c("            2018", "2019", "2020             "))
-    # labs(caption="\nSource: More Community, Less Confinement (2020)")
-    
-    # df <- adm_pop_long %>%
-    #   filter(states == input$state &
-    #          adm_or_pop == input$adm_or_pop &
-    #          metric == "Total") 
-    # df$year <- as.numeric(df$year)
-    # 
-    # title <- paste0("Total ", input$adm_or_pop, "\n")
-    # 
-    # ggplot(df, aes(x=year, y = total)) +
-    #   geom_area(fill = blue2, color = blue2, alpha = 0.5) +
-    #   geom_text(data = df, aes(x = year, y = total, label = scales::comma(total)),
-    #             position=position_dodge(0.8), vjust = -1, size = 5) +
-    #   scale_y_continuous(label = scales::comma,
-    #                      limits = c(0, 1.15*max(df$total)),
-    #                      expand = c(0,0)) +
-    #   theme_csgjc_horizontal_legend() +
-    #   theme(axis.text.y = element_blank(),
-    #         axis.line.x = element_line(colour = 'black', size=1, linetype='solid')) +
-    #   scale_x_continuous(breaks = c(1,2,3), labels = c("2018", "2019", "2020")) +
-    #   ggtitle(title)
-    
-    # df %>%
-    #   ggplot(aes(year, total)) +
-    #   stat_smooth(geom = 'area', fill = "red", alpha = 0.5) +
-    #   geom_text(data = df, aes(x = year, y = total, label = scales::comma(total)),
-    #             position=position_dodge(0.8), vjust = -1, size = 5) +
-    #   scale_y_continuous(label = scales::comma,
-    #                      limits = c(0, 1.15*max(df$total)),
-    #                      expand = c(0,0)) +
-    #   theme_csgjc_horizontal_legend() +
-    #   theme(axis.text.y = element_blank(),
-    #         axis.line.x = element_line(colour = 'black', size=1, linetype='solid')) +
-    #   scale_x_continuous(breaks = c(1,2,3), labels = c("2018", "2019", "2020")) +
-    #   ggtitle(title) 
-    
-  })
-  
-  # Supervision violations by type chart
-  output$sup_viols_type_chart <- renderPlot({
-    
-    df <- 
-      adm_pop_long %>% 
-      filter(states == input$state &
-               adm_or_pop == input$adm_or_pop) %>% 
-      group_by(metric, year) %>% 
-      summarise(total = sum(total)) %>% 
-      filter(metric == "New Offense" | metric == "Technical")  
-    
-    total <- adm_pop_long %>%
-      filter(states == input$state &
-             adm_or_pop == input$adm_or_pop &
-             metric == "Supervision Violations") 
-    
-    dodger = position_dodge(width = 0.9)
-    
-    title <- paste0("Supervision Violation ",input$adm_or_pop, " by Type\n")
-    
-    ggplot(data = df,
-           aes_string(x = 'year', y = 'total', fill = 'metric')) +
-      geom_bar(stat = "identity", position = "dodge", alpha = 1) +
-      geom_text(aes(label=scales::comma(total)),
-                position=dodger,
-                size = 4.5,
-                colour = "#000000",
-                vjust = -0.5) +
-      ggtitle(title) +
-      theme_csgjc_plot_legend() +
-      theme(axis.text.y = element_blank(),
-            axis.line.x = element_line(colour = 'black', size=1, linetype='solid')) +
-      scale_fill_manual(values = c(new_o_co, tech_co),
-                        labels = c("New Offense", "Technical Violation"), 
-                        breaks = c("New Offense", "Technical"),
-                        name = "") +
-      scale_y_continuous(label = scales::comma,
-                         limits = c(0, 1.17*max(total$total)),
-                         expand = c(0,0)) +
-      coord_cartesian(clip = "off") 
-      # labs(caption="\nSource: More Community, Less Confinement (2020)")
-    
-  })
   
   ##############
   # Value boxes
@@ -350,15 +212,15 @@ server <- function(input, output, session) {
   df_total_18 <- reactive({
     adm_pop_long %>%
       filter(states == input$state &
-             adm_or_pop == input$adm_or_pop &
-             year == "2019" &
-             metric == "Total")
+               adm_or_pop == input$adm_or_pop &
+               year == "2019" &
+               metric == "Total")
   })
   
   vb <- valueBox2(
     value = "10,080",
     title = "Admissions in 2020",
-    subtitle = tagList(HTML("&darr;"), "25% from 2019"),
+    subtitle = tagList(HTML("&darr;"), "28% from 2019"),
     # icon = icon("arrow-down"),
     # width = 10,
     color = "green",
@@ -368,7 +230,7 @@ server <- function(input, output, session) {
   vb2 <- valueBox2(
     value = "4,761",
     title = "Supervision Violations in 2020",
-    subtitle = tagList(HTML("&darr;"), "30% from 2019"),
+    subtitle = tagList(HTML("&darr;"), "22% from 2019"),
     # icon = icon("arrow-down"),
     # width = 10,
     color = "green",
@@ -378,7 +240,7 @@ server <- function(input, output, session) {
   vb3 <- valueBox2(
     value = "2,080",
     title = "Technical Violations in 2020",
-    subtitle = tagList(HTML("&darr;"), "19% from 2019"),
+    subtitle = tagList(HTML("&darr;"), "25% from 2019"),
     # icon = icon("arrow-down"),
     # width = 10,
     color = "green",
@@ -391,6 +253,161 @@ server <- function(input, output, session) {
   
   output$tech_change <- renderValueBox(vb3)
   
+  ##############
+  # Overall area plot
+  ##############
+  
+  # Total admissions and sup viols chart
+  output$totals_chart <- renderPlotly({ 
+    
+    # filter data
+    df <-
+      adm_pop_long %>%
+      filter(states == input$state &
+               adm_or_pop == input$adm_or_pop &
+               (metric == "Total" | metric == "Supervision Violations" | metric == "Technical")) %>% 
+      group_by(states, year, metric) %>% 
+      summarise(total = sum(total))
+    data_total <- df %>% filter(metric == "Total")
+    data_supviols <- df %>% filter(metric == "Supervision Violations")
+    data_technical <- df %>% filter(metric == "Technical")
+    
+    # area plot
+    plot_ly() %>%
+      # total
+      add_trace(x = data_total$year, 
+                y = data_total$total, 
+                name = "Total",
+                split = data_total$metric, 
+                type = 'scatter', 
+                mode = 'none', 
+                fill = 'tozeroy', 
+                fillcolor = total_co,
+                hoverinfo = 'text',
+                text = paste('<b>',data_total$metric, '</b><br><br>',
+                             'Total: ', formattable::comma(data_total$total, digits = 0),'<br>',
+                             'Year: ', data_total$year, '<br>')) %>% 
+      # supervision violations
+      add_trace(x = data_supviols$year, 
+                y = data_supviols$total, 
+                name = "Supervision Violations",
+                split = data_supviols$metric, 
+                type = 'scatter', 
+                mode = 'none', 
+                fill = 'tozeroy', 
+                fillcolor = viol_co,
+                hoverinfo = 'text',
+                text = paste('<b>',data_supviols$metric, '</b><br><br>',
+                             'Total: ', formattable::comma(data_supviols$total, digits = 0),'<br>',
+                             'Year: ', data_supviols$year, '<br>')) %>% 
+      # technical
+      add_trace(x = data_technical$year, 
+                y = data_technical$total, 
+                name = "Technical",
+                split = data_technical$metric, 
+                type = 'scatter', 
+                mode = 'none', 
+                fill = 'tozeroy', 
+                fillcolor = tech_co,
+                hoverinfo = 'text',
+                text = paste('<b>',data_technical$metric, '</b><br><br>',
+                             'Total: ', formattable::comma(data_technical$total, digits = 0),'<br>',
+                             'Year: ', data_technical$year, '<br>')) %>% 
+      # customize layout
+      layout(title = list(text = paste0('<b>Prison ', input$adm_or_pop, '</b>\n'), font = list(size = 14)),
+             font = list(size = 12),
+             plot_bgcolor='#FFFFFF', 
+             xaxis = list( 
+               title = "",
+               showline= T, 
+               linewidth=2,
+               linecolor='black',
+               gridcolor = 'FFFFFF'), 
+             yaxis = list( 
+               title = "",
+               showticklabels = TRUE,
+               tickformat=",d",
+               gridcolor = 'FFFFFF'
+             ),
+             legend = list(orientation = "h",   
+                           xanchor = "center",
+                           x = 0.5, y = -0.1)) %>% 
+      # remove plotly buttons
+      config(
+        modeBarButtonsToRemove = list(
+          "zoom2d", "pan2d", "select2d", "lasso2d", "zoomIn2d", "zoomOut2d", "autoScale2d", 
+          "resetScale2d", "zoom3d", "pan3d", 
+          "resetCameraDefault3d", "resetCameraLastSave3d", "hoverClosest3d", "orbitRotation", 
+          "tableRotation", "zoomInGeo", "zoomOutGeo", "resetGeo", "hoverClosestGeo", 
+          "sendDataToCloud", "hoverClosestGl2d", "hoverClosestPie", "toggleHover", 
+          "resetViews", "toggleSpikelines", "resetViewMapbox"
+        ), displaylogo = FALSE) %>% 
+      # customize file name
+      config(plot_ly(),
+             toImageButtonOptions= list(filename = paste0(input$state, "_", input$adm_or_pop_map))) 
+  })
+  
+  # Supervision violations by type chart
+  output$sup_viols_type_chart <- renderPlotly({
+    
+    state <- input$state
+    adm_or_pop <- input$adm_or_pop
+    
+    # filter data
+    df <- 
+      adm_pop_long %>% 
+      filter(states == input$state &
+             adm_or_pop == input$adm_or_pop) %>% 
+      group_by(metric, year) %>% 
+      summarise(total = sum(total)) %>% 
+      filter(metric == "New Offense" | metric == "Technical")  
+
+    # bar chart of supervision violations by type
+    df %>%
+      plot_ly(
+        type = 'bar',
+        x = ~year,
+        y = ~total,
+        color = ~metric,
+        colors = c(`New Offense` = new_o_co,
+                   Technical = tech_co),
+        hoverinfo = 'text',
+        text = paste('<b>',df$metric, '</b><br><br>',
+                     'Total: ', formattable::comma(df$total, digits = 0),'<br>',
+                     'Year: ', df$year, '<br>')) %>%
+      # customize layout
+      layout(title = list(text = paste0('<b>Supervision Violation\n', input$adm_or_pop, 'by Type</b>'), font = list(size = 14)),
+             font = list(size = 12),
+             plot_bgcolor='#FFFFFF', 
+             xaxis = list( 
+               title = "",
+               showline= T, linewidth=2, linecolor='black',
+               gridcolor = 'FFFFFF'), 
+             yaxis = list( 
+               title = "",
+               showticklabels = TRUE,
+               tickformat=",d"
+             ),
+             legend = list(orientation = "h",   
+                           xanchor = "center",
+                           x = 0.5, y = -0.1)) %>% 
+      # remove plotly buttons
+      config(
+        modeBarButtonsToRemove = list(
+          "zoom2d", "pan2d", "select2d", "lasso2d", "zoomIn2d", "zoomOut2d", "autoScale2d", 
+          "resetScale2d", "zoom3d", "pan3d", 
+          "resetCameraDefault3d", "resetCameraLastSave3d", "hoverClosest3d", "orbitRotation", 
+          "tableRotation", "zoomInGeo", "zoomOutGeo", "resetGeo", "hoverClosestGeo", 
+          "sendDataToCloud", "hoverClosestGl2d", "hoverClosestPie", "toggleHover", 
+          "resetViews", "toggleSpikelines", "resetViewMapbox"
+        ), displaylogo = FALSE) %>% 
+      # customize file name
+      config(plot_ly(),
+             toImageButtonOptions= list(filename = paste0(state, "_Supervision_Violation_", adm_or_pop)))
+    
+  })
+  
+  
   ##################################
   # State table under graphs
   ##################################
@@ -400,96 +417,326 @@ server <- function(input, output, session) {
     
     # filter data
     df <- state_table %>% 
-      filter(states == input$state &
-               adm_or_pop == input$adm_or_pop) %>% 
-      select(-c(states, adm_or_pop, metric, data))
+      filter(states == input$state & 
+             adm_or_pop == input$adm_or_pop) %>% 
+      group_by(text) %>% 
+      summarise(total_new = list(list(total))) 
+    df1 <- state_table_wide %>% 
+      filter(states == input$state & 
+             adm_or_pop == input$adm_or_pop) %>% 
+      arrange(order) %>% 
+      select(-adm_or_pop, -states)
     
-    # overview table with expandable rows
+    # merge data
+    df <- merge(df1, df, by = "text")
+    df <- df %>% arrange(order) %>% select(-order)
+    
+    # choose colors
+    colpal_fill <- c("url(#total)",  
+                     "url(#sup_viols)",
+                     "url(#technical)",
+                     "url(#new_offense)")
+    colpal_stroke <- c(total_co, viol_co , tech_co, new_o_co)
+    
+    # create table with 3 year trend line in last column
     reactable(df,
-              groupBy = "type",
-              defaultSortOrder = 'desc',
-              defaultSorted = 'type',
-              striped = FALSE,
-              highlight = TRUE,
-              pagination = FALSE,
-              # compact = TRUE,
-              # showSortable = TRUE,
-              outlined = TRUE,
-              borderless = TRUE,
-              # theme = reactableTheme(
-              #   borderColor = "#C8C8C8",
-              #   stripedColor = "#F5F5F5",
-              #   highlightColor = "#C8C8C8",
-              #   cellPadding = "4px 6px",
-              #   headerStyle = list(background = "#C8C8C8"),
-              #   style = list(#fontFamily = "Cambria", 
-              #                fontSize = 14)),
+              theme = reactableTheme(
+                # Vertically center cells
+                cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
               defaultColDef = colDef(
-                format = colFormat(separators = TRUE)),
-              
+                format = colFormat(separators = TRUE),
+                align = "center"),
+              compact = TRUE,
+              fullWidth = FALSE,
               columns = list(
-                type             = colDef(name = "Breakdown",
-                                          html = TRUE,
-                                          align = "left",
-                                          minWidth = 250,
-                                          style = list(fontWeight = "bold")),
-                text              = colDef(name = "Metric",
-                                           minWidth = 160),
-                `2018`            = colDef(aggregate = "sum"),
-                `2019`            = colDef(aggregate = "sum"),
-                `2020`            = colDef(aggregate = "sum")
-              )
-    )
-    
+                text            = colDef(name = "Metric",
+                                         align = "left",
+                                         minWidth = 250),
+                `2018`          = colDef(minWidth = 75),
+                `2019`          = colDef(minWidth = 75),
+                `2020`          = colDef(minWidth = 75),
+                three_yr_change = colDef(name = "3 Yr Change",
+                                         format = colFormat(percent = TRUE, digits = 1)),
+                total_new  = colDef(name = "3 Yr Trend",
+                                    cell = function(value, index) {
+                                      dui_sparkline(
+                                        data = value[[1]], 
+                                        height = 80,
+                                        margin = list(top = 30, right = 20, bottom = 30, left = 20),
+                                        
+                                        components = list(
+                                          dui_sparkpatternlines(
+                                            id = "total",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = total_co,
+                                            strokeWidth = 1,
+                                            orientation = "diagonal"
+                                          ),
+                                          
+                                          dui_sparkpatternlines(
+                                            id = "sup_viols",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = viol_co,
+                                            strokeWidth = 1,
+                                            orientation = "diagonal"
+                                          ),
+                                          
+                                          dui_sparkpatternlines(
+                                            id = "technical",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = tech_co,
+                                            strokeWidth = 1,
+                                            orientation = "diagonal"
+                                          ),
+                                          
+                                          dui_sparkpatternlines(
+                                            id = "new_offense",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = new_o_co,
+                                            strokeWidth = 1,
+                                            orientation = "diagonal"
+                                          ),
+                                          
+                                          dui_sparklineseries(
+                                            curve = "linear",
+                                            showArea = TRUE,
+                                            fill = colpal_fill[index],
+                                            stroke = colpal_stroke[index])))})))
   })
   
   ##################################
-  # Probation and Parole Charts
+  # Parole and probation charts
   ##################################
   
-  # parole plot
-  output$barchart_parole <- renderPlot({
+  # parole area plot
+  output$areachart_parole <- renderPlotly({
     
-    df_parole <- 
-      adm_pop_long %>% 
+    # filter data
+    df <-
+      adm_pop_long %>%
       filter(states == input$state &
                adm_or_pop == input$adm_or_pop &
-               prob_vs_parole == "Parole") %>% 
+               prob_vs_parole == "Parole" &
+               metric != "New Offense") %>% 
+      group_by(states, year, metric) %>% 
+      summarise(total = sum(total))
+    df$year <- as.factor(df$year)
+    data_total <- df %>% filter(metric == "Parole")
+    data_technical <- df %>% filter(metric == "Technical")
+    
+    # area plot
+    plot_ly() %>%
+      # total
+      add_trace(x = data_total$year, 
+                y = data_total$total, 
+                name = "Total",
+                split = data_total$metric, 
+                type = 'scatter', 
+                mode = 'none', 
+                fill = 'tozeroy', 
+                fillcolor = pp_co,
+                hoverinfo = 'text',
+                text = paste('<b>',data_total$metric, '</b><br><br>',
+                             'Total: ', formattable::comma(data_total$total, digits = 0),'<br>',
+                             'Year: ', data_total$year, '<br>')) %>% 
+      # technical
+      add_trace(x = data_technical$year, 
+                y = data_technical$total, 
+                name = "Technical",
+                split = data_technical$metric, 
+                type = 'scatter', 
+                mode = 'none', 
+                fill = 'tozeroy', 
+                fillcolor = tech_co,
+                hoverinfo = 'text',
+                text = paste('<b>',data_technical$metric, '</b><br><br>',
+                             'Total: ', formattable::comma(data_technical$total, digits = 0),'<br>',
+                             'Year: ', data_technical$year, '<br>')) %>% 
+      # customize layout
+      layout(title = list(text = paste0('<b>Parole ', input$adm_or_pop, '</b>\n'), font = list(size = 14)),
+             font = list(size = 12),
+             plot_bgcolor='#FFFFFF', 
+             xaxis = list( 
+               title = "",
+               showline= T, 
+               linewidth=2,
+               linecolor='black',
+               gridcolor = 'FFFFFF'), 
+             yaxis = list( 
+               title = "",
+               showticklabels = TRUE,
+               tickformat=",d",
+               gridcolor = 'FFFFFF'
+             ),
+             legend = list(orientation = "h",   
+                           xanchor = "center",
+                           x = 0.5, y = -0.1)) %>% 
+      # remove plotly buttons
+      config(
+        modeBarButtonsToRemove = list(
+          "zoom2d", "pan2d", "select2d", "lasso2d", "zoomIn2d", "zoomOut2d", "autoScale2d", 
+          "resetScale2d", "zoom3d", "pan3d", 
+          "resetCameraDefault3d", "resetCameraLastSave3d", "hoverClosest3d", "orbitRotation", 
+          "tableRotation", "zoomInGeo", "zoomOutGeo", "resetGeo", "hoverClosestGeo", 
+          "sendDataToCloud", "hoverClosestGl2d", "hoverClosestPie", "toggleHover", 
+          "resetViews", "toggleSpikelines", "resetViewMapbox"
+        ), displaylogo = FALSE) %>% 
+      # customize file name
+      config(plot_ly(),
+             toImageButtonOptions= list(filename = paste0(input$state, "_Parole_", input$adm_or_pop)))
+    
+  })
+  
+  # parole bar chart
+  output$barchart_parole <- renderPlotly({
+    
+    state <- input$state
+    adm_or_pop <- input$adm_or_pop
+    
+    # filter data
+    df <- 
+      adm_pop_long %>% 
+      filter(states == input$state &
+             adm_or_pop == input$adm_or_pop &
+             prob_vs_parole == "Parole") %>% 
       filter(metric == "Technical" | metric == "New Offense")  %>% 
       group_by(metric, year) %>% 
       summarise(total = sum(total)) 
     
-    totals <- df_parole %>%
-      group_by(year) %>%
-      summarise(total = sum(total))
-    
-    title <- paste0("Prison ",input$adm_or_pop, " due to Parole Violations by Type\n")
-    
-    ggplot(data = df_parole,
-           aes_string(x = 'year', y = 'total', fill = 'metric')) +
-      geom_bar(stat = "identity", position = "dodge", alpha = 1) +
-      geom_text(aes(label=scales::comma(total)),
-                position=position_dodge(width = 0.9),
-                size = 4.5,
-                colour = "#000000",
-                vjust = -0.5) +
-      theme_csgjc_plot_legend() +
-      ggtitle(title) +
-      theme(plot.margin = margin(0.1, 0.1, 0.1, 0.1, "cm")) +
-      scale_fill_manual(values = c(new_o_co, tech_co),
-                        name = "") +
-      scale_y_continuous(label = scales::comma,
-                         limits = c(0, 1.17*max(df_parole$total)),
-                         expand = c(0,0)
-      ) +
-      coord_cartesian(clip = "off")
-    
+    # bar chart of parole violations by type
+    df %>%
+      plot_ly(
+        type = 'bar',
+        x = ~year,
+        y = ~total,
+        color = ~metric,
+        colors = c(`New Offense` = new_o_co,
+                   Technical = tech_co),
+        hoverinfo = 'text',
+        text = paste('<b>',df$metric, '</b><br><br>',
+                     'Total: ', formattable::comma(df$total, digits = 0),'<br>',
+                     'Year: ', df$year, '<br>')) %>%
+      # customize layout
+      layout(title = list(text = paste0('<b>Parole ', input$adm_or_pop, ' by Type</b>\n'), font = list(size = 14)),
+             font = list(size = 12),
+             plot_bgcolor='#FFFFFF', 
+             xaxis = list( 
+               title = "",
+               showline= T, linewidth=2, linecolor='black',
+               gridcolor = 'FFFFFF'), 
+             yaxis = list( 
+               title = "",
+               showticklabels = TRUE,
+               tickformat=",d"
+             ),
+             legend = list(orientation = "h",   
+                           xanchor = "center",
+                           x = 0.5, y = -0.1)) %>% 
+      # remove plotly buttons
+      config(
+        modeBarButtonsToRemove = list(
+          "zoom2d", "pan2d", "select2d", "lasso2d", "zoomIn2d", "zoomOut2d", "autoScale2d", 
+          "resetScale2d", "zoom3d", "pan3d", 
+          "resetCameraDefault3d", "resetCameraLastSave3d", "hoverClosest3d", "orbitRotation", 
+          "tableRotation", "zoomInGeo", "zoomOutGeo", "resetGeo", "hoverClosestGeo", 
+          "sendDataToCloud", "hoverClosestGl2d", "hoverClosestPie", "toggleHover", 
+          "resetViews", "toggleSpikelines", "resetViewMapbox"
+        ), displaylogo = FALSE) %>% 
+      # customize file name
+      config(plot_ly(),
+             toImageButtonOptions= list(filename = paste0(state, "_Parole_Type_", adm_or_pop)))
+
   })
   
-  # prob plot
-  output$barchart_prob <- renderPlot({
+  # probation area plot
+  output$areachart_prob <- renderPlotly({
+    # filter data
+    df <-
+      adm_pop_long %>%
+      filter(states == input$state &
+               adm_or_pop == input$adm_or_pop &
+               prob_vs_parole == "Probation" &
+               metric != "New Offense") %>% 
+      group_by(states, year, metric) %>% 
+      summarise(total = sum(total))
+    df$year <- as.factor(df$year)
+    data_total <- df %>% filter(metric == "Probation")
+    data_technical <- df %>% filter(metric == "Technical")
     
-    df_prob <- 
+    # area plot
+    plot_ly() %>%
+      # total
+      add_trace(x = data_total$year, 
+                y = data_total$total, 
+                name = "Total",
+                split = data_total$metric, 
+                type = 'scatter', 
+                mode = 'none', 
+                fill = 'tozeroy', 
+                fillcolor = pp_co,
+                hoverinfo = 'text',
+                text = paste('<b>',data_total$metric, '</b><br><br>',
+                             'Total: ', formattable::comma(data_total$total, digits = 0),'<br>',
+                             'Year: ', data_total$year, '<br>')) %>% 
+      # technical
+      add_trace(x = data_technical$year, 
+                y = data_technical$total, 
+                name = "Technical",
+                split = data_technical$metric, 
+                type = 'scatter', 
+                mode = 'none', 
+                fill = 'tozeroy', 
+                fillcolor = tech_co,
+                hoverinfo = 'text',
+                text = paste('<b>',data_technical$metric, '</b><br><br>',
+                             'Total: ', formattable::comma(data_technical$total, digits = 0),'<br>',
+                             'Year: ', data_technical$year, '<br>')) %>% 
+      # customize layout
+      layout(title = list(text = paste0('<b>Probation ', input$adm_or_pop, '</b>\n'), font = list(size = 14)),
+             font = list(size = 12),
+             plot_bgcolor='#FFFFFF', 
+             xaxis = list( 
+               title = "",
+               showline= T, 
+               linewidth=2,
+               linecolor='black',
+               gridcolor = 'FFFFFF'), 
+             yaxis = list( 
+               title = "",
+               showticklabels = TRUE,
+               tickformat=",d",
+               gridcolor = 'FFFFFF'
+             ),
+             legend = list(orientation = "h",   
+                           xanchor = "center",
+                           x = 0.5, y = -0.1)) %>% 
+      # remove plotly buttons
+      config(
+        modeBarButtonsToRemove = list(
+          "zoom2d", "pan2d", "select2d", "lasso2d", "zoomIn2d", "zoomOut2d", "autoScale2d", 
+          "resetScale2d", "zoom3d", "pan3d", 
+          "resetCameraDefault3d", "resetCameraLastSave3d", "hoverClosest3d", "orbitRotation", 
+          "tableRotation", "zoomInGeo", "zoomOutGeo", "resetGeo", "hoverClosestGeo", 
+          "sendDataToCloud", "hoverClosestGl2d", "hoverClosestPie", "toggleHover", 
+          "resetViews", "toggleSpikelines", "resetViewMapbox"
+        ), displaylogo = FALSE) %>% 
+      # customize file name
+      config(plot_ly(),
+             toImageButtonOptions= list(filename = paste0(input$state, "_Probation_Violation_", input$adm_or_pop)))
+  })
+  
+  # probation bar chart
+  output$barchart_prob <- renderPlotly({
+    
+    state <- input$state
+    adm_or_pop <- input$adm_or_pop
+    
+    # filter data
+    df <- 
       adm_pop_long %>% 
       filter(states == input$state &
                adm_or_pop == input$adm_or_pop &
@@ -498,30 +745,48 @@ server <- function(input, output, session) {
       group_by(metric, year) %>% 
       summarise(total = sum(total)) 
     
-    totals <- df_prob %>%
-      group_by(year) %>%
-      summarise(total = sum(total))
-    
-    title <- paste0("Probation ",input$adm_or_pop, " by Type\n")
-    
-    ggplot(data = df_prob,
-           aes_string(x = 'year', y = 'total', fill = 'metric')) +
-      geom_bar(stat = "identity", position = "dodge", alpha = 1) +
-      geom_text(aes(label=scales::comma(total)),
-                position=position_dodge(width = 0.9),
-                size = 4.5,
-                colour = "#000000",
-                vjust = -0.5) +
-      theme_csgjc_plot_legend() +
-      ggtitle(title) +
-      theme(plot.margin = margin(0.1, 0.1, 0.1, 0.1, "cm")) +
-      scale_fill_manual(values = c(new_o_co, tech_co),
-                        name = "") +
-      scale_y_continuous(label = scales::comma,
-                         limits = c(0, 1.17*max(df_prob$total)),
-                         expand = c(0,0)
-      ) +
-      coord_cartesian(clip = "off")
+    # bar chart of probation violations by type
+    df %>%
+      plot_ly(
+        type = 'bar',
+        x = ~year,
+        y = ~total,
+        color = ~metric,
+        colors = c(`New Offense` = new_o_co,
+                   Technical = tech_co),
+        hoverinfo = 'text',
+        text = paste('<b>',df$metric, '</b><br><br>',
+                     'Total: ', formattable::comma(df$total, digits = 0),'<br>',
+                     'Year: ', df$year, '<br>')) %>%
+      # customize layout
+      layout(title = list(text = paste0('<b>Probation ', input$adm_or_pop, ' by Type</b>\n'), font = list(size = 14)),
+             font = list(size = 12),
+             plot_bgcolor='#FFFFFF', 
+             xaxis = list( 
+               title = "",
+               showline= T, linewidth=2, linecolor='black',
+               gridcolor = 'FFFFFF'), 
+             yaxis = list( 
+               title = "",
+               showticklabels = TRUE,
+               tickformat=",d"
+             ),
+             legend = list(orientation = "h",   
+                           xanchor = "center",
+                           x = 0.5, y = -0.1)) %>% 
+      # remove plotly buttons
+      config(
+        modeBarButtonsToRemove = list(
+          "zoom2d", "pan2d", "select2d", "lasso2d", "zoomIn2d", "zoomOut2d", "autoScale2d", 
+          "resetScale2d", "zoom3d", "pan3d", 
+          "resetCameraDefault3d", "resetCameraLastSave3d", "hoverClosest3d", "orbitRotation", 
+          "tableRotation", "zoomInGeo", "zoomOutGeo", "resetGeo", "hoverClosestGeo", 
+          "sendDataToCloud", "hoverClosestGl2d", "hoverClosestPie", "toggleHover", 
+          "resetViews", "toggleSpikelines", "resetViewMapbox"
+        ), displaylogo = FALSE) %>% 
+      # customize file name
+      config(plot_ly(),
+             toImageButtonOptions= list(filename = paste0(state, "_Probation_Type_", adm_or_pop)))
     
   })
   
@@ -529,49 +794,17 @@ server <- function(input, output, session) {
   # BJS Probation and Parole Charts
   ##################################
   
-  # prob prob bar and line chart
-  output$barchart_bjs_prob_total <- renderPlot({
+  # prob parole bar and line chart
+  output$barchart_bjs_parole <- renderPlotly({
     
-    entries_woi <- bjs_prob %>% 
-      filter(state == input$state &
-               adm_or_pop == input$adm_or_pop &
-               data == "entries_wo_inc")
-
-    total <-  bjs_prob %>% 
-      filter(state == input$state &
-               adm_or_pop == input$adm_or_pop &
-               data == "entries_total")
-    
-    title <- paste0("Probation Entries\n")
-    
-    ggplot() + 
-      geom_bar(data = entries_woi, aes(x = year, y = total, fill = "Probation Entries without Incarceration"), stat="identity") +
-      geom_line(data = total, aes(x = year, y = total, group = 1, color = metric), size = 1.25) +
-      geom_text(data = entries_woi, aes(x = year, y = total, label = scales::comma(total)),
-                position=position_dodge(0.8), vjust = -0.6, size = 5) +
-      geom_text(data = total, aes(x = year, y = total, label = scales::comma(total)),
-                position=position_dodge(0.8), vjust = -0.6, size = 5) +
-      scale_y_continuous(label = scales::comma,
-                         limits = c(0, 1.15*max(total$total)),
-                         expand = c(0,0)) +
-      scale_colour_manual(" ", values=c("Total Probation Entries" = red))+
-      scale_fill_manual("",values=blue2)+
-      theme_csgjc_horizontal_legend() +
-      theme(legend.key=element_blank(),
-            legend.title=element_blank(),
-            legend.position = "top",
-            legend.box="horizontal",
-            axis.text.y = element_blank()) +
-      ggtitle(title) 
 
   })
   
-  # # prob barchart
-  # output$barchart_bjs_prob <- renderPlot({
-  #   
-  #   
-  #   
-  # })
+  # prob prob bar and line chart
+  output$barchart_bjs_prob <- renderPlotly({
+    
+    
+  })
   
   #-------------------------------------------------------------------------------
   # Download Data

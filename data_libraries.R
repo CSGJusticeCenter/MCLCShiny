@@ -89,8 +89,9 @@ gray <- "#dcdcdc"
 
 total_co <- lightorange
 viol_co <- orange
-tech_co <-  lightblue
+tech_co <-  regblue
 new_o_co <- darkblue
+pp_co <- lightblue
 
 #______________________________________________________
 # custom theme
