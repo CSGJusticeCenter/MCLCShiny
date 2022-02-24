@@ -153,47 +153,8 @@ bjs_prob <- bjs_prob %>% mutate(adm_or_pop = case_when(
 # clean shapefile for hex map
 ########
 
-# # remove US text from name
-# spdf@data = spdf@data %>%
-#   mutate(google_name = gsub(" \\(United States\\)", "", google_name))
-# spdf_fortified <- tidy(spdf, region = "google_name")
-# 
-# # calculate the centroid of each hexagon to add the label
-# centers <- cbind.data.frame(data.frame(gCentroid(spdf, byid=TRUE), id=spdf@data$iso3166_2))
-
 us_map <- fortify(us, region="iso3166_2")
 centers <- cbind.data.frame(data.frame(gCentroid(us, byid=TRUE), id=us@data$iso3166_2))
-
-########
-# clean shapefile
-# move and rescale hawaii and alaska
-########
-
-# # convert it to Albers equal area
-# us_aea <- spTransform(us, CRS("+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs"))
-# us_aea@data$id <- rownames(us_aea@data)
-# 
-# # extract, then rotate, shrink & move alaska (and reset projection)
-# # need to use state IDs via # https://www.census.gov/geo/reference/ansi_statetables.html
-# alaska <- us_aea[us_aea$STATEFP=="02",]
-# alaska <- elide(alaska, rotate=-50)
-# alaska <- elide(alaska, scale=max(apply(bbox(alaska), 1, diff)) / 2.3)
-# alaska <- elide(alaska, shift=c(-2100000, -2500000))
-# proj4string(alaska) <- proj4string(us_aea)
-# 
-# # extract, then rotate & shift hawaii
-# hawaii <- us_aea[us_aea$STATEFP=="15",]
-# hawaii <- elide(hawaii, rotate=-35)
-# hawaii <- elide(hawaii, shift=c(5400000, -1400000))
-# proj4string(hawaii) <- proj4string(us_aea)
-# 
-# # remove old states and put new ones back in; note the different order
-# # we're also removing puerto rico in this example but you can move it
-# # between texas and florida via similar methods to the ones we just used
-# us_aea <- us_aea[!us_aea$STATEFP %in% c("02", "15", "72"),]
-# us_aea <- rbind(us_aea, alaska, hawaii)
-# # transform data again
-# us_aea2 <- spTransform(us_aea, proj4string(us))
 
 ##########
 # create long form data
@@ -505,7 +466,6 @@ adm_pop_long$year <- as.factor(adm_pop_long$year)
 
 ########
 # State table under graph
-# Draft 1 - all data
 ########
 
 # select variables
@@ -527,9 +487,6 @@ state_table <- state_table %>%
          metric != "Parole" &
          metric != "Other")
 
-# make wide form
-state_table <- spread(state_table, key = year, value = total)
-
 # create text for table
 state_table <- state_table %>% mutate(text = case_when(
   metric == "New Offense" & adm_or_pop == "Admissions"            ~ "New Offense Admissions",
@@ -543,34 +500,33 @@ state_table <- state_table %>% mutate(text = case_when(
   metric == "Total" & adm_or_pop == "Population"                  ~ "Total Population"
 ))
 
+# make wide form
+state_table_wide <- spread(state_table, key = year, value = total)
+
+# order data for table output
+state_table_wide <- state_table_wide %>%
+  mutate(order = case_when(
+    metric == "New Offense"             ~ 4,
+    metric == "Supervision Violations"  ~ 2,
+    metric == "Technical"               ~ 3,
+    metric == "Total"                   ~ 1,
+
+    metric == "New Offense"             ~ 4,
+    metric == "Supervision Violations"  ~ 2,
+    metric == "Technical"               ~ 3,
+    metric == "Total"                   ~ 1)) %>% 
+    # 3 year change
+  mutate(three_yr_change = (`2020`-`2018`)/`2018`)
+
 # rearrange data
-state_table <- state_table %>% select(states, text, adm_or_pop, everything()) %>% 
-  ungroup() %>% 
+state_table <- state_table %>% select(states, text, adm_or_pop, everything()) %>%
+  ungroup() %>%
   select(-metric)
 
-########
-# State table under graph
-# Draft 2 - all data
-########
-
-# select variables
-state_table <- adm_pop_long %>% select(states,
-                                       year,
-                                       data,
-                                       total,
-                                       metric,
-                                       adm_or_pop)
-
-# make wide form
-state_table <- spread(state_table, key = year, value = total)
-
-# include totals
-state_table <- state_table %>% ungroup() %>% 
-  filter(data == "total_violation_admissions" &
-         data == "total_violation_population" &
-           
-         data != "other_admissions" &
-         data != "other_population")
+# rearrange data
+state_table_wide <- state_table_wide %>% select(states, text, `2018`, `2019`, `2020`, three_yr_change, everything()) %>%
+  ungroup() %>%
+  select(-metric)
 
 ########
 # National numbers
@@ -635,19 +591,20 @@ bjs <- bjs_prob
 ########
 # save Rdata
 ########
-save(mclc_datatable, file="mclc_datatable.Rda")
-save(mclc_change,    file="mclc_change.Rda")
-save(mclc,           file="mclc.Rda")
-save(mclc_explorer,  file="mclc_explorer.Rda")
-save(adm_pop_long,   file="adm_pop_long.Rda")
-save(state_table,    file="state_table.Rda")
-save(df_adm,         file="df_adm.Rda")
-save(df_pop,         file="df_pop.Rda")
-save(us_map,         file="us_map.Rda")
-save(us,             file="us.Rda")
-save(centers,        file="centers.Rda")
-save(df_pop,         file="df_pop.Rda")
+save(mclc_datatable,   file="mclc_datatable.Rda")
+save(mclc_change,      file="mclc_change.Rda")
+save(mclc,             file="mclc.Rda")
+save(mclc_explorer,    file="mclc_explorer.Rda")
+save(adm_pop_long,     file="adm_pop_long.Rda")
+save(state_table,      file="state_table.Rda")
+save(state_table_wide, file="state_table_wide.Rda")
+save(df_adm,           file="df_adm.Rda")
+save(df_pop,           file="df_pop.Rda")
+save(us_map,           file="us_map.Rda")
+save(us,               file="us.Rda")
+save(centers,          file="centers.Rda")
+save(df_pop,           file="df_pop.Rda")
 # save(df_prob_parole, file="df_prob_parole.Rda")
-save(bjs,            file="bjs.Rda")
-save(bjs_prob,       file="bjs_prob.Rda")
-save(csg,            file="csg.Rda")
+save(bjs,              file="bjs.Rda")
+save(bjs_prob,         file="bjs_prob.Rda")
+save(csg,              file="csg.Rda")
