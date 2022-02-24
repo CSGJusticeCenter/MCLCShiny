@@ -575,6 +575,124 @@ state_table_wide <- state_table_wide %>% select(states, text, `2018`, `2019`, `2
   select(-metric)
 
 ########
+# Parole table under graph
+########
+
+# select variables
+parole_table <- adm_pop_long %>% select(states,
+                                        year,
+                                        data,
+                                        total,
+                                        metric,
+                                        adm_or_pop,
+                                        prob_vs_parole)
+
+# summarise by type
+parole_table <- parole_table %>% 
+  group_by(states, year, metric, adm_or_pop, prob_vs_parole) %>% 
+  summarise(total = sum(total))
+
+# select
+parole_table <- parole_table %>% 
+  filter(prob_vs_parole == "Parole")
+
+# create text for table
+parole_table <- parole_table %>% mutate(text = case_when(
+  metric == "New Offense" & adm_or_pop == "Admissions"       ~ "Parole New Offense Admissions",
+  metric == "Technical" & adm_or_pop == "Admissions"         ~ "Parole Technical Admissions",
+  metric == "Parole" & adm_or_pop == "Admissions"            ~ "Parole Admissions",
+  
+  metric == "New Offense" & adm_or_pop == "Population"       ~ "Parole New Offense Population",
+  metric == "Technical" & adm_or_pop == "Population"         ~ "Parole Technical Population",
+  metric == "Parole" & adm_or_pop == "Population"            ~ "Parole Population"
+))
+
+# make wide form
+parole_table_wide <- spread(parole_table, key = year, value = total)
+
+# order data for table output
+parole_table_wide <- parole_table_wide %>%
+  mutate(order = case_when(
+    metric == "New Offense"             ~ 3,
+    metric == "Technical"               ~ 2,
+    metric == "Parole"                  ~ 1,
+    
+    metric == "New Offense"             ~ 3,
+    metric == "Technical"               ~ 2,
+    metric == "Parole"                  ~ 1)) %>% 
+  # 3 year change
+  mutate(three_yr_change = (`2020`-`2018`)/`2018`)
+
+# rearrange data
+parole_table <- parole_table %>% select(states, text, adm_or_pop, everything()) %>%
+  ungroup() %>%
+  select(-metric)
+
+# rearrange data
+parole_table_wide <- parole_table_wide %>% select(states, text, `2018`, `2019`, `2020`, three_yr_change, everything()) %>%
+  ungroup() %>%
+  select(-metric)
+
+########
+# Probation table under graph
+########
+
+# select variables
+prob_table <- adm_pop_long %>% select(states,
+                                      year,
+                                      data,
+                                      total,
+                                      metric,
+                                      adm_or_pop,
+                                      prob_vs_parole)
+
+# summarise by type
+prob_table <- prob_table %>% 
+  group_by(states, year, metric, adm_or_pop, prob_vs_parole) %>% 
+  summarise(total = sum(total))
+
+# select
+prob_table <- prob_table %>% 
+  filter(prob_vs_parole == "Probation")
+
+# create text for table
+prob_table <- prob_table %>% mutate(text = case_when(
+  metric == "New Offense" & adm_or_pop == "Admissions"       ~ "Probation New Offense Admissions",
+  metric == "Technical" & adm_or_pop == "Admissions"         ~ "Probation Technical Admissions",
+  metric == "Probation" & adm_or_pop == "Admissions"         ~ "Probation Admissions",
+  
+  metric == "New Offense" & adm_or_pop == "Population"       ~ "Probation New Offense Population",
+  metric == "Technical" & adm_or_pop == "Population"         ~ "Probation Technical Population",
+  metric == "Probation" & adm_or_pop == "Population"         ~ "Probation Population"
+))
+
+# make wide form
+prob_table_wide <- spread(prob_table, key = year, value = total)
+
+# order data for table output
+prob_table_wide <- prob_table_wide %>%
+  mutate(order = case_when(
+    metric == "New Offense"             ~ 3,
+    metric == "Technical"               ~ 2,
+    metric == "Probation"               ~ 1,
+    
+    metric == "New Offense"             ~ 3,
+    metric == "Technical"               ~ 2,
+    metric == "Probation"               ~ 1)) %>% 
+  # 3 year change
+  mutate(three_yr_change = (`2020`-`2018`)/`2018`)
+
+# rearrange data
+prob_table <- prob_table %>% select(states, text, adm_or_pop, everything()) %>%
+  ungroup() %>%
+  select(-metric)
+
+# rearrange data
+prob_table_wide <- prob_table_wide %>% select(states, text, `2018`, `2019`, `2020`, three_yr_change, everything()) %>%
+  ungroup() %>%
+  select(-metric)
+
+########
 # National numbers
 # get data from website for now 
 # state data will change so national numbers will change
@@ -628,30 +746,33 @@ df_pop$year <- as.numeric(df_pop$year)
 # order factor for plotting
 df_pop$metric <- factor(df_pop$metric, levels=c("other_population","violator_population"))
 
-
-
+########
+# save Rdata
+########
 
 csg <- adm_pop_long %>% rename(state = states)
 bjs <- bjs_prob
 
-########
-# save Rdata
-########
 save(mclc_datatable,   file="mclc_datatable.Rda")
 save(mclc_change,      file="mclc_change.Rda")
 save(mclc,             file="mclc.Rda")
 save(mclc_explorer,    file="mclc_explorer.Rda")
+
 save(adm_pop_long,     file="adm_pop_long.Rda")
 save(state_table,      file="state_table.Rda")
 save(state_table_wide, file="state_table_wide.Rda")
+save(parole_table,     file="parole_table.Rda")
+save(parole_table_wide,file="parole_table_wide.Rda")
+save(prob_table,       file="prob_table.Rda")
+save(prob_table_wide,  file="prob_table_wide.Rda")
+
 save(df_adm,           file="df_adm.Rda")
 save(df_pop,           file="df_pop.Rda")
 save(df_area,          file="df_area.Rda")
 save(us_map,           file="us_map.Rda")
 save(us,               file="us.Rda")
 save(centers,          file="centers.Rda")
-save(df_pop,           file="df_pop.Rda")
-# save(df_prob_parole, file="df_prob_parole.Rda")
+
 save(bjs,              file="bjs.Rda")
 save(bjs_prob,         file="bjs_prob.Rda")
 save(csg,              file="csg.Rda")

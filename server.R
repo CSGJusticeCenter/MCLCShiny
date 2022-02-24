@@ -376,7 +376,7 @@ server <- function(input, output, session) {
                      'Total: ', formattable::comma(df$total, digits = 0),'<br>',
                      'Year: ', df$year, '<br>')) %>%
       # customize layout
-      layout(title = list(text = paste0('<b>Supervision Violation\n', input$adm_or_pop, 'by Type</b>'), font = list(size = 14)),
+      layout(title = list(text = paste0('<b>Supervision Violation\n', input$adm_or_pop, ' by Type</b>'), font = list(size = 14)),
              font = list(size = 12),
              plot_bgcolor='#FFFFFF', 
              xaxis = list( 
@@ -787,6 +787,183 @@ server <- function(input, output, session) {
       # customize file name
       config(plot_ly(),
              toImageButtonOptions= list(filename = paste0(state, "_Probation_Type_", adm_or_pop)))
+    
+  })
+  
+  ##################################
+  # Parole and probation tables under graphs
+  ##################################
+  
+  # Parole table under graphs
+  output$parole_table <- renderReactable({ 
+    
+    # filter data
+    df <- parole_table %>% 
+      filter(states == input$state & 
+             adm_or_pop == input$adm_or_pop) %>% 
+      group_by(text) %>% 
+      summarise(total_new = list(list(total))) 
+    df1 <- parole_table_wide %>% 
+      filter(states == input$state & 
+             adm_or_pop == input$adm_or_pop) %>% 
+      arrange(order) %>% 
+      select(-adm_or_pop, -states, -prob_vs_parole)
+    
+    # merge data
+    df <- merge(df1, df, by = "text")
+    df <- df %>% arrange(order) %>% select(-order)
+    
+    # choose colors
+    colpal_fill <- c("url(#total)",  
+                     "url(#technical)",
+                     "url(#new_offense)")
+    colpal_stroke <- c(pp_co, tech_co, new_o_co)
+    
+    # create table with 3 year trend line in last column
+    reactable(df,
+              theme = reactableTheme(
+                # Vertically center cells
+                cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
+              defaultColDef = colDef(
+                format = colFormat(separators = TRUE),
+                align = "center"),
+              compact = TRUE,
+              fullWidth = FALSE,
+              columns = list(
+                text            = colDef(name = "Metric",
+                                         align = "left",
+                                         minWidth = 250),
+                `2018`          = colDef(minWidth = 75),
+                `2019`          = colDef(minWidth = 75),
+                `2020`          = colDef(minWidth = 75),
+                three_yr_change = colDef(name = "3 Yr Change",
+                                         format = colFormat(percent = TRUE, digits = 1)),
+                total_new  = colDef(name = "3 Yr Trend",
+                                    cell = function(value, index) {
+                                      dui_sparkline(
+                                        data = value[[1]], 
+                                        height = 80,
+                                        margin = list(top = 30, right = 20, bottom = 30, left = 20),
+                                        
+                                        components = list(
+                                          dui_sparkpatternlines(
+                                            id = "total",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = pp_co,
+                                            strokeWidth = 1,
+                                            orientation = "diagonal"
+                                          ),
+                                          
+                                          dui_sparkpatternlines(
+                                            id = "technical",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = tech_co,
+                                            strokeWidth = 1,
+                                            orientation = "diagonal"
+                                          ),
+                                          
+                                          dui_sparkpatternlines(
+                                            id = "new_offense",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = new_o_co,
+                                            strokeWidth = 1,
+                                            orientation = "diagonal"
+                                          ),
+                                          
+                                          dui_sparklineseries(
+                                            curve = "linear",
+                                            showArea = TRUE,
+                                            fill = colpal_fill[index],
+                                            stroke = colpal_stroke[index])))})))
+  })
+  
+  # Probation table under graphs
+  output$prob_table <- renderReactable({ 
+    
+    # filter data
+    df <- prob_table %>% 
+      filter(states == input$state & 
+               adm_or_pop == input$adm_or_pop) %>% 
+      group_by(text) %>% 
+      summarise(total_new = list(list(total))) 
+    df1 <- prob_table_wide %>% 
+      filter(states == input$state & 
+               adm_or_pop == input$adm_or_pop) %>% 
+      arrange(order) %>% 
+      select(-adm_or_pop, -states, -prob_vs_parole)
+    
+    # merge data
+    df <- merge(df1, df, by = "text")
+    df <- df %>% arrange(order) %>% select(-order)
+    
+    # choose colors
+    colpal_fill <- c("url(#total)",  
+                     "url(#technical)",
+                     "url(#new_offense)")
+    colpal_stroke <- c(pp_co, tech_co, new_o_co)
+    
+    # create table with 3 year trend line in last column
+    reactable(df,
+              theme = reactableTheme(
+                # Vertically center cells
+                cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
+              defaultColDef = colDef(
+                format = colFormat(separators = TRUE),
+                align = "center"),
+              compact = TRUE,
+              fullWidth = FALSE,
+              columns = list(
+                text            = colDef(name = "Metric",
+                                         align = "left",
+                                         minWidth = 250),
+                `2018`          = colDef(minWidth = 75),
+                `2019`          = colDef(minWidth = 75),
+                `2020`          = colDef(minWidth = 75),
+                three_yr_change = colDef(name = "3 Yr Change",
+                                         format = colFormat(percent = TRUE, digits = 1)),
+                total_new  = colDef(name = "3 Yr Trend",
+                                    cell = function(value, index) {
+                                      dui_sparkline(
+                                        data = value[[1]], 
+                                        height = 80,
+                                        margin = list(top = 30, right = 20, bottom = 30, left = 20),
+                                        
+                                        components = list(
+                                          dui_sparkpatternlines(
+                                            id = "total",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = pp_co,
+                                            strokeWidth = 1,
+                                            orientation = "diagonal"
+                                          ),
+                                          
+                                          dui_sparkpatternlines(
+                                            id = "technical",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = tech_co,
+                                            strokeWidth = 1,
+                                            orientation = "diagonal"
+                                          ),
+                                          
+                                          dui_sparkpatternlines(
+                                            id = "new_offense",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = new_o_co,
+                                            strokeWidth = 1,
+                                            orientation = "diagonal"
+                                          ),
+                                          
+                                          dui_sparklineseries(
+                                            curve = "linear",
+                                            showArea = TRUE,
+                                            fill = colpal_fill[index],
+                                            stroke = colpal_stroke[index])))})))
     
   })
   
