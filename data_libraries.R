@@ -2,9 +2,15 @@
 # load packages
 #______________________________________________________
 
-# library(classInt)
-# library(broom)
-# library(labelled)
+# deployment issues
+# install.packages("http://cran.r-project.org/src/contrib/Archive/evaluate/evaluate_0.13.tar.gz", repos=NULL, type="source")
+# install.packages("http://cran.r-project.org/src/contrib/Archive/highr/highr_0.8.tar.gz", repos=NULL, type="source")
+# install.packages("http://cran.r-project.org/src/contrib/Archive/markdown/markdown_0.9.tar.gz", repos=NULL, type="source")
+# install.packages("http://cran.r-project.org/src/contrib/Archive/markdown/scico_1.2.0.tar.gz", repos=NULL, type="source")
+library(evaluate)
+library(highr)
+library(markdown)
+library(scico)
 
 # shiny
 library(shiny)
@@ -30,6 +36,7 @@ library(geojsonio)
 library(rgdal)
 library(rgeos)
 library(viridis)
+library(sp)
 
 # data visualizations
 library(dataui)
@@ -37,8 +44,13 @@ library(plotly)
 library(ggplot2)
 library(ggthemes)
 library(RColorBrewer)
-library(ggiraph)
 library(scico)
+library(ggiraph)
+
+# don't need?
+# library(classInt)
+# library(broom)
+# library(labelled)
 
 #______________________________________________________
 # read in R data
