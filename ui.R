@@ -1,5 +1,3 @@
-source("data_libraries.R")
-source("functions.R")
 
 ui <- dashboardPage(dashboardHeader(title = "MCLC"), 
                     sidebar = dashboardSidebar(
@@ -41,7 +39,8 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                             br(), br(),
                                             fluidRow(
                                               column(width = 2),
-                                              column(width = 8, DT::dataTableOutput("table_map_counts"))),
+                                              column(width = 8,
+                                                     DT::dataTableOutput("table_map_counts"))),
                                               column(width = 2)
                                             # fluidRow(reactableOutput("table_map_counts"))
                                           )
@@ -220,8 +219,8 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                     ),
                                                     conditionalPanel(
                                                       condition = "input.dataset == 'Bureau of Justice Statistics'",
-                                                      checkboxGroupInput("year_table2", "Year", choices = unique(df_prob_parole$year), selected = "2014"),
-                                                      selectizeInput("state_table2", "State(s)", choices = unique(df_prob_parole$state), multiple = TRUE, selected = "Alabama")
+                                                      checkboxGroupInput("year_table2", "Year", choices = unique(bjs_prob$year), selected = "2014"),
+                                                      selectizeInput("state_table2", "State(s)", choices = unique(bjs_prob$state), multiple = TRUE, selected = "Alabama")
                                                     )
                                           ), # wellPanel
                                           mainPanel(  

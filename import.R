@@ -14,8 +14,6 @@
 #    "Data for web team v13.xlsx"
 #######################################
 
-library(formattable)
-
 ########
 # Import data
 ########
@@ -726,7 +724,7 @@ mclc_report <- mclc_report %>% mutate(year = case_when(
 mclc_report$total <- as.numeric(gsub(",", "", mclc_report$total))
 mclc_report$total <- round(mclc_report$total, 0)
 # add comma for labels in area chart
-mclc_report$total1 <- comma(mclc_report$total)
+mclc_report$total1 <- scales::comma(mclc_report$total)
 
 # admissions table
 df_adm <- mclc_report %>% 

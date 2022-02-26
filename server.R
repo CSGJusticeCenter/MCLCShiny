@@ -59,6 +59,8 @@ server <- function(input, output, session) {
                         aes(map_id=iso3166_2),
                         fill="#ffffff", alpha=0, color="white",
                         show_guide=FALSE)
+    
+    # change scales depending on rate vs count selection
     gg <- gg +
       geom_text(data=centers, aes(label = id, x = x, y = y), color = "white", size = 4) +
       coord_map() +
@@ -110,7 +112,7 @@ server <- function(input, output, session) {
   }, height="auto")
   
   ##############
-  # Table changes depending on count vs change
+  # Table below map changes depending on count vs change
   ##############
   
   output$table_map_counts <- DT::renderDataTable(
@@ -257,7 +259,6 @@ server <- function(input, output, session) {
   # Overall area plot
   ##############
   
-  # Total admissions and sup viols chart
   output$totals_chart <- renderPlotly({ 
     
     # filter data
@@ -347,7 +348,10 @@ server <- function(input, output, session) {
              toImageButtonOptions= list(filename = paste0(input$state, "_", input$adm_or_pop_map))) 
   })
   
+  ########
   # Supervision violations by type chart
+  ########
+  
   output$sup_viols_type_chart <- renderPlotly({
     
     state <- input$state
@@ -407,12 +411,10 @@ server <- function(input, output, session) {
     
   })
   
-  
-  ##################################
+  ########
   # State table under graphs
-  ##################################
+  ########
   
-  # State table under graphs
   output$state_table <- renderReactable({
     
     # filter data
@@ -457,6 +459,7 @@ server <- function(input, output, session) {
                 `2020`          = colDef(minWidth = 75),
                 three_yr_change = colDef(name = "3 Yr Change",
                                          format = colFormat(percent = TRUE, digits = 1)),
+                # add 3 year trend graphs to each row
                 total_new  = colDef(name = "3 Yr Trend",
                                     cell = function(value, index) {
                                       dui_sparkline(
@@ -512,7 +515,10 @@ server <- function(input, output, session) {
   # Parole and probation charts
   ##################################
   
-  # parole area plot
+  ########
+  # Parole area plot
+  ########
+  
   output$areachart_parole <- renderPlotly({
     
     # filter data
@@ -591,7 +597,10 @@ server <- function(input, output, session) {
     
   })
   
-  # parole bar chart
+  ########
+  # Parole bar chart
+  ########
+  
   output$barchart_parole <- renderPlotly({
     
     state <- input$state
@@ -652,7 +661,10 @@ server <- function(input, output, session) {
 
   })
   
-  # probation area plot
+  ########
+  # Probation area plot
+  ########
+  
   output$areachart_prob <- renderPlotly({
     # filter data
     df <-
@@ -729,7 +741,10 @@ server <- function(input, output, session) {
              toImageButtonOptions= list(filename = paste0(input$state, "_Probation_Violation_", input$adm_or_pop)))
   })
   
-  # probation bar chart
+  ########
+  # Probation bar chart
+  ########
+  
   output$barchart_prob <- renderPlotly({
     
     state <- input$state
@@ -794,7 +809,10 @@ server <- function(input, output, session) {
   # Parole and probation tables under graphs
   ##################################
   
+  ########
   # Parole table under graphs
+  ########
+  
   output$parole_table <- renderReactable({ 
     
     # filter data
@@ -880,7 +898,10 @@ server <- function(input, output, session) {
                                             stroke = colpal_stroke[index])))})))
   })
   
+  ########
   # Probation table under graphs
+  ########
+  
   output$prob_table <- renderReactable({ 
     
     # filter data
@@ -971,17 +992,17 @@ server <- function(input, output, session) {
   # BJS Probation and Parole Charts
   ##################################
   
-  # prob parole bar and line chart
-  output$barchart_bjs_parole <- renderPlotly({
-    
-
-  })
-  
-  # prob prob bar and line chart
-  output$barchart_bjs_prob <- renderPlotly({
-    
-    
-  })
+  # # prob parole bar and line chart
+  # output$barchart_bjs_parole <- renderPlotly({
+  #   
+  # 
+  # })
+  # 
+  # # prob prob bar and line chart
+  # output$barchart_bjs_prob <- renderPlotly({
+  #   
+  #   
+  # })
   
   #-------------------------------------------------------------------------------
   # Download Data

@@ -1,52 +1,72 @@
 #______________________________________________________
 # load packages
 #______________________________________________________
+
+# library(classInt)
+# library(broom)
+# library(labelled)
+
+# shiny
+library(shiny)
 library(shinyWidgets)
-library(RColorBrewer)
-library(classInt)
+library(dashboardthemes)
+library(shinydashboard)
+
+# data manipulation
+library(readxl)
+library(dplyr)
+library(tidyverse)
+library(janitor)
+
+# tables
+library(reactable)
+library(DT)
+
+# maps
+library(leaflet)
+library(leaflegend)
+library(mapproj)
+library(geojsonio)
+library(rgdal)
+library(rgeos)
+library(viridis)
+
+# data visualizations
+library(dataui)
 library(plotly)
 library(ggplot2)
 library(ggthemes)
-library(dplyr)
-library(shinythemes)
+library(RColorBrewer)
 library(ggiraph)
-library(shinydashboard)
-library(leaflet)
-library(DT)
-library(tidyverse)
-library(geojsonio)
-library(rgdal)
-library(broom)
-library(rgeos)
-library(viridis)
-library(readxl)
-library(janitor)
-library(dashboardthemes)
-library(labelled)
-library(reactable)
-library(shiny)
 library(scico)
-library(leaflegend)
-library(mapproj)
-library(dataui)
 
 #______________________________________________________
 # read in R data
 #______________________________________________________
-load("adm_pop_long.Rda")
-load("mclc.Rda")
-load("mclc_change.Rda")
-load("mclc_datatable.Rda")
-load("mclc_explorer.Rda")
-load("df_adm.Rda")
-load("df_pop.Rda")
-load("df_pop.Rda")
-load("us.Rda")
-load("us_map.Rda")
-load("centers.Rda")
-load("df_prob_parole.Rda")
-load("csg.Rda")
-load("bjs.Rda")
+
+load(file="mclc_datatable.Rda")
+load(file="mclc_change.Rda")
+load(file="mclc.Rda")
+load(file="mclc_explorer.Rda")
+
+load(file="adm_pop_long.Rda")
+load(file="state_table.Rda")
+load(file="state_table_wide.Rda")
+load(file="parole_table.Rda")
+load(file="parole_table_wide.Rda")
+load(file="prob_table.Rda")
+load(file="prob_table_wide.Rda")
+
+load(file="df_adm.Rda")
+load(file="df_pop.Rda")
+load(file="df_area.Rda")
+load(file="us_map.Rda")
+load(file="us.Rda")
+load(file="centers.Rda")
+
+load(file="bjs.Rda")
+load(file="bjs_prob.Rda")
+load(file="csg.Rda")
 
 #______________________________________________________
 # colors
@@ -56,29 +76,6 @@ change_colors = c("#264d59", "#43978d", "#f9e07f", "#f9ad6a", "#d46c4e")
 count_colors = c("#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#08589e")
 
 # assign colors for visualizations
-# blue2  <- "#9ed4ef"
-# blue3  <- "#71cfee"
-# blue4  <- "#007392"
-# blue5  <- "#00475d"
-# red    <- "#B05D24"
-# green3 <- "#7fc241"
-# green4 <- "#5c922f"
-# green5 <- "#315c15"
-# yellow <- "#f0de0b"
-# orange <- "#f89c1b"
-
-# blue1 <- "#DEF0F6"
-# blue3 <- "#355DA1"
-# orange <- "#f89c1b"
-# red <- "#B05D24"
-# yellow <- "#F5CB5C"
-# drab <- "#3C362A"
-
-# lightorange <- "#FFBB78"
-# orange <- "#FF7F0E"
-# lightblue <- "#AEC7E8"
-# darkblue <- "#1F77B4"
-
 lightorange <- "#fcccac"
 orange <- "#fc9c54"
 lightblue <- "#9cccec"
@@ -87,6 +84,7 @@ regblue <- "#3c97da"
 brown <- "#b26e39"
 gray <- "#dcdcdc"
 
+# assign colors to data types
 total_co <- lightorange
 viol_co <- orange
 tech_co <-  regblue
