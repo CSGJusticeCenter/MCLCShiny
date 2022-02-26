@@ -69,9 +69,6 @@ load(file="parole_table_wide.Rda")
 load(file="prob_table.Rda")
 load(file="prob_table_wide.Rda")
 
-load(file="df_adm.Rda")
-load(file="df_pop.Rda")
-load(file="df_area.Rda")
 load(file="us_map.Rda")
 load(file="us.Rda")
 load(file="centers.Rda")
@@ -84,8 +81,8 @@ load(file="csg.Rda")
 # colors
 #______________________________________________________
 
-change_colors = c("#264d59", "#43978d", "#f9e07f", "#f9ad6a", "#d46c4e")
-count_colors = c("#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#08589e")
+# change_colors = c("#264d59", "#43978d", "#f9e07f", "#f9ad6a", "#d46c4e")
+# count_colors = c("#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#08589e")
 
 # assign colors for visualizations
 lightorange <- "#fcccac"
@@ -102,6 +99,9 @@ viol_co <- orange
 tech_co <-  regblue
 new_o_co <- darkblue
 pp_co <- lightblue
+
+count_colors <- c(lightblue, regblue, darkblue, "#2a6a99")
+change_colors = c("#af4d03", orange, lightorange, lightblue, regblue, darkblue)
 
 #______________________________________________________
 # custom theme

@@ -3,7 +3,6 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                     sidebar = dashboardSidebar(
                       sidebarMenu(id = "tabs",
                                   menuItem(text = "Map Explorer",  tabName = "Map_Explorer",icon = icon("map-pin")),
-                                  menuItem(text = "Map Explorer 2",tabName = "Map_Explorer_2",icon = icon("map-pin")),
                                   menuItem(text = "State Reports", tabName = "State_Reports",icon = icon("search-location")),
                                   menuItem(text = "Download Data", tabName = "Download_Data",icon = icon("table"))
                       )
@@ -35,7 +34,11 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                     )
                                           ),
                                           mainPanel(  
-                                            fluidRow(plotOutput("map_counts", width = "100%")),
+                                            fluidRow(#plotOutput("map_counts", width = "100%")
+                                                     leafletOutput("leaflet_map"),
+                                                     tags$style(HTML(".leaflet-container { background: #FFFFFF;}"))
+                                                     #tags$style(type = "text/css", "#leaflet_map {height: calc(100vh - 53px) !important;}")
+                                                     ),
                                             br(), br(),
                                             fluidRow(
                                               column(width = 2),
@@ -187,24 +190,6 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                         ), #tabItem 
                         
                         #-------------------------------------------------------
-                        # 2nd Map Option - Interactive Leaflet
-                        #-------------------------------------------------------
-                        
-                        tabItem(tabName = "Map_Explorer_2",
-                                fluidPage(
-
-                                  mainPanel(
-
-                                    br(),
-                                    leafletOutput("leaflet_map", height = 350, width = 800),
-                                    tags$style(HTML(".leaflet-container { background: #FFFFFF;}")),
-                                    tags$style(type = "text/css", "#leaflet_map {height: calc(100vh - 53px) !important;}"),
-
-                                  ) #mainPanel
-                                ) #fluidPage
-                        ), #tabItem
-                        
-                        #-------------------------------------------------------
                         # Download Data
                         #-------------------------------------------------------
                         tabItem(tabName = "Download_Data",
@@ -212,25 +197,37 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                 fluidPage(wellPanel(tags$style(type="text/css", '#leftPanel { width:250px; float:left;}'), id = "leftPanel",
                                                     selectInput(inputId = "dataset",
                                                                 label = "Dataset",
-                                                                choices = c("More Community, Less Confinement (CSG)", "Bureau of Justice Statistics")),
+                                                                choices = c("More Community, Less Confinement (CSG)", "Annual Probation Survey and Annual Parole Survey (BJS)")),
                                                     
                                                     conditionalPanel(
                                                       condition = "input.dataset == 'More Community, Less Confinement (CSG)'",
                                                       checkboxGroupInput("year_table", "Year", choices = unique(csg$year), selected = "2018"),
-                                                      selectizeInput("state_table", "State(s)", choices = unique(csg$state), multiple = TRUE, selected = "Alabama")
+                                                      pickerInput("download_table","State(s)", choices = unique(csg$state), options = list(`actions-box` = TRUE), multiple = T)
+                                                      # selectizeInput("download_table", "State(s)", choices = unique(csg$state), multiple = TRUE, selected = "Alabama")
+                                              
                                                     ),
                                                     conditionalPanel(
-                                                      condition = "input.dataset == 'Bureau of Justice Statistics'",
+                                                      condition = "input.dataset == 'Annual Probation Survey and Annual Parole Survey (BJS)'",
                                                       checkboxGroupInput("year_table2", "Year", choices = unique(bjs_prob$year), selected = "2014"),
-                                                      selectizeInput("state_table2", "State(s)", choices = unique(bjs_prob$state), multiple = TRUE, selected = "Alabama")
+                                                      pickerInput("download_table2","State(s)", choices = unique(bjs_prob$state), options = list(`actions-box` = TRUE), multiple = T)
+                                                      # selectizeInput("download_table2", "State(s)", choices = unique(bjs_prob$state), multiple = TRUE, selected = "Alabama")
                                                     )
                                           ), # wellPanel
                                           mainPanel(  
-                                            br(),
+                                           br(),
+                                           fluidRow(column(width = 1),
+                                                    column(width = 11,
+                                                           h2("Download Data"),
+                                                           br(),
+                                                           textOutput("selected_data"),
+                                                           tags$head(tags$style("#selected_data{font-size: 20px;font-style: bold;}")),
+                                                           br(),
+                                                           textOutput("selected_data_info"),
+                                                           br(), br())
+                                           ),
                                             fluidRow(
-                                              column(width = 2),
-                                              column(width = 8, DT::dataTableOutput("main_table"))),
-                                              column(width = 2)
+                                              column(width = 1),
+                                              column(width = 11, DT::dataTableOutput("main_table")), align = "center")
                                           ) #mainPanel
                                 ) #fluidPage
                         ) #tabItem

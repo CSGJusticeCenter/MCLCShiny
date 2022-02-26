@@ -173,9 +173,9 @@ server <- function(input, output, session) {
     
     df_map <- sp::merge(us, df_map(), by.x = 'iso3166_2', by.y = "Code")
     
-    # pal_fun <- colorQuantile("YlOrRd", NULL, n = 5)
-    pal_fun <- colorNumeric('inferno', df_map$total)
+    df_map <- df_map[df_map$google_name != "District of Columbia (United States)", ]
     
+    pal_fun <- colorNumeric(change_colors, df_map$total)
     p_popup <- paste0(df_map$states, ": ", round(df_map$total, 2), "%")
     
     leaflet(df_map, options = leafletOptions(zoomControl = FALSE,
@@ -191,7 +191,25 @@ server <- function(input, output, session) {
                   popup = p_popup) %>% 
       
       # set view to US
-      setView(lng = -96.25, lat = 30.50, zoom = 3.5) 
+      setView(lng = -96.25, lat = 40.50, zoom = 3.5) %>% 
+      
+      # legend
+      addLegend("topright", 
+                pal = pal_fun, 
+                values = ~total,
+                title = "Change",
+                labFormat = labelFormat(prefix = " ", suffix = "%"),
+                opacity = 1
+      )  %>% 
+      
+      addLabelOnlyMarkers(data = centers,
+                          lng = ~x, 
+                          lat = ~y, 
+                          label = ~id,
+                          labelOptions = labelOptions(noHide = TRUE, 
+                                                      direction = 'center', 
+                                                      textOnly = TRUE))
+    
 
   })
   
@@ -380,7 +398,7 @@ server <- function(input, output, session) {
                      'Total: ', formattable::comma(df$total, digits = 0),'<br>',
                      'Year: ', df$year, '<br>')) %>%
       # customize layout
-      layout(title = list(text = paste0('<b>Supervision Violation\n', input$adm_or_pop, ' by Type</b>'), font = list(size = 14)),
+      layout(title = list(text = paste0('<b>Supervision Violation\n', input$adm_or_pop, ' by Type</b>\n'), font = list(size = 14)),
              font = list(size = 12),
              plot_bgcolor='#FFFFFF', 
              xaxis = list( 
@@ -1008,19 +1026,46 @@ server <- function(input, output, session) {
   # Download Data
   #-------------------------------------------------------------------------------
   
+  output$selected_data <- renderText({ 
+   input$dataset
+  })
+  
+  output$selected_data_info <- renderText({
+    if     (input$dataset == "More Community, Less Confinement (CSG)"){
+      "This dataset contains prison admissions and population numbers by state from 2018 to 2020. This dataset includes a breakdown of community supervision violation type."
+    }
+    else if(input$dataset == "Annual Probation Survey and Annual Parole Survey (BJS)"){
+      "This dataset includes administrative data from probation and parole agencies in the United States. Data collected include the total number of adults on state and federal probation and parole on January 1 and December 31 of each year, the number of adults entering and exiting probation and parole supervision each year, and the characteristics of adults under the supervision of probation and parole agencies. Published data include both national- and state-level data. The surveys cover all 50 states, the federal system, and the District of Columbia."
+    }
+  })
+  
   datasetInput <- reactive({
     dataset <- switch(input$dataset,
-                      "Bureau of Justice Statistics" = bjs,
-                      "More Community, Less Confinement (CSG)" = csg)
+                      "Annual Probation Survey and Annual Parole Survey (BJS)" = bjs,
+                      "More Community, Less Confinement (CSG)"                 = csg)
     dataset <- dataset %>% filter(year %in% input$year_table |
-                                    year %in% input$year_table2) %>% 
-      filter(state %in% input$state_table |
-             state %in% input$state_table2)
+                                  year %in% input$year_table2) %>% 
+      filter(state %in% input$download_table |
+             state %in% input$download_table2) %>% 
+      arrange(state, text, year)
   })
   
   # Generate a summary of the dataset ----
   output$main_table <- DT::renderDataTable({
-    datatable(datasetInput())
+    DT::datatable(
+      datasetInput(),
+      colnames = c('State', 'Year', 'Data', 'Total', 'Admissions or Population'),
+      rownames = FALSE,
+      options =  list(dom = 'Blfrtip',
+                      pageLength = 20,
+                      buttons = list(
+                        c('copy', 'csv', 'excel', 'pdf', 'print')),
+                      deferRender = TRUE,
+                      lengthMenu = list(c(10, 20,-1), c('10', '20', 'All')),
+                      searching = TRUE
+      ),
+      extensions = 'Buttons'
+    )
   })
   
   
