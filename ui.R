@@ -2,10 +2,10 @@
 ui <- dashboardPage(dashboardHeader(title = "MCLC"), 
                     sidebar = dashboardSidebar(
                       sidebarMenu(id = "tabs",
-                                  menuItem(text = "Map Explorer",tabName = "Map_Explorer",icon = icon("map-pin")),
+                                  menuItem(text = "Map Explorer",  tabName = "Map_Explorer",icon = icon("map-pin")),
                                   menuItem(text = "Map Explorer 2",tabName = "Map_Explorer_2",icon = icon("map-pin")),
-                                  menuItem(text = "State Reports",tabName = "State_Reports",icon = icon("search-location")),
-                                  menuItem(text = "Download Data",tabName = "Download_Data",icon = icon("table"))
+                                  menuItem(text = "State Reports", tabName = "State_Reports",icon = icon("search-location")),
+                                  menuItem(text = "Download Data", tabName = "Download_Data",icon = icon("table"))
                       )
                     ), #dashboardSidebar
                     body = dashboardBody(
@@ -15,7 +15,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                       
                       tabItems(
                         #-------------------------------------------------------
-                        # National Page
+                        # Map Page
                         #-------------------------------------------------------
                         
                         tabItem(tabName = "Map_Explorer",
@@ -97,7 +97,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                     
                                     tabsetPanel(
                                       ###################
-                                      # Overview of state report
+                                      # Overview of state 
                                       ###################
                                       tabPanel(value="1","Overview", 
                                                br(),
@@ -109,15 +109,14 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                         plotlyOutput("totals_chart", height = 375)),
                                                  column(width = 5,
                                                         plotlyOutput("sup_viols_type_chart", height = 375))
-                                               ), #fluidRow
+                                                 ), #fluidRow
                                                br(), 
                                                ############
-                                               # Tables
+                                               # Table under graphs
                                                ############
                                                fluidRow(
                                                  column(width = 12,
-                                                        reactableOutput("state_table")
-                                                        )                                               ),
+                                                        reactableOutput("state_table"))),
                                                br()
                                       ),
                                       ###################
@@ -125,6 +124,9 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                       ###################
                                       tabPanel("Parole", 
                                                br(),
+                                               ############
+                                               # Plots
+                                               ############
                                                fluidRow(
                                                  column(width = 6,
                                                         plotlyOutput("areachart_parole", height = 300)),
@@ -140,7 +142,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                ), #fluidRow
                                                br(), 
                                                ############
-                                               # Tables
+                                               # Table under graphs
                                                ############
                                                fluidRow(
                                                  column(width = 12,
@@ -153,6 +155,9 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                       ###################
                                       tabPanel("Probation", 
                                                br(),
+                                               ############
+                                               # Plots
+                                               ############
                                                fluidRow(
                                                  column(width = 6,
                                                         plotlyOutput("areachart_prob", height = 300)),
@@ -168,7 +173,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                ), #fluidRow
                                                br(), 
                                                ############
-                                               # Tables
+                                               # Table under graphs
                                                ############
                                                fluidRow(
                                                  column(width = 12,
@@ -182,14 +187,11 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                         ), #tabItem 
                         
                         #-------------------------------------------------------
-                        # 2nd Map Option
+                        # 2nd Map Option - Interactive Leaflet
                         #-------------------------------------------------------
                         
                         tabItem(tabName = "Map_Explorer_2",
                                 fluidPage(
-
-                                  # headerPanel("header 3"),
-                                  # titlePanel(h2("title 3")),
 
                                   mainPanel(
 
