@@ -1066,8 +1066,55 @@ server <- function(input, output, session) {
   
   # prob parole bar and line chart
   output$barchart_bjs_parole <- renderPlotly({
-
-
+    
+    df <- bjs %>% filter(state == input$state & adm_or_pop == input$adm_or_pop & type == "Parole")
+    type <- "Parole"
+    
+    state <- input$state
+    adm_or_pop <- input$adm_or_pop
+    title <- unique(df$text)
+    
+    # bar chart of supervision violations by type
+    df %>%
+      plot_ly(
+        type = 'bar',
+        x = ~year,
+        y = ~total,
+        marker = list(color = bjs_co),
+        hovertext  = paste('<b>',     df$text, '</b><br><br>',
+                           'Total: ', formattable::comma(df$total, digits = 0),'<br>',
+                           'Year: ',  df$year, '<br>'),
+        hoverinfo = 'text'
+      ) %>%
+      # customize layout
+      layout(title = list(text = paste0('<b>', title, '</b>\n'), font = list(size = 14)),
+             font = list(size = 12),
+             plot_bgcolor='#FFFFFF', 
+             xaxis = list( 
+               title = "",
+               showline= T, linewidth=2, linecolor='black',
+               gridcolor = 'FFFFFF'), 
+             yaxis = list( 
+               title = "",
+               showticklabels = TRUE,
+               tickformat=",d"),
+             annotations = list(x = 0, y = -0.2, text = "Source: BJS Annual Parole Surveys 2014-2018", 
+                                showarrow = F, xref='paper', yref='paper', 
+                                xanchor='left', yanchor='auto', 
+                                font=list(color="gray"))) %>% 
+      # remove plotly buttons
+      config(
+        modeBarButtonsToRemove = list(
+          "zoom2d", "pan2d", "select2d", "lasso2d", "zoomIn2d", "zoomOut2d", "autoScale2d", 
+          "resetScale2d", "zoom3d", "pan3d", 
+          "resetCameraDefault3d", "resetCameraLastSave3d", "hoverClosest3d", "orbitRotation", 
+          "tableRotation", "zoomInGeo", "zoomOutGeo", "resetGeo", "hoverClosestGeo", 
+          "sendDataToCloud", "hoverClosestGl2d", "hoverClosestPie", "toggleHover", 
+          "resetViews", "toggleSpikelines", "resetViewMapbox"
+        ), displaylogo = FALSE) %>% 
+      # customize file name
+      config(plot_ly(),
+             toImageButtonOptions= list(filename = paste0(state, "_", title)))
   })
 
   # prob prob bar and line chart
@@ -1086,13 +1133,12 @@ server <- function(input, output, session) {
         type = 'bar',
         x = ~year,
         y = ~total,
-        marker = list(color = lightblue),
+        marker = list(color = bjs_co),
         hovertext  = paste('<b>',     df$text, '</b><br><br>',
                            'Total: ', formattable::comma(df$total, digits = 0),'<br>',
                            'Year: ',  df$year, '<br>'),
         hoverinfo = 'text'
-      ) 
-    %>%
+      ) %>%
       # customize layout
       layout(title = list(text = paste0('<b>', title, '</b>\n'), font = list(size = 14)),
              font = list(size = 12),

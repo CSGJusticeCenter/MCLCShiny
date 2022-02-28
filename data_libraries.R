@@ -91,6 +91,7 @@ darkblue <- "#2c6c9c"
 regblue <- "#3c97da"
 brown <- "#b26e39"
 gray <- "#dcdcdc"
+lightgreen <- "#a8ddb5"
 
 # assign colors to data types
 total_co <- lightorange
@@ -98,6 +99,7 @@ viol_co <- orange
 tech_co <-  regblue
 new_o_co <- darkblue
 pp_co <- lightblue
+bjs_co <- lightgreen
 
 count_colors <- c(lightblue, regblue, darkblue, "#2a6a99")
 change_colors = c("#af4d03", orange, lightorange, lightblue, regblue, darkblue)

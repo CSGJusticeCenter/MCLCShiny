@@ -656,7 +656,7 @@ parole <- parole %>% rename(state_abb = state, state = stateid)
 ########
 
 # select variables and rename
-prob <- prob %>% select(state, state_abb, year,
+bjs_prob <- prob %>% select(state, state_abb, year,
                         total_pop_end = totend,          # prob population end of year 
                         entries_w_inc = eninc,           # entries with incarceration
                         entries_wo_inc = ennoinc,        # entries without incarceration
@@ -666,32 +666,29 @@ prob <- prob %>% select(state, state_abb, year,
 )
 
 # combine inc_new_sentence + inc_current_sentence
-prob <- prob %>% mutate(incarecerated = inc_new_sentence + inc_current_sentence)
+bjs_prob <- bjs_prob %>% mutate(incarcerated = inc_new_sentence + inc_current_sentence)
 
 # add types
-prob$type <- "Probation"
+bjs_prob$type <- "Probation"
 
 # make long form
-bjs_prob <- gather(prob, data, total, total_pop_end:incarecerated)
+bjs_prob <- gather(bjs_prob, data, total, total_pop_end:incarcerated)
 
 # descriptions
 bjs_prob <- bjs_prob %>% mutate(text = case_when(
-  data == "entries_total"         & type == "Probation" ~ "Total Probation Entries",
-  data == "entries_w_inc"         & type == "Probation" ~ "Probation Entries with Incarceration",
-  data == "entries_wo_inc"        & type == "Probation" ~ "Probation Entries without Incarceration",
+  data == "entries_w_inc"         & type == "Probation" ~ "Entries with Incarceration",
   data == "inc_current_sentence"  & type == "Probation" ~ "Incarcerated under Current Sentence",
   data == "inc_new_sentence"      & type == "Probation" ~ "Incarcerated with New Sentence",
-  data == "total_pop_end"         & type == "Probation" ~ "Probation Population (EOY)"
+  data == "incarcerated"          & type == "Probation" ~ "Incarcerated with Current or New Sentence",
+  
 ))
 
 # assign admissions and population variable
 bjs_prob <- bjs_prob %>% mutate(adm_or_pop = case_when(
-  data == "entries_total"         ~ "Admissions",
-  data == "entries_w_inc"         ~ "Admissions",
-  data == "entries_wo_inc"        ~ "Admissions",
-  data == "inc_current_sentence"  ~ "Population",
+  data == "incarcerated"          ~ "Population",
   data == "inc_new_sentence"      ~ "Population",
-  data == "total_pop_end"         ~ "Population"
+  data == "inc_current_sentence"  ~ "Population",
+  data == "entries_w_inc"         ~ "Admissions"
 ))
 
 # filter to data needed (entries with incarceration, incarceration with new sentence or current sentence)
@@ -702,7 +699,7 @@ bjs_prob <- bjs_prob %>% filter(data == "entries_w_inc" | data == "incarcerated"
 ########
  
 bjs_parole <- parole %>% select(state, state_abb, year,
-                                entries_total = toten,           # total entries to probation 
+                                entries_total = toten,       # total entries to probation 
                             inc_new_sentence = exincnew,     # incarcerated with new sentence
                             inc_w_revocation = exincrev) %>% # incarcerated with revocation 
                      mutate(incarcerated = inc_new_sentence + inc_w_revocation)
@@ -711,14 +708,14 @@ bjs_parole <- parole %>% select(state, state_abb, year,
 bjs_parole$type <- "Parole"
 
 # make long form
-bjs_parole <- gather(parole, data, total, entries_total:incarcerated)
+bjs_parole <- gather(bjs_parole, data, total, entries_total:incarcerated)
 
 # descriptions
 bjs_parole <- bjs_parole %>% mutate(text = case_when(
-  data == "entries_total"               & type == "Parole" ~ "Total Parole Entries",
+  data == "entries_total"               & type == "Parole" ~ "Total Entries",
   data == "incarcerated_w_new_sentence" & type == "Parole" ~ "Incarcerated with New Sentence",
   data == "incarcerated_w_revocation"   & type == "Parole" ~ "Incarcerated with Revocation",
-  data == "incarcerated"                & type == "Parole" ~ "Incarcerated (New Sentence/Revocation)"
+  data == "incarcerated"                & type == "Parole" ~ "Incarcerated with New Sentence or Revocation"
 ))
 
 # assign admissions and population variable
@@ -740,7 +737,7 @@ bjs_parole <- bjs_parole %>% filter(data == "entries_total" | data == "incarcera
 bjs <- rbind(bjs_parole, bjs_prob)
 
 # select variables
-bjs <- bjs %>% select(state, year, text, total, adm_or_pop)
+bjs <- bjs %>% select(state, year, text, total, adm_or_pop, type)
 
 # change data types
 bjs$state <- as.character(bjs$state)
@@ -769,3 +766,4 @@ save(centers,          file="centers.Rda")
 
 save(bjs,              file="bjs.Rda")
 save(csg,              file="csg.Rda")
+

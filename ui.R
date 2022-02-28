@@ -221,7 +221,9 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                            ),
                                             fluidRow(
                                               column(width = 1),
-                                              column(width = 11, DT::dataTableOutput("main_table")), align = "center")
+                                              column(width = 11, 
+                                                     align = "center", 
+                                                     DT::dataTableOutput("main_table")))
                                           ) #mainPanel
                                 ) #fluidPage
                         ) #tabItem
