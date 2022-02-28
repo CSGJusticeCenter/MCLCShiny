@@ -33,133 +33,150 @@ server <- function(input, output, session) {
              Year = year,
              Data = metric,
              Type = adm_or_pop,
-             Value = total,
-             choice)
+             Value = total)
   })
   
   ##############
   # Hex map
   ##############
   
-  output$map_counts <- renderPlot({
-
-    df_map <- sp::merge(us, df_map(), by.x = 'iso3166_2', by.y = "Code")
-
-    # map
-    gg <- ggplot()
-    # add outline
-    gg <- gg + geom_map(data=us_map, map=us_map,
-                        aes(x=long, y=lat, map_id=id),
-                        color="white", size=0.5)
-    # add data
-    gg <- gg + geom_map(data=df_map@data, map=us_map,
-                        aes(fill=total, map_id=iso3166_2))
-    # overlay borders without ugly line on legend
-    gg <- gg + geom_map(data=df_map@data, map=us_map,
-                        aes(map_id=iso3166_2),
-                        fill="#ffffff", alpha=0, color="white",
-                        show_guide=FALSE)
+  # Title of map
+  output$selected_map <- renderText({ 
     
-    # change scales depending on rate vs count selection
-    gg <- gg +
-      geom_text(data=centers, aes(label = id, x = x, y = y), color = "white", size = 4) +
-      coord_map() +
-      labs(x=NULL, y=NULL) +
-      theme_bw() +
-      theme(panel.border=element_blank(),
-            panel.grid=element_blank(),
-            legend.position = c(0.5, 0.9),
-            legend.title=element_text(size=14),
-            legend.text=element_text(size=14),
-            axis.ticks=element_blank(),
-            axis.text=element_blank(),
-            plot.title = element_text(hjust = 0.5,
-                                      face = "bold",
-                                      size = 16))
+    if(input$choice_map_counts == "Change from Previous Year" & input$year_map_counts2 == "2019"){text = "Change from 2018-2019"}
+    else if(input$choice_map_counts == "Change from Previous Year" & input$year_map_counts2 == "2020"){text = "Change from 2019-2020"}
+    else if(input$choice_map_counts == "Count" & input$year_map_counts == "2018"){text = "in 2018"}
+    else if(input$choice_map_counts == "Count" & input$year_map_counts == "2019"){text = "in 2019"}
+    else if(input$choice_map_counts == "Count" & input$year_map_counts == "2020"){text = "in 2020"}
     
-    if(input$choice_map_counts == "Count"){
-      
-      title <- paste0(input$data_map_counts, " Prison ", input$adm_or_pop_map_counts, " in ", input$year_map_counts)
-      gg + scale_fill_gradientn("Number of People",
-                                colours = count_colors,
-                                na.value="#D3D3D3",
-                                label = scales::comma,
-                                guide = guide_legend(keyheight = unit(3, units = "mm"),
-                                                     keywidth=unit(12, units = "mm"),
-                                                     label.position = "bottom",
-                                                     title.position = 'top', nrow=1)) +
-           ggtitle(title)
-    }
+    paste(input$data_map_counts, " ", input$adm_or_pop_map_counts, " ", text)
     
-    else if(input$choice_map_counts == "Change from Previous Year"){
-      
-      change_year <- as.numeric(input$year_map_counts2)
-      change_year <- change_year - 1
-      title <- paste0("Change in ", input$data_map_counts, " Prison ", input$adm_or_pop_map_counts, " between ", change_year, " and ", input$year_map_counts2)
-      
-      gg + scale_fill_scico("Change from Previous Year",
-                            palette = "vik", 
-                            na.value="#D3D3D3",
-                            label = scales::percent,
-                            limits = c(-1, 1)*max(abs(df_map()$total)),
-                            guide = guide_legend(keyheight = unit(3, units = "mm"),
-                                                 keywidth=unit(12, units = "mm"),
-                                                 label.position = "bottom",
-                                                 title.position = 'top', nrow=1)) +
-           ggtitle(title)
-    }
-    
-  }, height="auto")
+  }) 
+  
+  # output$map_counts <- renderPlot({
+  # 
+  #   df_map <- sp::merge(us, df_map(), by.x = 'iso3166_2', by.y = "Code")
+  # 
+  #   # map
+  #   gg <- ggplot()
+  #   # add outline
+  #   gg <- gg + geom_map(data=us_map, map=us_map,
+  #                       aes(x=long, y=lat, map_id=id),
+  #                       color="white", size=0.5)
+  #   # add data
+  #   gg <- gg + geom_map(data=df_map@data, map=us_map,
+  #                       aes(fill=total, map_id=iso3166_2))
+  #   # overlay borders without ugly line on legend
+  #   gg <- gg + geom_map(data=df_map@data, map=us_map,
+  #                       aes(map_id=iso3166_2),
+  #                       fill="#ffffff", alpha=0, color="white",
+  #                       show_guide=FALSE)
+  #   
+  #   # change scales depending on rate vs count selection
+  #   gg <- gg +
+  #     geom_text(data=centers, aes(label = id, x = x, y = y), color = "white", size = 4) +
+  #     coord_map() +
+  #     labs(x=NULL, y=NULL) +
+  #     theme_bw() +
+  #     theme(panel.border=element_blank(),
+  #           panel.grid=element_blank(),
+  #           legend.position = c(0.5, 0.9),
+  #           legend.title=element_text(size=14),
+  #           legend.text=element_text(size=14),
+  #           axis.ticks=element_blank(),
+  #           axis.text=element_blank(),
+  #           plot.title = element_text(hjust = 0.5,
+  #                                     face = "bold",
+  #                                     size = 16))
+  #   
+  #   if(input$choice_map_counts == "Count"){
+  #     
+  #     title <- paste0(input$data_map_counts, " Prison ", input$adm_or_pop_map_counts, " in ", input$year_map_counts)
+  #     gg + scale_fill_gradientn("Number of People",
+  #                               colours = count_colors,
+  #                               na.value="#D3D3D3",
+  #                               label = scales::comma,
+  #                               guide = guide_legend(keyheight = unit(3, units = "mm"),
+  #                                                    keywidth=unit(12, units = "mm"),
+  #                                                    label.position = "bottom",
+  #                                                    title.position = 'top', nrow=1)) +
+  #          ggtitle(title)
+  #   }
+  #   
+  #   else if(input$choice_map_counts == "Change from Previous Year"){
+  #     
+  #     change_year <- as.numeric(input$year_map_counts2)
+  #     change_year <- change_year - 1
+  #     title <- paste0("Change in ", input$data_map_counts, " Prison ", input$adm_or_pop_map_counts, " between ", change_year, " and ", input$year_map_counts2)
+  #     
+  #     gg + scale_fill_scico("Change from Previous Year",
+  #                           palette = "vik", 
+  #                           na.value="#D3D3D3",
+  #                           label = scales::percent,
+  #                           limits = c(-1, 1)*max(abs(df_map()$total)),
+  #                           guide = guide_legend(keyheight = unit(3, units = "mm"),
+  #                                                keywidth=unit(12, units = "mm"),
+  #                                                label.position = "bottom",
+  #                                                title.position = 'top', nrow=1)) +
+  #          ggtitle(title)
+  #   }
+  #   
+  # }, height="auto")
   
   ##############
   # Table below map changes depending on count vs change
   ##############
   
-  output$table_map_counts <- DT::renderDataTable(
+  output$table_map_counts <- renderReactable(
     
     if(input$choice_map_counts == "Count"){
       
-      df_map_table() %>% 
-        datatable(#extensions = 'Buttons',
-                  selection = 'single',
-                  rownames = FALSE,
-                  options = list(
-                    searching = TRUE,
-                    # hide choice column
-                    columnDefs = list(list(visible=FALSE, targets=c(5))),
-                    # dom = "Blfrtip",
-                    # buttons = list("copy", list(extend = "collection", buttons = c("csv", "excel", "pdf"),text = "Download")), 
-                    lengthMenu = list(c(5, 10, 20, -1), 
-                                      c(5, 10, 20, "All")),                 
-                    pageLength = 5)) %>% 
-        # format color not working
-        formatStyle("Type", target = 'row', 
-                    backgroundColor = "#FFFFFF") %>% 
-        # add commas
-        formatRound('Value', interval = 3, digits = 0, mark = ",") 
+      reactable(df_map_table(),
+                searchable = TRUE,
+                defaultPageSize = 10, 
+                theme = reactableTheme(
+                  # Vertically center cells
+                  cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
+                defaultColDef = colDef(
+                  format = colFormat(separators = TRUE),
+                  align = "center"),
+                compact = TRUE,
+                fullWidth = FALSE,
+                columns = list(
+                  State         = colDef(name = "State",
+                                         align = "left",
+                                         minWidth = 150),
+                  Year          = colDef(minWidth = 75),
+                  Data          = colDef(minWidth = 100),
+                  Type          = colDef(minWidth = 100),
+                  Value         = colDef(minWidth = 150,
+                                         name = "Count")))
       
     }
     else if(input$choice_map_counts == "Change from Previous Year"){
       
-      df_map_table() %>% 
-        arrange(Value) %>% 
-        datatable(#extensions = 'Buttons',
-                  selection = 'single',
-                  rownames = FALSE,
-                  options = list(
-                    searching = TRUE,
-                    # hide choice column
-                    columnDefs = list(list(visible=FALSE, targets=c(5))),
-                    # dom = "Blfrtip",
-                    # buttons = list("copy", list(extend = "collection", buttons = c("csv", "excel", "pdf"),text = "Download")), 
-                    lengthMenu = list(c(5, 10, 20, -1), 
-                                      c(5, 10, 20, "All")),                 
-                    pageLength = 5)) %>% 
-        # format color not working
-        formatStyle("Type", target = 'row', 
-                    backgroundColor = "#FFFFFF") %>% 
-        # add % sign
-        formatPercentage('Value', digits = 2) 
+      reactable(df_map_table(),
+                searchable = TRUE,
+                defaultPageSize = 10, 
+                theme = reactableTheme(
+                  # Vertically center cells
+                  cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
+                defaultColDef = colDef(
+                  format = colFormat(separators = TRUE),
+                  align = "center"),
+                compact = TRUE,
+                fullWidth = FALSE,
+                columns = list(
+                  State         = colDef(name = "State",
+                                         align = "left",
+                                         minWidth = 150),
+                  Year          = colDef(minWidth = 75),
+                  Data          = colDef(minWidth = 100),
+                  Type          = colDef(minWidth = 100),
+                  Value         = colDef(minWidth = 150,
+                                         name = "Change from Previous Year",
+                                         format = colFormat(percent = TRUE, digits = 1))))
+      
     }
   )
   
@@ -175,40 +192,77 @@ server <- function(input, output, session) {
     
     df_map <- df_map[df_map$google_name != "District of Columbia (United States)", ]
     
-    pal_fun <- colorNumeric(change_colors, df_map$total)
-    p_popup <- paste0(df_map$states, ": ", round(df_map$total, 2), "%")
+    if(input$choice_map_counts == "Change from Previous Year"){
+      
+      pal_fun <- colorNumeric(change_colors, df_map$total)
+      p_popup <- paste0('<b>',df_map$states, '</b><br><br>',
+                        'Change: ', round(df_map$total, 2),'%<br>')
+      
+      leaflet(df_map, options = leafletOptions(zoomControl = FALSE,
+                                               minZoom = 3.5, 
+                                               maxZoom = 3.5,
+                                               dragging = FALSE,
+                                               attributionControl=FALSE)) %>%
+        addPolygons(stroke = FALSE, # remove borders
+                    fillColor = ~pal_fun(total), 
+                    color = "white",
+                    fillOpacity = 0.8, 
+                    smoothFactor = 0.5, 
+                    popup = p_popup) %>% 
+        # set view to US
+        setView(lng = -96.25, lat = 40.50, zoom = 3.5) %>% 
+        # legend
+        addLegend("topright", 
+                  pal = pal_fun, 
+                  values = ~total,
+                  title = "Change",
+                  labFormat = labelFormat(prefix = " ", suffix = "%"),
+                  opacity = 1
+        )  %>% 
+        addLabelOnlyMarkers(data = centers,
+                            lng = ~x, 
+                            lat = ~y, 
+                            label = ~id,
+                            labelOptions = labelOptions(noHide = TRUE, 
+                                                        direction = 'center', 
+                                                        textOnly = TRUE))
+    }
+    else if(input$choice_map_counts == "Count"){
+      
+      pal_fun <- colorNumeric(count_colors, df_map$total)
+      p_popup <- paste0('<b>',df_map$states, '</b><br><br>',
+                        'Count: ', formattable::comma(df_map$total, digits = 0),'<br>')
+      
+      leaflet(df_map, options = leafletOptions(zoomControl = FALSE,
+                                               minZoom = 3.5, 
+                                               maxZoom = 3.5,
+                                               dragging = FALSE,
+                                               attributionControl=FALSE)) %>%
+        addPolygons(stroke = FALSE, # remove borders
+                    fillColor = ~pal_fun(total), 
+                    color = "white",
+                    fillOpacity = 0.8, 
+                    smoothFactor = 0.5, 
+                    popup = p_popup) %>% 
+        # set view to US
+        setView(lng = -96.25, lat = 40.50, zoom = 3.5) %>% 
+        # legend
+        addLegend("topright", 
+                  pal = pal_fun, 
+                  values = ~total,
+                  title = "Count",
+                  opacity = 1
+        )  %>% 
+        addLabelOnlyMarkers(data = centers,
+                            lng = ~x, 
+                            lat = ~y, 
+                            label = ~id,
+                            labelOptions = labelOptions(noHide = TRUE, 
+                                                        direction = 'center', 
+                                                        textOnly = TRUE))
+    }
     
-    leaflet(df_map, options = leafletOptions(zoomControl = FALSE,
-                                             minZoom = 3.5, 
-                                             maxZoom = 3.5,
-                                             dragging = FALSE)) %>%
-      
-      addPolygons(stroke = FALSE, # remove borders
-                  fillColor = ~pal_fun(total), 
-                  color = "white",
-                  fillOpacity = 0.8, 
-                  smoothFactor = 0.5, 
-                  popup = p_popup) %>% 
-      
-      # set view to US
-      setView(lng = -96.25, lat = 40.50, zoom = 3.5) %>% 
-      
-      # legend
-      addLegend("topright", 
-                pal = pal_fun, 
-                values = ~total,
-                title = "Change",
-                labFormat = labelFormat(prefix = " ", suffix = "%"),
-                opacity = 1
-      )  %>% 
-      
-      addLabelOnlyMarkers(data = centers,
-                          lng = ~x, 
-                          lat = ~y, 
-                          label = ~id,
-                          labelOptions = labelOptions(noHide = TRUE, 
-                                                      direction = 'center', 
-                                                      textOnly = TRUE))
+    
     
 
   })

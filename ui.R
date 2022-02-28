@@ -19,7 +19,8 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                         
                         tabItem(tabName = "Map_Explorer",
                                 
-                                fluidPage(wellPanel(tags$style(type="text/css", '#leftPanel { width:200px; float:left;}'), id = "leftPanel",
+                                fluidPage(br(),
+                                          wellPanel(tags$style(type="text/css", '#leftPanel { width:200px; float:left;}'), id = "leftPanel",
                                                     selectInput("data_map_counts", "Data",        choices = unique(adm_pop_long$metric)),
                                                     selectInput("adm_or_pop_map_counts", "Type",  choices = unique(adm_pop_long$adm_or_pop)),
                                                     
@@ -33,19 +34,23 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                       selectInput("year_map_counts2", "Year", choices = c(2019, 2020))
                                                     )
                                           ),
-                                          mainPanel(  
-                                            fluidRow(#plotOutput("map_counts", width = "100%")
-                                                     leafletOutput("leaflet_map"),
+                                          mainPanel(
+                                            fluidRow(column(width = 12,
+                                                            align = "center",
+                                                            br(),
+                                                            textOutput("selected_map"),
+                                                            tags$head(tags$style("#selected_map{font-size: 20px;
+                                                                                         font-style: bold;}")),
+                                                            br()
+                                                            )),
+                                            fluidRow(leafletOutput("leaflet_map"),
                                                      tags$style(HTML(".leaflet-container { background: #FFFFFF;}"))
                                                      #tags$style(type = "text/css", "#leaflet_map {height: calc(100vh - 53px) !important;}")
                                                      ),
                                             br(), br(),
-                                            fluidRow(
-                                              column(width = 2),
-                                              column(width = 8,
-                                                     DT::dataTableOutput("table_map_counts"))),
-                                              column(width = 2)
-                                            # fluidRow(reactableOutput("table_map_counts"))
+                                            fluidRow(column(width = 12,
+                                                     align = "center",
+                                                     reactableOutput("table_map_counts")))
                                           )
                                 )
                         ), #tabItem
@@ -56,29 +61,24 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                         
                         tabItem(tabName = "State_Reports",
                                 fluidPage(
-                                  # headerPanel("header 2"),
-                                  # titlePanel(h2("title 2")),
                                   br(),
                                   wellPanel(tags$style(type="text/css", '#leftPanel { width:200px; float:left;}'), id = "leftPanel",
                                             selectInput("state", "State", choices = unique(adm_pop_long$states)),
                                             radioButtons("adm_or_pop", "Type",   choices = unique(adm_pop_long$adm_or_pop))
-                                            # radioButtons("year", "Year",       choices = unique(adm_pop_long$year))
                                   ),
                                   
                                   mainPanel(
-                                    
                                     ######
                                     # State title
                                     ######
-                                    textOutput("selected_state"),
-                                    tags$head(tags$style("#selected_state{font-size: 24px;
+                                    fluidRow(column(width = 12,
+                                                    align = "center",
+                                                    br(),
+                                                    textOutput("selected_state"),
+                                                    tags$head(tags$style("#selected_state{font-size: 24px;
                                                                           font-style: bold;}")),
-                                    # br(),
-                                    # textOutput("selected_state_adm_pop"),
-                                    # tags$head(tags$style("#selected_state_adm_pop{font-size: 14px
-                                    #                                               font-style: regular;}")),
-                                    br(),
-                                    
+                                                    br())),
+
                                     ############
                                     # Value boxes
                                     ############
@@ -194,7 +194,8 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                         #-------------------------------------------------------
                         tabItem(tabName = "Download_Data",
                                 
-                                fluidPage(wellPanel(tags$style(type="text/css", '#leftPanel { width:250px; float:left;}'), id = "leftPanel",
+                                fluidPage(br(),
+                                          wellPanel(tags$style(type="text/css", '#leftPanel { width:250px; float:left;}'), id = "leftPanel",
                                                     selectInput(inputId = "dataset",
                                                                 label = "Dataset",
                                                                 choices = c("More Community, Less Confinement (CSG)", "Annual Probation Survey and Annual Parole Survey (BJS)")),
