@@ -14,6 +14,8 @@
 #    "Data for web team v13.xlsx"
 #######################################
 
+library(formattable)
+
 ########
 # Import data
 ########
@@ -742,6 +744,7 @@ save(us_map,           file="us_map.Rda")
 save(us,               file="us.Rda")
 save(centers,          file="centers.Rda")
 
+save(bjs_prob,         file="bjs_prob.Rda")
 save(bjs,              file="bjs.Rda")
 save(csg,              file="csg.Rda")
 
