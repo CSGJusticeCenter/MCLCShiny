@@ -5,7 +5,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                   menuItem(text = "Map Explorer",  tabName = "Map_Explorer",icon = icon("map-pin")),
                                   menuItem(text = "State Reports", tabName = "State_Reports",icon = icon("search-location")),
                                   menuItem(text = "Download Data", tabName = "Download_Data",icon = icon("table"))
-                      )
+                                  ) #sidebarMenu
                     ), #dashboardSidebar
                     body = dashboardBody(
                       
@@ -13,13 +13,17 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                       customTheme,
                       
                       tabItems(
+                        
                         #-------------------------------------------------------
                         # Map Page
                         #-------------------------------------------------------
                         
                         tabItem(tabName = "Map_Explorer",
                                 
-                                fluidPage(br(),
+                                fluidPage(########
+                                          # Side panel
+                                          ########
+                                          br(),
                                           wellPanel(tags$style(type="text/css", '#leftPanel { width:200px; float:left;}'), id = "leftPanel",
                                                     selectInput("data_map_counts", "Data",        choices = unique(adm_pop_long$metric)),
                                                     selectInput("adm_or_pop_map_counts", "Type",  choices = unique(adm_pop_long$adm_or_pop)),
@@ -27,13 +31,14 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                     radioButtons("choice_map_counts", "Value",    choices = c("Count", "Change from Previous Year"), selected = "Count"),
                                                     conditionalPanel(
                                                       condition = "input.choice_map_counts == 'Count'",
-                                                      selectInput("year_map_counts", "Year", choices = c(2018, 2019, 2020))
-                                                    ),
+                                                      selectInput("year_map_counts", "Year", choices = c(2018, 2019, 2020))),
                                                     conditionalPanel(
                                                       condition = "input.choice_map_counts == 'Change from Previous Year'",
-                                                      selectInput("year_map_counts2", "Year", choices = c(2019, 2020))
-                                                    )
-                                          ),
+                                                      selectInput("year_map_counts2", "Year", choices = c(2019, 2020)))
+                                          ), #wellPanel
+                                          ########
+                                          # Map
+                                          ########
                                           mainPanel(
                                             fluidRow(column(width = 12,
                                                             align = "center",
@@ -47,12 +52,12 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                      tags$style(HTML(".leaflet-container { background: #FFFFFF;}"))
                                                      #tags$style(type = "text/css", "#leaflet_map {height: calc(100vh - 53px) !important;}")
                                                      ),
-                                            br(), br(),
+                                            br(),
                                             fluidRow(column(width = 12,
                                                      align = "center",
                                                      reactableOutput("table_map_counts")))
-                                          )
-                                )
+                                          ) #mainPanel
+                              ) #fluidPage
                         ), #tabItem
                         
                         #-------------------------------------------------------
@@ -64,39 +69,36 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                   br(),
                                   wellPanel(tags$style(type="text/css", '#leftPanel { width:200px; float:left;}'), id = "leftPanel",
                                             selectInput("state", "State", choices = unique(adm_pop_long$states)),
-                                            radioButtons("adm_or_pop", "Type",   choices = unique(adm_pop_long$adm_or_pop))
-                                  ),
+                                            radioButtons("adm_or_pop", "Type",   choices = unique(adm_pop_long$adm_or_pop))),
                                   
-                                  mainPanel(
-                                    ######
-                                    # State title
-                                    ######
-                                    fluidRow(column(width = 12,
-                                                    align = "center",
-                                                    br(),
-                                                    textOutput("selected_state"),
-                                                    tags$head(tags$style("#selected_state{font-size: 24px;
-                                                                          font-style: bold;}")),
-                                                    br())),
-
-                                    ############
-                                    # Value boxes
-                                    ############
-                                    tags$style(".small-box.bg-green {background-color: #3C3C3C !important; color: #FFFFFF !important; }"),
-                                    tags$style(".small-box.bg-red   {background-color: #3C3C3C !important; color: #FFFFFF !important; }"),
-                                    tags$style(".small-box          {border: 1px; border-style: solid; border-color: #3C3C3C !important; border-radius: 1px; padding: 0.1em; }"),
-                                    
-                                    fluidRow(
-                                      column(width = 4,
-                                             valueBoxOutput("total_change", width = 125)),
-                                      column(width = 4,
-                                             valueBoxOutput("sup_change", width = 125)),
-                                      column(width = 4,
-                                             valueBoxOutput("tech_change", width = 125)
-                                      )
-                                    ), #fluidRow
-                                    
-                                    br(),
+                                  mainPanel(######
+                                            # State title
+                                            ######
+                                            fluidRow(column(width = 12,
+                                                            align = "center",
+                                                            br(),
+                                                            textOutput("selected_state"),
+                                                            tags$head(tags$style("#selected_state{font-size: 24px;
+                                                                                  font-style: bold;}")),
+                                                            br())),
+        
+                                            ############
+                                            # Value boxes
+                                            ############
+                                            tags$style(".small-box.bg-green {background-color: #3C3C3C !important; color: #FFFFFF !important; }"),
+                                            tags$style(".small-box.bg-red   {background-color: #3C3C3C !important; color: #FFFFFF !important; }"),
+                                            tags$style(".small-box          {border: 1px; border-style: solid; border-color: #3C3C3C !important; border-radius: 1px; padding: 0.1em; }"),
+                                            
+                                            fluidRow(
+                                              column(width = 4,
+                                                     valueBoxOutput("total_change", width = 125)),
+                                              column(width = 4,
+                                                     valueBoxOutput("sup_change", width = 125)),
+                                              column(width = 4,
+                                                     valueBoxOutput("tech_change", width = 125)
+                                              )
+                                            ), #fluidRow
+                                            br(),
                                     
                                     tabsetPanel(
                                       ###################
@@ -176,8 +178,8 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                fluidRow(column(width = 6,
                                                                plotlyOutput("barchart_bjs_prob", height = 300))),
                                                br()
-                                      ),
-                                      id = "tb2")
+                                      ), #tabPanel
+                                      id = "tb2") #tabsetPanel
                                   ) #mainPanel
                                 ) #fluidPage
                         ), #tabItem 

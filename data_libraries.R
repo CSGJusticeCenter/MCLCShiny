@@ -77,9 +77,6 @@ load(file="csg.Rda")
 # colors
 #______________________________________________________
 
-# change_colors = c("#264d59", "#43978d", "#f9e07f", "#f9ad6a", "#d46c4e")
-# count_colors = c("#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#08589e")
-
 # assign colors for visualizations
 lightorange <- "#fcccac"
 orange <- "#fc9c54"
@@ -98,7 +95,7 @@ new_o_co <- darkblue
 pp_co <- lightblue
 bjs_co <- lightgreen
 
-count_colors <- c(lightblue, regblue, darkblue, "#2a6a99")
+count_colors <- c("#d1f4ff", lightblue, regblue, darkblue, "#2a6a99")
 change_colors = c("#af4d03", orange, lightorange, lightblue, regblue, darkblue)
 
 #______________________________________________________
