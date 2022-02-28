@@ -651,8 +651,9 @@ parole <- parole %>% filter(stateid != "Federal" & stateid != "District of Colum
 prob <- prob %>% rename(state_abb = state, state = stateid)
 parole <- parole %>% rename(state_abb = state, state = stateid)
 
-# remove data labels
-prob <- remove_labels(prob)
+########
+# BJS Probation
+########
 
 # select variables and rename
 prob <- prob %>% select(state, state_abb, year,
@@ -664,12 +665,14 @@ prob <- prob %>% select(state, state_abb, year,
                         inc_current_sentence = exincurr  # incarceration with current sentence
 )
 
+# combine inc_new_sentence + inc_current_sentence
+prob <- prob %>% mutate(incarecerated = inc_new_sentence + inc_current_sentence)
+
 # add types
 prob$type <- "Probation"
 
 # make long form
-bjs_prob <- gather(prob, data, total, total_pop_end:inc_current_sentence)
-# bjs_prob <- gather(prob, data, total, entries_w_inc:inc_current_sentence)
+bjs_prob <- gather(prob, data, total, total_pop_end:incarecerated)
 
 # descriptions
 bjs_prob <- bjs_prob %>% mutate(text = case_when(
@@ -677,7 +680,7 @@ bjs_prob <- bjs_prob %>% mutate(text = case_when(
   data == "entries_w_inc"         & type == "Probation" ~ "Probation Entries with Incarceration",
   data == "entries_wo_inc"        & type == "Probation" ~ "Probation Entries without Incarceration",
   data == "inc_current_sentence"  & type == "Probation" ~ "Incarcerated under Current Sentence",
-  data == "inc_new_sentence"      & type == "Probation" ~ "Incarcerated with Current Sentence",
+  data == "inc_new_sentence"      & type == "Probation" ~ "Incarcerated with New Sentence",
   data == "total_pop_end"         & type == "Probation" ~ "Probation Population (EOY)"
 ))
 
@@ -691,8 +694,55 @@ bjs_prob <- bjs_prob %>% mutate(adm_or_pop = case_when(
   data == "total_pop_end"         ~ "Population"
 ))
 
+# filter to data needed (entries with incarceration, incarceration with new sentence or current sentence)
+bjs_prob <- bjs_prob %>% filter(data == "entries_w_inc" | data == "incarcerated")
 
-bjs <- bjs_prob %>% select(state, year, text, total, adm_or_pop)
+########
+# BJS Parole
+########
+ 
+bjs_parole <- parole %>% select(state, state_abb, year,
+                                entries_total = toten,           # total entries to probation 
+                            inc_new_sentence = exincnew,     # incarcerated with new sentence
+                            inc_w_revocation = exincrev) %>% # incarcerated with revocation 
+                     mutate(incarcerated = inc_new_sentence + inc_w_revocation)
+
+# add types
+bjs_parole$type <- "Parole"
+
+# make long form
+bjs_parole <- gather(parole, data, total, entries_total:incarcerated)
+
+# descriptions
+bjs_parole <- bjs_parole %>% mutate(text = case_when(
+  data == "entries_total"               & type == "Parole" ~ "Total Parole Entries",
+  data == "incarcerated_w_new_sentence" & type == "Parole" ~ "Incarcerated with New Sentence",
+  data == "incarcerated_w_revocation"   & type == "Parole" ~ "Incarcerated with Revocation",
+  data == "incarcerated"                & type == "Parole" ~ "Incarcerated (New Sentence/Revocation)"
+))
+
+# assign admissions and population variable
+bjs_parole <- bjs_parole %>% mutate(adm_or_pop = case_when(
+  data == "entries_total"               ~ "Admissions",
+  data == "incarcerated_w_new_sentence" ~ "Population",
+  data == "incarcerated_w_revocation"   ~ "Population",
+  data == "incarcerated"                ~ "Population"
+))
+
+# select data
+bjs_parole <- bjs_parole %>% filter(data == "entries_total" | data == "incarcerated")
+
+########
+# BJS Data
+########
+
+# combine prob and parole data
+bjs <- rbind(bjs_parole, bjs_prob)
+
+# select variables
+bjs <- bjs %>% select(state, year, text, total, adm_or_pop)
+
+# change data types
 bjs$state <- as.character(bjs$state)
 bjs$year <- as.factor(bjs$year)
 
@@ -718,5 +768,4 @@ save(us,               file="us.Rda")
 save(centers,          file="centers.Rda")
 
 save(bjs,              file="bjs.Rda")
-save(bjs_prob,         file="bjs_prob.Rda")
 save(csg,              file="csg.Rda")

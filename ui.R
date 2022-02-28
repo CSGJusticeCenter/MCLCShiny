@@ -134,23 +134,20 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                  column(width = 6,
                                                         plotlyOutput("areachart_parole", height = 300)),
                                                  column(width = 6,
-                                                        plotlyOutput("barchart_parole", height = 300)),
-                                               ),
-                                               br(),
-                                               fluidRow(
-                                                 column(width = 6,
-                                                        #plotlyOutput("barchart_bjs_parole", height = 300)
-                                                        ),
-                                                 column(width = 6)
-                                               ), #fluidRow
+                                                        plotlyOutput("barchart_parole", height = 300)),),
                                                br(), 
                                                ############
                                                # Table under graphs
                                                ############
                                                fluidRow(
                                                  column(width = 12,
-                                                        reactableOutput("parole_table")
-                                                 )),
+                                                        reactableOutput("parole_table"))),
+                                               br(),
+                                               ############
+                                               # BJS plot
+                                               ############
+                                               fluidRow(column(width = 6,
+                                                               plotlyOutput("barchart_bjs_parole", height = 300))),
                                                br()
                                       ),
                                       ###################
@@ -161,27 +158,23 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                ############
                                                # Plots
                                                ############
-                                               fluidRow(
-                                                 column(width = 6,
-                                                        plotlyOutput("areachart_prob", height = 300)),
-                                                 column(width = 6,
-                                                        plotlyOutput("barchart_prob", height = 300))
-                                               ),
-                                               br(),
-                                               fluidRow(
-                                                 column(width = 6,
-                                                        #plotlyOutput("barchart_bjs_prob", height = 300)
-                                                 ),
-                                                 column(width = 6)
-                                               ), #fluidRow
+                                               fluidRow(column(width = 6,
+                                                               plotlyOutput("areachart_prob", height = 300)),
+                                                        column(width = 6,
+                                                               plotlyOutput("barchart_prob", height = 300))),
                                                br(), 
                                                ############
                                                # Table under graphs
                                                ############
-                                               fluidRow(
-                                                 column(width = 12,
-                                                        reactableOutput("prob_table")
-                                                 )),
+                                               fluidRow(column(width = 12,
+                                                               align = 'center',
+                                                               reactableOutput("prob_table"))),
+                                               br(),
+                                               ############
+                                               # BJS plot
+                                               ############
+                                               fluidRow(column(width = 6,
+                                                               plotlyOutput("barchart_bjs_prob", height = 300))),
                                                br()
                                       ),
                                       id = "tb2")

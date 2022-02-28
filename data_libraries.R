@@ -74,7 +74,6 @@ load(file="us.Rda")
 load(file="centers.Rda")
 
 load(file="bjs.Rda")
-load(file="bjs_prob.Rda")
 load(file="csg.Rda")
 
 #______________________________________________________
