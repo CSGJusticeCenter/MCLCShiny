@@ -56,9 +56,6 @@ library(ggiraph)
 # read in R data
 #______________________________________________________
 
-load(file="mclc_datatable.Rda")
-load(file="mclc_change.Rda")
-load(file="mclc.Rda")
 load(file="mclc_explorer.Rda")
 
 load(file="adm_pop_long.Rda")

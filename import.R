@@ -29,27 +29,27 @@ us <- geojson_read("Data/us_states_hexgrid.geojson", what = "sp")
 # load state abb
 stateAbb <- read_csv("Data/stateAbb.csv")
 
-# load charge data for 2019 and 2020
+# load admissions data
 adm18 <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2018")
 adm19 <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2019")
 adm20 <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2020")
 
-# pop
+# load population data
 pop18 <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2018")
 pop19 <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2019")
 pop20 <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2020")
 
-# costs
+# load mclc costs
 costs <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Costs")
 
-# load probation data
+# load bjs probation data
 load("Data/Annual Probation Survey, 2014/DS0001/36343-0001-Data.rda")
 load("Data/Annual Probation Survey, 2015/DS0001/36618-0001-Data.rda")
 load("Data/Annual Probation Survey, 2016/DS0001/37459-0001-Data.rda")
 load("Data/Annual Probation Survey, 2017/DS0001/37482-0001-Data.rda")
 load("Data/Annual Probation Survey, 2018/DS0001/38057-0001-Data.rda")
 
-# load parole data
+# load bjs parole data
 load("Data/Annual Parole Survey, 2014/DS0001/36320-0001-Data.rda")
 load("Data/Annual Parole Survey, 2015/DS0001/36619-0001-Data.rda")
 load("Data/Annual Parole Survey, 2016/DS0001/37441-0001-Data.rda")
@@ -60,6 +60,7 @@ load("Data/Annual Parole Survey, 2018/DS0001/38058-0001-Data.rda")
 # clean shapefile for hex map
 ########
 
+# remove DC and territories
 us_map <- fortify(us, region="iso3166_2")
 centers <- cbind.data.frame(data.frame(gCentroid(us, byid=TRUE), id=us@data$iso3166_2))
 centers <- centers[centers$id != "DC", ]
@@ -242,29 +243,9 @@ mclc_change <- mclc_change %>% rename(total = change)
 mclc_change$choice <- "Change from Previous Year"
 mclc$choice <- "Count"
 temp <- mclc %>% select(-change)
+
+# final map data
 mclc_explorer <- rbind(temp, mclc_change)
-
-########
-# Data for table
-########
-
-# select variables
-mclc_datatable <- mclc %>% select(State = states,
-                                  Year = year,
-                                  Data = metric,
-                                  Type = adm_or_pop,
-                                  Count = total,
-                                  Region = region)
-
-# change data types
-mclc_datatable$State <- as.factor(mclc_datatable$State)
-mclc_datatable$Data <- as.factor(mclc_datatable$Data)
-mclc_datatable$Type <- as.factor(mclc_datatable$Type)
-mclc_datatable$Region <- as.factor(mclc_datatable$Region)
-mclc_datatable$Year <- as.factor(mclc_datatable$Year)
-
-# arrange data
-mclc_datatable <- mclc_datatable %>% arrange(State, Year, Data, Type)
 
 ########
 # Long form
@@ -747,9 +728,6 @@ bjs$year <- as.factor(bjs$year)
 # save Rdata
 ########
 
-save(mclc_datatable,   file="mclc_datatable.Rda")
-save(mclc_change,      file="mclc_change.Rda")
-save(mclc,             file="mclc.Rda")
 save(mclc_explorer,    file="mclc_explorer.Rda")
 
 save(adm_pop_long,     file="adm_pop_long.Rda")
