@@ -268,6 +268,7 @@ theme_csgjc_right_legend <- function(){
     )
 }
 
+# https://jkunst.com/blog/posts/2020-06-26-valuebox-and-sparklines/
 valueBox2 <- function(value, title, subtitle, icon = NULL, color = "aqua", width = 4, href = NULL){
   
   shinydashboard:::validateColor(color)

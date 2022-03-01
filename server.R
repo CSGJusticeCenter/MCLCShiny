@@ -282,50 +282,74 @@ server <- function(input, output, session) {
   # Value boxes
   ##############
   
-  # filter data
-  df_total_18 <- reactive({
-    adm_pop_long %>%
+  # filter data to totals
+  df_vb_total <- reactive({
+    vb_adm_pop %>%
       filter(states == input$state &
                adm_or_pop == input$adm_or_pop &
-               year == "2019" &
+               year == "2020" &
                metric == "Total")
   })
   
-  vb <- valueBox2(
-    value = "10,080",
-    title = "Admissions in 2020",
-    subtitle = tagList(HTML("&darr;"), "28% from 2019"),
-    # icon = icon("arrow-down"),
-    # width = 10,
-    color = "green",
-    href = NULL
-  )
+  # filter data to sup viols
+  df_vb_sup_viols <- reactive({
+    vb_adm_pop %>%
+      filter(states == input$state &
+               adm_or_pop == input$adm_or_pop &
+               year == "2020" &
+               metric == "Supervision Violations")
+  })
   
-  vb2 <- valueBox2(
-    value = "4,761",
-    title = "Supervision Violations in 2020",
-    subtitle = tagList(HTML("&darr;"), "22% from 2019"),
-    # icon = icon("arrow-down"),
-    # width = 10,
-    color = "green",
-    href = NULL
-  )
+  # filter data to tech viols
+  df_vb_tech <- reactive({
+    vb_adm_pop %>%
+      filter(states == input$state &
+               adm_or_pop == input$adm_or_pop &
+               year == "2020" &
+               metric == "Technical")
+  })
   
-  vb3 <- valueBox2(
-    value = "2,080",
-    title = "Technical Violations in 2020",
-    subtitle = tagList(HTML("&darr;"), "25% from 2019"),
-    # icon = icon("arrow-down"),
-    # width = 10,
-    color = "green",
-    href = NULL
-  )
+  output$total_change <- renderValueBox({
+    
+    valueBox2(
+      df_vb_total()$total,
+      title = paste0(input$adm_or_pop, " in 2020"),
+      subtitle = tagList(HTML("&darr;"), paste0(df_vb_total()$change, "% from 2019")),
+      # icon = icon("arrow-down"),
+      # width = 10,
+      color = "green",
+      href = NULL
+    )
   
-  output$total_change <- renderValueBox(vb)
+  })
   
-  output$sup_change <- renderValueBox(vb2)
+  output$sup_change <- renderValueBox({
+    
+    valueBox2(
+      df_vb_sup_viols()$total,
+      title = paste0("Violation ", input$adm_or_pop, " in 2020"),
+      subtitle = tagList(HTML("&darr;"), paste0(df_vb_sup_viols()$change, "% from 2019")),
+      # icon = icon("arrow-down"),
+      # width = 10,
+      color = "green",
+      href = NULL
+    )
+    
+  })
   
-  output$tech_change <- renderValueBox(vb3)
+  output$tech_change <- renderValueBox({
+    
+    valueBox2(
+      df_vb_tech()$total,
+      title = paste0("Technical ", input$adm_or_pop, " in 2020"),
+      subtitle = tagList(HTML("&darr;"), paste0(df_vb_tech()$change, "% from 2019")),
+      # icon = icon("arrow-down"),
+      # width = 10,
+      color = "green",
+      href = NULL
+    )
+    
+  })
   
   ##############
   # Overall area plot

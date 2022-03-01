@@ -400,7 +400,62 @@ temp <- mclc %>% select(-change)
 mclc_explorer <- rbind(temp, mclc_change)
 
 ########
-# Long form
+# Long form for value boxes
+########
+
+vb_adm_pop <- adm_pop %>% mutate(technical_admissions = technical_probation_violation_admissions + technical_parole_violation_admissions,
+                                 technical_population = technical_probation_violation_population + technical_parole_violation_population)
+
+# make data long form
+vb_adm_pop <- gather(vb_adm_pop, 
+                     data,
+                     total,
+                     total_admissions:technical_population, 
+                     factor_key=TRUE)
+
+# filter to vb values
+vb_adm_pop <- vb_adm_pop %>% filter(data == "total_admissions" | 
+                                    data == "total_violation_admissions" | 
+                                    data == "technical_admissions" | 
+                                    data == "total_population" | 
+                                    data == "total_violation_population" |
+                                    data == "technical_population")
+
+vb_adm_pop <- vb_adm_pop %>% mutate(metric = case_when(
+  data == "total_admissions"                            ~ "Total",
+  data == "total_violation_admissions"                  ~ "Supervision Violations",
+  data == "technical_admissions"                        ~ "Technical",
+  
+  data == "total_population"                            ~ "Total",
+  data == "total_violation_population"                  ~ "Supervision Violations",
+  data == "technical_population"                        ~ "Technical"
+))
+
+# create pop vs adm variable
+vb_adm_pop <- vb_adm_pop %>% mutate(adm_or_pop = ifelse(
+  grepl("population", data), "Population", "Admissions"
+))
+
+# create change from 2018 to 2019 to 2020
+vb_adm_pop <- vb_adm_pop %>%
+  group_by(states, data, metric) %>%
+  arrange(states, data, year) %>% 
+  mutate(change = (total/lag(total) - 1) * 100)
+
+# round
+vb_adm_pop$change <- round(vb_adm_pop$change, 0)
+
+# create increase or decrease category
+vb_adm_pop <- vb_adm_pop %>% 
+  mutate(change_type = ifelse(
+    change > 0, "increase", "decrease"
+  ))
+
+# change data types
+vb_adm_pop$year <- as.factor(vb_adm_pop$year)
+
+########
+# Long form 
 ########
 
 # make data long form
@@ -899,6 +954,7 @@ bjs_overall <- rbind(prob_by_state, parole_by_state)
 save(mclc_explorer,    file="mclc_explorer.Rda")
 
 save(adm_pop_long,     file="adm_pop_long.Rda")
+save(vb_adm_pop,       file="vb_adm_pop.Rda")
 save(state_table,      file="state_table.Rda")
 save(state_table_wide, file="state_table_wide.Rda")
 save(parole_table,     file="parole_table.Rda")

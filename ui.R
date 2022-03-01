@@ -70,8 +70,8 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                 fluidPage(
                                   br(),
                                   wellPanel(tags$style(type="text/css", '#leftPanel { width:200px; float:left;}'), id = "leftPanel",
-                                            selectInput("state", "State", choices = unique(adm_pop_long$states)),
-                                            radioButtons("adm_or_pop", "Type",   choices = unique(adm_pop_long$adm_or_pop))),
+                                            selectInput("state", "State",      choices = unique(adm_pop_long$states)),
+                                            radioButtons("adm_or_pop", "Type", choices = unique(adm_pop_long$adm_or_pop))),
                                   
                                   mainPanel(######
                                             # State title
@@ -206,9 +206,9 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                     ),
                                                     conditionalPanel(
                                                       condition = "input.dataset == 'Annual Probation Survey and Annual Parole Survey (BJS)'",
-                                                      checkboxGroupInput("year_table2", "Year", choices = unique(bjs_prob$year), selected = "2014"),
-                                                      pickerInput("download_table2","State(s)", choices = unique(bjs_prob$state), options = list(`actions-box` = TRUE), multiple = T)
-                                                      # selectizeInput("download_table2", "State(s)", choices = unique(bjs_prob$state), multiple = TRUE, selected = "Alabama")
+                                                      checkboxGroupInput("year_table2", "Year", choices = unique(bjs$year), selected = "2014"),
+                                                      pickerInput("download_table2","State(s)", choices = unique(bjs$state), options = list(`actions-box` = TRUE), multiple = T)
+                                                      # selectizeInput("download_table2", "State(s)", choices = unique(bjs$state), multiple = TRUE, selected = "Alabama")
                                                     )
                                           ), # wellPanel
                                           mainPanel(  

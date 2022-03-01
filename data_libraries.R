@@ -59,6 +59,7 @@ library(ggiraph)
 load(file="mclc_explorer.Rda")
 
 load(file="adm_pop_long.Rda")
+load(file="vb_adm_pop.Rda")
 load(file="state_table.Rda")
 load(file="state_table_wide.Rda")
 load(file="parole_table.Rda")
@@ -80,24 +81,24 @@ load(file="csg.Rda")
 
 # assign colors for visualizations
 lightorange <- "#fcccac"
-orange <- "#fc9c54"
-lightblue <- "#9cccec"
-darkblue <- "#2c6c9c"
-regblue <- "#3c97da"
-brown <- "#b26e39"
-gray <- "#dcdcdc"
-lightgreen <- "#a8ddb5"
+orange      <- "#fc9c54"
+lightblue   <- "#9cccec"
+darkblue    <- "#2c6c9c"
+regblue     <- "#3c97da"
+brown       <- "#b26e39"
+gray        <- "#dcdcdc"
+lightgreen  <- "#a8ddb5"
 
 # assign colors to data types
 total_co <- lightorange
-viol_co <- orange
-tech_co <-  regblue
+viol_co  <- orange
+tech_co  <- regblue
 new_o_co <- darkblue
-pp_co <- lightblue
-bjs_co <- lightgreen
+pp_co    <- lightblue
+bjs_co   <- lightgreen
 
-count_colors <- c("#d1f4ff", lightblue, regblue, darkblue, "#2a6a99")
-change_colors = c("#af4d03", orange, lightorange, lightblue, regblue, darkblue)
+count_colors  <- c("#d1f4ff", lightblue, regblue, darkblue, "#2a6a99")
+change_colors <- c("#af4d03", orange, lightorange, lightblue, regblue, darkblue)
 
 #______________________________________________________
 # custom theme
