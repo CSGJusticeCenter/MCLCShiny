@@ -70,11 +70,7 @@ load(file="us_map.Rda")
 load(file="us.Rda")
 load(file="centers.Rda")
 
-<<<<<<< HEAD
 load(file="prob_parole_exits.Rda")
-=======
-load(file="bjs_prob.Rda")
->>>>>>> d2b5e22f2869832a5866dbf9c3d7552c84dc6dde
 load(file="bjs.Rda")
 load(file="csg.Rda")
 

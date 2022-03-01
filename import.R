@@ -906,11 +906,7 @@ save(us_map,           file="us_map.Rda")
 save(us,               file="us.Rda")
 save(centers,          file="centers.Rda")
 
-<<<<<<< HEAD
 save(prob_parole_exits,file="prob_parole_exits.Rda")
-=======
-save(bjs_prob,         file="bjs_prob.Rda")
->>>>>>> d2b5e22f2869832a5866dbf9c3d7552c84dc6dde
 save(bjs,              file="bjs.Rda")
 save(csg,              file="csg.Rda")
 
