@@ -1067,7 +1067,7 @@ server <- function(input, output, session) {
   # prob parole bar and line chart
   output$barchart_bjs_parole <- renderPlotly({
     
-    df <- bjs %>% filter(state == input$state & adm_or_pop == input$adm_or_pop & type == "Parole")
+    df <- bjs_all %>% filter(state == input$state & adm_or_pop == input$adm_or_pop & type == "Parole")
     type <- "Parole"
     
     state <- input$state
@@ -1087,7 +1087,7 @@ server <- function(input, output, session) {
         hoverinfo = 'text'
       ) %>%
       # customize layout
-      layout(title = list(text = paste0('<b>', title, '</b>\n'), font = list(size = 14)),
+      layout(title = list(text = paste0('<b>Parole: ', title, '</b>\n\n'), font = list(size = 14)),
              font = list(size = 12),
              plot_bgcolor='#FFFFFF', 
              xaxis = list( 
@@ -1098,7 +1098,7 @@ server <- function(input, output, session) {
                title = "",
                showticklabels = TRUE,
                tickformat=",d"),
-             annotations = list(x = 0, y = -0.2, text = "Source: BJS Annual Parole Surveys 2014-2018", 
+             annotations = list(x = 0, y = -0.2, text = "Source: BJS Annual Parole Survey", 
                                 showarrow = F, xref='paper', yref='paper', 
                                 xanchor='left', yanchor='auto', 
                                 font=list(color="gray"))) %>% 
@@ -1120,7 +1120,7 @@ server <- function(input, output, session) {
   # prob prob bar and line chart
   output$barchart_bjs_prob <- renderPlotly({
 
-    df <- bjs %>% filter(state == input$state & adm_or_pop == input$adm_or_pop & type == "Probation")
+    df <- bjs_all %>% filter(state == input$state & adm_or_pop == input$adm_or_pop & type == "Probation")
     type <- "Probation"
     
     state <- input$state
@@ -1140,7 +1140,7 @@ server <- function(input, output, session) {
         hoverinfo = 'text'
       ) %>%
       # customize layout
-      layout(title = list(text = paste0('<b>', title, '</b>\n'), font = list(size = 14)),
+      layout(title = list(text = paste0('<b>Probation: ', title, '</b>\n\n'), font = list(size = 14)),
              font = list(size = 12),
              plot_bgcolor='#FFFFFF', 
              xaxis = list( 
@@ -1151,7 +1151,7 @@ server <- function(input, output, session) {
                title = "",
                showticklabels = TRUE,
                tickformat=",d"),
-             annotations = list(x = 0, y = -0.2, text = "Source: BJS Annual Probation Surveys 2014-2018", 
+             annotations = list(x = 0, y = -0.2, text = "Source: BJS Annual Probation Survey", 
                                 showarrow = F, xref='paper', yref='paper', 
                                 xanchor='left', yanchor='auto', 
                                 font=list(color="gray"))) %>% 

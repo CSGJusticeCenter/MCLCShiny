@@ -140,32 +140,32 @@ prob_exits_20 <- bjs_prob_long_form(prob_exits_20)
 # clean BJS parole 
 ########
   
-parole_exits_15 <- parole_exits_15.csv %>% select(state        = X, 
+parole_exits_15 <- parole_exits_15.csv %>% select(state = X, 
                                               inc_new_sentence = X.3, 
                                               inc_revocation   = X.4) %>% mutate(year = 2015,
                                                                                  type = "Parole")
 
-parole_exits_16 <- parole_exits_16.csv %>% select(state            = X, 
+parole_exits_16 <- parole_exits_16.csv %>% select(state = X, 
                                               inc_new_sentence = X.3, 
                                               inc_revocation   = X.4) %>% mutate(year = 2016,
                                                                                  type = "Parole")
 
-parole_exits_17 <- parole_exits_17.csv %>% select(state            = X, 
+parole_exits_17 <- parole_exits_17.csv %>% select(state = X, 
                                               inc_new_sentence = X.3, 
                                               inc_revocation   = X.4) %>% mutate(year = 2017,
                                                                                  type = "Parole")
 
-parole_exits_18 <- parole_exits_18.csv %>% select(state            = X, 
+parole_exits_18 <- parole_exits_18.csv %>% select(state = X, 
                                               inc_new_sentence = X.3, 
                                               inc_revocation   = X.4) %>% mutate(year = 2018,
                                                                                  type = "Parole")
 
-parole_exits_19 <- parole_exits_19.csv %>% select(state            = X, 
+parole_exits_19 <- parole_exits_19.csv %>% select(state = X, 
                                               inc_new_sentence = X.3, 
                                               inc_revocation   = X.4) %>% mutate(year = 2019,
                                                                                  type = "Parole")
 
-parole_exits_20 <- parole_exits_20.csv %>% select(state            = X, 
+parole_exits_20 <- parole_exits_20.csv %>% select(state = X, 
                                               inc_new_sentence = X.4, 
                                               inc_revocation   = X.5) %>% mutate(year = 2020,
                                                                                  type = "Parole")
@@ -200,14 +200,13 @@ prob_parole_exits <- rbind(parole_exits_15, parole_exits_16, parole_exits_17, pa
 # descriptions
 prob_parole_exits <- prob_parole_exits %>% mutate(text = case_when(
   data == "incarcerated" & type == "Parole"    ~ "Incarcerated with New Sentence or Revocation",
-  data == "incarcerated" & type == "Probation" ~ "Incarcerated with New/Current Sentence"
-  
+  data == "incarcerated" & type == "Probation" ~ "Incarcerated with New or Current Sentence"
 ))
 
 # assign admissions and population variable
 prob_parole_exits <- prob_parole_exits %>% mutate(adm_or_pop = case_when(
   data == "incarcerated" ~ "Population"
-))
+)) %>% select(-data)
 
 ########
 # clean shapefile for hex map
@@ -871,11 +870,16 @@ bjs_parole <- bjs_parole %>% filter(data == "entries_total" | data == "incarcera
 bjs <- rbind(bjs_parole, bjs_prob)
 
 # select variables
-bjs <- bjs %>% select(state, year, text, total, adm_or_pop, type)
+bjs <- bjs %>% select(-state_abb)
 
 # change data types
 bjs$state <- as.character(bjs$state)
 bjs$year  <- as.factor(bjs$year)
+
+# combine bjs admissions with prob_parole_exits
+temp <- bjs %>% filter(adm_or_pop == "Admissions") %>% select(state, year, type, total, text, adm_or_pop)
+prob_parole_exits <- prob_parole_exits %>% select(state, year, type, total, text, adm_or_pop)
+bjs_all <- rbind(temp, prob_parole_exits)
 
 ########
 # BJS Data 2000-2022
@@ -907,6 +911,6 @@ save(us,               file="us.Rda")
 save(centers,          file="centers.Rda")
 
 save(prob_parole_exits,file="prob_parole_exits.Rda")
-save(bjs,              file="bjs.Rda")
+save(bjs_all,          file="bjs_all.Rda")
 save(csg,              file="csg.Rda")
 

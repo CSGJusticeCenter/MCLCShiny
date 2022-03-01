@@ -150,7 +150,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                ############
                                                # BJS plot
                                                ############
-                                               fluidRow(column(width = 6,
+                                               fluidRow(column(width = 8,
                                                                plotlyOutput("barchart_bjs_parole", height = 300))),
                                                br()
                                       ),
@@ -177,7 +177,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                ############
                                                # BJS plot
                                                ############
-                                               fluidRow(column(width = 6,
+                                               fluidRow(column(width = 8,
                                                                plotlyOutput("barchart_bjs_prob", height = 300))),
                                                br()
                                       ), #tabPanel
