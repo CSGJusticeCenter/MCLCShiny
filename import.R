@@ -56,6 +56,157 @@ load("Data/Annual Parole Survey, 2016/DS0001/37441-0001-Data.rda")
 load("Data/Annual Parole Survey, 2017/DS0001/37471-0001-Data.rda")
 load("Data/Annual Parole Survey, 2018/DS0001/38058-0001-Data.rda")
 
+# load 2000-2022 probation and parole data (not useful, entire probation and parole numbers not prison admissions or pops)
+parole_by_state <- readRDS("Data/parole_by_state.rds")
+prob_by_state   <- readRDS("Data/probation_by_state.rds")
+
+# load probation data for 2010-2020
+# https://bjs.ojp.gov/library/publications/list?series_filter=Probation%20and%20Parole%20Populations
+prob_exits_15.csv <- read.csv("Data/Annual Probation and Parole Surveys/prob_exits_15.csv")
+prob_exits_16.csv <- read.csv("Data/Annual Probation and Parole Surveys/prob_exits_16.csv")
+prob_exits_17.csv <- read.csv("Data/Annual Probation and Parole Surveys/prob_exits_17.csv")
+prob_exits_18.csv <- read.csv("Data/Annual Probation and Parole Surveys/prob_exits_18.csv")
+prob_exits_19.csv <- read.csv("Data/Annual Probation and Parole Surveys/prob_exits_19.csv")
+prob_exits_20.csv <- read.csv("Data/Annual Probation and Parole Surveys/prob_exits_20.csv")
+
+# load parole data for 2010-2020
+parole_exits_15.csv <- read.csv("Data/Annual Probation and Parole Surveys/parole_exits_15.csv")
+parole_exits_16.csv <- read.csv("Data/Annual Probation and Parole Surveys/parole_exits_16.csv")
+parole_exits_17.csv <- read.csv("Data/Annual Probation and Parole Surveys/parole_exits_17.csv")
+parole_exits_18.csv <- read.csv("Data/Annual Probation and Parole Surveys/parole_exits_18.csv")
+parole_exits_19.csv <- read.csv("Data/Annual Probation and Parole Surveys/parole_exits_19.csv")
+parole_exits_20.csv <- read.csv("Data/Annual Probation and Parole Surveys/parole_exits_20.csv")
+
+########
+# clean BJS probation 
+########
+
+prob_exits_15 <- prob_exits_15.csv %>% select(state            = X, 
+                                          inc_new_sentence     = X.3, 
+                                          inc_current_sentence = X.4) %>% mutate(year = 2015,
+                                                                                 type = "Probation")
+
+prob_exits_16 <- prob_exits_16.csv %>% select(state            = X, 
+                                          inc_new_sentence     = X.4, 
+                                          inc_current_sentence = X.5) %>% mutate(year = 2016,
+                                                                                 type = "Probation")
+
+prob_exits_17 <- prob_exits_17.csv %>% select(state            = X, 
+                                          inc_new_sentence     = X.3, 
+                                          inc_current_sentence = X.4) %>% mutate(year = 2017,
+                                                                                 type = "Probation")
+
+prob_exits_18 <- prob_exits_18.csv %>% select(state            = X, 
+                                          inc_new_sentence     = X.3, 
+                                          inc_current_sentence = X.4) %>% mutate(year = 2018,
+                                                                                 type = "Probation")
+
+prob_exits_19 <- prob_exits_19.csv %>% select(state            = X, 
+                                          inc_new_sentence     = X.3, 
+                                          inc_current_sentence = X.4) %>% mutate(year = 2019,
+                                                                                 type = "Probation")
+
+prob_exits_20 <- prob_exits_20.csv %>% select(state            = X, 
+                                          inc_new_sentence     = X.4, 
+                                          inc_current_sentence = X.5) %>% mutate(year = 2020,
+                                                                                 type = "Probation")
+# clean bjs data format
+prob_exits_15 <- clean_bjs_prob(prob_exits_15)
+prob_exits_16 <- clean_bjs_prob(prob_exits_16)
+prob_exits_17 <- clean_bjs_prob(prob_exits_17)
+prob_exits_18 <- clean_bjs_prob(prob_exits_18)
+prob_exits_19 <- clean_bjs_prob(prob_exits_19)
+prob_exits_20 <- clean_bjs_prob(prob_exits_20)
+
+# add incarcerated variable
+prob_exits_15 <- incarcerated_bjs_prob(prob_exits_15)
+prob_exits_16 <- incarcerated_bjs_prob(prob_exits_16)
+prob_exits_17 <- incarcerated_bjs_prob(prob_exits_17)
+prob_exits_18 <- incarcerated_bjs_prob(prob_exits_18)
+prob_exits_19 <- incarcerated_bjs_prob(prob_exits_19)
+prob_exits_20 <- incarcerated_bjs_prob(prob_exits_20)
+
+# make long form
+prob_exits_15 <- bjs_prob_long_form(prob_exits_15)
+prob_exits_16 <- bjs_prob_long_form(prob_exits_16)
+prob_exits_17 <- bjs_prob_long_form(prob_exits_17)
+prob_exits_18 <- bjs_prob_long_form(prob_exits_18)
+prob_exits_19 <- bjs_prob_long_form(prob_exits_19)
+prob_exits_20 <- bjs_prob_long_form(prob_exits_20)
+  
+########
+# clean BJS parole 
+########
+  
+parole_exits_15 <- parole_exits_15.csv %>% select(state        = X, 
+                                              inc_new_sentence = X.3, 
+                                              inc_revocation   = X.4) %>% mutate(year = 2015,
+                                                                                 type = "Parole")
+
+parole_exits_16 <- parole_exits_16.csv %>% select(state            = X, 
+                                              inc_new_sentence = X.3, 
+                                              inc_revocation   = X.4) %>% mutate(year = 2016,
+                                                                                 type = "Parole")
+
+parole_exits_17 <- parole_exits_17.csv %>% select(state            = X, 
+                                              inc_new_sentence = X.3, 
+                                              inc_revocation   = X.4) %>% mutate(year = 2017,
+                                                                                 type = "Parole")
+
+parole_exits_18 <- parole_exits_18.csv %>% select(state            = X, 
+                                              inc_new_sentence = X.3, 
+                                              inc_revocation   = X.4) %>% mutate(year = 2018,
+                                                                                 type = "Parole")
+
+parole_exits_19 <- parole_exits_19.csv %>% select(state            = X, 
+                                              inc_new_sentence = X.3, 
+                                              inc_revocation   = X.4) %>% mutate(year = 2019,
+                                                                                 type = "Parole")
+
+parole_exits_20 <- parole_exits_20.csv %>% select(state            = X, 
+                                              inc_new_sentence = X.4, 
+                                              inc_revocation   = X.5) %>% mutate(year = 2020,
+                                                                                 type = "Parole")
+
+parole_exits_15 <- clean_bjs_parole(parole_exits_15)
+parole_exits_16 <- clean_bjs_parole(parole_exits_16)
+parole_exits_17 <- clean_bjs_parole(parole_exits_17)
+parole_exits_18 <- clean_bjs_parole(parole_exits_18)
+parole_exits_19 <- clean_bjs_parole(parole_exits_19)
+parole_exits_20 <- clean_bjs_parole(parole_exits_20)
+
+# add incarcerated variable
+parole_exits_15 <- incarcerated_bjs_parole(parole_exits_15)
+parole_exits_16 <- incarcerated_bjs_parole(parole_exits_16)
+parole_exits_17 <- incarcerated_bjs_parole(parole_exits_17)
+parole_exits_18 <- incarcerated_bjs_parole(parole_exits_18)
+parole_exits_19 <- incarcerated_bjs_parole(parole_exits_19)
+parole_exits_20 <- incarcerated_bjs_parole(parole_exits_20)
+
+# make long form
+parole_exits_15 <- bjs_parole_long_form(parole_exits_15)
+parole_exits_16 <- bjs_parole_long_form(parole_exits_16)
+parole_exits_17 <- bjs_parole_long_form(parole_exits_17)
+parole_exits_18 <- bjs_parole_long_form(parole_exits_18)
+parole_exits_19 <- bjs_parole_long_form(parole_exits_19)
+parole_exits_20 <- bjs_parole_long_form(parole_exits_20)
+
+# combine data
+prob_parole_exits <- rbind(parole_exits_15, parole_exits_16, parole_exits_17, parole_exits_18, parole_exits_19, parole_exits_20,
+                           prob_exits_15, prob_exits_16, prob_exits_17, prob_exits_18, prob_exits_19, prob_exits_20)
+
+# descriptions
+prob_parole_exits <- prob_parole_exits %>% mutate(text = case_when(
+  data == "incarcerated" & type == "Parole"    ~ "Incarcerated with New Sentence or Revocation",
+  data == "incarcerated" & type == "Probation" ~ "Incarcerated with New/Current Sentence"
+  
+))
+
+# assign admissions and population variable
+prob_parole_exits <- prob_parole_exits %>% mutate(adm_or_pop = case_when(
+  data == "incarcerated" ~ "Population"
+))
+
 ########
 # clean shapefile for hex map
 ########
@@ -680,9 +831,9 @@ bjs_prob <- bjs_prob %>% filter(data == "entries_w_inc" | data == "incarcerated"
 ########
  
 bjs_parole <- parole %>% select(state, state_abb, year,
-                                entries_total = toten,       # total entries to probation 
-                            inc_new_sentence = exincnew,     # incarcerated with new sentence
-                            inc_w_revocation = exincrev) %>% # incarcerated with revocation 
+                                entries_total = toten,           # total entries to probation 
+                                inc_new_sentence = exincnew,     # incarcerated with new sentence
+                                inc_w_revocation = exincrev) %>% # incarcerated with revocation 
                      mutate(incarcerated = inc_new_sentence + inc_w_revocation)
 
 # add types
@@ -711,7 +862,7 @@ bjs_parole <- bjs_parole %>% mutate(adm_or_pop = case_when(
 bjs_parole <- bjs_parole %>% filter(data == "entries_total" | data == "incarcerated")
 
 ########
-# BJS Data
+# BJS Data 2014-2018
 ########
 
 # combine prob and parole data
@@ -722,7 +873,18 @@ bjs <- bjs %>% select(state, year, text, total, adm_or_pop, type)
 
 # change data types
 bjs$state <- as.character(bjs$state)
-bjs$year <- as.factor(bjs$year)
+bjs$year  <- as.factor(bjs$year)
+
+########
+# BJS Data 2000-2022
+########
+
+# add info about parole or probation
+prob_by_state$type   <- "Probation"
+parole_by_state$type <- "Parole"
+
+# combine data
+bjs_overall <- rbind(prob_by_state, parole_by_state)
 
 ########
 # save Rdata
@@ -742,6 +904,7 @@ save(us_map,           file="us_map.Rda")
 save(us,               file="us.Rda")
 save(centers,          file="centers.Rda")
 
+save(prob_parole_exits,file="prob_parole_exits.Rda")
 save(bjs,              file="bjs.Rda")
 save(csg,              file="csg.Rda")
 

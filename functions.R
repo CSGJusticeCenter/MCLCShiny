@@ -34,6 +34,92 @@ df <- df %>%
   ))
 }
 
+
+clean_bjs_prob <- function(df){
+  
+  df$state <- gsub('/c','',df$state)
+  df$state <- gsub('/b','',df$state)
+  df$state <- gsub('[[:punct:]]+','',df$state)
+  df$state <- gsub('[[:digit:]]+', '', df$state)
+  df$state <- gsub('†','',df$state)
+  df$state <- gsub('*','',df$state)
+  df$state <- trimws(df$state, whitespace = "[\\h\\v]")
+
+  # remove DC
+  df <- df %>% filter(state != "District of Columbia" & state != "US total")
+
+  # get indices for alabama and wyoming to subset rows to rows with values
+  alabama <- which(df$state == "Alabama")
+  wyoming <- which(df$state == "Wyoming")
+
+  # remove NA rows
+  df <- df[alabama:wyoming,]
+  
+}
+
+clean_bjs_parole <- function(df){
+  
+  df$state <- gsub('/c','',df$state)
+  df$state <- gsub('/b','',df$state)
+  df$state <- gsub('[[:punct:]]+','',df$state)
+  df$state <- gsub('[[:digit:]]+', '', df$state)
+  df$state <- gsub('†','',df$state)
+  df$state <- gsub('*','',df$state)
+  df$state <- trimws(df$state, whitespace = "[\\h\\v]")
+  
+  # remove DC
+  df <- df %>% filter(state != "District of Columbia" & state != "US total")
+  
+  # get indices for alabama and wyoming to subset rows to rows with values
+  alabama <- which(df$state == "Alabama")
+  wyoming <- which(df$state == "Wyoming")
+  
+  # remove NA rows
+  df <- df[alabama:wyoming,]
+  
+}
+
+# create incarcerated variable
+incarcerated_bjs_prob <- function(df){
+  df[] <- lapply(df, gsub, pattern = ".", replacement = "", fixed = TRUE)
+  df[] <- lapply(df, gsub, pattern = ",", replacement = "", fixed = TRUE)
+  df$inc_new_sentence <- as.numeric(df$inc_new_sentence)
+  df$inc_current_sentence <- as.numeric(df$inc_current_sentence)
+  df <- df %>% rowwise() %>% mutate(incarcerated = sum(inc_current_sentence, inc_new_sentence, na.rm = TRUE))
+  df <- data.frame(df)
+  df <- df %>% select(state, year, type, incarcerated)
+}
+
+incarcerated_bjs_parole <- function(df){
+  df[] <- lapply(df, gsub, pattern = ".", replacement = "", fixed = TRUE)
+  df[] <- lapply(df, gsub, pattern = ",", replacement = "", fixed = TRUE)
+  df$inc_new_sentence <- as.numeric(df$inc_new_sentence)
+  df$inc_revocation <- as.numeric(df$inc_revocation)
+  df <- df %>% rowwise() %>% mutate(incarcerated = sum(inc_revocation, inc_new_sentence, na.rm = TRUE))
+  df <- data.frame(df)
+  df <- df %>% select(state, year, type, incarcerated)
+}
+
+# make parole data long form
+bjs_parole_long_form <- function(df){
+  
+  df <- gather(df, 
+               data,
+               total,
+               incarcerated, 
+               factor_key=TRUE)
+}
+
+# make probation data long form
+bjs_prob_long_form <- function(df){
+  
+  df <- gather(df, 
+               data,
+               total,
+               incarcerated, 
+               factor_key=TRUE)
+}
+
 theme_csgjc_donut_plot <- function(){ 
   
   # assign font family up front

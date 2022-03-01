@@ -70,6 +70,7 @@ load(file="us_map.Rda")
 load(file="us.Rda")
 load(file="centers.Rda")
 
+load(file="prob_parole_exits.Rda")
 load(file="bjs.Rda")
 load(file="csg.Rda")
 
