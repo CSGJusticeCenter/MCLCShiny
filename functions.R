@@ -41,7 +41,8 @@ clean_bjs_prob <- function(df){
   df$state <- gsub('/b','',df$state)
   df$state <- gsub('[[:punct:]]+','',df$state)
   df$state <- gsub('[[:digit:]]+', '', df$state)
-  df$state <- gsub('†','',df$state)
+  # df$state <- gsub('†','',df$state)
+  df$state <- gsub("\u2020", "", df$state)
   df$state <- gsub('*','',df$state)
   df$state <- trimws(df$state, whitespace = "[\\h\\v]")
 
@@ -63,7 +64,8 @@ clean_bjs_parole <- function(df){
   df$state <- gsub('/b','',df$state)
   df$state <- gsub('[[:punct:]]+','',df$state)
   df$state <- gsub('[[:digit:]]+', '', df$state)
-  df$state <- gsub('†','',df$state)
+  # df$state <- gsub('†','',df$state)
+  df$state <- gsub("\u2020", "", df$state)
   df$state <- gsub('*','',df$state)
   df$state <- trimws(df$state, whitespace = "[\\h\\v]")
   

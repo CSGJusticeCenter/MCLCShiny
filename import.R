@@ -58,9 +58,9 @@ load("Data/Annual Parole Survey, 2016/DS0001/37441-0001-Data.rda")
 load("Data/Annual Parole Survey, 2017/DS0001/37471-0001-Data.rda")
 load("Data/Annual Parole Survey, 2018/DS0001/38058-0001-Data.rda")
 
-# load 2000-2022 probation and parole data (not useful, entire probation and parole numbers not prison admissions or pops)
-parole_by_state <- readRDS("Data/parole_by_state.rds")
-prob_by_state   <- readRDS("Data/probation_by_state.rds")
+# # load 2000-2022 probation and parole data (not useful, entire probation and parole numbers not prison admissions or pops)
+# parole_by_state <- readRDS("Data/parole_by_state.rds")
+# prob_by_state   <- readRDS("Data/probation_by_state.rds")
 
 # load probation data for 2010-2020
 # https://bjs.ojp.gov/library/publications/list?series_filter=Probation%20and%20Parole%20Populations
@@ -940,12 +940,12 @@ bjs_all <- rbind(temp, prob_parole_exits)
 # BJS Data 2000-2022
 ########
 
-# add info about parole or probation
-prob_by_state$type   <- "Probation"
-parole_by_state$type <- "Parole"
-
-# combine data
-bjs_overall <- rbind(prob_by_state, parole_by_state)
+# # add info about parole or probation
+# prob_by_state$type   <- "Probation"
+# parole_by_state$type <- "Parole"
+# 
+# # combine data
+# bjs_overall <- rbind(prob_by_state, parole_by_state)
 
 ########
 # save Rdata
