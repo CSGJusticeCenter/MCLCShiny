@@ -39,6 +39,7 @@ clean_bjs_prob <- function(df){
   
   df$state <- gsub('/c','',df$state)
   df$state <- gsub('/b','',df$state)
+  df$state <- gsub('/d','',df$state)
   df$state <- gsub('[[:punct:]]+','',df$state)
   df$state <- gsub('[[:digit:]]+', '', df$state)
   # df$state <- gsub('†','',df$state)
@@ -47,7 +48,7 @@ clean_bjs_prob <- function(df){
   df$state <- trimws(df$state, whitespace = "[\\h\\v]")
 
   # remove DC
-  df <- df %>% filter(state != "District of Columbia" & state != "US total")
+  df <- df %>% filter(state != "District of Columbia" & state != "US total" & state != "District Of Columbia")
 
   # get indices for alabama and wyoming to subset rows to rows with values
   alabama <- which(df$state == "Alabama")
@@ -62,6 +63,7 @@ clean_bjs_parole <- function(df){
   
   df$state <- gsub('/c','',df$state)
   df$state <- gsub('/b','',df$state)
+  df$state <- gsub('/d','',df$state)
   df$state <- gsub('[[:punct:]]+','',df$state)
   df$state <- gsub('[[:digit:]]+', '', df$state)
   # df$state <- gsub('†','',df$state)
@@ -70,7 +72,7 @@ clean_bjs_parole <- function(df){
   df$state <- trimws(df$state, whitespace = "[\\h\\v]")
   
   # remove DC
-  df <- df %>% filter(state != "District of Columbia" & state != "US total")
+  df <- df %>% filter(state != "District of Columbia" & state != "US total" & state != "District Of Columbia")
   
   # get indices for alabama and wyoming to subset rows to rows with values
   alabama <- which(df$state == "Alabama")

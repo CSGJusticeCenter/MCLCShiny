@@ -87,18 +87,22 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                             ############
                                             # Value boxes
                                             ############
-                                            tags$style(".small-box.bg-green {background-color: #3C3C3C !important; color: #FFFFFF !important; }"),
-                                            tags$style(".small-box.bg-red   {background-color: #3C3C3C !important; color: #FFFFFF !important; }"),
-                                            tags$style(".small-box          {border: 1px; border-style: solid; border-color: #3C3C3C !important; border-radius: 1px; padding: 0.1em; }"),
+                                            tags$style(".small-box.bg-black       {background-color: #3C3C3C !important; color: #FFFFFF !important; }"),
+                                            tags$style(".small-box.bg-green       {background-color: #fcccac !important; color: #3C3C3C !important; }"),
+                                            tags$style(".small-box.bg-orange      {background-color: #fc9c54 !important; color: #FFFFFF !important; }"),
+                                            tags$style(".small-box.bg-blue        {background-color: #2B4570 !important; color: #FFFFFF !important; }"),
+                                            
+                                            tags$style(".small-box                {border: 1px; border-style: solid; border-color: #FFFFFF !important; border-radius: 1px; padding: 0.1em; }"),
                                             
                                             fluidRow(
-                                              column(width = 4,
+                                              column(width = 3,
                                                      valueBoxOutput("total_change", width = 125)),
-                                              column(width = 4,
+                                              column(width = 3,
                                                      valueBoxOutput("sup_change", width = 125)),
-                                              column(width = 4,
-                                                     valueBoxOutput("tech_change", width = 125)
-                                              )
+                                              column(width = 3,
+                                                     valueBoxOutput("tech_change", width = 125)),
+                                              column(width = 3,
+                                                     valueBoxOutput("rev_rate", width = 125))
                                             ), #fluidRow
                                             br(),
                                     
@@ -145,13 +149,8 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                ############
                                                fluidRow(
                                                  column(width = 12,
+                                                        align = 'center',
                                                         reactableOutput("parole_table"))),
-                                               br(),
-                                               ############
-                                               # BJS plot
-                                               ############
-                                               fluidRow(column(width = 8,
-                                                               plotlyOutput("barchart_bjs_parole", height = 300))),
                                                br()
                                       ),
                                       ###################
@@ -173,12 +172,6 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                fluidRow(column(width = 12,
                                                                align = 'center',
                                                                reactableOutput("prob_table"))),
-                                               br(),
-                                               ############
-                                               # BJS plot
-                                               ############
-                                               fluidRow(column(width = 8,
-                                                               plotlyOutput("barchart_bjs_prob", height = 300))),
                                                br()
                                       ), #tabPanel
                                       id = "tb2") #tabsetPanel

@@ -309,15 +309,21 @@ server <- function(input, output, session) {
                metric == "Technical")
   })
   
+  # filter data to state and rev rate
+  df_bjs_rate <- reactive({
+    bjs_prob_parole %>%
+      filter(state == input$state)
+  })
+  
   output$total_change <- renderValueBox({
     
     valueBox2(
-      df_vb_total()$total,
+      comma(df_vb_total()$total, digits = 0),
       title = paste0(input$adm_or_pop, " in 2020"),
       subtitle = tagList(HTML("&darr;"), paste0(df_vb_total()$change, "% from 2019")),
       # icon = icon("arrow-down"),
       # width = 10,
-      color = "green",
+      color = "black",
       href = NULL
     )
   
@@ -326,12 +332,12 @@ server <- function(input, output, session) {
   output$sup_change <- renderValueBox({
     
     valueBox2(
-      df_vb_sup_viols()$total,
+      comma(df_vb_sup_viols()$total, digits = 0),
       title = paste0("Violation ", input$adm_or_pop, " in 2020"),
       subtitle = tagList(HTML("&darr;"), paste0(df_vb_sup_viols()$change, "% from 2019")),
       # icon = icon("arrow-down"),
       # width = 10,
-      color = "green",
+      color = "black",
       href = NULL
     )
     
@@ -340,12 +346,26 @@ server <- function(input, output, session) {
   output$tech_change <- renderValueBox({
     
     valueBox2(
-      df_vb_tech()$total,
+      comma(df_vb_tech()$total, digits = 0),
       title = paste0("Technical ", input$adm_or_pop, " in 2020"),
       subtitle = tagList(HTML("&darr;"), paste0(df_vb_tech()$change, "% from 2019")),
       # icon = icon("arrow-down"),
       # width = 10,
-      color = "green",
+      color = "black",
+      href = NULL
+    )
+    
+  })
+  
+  output$rev_rate <- renderValueBox({
+    
+    valueBox2(
+      paste0(round(df_bjs_rate()$rev_rate_20*100, 2), "%"),
+      title = "Revovation Rate in 2020",
+      subtitle = tagList(HTML("&darr;"), paste0(round(df_bjs_rate()$rev_rate_change*100, 0), "% from 2019")),
+      # icon = icon("arrow-down"),
+      # width = 10,
+      color = "black",
       href = NULL
     )
     
@@ -1082,117 +1102,6 @@ server <- function(input, output, session) {
                                             fill = colpal_fill[index],
                                             stroke = colpal_stroke[index])))})))
     
-  })
-  
-  ##################################
-  # BJS Probation and Parole Charts
-  ##################################
-  
-  # prob parole bar and line chart
-  output$barchart_bjs_parole <- renderPlotly({
-    
-    df <- bjs_all %>% filter(state == input$state & adm_or_pop == input$adm_or_pop & type == "Parole")
-    type <- "Parole"
-    
-    state <- input$state
-    adm_or_pop <- input$adm_or_pop
-    title <- unique(df$text)
-    
-    # bar chart of supervision violations by type
-    df %>%
-      plot_ly(
-        type = 'bar',
-        x = ~year,
-        y = ~total,
-        marker = list(color = bjs_co),
-        hovertext  = paste('<b>',     df$text, '</b><br><br>',
-                           'Total: ', formattable::comma(df$total, digits = 0),'<br>',
-                           'Year: ',  df$year, '<br>'),
-        hoverinfo = 'text'
-      ) %>%
-      # customize layout
-      layout(title = list(text = paste0('<b>Parole: ', title, '</b>\n\n'), font = list(size = 14)),
-             font = list(size = 12),
-             plot_bgcolor='#FFFFFF', 
-             xaxis = list( 
-               title = "",
-               showline= T, linewidth=2, linecolor='black',
-               gridcolor = 'FFFFFF'), 
-             yaxis = list( 
-               title = "",
-               showticklabels = TRUE,
-               tickformat=",d"),
-             annotations = list(x = 0, y = -0.2, text = "Source: BJS Annual Parole Survey", 
-                                showarrow = F, xref='paper', yref='paper', 
-                                xanchor='left', yanchor='auto', 
-                                font=list(color="gray"))) %>% 
-      # remove plotly buttons
-      config(
-        modeBarButtonsToRemove = list(
-          "zoom2d", "pan2d", "select2d", "lasso2d", "zoomIn2d", "zoomOut2d", "autoScale2d", 
-          "resetScale2d", "zoom3d", "pan3d", 
-          "resetCameraDefault3d", "resetCameraLastSave3d", "hoverClosest3d", "orbitRotation", 
-          "tableRotation", "zoomInGeo", "zoomOutGeo", "resetGeo", "hoverClosestGeo", 
-          "sendDataToCloud", "hoverClosestGl2d", "hoverClosestPie", "toggleHover", 
-          "resetViews", "toggleSpikelines", "resetViewMapbox"
-        ), displaylogo = FALSE) %>% 
-      # customize file name
-      config(plot_ly(),
-             toImageButtonOptions= list(filename = paste0(state, "_", title)))
-  })
-
-  # prob prob bar and line chart
-  output$barchart_bjs_prob <- renderPlotly({
-
-    df <- bjs_all %>% filter(state == input$state & adm_or_pop == input$adm_or_pop & type == "Probation")
-    type <- "Probation"
-    
-    state <- input$state
-    adm_or_pop <- input$adm_or_pop
-    title <- unique(df$text)
-    
-    # bar chart of supervision violations by type
-    df %>%
-      plot_ly(
-        type = 'bar',
-        x = ~year,
-        y = ~total,
-        marker = list(color = bjs_co),
-        hovertext  = paste('<b>',     df$text, '</b><br><br>',
-                           'Total: ', formattable::comma(df$total, digits = 0),'<br>',
-                           'Year: ',  df$year, '<br>'),
-        hoverinfo = 'text'
-      ) %>%
-      # customize layout
-      layout(title = list(text = paste0('<b>Probation: ', title, '</b>\n\n'), font = list(size = 14)),
-             font = list(size = 12),
-             plot_bgcolor='#FFFFFF', 
-             xaxis = list( 
-               title = "",
-               showline= T, linewidth=2, linecolor='black',
-               gridcolor = 'FFFFFF'), 
-             yaxis = list( 
-               title = "",
-               showticklabels = TRUE,
-               tickformat=",d"),
-             annotations = list(x = 0, y = -0.2, text = "Source: BJS Annual Probation Survey", 
-                                showarrow = F, xref='paper', yref='paper', 
-                                xanchor='left', yanchor='auto', 
-                                font=list(color="gray"))) %>% 
-      # remove plotly buttons
-      config(
-        modeBarButtonsToRemove = list(
-          "zoom2d", "pan2d", "select2d", "lasso2d", "zoomIn2d", "zoomOut2d", "autoScale2d", 
-          "resetScale2d", "zoom3d", "pan3d", 
-          "resetCameraDefault3d", "resetCameraLastSave3d", "hoverClosest3d", "orbitRotation", 
-          "tableRotation", "zoomInGeo", "zoomOutGeo", "resetGeo", "hoverClosestGeo", 
-          "sendDataToCloud", "hoverClosestGl2d", "hoverClosestPie", "toggleHover", 
-          "resetViews", "toggleSpikelines", "resetViewMapbox"
-        ), displaylogo = FALSE) %>% 
-      # customize file name
-      config(plot_ly(),
-             toImageButtonOptions= list(filename = paste0(state, "_", title)))
-
   })
   
   #-------------------------------------------------------------------------------

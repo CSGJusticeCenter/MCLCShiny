@@ -67,6 +67,8 @@ load(file="parole_table_wide.Rda")
 load(file="prob_table.Rda")
 load(file="prob_table_wide.Rda")
 
+load(file="bjs_prob_parole.Rda")
+
 load(file="us_map.Rda")
 load(file="us.Rda")
 load(file="centers.Rda")
