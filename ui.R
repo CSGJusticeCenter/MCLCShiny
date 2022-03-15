@@ -36,7 +36,10 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                       selectInput("year_map_counts", "Year", choices = c(2018, 2019, 2020))),
                                                     conditionalPanel(
                                                       condition = "input.choice_map_counts == 'Change from Previous Year'",
-                                                      selectInput("year_map_counts2", "Year", choices = c(2019, 2020)))
+                                                      selectInput("year_map_counts2", "Year", choices = c(2019, 2020))),
+                                                    # download buttons
+                                                    downloadButton(outputId = "save_map", label = "Download Map"),
+                                                    downloadButton(outputId = "save_data", label = "Download Data")
                                           ), #wellPanel
                                           ########
                                           # Map
@@ -70,7 +73,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                 fluidPage(
                                   br(),
                                   wellPanel(tags$style(type="text/css", '#leftPanel { width:200px; float:left;}'), id = "leftPanel",
-                                            selectInput("state", "State",      choices = unique(adm_pop_long$states)),
+                                            selectInput("state", "State",      choices = unique(adm_pop_long$state)),
                                             radioButtons("adm_or_pop", "Type", choices = unique(adm_pop_long$adm_or_pop))),
                                   
                                   mainPanel(######
@@ -127,6 +130,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                ############
                                                fluidRow(
                                                  column(width = 12,
+                                                        align = "center", 
                                                         reactableOutput("state_table"))),
                                                br()
                                       ),
@@ -138,19 +142,17 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                ############
                                                # Plots
                                                ############
-                                               fluidRow(
-                                                 column(width = 6,
-                                                        plotlyOutput("areachart_parole", height = 300)),
-                                                 column(width = 6,
-                                                        plotlyOutput("barchart_parole", height = 300)),),
+                                               fluidRow(column(width = 6,
+                                                               plotlyOutput("areachart_parole", height = 300)),
+                                                        column(width = 6,
+                                                               plotlyOutput("barchart_parole", height = 300))),
                                                br(), 
                                                ############
                                                # Table under graphs
                                                ############
-                                               fluidRow(
-                                                 column(width = 12,
-                                                        align = 'center',
-                                                        reactableOutput("parole_table"))),
+                                               fluidRow(column(width = 12,
+                                                               align = 'center',
+                                                               reactableOutput("parole_table"))),
                                                br()
                                       ),
                                       ###################
@@ -192,15 +194,29 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                     
                                                     conditionalPanel(
                                                       condition = "input.dataset == 'More Community, Less Confinement (CSG)'",
-                                                      checkboxGroupInput("year_table", "Year", choices = unique(csg$year), selected = "2018"),
-                                                      pickerInput("download_table","State(s)", choices = unique(csg$state), options = list(`actions-box` = TRUE), multiple = T)
+                                                      checkboxGroupInput("year_table", "Year", choices = unique(csg$year), selected = c("2018", "2019", "2020")),
+                                                      pickerInput("download_table","State(s)", choices = unique(csg$state), 
+                                                                  selected = c("Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", 
+                                                                               "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", 
+                                                                               "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", 
+                                                                               "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", 
+                                                                               "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont",
+                                                                               "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"), 
+                                                                  options = list(`actions-box` = TRUE), multiple = T)
                                                       # selectizeInput("download_table", "State(s)", choices = unique(csg$state), multiple = TRUE, selected = "Alabama")
                                               
                                                     ),
                                                     conditionalPanel(
                                                       condition = "input.dataset == 'Annual Probation Survey and Annual Parole Survey (BJS)'",
-                                                      checkboxGroupInput("year_table2", "Year", choices = unique(bjs$year), selected = "2014"),
-                                                      pickerInput("download_table2","State(s)", choices = unique(bjs$state), options = list(`actions-box` = TRUE), multiple = T)
+                                                      checkboxGroupInput("year_table2", "Year", choices = unique(bjs$year), selected = c("2019", "2020")),
+                                                      pickerInput("download_table2","State(s)", choices = unique(bjs$state), 
+                                                                  selected = c("Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", 
+                                                                               "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", 
+                                                                               "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", 
+                                                                               "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", 
+                                                                               "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont",
+                                                                               "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"), 
+                                                                  options = list(`actions-box` = TRUE), multiple = T)
                                                       # selectizeInput("download_table2", "State(s)", choices = unique(bjs$state), multiple = TRUE, selected = "Alabama")
                                                     )
                                           ), # wellPanel

@@ -29,7 +29,7 @@ server <- function(input, output, session) {
   df_map_table <- reactive({
     df_map() %>%
       arrange(desc(total)) %>%
-      select(State = states,
+      select(State = state,
              Year = year,
              Data = metric,
              Type = adm_or_pop,
@@ -52,76 +52,6 @@ server <- function(input, output, session) {
     paste(input$data_map_counts, " ", input$adm_or_pop_map_counts, " ", text)
     
   }) 
-  
-  # output$map_counts <- renderPlot({
-  # 
-  #   df_map <- sp::merge(us, df_map(), by.x = 'iso3166_2', by.y = "Code")
-  # 
-  #   # map
-  #   gg <- ggplot()
-  #   # add outline
-  #   gg <- gg + geom_map(data=us_map, map=us_map,
-  #                       aes(x=long, y=lat, map_id=id),
-  #                       color="white", size=0.5)
-  #   # add data
-  #   gg <- gg + geom_map(data=df_map@data, map=us_map,
-  #                       aes(fill=total, map_id=iso3166_2))
-  #   # overlay borders without ugly line on legend
-  #   gg <- gg + geom_map(data=df_map@data, map=us_map,
-  #                       aes(map_id=iso3166_2),
-  #                       fill="#ffffff", alpha=0, color="white",
-  #                       show_guide=FALSE)
-  #   
-  #   # change scales depending on rate vs count selection
-  #   gg <- gg +
-  #     geom_text(data=centers, aes(label = id, x = x, y = y), color = "white", size = 4) +
-  #     coord_map() +
-  #     labs(x=NULL, y=NULL) +
-  #     theme_bw() +
-  #     theme(panel.border=element_blank(),
-  #           panel.grid=element_blank(),
-  #           legend.position = c(0.5, 0.9),
-  #           legend.title=element_text(size=14),
-  #           legend.text=element_text(size=14),
-  #           axis.ticks=element_blank(),
-  #           axis.text=element_blank(),
-  #           plot.title = element_text(hjust = 0.5,
-  #                                     face = "bold",
-  #                                     size = 16))
-  #   
-  #   if(input$choice_map_counts == "Count"){
-  #     
-  #     title <- paste0(input$data_map_counts, " Prison ", input$adm_or_pop_map_counts, " in ", input$year_map_counts)
-  #     gg + scale_fill_gradientn("Number of People",
-  #                               colours = count_colors,
-  #                               na.value="#D3D3D3",
-  #                               label = scales::comma,
-  #                               guide = guide_legend(keyheight = unit(3, units = "mm"),
-  #                                                    keywidth=unit(12, units = "mm"),
-  #                                                    label.position = "bottom",
-  #                                                    title.position = 'top', nrow=1)) +
-  #          ggtitle(title)
-  #   }
-  #   
-  #   else if(input$choice_map_counts == "Change from Previous Year"){
-  #     
-  #     change_year <- as.numeric(input$year_map_counts2)
-  #     change_year <- change_year - 1
-  #     title <- paste0("Change in ", input$data_map_counts, " Prison ", input$adm_or_pop_map_counts, " between ", change_year, " and ", input$year_map_counts2)
-  #     
-  #     gg + scale_fill_scico("Change from Previous Year",
-  #                           palette = "vik", 
-  #                           na.value="#D3D3D3",
-  #                           label = scales::percent,
-  #                           limits = c(-1, 1)*max(abs(df_map()$total)),
-  #                           guide = guide_legend(keyheight = unit(3, units = "mm"),
-  #                                                keywidth=unit(12, units = "mm"),
-  #                                                label.position = "bottom",
-  #                                                title.position = 'top', nrow=1)) +
-  #          ggtitle(title)
-  #   }
-  #   
-  # }, height="auto")
   
   ##############
   # Table below map changes depending on count vs change
@@ -186,7 +116,8 @@ server <- function(input, output, session) {
   ################################################################################
   ################################################################################
 
-  output$leaflet_map <- renderLeaflet({
+  # save leaflet map as a reactive element to be saved
+  reactive_map <- reactive({
     
     df_map <- sp::merge(us, df_map(), by.x = 'iso3166_2', by.y = "Code")
     
@@ -195,7 +126,8 @@ server <- function(input, output, session) {
     if(input$choice_map_counts == "Change from Previous Year"){
       
       pal_fun <- colorNumeric(change_colors, df_map$total)
-      p_popup <- paste0('<b>',df_map$states, '</b><br><br>',
+      p_popup <- paste0('<b>',df_map$state, '</b><br><br>',
+                        'Year: ', df_map$year, '<br>',
                         'Change: ', round(df_map$total, 2),'%<br>')
       
       leaflet(df_map, options = leafletOptions(zoomControl = FALSE,
@@ -230,7 +162,8 @@ server <- function(input, output, session) {
     else if(input$choice_map_counts == "Count"){
       
       pal_fun <- colorNumeric(count_colors, df_map$total)
-      p_popup <- paste0('<b>',df_map$states, '</b><br><br>',
+      p_popup <- paste0('<b>',df_map$state, '</b><br><br>',
+                        'Year: ', df_map$year, '<br>',
                         'Count: ', formattable::comma(df_map$total, digits = 0),'<br>')
       
       leaflet(df_map, options = leafletOptions(zoomControl = FALSE,
@@ -261,11 +194,31 @@ server <- function(input, output, session) {
                                                         direction = 'center', 
                                                         textOnly = TRUE))
     }
-    
-    
-    
-
   })
+  
+  # output reactive leaflet map
+  output$leaflet_map <- renderLeaflet({
+    reactive_map()
+  })
+  
+  # download button for map
+  output$save_map <- downloadHandler(
+    filename = "map.html",
+    content = function(file){saveWidget(widget = reactive_map(), file = file)}) 
+  
+  # download button for data
+  output$save_data <- downloadHandler(
+    
+    filename = function() {
+      paste0(input$data_map_counts, "_", input$adm_or_pop_map_counts,"_", input$choice_map_counts, ".xlsx", sep="")
+    },
+    content = function(file) {
+      wb <- createWorkbook()
+      addWorksheet(wb, sheetName = "sheet1")
+      writeData(wb, sheet = 1, x = df_map_table(), startCol = 1, startRow = 1)
+      saveWorkbook(wb, file = file, overwrite = TRUE)
+    }
+  )
   
   ################################################################################
   ################################################################################
@@ -285,7 +238,7 @@ server <- function(input, output, session) {
   # filter data to totals
   df_vb_total <- reactive({
     vb_adm_pop %>%
-      filter(states == input$state &
+      filter(state == input$state &
                adm_or_pop == input$adm_or_pop &
                year == "2020" &
                metric == "Total")
@@ -294,7 +247,7 @@ server <- function(input, output, session) {
   # filter data to sup viols
   df_vb_sup_viols <- reactive({
     vb_adm_pop %>%
-      filter(states == input$state &
+      filter(state == input$state &
                adm_or_pop == input$adm_or_pop &
                year == "2020" &
                metric == "Supervision Violations")
@@ -303,7 +256,7 @@ server <- function(input, output, session) {
   # filter data to tech viols
   df_vb_tech <- reactive({
     vb_adm_pop %>%
-      filter(states == input$state &
+      filter(state == input$state &
                adm_or_pop == input$adm_or_pop &
                year == "2020" &
                metric == "Technical")
@@ -380,10 +333,10 @@ server <- function(input, output, session) {
     # filter data
     df <-
       adm_pop_long %>%
-      filter(states == input$state &
+      filter(state == input$state &
                adm_or_pop == input$adm_or_pop &
                (metric == "Total" | metric == "Supervision Violations" | metric == "Technical")) %>% 
-      group_by(states, year, metric) %>% 
+      group_by(state, year, metric) %>% 
       summarise(total = sum(total))
     data_total <- df %>% filter(metric == "Total")
     data_supviols <- df %>% filter(metric == "Supervision Violations")
@@ -402,8 +355,8 @@ server <- function(input, output, session) {
                 fillcolor = total_co,
                 hoverinfo = 'text',
                 hovertext = paste('<b>',data_total$metric, '</b><br><br>',
-                             'Total: ', formattable::comma(data_total$total, digits = 0),'<br>',
-                             'Year: ', data_total$year, '<br>')) %>% 
+                                  'Year: ', data_total$year, '<br>',
+                                  'Total: ', formattable::comma(data_total$total, digits = 0),'<br>')) %>% 
       # supervision violations
       add_trace(x = data_supviols$year, 
                 y = data_supviols$total, 
@@ -415,8 +368,8 @@ server <- function(input, output, session) {
                 fillcolor = viol_co,
                 hoverinfo = 'text',
                 text = paste('<b>',data_supviols$metric, '</b><br><br>',
-                             'Total: ', formattable::comma(data_supviols$total, digits = 0),'<br>',
-                             'Year: ', data_supviols$year, '<br>')) %>% 
+                             'Year: ', data_supviols$year, '<br>',
+                             'Total: ', formattable::comma(data_supviols$total, digits = 0),'<br>')) %>% 
       # technical
       add_trace(x = data_technical$year, 
                 y = data_technical$total, 
@@ -428,8 +381,8 @@ server <- function(input, output, session) {
                 fillcolor = tech_co,
                 hoverinfo = 'text',
                 hovertext = paste('<b>',data_technical$metric, '</b><br><br>',
-                             'Total: ', formattable::comma(data_technical$total, digits = 0),'<br>',
-                             'Year: ', data_technical$year, '<br>')) %>% 
+                                  'Year: ', data_technical$year, '<br>',
+                                  'Total: ', formattable::comma(data_technical$total, digits = 0),'<br>')) %>% 
       # customize layout
       layout(title = list(text = paste0('<b>Prison ', input$adm_or_pop, '</b>\n'), font = list(size = 14)),
              font = list(size = 12),
@@ -461,7 +414,7 @@ server <- function(input, output, session) {
         ), displaylogo = FALSE) %>% 
       # customize file name
       config(plot_ly(),
-             toImageButtonOptions= list(filename = paste0(input$state, "_", input$adm_or_pop_map))) 
+             toImageButtonOptions= list(filename = paste0(input$state, "_", input$adm_or_pop))) 
   })
   
   ########
@@ -476,7 +429,7 @@ server <- function(input, output, session) {
     # filter data
     df <- 
       adm_pop_long %>% 
-      filter(states == input$state &
+      filter(state == input$state &
              adm_or_pop == input$adm_or_pop) %>% 
       group_by(metric, year) %>% 
       summarise(total = sum(total)) %>% 
@@ -493,8 +446,8 @@ server <- function(input, output, session) {
                    Technical = tech_co),
         hoverinfo = 'text',
         hovertext = paste('<b>',df$metric, '</b><br><br>',
-                     'Total: ', formattable::comma(df$total, digits = 0),'<br>',
-                     'Year: ', df$year, '<br>')) %>%
+                          'Year: ', df$year, '<br>',
+                          'Total: ', formattable::comma(df$total, digits = 0),'<br>')) %>%
       # customize layout
       layout(title = list(text = paste0('<b>Supervision Violation\n', input$adm_or_pop, ' by Type</b>\n'), font = list(size = 14)),
              font = list(size = 12),
@@ -535,15 +488,15 @@ server <- function(input, output, session) {
     
     # filter data
     df <- state_table %>% 
-      filter(states == input$state & 
+      filter(state == input$state & 
              adm_or_pop == input$adm_or_pop) %>% 
       group_by(text) %>% 
       summarise(total_new = list(list(total))) 
     df1 <- state_table_wide %>% 
-      filter(states == input$state & 
+      filter(state == input$state & 
              adm_or_pop == input$adm_or_pop) %>% 
       arrange(order) %>% 
-      select(-adm_or_pop, -states)
+      select(-adm_or_pop, -state)
     
     # merge data
     df <- merge(df1, df, by = "text")
@@ -640,11 +593,11 @@ server <- function(input, output, session) {
     # filter data
     df <-
       adm_pop_long %>%
-      filter(states == input$state &
+      filter(state == input$state &
                adm_or_pop == input$adm_or_pop &
                prob_vs_parole == "Parole" &
                metric != "New Offense") %>% 
-      group_by(states, year, metric) %>% 
+      group_by(state, year, metric) %>% 
       summarise(total = sum(total))
     df$year <- as.factor(df$year)
     data_total <- df %>% filter(metric == "Parole")
@@ -663,8 +616,8 @@ server <- function(input, output, session) {
                 fillcolor = pp_co,
                 hoverinfo = 'text',
                 hovertext = paste('<b>',data_total$metric, '</b><br><br>',
-                             'Total: ', formattable::comma(data_total$total, digits = 0),'<br>',
-                             'Year: ', data_total$year, '<br>')) %>% 
+                                  'Year: ', data_total$year, '<br>',
+                                  'Total: ', formattable::comma(data_total$total, digits = 0),'<br>')) %>% 
       # technical
       add_trace(x = data_technical$year, 
                 y = data_technical$total, 
@@ -676,8 +629,8 @@ server <- function(input, output, session) {
                 fillcolor = tech_co,
                 hoverinfo = 'text',
                 hovertext = paste('<b>',data_technical$metric, '</b><br><br>',
-                             'Total: ', formattable::comma(data_technical$total, digits = 0),'<br>',
-                             'Year: ', data_technical$year, '<br>')) %>% 
+                                  'Year: ', data_technical$year, '<br>',
+                                  'Total: ', formattable::comma(data_technical$total, digits = 0),'<br>')) %>% 
       # customize layout
       layout(title = list(text = paste0('<b>Parole ', input$adm_or_pop, '</b>\n'), font = list(size = 14)),
              font = list(size = 12),
@@ -725,7 +678,7 @@ server <- function(input, output, session) {
     # filter data
     df <- 
       adm_pop_long %>% 
-      filter(states == input$state &
+      filter(state == input$state &
              adm_or_pop == input$adm_or_pop &
              prob_vs_parole == "Parole") %>% 
       filter(metric == "Technical" | metric == "New Offense")  %>% 
@@ -742,9 +695,9 @@ server <- function(input, output, session) {
         colors = c(`New Offense` = new_o_co,
                    Technical = tech_co),
         hoverinfo = 'text',
-        hovertext = paste('<b>',df$metric, '</b><br><br>',
-                     'Total: ', formattable::comma(df$total, digits = 0),'<br>',
-                     'Year: ', df$year, '<br>')) %>%
+        hovertext = paste('<b>', df$metric, '</b><br><br>',
+                          'Year: ', df$year, '<br>',
+                          'Total: ', formattable::comma(df$total, digits = 0),'<br>')) %>%
       # customize layout
       layout(title = list(text = paste0('<b>Parole ', input$adm_or_pop, ' by Type</b>\n'), font = list(size = 14)),
              font = list(size = 12),
@@ -785,11 +738,11 @@ server <- function(input, output, session) {
     # filter data
     df <-
       adm_pop_long %>%
-      filter(states == input$state &
+      filter(state == input$state &
                adm_or_pop == input$adm_or_pop &
                prob_vs_parole == "Probation" &
                metric != "New Offense") %>% 
-      group_by(states, year, metric) %>% 
+      group_by(state, year, metric) %>% 
       summarise(total = sum(total))
     df$year <- as.factor(df$year)
     data_total <- df %>% filter(metric == "Probation")
@@ -808,8 +761,8 @@ server <- function(input, output, session) {
                 fillcolor = pp_co,
                 hoverinfo = 'text',
                 hovertext = paste('<b>',data_total$metric, '</b><br><br>',
-                             'Total: ', formattable::comma(data_total$total, digits = 0),'<br>',
-                             'Year: ', data_total$year, '<br>')) %>% 
+                                  'Year: ', data_total$year, '<br>',
+                                  'Total: ', formattable::comma(data_total$total, digits = 0),'<br>')) %>% 
       # technical
       add_trace(x = data_technical$year, 
                 y = data_technical$total, 
@@ -821,8 +774,8 @@ server <- function(input, output, session) {
                 fillcolor = tech_co,
                 hoverinfo = 'text',
                 hovertext = paste('<b>',data_technical$metric, '</b><br><br>',
-                             'Total: ', formattable::comma(data_technical$total, digits = 0),'<br>',
-                             'Year: ', data_technical$year, '<br>')) %>% 
+                                  'Year: ', data_technical$year, '<br>',
+                                  'Total: ', formattable::comma(data_technical$total, digits = 0),'<br>')) %>% 
       # customize layout
       layout(title = list(text = paste0('<b>Probation ', input$adm_or_pop, '</b>\n'), font = list(size = 14)),
              font = list(size = 12),
@@ -854,7 +807,7 @@ server <- function(input, output, session) {
         ), displaylogo = FALSE) %>% 
       # customize file name
       config(plot_ly(),
-             toImageButtonOptions= list(filename = paste0(input$state, "_Probation_Violation_", input$adm_or_pop)))
+             toImageButtonOptions= list(filename = paste0(input$state, "_Probation_", input$adm_or_pop)))
   })
   
   ########
@@ -869,7 +822,7 @@ server <- function(input, output, session) {
     # filter data
     df <- 
       adm_pop_long %>% 
-      filter(states == input$state &
+      filter(state == input$state &
                adm_or_pop == input$adm_or_pop &
                prob_vs_parole == "Probation") %>% 
       filter(metric == "Technical" | metric == "New Offense")  %>% 
@@ -887,8 +840,8 @@ server <- function(input, output, session) {
                    Technical = tech_co),
         hoverinfo = 'text',
         hovertext = paste('<b>',df$metric, '</b><br><br>',
-                     'Total: ', formattable::comma(df$total, digits = 0),'<br>',
-                     'Year: ', df$year, '<br>')) %>%
+                          'Year: ', df$year, '<br>',
+                          'Total: ', formattable::comma(df$total, digits = 0),'<br>')) %>%
       # customize layout
       layout(title = list(text = paste0('<b>Probation ', input$adm_or_pop, ' by Type</b>\n'), font = list(size = 14)),
              font = list(size = 12),
@@ -933,15 +886,15 @@ server <- function(input, output, session) {
     
     # filter data
     df <- parole_table %>% 
-      filter(states == input$state & 
+      filter(state == input$state & 
              adm_or_pop == input$adm_or_pop) %>% 
       group_by(text) %>% 
       summarise(total_new = list(list(total))) 
     df1 <- parole_table_wide %>% 
-      filter(states == input$state & 
+      filter(state == input$state & 
              adm_or_pop == input$adm_or_pop) %>% 
       arrange(order) %>% 
-      select(-adm_or_pop, -states, -prob_vs_parole)
+      select(-adm_or_pop, -state, -prob_vs_parole)
     
     # merge data
     df <- merge(df1, df, by = "text")
@@ -1022,15 +975,15 @@ server <- function(input, output, session) {
     
     # filter data
     df <- prob_table %>% 
-      filter(states == input$state & 
+      filter(state == input$state & 
                adm_or_pop == input$adm_or_pop) %>% 
       group_by(text) %>% 
       summarise(total_new = list(list(total))) 
     df1 <- prob_table_wide %>% 
-      filter(states == input$state & 
+      filter(state == input$state & 
                adm_or_pop == input$adm_or_pop) %>% 
       arrange(order) %>% 
-      select(-adm_or_pop, -states, -prob_vs_parole)
+      select(-adm_or_pop, -state, -prob_vs_parole)
     
     # merge data
     df <- merge(df1, df, by = "text")
@@ -1129,25 +1082,55 @@ server <- function(input, output, session) {
                                   year %in% input$year_table2) %>% 
       filter(state %in% input$download_table |
              state %in% input$download_table2) %>% 
-      arrange(state, text, year)
+      arrange(state, year)
   })
   
   # Generate a summary of the dataset ----
   output$main_table <- DT::renderDataTable({
-    DT::datatable(
-      datasetInput(),
-      colnames = c('State', 'Year', 'Data', 'Total', 'Admissions or Population'),
-      rownames = FALSE,
-      options =  list(dom = 'Blfrtip',
-                      pageLength = 20,
-                      buttons = list(
-                        c('copy', 'csv', 'excel', 'pdf', 'print')),
-                      deferRender = TRUE,
-                      lengthMenu = list(c(10, 20,-1), c('10', '20', 'All')),
-                      searching = TRUE
-      ),
-      extensions = 'Buttons'
-    )
+    if     (input$dataset == "More Community, Less Confinement (CSG)"){
+      DT::datatable(
+        datasetInput(),
+        colnames = c('State', 'Year', 'Data', 'Total', 'Admissions or Population'),
+        rownames = FALSE,
+        options = list(
+          dom = 'Blfrtip',
+          pageLength = 20,
+          lengthMenu = list(c(10, 20,-1), c('10', '20', 'All')),
+          deferRender = TRUE,
+          searching = TRUE,
+          buttons =
+            list('copy', 'print', list(
+              extend = 'collection',
+              buttons = list(
+                list(extend = 'csv', filename = "bjs_probation_parole"),
+                list(extend = 'excel', filename = "bjs_probation_parole"),
+                list(extend = 'pdf', filename = "bjs_probation_parole")),
+              text = 'Download'))),
+        extensions = 'Buttons')
+    }
+    else if(input$dataset == "Annual Probation Survey and Annual Parole Survey (BJS)"){
+      DT::datatable(
+        datasetInput(),
+        colnames = c('State', 'Year', 'Type' ,'Population', 'Number Incarcerated', 'Revocation Rate'),
+        rownames = FALSE,
+        options = list(
+          dom = 'Blfrtip',
+          pageLength = 20,
+          lengthMenu = list(c(10, 20,-1), c('10', '20', 'All')),
+          deferRender = TRUE,
+          searching = TRUE,
+          buttons =
+            list('copy', 'print', list(
+              extend = 'collection',
+              buttons = list(
+                list(extend = 'csv', filename = "bjs_probation_parole"),
+                list(extend = 'excel', filename = "bjs_probation_parole"),
+                list(extend = 'pdf', filename = "bjs_probation_parole")),
+              text = 'Download'))),
+        extensions = 'Buttons') %>% 
+        formatPercentage(c("rev_rate"), 2)
+    }
+    
   })
   
   

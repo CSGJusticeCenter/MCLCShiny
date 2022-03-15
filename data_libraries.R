@@ -3,10 +3,6 @@
 #______________________________________________________
 
 # deployment issues
-# install.packages("http://cran.r-project.org/src/contrib/Archive/evaluate/evaluate_0.13.tar.gz", repos=NULL, type="source")
-# install.packages("http://cran.r-project.org/src/contrib/Archive/highr/highr_0.8.tar.gz", repos=NULL, type="source")
-# install.packages("http://cran.r-project.org/src/contrib/Archive/markdown/markdown_0.9.tar.gz", repos=NULL, type="source")
-# install.packages("http://cran.r-project.org/src/contrib/Archive/markdown/scico_1.2.0.tar.gz", repos=NULL, type="source")
 library(evaluate)
 library(highr)
 library(markdown)
@@ -23,6 +19,9 @@ library(readxl)
 library(dplyr)
 library(tidyverse)
 library(janitor)
+library(openxlsx)
+library(writexl)
+library(formattable)
 
 # tables
 library(reactable)
@@ -37,6 +36,7 @@ library(rgdal)
 library(rgeos)
 library(viridis)
 library(sp)
+library(webshot)
 
 # data visualizations
 library(dataui)
@@ -67,13 +67,11 @@ load(file="parole_table_wide.Rda")
 load(file="prob_table.Rda")
 load(file="prob_table_wide.Rda")
 
-load(file="bjs_prob_parole.Rda")
-
 load(file="us_map.Rda")
 load(file="us.Rda")
 load(file="centers.Rda")
 
-load(file="bjs_all.Rda")
+load(file="bjs_prob_parole.Rda")
 load(file="bjs.Rda")
 load(file="csg.Rda")
 
