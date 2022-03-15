@@ -193,6 +193,7 @@ us_map <- fortify(us, region="iso3166_2")
 centers <- cbind.data.frame(data.frame(gCentroid(us, byid=TRUE), id=us@data$iso3166_2))
 centers <- centers[centers$id != "DC", ]
 
+# clean stateAbb file
 stateAbb <- clean_names(stateAbb) 
 stateAbb <- stateAbb %>% select(states = i_state,
                                 Abbrev = abbrev,
@@ -322,9 +323,6 @@ mclc <- mclc %>%
   group_by(states, data) %>%
   mutate(change = total/lag(total) - 1)
 
-# # round
-# mclc$change <- round(mclc$change, 0)
-
 # add regions
 mclc <- merge(mclc, region, by = "states")
 
@@ -388,13 +386,14 @@ temp <- mclc %>% select(-change)
 # final map data
 mclc_explorer <- rbind(temp, mclc_change)
 
-# add state abb
+# add state abb for merging with shapefile in server
 mclc_explorer <- merge(mclc_explorer, stateAbb, by = "states")
 
 ########
 # Long form for value boxes
 ########
 
+# add technical prob/parole together
 vb_adm_pop <- adm_pop %>% mutate(technical_admissions = technical_probation_violation_admissions + technical_parole_violation_admissions,
                                  technical_population = technical_probation_violation_population + technical_parole_violation_population)
 
