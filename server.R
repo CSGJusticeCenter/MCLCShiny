@@ -1085,14 +1085,38 @@ server <- function(input, output, session) {
     }
   })
 
+  filteredYears <- reactive({
+    if     (input$dataset == "More Community, Less Confinement (CSG)"){
+      unique(csg$year)
+    }
+    else if(input$dataset == "Annual Probation Survey and Annual Parole Survey (BJS)"){
+      unique(bjs$year)
+    }
+  })
+
+  observeEvent(filteredYears(), {
+    updatePickerInput(session, inputId = 'year_table', label = 'Year(s)', choices = filteredYears(), selected = filteredYears())
+  })
+
+  filteredStates <- reactive({
+    if     (input$dataset == "More Community, Less Confinement (CSG)"){
+      unique(csg$state)
+    }
+    else if(input$dataset == "Annual Probation Survey and Annual Parole Survey (BJS)"){
+      unique(bjs$state)
+    }
+  })
+
+  observeEvent(filteredStates(), {
+    updatePickerInput(session, inputId = 'state_table', label = 'State(s)', choices = filteredStates(), selected = filteredStates())
+  })
+
   datasetInput <- reactive({
     dataset <- switch(input$dataset,
                       "Annual Probation Survey and Annual Parole Survey (BJS)" = bjs,
                       "More Community, Less Confinement (CSG)"                 = csg)
-    dataset <- dataset %>% filter(year %in% input$year_table |
-                                  year %in% input$year_table2) %>%
-      filter(state %in% input$download_table |
-             state %in% input$download_table2) %>%
+    dataset <- dataset %>% filter(year %in% input$year_table) %>%
+      filter(state %in% input$state_table) %>%
       arrange(state, year)
   })
 
@@ -1143,6 +1167,5 @@ server <- function(input, output, session) {
     }
 
   })
-
 
 }

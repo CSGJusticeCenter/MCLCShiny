@@ -1,7 +1,7 @@
 source("data_libraries.R")
 source("functions.R")
 
-ui <- dashboardPage(dashboardHeader(title = "MCLC"), 
+ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                     sidebar = dashboardSidebar(
                       sidebarMenu(id = "tabs",
                                   menuItem(text = "Map Explorer",  tabName = "Map_Explorer",icon = icon("map-pin")),
@@ -10,18 +10,18 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                   ) #sidebarMenu
                     ), #dashboardSidebar
                     body = dashboardBody(
-                      
+
                       # change to custom theme
                       customTheme,
-                      
+
                       tabItems(
-                        
+
                         #-------------------------------------------------------
                         # Map Page
                         #-------------------------------------------------------
-                        
+
                         tabItem(tabName = "Map_Explorer",
-                                
+
                                 fluidPage(########
                                           # Side panel
                                           ########
@@ -29,7 +29,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                           wellPanel(tags$style(type="text/css", '#leftPanel { width:200px; float:left;}'), id = "leftPanel",
                                                     selectInput("data_map_counts", "Data",        choices = unique(adm_pop_long$metric)),
                                                     selectInput("adm_or_pop_map_counts", "Type",  choices = unique(adm_pop_long$adm_or_pop)),
-                                                    
+
                                                     radioButtons("choice_map_counts", "Value",    choices = c("Count", "Change from Previous Year"), selected = "Count"),
                                                     conditionalPanel(
                                                       condition = "input.choice_map_counts == 'Count'",
@@ -64,18 +64,18 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                           ) #mainPanel
                               ) #fluidPage
                         ), #tabItem
-                        
+
                         #-------------------------------------------------------
                         # State Reports
                         #-------------------------------------------------------
-                        
+
                         tabItem(tabName = "State_Reports",
                                 fluidPage(
                                   br(),
                                   wellPanel(tags$style(type="text/css", '#leftPanel { width:200px; float:left;}'), id = "leftPanel",
                                             selectInput("state", "State",      choices = unique(adm_pop_long$state)),
                                             radioButtons("adm_or_pop", "Type", choices = unique(adm_pop_long$adm_or_pop))),
-                                  
+
                                   mainPanel(######
                                             # State title
                                             ######
@@ -86,7 +86,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                             tags$head(tags$style("#selected_state{font-size: 24px;
                                                                                   font-style: bold;}")),
                                                             br())),
-        
+
                                             ############
                                             # Value boxes
                                             ############
@@ -94,9 +94,9 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                             tags$style(".small-box.bg-green       {background-color: #fcccac !important; color: #3C3C3C !important; }"),
                                             tags$style(".small-box.bg-orange      {background-color: #fc9c54 !important; color: #FFFFFF !important; }"),
                                             tags$style(".small-box.bg-blue        {background-color: #2B4570 !important; color: #FFFFFF !important; }"),
-                                            
+
                                             tags$style(".small-box                {border: 1px; border-style: solid; border-color: #FFFFFF !important; border-radius: 1px; padding: 0.1em; }"),
-                                            
+
                                             fluidRow(
                                               column(width = 3,
                                                      valueBoxOutput("total_change", width = 125)),
@@ -108,36 +108,36 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                      valueBoxOutput("rev_rate", width = 125))
                                             ), #fluidRow
                                             br(),
-                                    
+
                                     tabsetPanel(
                                       ###################
-                                      # Overview of state 
+                                      # Overview of state
                                       ###################
-                                      tabPanel(value="1","Overview", 
+                                      tabPanel(value="1","Overview",
                                                br(),
                                                ############
                                                # Plots
                                                ############
                                                fluidRow(
-                                                 column(width = 7, 
+                                                 column(width = 7,
                                                         plotlyOutput("totals_chart", height = 375)),
                                                  column(width = 5,
                                                         plotlyOutput("sup_viols_type_chart", height = 375))
                                                  ), #fluidRow
-                                               br(), 
+                                               br(),
                                                ############
                                                # Table under graphs
                                                ############
                                                fluidRow(
                                                  column(width = 12,
-                                                        align = "center", 
+                                                        align = "center",
                                                         reactableOutput("state_table"))),
                                                br()
                                       ),
                                       ###################
                                       # Parole
                                       ###################
-                                      tabPanel("Parole", 
+                                      tabPanel("Parole",
                                                br(),
                                                ############
                                                # Plots
@@ -146,7 +146,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                                plotlyOutput("areachart_parole", height = 300)),
                                                         column(width = 6,
                                                                plotlyOutput("barchart_parole", height = 300))),
-                                               br(), 
+                                               br(),
                                                ############
                                                # Table under graphs
                                                ############
@@ -158,7 +158,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                       ###################
                                       # Probation
                                       ###################
-                                      tabPanel("Probation", 
+                                      tabPanel("Probation",
                                                br(),
                                                ############
                                                # Plots
@@ -167,7 +167,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                                plotlyOutput("areachart_prob", height = 300)),
                                                         column(width = 6,
                                                                plotlyOutput("barchart_prob", height = 300))),
-                                               br(), 
+                                               br(),
                                                ############
                                                # Table under graphs
                                                ############
@@ -179,48 +179,34 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                       id = "tb2") #tabsetPanel
                                   ) #mainPanel
                                 ) #fluidPage
-                        ), #tabItem 
-                        
+                        ), #tabItem
+
                         #-------------------------------------------------------
                         # Download Data
                         #-------------------------------------------------------
                         tabItem(tabName = "Download_Data",
-                                
+
                                 fluidPage(br(),
                                           wellPanel(tags$style(type="text/css", '#leftPanel { width:250px; float:left;}'), id = "leftPanel",
                                                     selectInput(inputId = "dataset",
                                                                 label = "Dataset",
                                                                 choices = c("More Community, Less Confinement (CSG)", "Annual Probation Survey and Annual Parole Survey (BJS)")),
-                                                    
-                                                    conditionalPanel(
-                                                      condition = "input.dataset == 'More Community, Less Confinement (CSG)'",
-                                                      checkboxGroupInput("year_table", "Year", choices = unique(csg$year), selected = c("2018", "2019", "2020")),
-                                                      pickerInput("download_table","State(s)", choices = unique(csg$state), 
-                                                                  selected = c("Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", 
-                                                                               "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", 
-                                                                               "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", 
-                                                                               "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", 
-                                                                               "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont",
-                                                                               "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"), 
-                                                                  options = list(`actions-box` = TRUE), multiple = T)
-                                                      # selectizeInput("download_table", "State(s)", choices = unique(csg$state), multiple = TRUE, selected = "Alabama")
-                                              
-                                                    ),
-                                                    conditionalPanel(
-                                                      condition = "input.dataset == 'Annual Probation Survey and Annual Parole Survey (BJS)'",
-                                                      checkboxGroupInput("year_table2", "Year", choices = unique(bjs$year), selected = c("2019", "2020")),
-                                                      pickerInput("download_table2","State(s)", choices = unique(bjs$state), 
-                                                                  selected = c("Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", 
-                                                                               "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", 
-                                                                               "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", 
-                                                                               "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", 
-                                                                               "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont",
-                                                                               "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"), 
-                                                                  options = list(`actions-box` = TRUE), multiple = T)
-                                                      # selectizeInput("download_table2", "State(s)", choices = unique(bjs$state), multiple = TRUE, selected = "Alabama")
-                                                    )
+                                                    pickerInput(inputId = 'year_table', label = 'Year(s)', choices = NULL, selected = NULL, multiple = TRUE, options = list(`actions-box` = TRUE)),
+                                                    pickerInput(inputId = 'state_table', label = 'State(s)', choices = NULL, selected = NULL, multiple = TRUE, options = list(`actions-box` = TRUE))
+                                                    # conditionalPanel(
+                                                    #   condition = "input.dataset == 'More Community, Less Confinement (CSG)'",
+                                                    #   pickerInput('year_table', label = 'Year(s)', choices = c(2018, 2019, 2020), selected = NULL, multiple = TRUE),
+                                                    #   #checkboxGroupInput("year_table", "Year", choices = unique(csg$year)),
+                                                    #   pickerInput("download_table","State(s)", choices = unique(csg$state), options = list(`actions-box` = TRUE), multiple = T)
+                                                    # ),
+                                                    # conditionalPanel(
+                                                    #   condition = "input.dataset == 'Annual Probation Survey and Annual Parole Survey (BJS)'",
+                                                    #   pickerInput('year_table2', label = 'Year(s)', choices = c(2019, 2020), selected = NULL, multiple = TRUE),
+                                                    #   # checkboxGroupInput("year_table2", "Year", choices = unique(bjs$year)),
+                                                    #   pickerInput("download_table2","State(s)", choices = unique(bjs$state), options = list(`actions-box` = TRUE), multiple = T)
+                                                    # )
                                           ), # wellPanel
-                                          mainPanel(  
+                                          mainPanel(
                                            br(),
                                            fluidRow(column(width = 1),
                                                     column(width = 11,
@@ -234,8 +220,8 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                            ),
                                             fluidRow(
                                               column(width = 1),
-                                              column(width = 11, 
-                                                     align = "center", 
+                                              column(width = 11,
+                                                     align = "center",
                                                      DT::dataTableOutput("main_table")))
                                           ) #mainPanel
                                 ) #fluidPage

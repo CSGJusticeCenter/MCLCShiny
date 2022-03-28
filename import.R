@@ -792,7 +792,13 @@ csg <- create_data_text(csg)
 # select data and change data types
 csg <- csg %>% ungroup() %>% select(state, year, text, total, adm_or_pop)
 csg$state <- as.character(csg$state)
-csg$year <- as.factor(csg$year)
+csg$year <- as.numeric(csg$year)
+
+csg <- csg %>% mutate(year = case_when(
+  year == 1 ~ 2018,
+  year == 2 ~ 2019,
+  year == 3 ~ 2020
+))
 
 ################################################################################
 # BJS download data
