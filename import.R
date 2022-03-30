@@ -847,22 +847,22 @@ bjs <- merge(bjs, revrates, by = c("state", "year", "type"))
 # save Rdata
 ########
 
-save(mclc_explorer,    file="mclc_explorer.Rda")
+save(mclc_explorer,    file="Data/mclc_explorer.Rda")
 
-save(adm_pop_long,     file="adm_pop_long.Rda")
-save(vb_adm_pop,       file="vb_adm_pop.Rda")
-save(state_table,      file="state_table.Rda")
-save(state_table_wide, file="state_table_wide.Rda")
-save(parole_table,     file="parole_table.Rda")
-save(parole_table_wide,file="parole_table_wide.Rda")
-save(prob_table,       file="prob_table.Rda")
-save(prob_table_wide,  file="prob_table_wide.Rda")
+save(adm_pop_long,     file="Data/adm_pop_long.Rda")
+save(vb_adm_pop,       file="Data/vb_adm_pop.Rda")
+save(state_table,      file="Data/state_table.Rda")
+save(state_table_wide, file="Data/state_table_wide.Rda")
+save(parole_table,     file="Data/parole_table.Rda")
+save(parole_table_wide,file="Data/parole_table_wide.Rda")
+save(prob_table,       file="Data/prob_table.Rda")
+save(prob_table_wide,  file="Data/prob_table_wide.Rda")
 
-save(us_map,           file="us_map.Rda")
-save(us,               file="us.Rda")
-save(centers,          file="centers.Rda")
+save(us_map,           file="Data/us_map.Rda")
+save(us,               file="Data/us.Rda")
+save(centers,          file="Data/centers.Rda")
 
-save(bjs_prob_parole,  file="bjs_prob_parole.Rda")
-save(bjs,              file="bjs.Rda")
-save(csg,              file="csg.Rda")
+save(bjs_prob_parole,  file="Data/bjs_prob_parole.Rda")
+save(bjs,              file="Data/bjs.Rda")
+save(csg,              file="Data/csg.Rda")
 

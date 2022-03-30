@@ -228,7 +228,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                         ) #tabItem
                       ) #tabItems
                     ), #dashboardBody
-                    tags$head(tags$style(HTML('* {font-family: "GraphikRegular"};')))
+                    tags$head(tags$style(HTML('* {font-family: "Arial"};')))
                     # tags$head(
                     #   includeCSS("www/custom.css")
                     # )

@@ -7,6 +7,7 @@ library(evaluate)
 library(highr)
 library(markdown)
 library(scico)
+library(prettyR)
 
 # shiny
 library(shiny)
@@ -56,24 +57,24 @@ library(ggiraph)
 # read in R data
 #______________________________________________________
 
-load(file="mclc_explorer.Rda")
+load(file="Data/mclc_explorer.Rda")
 
-load(file="adm_pop_long.Rda")
-load(file="vb_adm_pop.Rda")
-load(file="state_table.Rda")
-load(file="state_table_wide.Rda")
-load(file="parole_table.Rda")
-load(file="parole_table_wide.Rda")
-load(file="prob_table.Rda")
-load(file="prob_table_wide.Rda")
+load(file="Data/adm_pop_long.Rda")
+load(file="Data/vb_adm_pop.Rda")
+load(file="Data/state_table.Rda")
+load(file="Data/state_table_wide.Rda")
+load(file="Data/parole_table.Rda")
+load(file="Data/parole_table_wide.Rda")
+load(file="Data/prob_table.Rda")
+load(file="Data/prob_table_wide.Rda")
 
-load(file="us_map.Rda")
-load(file="us.Rda")
-load(file="centers.Rda")
+load(file="Data/us_map.Rda")
+load(file="Data/us.Rda")
+load(file="Data/centers.Rda")
 
-load(file="bjs_prob_parole.Rda")
-load(file="bjs.Rda")
-load(file="csg.Rda")
+load(file="Data/bjs_prob_parole.Rda")
+load(file="Data/bjs.Rda")
+load(file="Data/csg.Rda")
 
 #______________________________________________________
 # colors
