@@ -1,14 +1,9 @@
-.main-header .logo {
-  font-family: "Georgia", Times, "Times New Roman", serif;
-  font-weight: bold;
-  font-size: 24px;
+@font-face {  
+  src: url(GraphikRegular.otf);
+  font-family: "GraphikRegular";
 }
 
-.skin-blue .main-header .logo {
-          background-color: #3c8dbc;
+.p_Style {
+	font-family: 'GraphikRegular';
+	color: red;
 }
-.skin-blue .main-header .logo:hover {
-          background-color: #3c8dbc;
-}
-
-*{font-family: Times;}
