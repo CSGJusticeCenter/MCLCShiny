@@ -7,7 +7,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                   menuItem(text = "Map Explorer",  tabName = "Map_Explorer",icon = icon("map-pin")),
                                   menuItem(text = "State Reports", tabName = "State_Reports",icon = icon("search-location")),
                                   menuItem(text = "Download Data", tabName = "Download_Data",icon = icon("table"))
-                                  ) #sidebarMenu
+                      ) #sidebarMenu
                     ), #dashboardSidebar
                     body = dashboardBody(
 
@@ -50,19 +50,21 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                             br(),
                                                             textOutput("selected_map"),
                                                             tags$head(tags$style("#selected_map{font-size: 20px;
-                                                                                         font-style: bold;}")),
-                                                            br()
-                                                            )),
-                                            fluidRow(leafletOutput("leaflet_map"),
-                                                     tags$style(HTML(".leaflet-container { background: #FFFFFF;}"))
-                                                     #tags$style(type = "text/css", "#leaflet_map {height: calc(100vh - 53px) !important;}")
-                                                     ),
+                                                                                         font-style: bold;}")))),
+                                            fluidRow(column(width = 12,
+                                                            align = "center",
+                                                            plotOutput("static_hex_map", height = 600))),
+                                            # fluidRow(leafletOutput("leaflet_map"),
+                                            #          tags$style(HTML(".leaflet-container { background: #FFFFFF;}"))
+                                            #          #tags$style(type = "text/css", "#leaflet_map {height: calc(100vh - 53px) !important;}")
+                                            #          ),
                                             br(),
                                             fluidRow(column(width = 12,
-                                                     align = "center",
-                                                     reactableOutput("table_map_counts")))
+                                                            align = "center",
+                                                            reactableOutput("table_map_counts"))),
+                                            br()
                                           ) #mainPanel
-                              ) #fluidPage
+                                ) #fluidPage
                         ), #tabItem
 
                         #-------------------------------------------------------
@@ -109,74 +111,74 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                             ), #fluidRow
                                             br(),
 
-                                    tabsetPanel(
-                                      ###################
-                                      # Overview of state
-                                      ###################
-                                      tabPanel(value="1","Overview",
-                                               br(),
-                                               ############
-                                               # Plots
-                                               ############
-                                               fluidRow(
-                                                 column(width = 7,
-                                                        plotlyOutput("totals_chart", height = 375)),
-                                                 column(width = 5,
-                                                        plotlyOutput("sup_viols_type_chart", height = 375))
-                                                 ), #fluidRow
-                                               br(),
-                                               ############
-                                               # Table under graphs
-                                               ############
-                                               fluidRow(
-                                                 column(width = 12,
-                                                        align = "center",
-                                                        reactableOutput("state_table"))),
-                                               br()
-                                      ),
-                                      ###################
-                                      # Parole
-                                      ###################
-                                      tabPanel("Parole",
-                                               br(),
-                                               ############
-                                               # Plots
-                                               ############
-                                               fluidRow(column(width = 6,
-                                                               plotlyOutput("areachart_parole", height = 300)),
-                                                        column(width = 6,
-                                                               plotlyOutput("barchart_parole", height = 300))),
-                                               br(),
-                                               ############
-                                               # Table under graphs
-                                               ############
-                                               fluidRow(column(width = 12,
-                                                               align = 'center',
-                                                               reactableOutput("parole_table"))),
-                                               br()
-                                      ),
-                                      ###################
-                                      # Probation
-                                      ###################
-                                      tabPanel("Probation",
-                                               br(),
-                                               ############
-                                               # Plots
-                                               ############
-                                               fluidRow(column(width = 6,
-                                                               plotlyOutput("areachart_prob", height = 300)),
-                                                        column(width = 6,
-                                                               plotlyOutput("barchart_prob", height = 300))),
-                                               br(),
-                                               ############
-                                               # Table under graphs
-                                               ############
-                                               fluidRow(column(width = 12,
-                                                               align = 'center',
-                                                               reactableOutput("prob_table"))),
-                                               br()
-                                      ), #tabPanel
-                                      id = "tb2") #tabsetPanel
+                                            tabsetPanel(
+                                              ###################
+                                              # Overview of state
+                                              ###################
+                                              tabPanel(value="1","Overview",
+                                                       br(),
+                                                       ############
+                                                       # Plots
+                                                       ############
+                                                       fluidRow(
+                                                         column(width = 7,
+                                                                plotlyOutput("totals_chart", height = 375)),
+                                                         column(width = 5,
+                                                                plotlyOutput("sup_viols_type_chart", height = 375))
+                                                       ), #fluidRow
+                                                       br(),
+                                                       ############
+                                                       # Table under graphs
+                                                       ############
+                                                       fluidRow(
+                                                         column(width = 12,
+                                                                align = "center",
+                                                                reactableOutput("state_table"))),
+                                                       br()
+                                              ),
+                                              ###################
+                                              # Parole
+                                              ###################
+                                              tabPanel("Parole",
+                                                       br(),
+                                                       ############
+                                                       # Plots
+                                                       ############
+                                                       fluidRow(column(width = 6,
+                                                                       plotlyOutput("areachart_parole", height = 300)),
+                                                                column(width = 6,
+                                                                       plotlyOutput("barchart_parole", height = 300))),
+                                                       br(),
+                                                       ############
+                                                       # Table under graphs
+                                                       ############
+                                                       fluidRow(column(width = 12,
+                                                                       align = 'center',
+                                                                       reactableOutput("parole_table"))),
+                                                       br()
+                                              ),
+                                              ###################
+                                              # Probation
+                                              ###################
+                                              tabPanel("Probation",
+                                                       br(),
+                                                       ############
+                                                       # Plots
+                                                       ############
+                                                       fluidRow(column(width = 6,
+                                                                       plotlyOutput("areachart_prob", height = 300)),
+                                                                column(width = 6,
+                                                                       plotlyOutput("barchart_prob", height = 300))),
+                                                       br(),
+                                                       ############
+                                                       # Table under graphs
+                                                       ############
+                                                       fluidRow(column(width = 12,
+                                                                       align = 'center',
+                                                                       reactableOutput("prob_table"))),
+                                                       br()
+                                              ), #tabPanel
+                                              id = "tb2") #tabsetPanel
                                   ) #mainPanel
                                 ) #fluidPage
                         ), #tabItem
@@ -207,17 +209,17 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                     # )
                                           ), # wellPanel
                                           mainPanel(
-                                           br(),
-                                           fluidRow(column(width = 1),
-                                                    column(width = 11,
-                                                           h2("Download Data"),
-                                                           br(),
-                                                           textOutput("selected_data"),
-                                                           tags$head(tags$style("#selected_data{font-size: 20px;font-style: bold;}")),
-                                                           br(),
-                                                           textOutput("selected_data_info"),
-                                                           br(), br())
-                                           ),
+                                            br(),
+                                            fluidRow(column(width = 1),
+                                                     column(width = 11,
+                                                            h2("Download Data"),
+                                                            br(),
+                                                            textOutput("selected_data"),
+                                                            tags$head(tags$style("#selected_data{font-size: 20px;font-style: bold;}")),
+                                                            br(),
+                                                            textOutput("selected_data_info"),
+                                                            br(), br())
+                                            ),
                                             fluidRow(
                                               column(width = 1),
                                               column(width = 11,
@@ -228,7 +230,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                         ) #tabItem
                       ) #tabItems
                     ), #dashboardBody
-                    tags$head(tags$style(HTML('* {font-family: "GraphikRegular"};')))
+                    tags$head(tags$style(HTML('* {font-family: "Arial"};')))
                     # tags$head(
                     #   includeCSS("www/custom.css")
                     # )

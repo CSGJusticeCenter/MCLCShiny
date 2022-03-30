@@ -31,6 +31,10 @@ us <- geojson_read("Data/us_states_hexgrid.geojson", what = "sp")
 # load state abb
 stateAbb <- read.csv("Data/stateAbb.csv")
 
+# load static hex map info
+load(file="Data/combined.Rda")
+load(file="Data/combined_labels.Rda")
+
 # load admissions data
 adm18 <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2018")
 adm19 <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2019")
@@ -66,9 +70,9 @@ parole_pop_19.csv   <- read.csv("Data/Annual Probation and Parole Surveys/parole
 # probation exits
 ####
 prob_exits_20 <- prob_exits_20.csv %>% select(state            = X,
-                                          inc_new_sentence     = X.4,
-                                          inc_current_sentence = X.5) %>% mutate(year = 2020,
-                                                                                 type = "Probation")
+                                              inc_new_sentence     = X.4,
+                                              inc_current_sentence = X.5) %>% mutate(year = 2020,
+                                                                                     type = "Probation")
 prob_exits_19 <- prob_exits_19.csv %>% select(state                = X,
                                               inc_new_sentence     = X.3,
                                               inc_current_sentence = X.4) %>% mutate(year = 2019,
@@ -114,9 +118,9 @@ prob_19 <- prob_19 %>% mutate(prob_rev_rate_19 = incarcerated/prob_pop_19) %>%
 # parole exits
 ####
 parole_exits_20 <- parole_exits_20.csv %>% select(state = X,
-                                              inc_new_sentence = X.4,
-                                              inc_revocation   = X.5) %>% mutate(year = 2020,
-                                                                                 type = "Parole")
+                                                  inc_new_sentence = X.4,
+                                                  inc_revocation   = X.5) %>% mutate(year = 2020,
+                                                                                     type = "Parole")
 parole_exits_19 <- parole_exits_19.csv %>% select(state = X,
                                                   inc_new_sentence = X.3,
                                                   inc_revocation   = X.4) %>% mutate(year = 2019,
@@ -410,11 +414,11 @@ vb_adm_pop <- gather(vb_adm_pop,
 
 # filter to vb values
 vb_adm_pop <- vb_adm_pop %>% filter(data == "total_admissions" |
-                                    data == "total_violation_admissions" |
-                                    data == "technical_admissions" |
-                                    data == "total_population" |
-                                    data == "total_violation_population" |
-                                    data == "technical_population")
+                                      data == "total_violation_admissions" |
+                                      data == "technical_admissions" |
+                                      data == "total_population" |
+                                      data == "total_violation_population" |
+                                      data == "technical_population")
 
 vb_adm_pop <- vb_adm_pop %>% mutate(metric = case_when(
   data == "total_admissions"                            ~ "Total",
@@ -575,8 +579,8 @@ state_table <- state_table %>%
 # remove probation, parole and other
 state_table <- state_table %>%
   filter(metric != "Probation" &
-         metric != "Parole" &
-         metric != "Other")
+           metric != "Parole" &
+           metric != "Other")
 
 # create text for table
 state_table <- state_table %>% mutate(text = case_when(
@@ -606,7 +610,7 @@ state_table_wide <- state_table_wide %>%
     metric == "Supervision Violations"  ~ 2,
     metric == "Technical"               ~ 3,
     metric == "Total"                   ~ 1)) %>%
-    # 3 year change
+  # 3 year change
   mutate(three_yr_change = (`2020`-`2018`)/`2018`)
 
 # rearrange data
@@ -847,22 +851,24 @@ bjs <- merge(bjs, revrates, by = c("state", "year", "type"))
 # save Rdata
 ########
 
-save(mclc_explorer,    file="mclc_explorer.Rda")
+save(mclc_explorer,    file="Data/mclc_explorer.Rda")
 
-save(adm_pop_long,     file="adm_pop_long.Rda")
-save(vb_adm_pop,       file="vb_adm_pop.Rda")
-save(state_table,      file="state_table.Rda")
-save(state_table_wide, file="state_table_wide.Rda")
-save(parole_table,     file="parole_table.Rda")
-save(parole_table_wide,file="parole_table_wide.Rda")
-save(prob_table,       file="prob_table.Rda")
-save(prob_table_wide,  file="prob_table_wide.Rda")
+save(adm_pop_long,     file="Data/adm_pop_long.Rda")
+save(vb_adm_pop,       file="Data/vb_adm_pop.Rda")
+save(state_table,      file="Data/state_table.Rda")
+save(state_table_wide, file="Data/state_table_wide.Rda")
+save(parole_table,     file="Data/parole_table.Rda")
+save(parole_table_wide,file="Data/parole_table_wide.Rda")
+save(prob_table,       file="Data/prob_table.Rda")
+save(prob_table_wide,  file="Data/prob_table_wide.Rda")
 
-save(us_map,           file="us_map.Rda")
-save(us,               file="us.Rda")
-save(centers,          file="centers.Rda")
+save(us_map,           file="Data/us_map.Rda")
+save(us,               file="Data/us.Rda")
+save(centers,          file="Data/centers.Rda")
+save(combined,         file="Data/combined.Rda")
+save(combined_levels,  file="Data/combined_labels.Rda")
 
-save(bjs_prob_parole,  file="bjs_prob_parole.Rda")
-save(bjs,              file="bjs.Rda")
-save(csg,              file="csg.Rda")
+save(bjs_prob_parole,  file="Data/bjs_prob_parole.Rda")
+save(bjs,              file="Data/bjs.Rda")
+save(csg,              file="Data/csg.Rda")
 

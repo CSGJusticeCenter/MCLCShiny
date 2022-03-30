@@ -11,9 +11,9 @@ server <- function(input, output, session) {
   # count includes years 2018-2020
   df_map_temp <- reactive ({
     if(input$choice_map_counts == "Count"){     if(input$year_map_counts == "2018"){filter(mclc_explorer, year=="2018" & choice == "Count")}
-                                           else if(input$year_map_counts == "2019"){filter(mclc_explorer, year=="2019" & choice == "Count")}
-                                           else if(input$year_map_counts == "2020"){filter(mclc_explorer, year=="2020" & choice == "Count")}
-                                          }
+      else if(input$year_map_counts == "2019"){filter(mclc_explorer, year=="2019" & choice == "Count")}
+      else if(input$year_map_counts == "2020"){filter(mclc_explorer, year=="2020" & choice == "Count")}
+    }
     else if(input$choice_map_counts == "Change from Previous Year" & input$year_map_counts2 == "2019"){filter(mclc_explorer, year == "2019" & choice == "Change from Previous Year")}
     else if(input$choice_map_counts == "Change from Previous Year" & input$year_map_counts2 == "2020"){filter(mclc_explorer, year == "2020" & choice == "Change from Previous Year")}
   })
@@ -46,7 +46,7 @@ server <- function(input, output, session) {
   })
 
   ##############
-  # Hex map
+  # Hex map title
   ##############
 
   # Title of map
@@ -121,7 +121,7 @@ server <- function(input, output, session) {
 
   ################################################################################
   ################################################################################
-  # Leaflet Map
+  #  Map
   ################################################################################
   ################################################################################
 
@@ -206,6 +206,100 @@ server <- function(input, output, session) {
                                                         textOnly = TRUE))
     }
   })
+
+  ##############
+  # Static hex map
+  ##############
+  output$static_hex_map <- renderPlot({
+
+    combined_new <- merge(combined, df_map(), by.x = "name.x", by.y = "state")
+    combined_labels_new <- merge(combined_labels, df_map(), by.x = "name.x", by.y = "state")
+
+    NA_color <- "grey80"
+
+    if(input$choice_map_counts == "Change from Previous Year"){
+      ggplot(combined_new) +
+        geom_sf(aes(fill = total),     color = NA       ) +  #color (non-NA) hex
+        geom_sf(    fill = NA,          aes(color = "NA")    ) +  #dummy legend for NA values
+        geom_sf(    fill = NA,              color = "grey50" ) +  #hex borders
+        geom_sf_text(
+          data=mutate(combined_labels_new, geometry=geometry+c(0, 5))
+          , aes(label=abb_usps)
+          , fontface="bold"
+          , size=5
+        ) +
+        geom_sf_text(
+          data=mutate(combined_labels_new, geometry=geometry+c(0,-5))
+          , aes(label=scales::percent(total, accuracy=0.1))
+          , size=4
+        ) +
+        scale_fill_gradient2(
+          name = "Change"
+          , low  = "#65ace1"
+          , mid  = "#ffffff"
+          , high = "#ee7600"
+          , midpoint = 0
+          , labels = scales::percent
+          , na.value = NA_color
+        ) +
+        scale_color_manual( #dummy legend for NA color
+          name = NULL
+          , values = NA_color
+          , labels = 'No data'
+        ) +
+        guides(
+          fill  = guide_colorbar(order = 1)
+          , color = guide_legend(override.aes = list(fill = NA_color))
+        ) +
+        theme_void()+
+        theme(legend.title=element_text(size=14),
+              legend.text=element_text(size=14))
+    }
+
+    else if(input$choice_map_counts == "Count"){
+      ggplot(combined_new) +
+        geom_sf(aes(fill = total),     color = NA       ) +  #color (non-NA) hex
+        geom_sf(    fill = NA,          aes(color = "NA")    ) +  #dummy legend for NA values
+        geom_sf(    fill = NA,              color = "grey50" ) +  #hex borders
+        geom_sf_text(
+          data=mutate(combined_labels_new, geometry=geometry+c(0, 5))
+          , aes(label=abb_usps)
+          , fontface="bold"
+          , size=5
+        ) +
+        geom_sf_text(
+          data=mutate(combined_labels_new, geometry=geometry+c(0,-5))
+          , aes(label=scales::comma(total))
+          , size=4
+        ) +
+        scale_fill_gradient2(
+          name = "Count"
+          , low  = "#ffffff"
+          , mid  = "#9cccec"
+          , high = "#65ace1"
+          , midpoint = 0
+          , labels = scales::comma
+          , na.value = NA_color
+        ) +
+        scale_color_manual( #dummy legend for NA color
+          name = NULL
+          , values = NA_color
+          , labels = 'No data'
+        ) +
+        guides(
+          fill  = guide_colorbar(order = 1)
+          , color = guide_legend(override.aes = list(fill = NA_color))
+        ) +
+        theme_void()+
+        theme(legend.title=element_text(size=14),
+              legend.text=element_text(size=14))
+    }
+  })
+
+
+  ##############
+  # Download data and map options
+  ##############
 
   # output reactive leaflet map
   output$leaflet_map <- renderLeaflet({
@@ -441,7 +535,7 @@ server <- function(input, output, session) {
     df <-
       adm_pop_long %>%
       filter(state == input$state &
-             adm_or_pop == input$adm_or_pop) %>%
+               adm_or_pop == input$adm_or_pop) %>%
       group_by(metric, year) %>%
       summarise(total = sum(total)) %>%
       filter(metric == "New Offense" | metric == "Technical")
@@ -500,12 +594,12 @@ server <- function(input, output, session) {
     # filter data
     df <- state_table %>%
       filter(state == input$state &
-             adm_or_pop == input$adm_or_pop) %>%
+               adm_or_pop == input$adm_or_pop) %>%
       group_by(text) %>%
       summarise(total_new = list(list(total)))
     df1 <- state_table_wide %>%
       filter(state == input$state &
-             adm_or_pop == input$adm_or_pop) %>%
+               adm_or_pop == input$adm_or_pop) %>%
       arrange(order) %>%
       select(-adm_or_pop, -state)
 
@@ -690,8 +784,8 @@ server <- function(input, output, session) {
     df <-
       adm_pop_long %>%
       filter(state == input$state &
-             adm_or_pop == input$adm_or_pop &
-             prob_vs_parole == "Parole") %>%
+               adm_or_pop == input$adm_or_pop &
+               prob_vs_parole == "Parole") %>%
       filter(metric == "Technical" | metric == "New Offense")  %>%
       group_by(metric, year) %>%
       summarise(total = sum(total))
@@ -898,12 +992,12 @@ server <- function(input, output, session) {
     # filter data
     df <- parole_table %>%
       filter(state == input$state &
-             adm_or_pop == input$adm_or_pop) %>%
+               adm_or_pop == input$adm_or_pop) %>%
       group_by(text) %>%
       summarise(total_new = list(list(total)))
     df1 <- parole_table_wide %>%
       filter(state == input$state &
-             adm_or_pop == input$adm_or_pop) %>%
+               adm_or_pop == input$adm_or_pop) %>%
       arrange(order) %>%
       select(-adm_or_pop, -state, -prob_vs_parole)
 
@@ -1073,7 +1167,7 @@ server <- function(input, output, session) {
   #-------------------------------------------------------------------------------
 
   output$selected_data <- renderText({
-   input$dataset
+    input$dataset
   })
 
   output$selected_data_info <- renderText({
