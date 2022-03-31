@@ -7,7 +7,14 @@ library(evaluate)
 library(highr)
 library(markdown)
 library(scico)
-library(prettyR)
+
+# highcharter
+library(tidyverse)
+library(highcharter)
+library(scales)
+library(gapminder)
+library(tidycensus)
+library(tidyverse)
 
 # shiny
 library(shiny)
@@ -71,8 +78,11 @@ load(file="Data/prob_table_wide.Rda")
 load(file="Data/us_map.Rda")
 load(file="Data/us.Rda")
 load(file="Data/centers.Rda")
+load(file="Data/combined.Rda")
+load(file="Data/combined_labels.Rda")
 
 load(file="Data/bjs_prob_parole.Rda")
+load(file="Data/bjs_bubble.Rda")
 load(file="Data/bjs.Rda")
 load(file="Data/csg.Rda")
 
