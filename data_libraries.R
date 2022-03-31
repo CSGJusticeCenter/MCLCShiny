@@ -7,6 +7,7 @@ library(evaluate)
 library(highr)
 library(markdown)
 library(scico)
+library(zoo)
 
 # highcharter
 library(tidyverse)
