@@ -16,6 +16,8 @@
 
 library(formattable)
 
+# census_api_key("YOUR API KEY HERE")
+
 ########
 # Import data
 ########
@@ -30,6 +32,10 @@ us <- geojson_read("Data/us_states_hexgrid.geojson", what = "sp")
 
 # load state abb
 stateAbb <- read.csv("Data/stateAbb.csv")
+
+# load static hex map info
+load(file="Data/combined.Rda")
+load(file="Data/combined_labels.Rda")
 
 # load admissions data
 adm18 <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Admissions 2018")
@@ -53,136 +59,11 @@ parole_exits_19.csv <- read.csv("Data/Annual Probation and Parole Surveys/parole
 
 # load probation and parole populations
 comm_sup_pop_20.csv <- read.csv("Data/Annual Probation and Parole Surveys/comm_sup_pop_20.csv")
+comm_sup_pop_19.csv <- read.csv("Data/Annual Probation and Parole Surveys/comm_sup_pop_19.csv")
 prob_pop_20.csv     <- read.csv("Data/Annual Probation and Parole Surveys/prob_pop_20.csv")
 parole_pop_20.csv   <- read.csv("Data/Annual Probation and Parole Surveys/parole_pop_20.csv")
 prob_pop_19.csv     <- read.csv("Data/Annual Probation and Parole Surveys/prob_pop_19.csv")
 parole_pop_19.csv   <- read.csv("Data/Annual Probation and Parole Surveys/parole_pop_19.csv")
-
-################################################################################
-# clean BJS probation and parole for revocation rate
-################################################################################
-
-####
-# probation exits
-####
-prob_exits_20 <- prob_exits_20.csv %>% select(state            = X,
-                                          inc_new_sentence     = X.4,
-                                          inc_current_sentence = X.5) %>% mutate(year = 2020,
-                                                                                 type = "Probation")
-prob_exits_19 <- prob_exits_19.csv %>% select(state                = X,
-                                              inc_new_sentence     = X.3,
-                                              inc_current_sentence = X.4) %>% mutate(year = 2019,
-                                                                                     type = "Probation")
-# clean bjs data format
-prob_exits_20 <- clean_bjs_prob(prob_exits_20)
-prob_exits_19 <- clean_bjs_prob(prob_exits_19)
-
-# add incarcerated variable
-prob_exits_20 <- incarcerated_bjs_prob(prob_exits_20)
-prob_exits_19 <- incarcerated_bjs_prob(prob_exits_19)
-
-####
-# probation pop
-####
-
-prob_pop_20 <- prob_pop_20.csv %>% select(state = X,
-                                          prob_pop_20 = X.1)
-prob_pop_19 <- prob_pop_19.csv %>% select(state = X,
-                                          prob_pop_19 = X.1)
-
-# clean bjs data format
-prob_pop_20 <- clean_bjs_prob(prob_pop_20)
-prob_pop_19 <- clean_bjs_prob(prob_pop_19)
-
-# remove commas and make numeric
-prob_pop_20$prob_pop_20 <- gsub('[[:punct:]]+','',prob_pop_20$prob_pop_20)
-prob_pop_20$prob_pop_20 <- as.numeric(prob_pop_20$prob_pop_20)
-prob_pop_19$prob_pop_19 <- gsub('[[:punct:]]+','',prob_pop_19$prob_pop_19)
-prob_pop_19$prob_pop_19 <- as.numeric(prob_pop_19$prob_pop_19)
-
-# merge pop and exits together
-prob_20 <- merge(prob_pop_20, prob_exits_20, by = "state")
-prob_19 <- merge(prob_pop_19, prob_exits_19, by = "state")
-
-# create revocation rate
-prob_20 <- prob_20 %>% mutate(prob_rev_rate_20 = incarcerated/prob_pop_20) %>%
-  select(state, prob_pop_20, prob_incarcerated_20 = incarcerated, prob_rev_rate_20)
-prob_19 <- prob_19 %>% mutate(prob_rev_rate_19 = incarcerated/prob_pop_19) %>%
-  select(state, prob_pop_19, prob_incarcerated_19 = incarcerated, prob_rev_rate_19)
-
-####
-# parole exits
-####
-parole_exits_20 <- parole_exits_20.csv %>% select(state = X,
-                                              inc_new_sentence = X.4,
-                                              inc_revocation   = X.5) %>% mutate(year = 2020,
-                                                                                 type = "Parole")
-parole_exits_19 <- parole_exits_19.csv %>% select(state = X,
-                                                  inc_new_sentence = X.3,
-                                                  inc_revocation   = X.4) %>% mutate(year = 2019,
-                                                                                     type = "Parole")
-
-parole_exits_20 <- clean_bjs_parole(parole_exits_20)
-parole_exits_19 <- clean_bjs_parole(parole_exits_19)
-
-# add incarcerated variable
-parole_exits_20 <- incarcerated_bjs_parole(parole_exits_20)
-parole_exits_19 <- incarcerated_bjs_parole(parole_exits_19)
-
-####
-# parole pop
-####
-
-parole_pop_20 <- parole_pop_20.csv %>% select(state = X,
-                                              parole_pop_20 = X.1)
-parole_pop_19 <- parole_pop_19.csv %>% select(state = X,
-                                              parole_pop_19 = X.1)
-
-# clean bjs data format
-parole_pop_20 <- clean_bjs_parole(parole_pop_20)
-parole_pop_19 <- clean_bjs_parole(parole_pop_19)
-
-# remove commas and make numeric
-parole_pop_20$parole_pop_20 <- gsub('[[:punct:]]+','',parole_pop_20$parole_pop_20)
-parole_pop_20$parole_pop_20 <- as.numeric(parole_pop_20$parole_pop_20)
-parole_pop_19$parole_pop_19 <- gsub('[[:punct:]]+','',parole_pop_19$parole_pop_19)
-parole_pop_19$parole_pop_19 <- as.numeric(parole_pop_19$parole_pop_19)
-
-# merge pop and exits together
-parole_20 <- merge(parole_pop_20, parole_exits_20, by = "state")
-parole_19 <- merge(parole_pop_19, parole_exits_19, by = "state")
-
-# create revocation rate
-parole_20 <- parole_20 %>% mutate(parole_rev_rate_20 = incarcerated/parole_pop_20) %>%
-  select(state, parole_pop_20, parole_incarcerated_20 = incarcerated, parole_rev_rate_20)
-parole_19 <- parole_19 %>% mutate(parole_rev_rate_19 = incarcerated/parole_pop_19) %>%
-  select(state, parole_pop_19, parole_incarcerated_19 = incarcerated, parole_rev_rate_19)
-
-####
-# combine probation and parole
-####
-
-bjs_prob_parole <- merge(parole_20, prob_20, by = "state")
-bjs_prob_parole <- merge(bjs_prob_parole, prob_19, by = "state")
-bjs_prob_parole <- merge(bjs_prob_parole, parole_19, by = "state")
-
-# create variable for overall rev rate in 2020
-bjs_prob_parole <- bjs_prob_parole %>%
-  mutate(pop_20 = prob_pop_20 + parole_pop_20,
-         incarcerated_20 = parole_incarcerated_20 + prob_incarcerated_20)
-bjs_prob_parole <- bjs_prob_parole %>%
-  mutate(rev_rate_20 = incarcerated_20/pop_20)
-
-# calculate the overall rev rate in 2019
-bjs_prob_parole <- bjs_prob_parole %>%
-  mutate(pop_19 = prob_pop_19 + parole_pop_19,
-         incarcerated_19 = parole_incarcerated_19 + prob_incarcerated_19)
-bjs_prob_parole <- bjs_prob_parole %>%
-  mutate(rev_rate_19 = incarcerated_19/pop_19)
-
-# calculate rev rate change
-bjs_prob_parole <- bjs_prob_parole %>%
-  mutate(rev_rate_change = rev_rate_20-rev_rate_19)
 
 ################################################################################
 # clean shapefile for hex map
@@ -410,11 +291,11 @@ vb_adm_pop <- gather(vb_adm_pop,
 
 # filter to vb values
 vb_adm_pop <- vb_adm_pop %>% filter(data == "total_admissions" |
-                                    data == "total_violation_admissions" |
-                                    data == "technical_admissions" |
-                                    data == "total_population" |
-                                    data == "total_violation_population" |
-                                    data == "technical_population")
+                                      data == "total_violation_admissions" |
+                                      data == "technical_admissions" |
+                                      data == "total_population" |
+                                      data == "total_violation_population" |
+                                      data == "technical_population")
 
 vb_adm_pop <- vb_adm_pop %>% mutate(metric = case_when(
   data == "total_admissions"                            ~ "Total",
@@ -575,8 +456,8 @@ state_table <- state_table %>%
 # remove probation, parole and other
 state_table <- state_table %>%
   filter(metric != "Probation" &
-         metric != "Parole" &
-         metric != "Other")
+           metric != "Parole" &
+           metric != "Other")
 
 # create text for table
 state_table <- state_table %>% mutate(text = case_when(
@@ -606,7 +487,7 @@ state_table_wide <- state_table_wide %>%
     metric == "Supervision Violations"  ~ 2,
     metric == "Technical"               ~ 3,
     metric == "Total"                   ~ 1)) %>%
-    # 3 year change
+  # 3 year change
   mutate(three_yr_change = (`2020`-`2018`)/`2018`)
 
 # rearrange data
@@ -801,6 +682,257 @@ csg <- csg %>% mutate(year = case_when(
 ))
 
 ################################################################################
+# clean BJS probation and parole for revocation rate
+################################################################################
+
+####
+# probation exits
+####
+prob_exits_20 <- prob_exits_20.csv %>% select(state            = X,
+                                              inc_new_sentence     = X.4,
+                                              inc_current_sentence = X.5) %>% mutate(year = 2020,
+                                                                                     type = "Probation")
+prob_exits_19 <- prob_exits_19.csv %>% select(state                = X,
+                                              inc_new_sentence     = X.3,
+                                              inc_current_sentence = X.4) %>% mutate(year = 2019,
+                                                                                     type = "Probation")
+# clean bjs data format
+prob_exits_20 <- clean_bjs_prob(prob_exits_20)
+prob_exits_19 <- clean_bjs_prob(prob_exits_19)
+
+# add incarcerated variable
+prob_exits_20 <- incarcerated_bjs_prob(prob_exits_20)
+prob_exits_19 <- incarcerated_bjs_prob(prob_exits_19)
+
+####
+# probation pop
+####
+
+prob_pop_20 <- prob_pop_20.csv %>% select(state = X,
+                                          prob_pop_20 = X.1)
+prob_pop_19 <- prob_pop_19.csv %>% select(state = X,
+                                          prob_pop_19 = X.1)
+
+# clean bjs data format
+prob_pop_20 <- clean_bjs_prob(prob_pop_20)
+prob_pop_19 <- clean_bjs_prob(prob_pop_19)
+
+# remove commas and make numeric
+prob_pop_20$prob_pop_20 <- gsub('[[:punct:]]+','',prob_pop_20$prob_pop_20)
+prob_pop_20$prob_pop_20 <- as.numeric(prob_pop_20$prob_pop_20)
+prob_pop_19$prob_pop_19 <- gsub('[[:punct:]]+','',prob_pop_19$prob_pop_19)
+prob_pop_19$prob_pop_19 <- as.numeric(prob_pop_19$prob_pop_19)
+
+# merge pop and exits together
+prob_20 <- merge(prob_pop_20, prob_exits_20, by = "state")
+prob_19 <- merge(prob_pop_19, prob_exits_19, by = "state")
+
+# create revocation rate
+prob_20 <- prob_20 %>% mutate(prob_rev_rate_20 = incarcerated/prob_pop_20) %>%
+  select(state, prob_pop_20, prob_incarcerated_20 = incarcerated, prob_rev_rate_20)
+prob_19 <- prob_19 %>% mutate(prob_rev_rate_19 = incarcerated/prob_pop_19) %>%
+  select(state, prob_pop_19, prob_incarcerated_19 = incarcerated, prob_rev_rate_19)
+
+####
+# parole exits
+####
+parole_exits_20 <- parole_exits_20.csv %>% select(state = X,
+                                                  inc_new_sentence = X.4,
+                                                  inc_revocation   = X.5) %>% mutate(year = 2020,
+                                                                                     type = "Parole")
+parole_exits_19 <- parole_exits_19.csv %>% select(state = X,
+                                                  inc_new_sentence = X.3,
+                                                  inc_revocation   = X.4) %>% mutate(year = 2019,
+                                                                                     type = "Parole")
+
+parole_exits_20 <- clean_bjs_parole(parole_exits_20)
+parole_exits_19 <- clean_bjs_parole(parole_exits_19)
+
+# add incarcerated variable
+parole_exits_20 <- incarcerated_bjs_parole(parole_exits_20)
+parole_exits_19 <- incarcerated_bjs_parole(parole_exits_19)
+
+####
+# parole pop
+####
+
+parole_pop_20 <- parole_pop_20.csv %>% select(state = X,
+                                              parole_pop_20 = X.1)
+parole_pop_19 <- parole_pop_19.csv %>% select(state = X,
+                                              parole_pop_19 = X.1)
+
+# clean bjs data format
+parole_pop_20 <- clean_bjs_parole(parole_pop_20)
+parole_pop_19 <- clean_bjs_parole(parole_pop_19)
+
+# remove commas and make numeric
+parole_pop_20$parole_pop_20 <- gsub('[[:punct:]]+','',parole_pop_20$parole_pop_20)
+parole_pop_20$parole_pop_20 <- as.numeric(parole_pop_20$parole_pop_20)
+parole_pop_19$parole_pop_19 <- gsub('[[:punct:]]+','',parole_pop_19$parole_pop_19)
+parole_pop_19$parole_pop_19 <- as.numeric(parole_pop_19$parole_pop_19)
+
+# merge pop and exits together
+parole_20 <- merge(parole_pop_20, parole_exits_20, by = "state")
+parole_19 <- merge(parole_pop_19, parole_exits_19, by = "state")
+
+# create revocation rate
+parole_20 <- parole_20 %>% mutate(parole_rev_rate_20 = incarcerated/parole_pop_20) %>%
+  select(state, parole_pop_20, parole_incarcerated_20 = incarcerated, parole_rev_rate_20)
+parole_19 <- parole_19 %>% mutate(parole_rev_rate_19 = incarcerated/parole_pop_19) %>%
+  select(state, parole_pop_19, parole_incarcerated_19 = incarcerated, parole_rev_rate_19)
+
+####
+# combine probation and parole
+####
+
+bjs_prob_parole <- merge(parole_20, prob_20, by = "state")
+bjs_prob_parole <- merge(bjs_prob_parole, prob_19, by = "state")
+bjs_prob_parole <- merge(bjs_prob_parole, parole_19, by = "state")
+
+####
+# get total comm population
+####
+
+comm_sup_pop_20 <- comm_sup_pop_20.csv %>% select(state    = X,
+                                                  pop_20 = X.1)
+comm_sup_pop_19 <- comm_sup_pop_19.csv %>% select(state    = X,
+                                                  pop_19 = X.1)
+
+# clean bjs data format
+comm_sup_pop_20 <- clean_bjs_prob(comm_sup_pop_20)
+comm_sup_pop_19 <- clean_bjs_prob(comm_sup_pop_19)
+
+# remove comma
+comm_sup_pop_20$pop_20 <- as.numeric(gsub(",", "", comm_sup_pop_20$pop_20))
+comm_sup_pop_19$pop_19 <- as.numeric(gsub(",", "", comm_sup_pop_19$pop_19))
+
+# merge with bjs data
+bjs_prob_parole <- left_join(bjs_prob_parole, comm_sup_pop_20, by = "state")
+bjs_prob_parole <- left_join(bjs_prob_parole, comm_sup_pop_19, by = "state")
+
+# create variable for overall rev rate in 2020
+bjs_prob_parole <- bjs_prob_parole %>%
+  mutate(incarcerated_20 = parole_incarcerated_20 + prob_incarcerated_20)
+bjs_prob_parole <- bjs_prob_parole %>%
+  mutate(rev_rate_20 = incarcerated_20/pop_20)
+
+# calculate the overall rev rate in 2019
+bjs_prob_parole <- bjs_prob_parole %>%
+  mutate(incarcerated_19 = parole_incarcerated_19 + prob_incarcerated_19)
+bjs_prob_parole <- bjs_prob_parole %>%
+  mutate(rev_rate_19 = incarcerated_19/pop_19)
+
+# calculate rev rate change
+bjs_prob_parole <- bjs_prob_parole %>%
+  mutate(rev_rate_change = rev_rate_20-rev_rate_19)
+
+bjs_prob_parole <- bjs_prob_parole %>%
+  dplyr::mutate(rev_rate_20 = ifelse(state == "California" |
+                                       state == "Connecticut"|
+                                       state == "Illinois"|
+                                       state == "Massachusetts"|
+                                       state == "Minnesota"|
+                                       state == "Nevada"|
+                                       state == "New Jersey"|
+                                       state == "New Mexico"|
+                                       state == "New York"|
+                                       state == "Oregon"|
+                                       state == "Rhode Island"|
+                                       state == "South Dakota"|
+                                       state == "Vermont"|
+                                       state == "Virginia"|
+                                       state == "Wisconsin", NA, rev_rate_20))
+
+bjs_prob_parole <- bjs_prob_parole %>%
+  dplyr::mutate(rev_rate_change = ifelse(state == "California" |
+                                           state == "Connecticut"|
+                                           state == "Illinois"|
+                                           state == "Massachusetts"|
+                                           state == "Minnesota"|
+                                           state == "Nevada"|
+                                           state == "New Jersey"|
+                                           state == "New Mexico"|
+                                           state == "New York"|
+                                           state == "Oregon"|
+                                           state == "Rhode Island"|
+                                           state == "South Dakota"|
+                                           state == "Vermont"|
+                                           state == "Virginia"|
+                                           state == "Wisconsin", NA, rev_rate_change))
+
+################################################################################
+# create bubble chart data
+################################################################################
+
+# select rev rates
+bjs_bubble <- bjs_prob_parole %>% select(state,
+                                         rev_rate_19,
+                                         rev_rate_20,
+                                         parole_rev_rate_19,
+                                         prob_rev_rate_19,
+                                         parole_rev_rate_20,
+                                         prob_rev_rate_20)
+
+# select rev rates
+bjs_bubble_pop <- bjs_prob_parole %>% select(state,
+                                             parole_pop_20,
+                                             prob_pop_20,
+                                             parole_pop_19,
+                                             prob_pop_19,
+                                             pop_20,
+                                             pop_19)
+
+# make long form
+bjs_bubble <- gather(bjs_bubble, type, rate, rev_rate_19:prob_rev_rate_20)
+bjs_bubble_pop <- gather(bjs_bubble_pop, type, pop, parole_pop_20:pop_19)
+
+# create year variable
+bjs_bubble <- bjs_bubble %>% mutate(year = ifelse(
+  grepl("19", type), 2019, 2020
+))
+bjs_bubble_pop <- bjs_bubble_pop %>% mutate(year = ifelse(
+  grepl("19", type), 2019, 2020
+))
+
+# create rev type variable
+bjs_bubble <- bjs_bubble %>% mutate(type = case_when(
+  grepl("prob", type)              ~ "Probation",
+  grepl("parole", type)            ~ "Parole",
+  grepl("\\<rev_rate_19\\>", type) ~ "Overall",
+  grepl("\\<rev_rate_20\\>", type) ~ "Overall"
+))
+# create rev type variable
+bjs_bubble_pop <- bjs_bubble_pop %>% mutate(type = case_when(
+  grepl("prob", type)         ~ "Probation",
+  grepl("parole", type)       ~ "Parole",
+  grepl("\\<pop_20\\>", type) ~ "Overall",
+  grepl("\\<pop_19\\>", type) ~ "Overall"
+))
+
+# merge regions
+bjs_bubble <- merge(bjs_bubble, region, by = "state")
+
+# merge bubble chart dfs
+bjs_bubble <- merge(bjs_bubble, bjs_bubble_pop, by = c("state", "year", "type"))
+
+# get census data
+state_pop_19 <- get_acs(geography = "state", variables = "B01001_001", year = 2019)
+state_pop_20 <- get_acs(geography = "state", variables = "B01001_001", year = 2020)
+
+# add year variables
+state_pop_19 <- state_pop_19 %>% mutate(year = 2019) %>% select(state = NAME,
+                                                                state_pop = estimate,
+                                                                year)
+state_pop_20 <- state_pop_20 %>% mutate(year = 2020) %>% select(state = NAME,
+                                                                state_pop = estimate,
+                                                                year)
+# add state pops together
+state_pop <- rbind(state_pop_19, state_pop_20)
+
+# add estimated state pops to data
+bjs_bubble <- left_join(bjs_bubble, state_pop, by = c("state", "year"))
+
+################################################################################
 # BJS download data
 ################################################################################
 
@@ -861,8 +993,11 @@ save(prob_table_wide,  file="Data/prob_table_wide.Rda")
 save(us_map,           file="Data/us_map.Rda")
 save(us,               file="Data/us.Rda")
 save(centers,          file="Data/centers.Rda")
+save(combined,         file="Data/combined.Rda")
+save(combined_labels,  file="Data/combined_labels.Rda")
 
 save(bjs_prob_parole,  file="Data/bjs_prob_parole.Rda")
+save(bjs_bubble,       file="Data/bjs_bubble.Rda")
 save(bjs,              file="Data/bjs.Rda")
 save(csg,              file="Data/csg.Rda")
 
