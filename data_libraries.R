@@ -8,6 +8,14 @@ library(highr)
 library(markdown)
 library(scico)
 
+# highcharter
+library(tidyverse)
+library(highcharter)
+library(scales)
+library(gapminder)
+library(tidycensus)
+library(tidyverse)
+
 # shiny
 library(shiny)
 library(shinyWidgets)
@@ -74,6 +82,7 @@ load(file="Data/combined.Rda")
 load(file="Data/combined_labels.Rda")
 
 load(file="Data/bjs_prob_parole.Rda")
+load(file="Data/bjs_bubble.Rda")
 load(file="Data/bjs.Rda")
 load(file="Data/csg.Rda")
 

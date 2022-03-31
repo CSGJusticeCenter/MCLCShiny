@@ -10,7 +10,7 @@ server <- function(input, output, session) {
   # change from previous year only includes years 2019-2020
   # count includes years 2018-2020
   df_map_temp <- reactive ({
-    if(input$choice_map_counts == "Count"){     if(input$year_map_counts == "2018"){filter(mclc_explorer, year=="2018" & choice == "Count")}
+    if(input$choice_map_counts == "Count"){if(input$year_map_counts == "2018"){filter(mclc_explorer, year=="2018" & choice == "Count")}
       else if(input$year_map_counts == "2019"){filter(mclc_explorer, year=="2019" & choice == "Count")}
       else if(input$year_map_counts == "2020"){filter(mclc_explorer, year=="2020" & choice == "Count")}
     }
@@ -324,6 +324,17 @@ server <- function(input, output, session) {
       saveWorkbook(wb, file = file, overwrite = TRUE)
     }
   )
+
+  ################################################################################
+  ################################################################################
+  # National- Bubble chart
+  ################################################################################
+  ################################################################################
+
+
+
+
+
 
   ################################################################################
   ################################################################################

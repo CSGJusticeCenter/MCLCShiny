@@ -30,7 +30,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                     selectInput("data_map_counts", "Data",        choices = unique(adm_pop_long$metric)),
                                                     selectInput("adm_or_pop_map_counts", "Type",  choices = unique(adm_pop_long$adm_or_pop)),
 
-                                                    radioButtons("choice_map_counts", "Value",    choices = c("Count", "Change from Previous Year"), selected = "Count"),
+                                                    radioButtons("choice_map_counts", "Value",    choices = c("Change from Previous Year", "Count"), selected = "Change from Previous Year"),
                                                     conditionalPanel(
                                                       condition = "input.choice_map_counts == 'Count'",
                                                       selectInput("year_map_counts", "Year", choices = c(2018, 2019, 2020))),
