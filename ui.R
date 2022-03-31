@@ -4,7 +4,8 @@ source("functions.R")
 ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                     sidebar = dashboardSidebar(
                       sidebarMenu(id = "tabs",
-                                  menuItem(text = "Map Explorer",  tabName = "Map_Explorer",icon = icon("map-pin")),
+                                  menuItem(text = "Map Explorer",  tabName = "Map_Explorer", icon = icon("map-pin")),
+                                  # menuItem(text = "National", tabName = "National",     icon = icon("chart")),
                                   menuItem(text = "State Reports", tabName = "State_Reports",icon = icon("search-location")),
                                   menuItem(text = "Download Data", tabName = "Download_Data",icon = icon("table"))
                       ) #sidebarMenu
@@ -38,7 +39,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                       condition = "input.choice_map_counts == 'Change from Previous Year'",
                                                       selectInput("year_map_counts2", "Year", choices = c(2019, 2020))),
                                                     # download buttons
-                                                    downloadButton(outputId = "save_map", label = "Download Map"),
+                                                    # downloadButton(outputId = "save_map", label = "Download Map"),
                                                     downloadButton(outputId = "save_data", label = "Download Data")
                                           ), #wellPanel
                                           ########
@@ -103,11 +104,11 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                               column(width = 3,
                                                      valueBoxOutput("total_change", width = 125)),
                                               column(width = 3,
-                                                     valueBoxOutput("sup_change", width = 125)),
+                                                     valueBoxOutput("sup_change",   width = 125)),
                                               column(width = 3,
-                                                     valueBoxOutput("tech_change", width = 125)),
+                                                     valueBoxOutput("tech_change",  width = 125)),
                                               column(width = 3,
-                                                     valueBoxOutput("rev_rate", width = 125))
+                                                     valueBoxOutput("rev_rate",     width = 125))
                                             ), #fluidRow
                                             br(),
 
@@ -122,7 +123,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                        ############
                                                        fluidRow(
                                                          column(width = 7,
-                                                                plotlyOutput("totals_chart", height = 375)),
+                                                                plotlyOutput("totals_chart",         height = 375)),
                                                          column(width = 5,
                                                                 plotlyOutput("sup_viols_type_chart", height = 375))
                                                        ), #fluidRow
@@ -147,7 +148,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                        fluidRow(column(width = 6,
                                                                        plotlyOutput("areachart_parole", height = 300)),
                                                                 column(width = 6,
-                                                                       plotlyOutput("barchart_parole", height = 300))),
+                                                                       plotlyOutput("barchart_parole",  height = 300))),
                                                        br(),
                                                        ############
                                                        # Table under graphs
@@ -193,20 +194,8 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                     selectInput(inputId = "dataset",
                                                                 label = "Dataset",
                                                                 choices = c("More Community, Less Confinement (CSG)", "Annual Probation Survey and Annual Parole Survey (BJS)")),
-                                                    pickerInput(inputId = 'year_table', label = 'Year(s)', choices = NULL, selected = NULL, multiple = TRUE, options = list(`actions-box` = TRUE)),
+                                                    pickerInput(inputId = 'year_table',  label = 'Year(s)',  choices = NULL, selected = NULL, multiple = TRUE, options = list(`actions-box` = TRUE)),
                                                     pickerInput(inputId = 'state_table', label = 'State(s)', choices = NULL, selected = NULL, multiple = TRUE, options = list(`actions-box` = TRUE))
-                                                    # conditionalPanel(
-                                                    #   condition = "input.dataset == 'More Community, Less Confinement (CSG)'",
-                                                    #   pickerInput('year_table', label = 'Year(s)', choices = c(2018, 2019, 2020), selected = NULL, multiple = TRUE),
-                                                    #   #checkboxGroupInput("year_table", "Year", choices = unique(csg$year)),
-                                                    #   pickerInput("download_table","State(s)", choices = unique(csg$state), options = list(`actions-box` = TRUE), multiple = T)
-                                                    # ),
-                                                    # conditionalPanel(
-                                                    #   condition = "input.dataset == 'Annual Probation Survey and Annual Parole Survey (BJS)'",
-                                                    #   pickerInput('year_table2', label = 'Year(s)', choices = c(2019, 2020), selected = NULL, multiple = TRUE),
-                                                    #   # checkboxGroupInput("year_table2", "Year", choices = unique(bjs$year)),
-                                                    #   pickerInput("download_table2","State(s)", choices = unique(bjs$state), options = list(`actions-box` = TRUE), multiple = T)
-                                                    # )
                                           ), # wellPanel
                                           mainPanel(
                                             br(),
@@ -218,13 +207,15 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                             tags$head(tags$style("#selected_data{font-size: 20px;font-style: bold;}")),
                                                             br(),
                                                             textOutput("selected_data_info"),
-                                                            br(), br())
+                                                            br(),
+                                                            br()),
+                                                     column(width = 1)
                                             ),
                                             fluidRow(
                                               column(width = 1),
-                                              column(width = 11,
-                                                     align = "center",
-                                                     DT::dataTableOutput("main_table")))
+                                              column(width = 11, align = "center", DT::dataTableOutput("main_table")),
+                                              column(width = 1)
+                                              )
                                           ) #mainPanel
                                 ) #fluidPage
                         ) #tabItem

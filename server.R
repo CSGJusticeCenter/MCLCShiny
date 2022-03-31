@@ -125,87 +125,87 @@ server <- function(input, output, session) {
   ################################################################################
   ################################################################################
 
-  # save leaflet map as a reactive element to be saved
-  reactive_map <- reactive({
-
-    df_map <- sp::merge(us, df_map(), by.x = 'iso3166_2', by.y = "Code")
-
-    df_map <- df_map[df_map$google_name != "District of Columbia (United States)", ]
-
-    if(input$choice_map_counts == "Change from Previous Year"){
-
-      df_map$total <- df_map$total*100
-
-      pal_fun <- colorNumeric(change_colors, df_map$total)
-      p_popup <- paste0('<b>',df_map$state, '</b><br><br>',
-                        'Year: ', df_map$year, '<br>',
-                        'Change: ', round(df_map$total, 1),'%<br>')
-
-      leaflet(df_map, options = leafletOptions(zoomControl = FALSE,
-                                               minZoom = 3.75,
-                                               maxZoom = 3.75,
-                                               dragging = FALSE,
-                                               attributionControl=FALSE)) %>%
-        addPolygons(stroke = FALSE, # remove borders
-                    fillColor = ~pal_fun(total),
-                    color = "white",
-                    fillOpacity = 0.8,
-                    smoothFactor = 0.5,
-                    popup = p_popup) %>%
-        # set view to US
-        setView(lng = -98.25, lat = 42.50, zoom = 3.75) %>%
-        # legend
-        addLegend("topright",
-                  pal = pal_fun,
-                  values = ~total,
-                  title = "Change",
-                  labFormat = labelFormat(prefix = " ", suffix = "%"),
-                  opacity = 1
-        )  %>%
-        addLabelOnlyMarkers(data = centers,
-                            lng = ~x,
-                            lat = ~y,
-                            label = ~id,
-                            labelOptions = labelOptions(noHide = TRUE,
-                                                        direction = 'center',
-                                                        textOnly = TRUE))
-    }
-    else if(input$choice_map_counts == "Count"){
-
-      pal_fun <- colorNumeric(count_colors, df_map$total)
-      p_popup <- paste0('<b>',df_map$state, '</b><br><br>',
-                        'Year: ', df_map$year, '<br>',
-                        'Count: ', formattable::comma(df_map$total, digits = 0),'<br>')
-
-      leaflet(df_map, options = leafletOptions(zoomControl = FALSE,
-                                               minZoom = 3.75,
-                                               maxZoom = 3.75,
-                                               dragging = FALSE,
-                                               attributionControl=FALSE)) %>%
-        addPolygons(stroke = FALSE, # remove borders
-                    fillColor = ~pal_fun(total),
-                    color = "white",
-                    fillOpacity = 0.8,
-                    smoothFactor = 0.5,
-                    popup = p_popup) %>%
-        # set view to US
-        setView(lng = -98.25, lat = 42.50, zoom = 3.75) %>%
-        # legend
-        addLegend("topright",
-                  pal = pal_fun,
-                  values = ~total,
-                  title = "Count",
-                  opacity = 1
-        )  %>%
-        addLabelOnlyMarkers(data = centers,
-                            lng = ~x,
-                            lat = ~y,
-                            label = ~id,
-                            labelOptions = labelOptions(noHide = TRUE,
-                                                        direction = 'center',
-                                                        textOnly = TRUE))
-    }
-  })
+  # # save leaflet map as a reactive element to be saved
+  # reactive_map <- reactive({
+  #
+  #   df_map <- sp::merge(us, df_map(), by.x = 'iso3166_2', by.y = "Code")
+  #
+  #   df_map <- df_map[df_map$google_name != "District of Columbia (United States)", ]
+  #
+  #   if(input$choice_map_counts == "Change from Previous Year"){
+  #
+  #     df_map$total <- df_map$total*100
+  #
+  #     pal_fun <- colorNumeric(change_colors, df_map$total)
+  #     p_popup <- paste0('<b>',df_map$state, '</b><br><br>',
+  #                       'Year: ', df_map$year, '<br>',
+  #                       'Change: ', round(df_map$total, 1),'%<br>')
+  #
+  #     leaflet(df_map, options = leafletOptions(zoomControl = FALSE,
+  #                                              minZoom = 3.75,
+  #                                              maxZoom = 3.75,
+  #                                              dragging = FALSE,
+  #                                              attributionControl=FALSE)) %>%
+  #       addPolygons(stroke = FALSE, # remove borders
+  #                   fillColor = ~pal_fun(total),
+  #                   color = "white",
+  #                   fillOpacity = 0.8,
+  #                   smoothFactor = 0.5,
+  #                   popup = p_popup) %>%
+  #       # set view to US
+  #       setView(lng = -98.25, lat = 42.50, zoom = 3.75) %>%
+  #       # legend
+  #       addLegend("topright",
+  #                 pal = pal_fun,
+  #                 values = ~total,
+  #                 title = "Change",
+  #                 labFormat = labelFormat(prefix = " ", suffix = "%"),
+  #                 opacity = 1
+  #       )  %>%
+  #       addLabelOnlyMarkers(data = centers,
+  #                           lng = ~x,
+  #                           lat = ~y,
+  #                           label = ~id,
+  #                           labelOptions = labelOptions(noHide = TRUE,
+  #                                                       direction = 'center',
+  #                                                       textOnly = TRUE))
+  #   }
+  #   else if(input$choice_map_counts == "Count"){
+  #
+  #     pal_fun <- colorNumeric(count_colors, df_map$total)
+  #     p_popup <- paste0('<b>',df_map$state, '</b><br><br>',
+  #                       'Year: ', df_map$year, '<br>',
+  #                       'Count: ', formattable::comma(df_map$total, digits = 0),'<br>')
+  #
+  #     leaflet(df_map, options = leafletOptions(zoomControl = FALSE,
+  #                                              minZoom = 3.75,
+  #                                              maxZoom = 3.75,
+  #                                              dragging = FALSE,
+  #                                              attributionControl=FALSE)) %>%
+  #       addPolygons(stroke = FALSE, # remove borders
+  #                   fillColor = ~pal_fun(total),
+  #                   color = "white",
+  #                   fillOpacity = 0.8,
+  #                   smoothFactor = 0.5,
+  #                   popup = p_popup) %>%
+  #       # set view to US
+  #       setView(lng = -98.25, lat = 42.50, zoom = 3.75) %>%
+  #       # legend
+  #       addLegend("topright",
+  #                 pal = pal_fun,
+  #                 values = ~total,
+  #                 title = "Count",
+  #                 opacity = 1
+  #       )  %>%
+  #       addLabelOnlyMarkers(data = centers,
+  #                           lng = ~x,
+  #                           lat = ~y,
+  #                           label = ~id,
+  #                           labelOptions = labelOptions(noHide = TRUE,
+  #                                                       direction = 'center',
+  #                                                       textOnly = TRUE))
+  #   }
+  # })
 
   ##############
   # Static hex map
@@ -301,15 +301,15 @@ server <- function(input, output, session) {
   # Download data and map options
   ##############
 
-  # output reactive leaflet map
-  output$leaflet_map <- renderLeaflet({
-    reactive_map()
-  })
+  # # output reactive leaflet map
+  # output$leaflet_map <- renderLeaflet({
+  #   reactive_map()
+  # })
 
-  # download button for map
-  output$save_map <- downloadHandler(
-    filename = "map.html",
-    content = function(file){saveWidget(widget = reactive_map(), file = file)})
+  # # download button for map
+  # output$save_map <- downloadHandler(
+  #   filename = "map.html",
+  #   content = function(file){saveWidget(widget = reactive_map(), file = file)})
 
   # download button for data
   output$save_data <- downloadHandler(
