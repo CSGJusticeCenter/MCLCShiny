@@ -12,10 +12,14 @@
 
 # Input:
 #    "Data for web team v13.xlsx"
+#     BJS Annual Probation and Parole Surveys
+#     Shapefiles, map related files
+#     Census API through tidycensus
 #######################################
 
 library(formattable)
 
+# use to pull state population data
 # census_api_key("YOUR API KEY HERE")
 
 ########
@@ -47,9 +51,6 @@ pop18 <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Population 
 pop19 <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2019")
 pop20 <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Population 2020")
 
-# load mclc costs
-costs <- read_excel("Data/Data for web team 2021 v13.xlsx", sheet = "Costs")
-
 # load probation and parole exits
 # https://bjs.ojp.gov/library/publications/list?series_filter=Probation%20and%20Parole%20Populations
 prob_exits_20.csv <- read.csv("Data/Annual Probation and Parole Surveys/prob_exits_20.csv")
@@ -66,7 +67,7 @@ prob_pop_19.csv     <- read.csv("Data/Annual Probation and Parole Surveys/prob_p
 parole_pop_19.csv   <- read.csv("Data/Annual Probation and Parole Surveys/parole_pop_19.csv")
 
 ################################################################################
-# clean shapefile for hex map
+# clean shapefile for leaflet hex map - not using now but might later
 ################################################################################
 
 # remove DC and territories
@@ -81,7 +82,8 @@ stateAbb <- stateAbb %>% select(state = i_state,
                                 Code = code)
 
 ##########################################################################################
-# create long form data
+# ADM POP
+# create wide form data
 ##########################################################################################
 
 # add year variable
@@ -184,7 +186,7 @@ adm_pop <- adm_pop %>% mutate(other_admissions = total_admissions-total_violatio
                               other_population = total_population-total_violation_population)
 
 #######################################################################################
-# make long form
+# MAP DATA
 #######################################################################################
 
 # make data long form
@@ -275,7 +277,7 @@ mclc_explorer <- rbind(temp, mclc_change)
 # mclc_explorer <- merge(mclc_explorer, stateAbb, by = "state")
 
 ################################################################################
-# Long form for value boxes
+# Value box data
 ################################################################################
 
 # add technical prob/parole together
@@ -331,6 +333,7 @@ vb_adm_pop <- vb_adm_pop %>%
 vb_adm_pop$year <- as.factor(vb_adm_pop$year)
 
 ################################################################################
+# ADM POP LONG
 # Long form
 ################################################################################
 
@@ -655,40 +658,14 @@ mclc_report$total <- round(mclc_report$total, 0)
 mclc_report$total1 <- scales::comma(mclc_report$total)
 
 ################################################################################
-# CSG download data
-################################################################################
-
-# filter data
-csg <- adm_pop_long %>% rename(state = state) %>% filter(metric != "Other")
-
-# remove dups from regions df
-region <- region %>% distinct()
-
-# merge with regions
-csg <- merge(csg, region, by = "state")
-
-# create text from data variable
-csg <- create_data_text(csg)
-
-# select data and change data types
-csg <- csg %>% ungroup() %>% select(state, year, text, total, adm_or_pop)
-csg$state <- as.character(csg$state)
-csg$year <- as.numeric(csg$year)
-
-csg <- csg %>% mutate(year = case_when(
-  year == 1 ~ 2018,
-  year == 2 ~ 2019,
-  year == 3 ~ 2020
-))
-
-################################################################################
 # clean BJS probation and parole for revocation rate
 ################################################################################
 
 ####
 # probation exits
 ####
-prob_exits_20 <- prob_exits_20.csv %>% select(state            = X,
+
+prob_exits_20 <- prob_exits_20.csv %>% select(state                = X,
                                               inc_new_sentence     = X.4,
                                               inc_current_sentence = X.5) %>% mutate(year = 2020,
                                                                                      type = "Probation")
@@ -861,6 +838,49 @@ bjs_prob_parole <- bjs_prob_parole %>%
                                          state == "Wisconsin", NA, rev_rate_change))
 
 ################################################################################
+# BJS download data
+################################################################################
+
+bjs <- bjs_prob_parole %>% select(-rev_rate_change)
+
+# make long form
+incarcerated <- bjs %>% select(state,
+                               parole_incarcerated_19,
+                               parole_incarcerated_20,
+                               prob_incarcerated_19,
+                               prob_incarcerated_20)
+population <- bjs %>% select(state,
+                             prob_pop_19,
+                             prob_pop_20,
+                             parole_pop_19,
+                             parole_pop_20)
+revrates <- bjs %>% select(state,
+                           parole_rev_rate_19,
+                           parole_rev_rate_20,
+                           prob_rev_rate_19,
+                           prob_rev_rate_20)
+
+incarcerated <- gather(incarcerated, data, incarcerated, parole_incarcerated_19:prob_incarcerated_20)
+population <- gather(population, data, population, prob_pop_19:parole_pop_20)
+revrates <- gather(revrates, data, rev_rate, parole_rev_rate_19:prob_rev_rate_20)
+
+# assign year
+# assign parole vs probation
+incarcerated <- incarcerated %>%
+  mutate(year = ifelse(grepl("20", data), 2020, 2019),
+         type = ifelse(grepl("parole", data), "Parole", "Probation")) %>% select(-data)
+population <- population %>%
+  mutate(year = ifelse(grepl("20", data), 2020, 2019),
+         type = ifelse(grepl("parole", data), "Parole", "Probation")) %>% select(-data)
+revrates <- revrates %>%
+  mutate(year = ifelse(grepl("20", data), 2020, 2019),
+         type = ifelse(grepl("parole", data), "Parole", "Probation")) %>% select(-data)
+
+# combine data
+bjs <- merge(population, incarcerated, by = c("state", "year", "type"))
+bjs <- merge(bjs, revrates, by = c("state", "year", "type"))
+
+################################################################################
 # create bubble chart data
 ################################################################################
 
@@ -873,7 +893,7 @@ bjs_bubble <- bjs_prob_parole %>% select(state,
                                          parole_rev_rate_20,
                                          prob_rev_rate_20)
 
-# select rev rates
+# select pops
 bjs_bubble_pop <- bjs_prob_parole %>% select(state,
                                              parole_pop_20,
                                              prob_pop_20,
@@ -932,48 +952,35 @@ state_pop <- rbind(state_pop_19, state_pop_20)
 # add estimated state pops to data
 bjs_bubble <- left_join(bjs_bubble, state_pop, by = c("state", "year"))
 
+# merge with incarcerated variable
+bjs_bubble <- left_join(bjs_bubble, incarcerated, by = c("state", "year", "type"))
+
 ################################################################################
-# BJS download data
+# CSG download data
 ################################################################################
 
-bjs <- bjs_prob_parole %>% select(-rev_rate_change)
+# filter data
+csg <- adm_pop_long %>% rename(state = state) %>% filter(metric != "Other")
 
-# make long form
-incarcerated <- bjs %>% select(state,
-                               parole_incarcerated_19,
-                               parole_incarcerated_20,
-                               prob_incarcerated_19,
-                               prob_incarcerated_20)
-population <- bjs %>% select(state,
-                             prob_pop_19,
-                             prob_pop_20,
-                             parole_pop_19,
-                             parole_pop_20)
-revrates <- bjs %>% select(state,
-                           parole_rev_rate_19,
-                           parole_rev_rate_20,
-                           prob_rev_rate_19,
-                           prob_rev_rate_20)
+# remove dups from regions df
+region <- region %>% distinct()
 
-incarcerated <- gather(incarcerated, data, incarcerated, parole_incarcerated_19:prob_incarcerated_20)
-population <- gather(population, data, population, prob_pop_19:parole_pop_20)
-revrates <- gather(revrates, data, rev_rate, parole_rev_rate_19:prob_rev_rate_20)
+# merge with regions
+csg <- merge(csg, region, by = "state")
 
-# assign year
-# assign parole vs probation
-incarcerated <- incarcerated %>%
-  mutate(year = ifelse(grepl("20", data), 2020, 2019),
-         type = ifelse(grepl("parole", data), "Parole", "Probation")) %>% select(-data)
-population <- population %>%
-  mutate(year = ifelse(grepl("20", data), 2020, 2019),
-         type = ifelse(grepl("parole", data), "Parole", "Probation")) %>% select(-data)
-revrates <- revrates %>%
-  mutate(year = ifelse(grepl("20", data), 2020, 2019),
-         type = ifelse(grepl("parole", data), "Parole", "Probation")) %>% select(-data)
+# create text from data variable
+csg <- create_data_text(csg)
 
-# combine data
-bjs <- merge(population, incarcerated, by = c("state", "year", "type"))
-bjs <- merge(bjs, revrates, by = c("state", "year", "type"))
+# select data and change data types
+csg <- csg %>% ungroup() %>% select(state, year, text, total, adm_or_pop)
+csg$state <- as.character(csg$state)
+csg$year <- as.numeric(csg$year)
+
+csg <- csg %>% mutate(year = case_when(
+  year == 1 ~ 2018,
+  year == 2 ~ 2019,
+  year == 3 ~ 2020
+))
 
 ########
 # save Rdata

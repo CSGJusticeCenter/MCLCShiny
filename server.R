@@ -210,6 +210,7 @@ server <- function(input, output, session) {
   ##############
   # Static hex map
   ##############
+
   output$static_hex_map <- renderPlot({
 
     combined_new <- merge(combined, df_map(), by.x = "name.x", by.y = "state")
@@ -331,10 +332,65 @@ server <- function(input, output, session) {
   ################################################################################
   ################################################################################
 
+  # Print graph title depending on selection
+  output$selected_bubble_chart <- renderText({
+    paste(input$bubble_type, " Revocations in ", input$bubble_year)
+  })
 
+  output$bubble_chart <- renderHighchart({
 
+    hcoptslang <- getOption("highcharter.lang")
+    hcoptslang$thousandsSep <- ","
+    options(highcharter.lang = hcoptslang)
 
-
+    bjs_bubble %>% filter(year == input$bubble_year & type == input$bubble_type) %>%
+      mutate(
+        tooltip = paste0(
+          "<b>", state, " - ", region, "</b><br>",
+          "Year: ", year, "<br>",
+          "State Population: ",       comma(state_pop), "<br>",
+          "Supervision Population: ", comma(pop), "<br>",
+          "Number Incarcerated: ",    comma(incarcerated), "<br>",
+          "Revocation Rate: ",        round(rate*100, 2), "<br>")
+      ) %>%
+      hchart(
+        type = "bubble",
+        hcaes(x = pop, y = incarcerated, group = region, size = rate), maxSize = "10%"
+      ) %>%
+      # hc_title(
+      #   text = paste0("State ", input$bubble_type, " Revocations in ", input$bubble_year),
+      #   align = "left",
+      #   style = list(fontFamily = c("Franklin Gothic Medium", "sans-serif"), fontSize = "24px")
+      # ) %>%
+      hc_xAxis(
+        title = list(text = paste0(input$bubble_type, " Population"))
+        # labels = list(format = "${value:,.0f}")
+      ) %>%
+      hc_yAxis(title = list(text = "Number Incarcerated")) %>%
+      hc_caption(text = "Data source: BJS Annual Probation and Parole Survey", align = "right") %>%
+      hc_legend(
+        align = "left",
+        verticalAlign = "top"
+      ) %>%
+      # hc_colors(viridisLite::viridis(n = 5, alpha = 0.3)) %>%
+      hc_colors(c(lightgreen, orange, regblue, lightblue)) %>%
+      hc_chart(style = list(fontFamily = c("Franklin Gothic Book", "sans-serif"))) %>%
+      hc_plotOptions(series = list(states = list(inactive = list(opacity = 0.1)))) %>%
+      hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
+      hc_exporting(
+        enabled = TRUE,
+        accessibility = list(enabled = TRUE)
+      ) %>%
+      hc_plotOptions(
+        accessibility = list(
+          enabled = TRUE,
+          keyboardNavigation = list(enabled = TRUE)
+        )
+      ) %>%
+      # hc_add_dependency(name = "modules/accessibility.js") %>%
+      hc_add_dependency(name = "modules/exporting.js") %>%
+      hc_add_dependency(name = "modules/export-data.js")
+  })
 
   ################################################################################
   ################################################################################
@@ -342,7 +398,7 @@ server <- function(input, output, session) {
   ################################################################################
   ################################################################################
 
-  # Print state name and adm or pop selected
+  # Print state name depending on state selected
   output$selected_state <- renderText({
     paste("Trends in ", input$state)
   })
