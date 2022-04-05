@@ -20,7 +20,7 @@
 library(formattable)
 
 # use to pull state population data
-# census_api_key("YOUR API KEY HERE")
+# census_api_key("37fb837476737351145409de9fceaa40d6164494")
 
 ########
 # Import data
@@ -77,7 +77,7 @@ centers <- centers[centers$id != "DC", ]
 
 # clean stateAbb file
 stateAbb <- clean_names(stateAbb)
-stateAbb <- stateAbb %>% select(state = i_state,
+stateAbb <- stateAbb %>% select(state,
                                 Abbrev = abbrev,
                                 Code = code)
 
@@ -270,8 +270,35 @@ mclc_change$choice <- "Change from Previous Year"
 mclc$choice <- "Count"
 temp <- mclc %>% select(-change)
 
-# final map data
+# join data
 mclc_explorer <- rbind(temp, mclc_change)
+
+# final map table
+mclc_explorer_table <- mclc_explorer %>% mutate(data = paste0(metric, " " , adm_or_pop)) %>% filter(choice == "Change from Previous Year")
+
+# make year column into column headers
+mclc_explorer_table <- spread(mclc_explorer_table, year, total) %>%
+  select(state,
+         data,
+         `2018 - 2019` = `2019`,
+         `2019 - 2020` = `2020`)
+
+# get counts to add to table
+mclc_counts <- mclc_explorer %>% mutate(data = paste0(metric, " " , adm_or_pop)) %>% filter(choice == "Count")
+
+# make year column into column headers
+mclc_counts <- spread(mclc_counts, year, total) %>% select(state, data, `2018`, `2019`, `2020`)
+
+# combine counts and change tables together
+mclc_explorer_table <- left_join(mclc_counts, mclc_explorer_table, by = c("state", "data"))
+
+# only use change for now
+mclc_explorer <- mclc_explorer %>% filter(choice == "Change from Previous Year") %>% select(-choice)
+
+# create year range
+mclc_explorer <- mclc_explorer %>%
+  mutate(year = case_when(year == 2019 ~ "2018 - 2019",
+                          year == 2020 ~ "2019 - 2020"))
 
 # # add state abb for merging with shapefile in server
 # mclc_explorer <- merge(mclc_explorer, stateAbb, by = "state")
@@ -844,41 +871,83 @@ bjs_prob_parole <- bjs_prob_parole %>%
 bjs <- bjs_prob_parole %>% select(-rev_rate_change)
 
 # make long form
-incarcerated <- bjs %>% select(state,
-                               parole_incarcerated_19,
-                               parole_incarcerated_20,
-                               prob_incarcerated_19,
-                               prob_incarcerated_20)
+incarcerated <- bjs %>%
+  mutate(incarcerated_19 = parole_incarcerated_19 + prob_incarcerated_19,
+         incarcerated_20 = parole_incarcerated_20 + prob_incarcerated_20) %>%
+  select(state,
+         parole_incarcerated_19,
+         parole_incarcerated_20,
+         prob_incarcerated_19,
+         prob_incarcerated_20,
+         incarcerated_19,
+         incarcerated_20)
+
 population <- bjs %>% select(state,
                              prob_pop_19,
                              prob_pop_20,
                              parole_pop_19,
-                             parole_pop_20)
+                             parole_pop_20,
+                             pop_19,
+                             pop_20)
+
 revrates <- bjs %>% select(state,
                            parole_rev_rate_19,
                            parole_rev_rate_20,
                            prob_rev_rate_19,
-                           prob_rev_rate_20)
+                           prob_rev_rate_20,
+                           rev_rate_19,
+                           rev_rate_20)
 
-incarcerated <- gather(incarcerated, data, incarcerated, parole_incarcerated_19:prob_incarcerated_20)
-population <- gather(population, data, population, prob_pop_19:parole_pop_20)
-revrates <- gather(revrates, data, rev_rate, parole_rev_rate_19:prob_rev_rate_20)
+# make long form
+incarcerated <- gather(incarcerated, data, incarcerated, parole_incarcerated_19:incarcerated_20)
+population <- gather(population, data, population, prob_pop_19:pop_20)
+revrates <- gather(revrates, data, rev_rate, parole_rev_rate_19:rev_rate_20)
 
 # assign year
 # assign parole vs probation
 incarcerated <- incarcerated %>%
   mutate(year = ifelse(grepl("20", data), 2020, 2019),
-         type = ifelse(grepl("parole", data), "Parole", "Probation")) %>% select(-data)
+         type = case_when(grepl("parole", data) ~ "Parole",
+                          grepl("prob", data) ~ "Probation",
+                          TRUE ~ "Overall")) %>% select(-data)
+
 population <- population %>%
   mutate(year = ifelse(grepl("20", data), 2020, 2019),
-         type = ifelse(grepl("parole", data), "Parole", "Probation")) %>% select(-data)
+         type = case_when(grepl("parole", data) ~ "Parole",
+                          grepl("prob", data) ~ "Probation",
+                          TRUE ~ "Overall")) %>% select(-data)
+
 revrates <- revrates %>%
   mutate(year = ifelse(grepl("20", data), 2020, 2019),
-         type = ifelse(grepl("parole", data), "Parole", "Probation")) %>% select(-data)
+         type = case_when(grepl("parole", data) ~ "Parole",
+                          grepl("prob", data) ~ "Probation",
+                          TRUE ~ "Overall")) %>% select(-data)
+
+# add prob, parole, and overall indicators to column headers
+incarcerated <- spread(incarcerated, type, incarcerated) %>%
+  select(state,
+         year,
+         overall_incarcerated = Overall,
+         parole_incarcerated = Parole,
+         prob_incarcerated = Probation)
+
+population <- spread(population, type, population) %>%
+  select(state,
+         year,
+         overall_population = Overall,
+         parole_population = Parole,
+         prob_population = Probation)
+
+revrates <- spread(revrates, type, rev_rate) %>%
+  select(state,
+         year,
+         overall_rev_rate = Overall,
+         parole_rev_rate = Parole,
+         prob_rev_rate = Probation)
 
 # combine data
-bjs <- merge(population, incarcerated, by = c("state", "year", "type"))
-bjs <- merge(bjs, revrates, by = c("state", "year", "type"))
+bjs <- merge(population, incarcerated, by = c("state", "year"))
+bjs <- merge(bjs, revrates, by = c("state", "year"))
 
 ################################################################################
 # create bubble chart data
@@ -952,8 +1021,15 @@ state_pop <- rbind(state_pop_19, state_pop_20)
 # add estimated state pops to data
 bjs_bubble <- left_join(bjs_bubble, state_pop, by = c("state", "year"))
 
+# make incarcerated df long form
+temp <- gather(incarcerated, type, incarcerated, overall_incarcerated:prob_incarcerated)
+temp <- temp %>%
+  mutate(type = case_when(grepl("parole", type) ~ "Parole",
+                          grepl("prob", type) ~ "Probation",
+                          TRUE ~ "Overall"))
+
 # merge with incarcerated variable
-bjs_bubble <- left_join(bjs_bubble, incarcerated, by = c("state", "year", "type"))
+bjs_bubble <- left_join(bjs_bubble, temp, by = c("state", "year", "type"))
 
 ################################################################################
 # CSG download data
@@ -986,25 +1062,26 @@ csg <- csg %>% mutate(year = case_when(
 # save Rdata
 ########
 
-save(mclc_explorer,    file="Data/mclc_explorer.Rda")
+save(mclc_explorer,       file="Data/mclc_explorer.Rda")
+save(mclc_explorer_table, file="Data/mclc_explorer_table.Rda")
 
-save(adm_pop_long,     file="Data/adm_pop_long.Rda")
-save(vb_adm_pop,       file="Data/vb_adm_pop.Rda")
-save(state_table,      file="Data/state_table.Rda")
-save(state_table_wide, file="Data/state_table_wide.Rda")
-save(parole_table,     file="Data/parole_table.Rda")
-save(parole_table_wide,file="Data/parole_table_wide.Rda")
-save(prob_table,       file="Data/prob_table.Rda")
-save(prob_table_wide,  file="Data/prob_table_wide.Rda")
+save(adm_pop_long,        file="Data/adm_pop_long.Rda")
+save(vb_adm_pop,          file="Data/vb_adm_pop.Rda")
+save(state_table,         file="Data/state_table.Rda")
+save(state_table_wide,    file="Data/state_table_wide.Rda")
+save(parole_table,        file="Data/parole_table.Rda")
+save(parole_table_wide,   file="Data/parole_table_wide.Rda")
+save(prob_table,          file="Data/prob_table.Rda")
+save(prob_table_wide,     file="Data/prob_table_wide.Rda")
 
-save(us_map,           file="Data/us_map.Rda")
-save(us,               file="Data/us.Rda")
-save(centers,          file="Data/centers.Rda")
-save(combined,         file="Data/combined.Rda")
-save(combined_labels,  file="Data/combined_labels.Rda")
+save(us_map,              file="Data/us_map.Rda")
+save(us,                  file="Data/us.Rda")
+save(centers,             file="Data/centers.Rda")
+save(combined,            file="Data/combined.Rda")
+save(combined_labels,     file="Data/combined_labels.Rda")
 
-save(bjs_prob_parole,  file="Data/bjs_prob_parole.Rda")
-save(bjs_bubble,       file="Data/bjs_bubble.Rda")
-save(bjs,              file="Data/bjs.Rda")
-save(csg,              file="Data/csg.Rda")
+save(bjs_prob_parole,     file="Data/bjs_prob_parole.Rda")
+save(bjs_bubble,          file="Data/bjs_bubble.Rda")
+save(bjs,                 file="Data/bjs.Rda")
+save(csg,                 file="Data/csg.Rda")
 

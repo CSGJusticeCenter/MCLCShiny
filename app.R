@@ -3,7 +3,7 @@
 # File: app.R
 # Authors: Mari Roberts
 # Date: December 8, 2021
-# Description: 
+# Description:
 #    Runs app
 #######################################
 
@@ -24,7 +24,7 @@ shinyApp(ui = ui, server = server)
 # https://medium.com/ibm-data-ai/center-diverging-colors-on-leaflet-map-515e69d7f81f
 # https://stackoverflow.com/questions/61622436/how-do-i-make-a-reactive-palette-which-changes-the-colour-of-polygons-on-a-map
 # https://stackoverflow.com/questions/56690624/how-can-i-make-an-horizontal-legend-in-leaflet
-# https://stackoverflow.com/questions/36925152/r-leaflet-legend-colorbin-removing-decimals-in-between-breakspng 
+# https://stackoverflow.com/questions/36925152/r-leaflet-legend-colorbin-removing-decimals-in-between-breakspng
 
 # hex map notes
 # https://rud.is/b/2015/05/14/geojson-hexagonal-statebins-in-r/

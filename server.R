@@ -9,56 +9,70 @@ server <- function(input, output, session) {
   # change sidebar depending on selection
   # change from previous year only includes years 2019-2020
   # count includes years 2018-2020
-  df_map_temp <- reactive ({
-    if(input$choice_map_counts == "Count"){if(input$year_map_counts == "2018"){filter(mclc_explorer, year=="2018" & choice == "Count")}
-      else if(input$year_map_counts == "2019"){filter(mclc_explorer, year=="2019" & choice == "Count")}
-      else if(input$year_map_counts == "2020"){filter(mclc_explorer, year=="2020" & choice == "Count")}
-    }
-    else if(input$choice_map_counts == "Change from Previous Year" & input$year_map_counts2 == "2019"){filter(mclc_explorer, year == "2019" & choice == "Change from Previous Year")}
-    else if(input$choice_map_counts == "Change from Previous Year" & input$year_map_counts2 == "2020"){filter(mclc_explorer, year == "2020" & choice == "Change from Previous Year")}
-  })
+  # df_map_temp <- reactive ({
+  #   if(input$choice_map_counts == "Count"){if(input$year_map_counts == "2018"){filter(mclc_explorer, year=="2018" & choice == "Count")}
+  #     else if(input$year_map_counts == "2019"){filter(mclc_explorer, year=="2019" & choice == "Count")}
+  #     else if(input$year_map_counts == "2020"){filter(mclc_explorer, year=="2020" & choice == "Count")}
+  #   }
+  #   else if(input$choice_map_counts == "Change from Previous Year" & input$year_map_counts2 == "2019"){filter(mclc_explorer, year == "2019" & choice == "Change from Previous Year")}
+  #   else if(input$choice_map_counts == "Change from Previous Year" & input$year_map_counts2 == "2020"){filter(mclc_explorer, year == "2020" & choice == "Change from Previous Year")}
+  # })
 
-  # filter data depending on choice above
+  # # filter data depending on choice above
+  # df_map <- reactive({
+  #   df_map_temp() %>%
+  #     filter(adm_or_pop == input$adm_or_pop_map_counts,
+  #            metric == input$data_map_counts)
+  # })
+
   df_map <- reactive({
-    df_map_temp() %>%
+    mclc_explorer %>%
       filter(adm_or_pop == input$adm_or_pop_map_counts,
-             metric == input$data_map_counts)
+             metric     == input$data_map_counts,
+             year       == input$year_map_counts)
   })
 
-  # format for datatable
+  # # format for datatable
+  # df_map_table <- reactive({
+  #   df_map() %>%
+  #     arrange(desc(total)) %>%
+  #     select(State = state,
+  #            Year = year,
+  #            Data = metric,
+  #            Type = adm_or_pop,
+  #            Value = total)
+  # })
+
   df_map_table <- reactive({
-    df_map() %>%
-      arrange(desc(total)) %>%
-      select(State = state,
-             Year = year,
-             Data = metric,
-             Type = adm_or_pop,
-             Value = total)
-  })
-  df_map_table2 <- reactive({
-    df_map() %>%
-      arrange(total) %>%
-      select(State = state,
-             Year = year,
-             Data = metric,
-             Type = adm_or_pop,
-             Value = total)
+
+    filter_by <- paste0(input$data_map_counts, " ", input$adm_or_pop_map_counts)
+
+    mclc_explorer_table %>%
+      filter(data == filter_by) %>%
+      arrange(state)
   })
 
   ##############
   # Hex map title
   ##############
 
+  # # Title of map
+  # output$selected_map <- renderText({
+  #
+  #   if(input$choice_map_counts == "Change from Previous Year" & input$year_map_counts2 == "2019"){text = "Change from 2018-2019"}
+  #   else if(input$choice_map_counts == "Change from Previous Year" & input$year_map_counts2 == "2020"){text = "Change from 2019-2020"}
+  #   else if(input$choice_map_counts == "Count" & input$year_map_counts == "2018"){text = "in 2018"}
+  #   else if(input$choice_map_counts == "Count" & input$year_map_counts == "2019"){text = "in 2019"}
+  #   else if(input$choice_map_counts == "Count" & input$year_map_counts == "2020"){text = "in 2020"}
+  #
+  #   paste(input$data_map_counts, " ", input$adm_or_pop_map_counts, " ", text)
+  #
+  # })
+
   # Title of map
   output$selected_map <- renderText({
 
-    if(input$choice_map_counts == "Change from Previous Year" & input$year_map_counts2 == "2019"){text = "Change from 2018-2019"}
-    else if(input$choice_map_counts == "Change from Previous Year" & input$year_map_counts2 == "2020"){text = "Change from 2019-2020"}
-    else if(input$choice_map_counts == "Count" & input$year_map_counts == "2018"){text = "in 2018"}
-    else if(input$choice_map_counts == "Count" & input$year_map_counts == "2019"){text = "in 2019"}
-    else if(input$choice_map_counts == "Count" & input$year_map_counts == "2020"){text = "in 2020"}
-
-    paste(input$data_map_counts, " ", input$adm_or_pop_map_counts, " ", text)
+    paste("Change in ", input$data_map_counts, " ", input$adm_or_pop_map_counts, " from ", input$year_map_counts)
 
   })
 
@@ -66,57 +80,87 @@ server <- function(input, output, session) {
   # Table below map changes depending on count vs change
   ##############
 
+  # output$table_map_counts <- renderReactable(
+  #
+  #   if(input$choice_map_counts == "Count"){
+  #
+  #     reactable(df_map_table(),
+  #               searchable = TRUE,
+  #               defaultPageSize = 10,
+  #               theme = reactableTheme(
+  #                 # Vertically center cells
+  #                 cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
+  #               defaultColDef = colDef(
+  #                 format = colFormat(separators = TRUE),
+  #                 align = "center"),
+  #               compact = TRUE,
+  #               fullWidth = FALSE,
+  #               columns = list(
+  #                 State         = colDef(name = "State",
+  #                                        align = "left",
+  #                                        minWidth = 150),
+  #                 Year          = colDef(minWidth = 75),
+  #                 Data          = colDef(minWidth = 100),
+  #                 Type          = colDef(minWidth = 100),
+  #                 Value         = colDef(minWidth = 150,
+  #                                        name = "Count")))
+  #
+  #   }
+  #   else if(input$choice_map_counts == "Change from Previous Year"){
+  #
+  #     reactable(df_map_table2(),
+  #               searchable = TRUE,
+  #               defaultPageSize = 10,
+  #               theme = reactableTheme(
+  #                 # Vertically center cells
+  #                 cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
+  #               defaultColDef = colDef(
+  #                 format = colFormat(separators = TRUE),
+  #                 align = "center"),
+  #               compact = TRUE,
+  #               fullWidth = FALSE,
+  #               columns = list(
+  #                 State         = colDef(name = "State",
+  #                                        align = "left",
+  #                                        minWidth = 150),
+  #                 Year          = colDef(minWidth = 75),
+  #                 Data          = colDef(minWidth = 100),
+  #                 Type          = colDef(minWidth = 100),
+  #                 Value         = colDef(minWidth = 150,
+  #                                        name = "Change from Previous Year",
+  #                                        format = colFormat(percent = TRUE, digits = 1))))
+  #
+  #   }
+  # )
+
   output$table_map_counts <- renderReactable(
-
-    if(input$choice_map_counts == "Count"){
-
-      reactable(df_map_table(),
-                searchable = TRUE,
-                defaultPageSize = 10,
-                theme = reactableTheme(
-                  # Vertically center cells
-                  cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
-                defaultColDef = colDef(
-                  format = colFormat(separators = TRUE),
-                  align = "center"),
-                compact = TRUE,
-                fullWidth = FALSE,
-                columns = list(
-                  State         = colDef(name = "State",
-                                         align = "left",
-                                         minWidth = 150),
-                  Year          = colDef(minWidth = 75),
-                  Data          = colDef(minWidth = 100),
-                  Type          = colDef(minWidth = 100),
-                  Value         = colDef(minWidth = 150,
-                                         name = "Count")))
-
-    }
-    else if(input$choice_map_counts == "Change from Previous Year"){
-
-      reactable(df_map_table2(),
-                searchable = TRUE,
-                defaultPageSize = 10,
-                theme = reactableTheme(
-                  # Vertically center cells
-                  cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
-                defaultColDef = colDef(
-                  format = colFormat(separators = TRUE),
-                  align = "center"),
-                compact = TRUE,
-                fullWidth = FALSE,
-                columns = list(
-                  State         = colDef(name = "State",
-                                         align = "left",
-                                         minWidth = 150),
-                  Year          = colDef(minWidth = 75),
-                  Data          = colDef(minWidth = 100),
-                  Type          = colDef(minWidth = 100),
-                  Value         = colDef(minWidth = 150,
-                                         name = "Change from Previous Year",
-                                         format = colFormat(percent = TRUE, digits = 1))))
-
-    }
+    reactable(df_map_table(),
+              searchable = TRUE,
+              defaultPageSize = 50,
+              theme = reactableTheme(
+                # Vertically center cells
+                cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
+              defaultColDef = colDef(
+                format = colFormat(separators = TRUE),
+                align = "center"),
+              compact = TRUE,
+              fullWidth = FALSE,
+              columns = list(
+                state         = colDef(name = "State",
+                                       align = "left",
+                                       minWidth = 100),
+                data          = colDef(name = "Data",
+                                       minWidth = 150),
+                `2018`        = colDef(minWidth = 100),
+                `2019`        = colDef(minWidth = 100),
+                `2020`        = colDef(minWidth = 100),
+                change_18_19  = colDef(minWidth = 125,
+                                       name = "Change from\n2018-2019",
+                                       format = colFormat(percent = TRUE, digits = 1)),
+                change_19_20  = colDef(minWidth = 125,
+                                       name = "Change from\n2019-2020",
+                                       format = colFormat(percent = TRUE, digits = 1)))
+                )
   )
 
   ################################################################################
@@ -211,91 +255,92 @@ server <- function(input, output, session) {
   # Static hex map
   ##############
 
-  output$static_hex_map <- renderPlot({
+  # output$static_hex_map <- renderPlot({
+  #
+  #   combined_new <- merge(combined, df_map(), by.x = "name.x", by.y = "state")
+  #   combined_labels_new <- merge(combined_labels, df_map(), by.x = "name.x", by.y = "state")
+  #
+  #   NA_color <- "grey80"
+  #
+  #   if(input$choice_map_counts == "Change from Previous Year"){
+  #     ggplot(combined_new) +
+  #       geom_sf(aes(fill = total),     color = NA       ) +  #color (non-NA) hex
+  #       geom_sf(    fill = NA,          aes(color = "NA")    ) +  #dummy legend for NA values
+  #       geom_sf(    fill = NA,              color = "grey50" ) +  #hex borders
+  #       geom_sf_text(
+  #         data=mutate(combined_labels_new, geometry=geometry+c(0, 5))
+  #         , aes(label=abb_usps)
+  #         , fontface="bold"
+  #         , size=5
+  #       ) +
+  #       geom_sf_text(
+  #         data=mutate(combined_labels_new, geometry=geometry+c(0,-5))
+  #         , aes(label=scales::percent(total, accuracy=0.1))
+  #         , size=4
+  #       ) +
+  #       scale_fill_gradient2(
+  #         name = "Change"
+  #         , low  = "#65ace1"
+  #         , mid  = "#ffffff"
+  #         , high = "#ee7600"
+  #         , midpoint = 0
+  #         , labels = scales::percent
+  #         , na.value = NA_color
+  #       ) +
+  #       scale_color_manual( #dummy legend for NA color
+  #         name = NULL
+  #         , values = NA_color
+  #         , labels = 'No data'
+  #       ) +
+  #       guides(
+  #         fill  = guide_colorbar(order = 1)
+  #         , color = guide_legend(override.aes = list(fill = NA_color))
+  #       ) +
+  #       theme_void()+
+  #       theme(legend.title=element_text(size=14),
+  #             legend.text=element_text(size=14))
+  #   }
+  #
+  #   else if(input$choice_map_counts == "Count"){
+  #     ggplot(combined_new) +
+  #       geom_sf(aes(fill = total),     color = NA       ) +  #color (non-NA) hex
+  #       geom_sf(    fill = NA,          aes(color = "NA")    ) +  #dummy legend for NA values
+  #       geom_sf(    fill = NA,              color = "grey50" ) +  #hex borders
+  #       geom_sf_text(
+  #         data=mutate(combined_labels_new, geometry=geometry+c(0, 5))
+  #         , aes(label=abb_usps)
+  #         , fontface="bold"
+  #         , size=5
+  #       ) +
+  #       geom_sf_text(
+  #         data=mutate(combined_labels_new, geometry=geometry+c(0,-5))
+  #         , aes(label=scales::comma(total))
+  #         , size=4
+  #       ) +
+  #       scale_fill_gradient2(
+  #         name = "Count"
+  #         , low  = "#ffffff"
+  #         , mid  = "#9cccec"
+  #         , high = "#65ace1"
+  #         , midpoint = 0
+  #         , labels = scales::comma
+  #         , na.value = NA_color
+  #       ) +
+  #       scale_color_manual( #dummy legend for NA color
+  #         name = NULL
+  #         , values = NA_color
+  #         , labels = 'No data'
+  #       ) +
+  #       guides(
+  #         fill  = guide_colorbar(order = 1)
+  #         , color = guide_legend(override.aes = list(fill = NA_color))
+  #       ) +
+  #       theme_void()+
+  #       theme(legend.title=element_text(size=14),
+  #             legend.text=element_text(size=14))
+  #   }
+  # })
 
-    combined_new <- merge(combined, df_map(), by.x = "name.x", by.y = "state")
-    combined_labels_new <- merge(combined_labels, df_map(), by.x = "name.x", by.y = "state")
-
-    NA_color <- "grey80"
-
-    if(input$choice_map_counts == "Change from Previous Year"){
-      ggplot(combined_new) +
-        geom_sf(aes(fill = total),     color = NA       ) +  #color (non-NA) hex
-        geom_sf(    fill = NA,          aes(color = "NA")    ) +  #dummy legend for NA values
-        geom_sf(    fill = NA,              color = "grey50" ) +  #hex borders
-        geom_sf_text(
-          data=mutate(combined_labels_new, geometry=geometry+c(0, 5))
-          , aes(label=abb_usps)
-          , fontface="bold"
-          , size=5
-        ) +
-        geom_sf_text(
-          data=mutate(combined_labels_new, geometry=geometry+c(0,-5))
-          , aes(label=scales::percent(total, accuracy=0.1))
-          , size=4
-        ) +
-        scale_fill_gradient2(
-          name = "Change"
-          , low  = "#65ace1"
-          , mid  = "#ffffff"
-          , high = "#ee7600"
-          , midpoint = 0
-          , labels = scales::percent
-          , na.value = NA_color
-        ) +
-        scale_color_manual( #dummy legend for NA color
-          name = NULL
-          , values = NA_color
-          , labels = 'No data'
-        ) +
-        guides(
-          fill  = guide_colorbar(order = 1)
-          , color = guide_legend(override.aes = list(fill = NA_color))
-        ) +
-        theme_void()+
-        theme(legend.title=element_text(size=14),
-              legend.text=element_text(size=14))
-    }
-
-    else if(input$choice_map_counts == "Count"){
-      ggplot(combined_new) +
-        geom_sf(aes(fill = total),     color = NA       ) +  #color (non-NA) hex
-        geom_sf(    fill = NA,          aes(color = "NA")    ) +  #dummy legend for NA values
-        geom_sf(    fill = NA,              color = "grey50" ) +  #hex borders
-        geom_sf_text(
-          data=mutate(combined_labels_new, geometry=geometry+c(0, 5))
-          , aes(label=abb_usps)
-          , fontface="bold"
-          , size=5
-        ) +
-        geom_sf_text(
-          data=mutate(combined_labels_new, geometry=geometry+c(0,-5))
-          , aes(label=scales::comma(total))
-          , size=4
-        ) +
-        scale_fill_gradient2(
-          name = "Count"
-          , low  = "#ffffff"
-          , mid  = "#9cccec"
-          , high = "#65ace1"
-          , midpoint = 0
-          , labels = scales::comma
-          , na.value = NA_color
-        ) +
-        scale_color_manual( #dummy legend for NA color
-          name = NULL
-          , values = NA_color
-          , labels = 'No data'
-        ) +
-        guides(
-          fill  = guide_colorbar(order = 1)
-          , color = guide_legend(override.aes = list(fill = NA_color))
-        ) +
-        theme_void()+
-        theme(legend.title=element_text(size=14),
-              legend.text=element_text(size=14))
-    }
-  })
 
 
   ##############
@@ -314,9 +359,8 @@ server <- function(input, output, session) {
 
   # download button for data
   output$save_data <- downloadHandler(
-
     filename = function() {
-      paste0(input$data_map_counts, "_", input$adm_or_pop_map_counts,"_", input$choice_map_counts, ".xlsx", sep="")
+      paste0(input$data_map_counts, "_", input$adm_or_pop_map_counts, ".xlsx", sep="")
     },
     content = function(file) {
       wb <- createWorkbook()
@@ -325,6 +369,51 @@ server <- function(input, output, session) {
       saveWorkbook(wb, file = file, overwrite = TRUE)
     }
   )
+
+  output$static_hex_map <- renderPlot({
+
+    combined_new <- merge(combined, df_map(), by.x = "name.x", by.y = "state")
+    combined_labels_new <- merge(combined_labels, df_map(), by.x = "name.x", by.y = "state")
+
+    NA_color <- "grey80"
+
+    ggplot(combined_new) +
+      geom_sf(aes(fill = total),     color = NA       ) +  #color (non-NA) hex
+      geom_sf(    fill = NA,          aes(color = "NA")    ) +  #dummy legend for NA values
+      geom_sf(    fill = NA,              color = "grey50" ) +  #hex borders
+      geom_sf_text(
+        data=mutate(combined_labels_new, geometry=geometry+c(0, 5))
+        , aes(label=abb_usps)
+        , fontface="bold"
+        , size=5
+      ) +
+      geom_sf_text(
+        data=mutate(combined_labels_new, geometry=geometry+c(0,-5))
+        , aes(label=scales::percent(total, accuracy=0.1))
+        , size=4
+      ) +
+      scale_fill_gradient2(
+        name = "Change"
+        , low  = "#65ace1"
+        , mid  = "#ffffff"
+        , high = "#ee7600"
+        , midpoint = 0
+        , labels = scales::percent
+        , na.value = NA_color
+      ) +
+      scale_color_manual( #dummy legend for NA color
+        name = NULL
+        , values = NA_color
+        , labels = 'No data'
+      ) +
+      guides(
+        fill  = guide_colorbar(order = 1)
+        , color = guide_legend(override.aes = list(fill = NA_color))
+      ) +
+      theme_void()+
+      theme(legend.title=element_text(size=14),
+            legend.text=element_text(size=14))
+  })
 
   ################################################################################
   ################################################################################
@@ -1307,7 +1396,17 @@ server <- function(input, output, session) {
     else if(input$dataset == "Annual Probation Survey and Annual Parole Survey (BJS)"){
       DT::datatable(
         datasetInput(),
-        colnames = c('State', 'Year', 'Type' ,'Population', 'Number Incarcerated', 'Revocation Rate'),
+        colnames = c('State',
+                     'Year',
+                     'Overall Population' ,
+                     'Parole Population',
+                     'Probation Population',
+                     'Overall Incarcerated' ,
+                     'Parole Incarcerated',
+                     'Probation Incarcerated',
+                     'Overall Revocation Rate' ,
+                     'Parole Revocation Rate',
+                     'Probation Revocation Rate'),
         rownames = FALSE,
         options = list(
           dom = 'Blfrtip',
@@ -1324,7 +1423,7 @@ server <- function(input, output, session) {
                 list(extend = 'pdf', filename = "bjs_probation_parole")),
               text = 'Download'))),
         extensions = 'Buttons') %>%
-        formatPercentage(c("rev_rate"), 2)
+        formatPercentage(c("overall_rev_rate", "parole_rev_rate", "prob_rev_rate"), 2)
     }
 
   })

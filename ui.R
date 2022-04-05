@@ -28,17 +28,18 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                           ########
                                           br(),
                                           wellPanel(tags$style(type="text/css", '#leftPanel {width:200px; float:left;}'), id = "leftPanel",
-                                                    selectInput("data_map_counts",       "Data",  choices = unique(adm_pop_long$metric)),
-                                                    selectInput("adm_or_pop_map_counts", "Type",  choices = unique(adm_pop_long$adm_or_pop)),
+                                                    selectInput("data_map_counts",       "Data",  choices = unique(mclc_explorer$metric)),
+                                                    selectInput("adm_or_pop_map_counts", "Type",  choices = unique(mclc_explorer$adm_or_pop)),
+                                                    selectInput("year_map_counts",       "Year",  choices = unique(mclc_explorer$year)),
 
-                                                    radioButtons("choice_map_counts",    "Value", choices = c("Change from Previous Year", "Count"),
-                                                                                                  selected = "Change from Previous Year"),
-                                                    conditionalPanel(
-                                                      condition = "input.choice_map_counts == 'Count'",
-                                                      selectInput("year_map_counts",     "Year",  choices = c(2018, 2019, 2020))),
-                                                    conditionalPanel(
-                                                      condition = "input.choice_map_counts == 'Change from Previous Year'",
-                                                      selectInput("year_map_counts2",    "Year",  choices = c(2019, 2020))),
+                                                    # radioButtons("choice_map_counts",    "Value", choices = c("Change from Previous Year", "Count"),
+                                                    #                                               selected = "Change from Previous Year"),
+                                                    # conditionalPanel(
+                                                    #   condition = "input.choice_map_counts == 'Count'",
+                                                    #   selectInput("year_map_counts",     "Year",  choices = c(2018, 2019, 2020))),
+                                                    # conditionalPanel(
+                                                    #   condition = "input.choice_map_counts == 'Change from Previous Year'",
+                                                    #   selectInput("year_map_counts2",    "Year",  choices = c(2019, 2020))),
 
                                                     # download buttons
                                                     # downloadButton(outputId = "save_map", label = "Download Map"),
@@ -58,7 +59,6 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                             fluidRow(column(width = 12,
                                                             align = "center",
                                                             plotOutput("static_hex_map", height = 600))),
-                                            br(),
                                             fluidRow(column(width = 12,
                                                             align = "center",
                                                             reactableOutput("table_map_counts"))),
@@ -78,7 +78,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                           ########
                                           br(),
                                           wellPanel(tags$style(type="text/css", '#leftPanel { width:200px; float:left;}'), id = "leftPanel",
-                                                    selectInput("bubble_type", "Supervision Type", choices = c("Parole", "Probation")),
+                                                    selectInput("bubble_type", "Supervision Type", choices = unique(bjs_bubble$type)),
                                                     selectInput("bubble_year", "Year",             choices = unique(bjs_bubble$year)),
                                           ),
                                           ########
