@@ -44,9 +44,7 @@ server <- function(input, output, session) {
   # })
 
   df_map_table <- reactive({
-
     filter_by <- paste0(input$data_map_counts, " ", input$adm_or_pop_map_counts)
-
     mclc_explorer_table %>%
       filter(data == filter_by) %>%
       arrange(state)
@@ -154,10 +152,10 @@ server <- function(input, output, session) {
                 `2018`        = colDef(minWidth = 100),
                 `2019`        = colDef(minWidth = 100),
                 `2020`        = colDef(minWidth = 100),
-                change_18_19  = colDef(minWidth = 125,
+                `2018 - 2019` = colDef(minWidth = 125,
                                        name = "Change from\n2018-2019",
                                        format = colFormat(percent = TRUE, digits = 1)),
-                change_19_20  = colDef(minWidth = 125,
+                `2019 - 2020` = colDef(minWidth = 125,
                                        name = "Change from\n2019-2020",
                                        format = colFormat(percent = TRUE, digits = 1)))
                 )
@@ -352,10 +350,10 @@ server <- function(input, output, session) {
   #   reactive_map()
   # })
 
-  # # download button for map
-  # output$save_map <- downloadHandler(
-  #   filename = "map.html",
-  #   content = function(file){saveWidget(widget = reactive_map(), file = file)})
+  # download button for map
+  output$save_map <- downloadHandler(
+    filename = "map.html",
+    content = function(file){saveWidget(widget = reactive_map(), file = file)})
 
   # download button for data
   output$save_data <- downloadHandler(
@@ -710,7 +708,7 @@ server <- function(input, output, session) {
                           'Year: ', df$year, '<br>',
                           'Total: ', formattable::comma(df$total, digits = 0),'<br>')) %>%
       # customize layout
-      layout(title = list(text = paste0('<b>Supervision Violation\n', input$adm_or_pop, ' by Type</b>\n'), font = list(size = 14)),
+      layout(title = list(text = paste0('<b>Supervision Violation ', input$adm_or_pop, ' by Type</b>\n'), font = list(size = 14)),
              font = list(size = 12),
              plot_bgcolor='#FFFFFF',
              xaxis = list(
@@ -1372,17 +1370,19 @@ server <- function(input, output, session) {
 
   # Generate a summary of the dataset ----
   output$main_table <- DT::renderDataTable({
-    if     (input$dataset == "More Community, Less Confinement (CSG)"){
+    if (input$dataset == "More Community, Less Confinement (CSG)"){
       DT::datatable(
         datasetInput(),
-        colnames = c('State', 'Year', 'Data', 'Total', 'Admissions or Population'),
+        colnames = c('State', 'Year', 'Data', 'Total'),
         rownames = FALSE,
         options = list(
+          columnDefs = list(list(className = 'dt-left', targets = '_all')),
           dom = 'Blfrtip',
           pageLength = 20,
           lengthMenu = list(c(10, 20,-1), c('10', '20', 'All')),
           deferRender = TRUE,
-          searching = TRUE,
+          searching = FALSE,
+          columnDefs = list(list(className = 'dt-right', targets = c("state"))),
           buttons =
             list('copy', 'print', list(
               extend = 'collection',
@@ -1390,8 +1390,12 @@ server <- function(input, output, session) {
                 list(extend = 'csv', filename = "bjs_probation_parole"),
                 list(extend = 'excel', filename = "bjs_probation_parole"),
                 list(extend = 'pdf', filename = "bjs_probation_parole")),
-              text = 'Download'))),
-        extensions = 'Buttons')
+              text = 'Download')),
+        extensions = 'Buttons')) %>%
+        formatCurrency("total", currency = "", interval = 3, mark = ",", digits = 0) %>%
+        formatStyle(columns = c("state"), width='55px') %>%
+        formatStyle(columns = c("year", "total"), width='55px') %>%
+        formatStyle(columns = c("text"), width='125px')
     }
     else if(input$dataset == "Annual Probation Survey and Annual Parole Survey (BJS)"){
       DT::datatable(
@@ -1413,7 +1417,7 @@ server <- function(input, output, session) {
           pageLength = 20,
           lengthMenu = list(c(10, 20,-1), c('10', '20', 'All')),
           deferRender = TRUE,
-          searching = TRUE,
+          searching = FALSE,
           buttons =
             list('copy', 'print', list(
               extend = 'collection',
@@ -1423,7 +1427,10 @@ server <- function(input, output, session) {
                 list(extend = 'pdf', filename = "bjs_probation_parole")),
               text = 'Download'))),
         extensions = 'Buttons') %>%
-        formatPercentage(c("overall_rev_rate", "parole_rev_rate", "prob_rev_rate"), 2)
+        formatPercentage(c("overall_rev_rate", "parole_rev_rate", "prob_rev_rate"), 2) %>%
+        formatCurrency(c("overall_population", "parole_population", "prob_population",
+                         "overall_incarcerated", "parole_incarcerated", "prob_incarcerated"),
+                       currency = "", interval = 3, mark = ",", digits = 0)
     }
 
   })

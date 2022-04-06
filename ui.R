@@ -5,7 +5,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                     sidebar = dashboardSidebar(
                       sidebarMenu(id = "tabs",
                                   menuItem(text = "Map Explorer",  tabName = "Map_Explorer"),
-                                  menuItem(text = "National",      tabName = "National"),
+                                  # menuItem(text = "National",      tabName = "National"),
                                   menuItem(text = "State Reports", tabName = "State_Reports"),
                                   menuItem(text = "Download Data", tabName = "Download_Data")
                       )
@@ -30,7 +30,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                           wellPanel(tags$style(type="text/css", '#leftPanel {width:200px; float:left;}'), id = "leftPanel",
                                                     selectInput("data_map_counts",       "Data",  choices = unique(mclc_explorer$metric)),
                                                     selectInput("adm_or_pop_map_counts", "Type",  choices = unique(mclc_explorer$adm_or_pop)),
-                                                    selectInput("year_map_counts",       "Year",  choices = unique(mclc_explorer$year)),
+                                                    selectInput("year_map_counts",       "Years", choices = unique(mclc_explorer$year)),
 
                                                     # radioButtons("choice_map_counts",    "Value", choices = c("Change from Previous Year", "Count"),
                                                     #                                               selected = "Change from Previous Year"),
@@ -42,7 +42,8 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                     #   selectInput("year_map_counts2",    "Year",  choices = c(2019, 2020))),
 
                                                     # download buttons
-                                                    # downloadButton(outputId = "save_map", label = "Download Map"),
+                                                    downloadButton(outputId = "save_map", label = "Download Map"),
+                                                    br(),
                                                     downloadButton(outputId = "save_data", label = "Download Data")
                                           ),
                                           ########
@@ -71,34 +72,34 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
 # National - Bubble Chart
 #--------------------------------------------------------------------------------------------------------------
 
-                        tabItem(tabName = "National",
-
-                                fluidPage(########
-                                          # Side panel
-                                          ########
-                                          br(),
-                                          wellPanel(tags$style(type="text/css", '#leftPanel { width:200px; float:left;}'), id = "leftPanel",
-                                                    selectInput("bubble_type", "Supervision Type", choices = unique(bjs_bubble$type)),
-                                                    selectInput("bubble_year", "Year",             choices = unique(bjs_bubble$year)),
-                                          ),
-                                          ########
-                                          # Map
-                                          ########
-                                          mainPanel(
-                                            fluidRow(column(width = 12,
-                                                            align = "left",
-                                                            br(),
-                                                            textOutput("selected_bubble_chart"),
-                                                            tags$head(tags$style("#selected_bubble_chart{font-size: 20px;
-                                                                                                         font-style: bold;
-                                                                                                         font-family: sans-serif;}")))),
-                                            fluidRow(column(width = 12,
-                                                            align = "center",
-                                                            highchartOutput("bubble_chart", height = 600))),
-                                            br()
-                                          ) #mainPanel
-                                ) #fluidPage
-                        ), #tabItem
+                        # tabItem(tabName = "National",
+                        #
+                        #         fluidPage(########
+                        #                   # Side panel
+                        #                   ########
+                        #                   br(),
+                        #                   wellPanel(tags$style(type="text/css", '#leftPanel { width:200px; float:left;}'), id = "leftPanel",
+                        #                             selectInput("bubble_type", "Supervision Type", choices = unique(bjs_bubble$type)),
+                        #                             selectInput("bubble_year", "Year",             choices = unique(bjs_bubble$year)),
+                        #                   ),
+                        #                   ########
+                        #                   # Map
+                        #                   ########
+                        #                   mainPanel(
+                        #                     fluidRow(column(width = 12,
+                        #                                     align = "left",
+                        #                                     br(),
+                        #                                     textOutput("selected_bubble_chart"),
+                        #                                     tags$head(tags$style("#selected_bubble_chart{font-size: 20px;
+                        #                                                                                  font-style: bold;
+                        #                                                                                  font-family: sans-serif;}")))),
+                        #                     fluidRow(column(width = 12,
+                        #                                     align = "center",
+                        #                                     highchartOutput("bubble_chart", height = 600))),
+                        #                     br()
+                        #                   ) #mainPanel
+                        #         ) #fluidPage
+                        # ), #tabItem
 
 #--------------------------------------------------------------------------------------------------------------
 # State Reports
@@ -222,7 +223,8 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
 
                         tabItem(tabName = "Download_Data",
 
-                                fluidPage(wellPanel(tags$style(type="text/css", '#leftPanel { width:250px; float:left;}'), id = "leftPanel",
+                                fluidPage(br(),
+                                          wellPanel(tags$style(type="text/css", '#leftPanel { width:250px; float:left;}'), id = "leftPanel",
                                                     selectInput(inputId = "dataset",
                                                                 label = "Dataset",
                                                                 choices = c("More Community, Less Confinement (CSG)", "Annual Probation Survey and Annual Parole Survey (BJS)")),
@@ -230,7 +232,6 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                     pickerInput(inputId = 'state_table', label = 'State(s)', choices = NULL, selected = NULL, multiple = TRUE, options = list(`actions-box` = TRUE))
                                           ), # wellPanel
                                           mainPanel(
-                                            br(),
                                             fluidRow(#column(width = 1),
                                                      column(width = 12,
                                                             h3("Download Data"),
@@ -247,7 +248,8 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                             ),
                                             fluidRow(
                                               #column(width = 1),
-                                              column(width = 12, align = "center", DT::dataTableOutput("main_table"))
+                                              column(width = 12,
+                                                     DT::dataTableOutput("main_table"))
                                               #column(width = 1)
                                               )
                                           ) #mainPanel

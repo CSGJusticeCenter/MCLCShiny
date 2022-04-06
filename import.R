@@ -77,7 +77,7 @@ centers <- centers[centers$id != "DC", ]
 
 # clean stateAbb file
 stateAbb <- clean_names(stateAbb)
-stateAbb <- stateAbb %>% select(state,
+stateAbb <- stateAbb %>% select(state = i_state,
                                 Abbrev = abbrev,
                                 Code = code)
 
@@ -1048,7 +1048,7 @@ csg <- merge(csg, region, by = "state")
 csg <- create_data_text(csg)
 
 # select data and change data types
-csg <- csg %>% ungroup() %>% select(state, year, text, total, adm_or_pop)
+csg <- csg %>% ungroup() %>% select(state, year, text, total)
 csg$state <- as.character(csg$state)
 csg$year <- as.numeric(csg$year)
 
