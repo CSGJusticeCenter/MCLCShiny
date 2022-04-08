@@ -50,9 +50,10 @@ server <- function(input, output, session) {
               columns = list(
                 state         = colDef(name = "State",
                                        align = "left",
-                                       minWidth = 100),
+                                       minWidth = 150,
+                                       style = function(value){list(fontWeight = "bold")}),
                 data          = colDef(name = "Data",
-                                       minWidth = 150),
+                                       minWidth = 140),
                 `2018`        = colDef(minWidth = 100),
                 `2019`        = colDef(minWidth = 100),
                 `2020`        = colDef(minWidth = 100),
@@ -130,9 +131,9 @@ server <- function(input, output, session) {
     filename = function(){
       paste(input$data_map_counts, "_", input$adm_or_pop_map_counts, "_Change_", input$year_map_counts, '.png', sep = '')
     },
-    content = function(file){
+    content = function(filename){
       req(reactive_map())
-      ggsave(file, plot = reactive_map(), device = 'png')
+      ggsave(filename, plot = reactive_map(), device = 'png', width=11, height=8.5)
     }
   )
 
@@ -1103,7 +1104,11 @@ server <- function(input, output, session) {
         formatPercentage(c("overall_rev_rate", "parole_rev_rate", "prob_rev_rate"), 2) %>%
         formatCurrency(c("overall_population", "parole_population", "prob_population",
                          "overall_incarcerated", "parole_incarcerated", "prob_incarcerated"), currency = "", interval = 3, mark = ",", digits = 0) %>%
-        formatStyle(columns = c("state"), width='65px')
+        formatStyle(columns = c("state"), width='65px') %>%
+        formatStyle(columns = c("year"), width='10px') %>%
+        formatStyle(columns = c("overall_population", "parole_population", "prob_population",
+                                "overall_incarcerated", "parole_incarcerated", "prob_incarcerated",
+                                "overall_rev_rate", "parole_rev_rate", "prob_rev_rate"), width='20px')
     }
   })
 
