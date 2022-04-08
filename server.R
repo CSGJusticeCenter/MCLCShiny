@@ -200,33 +200,13 @@ server <- function(input, output, session) {
 
   output$total_change <- renderValueBox({
 
-    if(df_vb_total()$change > 0){
-      valueBox2(
-        comma(df_vb_total()$total, digits = 0),
-        title = paste0(input$adm_or_pop, " in 2020"),
-        subtitle = tagList(HTML("&uarr;"), paste0(df_vb_total()$change, "% from 2019")),
-        color = "black",
-        href = NULL
-      )
-    }
-    else if(df_vb_total()$change < 0){
-      valueBox2(
-        comma(df_vb_total()$total, digits = 0),
-        title = paste0(input$adm_or_pop, " in 2020"),
-        subtitle = tagList(HTML("&darr;"), paste0(df_vb_total()$change, "% from 2019")),
-        color = "black",
-        href = NULL
-      )
-    }
-    else{
-      valueBox2(
-        comma(df_vb_total()$total, digits = 0),
-        title = paste0(input$adm_or_pop, " in 2020"),
-        subtitle = tagList(HTML("&darr;"), paste0(df_vb_total()$change, "% from 2019")),
-        color = "black",
-        href = NULL
-      )
-    }
+    valueBox2(
+      comma(df_vb_total()$total, digits = 0),
+      title = paste0(input$adm_or_pop, " in 2020"),
+      subtitle = tagList(HTML("&darr;"), paste0(df_vb_total()$change, "% from 2019")),
+      color = "black",
+      href = NULL
+    )
 
   })
 
