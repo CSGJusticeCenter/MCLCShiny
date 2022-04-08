@@ -200,15 +200,33 @@ server <- function(input, output, session) {
 
   output$total_change <- renderValueBox({
 
-    valueBox2(
-      comma(df_vb_total()$total, digits = 0),
-      title = paste0(input$adm_or_pop, " in 2020"),
-      subtitle = tagList(HTML("&darr;"), paste0(df_vb_total()$change, "% from 2019")),
-      # icon = icon("arrow-down"),
-      # width = 10,
-      color = "black",
-      href = NULL
-    )
+    if(df_vb_total()$change > 0){
+      valueBox2(
+        comma(df_vb_total()$total, digits = 0),
+        title = paste0(input$adm_or_pop, " in 2020"),
+        subtitle = tagList(HTML("&uarr;"), paste0(df_vb_total()$change, "% from 2019")),
+        color = "black",
+        href = NULL
+      )
+    }
+    else if(df_vb_total()$change < 0){
+      valueBox2(
+        comma(df_vb_total()$total, digits = 0),
+        title = paste0(input$adm_or_pop, " in 2020"),
+        subtitle = tagList(HTML("&darr;"), paste0(df_vb_total()$change, "% from 2019")),
+        color = "black",
+        href = NULL
+      )
+    }
+    else{
+      valueBox2(
+        comma(df_vb_total()$total, digits = 0),
+        title = paste0(input$adm_or_pop, " in 2020"),
+        subtitle = tagList(HTML("&darr;"), paste0(df_vb_total()$change, "% from 2019")),
+        color = "black",
+        href = NULL
+      )
+    }
 
   })
 
@@ -218,8 +236,6 @@ server <- function(input, output, session) {
       comma(df_vb_sup_viols()$total, digits = 0),
       title = paste0("Violation ", input$adm_or_pop, " in 2020"),
       subtitle = tagList(HTML("&darr;"), paste0(df_vb_sup_viols()$change, "% from 2019")),
-      # icon = icon("arrow-down"),
-      # width = 10,
       color = "black",
       href = NULL
     )
@@ -232,8 +248,6 @@ server <- function(input, output, session) {
       comma(df_vb_tech()$total, digits = 0),
       title = paste0("Technical ", input$adm_or_pop, " in 2020"),
       subtitle = tagList(HTML("&darr;"), paste0(df_vb_tech()$change, "% from 2019")),
-      # icon = icon("arrow-down"),
-      # width = 10,
       color = "black",
       href = NULL
     )
@@ -246,8 +260,6 @@ server <- function(input, output, session) {
       paste0(round(df_bjs_rate()$rev_rate_20*100, 2), "%"),
       title = "Revovation Rate in 2020",
       subtitle = tagList(HTML("&darr;"), paste0(round(df_bjs_rate()$rev_rate_change*100, 0), "% from 2019")),
-      # icon = icon("arrow-down"),
-      # width = 10,
       color = "black",
       href = NULL
     )
