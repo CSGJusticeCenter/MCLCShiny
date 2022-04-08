@@ -20,7 +20,7 @@
 library(formattable)
 
 # use to pull state population data
-# census_api_key("37fb837476737351145409de9fceaa40d6164494")
+# census_api_key("YOUR API KEY HERE")
 
 ########
 # Import data

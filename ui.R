@@ -5,7 +5,6 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                     sidebar = dashboardSidebar(
                       sidebarMenu(id = "tabs",
                                   menuItem(text = "Map Explorer",  tabName = "Map_Explorer"),
-                                  # menuItem(text = "National",      tabName = "National"),
                                   menuItem(text = "State Reports", tabName = "State_Reports"),
                                   menuItem(text = "Download Data", tabName = "Download_Data")
                       )
@@ -28,22 +27,12 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                           ########
                                           br(),
                                           wellPanel(tags$style(type="text/css", '#leftPanel {width:200px; float:left;}'), id = "leftPanel",
-                                                    selectInput("data_map_counts",       "Data",  choices = unique(mclc_explorer$metric)),
+                                                    selectInput("data_map_counts",       "Data",  choices = c("Total", "Supervision Violations",
+                                                                                                              "Technical", "New Offense",
+                                                                                                              "Parole", "Probation")),
                                                     selectInput("adm_or_pop_map_counts", "Type",  choices = unique(mclc_explorer$adm_or_pop)),
                                                     selectInput("year_map_counts",       "Years", choices = unique(mclc_explorer$year)),
-
-                                                    # radioButtons("choice_map_counts",    "Value", choices = c("Change from Previous Year", "Count"),
-                                                    #                                               selected = "Change from Previous Year"),
-                                                    # conditionalPanel(
-                                                    #   condition = "input.choice_map_counts == 'Count'",
-                                                    #   selectInput("year_map_counts",     "Year",  choices = c(2018, 2019, 2020))),
-                                                    # conditionalPanel(
-                                                    #   condition = "input.choice_map_counts == 'Change from Previous Year'",
-                                                    #   selectInput("year_map_counts2",    "Year",  choices = c(2019, 2020))),
-
-                                                    # download buttons
-                                                    downloadButton(outputId = "save_map", label = "Download Map"),
-                                                    br(),
+                                                    downloadButton(outputId = "save_map",  label = "Download Map"),
                                                     downloadButton(outputId = "save_data", label = "Download Data")
                                           ),
                                           ########
@@ -59,7 +48,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                                                                 font-family: sans-serif;}")))),
                                             fluidRow(column(width = 12,
                                                             align = "center",
-                                                            plotOutput("static_hex_map", height = 600))),
+                                                            plotOutput("reactive_map", height = 600))),
                                             fluidRow(column(width = 12,
                                                             align = "center",
                                                             reactableOutput("table_map_counts"))),
@@ -67,39 +56,6 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                           ) #mainPanel
                                 ) #fluidPage
                         ), #tabItem
-
-#--------------------------------------------------------------------------------------------------------------
-# National - Bubble Chart
-#--------------------------------------------------------------------------------------------------------------
-
-                        # tabItem(tabName = "National",
-                        #
-                        #         fluidPage(########
-                        #                   # Side panel
-                        #                   ########
-                        #                   br(),
-                        #                   wellPanel(tags$style(type="text/css", '#leftPanel { width:200px; float:left;}'), id = "leftPanel",
-                        #                             selectInput("bubble_type", "Supervision Type", choices = unique(bjs_bubble$type)),
-                        #                             selectInput("bubble_year", "Year",             choices = unique(bjs_bubble$year)),
-                        #                   ),
-                        #                   ########
-                        #                   # Map
-                        #                   ########
-                        #                   mainPanel(
-                        #                     fluidRow(column(width = 12,
-                        #                                     align = "left",
-                        #                                     br(),
-                        #                                     textOutput("selected_bubble_chart"),
-                        #                                     tags$head(tags$style("#selected_bubble_chart{font-size: 20px;
-                        #                                                                                  font-style: bold;
-                        #                                                                                  font-family: sans-serif;}")))),
-                        #                     fluidRow(column(width = 12,
-                        #                                     align = "center",
-                        #                                     highchartOutput("bubble_chart", height = 600))),
-                        #                     br()
-                        #                   ) #mainPanel
-                        #         ) #fluidPage
-                        # ), #tabItem
 
 #--------------------------------------------------------------------------------------------------------------
 # State Reports
@@ -232,8 +188,7 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                     pickerInput(inputId = 'state_table', label = 'State(s)', choices = NULL, selected = NULL, multiple = TRUE, options = list(`actions-box` = TRUE))
                                           ), # wellPanel
                                           mainPanel(
-                                            fluidRow(#column(width = 1),
-                                                     column(width = 12,
+                                            fluidRow(column(width = 12,
                                                             h3("Download Data"),
                                                             br(),
                                                             textOutput("selected_data"),
@@ -244,13 +199,10 @@ ui <- dashboardPage(dashboardHeader(title = "MCLC"),
                                                             textOutput("selected_data_info"),
                                                             br(),
                                                             br())
-                                                     #column(width = 1)
                                             ),
                                             fluidRow(
-                                              #column(width = 1),
                                               column(width = 12,
                                                      DT::dataTableOutput("main_table"))
-                                              #column(width = 1)
                                               )
                                           ) #mainPanel
                                 ) #fluidPage
