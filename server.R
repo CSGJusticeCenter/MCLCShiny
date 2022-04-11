@@ -200,10 +200,27 @@ server <- function(input, output, session) {
 
   output$total_change <- renderValueBox({
 
+    if(is.na(df_vb_total()$change)){
+      text <- "No Data"
+    }
+    else if(df_vb_total()$change < 0){
+      text <- tagList(HTML("&darr;"), paste0(df_vb_total()$change, "% from 2019"))
+    }
+    else{
+      text <- tagList(HTML("&uarr;"), paste0(df_vb_total()$change, "% from 2019"))
+    }
+
+    if(is.na(df_vb_total()$total)){
+      header <- "No Data"
+    }
+    else{
+      header <- comma(df_vb_total()$total, digits = 0)
+    }
+
     valueBox2(
-      comma(df_vb_total()$total, digits = 0),
+      header,
       title = paste0(input$adm_or_pop, " in 2020"),
-      subtitle = tagList(HTML("&darr;"), paste0(df_vb_total()$change, "% from 2019")),
+      subtitle = text,
       color = "black",
       href = NULL
     )
@@ -212,10 +229,27 @@ server <- function(input, output, session) {
 
   output$sup_change <- renderValueBox({
 
+    if(is.na(df_vb_sup_viols()$change)){
+      text <- "No Data"
+    }
+    else if(df_vb_sup_viols()$change < 0){
+      text <- tagList(HTML("&darr;"), paste0(df_vb_sup_viols()$change, "% from 2019"))
+    }
+    else{
+      text <- tagList(HTML("&uarr;"), paste0(df_vb_sup_viols()$change, "% from 2019"))
+    }
+
+    if(is.na(df_vb_sup_viols()$total)){
+      header <- "No Data"
+    }
+    else{
+      header <- comma(df_vb_sup_viols()$total, digits = 0)
+    }
+
     valueBox2(
-      comma(df_vb_sup_viols()$total, digits = 0),
+      header,
       title = paste0("Violation ", input$adm_or_pop, " in 2020"),
-      subtitle = tagList(HTML("&darr;"), paste0(df_vb_sup_viols()$change, "% from 2019")),
+      subtitle = text,
       color = "black",
       href = NULL
     )
@@ -224,10 +258,27 @@ server <- function(input, output, session) {
 
   output$tech_change <- renderValueBox({
 
+    if(is.na(df_vb_tech()$change)){
+      text <- "No Data"
+    }
+    else if(df_vb_tech()$change < 0){
+      text <- tagList(HTML("&darr;"), paste0(df_vb_tech()$change, "% from 2019"))
+    }
+    else{
+      text <- tagList(HTML("&uarr;"), paste0(df_vb_tech()$change, "% from 2019"))
+    }
+
+    if(is.na(df_vb_tech()$total)){
+      header <- "No Data"
+    }
+    else{
+      header <- comma(df_vb_tech()$total, digits = 0)
+    }
+
     valueBox2(
-      comma(df_vb_tech()$total, digits = 0),
+      header,
       title = paste0("Technical ", input$adm_or_pop, " in 2020"),
-      subtitle = tagList(HTML("&darr;"), paste0(df_vb_tech()$change, "% from 2019")),
+      subtitle = text,
       color = "black",
       href = NULL
     )
@@ -236,10 +287,27 @@ server <- function(input, output, session) {
 
   output$rev_rate <- renderValueBox({
 
+    if(is.na(df_bjs_rate()$rev_rate_change)){
+      text <- "No Data"
+    }
+    else if(df_bjs_rate()$rev_rate_change < 0){
+      text <- tagList(HTML("&darr;"), paste0(round(df_bjs_rate()$rev_rate_change*100, 0), "% from 2019"))
+    }
+    else{
+      text <- tagList(HTML("&uarr;"), paste0(round(df_bjs_rate()$rev_rate_change*100, 0), "% from 2019"))
+    }
+
+    if(is.na(df_bjs_rate()$rev_rate_20)){
+      header <- "No Data"
+    }
+    else{
+      header <- paste0(round(df_bjs_rate()$rev_rate_20*100, 2), "%")
+    }
+
     valueBox2(
-      paste0(round(df_bjs_rate()$rev_rate_20*100, 2), "%"),
+      header,
       title = "Revovation Rate in 2020",
-      subtitle = tagList(HTML("&darr;"), paste0(round(df_bjs_rate()$rev_rate_change*100, 0), "% from 2019")),
+      subtitle = text,
       color = "black",
       href = NULL
     )
