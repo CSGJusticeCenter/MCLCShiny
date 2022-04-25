@@ -1,11 +1,10 @@
 server <- function(input, output, session) {
 
-  ################################################################################
-  ################################################################################
-  # Map Explorer
-  ################################################################################
-  ################################################################################
+  #--------------------------------------------------------------------------------------------------------------
+  # Map Page
+  #--------------------------------------------------------------------------------------------------------------
 
+  # filter data based on user input
   df_map <- reactive({
     mclc_explorer %>%
       filter(adm_or_pop == input$adm_or_pop_map_counts,
@@ -13,6 +12,7 @@ server <- function(input, output, session) {
              year       == input$year_map_counts)
   })
 
+  # filter data for table underneath map based on user input
   df_map_table <- reactive({
     filter_by <- paste0(input$data_map_counts, " ", input$adm_or_pop_map_counts)
     mclc_explorer_table %>%
@@ -24,12 +24,8 @@ server <- function(input, output, session) {
   # Hex map title
   ##############
 
-  # Title of map
-  output$selected_map <- renderText({
-
-    paste("Change in ", input$data_map_counts, " ", input$adm_or_pop_map_counts, " from ", input$year_map_counts)
-
-  })
+  # title of map based on user input
+  output$selected_map <- renderText({paste("Change in ", input$data_map_counts, " ", input$adm_or_pop_map_counts, " from ", input$year_map_counts)})
 
   ##############
   # Table below map changes depending on count vs change
@@ -150,11 +146,9 @@ server <- function(input, output, session) {
     }
   )
 
-  ################################################################################
-  ################################################################################
+  #--------------------------------------------------------------------------------------------------------------
   # State Reports
-  ################################################################################
-  ################################################################################
+  #--------------------------------------------------------------------------------------------------------------
 
   # Print state name depending on state selected
   output$selected_state <- renderText({
@@ -565,7 +559,7 @@ server <- function(input, output, session) {
 
                                           dui_sparklineseries(
                                             curve = "linear",
-                                            showArea = TRUE,
+                                            showArea = FALSE,
                                             fill = colpal_fill[index],
                                             stroke = colpal_stroke[index])))})))
   })
