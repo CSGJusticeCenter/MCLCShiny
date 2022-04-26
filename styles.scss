@@ -25,6 +25,7 @@ body > div {
 }
 
 /* Top of page is a small grid of controls and info*/
+/* Can change background of header here   background-color:#DEF0F6; */
 #header {
   /*margin: 1rem auto; making everything shift to the left*/
   width: 768px;
@@ -39,19 +40,19 @@ body > div {
 /* Format for selector input adm-pop-map*/
 #adm-pop-map-btn {
   margin: 0 20px;
-  color: #355DA1;
   font-weight: bold;
   width: 200px;
 }
+#adm-pop-map {
+  background-color: yellow;
+}
 /* Format for selector input data-map*/
 #data-map-btn {
-  color: #355DA1;
   font-weight: bold;
   width: 200px;
 }
 /* Format for selector input year-map*/
 #year-map-btn {
-  color: #355DA1;
   font-weight: bold;
   width: 200px;
 }
@@ -62,6 +63,7 @@ body > div {
   margin: 0 20px;
   font-weight: bold;
   color: #FFFFFF;
+
 }
 /* Format for selector input save-map-data*/
 #save-map-data-btn {
@@ -72,6 +74,8 @@ body > div {
 .download_this{
     height:36px;
     width:200px;
+    text-align: left;
+    font-weight: bold;
 }
 
 

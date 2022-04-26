@@ -45,6 +45,12 @@ ui <- fluidPage(
   ),
   br(),
   div(id = "header",
+      #######
+      # Dropdown menus
+      #######
+      # tags$style(type="text/css", "#data_map {background-color:#DEF0F6}"),
+      # tags$style(type="text/css", "#adm_pop_map {background-color:#DEF0F6}"),
+      # tags$style(type="text/css", "#year_map {background-color:#DEF0F6}"),
       labeled_input('data-map-btn', "Select Data",
                     selectizeInput('data_map', label = NULL,
                                    choices = c("Total", "Supervision Violation", "Technical Violation", "New Offense", "Probation", "Parole"),
@@ -57,6 +63,10 @@ ui <- fluidPage(
                     selectizeInput('year_map', label = NULL,
                                    choices = c("2018", "2019", "2020"),
                                    multiple = FALSE)),
+
+      #######
+      # Download buttons
+      #######
       tags$style(type="text/css", "#save_map {background-color:#355DA1}"),
       tags$style(type="text/css", "#save_map_data {background-color:#355DA1}"),
       labeled_input('save-map-btn', "Download Map",
