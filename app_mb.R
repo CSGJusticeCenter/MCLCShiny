@@ -27,7 +27,7 @@ labeled_input <- function(id, label, input){
 # builds theme object to be supplied to ui
 my_theme <- bs_theme(
   bootswatch = "cosmo",
-  base_font = font_google("Lato")
+  base_font = font_google("Mukta")
 ) %>%
   bs_add_rules(sass::sass_file("styles.scss"))
 
@@ -56,7 +56,13 @@ ui <- fluidPage(
       labeled_input('year-map-btn', "Select Year",
                     selectizeInput('year_map', label = NULL,
                                    choices = c("2018", "2019", "2020"),
-                                   multiple = FALSE))
+                                   multiple = FALSE)),
+      tags$style(type="text/css", "#save_map {background-color:#355DA1}"),
+      tags$style(type="text/css", "#save_map_data {background-color:#355DA1}"),
+      labeled_input('save-map-btn', "Download Map",
+                    downloadButton(outputId = 'save_map', label = "Download Map", class = "download_this")),
+      labeled_input('save-map-data-btn', "Download Data",
+                    downloadButton(outputId = 'save_map_data', label = "Download Data", class = "download_this"))
   ),
   br(),
   div(class = "small_text",
