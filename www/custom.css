@@ -1,9 +1,0 @@
-@font-face {  
-  src: url(GraphikRegular.otf);
-  font-family: "GraphikRegular";
-}
-
-.p_Style {
-	font-family: 'GraphikRegular';
-	color: red;
-}
