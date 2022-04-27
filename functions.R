@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: import.R
 # Authors: Mari Roberts
-# Date: December 8, 2021
+# Date: April 27, 2022
 # Description:
 #    Defines custom functions
 #######################################
@@ -130,6 +130,7 @@ df <- df %>%
 }
 
 
+# clean bjs probation data sets
 clean_bjs_prob <- function(df){
 
   df$state <- gsub('/c','',df$state)
@@ -154,6 +155,7 @@ clean_bjs_prob <- function(df){
 
 }
 
+# clean bjs parole data sets
 clean_bjs_parole <- function(df){
 
   df$state <- gsub('/c','',df$state)
@@ -189,6 +191,7 @@ incarcerated_bjs_prob <- function(df){
   df <- df %>% select(state, year, type, incarcerated)
 }
 
+# create incarcerated variable
 incarcerated_bjs_parole <- function(df){
   df[] <- lapply(df, gsub, pattern = "..", replacement = NA, fixed = TRUE)
   df[] <- lapply(df, gsub, pattern = ",", replacement = "", fixed = TRUE)
@@ -219,155 +222,8 @@ bjs_prob_long_form <- function(df){
                factor_key=TRUE)
 }
 
-theme_csgjc_donut_plot <- function(){
-
-  # assign font family up front
-  font <- "Arial"
-
-  # replace elements we want to change
-  theme_minimal() %+replace%
-
-    theme(
-      legend.position = "none",
-      plot.title = element_text(hjust = 0.5,
-                                # face = "bold",
-                                size = 25,
-                                colour = "#000000"),
-      axis.title.x = element_blank(),
-      axis.title.y = element_blank(),
-      axis.text.x = element_blank(),
-      axis.text.y = element_blank(),
-      # axis.line.x.bottom = element_line(size = 0.75,
-      #                                   linetype = "solid",
-      #                                   colour = "#000000"),
-      axis.line.y = element_blank(),
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank(),
-      panel.border = element_blank()
-    )
-}
-
-theme_csgjc_areaplot <- function(){
-
-  # assign font family up front
-  font <- "Arial"
-
-  # replace elements we want to change
-  theme_minimal() %+replace%
-
-    theme(
-      legend.position = "top",
-      legend.text = element_text(size=14),
-      plot.title = element_text(hjust = 0.5,
-                                # face = "bold",
-                                size = 16,
-                                colour = "#000000"),
-      plot.caption = element_text(hjust = 0.5, face = "italic"),
-      axis.title.x = element_blank(),
-      axis.title.y = element_blank(),
-      axis.text.x = element_text(size = 14,
-                                 colour = "#000000"),
-      axis.text.y = element_blank(),
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank(),
-      panel.border = element_blank()
-    )
-}
-
-theme_csgjc_plot_legend <- function(){
-
-  # assign font family up front
-  font <- "Arial"
-
-  # replace elements we want to change
-  theme_minimal() %+replace%
-
-    theme(
-      legend.position = "top",
-      legend.text = element_text(size=14),
-      plot.title = element_text(hjust = 0.5,
-                                # face = "bold",
-                                size = 16,
-                                colour = "#000000"),
-      plot.caption = element_text(hjust = 0.5, face = "italic"),
-      axis.title.x = element_blank(),
-      axis.title.y = element_blank(),
-      axis.text.x = element_text(size = 14,
-                                 colour = "#000000"),
-      axis.text.y = element_blank(),
-      # axis.line.x.bottom = element_line(size = 0.75,
-      #                                   linetype = "solid",
-      #                                   colour = "#000000"),
-      axis.line.y = element_blank(),
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank(),
-      panel.border = element_blank()
-    )
-}
-
-theme_csgjc_horizontal_legend <- function(){
-
-  # assign font family up front
-  font <- "Arial"
-
-  # replace elements we want to change
-  theme_minimal() %+replace%
-
-    theme(
-      legend.direction="horizontal",
-      legend.position = "top",
-      legend.background = element_blank(),
-      legend.title = element_blank(),
-      legend.box = "horizontal",
-      legend.text = element_text(size=14),
-      plot.title = element_text(hjust = 0.5,
-                                # face = "bold",
-                                size = 16,
-                                colour = "#000000"),
-      plot.caption = element_text(hjust = 0.5, face = "italic"),
-      axis.line.x = element_line(colour = 'black', size=1, linetype='solid'),
-      axis.title.x = element_blank(),
-      axis.title.y = element_blank(),
-      axis.text.x = element_text(size = 14,
-                                 colour = "#000000"),
-      axis.text.y =  element_blank(),
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank(),
-      panel.border = element_blank()
-    )
-}
-
-theme_csgjc_right_legend <- function(){
-
-  # assign font family up front
-  font <- "Arial"
-
-  # replace elements we want to change
-  theme_minimal() %+replace%
-
-    theme(
-      legend.position = "top",
-      legend.background = element_blank(),
-      legend.title = element_blank(),
-      legend.text = element_text(size=14),
-      plot.title = element_text(hjust = 0.5,
-                                # face = "bold",
-                                size = 16,
-                                colour = "#000000"),
-      plot.caption = element_text(hjust = 0.5, face = "italic"),
-      axis.title.x = element_blank(),
-      axis.title.y = element_blank(),
-      axis.text.x = element_text(size = 14,
-                                 colour = "#000000"),
-      axis.text.y =  element_text(size = 14,
-                                  colour = "#000000"),
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank(),
-      panel.border = element_blank()
-    )
-}
-
 # https://jkunst.com/blog/posts/2020-06-26-valuebox-and-sparklines/
+# create value boxes
 valueBox2 <- function(value, title, subtitle, icon = NULL, color = "aqua", width = 4, href = NULL){
 
   shinydashboard:::validateColor(color)

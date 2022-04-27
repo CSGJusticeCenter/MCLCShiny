@@ -1,3 +1,11 @@
+#######################################
+# Project: MCLCShiny
+# File: ui.R
+# Authors: Mari Roberts
+# Date: April 27, 2022
+# Description:
+#    User interface for shiny app
+#######################################
 
 source("data_libraries.R")
 source("functions.R")
@@ -12,9 +20,9 @@ my_theme <- bs_theme(
 # let thematic know to use the font from bs_lib
 thematic_shiny(font = "auto")
 
-####################################################################################################################################
+##################
 # User Interface
-####################################################################################################################################
+##################
 
 ui <- fluidPage(
   theme = my_theme,

@@ -1,6 +1,11 @@
-####################################################################################################################################
-# Server
-####################################################################################################################################
+#######################################
+# Project: MCLCShiny
+# File: server.R
+# Authors: Mari Roberts
+# Date: April 27, 2022
+# Description:
+#    Server for shiny app
+#######################################
 
 server <- function(input, output, session) {
 
@@ -14,6 +19,8 @@ server <- function(input, output, session) {
   #######
   # Hex map data
   #######
+
+  # filter data depending on user input
   df_map <- reactive({
     mclc_explorer %>%
       filter(adm_or_pop == input$adm_or_pop_map,
@@ -30,6 +37,7 @@ server <- function(input, output, session) {
   #######
   # Hex map
   #######
+
   output$hex_map <- renderHighchart({
 
     min_map <- round(min(df_map()$total, na.rm = TRUE), 0)
@@ -58,12 +66,6 @@ server <- function(input, output, session) {
                    max = max_map,
                    stops = color_stops(6, c("#af4d03", orange, lightorange, lightblue, regblue, darkblue))) %>%
       hc_setup()
-    # hc_title(
-    #   text = paste0("<b>Change in ", input$data_map, " ", input$adm_or_pop_map, ", ", input$year_map, "</b>"),
-    #   margin = 20,
-    #   align = "left",
-    #   style = list(#color = "#22A884",
-    #                useHTML = TRUE))
   })
 
   #######

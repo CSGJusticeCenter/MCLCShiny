@@ -1,5 +1,14 @@
+#######################################
+# Project: MCLCShiny
+# File: data_libraries.R
+# Authors: Mari Roberts
+# Date: April 27, 2022
+# Description:
+#    Load packages, data files created in import.R, colors, fonts
+#######################################
+
 #______________________________________________________
-# load packages
+# Libraries
 #______________________________________________________
 
 # deployment issues
@@ -68,11 +77,6 @@ library(RColorBrewer)
 library(scico)
 library(ggiraph)
 
-# don't need?
-# library(classInt)
-# library(broom)
-# library(labelled)
-
 #______________________________________________________
 # read in R data
 #______________________________________________________
@@ -89,16 +93,9 @@ load(file="Data/parole_table_wide.Rda")
 load(file="Data/prob_table.Rda")
 load(file="Data/prob_table_wide.Rda")
 
-load(file="Data/us_map.Rda")
-load(file="Data/us.Rda")
-load(file="Data/centers.Rda")
-load(file="Data/combined.Rda")
-load(file="Data/combined_labels.Rda")
-load(file="Data/hex.Rda")
 load(file="Data/hex_gj.Rda")
 
 load(file="Data/bjs_prob_parole.Rda")
-load(file="Data/bjs_bubble.Rda")
 load(file="Data/bjs.Rda")
 load(file="Data/csg.Rda")
 
