@@ -16,21 +16,10 @@ library(here)
 source("data_libraries.R")
 source("functions.R")
 
-######################
-# Custom functions
-###################
-
-# add a nicely styled label above selection box
-labeled_input <- function(id, label, input){
-  div(id = id,
-      span(label, style = "font-size: small;"),
-      input)
-}
-
 # builds theme object to be supplied to ui
 my_theme <- bs_theme(
   bootswatch = "cosmo",
-  base_font = font_google("Mukta")
+  base_font = font_google("Noto Sans")
 ) %>%
   bs_add_rules(sass::sass_file("styles.scss"))
 
@@ -54,15 +43,15 @@ ui <- fluidPage(
       # tags$style(type="text/css", "#data_map {background-color:#DEF0F6}"),
       # tags$style(type="text/css", "#adm_or_pop_map {background-color:#DEF0F6}"),
       # tags$style(type="text/css", "#year_map {background-color:#DEF0F6}"),
-      labeled_input('data-map-btn', "Select Data",
+      labeled_input('data-map-btn', "Data",
                     selectizeInput('data_map', label = NULL,
                                    choices = c("Total", "New Offense", "Supervision Violation", "Probation Violation", "Parole Violation", "Technical Violation"),
                                    multiple = FALSE)),
-      labeled_input('adm-pop-map-btn', "Select Admissions or Population",
+      labeled_input('adm-pop-map-btn', "Admissions or Population",
                     selectizeInput('adm_or_pop_map', label = NULL,
                                    choices = c("Admissions", "Population"),
                                    multiple = FALSE)),
-      labeled_input('year-map-btn', "Select Year",
+      labeled_input('year-map-btn', "Year",
                     selectizeInput('year_map', label = NULL,
                                    choices = c("2018 - 2019", "2019 - 2020"),
                                    multiple = FALSE)),
@@ -83,13 +72,17 @@ ui <- fluidPage(
   # Hex map
   #######
 
-  highchartOutput("hex_map", height = 600),
+  div(id = "selected-map",
+      textOutput("selected_map")),
+  highchartOutput("hex_map", height = 600, width = 1091),
   br(),
 
   #######
   # Hex map table
   #######
 
+  div(id = "selected-map-table",
+      textOutput("selected_map_table")),
   div(id = "table-map",
   reactableOutput("table_map"),
   ),
@@ -111,8 +104,8 @@ server <- function(input, output, session) {
   # Hex map title
   #######
 
-  # # title of map based on user input
-  # output$selected_map <- renderText({paste("Change in ", input$data_map, " ", input$adm_or_pop_map, " from ", input$year_map)})
+  # title of map based on user input
+  output$selected_map <- renderText({paste("Change in ", input$data_map, " ", input$adm_or_pop_map, ", ", input$year_map)})
 
   #######
   # Hex map data
@@ -160,46 +153,52 @@ server <- function(input, output, session) {
       hc_colorAxis(min = min_map,
                    max = max_map,
                    stops = color_stops(6, c("#af4d03", orange, lightorange, lightblue, regblue, darkblue))) %>%
-      hc_setup() %>%
-      hc_title(
-        text = "This is a title with <i>margin</i> and <b>Strong or bold text</b>",
-        margin = 20,
-        align = "left",
-        style = list(color = "#22A884", useHTML = TRUE)
-      )
-
+      hc_setup()
+      # hc_title(
+      #   text = paste0("<b>Change in ", input$data_map, " ", input$adm_or_pop_map, ", ", input$year_map, "</b>"),
+      #   margin = 20,
+      #   align = "left",
+      #   style = list(#color = "#22A884",
+      #                useHTML = TRUE))
     })
 
   #######
   # Table under map
   #######
 
+  # title of map table based on user input
+  output$selected_map_table <- renderText({paste(input$data_map, " ", input$adm_or_pop_map)})
+
   output$table_map <- renderReactable(
     reactable(df_map_table(),
               searchable = TRUE,
               defaultPageSize = 50,
-              theme = reactableTheme(
-                # Vertically center cells
-                cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
+              compact = TRUE,
+              fullWidth = TRUE,
+              bordered = FALSE,
+              rowStyle = list(`border-top` = "thin dashed", borderColor = "#355DA1"),
+              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
               defaultColDef = colDef(
                 format = colFormat(separators = TRUE),
-                align = "center"),
-              compact = TRUE,
-              fullWidth = FALSE,
+                align = "center",
+                headerStyle = list(color = "#355DA1",
+                                   "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+                                   "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+                                   borderColor = "#FFFFFF")),
               columns = list(
                 state         = colDef(name = "State",
                                        align = "left",
-                                       minWidth = 150,
+                                       minWidth = 205,
                                        style = function(value){list(fontWeight = "bold")}),
                 data          = colDef(show = FALSE),
-                `2018`        = colDef(minWidth = 100),
-                `2019`        = colDef(minWidth = 100),
-                `2020`        = colDef(minWidth = 100),
-                `2018 - 2019` = colDef(minWidth = 125,
-                                       name = "Change from\n2018-2019",
+                `2018`        = colDef(minWidth = 155),
+                `2019`        = colDef(minWidth = 155),
+                `2020`        = colDef(minWidth = 155),
+                `2018 - 2019` = colDef(minWidth = 180,
+                                       name = "2018-2019",
                                        format = colFormat(percent = TRUE, digits = 1)),
-                `2019 - 2020` = colDef(minWidth = 125,
-                                       name = "Change from\n2019-2020",
+                `2019 - 2020` = colDef(minWidth = 180,
+                                       name = "2019-2020",
                                        format = colFormat(percent = TRUE, digits = 1)))
     )
   )

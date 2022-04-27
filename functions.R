@@ -11,6 +11,13 @@
 # custom functions
 ##########################
 
+# add a nicely styled label above selection box
+labeled_input <- function(id, label, input){
+  div(id = id,
+      span(label, style = "font-size: small;"),
+      input)
+}
+
 # custom highcharts theme
 hc_theme_jc <- hc_theme_merge(
   hc_theme_smpl(),

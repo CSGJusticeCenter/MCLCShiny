@@ -17,7 +17,6 @@ body > div {
   position: absolute;
 }
 
-
 /* Make title nice and centered */
 #app-title > h2 {
   text-align: center;
@@ -44,19 +43,20 @@ body > div {
   width: 200px;
   color: #355DA1;
 }
+
 /* Format for selector input data-map*/
 #data-map-btn {
   font-weight: bold;
   width: 200px;
   color: #355DA1;
 }
+
 /* Format for selector input year-map*/
 #year-map-btn {
   font-weight: bold;
   width: 200px;
   color: #355DA1;
 }
-
 
 /* Format for selector input save-map*/
 #save-map-btn {
@@ -65,11 +65,13 @@ body > div {
   color: #FFFFFF;
 
 }
+
 /* Format for selector input save-map-data*/
 #save-map-data-btn {
   font-weight: bold;
   color: #FFFFFF;
 }
+
 /* Size of download buttons */
 .download_this{
     height:36px;
@@ -78,13 +80,11 @@ body > div {
     font-weight: bold;
 }
 
-
 /* Makes the label for header inputs sit centered on top */
 #header > * > span {
   display: block;
   text-align: left;
 }
-
 
 /* Buttons are set at a fixed width and if content is too big it gets elipsed*/
 button { width: 50px; }
@@ -95,7 +95,6 @@ button > div {
   white-space: nowrap;
 }
 
-
 /* Map select input margins and font style */
 /* Text inputs bottom margin prevents it from lining up nicely, so remove */
 .form-group.shiny-input-container,
@@ -104,7 +103,6 @@ button > div {
   font-weight: bold;
 }
 
-
 /* Make some wordy sections smaller */
 .small_text {
   font-size: small;
@@ -112,5 +110,17 @@ button > div {
 
 
 #table-map {
-  text-align: center;
+  text-align: left;
+}
+
+#selected-map{
+  text-align: left;
+  font-weight: bold;
+  font-size:24px;
+}
+
+#selected-map-table{
+  text-align: left;
+  font-weight: bold;
+  font-size:24px;
 }

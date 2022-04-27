@@ -84,6 +84,8 @@ load(file="Data/us.Rda")
 load(file="Data/centers.Rda")
 load(file="Data/combined.Rda")
 load(file="Data/combined_labels.Rda")
+load(file="Data/hex.Rda")
+load(file="Data/hex_gj.Rda")
 
 load(file="Data/bjs_prob_parole.Rda")
 load(file="Data/bjs_bubble.Rda")
@@ -119,8 +121,8 @@ change_colors <- c("#af4d03", orange, lightorange, lightblue, regblue, darkblue)
 # fonts
 #______________________________________________________
 
-default_fonts <- c("system-ui", "-apple-system", "Segoe UI", "Roboto",
-                   "Helvetica Neue", "Arial", "Noto Sans", "Liberation Sans",
-                   "sans-serif", "Apple Color Emoji", "Segoe UI Emoji",
-                   "Segoe UI Symbol", "Noto Color Emoji")
-
+# default_fonts <- c("system-ui", "-apple-system", "Segoe UI", "Roboto",
+#                    "Helvetica Neue", "Arial", "Noto Sans", "Liberation Sans",
+#                    "sans-serif", "Apple Color Emoji", "Segoe UI Emoji",
+#                    "Segoe UI Symbol", "Noto Color Emoji")
+default_fonts <- c("Noto Sans")
