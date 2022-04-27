@@ -7,6 +7,15 @@ library(evaluate)
 library(highr)
 library(markdown)
 library(scico)
+library(zoo)
+
+# highcharter
+library(tidyverse)
+library(highcharter)
+library(scales)
+library(gapminder)
+library(tidycensus)
+library(tidyverse)
 
 # highcharter
 library(tidyverse)
