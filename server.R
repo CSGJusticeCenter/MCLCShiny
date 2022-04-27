@@ -1,227 +1,142 @@
 server <- function(input, output, session) {
 
-  ################################################################################
-  ################################################################################
-  # Map Explorer
-  ################################################################################
-  ################################################################################
+  #--------------------------------------------------------------------------------------------------------------
+  # Map Page
+  #--------------------------------------------------------------------------------------------------------------
 
-  # change sidebar depending on selection
-  # change from previous year only includes years 2019-2020
-  # count includes years 2018-2020
-  df_map_temp <- reactive ({
-    if(input$choice_map_counts == "Count"){     if(input$year_map_counts == "2018"){filter(mclc_explorer, year=="2018" & choice == "Count")}
-                                           else if(input$year_map_counts == "2019"){filter(mclc_explorer, year=="2019" & choice == "Count")}
-                                           else if(input$year_map_counts == "2020"){filter(mclc_explorer, year=="2020" & choice == "Count")}
-                                          }
-    else if(input$choice_map_counts == "Change from Previous Year" & input$year_map_counts2 == "2019"){filter(mclc_explorer, year == "2019" & choice == "Change from Previous Year")}
-    else if(input$choice_map_counts == "Change from Previous Year" & input$year_map_counts2 == "2020"){filter(mclc_explorer, year == "2020" & choice == "Change from Previous Year")}
-  })
-
-  # filter data depending on choice above
+  # filter data based on user input
   df_map <- reactive({
-    df_map_temp() %>%
+    mclc_explorer %>%
       filter(adm_or_pop == input$adm_or_pop_map_counts,
-             metric == input$data_map_counts)
+             metric     == input$data_map_counts,
+             year       == input$year_map_counts)
   })
 
-  # format for datatable
+  # filter data for table underneath map based on user input
   df_map_table <- reactive({
-    df_map() %>%
-      arrange(desc(total)) %>%
-      select(State = state,
-             Year = year,
-             Data = metric,
-             Type = adm_or_pop,
-             Value = total)
-  })
-  df_map_table2 <- reactive({
-    df_map() %>%
-      arrange(total) %>%
-      select(State = state,
-             Year = year,
-             Data = metric,
-             Type = adm_or_pop,
-             Value = total)
+    filter_by <- paste0(input$data_map_counts, " ", input$adm_or_pop_map_counts)
+    mclc_explorer_table %>%
+      filter(data == filter_by) %>%
+      arrange(state)
   })
 
   ##############
-  # Hex map
+  # Hex map title
   ##############
 
-  # Title of map
-  output$selected_map <- renderText({
-
-    if(input$choice_map_counts == "Change from Previous Year" & input$year_map_counts2 == "2019"){text = "Change from 2018-2019"}
-    else if(input$choice_map_counts == "Change from Previous Year" & input$year_map_counts2 == "2020"){text = "Change from 2019-2020"}
-    else if(input$choice_map_counts == "Count" & input$year_map_counts == "2018"){text = "in 2018"}
-    else if(input$choice_map_counts == "Count" & input$year_map_counts == "2019"){text = "in 2019"}
-    else if(input$choice_map_counts == "Count" & input$year_map_counts == "2020"){text = "in 2020"}
-
-    paste(input$data_map_counts, " ", input$adm_or_pop_map_counts, " ", text)
-
-  })
+  # title of map based on user input
+  output$selected_map <- renderText({paste("Change in ", input$data_map_counts, " ", input$adm_or_pop_map_counts, " from ", input$year_map_counts)})
 
   ##############
   # Table below map changes depending on count vs change
   ##############
 
   output$table_map_counts <- renderReactable(
-
-    if(input$choice_map_counts == "Count"){
-
-      reactable(df_map_table(),
-                searchable = TRUE,
-                defaultPageSize = 10,
-                theme = reactableTheme(
-                  # Vertically center cells
-                  cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
-                defaultColDef = colDef(
-                  format = colFormat(separators = TRUE),
-                  align = "center"),
-                compact = TRUE,
-                fullWidth = FALSE,
-                columns = list(
-                  State         = colDef(name = "State",
-                                         align = "left",
-                                         minWidth = 150),
-                  Year          = colDef(minWidth = 75),
-                  Data          = colDef(minWidth = 100),
-                  Type          = colDef(minWidth = 100),
-                  Value         = colDef(minWidth = 150,
-                                         name = "Count")))
-
-    }
-    else if(input$choice_map_counts == "Change from Previous Year"){
-
-      reactable(df_map_table2(),
-                searchable = TRUE,
-                defaultPageSize = 10,
-                theme = reactableTheme(
-                  # Vertically center cells
-                  cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
-                defaultColDef = colDef(
-                  format = colFormat(separators = TRUE),
-                  align = "center"),
-                compact = TRUE,
-                fullWidth = FALSE,
-                columns = list(
-                  State         = colDef(name = "State",
-                                         align = "left",
-                                         minWidth = 150),
-                  Year          = colDef(minWidth = 75),
-                  Data          = colDef(minWidth = 100),
-                  Type          = colDef(minWidth = 100),
-                  Value         = colDef(minWidth = 150,
-                                         name = "Change from Previous Year",
-                                         format = colFormat(percent = TRUE, digits = 1))))
-
-    }
+    reactable(df_map_table(),
+              searchable = TRUE,
+              defaultPageSize = 50,
+              theme = reactableTheme(
+                # Vertically center cells
+                cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
+              defaultColDef = colDef(
+                format = colFormat(separators = TRUE),
+                align = "center"),
+              compact = TRUE,
+              fullWidth = FALSE,
+              columns = list(
+                state         = colDef(name = "State",
+                                       align = "left",
+                                       minWidth = 150,
+                                       style = function(value){list(fontWeight = "bold")}),
+                data          = colDef(name = "Data",
+                                       minWidth = 140),
+                `2018`        = colDef(minWidth = 100),
+                `2019`        = colDef(minWidth = 100),
+                `2020`        = colDef(minWidth = 100),
+                `2018 - 2019` = colDef(minWidth = 125,
+                                       name = "Change from\n2018-2019",
+                                       format = colFormat(percent = TRUE, digits = 1)),
+                `2019 - 2020` = colDef(minWidth = 125,
+                                       name = "Change from\n2019-2020",
+                                       format = colFormat(percent = TRUE, digits = 1)))
+                )
   )
 
   ################################################################################
   ################################################################################
-  # Leaflet Map
+  #  Map
   ################################################################################
   ################################################################################
 
-  # save leaflet map as a reactive element to be saved
   reactive_map <- reactive({
 
-    df_map <- sp::merge(us, df_map(), by.x = 'iso3166_2', by.y = "Code")
+    combined_new <- merge(combined, df_map(), by.x = "name.x", by.y = "state")
+    combined_labels_new <- merge(combined_labels, df_map(), by.x = "name.x", by.y = "state")
 
-    df_map <- df_map[df_map$google_name != "District of Columbia (United States)", ]
+    NA_color <- "grey80"
 
-    if(input$choice_map_counts == "Change from Previous Year"){
-
-      df_map$total <- df_map$total*100
-
-      pal_fun <- colorNumeric(change_colors, df_map$total)
-      p_popup <- paste0('<b>',df_map$state, '</b><br><br>',
-                        'Year: ', df_map$year, '<br>',
-                        'Change: ', round(df_map$total, 1),'%<br>')
-
-      leaflet(df_map, options = leafletOptions(zoomControl = FALSE,
-                                               minZoom = 3.75,
-                                               maxZoom = 3.75,
-                                               dragging = FALSE,
-                                               attributionControl=FALSE)) %>%
-        addPolygons(stroke = FALSE, # remove borders
-                    fillColor = ~pal_fun(total),
-                    color = "white",
-                    fillOpacity = 0.8,
-                    smoothFactor = 0.5,
-                    popup = p_popup) %>%
-        # set view to US
-        setView(lng = -98.25, lat = 42.50, zoom = 3.75) %>%
-        # legend
-        addLegend("topright",
-                  pal = pal_fun,
-                  values = ~total,
-                  title = "Change",
-                  labFormat = labelFormat(prefix = " ", suffix = "%"),
-                  opacity = 1
-        )  %>%
-        addLabelOnlyMarkers(data = centers,
-                            lng = ~x,
-                            lat = ~y,
-                            label = ~id,
-                            labelOptions = labelOptions(noHide = TRUE,
-                                                        direction = 'center',
-                                                        textOnly = TRUE))
-    }
-    else if(input$choice_map_counts == "Count"){
-
-      pal_fun <- colorNumeric(count_colors, df_map$total)
-      p_popup <- paste0('<b>',df_map$state, '</b><br><br>',
-                        'Year: ', df_map$year, '<br>',
-                        'Count: ', formattable::comma(df_map$total, digits = 0),'<br>')
-
-      leaflet(df_map, options = leafletOptions(zoomControl = FALSE,
-                                               minZoom = 3.75,
-                                               maxZoom = 3.75,
-                                               dragging = FALSE,
-                                               attributionControl=FALSE)) %>%
-        addPolygons(stroke = FALSE, # remove borders
-                    fillColor = ~pal_fun(total),
-                    color = "white",
-                    fillOpacity = 0.8,
-                    smoothFactor = 0.5,
-                    popup = p_popup) %>%
-        # set view to US
-        setView(lng = -98.25, lat = 42.50, zoom = 3.75) %>%
-        # legend
-        addLegend("topright",
-                  pal = pal_fun,
-                  values = ~total,
-                  title = "Count",
-                  opacity = 1
-        )  %>%
-        addLabelOnlyMarkers(data = centers,
-                            lng = ~x,
-                            lat = ~y,
-                            label = ~id,
-                            labelOptions = labelOptions(noHide = TRUE,
-                                                        direction = 'center',
-                                                        textOnly = TRUE))
-    }
+    ggplot(combined_new) +
+      geom_sf(aes(fill = total),     color = NA       ) +  #color (non-NA) hex
+      geom_sf(    fill = NA,          aes(color = "NA")    ) +  #dummy legend for NA values
+      geom_sf(    fill = NA,              color = "grey50" ) +  #hex borders
+      geom_sf_text(
+        data=mutate(combined_labels_new, geometry=geometry+c(0, 5))
+        , aes(label=abb_usps)
+        , fontface="bold"
+        , size=5
+      ) +
+      geom_sf_text(
+        data=mutate(combined_labels_new, geometry=geometry+c(0,-5))
+        , aes(label=scales::percent(total, accuracy=0.1))
+        , size=4
+      ) +
+      scale_fill_gradient2(
+        name = "Change"
+        , low  = "#65ace1"
+        , mid  = "#ffffff"
+        , high = "#ee7600"
+        , midpoint = 0
+        , labels = scales::percent
+        , na.value = NA_color
+      ) +
+      scale_color_manual( #dummy legend for NA color
+        name = NULL
+        , values = NA_color
+        , labels = 'No data'
+      ) +
+      guides(
+        fill  = guide_colorbar(order = 1)
+        , color = guide_legend(override.aes = list(fill = NA_color))
+      ) +
+      theme_void()+
+      theme(legend.title=element_text(size=14),
+            legend.text=element_text(size=14))
   })
 
   # output reactive leaflet map
-  output$leaflet_map <- renderLeaflet({
+  output$reactive_map <- renderPlot({
     reactive_map()
   })
 
+  ##############
+  # Download data and map options
+  ##############
+
   # download button for map
   output$save_map <- downloadHandler(
-    filename = "map.html",
-    content = function(file){saveWidget(widget = reactive_map(), file = file)})
+    filename = function(){
+      paste(input$data_map_counts, "_", input$adm_or_pop_map_counts, "_Change_", input$year_map_counts, '.png', sep = '')
+    },
+    content = function(filename){
+      req(reactive_map())
+      ggsave(filename, plot = reactive_map(), device = 'png', width=11, height=8.5)
+    }
+  )
 
   # download button for data
   output$save_data <- downloadHandler(
-
     filename = function() {
-      paste0(input$data_map_counts, "_", input$adm_or_pop_map_counts,"_", input$choice_map_counts, ".xlsx", sep="")
+      paste0(input$data_map_counts, "_", input$adm_or_pop_map_counts, "_", input$year_map_counts, ".xlsx", sep="")
     },
     content = function(file) {
       wb <- createWorkbook()
@@ -231,13 +146,11 @@ server <- function(input, output, session) {
     }
   )
 
-  ################################################################################
-  ################################################################################
+  #--------------------------------------------------------------------------------------------------------------
   # State Reports
-  ################################################################################
-  ################################################################################
+  #--------------------------------------------------------------------------------------------------------------
 
-  # Print state name and adm or pop selected
+  # Print state name depending on state selected
   output$selected_state <- renderText({
     paste("Trends in ", input$state)
   })
@@ -281,12 +194,27 @@ server <- function(input, output, session) {
 
   output$total_change <- renderValueBox({
 
+    if(is.na(df_vb_total()$change)){
+      text <- "No Data"
+    }
+    else if(df_vb_total()$change < 0){
+      text <- tagList(HTML("&darr;"), paste0(df_vb_total()$change, "% from 2019"))
+    }
+    else{
+      text <- tagList(HTML("&uarr;"), paste0(df_vb_total()$change, "% from 2019"))
+    }
+
+    if(is.na(df_vb_total()$total)){
+      header <- "No Data"
+    }
+    else{
+      header <- comma(df_vb_total()$total, digits = 0)
+    }
+
     valueBox2(
-      comma(df_vb_total()$total, digits = 0),
+      header,
       title = paste0(input$adm_or_pop, " in 2020"),
-      subtitle = tagList(HTML("&darr;"), paste0(df_vb_total()$change, "% from 2019")),
-      # icon = icon("arrow-down"),
-      # width = 10,
+      subtitle = text,
       color = "black",
       href = NULL
     )
@@ -295,12 +223,27 @@ server <- function(input, output, session) {
 
   output$sup_change <- renderValueBox({
 
+    if(is.na(df_vb_sup_viols()$change)){
+      text <- "No Data"
+    }
+    else if(df_vb_sup_viols()$change < 0){
+      text <- tagList(HTML("&darr;"), paste0(df_vb_sup_viols()$change, "% from 2019"))
+    }
+    else{
+      text <- tagList(HTML("&uarr;"), paste0(df_vb_sup_viols()$change, "% from 2019"))
+    }
+
+    if(is.na(df_vb_sup_viols()$total)){
+      header <- "No Data"
+    }
+    else{
+      header <- comma(df_vb_sup_viols()$total, digits = 0)
+    }
+
     valueBox2(
-      comma(df_vb_sup_viols()$total, digits = 0),
+      header,
       title = paste0("Violation ", input$adm_or_pop, " in 2020"),
-      subtitle = tagList(HTML("&darr;"), paste0(df_vb_sup_viols()$change, "% from 2019")),
-      # icon = icon("arrow-down"),
-      # width = 10,
+      subtitle = text,
       color = "black",
       href = NULL
     )
@@ -309,12 +252,27 @@ server <- function(input, output, session) {
 
   output$tech_change <- renderValueBox({
 
+    if(is.na(df_vb_tech()$change)){
+      text <- "No Data"
+    }
+    else if(df_vb_tech()$change < 0){
+      text <- tagList(HTML("&darr;"), paste0(df_vb_tech()$change, "% from 2019"))
+    }
+    else{
+      text <- tagList(HTML("&uarr;"), paste0(df_vb_tech()$change, "% from 2019"))
+    }
+
+    if(is.na(df_vb_tech()$total)){
+      header <- "No Data"
+    }
+    else{
+      header <- comma(df_vb_tech()$total, digits = 0)
+    }
+
     valueBox2(
-      comma(df_vb_tech()$total, digits = 0),
+      header,
       title = paste0("Technical ", input$adm_or_pop, " in 2020"),
-      subtitle = tagList(HTML("&darr;"), paste0(df_vb_tech()$change, "% from 2019")),
-      # icon = icon("arrow-down"),
-      # width = 10,
+      subtitle = text,
       color = "black",
       href = NULL
     )
@@ -323,12 +281,27 @@ server <- function(input, output, session) {
 
   output$rev_rate <- renderValueBox({
 
+    if(is.na(df_bjs_rate()$rev_rate_change)){
+      text <- "No Data"
+    }
+    else if(df_bjs_rate()$rev_rate_change < 0){
+      text <- tagList(HTML("&darr;"), paste0(round(df_bjs_rate()$rev_rate_change*100, 0), "% from 2019"))
+    }
+    else{
+      text <- tagList(HTML("&uarr;"), paste0(round(df_bjs_rate()$rev_rate_change*100, 0), "% from 2019"))
+    }
+
+    if(is.na(df_bjs_rate()$rev_rate_20)){
+      header <- "No Data"
+    }
+    else{
+      header <- paste0(round(df_bjs_rate()$rev_rate_20*100, 2), "%")
+    }
+
     valueBox2(
-      paste0(round(df_bjs_rate()$rev_rate_20*100, 2), "%"),
+      header,
       title = "Revovation Rate in 2020",
-      subtitle = tagList(HTML("&darr;"), paste0(round(df_bjs_rate()$rev_rate_change*100, 0), "% from 2019")),
-      # icon = icon("arrow-down"),
-      # width = 10,
+      subtitle = text,
       color = "black",
       href = NULL
     )
@@ -441,7 +414,7 @@ server <- function(input, output, session) {
     df <-
       adm_pop_long %>%
       filter(state == input$state &
-             adm_or_pop == input$adm_or_pop) %>%
+               adm_or_pop == input$adm_or_pop) %>%
       group_by(metric, year) %>%
       summarise(total = sum(total)) %>%
       filter(metric == "New Offense" | metric == "Technical")
@@ -460,7 +433,7 @@ server <- function(input, output, session) {
                           'Year: ', df$year, '<br>',
                           'Total: ', formattable::comma(df$total, digits = 0),'<br>')) %>%
       # customize layout
-      layout(title = list(text = paste0('<b>Supervision Violation\n', input$adm_or_pop, ' by Type</b>\n'), font = list(size = 14)),
+      layout(title = list(text = paste0('<b>Supervision Violation ', input$adm_or_pop, ' by Type</b>\n'), font = list(size = 14)),
              font = list(size = 12),
              plot_bgcolor='#FFFFFF',
              xaxis = list(
@@ -500,12 +473,12 @@ server <- function(input, output, session) {
     # filter data
     df <- state_table %>%
       filter(state == input$state &
-             adm_or_pop == input$adm_or_pop) %>%
+               adm_or_pop == input$adm_or_pop) %>%
       group_by(text) %>%
       summarise(total_new = list(list(total)))
     df1 <- state_table_wide %>%
       filter(state == input$state &
-             adm_or_pop == input$adm_or_pop) %>%
+               adm_or_pop == input$adm_or_pop) %>%
       arrange(order) %>%
       select(-adm_or_pop, -state)
 
@@ -586,7 +559,7 @@ server <- function(input, output, session) {
 
                                           dui_sparklineseries(
                                             curve = "linear",
-                                            showArea = TRUE,
+                                            showArea = FALSE,
                                             fill = colpal_fill[index],
                                             stroke = colpal_stroke[index])))})))
   })
@@ -690,8 +663,8 @@ server <- function(input, output, session) {
     df <-
       adm_pop_long %>%
       filter(state == input$state &
-             adm_or_pop == input$adm_or_pop &
-             prob_vs_parole == "Parole") %>%
+               adm_or_pop == input$adm_or_pop &
+               prob_vs_parole == "Parole") %>%
       filter(metric == "Technical" | metric == "New Offense")  %>%
       group_by(metric, year) %>%
       summarise(total = sum(total))
@@ -898,12 +871,12 @@ server <- function(input, output, session) {
     # filter data
     df <- parole_table %>%
       filter(state == input$state &
-             adm_or_pop == input$adm_or_pop) %>%
+               adm_or_pop == input$adm_or_pop) %>%
       group_by(text) %>%
       summarise(total_new = list(list(total)))
     df1 <- parole_table_wide %>%
       filter(state == input$state &
-             adm_or_pop == input$adm_or_pop) %>%
+               adm_or_pop == input$adm_or_pop) %>%
       arrange(order) %>%
       select(-adm_or_pop, -state, -prob_vs_parole)
 
@@ -1072,10 +1045,10 @@ server <- function(input, output, session) {
   # Download Data
   #-------------------------------------------------------------------------------
 
+  # Render text depending on data selection: CSG vs BJS
   output$selected_data <- renderText({
-   input$dataset
+    input$dataset
   })
-
   output$selected_data_info <- renderText({
     if     (input$dataset == "More Community, Less Confinement (CSG)"){
       "This dataset contains prison admissions and population numbers by state from 2018 to 2020. This dataset includes a breakdown of community supervision violation type."
@@ -1085,6 +1058,7 @@ server <- function(input, output, session) {
     }
   })
 
+  # change year drop down options depending on data selecion
   filteredYears <- reactive({
     if     (input$dataset == "More Community, Less Confinement (CSG)"){
       unique(csg$year)
@@ -1093,11 +1067,11 @@ server <- function(input, output, session) {
       unique(bjs$year)
     }
   })
-
   observeEvent(filteredYears(), {
     updatePickerInput(session, inputId = 'year_table', label = 'Year(s)', choices = filteredYears(), selected = filteredYears())
   })
 
+  # react to selected states
   filteredStates <- reactive({
     if     (input$dataset == "More Community, Less Confinement (CSG)"){
       unique(csg$state)
@@ -1106,11 +1080,11 @@ server <- function(input, output, session) {
       unique(bjs$state)
     }
   })
-
   observeEvent(filteredStates(), {
     updatePickerInput(session, inputId = 'state_table', label = 'State(s)', choices = filteredStates(), selected = filteredStates())
   })
 
+  # creative reactive element for table depending on data set
   datasetInput <- reactive({
     dataset <- switch(input$dataset,
                       "Annual Probation Survey and Annual Parole Survey (BJS)" = bjs,
@@ -1120,52 +1094,76 @@ server <- function(input, output, session) {
       arrange(state, year)
   })
 
-  # Generate a summary of the dataset ----
+  # generate table depending on data set
   output$main_table <- DT::renderDataTable({
-    if     (input$dataset == "More Community, Less Confinement (CSG)"){
-      DT::datatable(
+
+    if (input$dataset == "More Community, Less Confinement (CSG)"){
+      datatable(
         datasetInput(),
-        colnames = c('State', 'Year', 'Data', 'Total', 'Admissions or Population'),
+        colnames = c('State', 'Year', 'Data', 'Total'),
         rownames = FALSE,
+        extensions = 'Buttons',
         options = list(
-          dom = 'Blfrtip',
+          paging = TRUE,
+          lengthMenu = list(c(10, 20, 100, -1), c('10', '20', '100', 'All')),
           pageLength = 20,
-          lengthMenu = list(c(10, 20,-1), c('10', '20', 'All')),
-          deferRender = TRUE,
-          searching = TRUE,
+          columnDefs = list(list(className = 'dt-left', targets = '_all')),
+          dom = 'Blfrtip',
           buttons =
             list('copy', 'print', list(
               extend = 'collection',
               buttons = list(
-                list(extend = 'csv', filename = "bjs_probation_parole"),
-                list(extend = 'excel', filename = "bjs_probation_parole"),
-                list(extend = 'pdf', filename = "bjs_probation_parole")),
-              text = 'Download'))),
-        extensions = 'Buttons')
+                list(extend = 'csv',   filename = paste0("mclc_", Sys.Date())),
+                list(extend = 'excel', filename = paste0("mclc_", Sys.Date())),
+                list(extend = 'pdf',   filename = paste0("mclc_", Sys.Date()))),
+              text = 'Download')))
+        ) %>%
+        formatCurrency("total", currency = "", interval = 3, mark = ",", digits = 0) %>%
+        formatStyle(columns = c("state"), width='65px') %>%
+        formatStyle(columns = c("year", "total"), width='55px') %>%
+        formatStyle(columns = c("text"), width='120px')
     }
+
     else if(input$dataset == "Annual Probation Survey and Annual Parole Survey (BJS)"){
       DT::datatable(
         datasetInput(),
-        colnames = c('State', 'Year', 'Type' ,'Population', 'Number Incarcerated', 'Revocation Rate'),
+        colnames = c('State',
+                     'Year',
+                     'Overall Population' ,
+                     'Parole Population',
+                     'Probation Population',
+                     'Overall Incarcerated' ,
+                     'Parole Incarcerated',
+                     'Probation Incarcerated',
+                     'Overall Revocation Rate' ,
+                     'Parole Revocation Rate',
+                     'Probation Revocation Rate'),
         rownames = FALSE,
+        extensions = 'Buttons',
         options = list(
-          dom = 'Blfrtip',
+          paging = TRUE,
+          lengthMenu = list(c(10, 20, 100, -1), c('10', '20', '100', 'All')),
           pageLength = 20,
-          lengthMenu = list(c(10, 20,-1), c('10', '20', 'All')),
-          deferRender = TRUE,
-          searching = TRUE,
+          columnDefs = list(list(className = 'dt-left', targets = '_all')),
+          dom = 'Blfrtip',
           buttons =
             list('copy', 'print', list(
               extend = 'collection',
               buttons = list(
-                list(extend = 'csv', filename = "bjs_probation_parole"),
-                list(extend = 'excel', filename = "bjs_probation_parole"),
-                list(extend = 'pdf', filename = "bjs_probation_parole")),
-              text = 'Download'))),
-        extensions = 'Buttons') %>%
-        formatPercentage(c("rev_rate"), 2)
+                list(extend = 'csv',   filename = paste0("bjs_probation_parole_", Sys.Date())),
+                list(extend = 'excel', filename = paste0("bjs_probation_parole_", Sys.Date())),
+                list(extend = 'pdf',   filename = paste0("bjs_probation_parole_", Sys.Date()))),
+              text = 'Download')))
+        ) %>%
+        formatPercentage(c("overall_rev_rate", "parole_rev_rate", "prob_rev_rate"), 2) %>%
+        formatCurrency(c("overall_population", "parole_population", "prob_population",
+                         "overall_incarcerated", "parole_incarcerated", "prob_incarcerated"), currency = "", interval = 3, mark = ",", digits = 0) %>%
+        formatStyle(columns = c("state"), width='65px') %>%
+        formatStyle(columns = c("year"), width='10px') %>%
+        formatStyle(columns = c("overall_population", "parole_population", "prob_population",
+                                "overall_incarcerated", "parole_incarcerated", "prob_incarcerated",
+                                "overall_rev_rate", "parole_rev_rate", "prob_rev_rate"), width='20px')
     }
-
   })
 
 }
