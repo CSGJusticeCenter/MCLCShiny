@@ -11,6 +11,94 @@
 # custom functions
 ##########################
 
+# custom highcharts theme
+hc_theme_jc <- hc_theme_merge(
+  hc_theme_smpl(),
+  hc_theme(
+    colors = c(
+      "#1795BF",
+      "#68C6A8",
+      "#F0EA44",
+      "#E1B32D",
+      "#001F35"
+    ),
+    chart = list(
+      marginTop = 75,
+      style = list(fontFamily = default_fonts)
+    ),
+    title = list(style = list(fontFamily = default_fonts, fontSize = "24px")),
+    subtitle = list(style = list(fontFamily = default_fonts, fontSize = "16px")),
+    legend = list(align = "center", verticalAlign = "bottom"),
+    caption = list(align = "right", y = 15),
+    xAxis = list(
+      labels = list(
+        style = list(fontSize = "11px"),
+        staggerLines = 2
+      ),
+      gridLineColor = "transparent"
+    ),
+    plotOptions = list(
+      series = list(states = list(inactive = list(opacity = 1))),
+      line = list(marker = list(enabled = TRUE)),
+      spline = list(marker = list(enabled = TRUE)),
+      area = list(marker = list(enabled = TRUE)),
+      areaspline = list(marker = list(enabled = TRUE))
+    )
+  )
+)
+
+# set up highcharts download buttons
+hc_setup <- function(x) {
+  hc_add_dependency(x, name = "modules/exporting.js") %>%
+    hc_add_dependency(name = "modules/offline-exporting.js") %>%
+    hc_exporting(
+      enabled = TRUE,
+      buttons = list(contextButton = list(menuItems = list("printChart", "downloadPNG", "downloadSVG", "downloadPDF")))
+    ) %>%
+    hc_add_theme(hc_theme_jc) %>%
+    hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
+    hc_plotOptions(series = list(animation = FALSE)) %>%
+    hc_xAxis(
+      title = "",
+      labels = list(y = 25)
+    ) %>%
+    hc_yAxis(
+      title = "",
+      labels = list(format = "{value:,.0f}")
+    )
+}
+
+# stops for highchart legend
+# n <- 5
+# stops <- data.frame(
+#   q = 0:n / n,
+#   c = c("#af4d03", orange, lightorange, lightblue, regblue, darkblue),
+#   stringsAsFactors = FALSE
+# )
+# stops <- list_parse2(stops)
+# colors <- c("#af4d03", orange, lightorange, lightblue, regblue, darkblue)
+
+# output highcharts map
+highchart_hex_map <- function(x) {
+  highchart() %>%
+    hc_add_series_map(
+      map = hex_gj,
+      df = x,
+      joinBy = "state_abb",
+      value = "total",
+      dataLabels = list(enabled = TRUE, format = "{point.state_abb}",
+                        style = list(fontSize = "11px", fontWeight = "regular", textOutline = 0)),
+      nullColor = "#e8e8e8"
+    ) %>%
+    # hc_colorAxis(minColor = "#355DA1", maxColor = "#B05D24") %>%
+    # hc_colorAxis(stops = stops) %>%
+    # hc_colorAxis(minColor = darkblue, maxColor = "#af4d03",
+    #              stops = color_stops(n=length(colors), colors = colors)) %>%
+    hc_colorAxis(min = min_map, max = max_map, stops = color_stops(6, c("#af4d03", orange, lightorange, lightblue, regblue, darkblue))) %>%
+    hc_setup()
+}
+
+# assign labels depending on data type
 create_data_text <- function(df){
 df <- df %>%
   mutate(text = case_when(

@@ -33,6 +33,8 @@ library(formattable)
 
 # load sp file
 us <- geojson_read("Data/us_states_hexgrid.geojson", what = "sp")
+hex <- read_sf(file.path("Data/us_states_hexgrid.geojson")) %>%
+  select(state_abb = iso3166_2)
 
 # load state abb
 stateAbb <- read.csv("Data/stateAbb.csv")
@@ -74,6 +76,11 @@ parole_pop_19.csv   <- read.csv("Data/Annual Probation and Parole Surveys/parole
 us_map <- fortify(us, region="iso3166_2")
 centers <- cbind.data.frame(data.frame(gCentroid(us, byid=TRUE), id=us@data$iso3166_2))
 centers <- centers[centers$id != "DC", ]
+
+hex_gj <- hex %>%
+  st_transform(3857) %>%
+  sf_geojson() %>%
+  fromJSON(simplifyVector = FALSE)
 
 # clean stateAbb file
 stateAbb <- clean_names(stateAbb)
@@ -219,19 +226,19 @@ mclc <- mclc %>% distinct()
 # add data type
 mclc <- mclc %>% mutate(metric = case_when(
   data == "total_admissions"                            ~ "Total",
-  data == "total_violation_admissions"                  ~ "Supervision Violations",
-  data == "total_probation_violation_admissions"        ~ "Probation",
-  data == "total_parole_violation_admissions"           ~ "Parole",
+  data == "total_violation_admissions"                  ~ "Supervision Violation",
+  data == "total_probation_violation_admissions"        ~ "Probation Violation",
+  data == "total_parole_violation_admissions"           ~ "Parole Violation",
   data == "new_offense_admissions"                      ~ "New Offense",
-  data == "technical_admissions"                        ~ "Technical",
+  data == "technical_admissions"                        ~ "Technical Violation",
   data == "other_admissions"                            ~ "Other",
 
   data == "total_population"                            ~ "Total",
-  data == "total_violation_population"                  ~ "Supervision Violations",
-  data == "total_probation_violation_population"        ~ "Probation",
-  data == "total_parole_violation_population"           ~ "Parole",
+  data == "total_violation_population"                  ~ "Supervision Violation",
+  data == "total_probation_violation_population"        ~ "Probation Violation",
+  data == "total_parole_violation_population"           ~ "Parole Violation",
   data == "new_offense_population"                      ~ "New Offense",
-  data == "technical_population"                        ~ "Technical",
+  data == "technical_population"                        ~ "Technical Violation",
   data == "other_population"                            ~ "Other"
 ))
 
@@ -298,7 +305,9 @@ mclc_explorer <- mclc_explorer %>% filter(choice == "Change from Previous Year")
 # create year range
 mclc_explorer <- mclc_explorer %>%
   mutate(year = case_when(year == 2019 ~ "2018 - 2019",
-                          year == 2020 ~ "2019 - 2020"))
+                          year == 2020 ~ "2019 - 2020"),
+         total = round(total*100, 2)) %>%
+  rename(state_abb = Code)
 
 # # add state abb for merging with shapefile in server
 # mclc_explorer <- merge(mclc_explorer, stateAbb, by = "state")
@@ -1079,6 +1088,8 @@ save(us,                  file="Data/us.Rda")
 save(centers,             file="Data/centers.Rda")
 save(combined,            file="Data/combined.Rda")
 save(combined_labels,     file="Data/combined_labels.Rda")
+save(hex,                 file="Data/hex.Rda")
+save(hex_gj,              file="Data/hex_gj.Rda")
 
 save(bjs_prob_parole,     file="Data/bjs_prob_parole.Rda")
 save(bjs_bubble,          file="Data/bjs_bubble.Rda")
