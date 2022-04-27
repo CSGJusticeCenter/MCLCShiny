@@ -1,216 +1,81 @@
+
 source("data_libraries.R")
 source("functions.R")
 
-ui <- dashboardPage(dashboardHeader(title = "MCLC"),
-                    sidebar = dashboardSidebar(
-                      sidebarMenu(id = "tabs",
-                                  menuItem(text = "Map Explorer",  tabName = "Map_Explorer"),
-                                  menuItem(text = "State Reports", tabName = "State_Reports"),
-                                  menuItem(text = "Download Data", tabName = "Download_Data")
-                      )
-                    ),
-                    body = dashboardBody(
+# builds theme object to be supplied to ui
+my_theme <- bs_theme(
+  bootswatch = "cosmo",
+  base_font = font_google("Noto Sans")
+) %>%
+  bs_add_rules(sass::sass_file("styles.scss"))
 
-                      # change to custom theme found in data_libraries.R
-                      customTheme,
+# let thematic know to use the font from bs_lib
+thematic_shiny(font = "auto")
 
-                      tabItems(
+####################################################################################################################################
+# User Interface
+####################################################################################################################################
 
-#--------------------------------------------------------------------------------------------------------------
-# Map Page
-#--------------------------------------------------------------------------------------------------------------
+ui <- fluidPage(
+  theme = my_theme,
+  div(id = "app-title",
+      titlePanel("Map Explorer")
+  ),
+  br(),
+  div(id = "header",
+      #######
+      # Dropdown menus
+      #######
+      # tags$style(type="text/css", "#data_map {background-color:#DEF0F6}"),
+      # tags$style(type="text/css", "#adm_or_pop_map {background-color:#DEF0F6}"),
+      # tags$style(type="text/css", "#year_map {background-color:#DEF0F6}"),
+      labeled_input('data-map-btn', "Data",
+                    selectizeInput('data_map', label = NULL,
+                                   choices = c("Total", "New Offense", "Supervision Violation", "Probation Violation", "Parole Violation", "Technical Violation"),
+                                   multiple = FALSE)),
+      labeled_input('adm-pop-map-btn', "Admissions or Population",
+                    selectizeInput('adm_or_pop_map', label = NULL,
+                                   choices = c("Admissions", "Population"),
+                                   multiple = FALSE)),
+      labeled_input('year-map-btn', "Year",
+                    selectizeInput('year_map', label = NULL,
+                                   choices = c("2018 - 2019", "2019 - 2020"),
+                                   multiple = FALSE)),
 
-                        tabItem(tabName = "Map_Explorer",
+      #######
+      # Download buttons
+      #######
+      tags$style(type="text/css", "#save_map {background-color:#355DA1}"),
+      tags$style(type="text/css", "#save_map_data {background-color:#355DA1}"),
+      labeled_input('save-map-btn', "Download Map",
+                    downloadButton(outputId = 'save_map', label = "Download Map", class = "download_this")),
+      labeled_input('save-map-data-btn', "Download Data",
+                    downloadButton(outputId = 'save_map_data', label = "Download Data", class = "download_this"))
+  ),
+  br(),
 
-                                fluidPage(########
-                                          # Side panel
-                                          ########
-                                          br(),
-                                          wellPanel(tags$style(type="text/css", '#leftPanel {width:200px; float:left;}'), id = "leftPanel",
-                                                    selectInput("data_map_counts",       "Data",  choices = c("Total", "Supervision Violations",
-                                                                                                              "Technical", "New Offense",
-                                                                                                              "Parole", "Probation")),
-                                                    selectInput("adm_or_pop_map_counts", "Type",  choices = unique(mclc_explorer$adm_or_pop)),
-                                                    selectInput("year_map_counts",       "Years", choices = unique(mclc_explorer$year)),
-                                                    downloadButton(outputId = "save_map",  label = "Download Map"),
-                                                    downloadButton(outputId = "save_data", label = "Download Data")
-                                          ),
-                                          ########
-                                          # Map
-                                          ########
-                                          mainPanel(
-                                            fluidRow(column(width = 12,
-                                                            align = "left",
-                                                            br(),
-                                                            textOutput("selected_map"),
-                                                            tags$head(tags$style("#selected_map{font-size: 20px;
-                                                                                                font-style: bold;
-                                                                                                font-family: sans-serif;}")))),
-                                            fluidRow(column(width = 12,
-                                                            align = "center",
-                                                            plotOutput("reactive_map", height = 600))),
-                                            fluidRow(column(width = 12,
-                                                            align = "center",
-                                                            reactableOutput("table_map_counts"))),
-                                            br()
-                                          ) #mainPanel
-                                ) #fluidPage
-                        ), #tabItem
+  #######
+  # Hex map
+  #######
 
-#--------------------------------------------------------------------------------------------------------------
-# State Reports
-#--------------------------------------------------------------------------------------------------------------
+  div(id = "selected-map",
+      textOutput("selected_map")),
+  highchartOutput("hex_map", height = 600, width = 1091),
+  br(),
 
-                        tabItem(tabName = "State_Reports",
-                                fluidPage(
-                                  br(),
-                                  wellPanel(tags$style(type="text/css", '#leftPanel { width:200px; float:left;}'), id = "leftPanel",
-                                            selectInput("state", "State",      choices = unique(adm_pop_long$state)),
-                                            radioButtons("adm_or_pop", "Type", choices = unique(adm_pop_long$adm_or_pop))),
+  #######
+  # Hex map table
+  #######
 
-                                  mainPanel(######
-                                            # State title
-                                            ######
-                                            fluidRow(column(width = 12,
-                                                            align = "left",
-                                                            br(),
-                                                            textOutput("selected_state"),
-                                                            tags$head(tags$style("#selected_state{font-size: 20px;
-                                                                                                  font-style: bold;
-                                                                                                  font-family: sans-serif;}")),
-                                                            br())),
+  div(id = "selected-map-table",
+      textOutput("selected_map_table")),
+  div(id = "table-map",
+  reactableOutput("table_map"),
+  ),
 
-                                            ############
-                                            # Value boxes
-                                            ############
-                                            tags$style(".small-box.bg-black       {background-color: #3C3C3C !important; color: #FFFFFF !important; }"),
-                                            tags$style(".small-box.bg-green       {background-color: #fcccac !important; color: #3C3C3C !important; }"),
-                                            tags$style(".small-box.bg-orange      {background-color: #fc9c54 !important; color: #FFFFFF !important; }"),
-                                            tags$style(".small-box.bg-blue        {background-color: #2B4570 !important; color: #FFFFFF !important; }"),
+  br(),
 
-                                            tags$style(".small-box                {border: 1px; border-style: solid; border-color: #FFFFFF !important; border-radius: 1px; padding: 0.1em; }"),
-
-                                            fluidRow(
-                                              column(width = 3,
-                                                     valueBoxOutput("total_change", width = 125)),
-                                              column(width = 3,
-                                                     valueBoxOutput("sup_change",   width = 125)),
-                                              column(width = 3,
-                                                     valueBoxOutput("tech_change",  width = 125)),
-                                              column(width = 3,
-                                                     valueBoxOutput("rev_rate",     width = 125))
-                                            ), #fluidRow
-                                            br(),
-
-                                            tabsetPanel(
-                                              ###################
-                                              # Overview of state
-                                              ###################
-                                              tabPanel(value="1","Overview",
-                                                       br(),
-                                                       ############
-                                                       # Plots
-                                                       ############
-                                                       fluidRow(
-                                                         column(width = 7,
-                                                                plotlyOutput("totals_chart",         height = 375)),
-                                                         column(width = 5,
-                                                                plotlyOutput("sup_viols_type_chart", height = 375))
-                                                       ), #fluidRow
-                                                       br(),
-                                                       ############
-                                                       # Table under graphs
-                                                       ############
-                                                       fluidRow(
-                                                         column(width = 12,
-                                                                align = "center",
-                                                                reactableOutput("state_table"))),
-                                                       br()
-                                              ),
-                                              ###################
-                                              # Parole
-                                              ###################
-                                              tabPanel("Parole",
-                                                       br(),
-                                                       ############
-                                                       # Plots
-                                                       ############
-                                                       fluidRow(column(width = 6,
-                                                                       plotlyOutput("areachart_parole", height = 300)),
-                                                                column(width = 6,
-                                                                       plotlyOutput("barchart_parole",  height = 300))),
-                                                       br(),
-                                                       ############
-                                                       # Table under graphs
-                                                       ############
-                                                       fluidRow(column(width = 12,
-                                                                       align = 'center',
-                                                                       reactableOutput("parole_table"))),
-                                                       br()
-                                              ),
-                                              ###################
-                                              # Probation
-                                              ###################
-                                              tabPanel("Probation",
-                                                       br(),
-                                                       ############
-                                                       # Plots
-                                                       ############
-                                                       fluidRow(column(width = 6,
-                                                                       plotlyOutput("areachart_prob", height = 300)),
-                                                                column(width = 6,
-                                                                       plotlyOutput("barchart_prob",  height = 300))),
-                                                       br(),
-                                                       ############
-                                                       # Table under graphs
-                                                       ############
-                                                       fluidRow(column(width = 12,
-                                                                       align = 'center',
-                                                                       reactableOutput("prob_table")))
-                                              ), #tabPanel
-                                              id = "tb2") #tabsetPanel
-                                  ) #mainPanel
-                                ) #fluidPage
-                        ), #tabItem
-
-#--------------------------------------------------------------------------------------------------------------
-# Download Data
-#--------------------------------------------------------------------------------------------------------------
-
-                        tabItem(tabName = "Download_Data",
-
-                                fluidPage(br(),
-                                          wellPanel(tags$style(type="text/css", '#leftPanel { width:250px; float:left;}'), id = "leftPanel",
-                                                    selectInput(inputId = "dataset",
-                                                                label = "Dataset",
-                                                                choices = c("More Community, Less Confinement (CSG)", "Annual Probation Survey and Annual Parole Survey (BJS)")),
-                                                    pickerInput(inputId = 'year_table',  label = 'Year(s)',  choices = NULL, selected = NULL, multiple = TRUE, options = list(`actions-box` = TRUE)),
-                                                    pickerInput(inputId = 'state_table', label = 'State(s)', choices = NULL, selected = NULL, multiple = TRUE, options = list(`actions-box` = TRUE))
-                                          ), # wellPanel
-                                          mainPanel(
-                                            fluidRow(column(width = 12,
-                                                            h3("Download Data"),
-                                                            br(),
-                                                            textOutput("selected_data"),
-                                                            tags$head(tags$style("#selected_data{font-size: 20px;
-                                                                                                 font-style: bold;
-                                                                                                 font-family: sans-serif;}")),
-                                                            br(),
-                                                            textOutput("selected_data_info"),
-                                                            br(),
-                                                            br())
-                                            ),
-                                            fluidRow(
-                                              column(width = 12,
-                                                     DT::dataTableOutput("main_table"))
-                                              )
-                                          ) #mainPanel
-                                ) #fluidPage
-                        ) #tabItem
-                      ) #tabItems
-                    ), #dashboardBody
-                    tags$head(tags$style(HTML('* {font-family: "Arial"};')))
-                    # tags$head(
-                    #   includeCSS("www/custom.css")
-                    # )
-) #dashboardPage
+  div(class = "small_text",
+      icon("database"), "Source:",
+      a(href = "https://csgjusticecenter.org/publications/more-community-less-confinement/", "More Community, Less Confinement (2021)"))
+)

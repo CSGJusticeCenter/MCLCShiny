@@ -10,20 +10,11 @@ library(scico)
 library(zoo)
 
 # highcharter
-library(tidyverse)
 library(highcharter)
 library(scales)
 library(gapminder)
 library(tidycensus)
-library(tidyverse)
-
-# highcharter
-library(tidyverse)
-library(highcharter)
-library(scales)
-library(gapminder)
-library(tidycensus)
-library(tidyverse)
+library(here)
 
 # shiny
 library(shiny)
@@ -32,6 +23,7 @@ library(dashboardthemes)
 library(shinydashboard)
 
 # data manipulation
+library(readr)
 library(readxl)
 library(dplyr)
 library(tidyverse)
@@ -39,6 +31,15 @@ library(janitor)
 library(openxlsx)
 library(writexl)
 library(formattable)
+library(bslib)
+library(thematic)
+library(showtext)
+library(patchwork)
+library(glue)
+library(tidyr)
+library(purrr)
+library(lubridate)
+library(stringr)
 
 # tables
 library(reactable)
