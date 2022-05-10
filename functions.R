@@ -35,11 +35,11 @@ hc_theme_jc <- hc_theme_merge(
     ),
     title = list(style = list(fontFamily = default_fonts, fontSize = "24px")),
     subtitle = list(style = list(fontFamily = default_fonts, fontSize = "16px")),
-    legend = list(align = "center", verticalAlign = "bottom"),
+    legend = list(align = "right", verticalAlign = "bottom", layout = "vertical"),
     caption = list(align = "right", y = 15),
     xAxis = list(
       labels = list(
-        style = list(fontSize = "11px"),
+        style = list(fontSize = "15px"),
         staggerLines = 2
       ),
       gridLineColor = "transparent"
@@ -73,36 +73,6 @@ hc_setup <- function(x) {
       title = "",
       labels = list(format = "{value:,.0f}")
     )
-}
-
-# stops for highchart legend
-# n <- 5
-# stops <- data.frame(
-#   q = 0:n / n,
-#   c = c("#af4d03", orange, lightorange, lightblue, regblue, darkblue),
-#   stringsAsFactors = FALSE
-# )
-# stops <- list_parse2(stops)
-# colors <- c("#af4d03", orange, lightorange, lightblue, regblue, darkblue)
-
-# output highcharts map
-highchart_hex_map <- function(x) {
-  highchart() %>%
-    hc_add_series_map(
-      map = hex_gj,
-      df = x,
-      joinBy = "state_abb",
-      value = "total",
-      dataLabels = list(enabled = TRUE, format = "{point.state_abb}",
-                        style = list(fontSize = "11px", fontWeight = "regular", textOutline = 0)),
-      nullColor = "#e8e8e8"
-    ) %>%
-    # hc_colorAxis(minColor = "#355DA1", maxColor = "#B05D24") %>%
-    # hc_colorAxis(stops = stops) %>%
-    # hc_colorAxis(minColor = darkblue, maxColor = "#af4d03",
-    #              stops = color_stops(n=length(colors), colors = colors)) %>%
-    hc_colorAxis(min = min_map, max = max_map, stops = color_stops(6, c("#af4d03", orange, lightorange, lightblue, regblue, darkblue))) %>%
-    hc_setup()
 }
 
 # assign labels depending on data type

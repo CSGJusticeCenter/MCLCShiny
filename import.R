@@ -80,7 +80,7 @@ hex_gj <- hex %>%
 
 # clean stateAbb file
 stateAbb <- clean_names(stateAbb)
-stateAbb <- stateAbb %>% select(state = i_state,
+stateAbb <- stateAbb %>% select(state,
                                 Abbrev = abbrev,
                                 Code = code)
 
@@ -960,3 +960,4 @@ save(hex_gj,              file="Data/hex_gj.Rda")
 save(bjs_prob_parole,     file="Data/bjs_prob_parole.Rda")
 save(bjs,                 file="Data/bjs.Rda")
 save(csg,                 file="Data/csg.Rda")
+

@@ -86,7 +86,7 @@ server <- function(input, output, session) {
               compact = TRUE,
               fullWidth = TRUE,
               bordered = FALSE,
-              rowStyle = list(`border-top` = "thin dashed", borderColor = "#355DA1"),
+              # rowStyle = list(`border-top` = "thin dashed", borderColor = "#355DA1"),
               theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
               defaultColDef = colDef(
                 format = colFormat(separators = TRUE),
