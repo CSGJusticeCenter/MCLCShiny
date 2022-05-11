@@ -83,7 +83,8 @@ ui <- fluidPage(
   div(id = "selected-map-table",
       textOutput("selected_map_table")),
   div(id = "table-map",
-  reactableOutput("table_map"),
+  # reactableOutput("table_map"),
+  dataTableOutput("table_map"),
   ),
 
   br(),
