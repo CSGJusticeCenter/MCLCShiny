@@ -53,6 +53,7 @@ library(stringr)
 # tables
 library(reactable)
 library(DT)
+library(reactablefmtr)
 
 # maps
 library(leaflet)

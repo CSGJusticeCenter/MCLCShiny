@@ -35,7 +35,7 @@ hc_theme_jc <- hc_theme_merge(
     ),
     title = list(style = list(fontFamily = default_fonts, fontSize = "24px")),
     subtitle = list(style = list(fontFamily = default_fonts, fontSize = "16px")),
-    legend = list(align = "right", verticalAlign = "bottom", layout = "vertical"),
+    # legend = list(align = "right", verticalAlign = "bottom", layout = "vertical"), # labels = list(format = "{percentage:.0f}")
     caption = list(align = "right", y = 15),
     xAxis = list(
       labels = list(
@@ -59,12 +59,13 @@ hc_setup <- function(x) {
   hc_add_dependency(x, name = "modules/exporting.js") %>%
     hc_add_dependency(name = "modules/offline-exporting.js") %>%
     hc_exporting(
-      enabled = TRUE,
+      enabled = FALSE, # change to TRUE to add drop down download options
       buttons = list(contextButton = list(menuItems = list("printChart", "downloadPNG", "downloadSVG", "downloadPDF")))
     ) %>%
     hc_add_theme(hc_theme_jc) %>%
     hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
     hc_plotOptions(series = list(animation = FALSE)) %>%
+    hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical", valueDecimals = 0, valueSuffix = "%") %>%
     hc_xAxis(
       title = "",
       labels = list(y = 25)

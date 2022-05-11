@@ -68,7 +68,7 @@ server <- function(input, output, session) {
       ) %>%
       hc_colorAxis(min = min_map,
                    max = max_map,
-                   stops = color_stops(6, c("#af4d03", orange, lightorange, lightblue, regblue, darkblue))) %>%
+                   stops = color_stops(7, c("#af4d03", orange, lightorange, "#FFFFFF", lightblue, regblue, darkblue))) %>%
       hc_setup()
   })
 
@@ -81,7 +81,7 @@ server <- function(input, output, session) {
 
   output$table_map <- renderReactable(
     reactable(df_map_table(),
-              searchable = TRUE,
+              searchable = FALSE,
               defaultPageSize = 50,
               compact = TRUE,
               fullWidth = TRUE,
@@ -94,7 +94,9 @@ server <- function(input, output, session) {
                 headerStyle = list(color = "#355DA1",
                                    "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
                                    "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
-                                   borderColor = "#FFFFFF")),
+                                   borderColor = NULL,
+                                   borderWidth = 0.5)
+                ),
               columns = list(
                 state         = colDef(name = "State",
                                        align = "left",
