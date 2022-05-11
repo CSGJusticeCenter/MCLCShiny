@@ -71,8 +71,8 @@ ui <- fluidPage(
   # Hex map
   #######
 
-  div(id = "selected-map",
-      textOutput("selected_map")),
+  # div(id = "selected-map",
+  #     textOutput("selected_map")),
   highchartOutput("hex_map", height = 600, width = 1091),
   br(),
 

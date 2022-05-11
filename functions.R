@@ -56,7 +56,7 @@ hc_theme_jc <- hc_theme_merge(
 
 # set up highcharts download buttons
 hc_setup <- function(x) {
-  hc_add_dependency(x, name = "modules/exporting.js") %>%
+    hc_add_dependency(x, name = "modules/exporting.js") %>%
     hc_add_dependency(name = "modules/offline-exporting.js") %>%
     hc_exporting(
       enabled = FALSE, # change to TRUE to add drop down download options
@@ -73,7 +73,8 @@ hc_setup <- function(x) {
     hc_yAxis(
       title = "",
       labels = list(format = "{value:,.0f}")
-    )
+    ) %>%
+    hc_title("Title")
 }
 
 # assign labels depending on data type
