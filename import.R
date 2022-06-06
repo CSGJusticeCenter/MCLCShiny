@@ -17,19 +17,24 @@
 #     Census API through tidycensus
 #######################################
 
-library(formattable)
-
 # use to pull state population data
 # census_api_key("YOUR API KEY HERE")
+
+# sharepoint directory
+CSG_SP_PATH = "C:/Users/mroberts/The Council of State Governments/JC Research - 50 State Revocations Project/MCLC Shiny App"
+
+# local directory
+L_PATH = "C:/Users/mroberts/OneDrive - The Council of State Governments/Desktop/csgjc/repos/MCLCShiny"
+
+# load packages
+source("library.R")
+
+# set directory to sharepoint to read data
+setwd(CSG_SP_PATH)
 
 ########
 # Import data
 ########
-
-# set wd to teams (for collaboration) - change user name to read in data
-# setwd("C:/Users/mroberts/The Council of State Governments/JC Research - 50 State Revocations Project/50 State Survey (2021)")
-# setwd("~/The Council of State Governments/JC Research - 50 State Survey (2021)")
-# setwd("C:/Users/jmallett/The Council of State Governments/JC Research - Documents/50 State Revocations Project/50 State Survey (2021)")
 
 # load sp file
 us <- geojson_read("Data/us_states_hexgrid.geojson", what = "sp")
@@ -80,7 +85,7 @@ hex_gj <- hex %>%
 
 # clean stateAbb file
 stateAbb <- clean_names(stateAbb)
-stateAbb <- stateAbb %>% select(state,
+stateAbb <- stateAbb %>% select(state = i_state,
                                 Abbrev = abbrev,
                                 Code = code)
 
@@ -961,3 +966,5 @@ save(bjs_prob_parole,     file="Data/bjs_prob_parole.Rda")
 save(bjs,                 file="Data/bjs.Rda")
 save(csg,                 file="Data/csg.Rda")
 
+# set working directory to local folder
+setwd(L_PATH)
