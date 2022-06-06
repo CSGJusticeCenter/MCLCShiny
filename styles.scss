@@ -1,3 +1,6 @@
+
+/* ################## Screen Settings ################## */
+
 /* Dont let the page get awkwardly wide on big screens */
 body > div {
   max-width: 1200px;
@@ -17,14 +20,17 @@ body > div {
   position: absolute;
 }
 
-/* Make title nice and centered */
-#app-title > h2 {
-  text-align: center;
-  font-weight: bold;
+/* ################## Font size and style ################## */
+
+/* Make some wordy sections smaller */
+.small_text {
+  font-size: small;
 }
 
+/* ################## Header ################## */
+
 /* Top of page is a small grid of controls and info*/
-/* Can change background of header here   background-color:#DEF0F6; */
+/* Can change background of header here background-color:#DEF0F6; */
 #header {
   /*margin: 1rem auto; making everything shift to the left*/
   width: 768px;
@@ -34,6 +40,19 @@ body > div {
 
 #header > div {
   display: inline-block;
+}
+
+/* logo */
+.skin-blue .main-header .logo {
+background-color: #f4b943;
+}
+
+/* ################## Drop Downs and Buttons ################## */
+
+/* Make title centered */
+#app-title > h2 {
+  text-align: center;
+  font-weight: bold;
 }
 
 /* Format for selector input adm-pop-map*/
@@ -95,6 +114,8 @@ button > div {
   white-space: nowrap;
 }
 
+/* ################## MAP ################## */
+
 /* Map select input margins and font style */
 /* Text inputs bottom margin prevents it from lining up nicely, so remove */
 .form-group.shiny-input-container,
@@ -103,24 +124,22 @@ button > div {
   font-weight: bold;
 }
 
-/* Make some wordy sections smaller */
-.small_text {
-  font-size: small;
-}
-
-
-#table-map {
-  text-align: left;
-}
-
-#selected-map{
+/* Align map */
+#hex-map{
   text-align: left;
   font-weight: bold;
   font-size:24px;
 }
 
+/* Align title of data table underneath map */
 #selected-map-table{
   text-align: left;
   font-weight: bold;
   font-size:24px;
+}
+
+/* Align data table underneath map */
+table-map
+#table-map {
+  text-align: left;
 }
