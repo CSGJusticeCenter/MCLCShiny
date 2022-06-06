@@ -1,6 +1,12 @@
 
-
+/* Change font family throughout */
 *{font-family: "Noto Sans", Helvetica, sans-serif;}
+
+/* Make title centered
+#app-title > h2 {
+  text-align: center;
+  font-weight: bold;
+} */
 
 /*######################################
           Navigation Bar Color and Font
@@ -13,27 +19,24 @@
 .tab-panel{background-color: #004270; color: #004270}
 
 .navbar-nav li a:hover, .navbar-nav > .active > a {
-color: #2EEBC4 !important;
-background-color:#004270 !important;
-background-image: #fff !important;
+  color: #2EEBC4 !important;
+  background-color:#004270 !important;
+  background-image: #fff !important;
 }
 
 /* Top of page is a small grid of controls and info*/
 /* Can change background of header here background-color:#DEF0F6; */
 #header {
   /*margin: 1rem auto; making everything shift to the left*/
-  width: 768px;
+  /*width: 768px;*/
   display: -ms-flexbox;
   display: flex; /* helps vertically align stuff */
+  background-color:#DDE3E9 !important;
+  height: 100px;
 }
 
 #header > div {
   display: inline-block;
-}
-
-/* logo */
-.skin-blue .main-header .logo {
-background-color: #f4b943;
 }
 
 /*
@@ -46,7 +49,8 @@ background-color: #f4b943;
           Screen Settings
 ########################################*/
 
-/* Dont let the page get awkwardly wide on big screens */
+
+/* Dont let the page get awkwardly wide on big screens - remove if you dont want white space*/
 body > div {
   max-width: 1200px;
 }
@@ -64,6 +68,7 @@ body > div {
 #page-top > * {
   position: absolute;
 }
+*/
 
 /*######################################
           Font size and style
@@ -77,12 +82,6 @@ body > div {
 /*######################################
           Drop Downs and Buttons
 ########################################*/
-
-/* Make title centered */
-#app-title > h2 {
-  text-align: center;
-  font-weight: bold;
-}
 
 /* Format for selector input adm-pop-map*/
 #adm-pop-map-btn {
@@ -192,6 +191,10 @@ table-map
     color: #2EEBC4 !important;
     background-color:#004270 !important;
     background-image: none !important;
+}
+
+.skin-blue .main-header .logo {
+background-color: #f4b943;
 }
 
 
