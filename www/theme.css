@@ -19,15 +19,24 @@
   /*color: #FFFFFF; NOT WORKING */
 }
 
-/*.navbar-default .navbar-brand{color: white;}  NOT WORKING */
-
-.tab-panel{background-color: #004270; color: #004270}
+.navbar-default .navbar-nav>li>a, .navbar-default .navbar-nav>li>a{
+  background-color: #004270 !important;
+  font-size: 16px;
+  font-weight: bold;
+  color: #FFFFFF !important;
+}
 
 .navbar-nav li a:hover, .navbar-nav > .active > a {
   color: #2EEBC4 !important;
   background-color:#004270 !important;
-  background-image: #fff !important;
 }
+
+.tab-panel{background-color: #004270; color: #004270}
+
+/*######################################
+          MAP EXPLORER 
+          Header with dropdowns
+########################################*/
 
 /* Top of page is a small grid of controls and info*/
 /* Can change background of header here background-color:#DEF0F6; */
@@ -80,6 +89,7 @@ body > div {
 }
 
 /*######################################
+          MAP EXPLORER 
           Drop Downs and Buttons
 ########################################*/
 
@@ -146,7 +156,7 @@ button > div {
 }
 
 /*######################################
-          Map
+          MAP EXPLORER 
 ########################################*/
 
 /* Map select input margins and font style */
