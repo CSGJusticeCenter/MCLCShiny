@@ -1,65 +1,4 @@
 
-/* Change font family throughout */
-*{font-family: "Noto Sans", Helvetica, sans-serif;}
-
-/* Make title centered
-#app-title > h2 {
-  text-align: center;
-  font-weight: bold;
-} */
-
-/*######################################
-          Navigation Bar Color and Font
-########################################*/
-
-.navbar{
-  background-color: #004270;
-  font-size: 16px;
-  font-weight: bold;
-  /*color: #FFFFFF; NOT WORKING */
-}
-
-.navbar-default .navbar-nav>li>a, .navbar-default .navbar-nav>li>a{
-  background-color: #004270 !important;
-  font-size: 16px;
-  font-weight: bold;
-  color: #FFFFFF !important;
-}
-
-.navbar-nav li a:hover, .navbar-nav > .active > a {
-  color: #2EEBC4 !important;
-  background-color:#004270 !important;
-}
-
-.tab-panel{background-color: #004270; color: #004270}
-
-/*######################################
-          MAP EXPLORER 
-          Header with dropdowns
-########################################*/
-
-/* Top of page is a small grid of controls and info*/
-/* Can change background of header here background-color:#DEF0F6; */
-#header {
-  /*margin: 1rem auto; making everything shift to the left*/
-  /*width: 768px;*/
-  display: -ms-flexbox;
-  display: flex; /* helps vertically align stuff */
-  background-color:#DDE3E9 !important;
-  height: 100px;
-  padding: 0 0px;
-}
-
-#header > div {
-  display: inline-block;
-}
-
-/*
-#app-title > h2 {
-  text-align: center;
-  font-weight: bold;
-}*/
-
 /*######################################
           Screen Settings
 ########################################*/
@@ -88,9 +27,62 @@ body > div {
   font-size: small;
 }
 
+/* Change font family throughout */
+*{font-family: "Noto Sans", Helvetica, sans-serif;}
+
+/* Make title centered
+#app-title > h2 {
+  text-align: center;
+  font-weight: bold;
+} */
+
+/*######################################
+          Navigation Bar Color and Font
+########################################*/
+
+.navbar{
+  background-color: #004270;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.navbar-default .navbar-nav>li>a, .navbar-default .navbar-nav>li>a{
+  background-color: #004270 !important;
+  font-size: 16px;
+  font-weight: bold;
+  color: #FFFFFF !important;
+}
+
+.navbar-nav li a:hover, .navbar-nav > .active > a {
+  color: #2EEBC4 !important;
+  background-color:#004270 !important;
+}
+
+.tab-panel{background-color: #004270; color: #004270}
+
+/*######################################
+          Header with dropdowns
+########################################*/
+
+/* Top of page is a small grid of controls and info*/
+/* Can change background of header here background-color:#DEF0F6; */
+#header {
+  /*margin: 1rem auto; making everything shift to the left*/
+  /*width: 768px;*/
+  display: -ms-flexbox;
+  display: flex; /* helps vertically align stuff */
+  background-color:#DDE3E9 !important;
+  height: 100px;
+  padding: 0 0px;
+}
+
+#header > div {
+  display: inline-block;
+}
+
 /*######################################
           MAP EXPLORER 
-          Drop Downs and Buttons
+          Dropdowns and buttons
 ########################################*/
 
 /* Remove rounded edges from drop downs */
@@ -146,7 +138,7 @@ body > div {
   text-align: left;
 }
 
-/* Buttons are set at a fixed width and if content is too big it gets elipsed*/
+/* Buttons are set at a fixed width and if content is too big it gets elipsed */
 button { width: 50px; }
 button > div {
   -o-text-overflow: ellipsis;
@@ -164,25 +156,30 @@ button > div {
 .form-group.shiny-input-container,
 .selectize-control {
   margin-bottom: 0;
-  /*font-weight: bold;*/
 }
 
-/* Align map */
+/* Title of map settings 
+#selected-map {
+  text-align: left;
+  font-weight: bold;
+  font-size: 24px;
+} */
+
+/* Map settings */
 #hex-map{
   text-align: left;
   font-weight: bold;
   font-size:24px;
 }
 
-/* Align title of data table underneath map */
+/* Title of table under map settings */
 #selected-map-table{
   text-align: left;
   font-weight: bold;
   font-size:24px;
 }
 
-/* Align data table underneath map */
-table-map
+/* Table under map settings */
 #table-map {
   text-align: left;
 }

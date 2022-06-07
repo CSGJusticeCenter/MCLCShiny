@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: server.R
 # Authors: Mari Roberts
-# Date last updated: June 6, 2022
+# Date last updated: June 7, 2022
 # Description:
 #    Server for shiny app
 #######################################
@@ -19,7 +19,11 @@ server <- function(input, output, session) {
 
   # title of map based on user input
   output$selected_map <- renderText({paste("Change in ", input$data_map, " ", input$adm_or_pop_map, "from ", input$year_map)})
-
+  
+  #######
+  # Hex map 
+  #######
+  
   #____________________________________________________________________________________________________________
   # STATE REPORTS
   #____________________________________________________________________________________________________________

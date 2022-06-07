@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: data_libraries.R
 # Authors: Mari Roberts
-# Date: April 27, 2022
+# Date last updated: June 7, 2022
 # Description:
 #    Load data files created in import.R, assign colors and fonts
 #######################################

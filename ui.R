@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: ui.R
 # Authors: Mari Roberts
-# Date: April 27, 2022
+# Date last updated: June 7, 2022
 # Description:
 #    User interface for shiny app
 #######################################
@@ -13,13 +13,22 @@ source("dataframes.R")
 source("functions.R")
 
 ui <- fluidPage(includeCSS("www/theme.css"),
+                
                 navbarPage(tags$style(type = "text/css", ".container-fluid {padding-left:0px; padding-right:0px;}"),
                            tags$style(type = "text/css", ".navbar {margin-bottom: .5px;}"),
                            tags$style(type = "text/css", ".container-fluid .navbar-header .navbar-brand {margin-left: 0px;}"),
 
                            title = "",
-
+                           
+##############################################################################################################################
+                          
+                           tabPanel("",icon = icon("home", lib = "glyphicon"),value = "home"),
+                           
+##############################################################################################################################
+                           
                            tabPanel("National Report"),
+
+##############################################################################################################################
 
                            tabPanel("Map Explorer",
 
@@ -70,18 +79,30 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                         ) # end fluidRow
                                     ), # end div header
                                     br(),
-                                    textOutput("selected_map")
+                                    div(id = "selected-map", textOutput("selected_map")),
                            ), # end tabPanel
+
+##############################################################################################################################
 
                            tabPanel("State Reports"),
 
+##############################################################################################################################
+
                            tabPanel("Download"),
+
+##############################################################################################################################
 
                            tabPanel("Methodology"),
 
+##############################################################################################################################
+
                            tabPanel("Videos"),
+
+##############################################################################################################################
 
                            tabPanel("Project Credits"))
 )
 
 
+# Useful links
+# https://stackoverflow.com/questions/43244468/how-to-direct-to-another-web-page-after-clicking-tabpanel-in-shiny-app
