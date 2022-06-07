@@ -18,7 +18,7 @@ server <- function(input, output, session) {
   #######
 
   # title of map based on user input
-  output$selected_map <- renderText({paste("Change in ", input$data_map, " ", input$adm_or_pop_map, ", ", input$year_map)})
+  output$selected_map <- renderText({paste("Change in ", input$data_map, " ", input$adm_or_pop_map, "from ", input$year_map)})
 
   #____________________________________________________________________________________________________________
   # STATE REPORTS

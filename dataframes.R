@@ -7,6 +7,8 @@
 #    Load data files created in import.R, assign colors and fonts
 #######################################
 
+setwd(CSG_SP_PATH)
+
 #______________________________________________________
 # read in R data
 #______________________________________________________
@@ -63,3 +65,5 @@ change_colors <- c("#af4d03", orange, lightorange, lightblue, regblue, darkblue)
 #                    "sans-serif", "Apple Color Emoji", "Segoe UI Emoji",
 #                    "Segoe UI Symbol", "Noto Color Emoji")
 default_fonts <- c("Noto Sans")
+
+setwd(L_PATH)

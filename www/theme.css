@@ -12,9 +12,14 @@
           Navigation Bar Color and Font
 ########################################*/
 
-.navbar{ background-color: #004270;}
+.navbar{
+  background-color: #004270;
+  font-size: 16px;
+  font-weight: bold;
+  /*color: #FFFFFF; NOT WORKING */
+}
 
-.navbar-default .navbar-brand{color: white;} /* NOT WORKING */
+/*.navbar-default .navbar-brand{color: white;}  NOT WORKING */
 
 .tab-panel{background-color: #004270; color: #004270}
 
@@ -33,6 +38,7 @@
   display: flex; /* helps vertically align stuff */
   background-color:#DDE3E9 !important;
   height: 100px;
+  padding: 0 0px;
 }
 
 #header > div {
@@ -49,7 +55,6 @@
           Screen Settings
 ########################################*/
 
-
 /* Dont let the page get awkwardly wide on big screens - remove if you dont want white space*/
 body > div {
   max-width: 1200px;
@@ -65,11 +70,6 @@ body > div {
   position: relative;
 }
 
-#page-top > * {
-  position: absolute;
-}
-*/
-
 /*######################################
           Font size and style
 ########################################*/
@@ -83,48 +83,51 @@ body > div {
           Drop Downs and Buttons
 ########################################*/
 
-/* Format for selector input adm-pop-map*/
-#adm-pop-map-btn {
-  margin: 0 20px;
-  font-weight: bold;
-  width: 200px;
+/* Remove rounded edges from drop downs */
+.selectize-input {
+  border-radius:0px; 
+  color: #004270;
+}
+.selectize-input.dropdown-active {
+  border-radius:0px;
+  color: #004270;
+}
+.selectize-dropdown {
+  border-radius:0px;
+  color: #004270;
+}
+.selectize-dropdown-content .active {
+  border-radius:0px;
   color: #004270;
 }
 
 /* Format for selector input data-map*/
 #data-map-btn {
-  font-weight: bold;
-  width: 200px;
+  margin: 17px 10px 17px 10px;
+  width: 175px;
+  color: #004270;
+}
+
+/* Format for selector input adm-pop-map */
+#adm-pop-map-btn {
+  margin: 17px 10px 17px 10px;
+  width: 175px;
   color: #004270;
 }
 
 /* Format for selector input year-map*/
 #year-map-btn {
-  font-weight: bold;
-  width: 200px;
+  margin: 17px 10px 17px 10px;
+  width: 175px;
   color: #004270;
-}
-
-/* Format for selector input save-map*/
-#save-map-btn {
-  margin: 0 20px;
-  font-weight: bold;
-  color: #FFFFFF;
-
-}
-
-/* Format for selector input save-map-data*/
-#save-map-data-btn {
-  font-weight: bold;
-  color: #FFFFFF;
 }
 
 /* Size of download buttons */
 .download_this{
-    height:36px;
-    width:200px;
-    text-align: left;
-    font-weight: bold;
+  text-align: left;
+  margin:41px 10px 41px 10px;
+  width:175px;
+  border-radius:0px;
 }
 
 /* Makes the label for header inputs sit centered on top */
@@ -146,13 +149,12 @@ button > div {
           Map
 ########################################*/
 
-
 /* Map select input margins and font style */
 /* Text inputs bottom margin prevents it from lining up nicely, so remove */
 .form-group.shiny-input-container,
 .selectize-control {
   margin-bottom: 0;
-  font-weight: bold;
+  /*font-weight: bold;*/
 }
 
 /* Align map */

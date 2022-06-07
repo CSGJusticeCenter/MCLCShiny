@@ -7,6 +7,7 @@
 #    User interface for shiny app
 #######################################
 
+setwd(L_PATH)
 source("library.R")
 source("dataframes.R")
 source("functions.R")
@@ -23,39 +24,54 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                            tabPanel("Map Explorer",
 
                                     # div(id = "app-title", titlePanel("Map Explorer")),
-
+                                
                                     div(id = "header",
-
+                                        
                                         #######
-                                        # Dropdown menus
+                                        # Dropdown and download buttons
                                         #######
-
-                                        labeled_input('data-map-btn', "Select Data",
-                                                      selectizeInput('data_map', label = NULL,
-                                                                     choices = c("Total", "New Offense", "Supervision Violation", "Probation Violation", "Parole Violation", "Technical Violation"),
-                                                                     multiple = FALSE)),
-                                        labeled_input('adm-pop-map-btn', "Select Type",
-                                                      selectizeInput('adm_or_pop_map', label = NULL,
-                                                                     choices = c("Admissions", "Population"),
-                                                                     multiple = FALSE)),
-                                        labeled_input('year-map-btn', "Select Years",
-                                                      selectizeInput('year_map', label = NULL,
-                                                                     choices = c("2018 - 2019", "2019 - 2020"),
-                                                                     multiple = FALSE)),
-
-                                        #######
-                                        # Download buttons
-                                        #######
-
-                                        tags$style(type="text/css", "#save_map {background-color:#004270; color: #fff;}"),
-                                        tags$style(type="text/css", "#save_map_data {background-color:#004270; color: #fff;}"),
-                                        labeled_input('save-map-btn', "",
-                                                      downloadButton(outputId = 'save_map', label = "Download Map", class = "download_this")),
-                                        labeled_input('save-map-data-btn', "",
-                                                      downloadButton(outputId = 'save_map_data', label = "Download Data", class = "download_this"))),
-
-                                    br()
-                           ),
+                                        
+                                        fluidRow(
+                                          column(width = 1),
+                                          column(width = 2, 
+                                                 #selectizeInput('data_map', label = "Select Data", choices = c("Total", "New Offense", "Supervision Violation", "Probation Violation", "Parole Violation", "Technical Violation"), multiple = FALSE)
+                                                 labeled_input('data-map-btn', "",
+                                                               selectizeInput('data_map', div(style = "font-weight: bold", "Select Data"),
+                                                                              choices = c("Total", "New Offense", "Supervision Violation", "Probation Violation", "Parole Violation", "Technical Violation"),
+                                                                              multiple = FALSE))
+                                                 ),
+                                          column(width = 2, 
+                                                 #selectizeInput('adm_or_pop_map', label = "Select Type", choices = c("Admissions", "Population"), multiple = FALSE)
+                                                 labeled_input('adm-pop-map-btn', "",
+                                                               selectizeInput('adm_or_pop_map', div(style = "font-weight: bold", "Select Type"),
+                                                                              choices = c("Admissions", "Population"),
+                                                                              multiple = FALSE))
+                                                 ),
+                                          column(width = 2, 
+                                                 #selectizeInput('year_map', label = "Select Years", choices = c("2018 - 2019", "2019 - 2020"), multiple = FALSE)
+                                                 labeled_input('year-map-btn', "",
+                                                               selectizeInput('year_map', div(style = "font-weight: bold", "Select Years"),
+                                                                              choices = c("2018 - 2019", "2019 - 2020"),
+                                                                              multiple = FALSE))
+                                                 ),
+                                          column(width = 2, 
+                                                 #downloadButton(outputId = 'save_map', label = "Download Map", class = "download_this")
+                                                 tags$style(type="text/css", "#save_map {background-color:#004270; color: #fff;}"),
+                                                 labeled_input('save-map-btn', "",
+                                                               downloadButton(outputId = 'save_map', label = "Download Map", class = "download_this"))
+                                                 ),
+                                          column(width = 2, 
+                                                 #downloadButton(outputId = 'save_map_data', label = "Download Data", class = "download_this")
+                                                 tags$style(type="text/css", "#save_map_data {background-color:#004270; color: #fff;}"),
+                                                 labeled_input('save-map-data-btn', "",
+                                                               downloadButton(outputId = 'save_map_data', label = "Download Data", class = "download_this"))
+                                                 ),
+                                          column(width = 1)
+                                        ) # end fluidRow
+                                    ), # end div header
+                                    br(),
+                                    textOutput("selected_map")
+                           ), # end tabPanel
 
                            tabPanel("State Reports"),
 

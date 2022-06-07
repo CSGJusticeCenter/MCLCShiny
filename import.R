@@ -22,9 +22,11 @@
 
 # sharepoint directory
 CSG_SP_PATH = "C:/Users/mroberts/The Council of State Governments/JC Research - 50 State Revocations Project/MCLC Shiny App"
+CSG_SP_PATH = "~/The Council of State Governments/JC Research - 50 State Revocations Project/MCLC Shiny App"
 
 # local directory
 L_PATH = "C:/Users/mroberts/OneDrive - The Council of State Governments/Desktop/csgjc/repos/MCLCShiny"
+L_PATH = "~/csgjc/MCLCShiny"
 
 # load packages
 source("library.R")
@@ -85,7 +87,7 @@ hex_gj <- hex %>%
 
 # clean stateAbb file
 stateAbb <- clean_names(stateAbb)
-stateAbb <- stateAbb %>% select(state = i_state,
+stateAbb <- stateAbb %>% select(state,
                                 Abbrev = abbrev,
                                 Code = code)
 

@@ -1,6 +1,6 @@
 #######################################
 # Project: MCLCShiny
-# File: import.R
+# File: functions.R
 # Authors: Mari Roberts
 # Date: April 27, 2022
 # Description:
@@ -222,3 +222,4 @@ valueBox2 <- function(value, title, subtitle, icon = NULL, color = "aqua", width
     boxContent
   )
 }
+
