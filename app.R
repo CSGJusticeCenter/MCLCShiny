@@ -8,8 +8,8 @@
 #######################################
 
 # set directory paths
-CSG_SP_PATH = "~/The Council of State Governments/JC Research - 50 State Revocations Project/MCLC Shiny App"
-L_PATH = "~/csgjc/MCLCShiny"
+CSG_SP_PATH = "C:/Users/mroberts/The Council of State Governments/JC Research - 50 State Revocations Project/MCLC Shiny App"
+L_PATH = "C:/Users/mroberts/OneDrive - The Council of State Governments/Desktop/csgjc/repos/MCLCShiny"
 
 # run ui and server code
 source("ui.R")
@@ -17,4 +17,5 @@ source("server.R")
 
 # launch shiny app
 shinyApp(ui = ui, server = server)
+
 

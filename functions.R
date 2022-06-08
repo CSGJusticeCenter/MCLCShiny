@@ -54,28 +54,27 @@ hc_theme_jc <- hc_theme_merge(
   )
 )
 
-# set up highcharts download buttons
-hc_setup <- function(x) {
-    hc_add_dependency(x, name = "modules/exporting.js") %>%
-    hc_add_dependency(name = "modules/offline-exporting.js") %>%
-    hc_exporting(
-      enabled = FALSE, # change to TRUE to add drop down download options
-      buttons = list(contextButton = list(menuItems = list("printChart", "downloadPNG", "downloadSVG", "downloadPDF")))
-    ) %>%
-    hc_add_theme(hc_theme_jc) %>%
-    hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
-    hc_plotOptions(series = list(animation = FALSE)) %>%
-    hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical", valueDecimals = 0, valueSuffix = "%") %>%
-    hc_xAxis(
-      title = "",
-      labels = list(y = 25)
-    ) %>%
-    hc_yAxis(
-      title = "",
-      labels = list(format = "{value:,.0f}")
-    ) %>%
-    hc_title("Title")
-}
+# # set up highcharts download buttons
+# hc_setup <- function(x) {
+#     hc_add_dependency(x, name = "modules/exporting.js") %>%
+#     hc_add_dependency(name = "modules/offline-exporting.js") %>%
+#     hc_exporting(
+#       enabled = FALSE, # change to TRUE to add drop down download options
+#       buttons = list(contextButton = list(menuItems = list("printChart", "downloadPNG", "downloadSVG", "downloadPDF")))
+#     ) %>%
+#     hc_add_theme(hc_theme_jc) %>%
+#     hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
+#     hc_plotOptions(series = list(animation = FALSE)) %>%
+#     hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical", valueDecimals = 0, valueSuffix = "%") %>%
+#     hc_xAxis(
+#       title = "",
+#       labels = list(y = 25)
+#     ) %>%
+#     hc_yAxis(
+#       title = "",
+#       labels = list(format = "{value:,.0f}")
+#     )
+# }
 
 # assign labels depending on data type
 create_data_text <- function(df){
