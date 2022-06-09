@@ -96,19 +96,24 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                     br(),
 
                                     #######
-                                    # Hex map
+                                    # Hex map table
                                     #######
 
                                     fluidRow(column(width = 1),
                                              column(width = 10, align = "left", div(id = "selected-map-table", textOutput("selected_map_table"))),
+                                             column(width = 1)
+                                             ),
+
+                                    br(),
+
+                                    tags$head(tags$style(HTML("thead{color: #004270; font-size: 16px}"))),
+                                    fluidRow(column(width = 1),
+                                             column(width = 10, align = "left", div(id = "table-map", formattableOutput("table_map"))),
                                              column(width = 1)),
 
                                     # fluidRow(column(width = 1),
-                                    #          column(width = 10, align = "left", div(id = "table-map", formattableOutput("table_map"))),
+                                    #          column(width = 10, align = "left", div(id = "table-map", dataTableOutput("table_map"))),
                                     #          column(width = 1)),
-                                    fluidRow(column(width = 1),
-                                             column(width = 10, align = "left", div(id = "table-map", dataTableOutput("table_map"))),
-                                             column(width = 1)),
 
                                     br(),
                                     br()
@@ -138,4 +143,5 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
 
 # Useful links
-# https://stackoverflow.com/questions/43244468/how-to-direct-to-another-web-page-after-clicking-tabpanel-in-shiny-app
+# DIRECTING TO WEB PAGE - https://stackoverflow.com/questions/43244468/how-to-direct-to-another-web-page-after-clicking-tabpanel-in-shiny-app
+# SEARCH BAR - https://stackoverflow.com/questions/55848517/how-do-i-add-search-widget-to-my-shiny-app

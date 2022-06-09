@@ -149,6 +149,7 @@ button > div {
 
 /*######################################
           MAP EXPLORER
+          Hex map
 ########################################*/
 
 /* Map select input margins and font style */
@@ -172,6 +173,11 @@ button > div {
   font-size:24px;
 }
 
+/*######################################
+          MAP EXPLORER
+          Table
+########################################*/
+
 /* Title of table under map settings */
 #selected-map-table{
   text-align: left;
@@ -183,6 +189,10 @@ button > div {
 #table-map {
   text-align: left;
 }
+
+/* Header font color and size for table under map */
+/* .thead{color: #004270;} */
+
 
 
 

@@ -116,22 +116,29 @@ server <- function(input, output, session) {
         # title of table under map based on user input
         output$selected_map_table <- renderText({paste(input$data_map, " ", input$adm_or_pop_map)})
 
-        # table under hex map
-        output$table_map = DT::renderDataTable({
-          # https://stackoverflow.com/questions/64097670/jquery-datatable-heading-and-search-on-the-same-line
-          datatable(df_map_table(),
-                    options = list(dom = 'ft',
-                                   columnDefs = list(list(visible=FALSE, targets=c(1)))),
-                    rownames = FALSE) %>%
-            formatPercentage(c("2018 - 2019", "2019 - 2020"), 2) %>%
-            formatCurrency(c("2018", "2019", "2020"), currency = "", interval = 3, mark = ",")
-        })
-        # output$table_map <-renderFormattable(
-        #   formattable(df_map_table(),
-        #               list(data = FALSE,
-        #                    `2018 - 2019` = percent,
-        #                    `2019 - 2020` = percent))
-        # )
+        # # table under hex map
+        # output$table_map = DT::renderDataTable({
+        #   # https://stackoverflow.com/questions/64097670/jquery-datatable-heading-and-search-on-the-same-line
+        #   datatable(df_map_table(),
+        #             class = list(stripe = FALSE),
+        #             options = list(dom = 'ft',
+        #                            pageLength = 50,
+        #                            columnDefs = list(list(visible=FALSE, targets=c(1)))),
+        #             rownames = FALSE) %>%
+        #     formatPercentage(c("2018 - 2019", "2019 - 2020"), 2) %>%
+        #     formatCurrency(c("2018", "2019", "2020"), currency = "", interval = 3, mark = ",")
+        # })
+        output$table_map <-renderFormattable(
+          formattable(df_map_table(),
+                      align =c("l","l","l","l","l","l"),
+                      list(State = formatter("span", style = x ~ formattable::style("font-weight" = "bold")),
+                           data = FALSE,
+                           `2018` = formatter("span", x ~ comma(x, digits = 0)),
+                           `2019` = formatter("span", x ~ comma(x, digits = 0)),
+                           `2020` = formatter("span", x ~ comma(x, digits = 0)),
+                           `2018 - 2019` = percent,
+                           `2019 - 2020` = percent))
+        )
 
 
 ##############################################################################################################################
