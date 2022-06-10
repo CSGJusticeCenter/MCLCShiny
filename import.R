@@ -61,7 +61,7 @@ hex_gj <- hex %>%
   sf_geojson() %>%
   fromJSON(simplifyVector = FALSE)
 
-# clean stateAbb file
+# clean state abbreviations file
 stateAbb <- clean_names(stateAbb)
 
 ################################################################################
