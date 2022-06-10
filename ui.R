@@ -7,7 +7,6 @@
 #    User interface for shiny app
 #######################################
 
-setwd(L_PATH)
 source("library.R")
 source("dataframes.R")
 source("functions.R")

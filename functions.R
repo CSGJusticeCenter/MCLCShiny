@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: functions.R
 # Authors: Mari Roberts
-# Date: April 27, 2022
+# Date: June 10, 2022
 # Description:
 #    Defines custom functions
 #######################################
@@ -77,17 +77,17 @@ hc_theme_jc <- hc_theme_merge(
 # }
 
 # assign labels depending on data type
-create_data_text <- function(df){
+fnc_create_data_text <- function(df){
 df <- df %>%
   mutate(text = case_when(
     data == "total_admissions"                            ~  "Total Admissions",
     data == "total_violation_admissions"                  ~  "Supervision Violation Admissions",
     data == "total_probation_violation_admissions"        ~  "Probation Violation Admissions",
-    data == "new_offense_probation_violation_admissions"  ~  "Probation New Offense Admisisons",
-    data == "technical_probation_violation_admissions"    ~  "Probation Technical Admisisons",
+    data == "new_offense_probation_violation_admissions"  ~  "Probation New Offense Admissions",
+    data == "technical_probation_violation_admissions"    ~  "Probation Technical Admissions",
     data == "total_parole_violation_admissions"           ~  "Parole Violation Admissions",
-    data == "new_offense_parole_violation_admissions"     ~  "Parole New Offense Admisisons",
-    data == "technical_parole_violation_admissions"       ~  "Parole Technical Admisisons",
+    data == "new_offense_parole_violation_admissions"     ~  "Parole New Offense Admissions",
+    data == "technical_parole_violation_admissions"       ~  "Parole Technical Admissions",
 
     data == "total_population"                            ~  "Total Population",
     data == "total_violation_population"                  ~  "Supervision Violation Population",
@@ -99,7 +99,28 @@ df <- df %>%
     data == "technical_parole_violation_population"       ~  "Parole Technical Population"
   ))
 }
-
+fnc_create_data_metric <- function(df){
+  df <- df %>%
+    mutate(metric = case_when(
+      data == "total_admissions"                            ~  "Total",
+      data == "total_violation_admissions"                  ~  "Supervision Violation",
+      data == "total_probation_violation_admissions"        ~  "Probation Violation",
+      data == "new_offense_probation_violation_admissions"  ~  "New Offense",
+      data == "technical_probation_violation_admissions"    ~  "Technical Violation",
+      data == "total_parole_violation_admissions"           ~  "Parole Violation",
+      data == "new_offense_parole_violation_admissions"     ~  "New Offense",
+      data == "technical_parole_violation_admissions"       ~  "Technical Violation",
+      
+      data == "total_population"                            ~  "Total",
+      data == "total_violation_population"                  ~  "Supervision Violation",
+      data == "total_probation_violation_population"        ~  "Probation Violation",
+      data == "new_offense_probation_violation_population"  ~  "New Offense",
+      data == "technical_probation_violation_population"    ~  "Technical Violation",
+      data == "total_parole_violation_population"           ~  "Parole Violation",
+      data == "new_offense_parole_violation_population"     ~  "New Offense",
+      data == "technical_parole_violation_population"       ~  "Technical Violation"
+    ))
+}
 
 # clean bjs probation data sets
 clean_bjs_prob <- function(df){

@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: server.R
 # Authors: Mari Roberts
-# Date last updated: June 7, 2022
+# Date last updated: June 10, 2022
 # Description:
 #    Server for shiny app
 #######################################
@@ -57,15 +57,15 @@ server <- function(input, output, session) {
           hcoptslang$numericSymbols <-c( "%")
           options(highcharter.lang = hcoptslang)
 
-          min_map <- round(min(df_map()$total, na.rm = TRUE), 0)
-          max_map <- round(max(df_map()$total, na.rm = TRUE), 0)
+          min_map <- round(min(df_map()$change, na.rm = TRUE), 0)
+          max_map <- round(max(df_map()$change, na.rm = TRUE), 0)
 
           df_plot <- df_map() %>%
             mutate(
               tooltip = paste0(
                 "<b>", state, "</b><br>",
                 "Change from ", year, "<br>",
-                total, "%<br>"
+                change, "%<br>"
               )
             )
 
@@ -74,7 +74,7 @@ server <- function(input, output, session) {
               map = hex_gj,
               df = df_plot,
               joinBy = "state_abb",
-              value = "total",
+              value = "change",
               dataLabels = list(enabled = TRUE, format = "{point.state_abb}",
                                 style = list(fontSize = "11px", fontWeight = "regular", textOutline = 0)),
               nullColor = "#e8e8e8"
