@@ -16,7 +16,7 @@
 #     Map files
 
 # Output:
-#     Dataframes needed to run shiny app
+#     Data frames needed to run shiny app
 #     Saves data to research SP folder
 #######################################
 
