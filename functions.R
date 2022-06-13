@@ -78,26 +78,26 @@ hc_theme_jc <- hc_theme_merge(
 
 # assign labels depending on data type
 fnc_create_data_text <- function(df){
-df <- df %>%
-  mutate(text = case_when(
-    data == "total_admissions"                            ~  "Total Admissions",
-    data == "total_violation_admissions"                  ~  "Supervision Violation Admissions",
-    data == "total_probation_violation_admissions"        ~  "Probation Violation Admissions",
-    data == "new_offense_probation_violation_admissions"  ~  "Probation New Offense Admissions",
-    data == "technical_probation_violation_admissions"    ~  "Probation Technical Admissions",
-    data == "total_parole_violation_admissions"           ~  "Parole Violation Admissions",
-    data == "new_offense_parole_violation_admissions"     ~  "Parole New Offense Admissions",
-    data == "technical_parole_violation_admissions"       ~  "Parole Technical Admissions",
+  df <- df %>%
+    mutate(text = case_when(
+      data == "total_admissions"                            ~  "Total Admissions",
+      data == "total_violation_admissions"                  ~  "Supervision Violation Admissions",
+      data == "total_probation_violation_admissions"        ~  "Probation Violation Admissions",
+      data == "new_offense_probation_violation_admissions"  ~  "Probation New Offense Admissions",
+      data == "technical_probation_violation_admissions"    ~  "Probation Technical Admissions",
+      data == "total_parole_violation_admissions"           ~  "Parole Violation Admissions",
+      data == "new_offense_parole_violation_admissions"     ~  "Parole New Offense Admissions",
+      data == "technical_parole_violation_admissions"       ~  "Parole Technical Admissions",
 
-    data == "total_population"                            ~  "Total Population",
-    data == "total_violation_population"                  ~  "Supervision Violation Population",
-    data == "total_probation_violation_population"        ~  "Probation Violation Population",
-    data == "new_offense_probation_violation_population"  ~  "Probation New Offense Population",
-    data == "technical_probation_violation_population"    ~  "Probation Technical Population",
-    data == "total_parole_violation_population"           ~  "Parole Violation Population",
-    data == "new_offense_parole_violation_population"     ~  "Parole New Offense Population",
-    data == "technical_parole_violation_population"       ~  "Parole Technical Population"
-  ))
+      data == "total_population"                            ~  "Total Population",
+      data == "total_violation_population"                  ~  "Supervision Violation Population",
+      data == "total_probation_violation_population"        ~  "Probation Violation Population",
+      data == "new_offense_probation_violation_population"  ~  "Probation New Offense Population",
+      data == "technical_probation_violation_population"    ~  "Probation Technical Population",
+      data == "total_parole_violation_population"           ~  "Parole Violation Population",
+      data == "new_offense_parole_violation_population"     ~  "Parole New Offense Population",
+      data == "technical_parole_violation_population"       ~  "Parole Technical Population"
+    ))
 }
 fnc_create_data_metric <- function(df){
   df <- df %>%
@@ -110,7 +110,7 @@ fnc_create_data_metric <- function(df){
       data == "total_parole_violation_admissions"           ~  "Parole Violation",
       data == "new_offense_parole_violation_admissions"     ~  "New Offense",
       data == "technical_parole_violation_admissions"       ~  "Technical Violation",
-      
+
       data == "total_population"                            ~  "Total",
       data == "total_violation_population"                  ~  "Supervision Violation",
       data == "total_probation_violation_population"        ~  "Probation Violation",

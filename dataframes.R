@@ -2,35 +2,29 @@
 # Project: MCLCShiny
 # File: dataframes.R
 # Authors: Mari Roberts
-# Date last updated: June 10, 2022
+# Date last updated: June 13, 2022
 # Description:
 #    Load data files created in import.R, assign colors, and fonts
 #######################################
 
-# path to data on research div sharepoint
-# make sure SP folder is synced locally
-# https://csgorg.sharepoint.com/:f:/s/Team-JC-Research/EhdvImKN2rdPnmHQ2TrKlooBdYqnnWc0SUXBNuh9C7d41g?e=NCsh8I
-# in your Renviron, set CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"
-sp_data_path <- csg_sp_path(file.path("MCLC Shiny App"))
-
 #______________________________________________________
 # read in R data
+# must be in local repo to publish app
 #______________________________________________________
 
-load(file=paste0(sp_data_path, "/Data/mclc_explorer.Rda", sep = ""))
-load(file=paste0(sp_data_path, "/Data/mclc_explorer_table.Rda", sep = ""))
-load(file=paste0(sp_data_path, "/Data/vb_adm_pop.Rda", sep = ""))
-load(file=paste0(sp_data_path, "/Data/state_table.Rda", sep = ""))
-load(file=paste0(sp_data_path, "/Data/state_table_wide.Rda", sep = ""))
-load(file=paste0(sp_data_path, "/Data/parole_table.Rda", sep = ""))
-load(file=paste0(sp_data_path, "/Data/parole_table_wide.Rda", sep = ""))
-load(file=paste0(sp_data_path, "/Data/probation_table.Rda", sep = ""))
-load(file=paste0(sp_data_path, "/Data/probation_table_wide.Rda", sep = ""))
-
-load(file=paste0(sp_data_path, "/Data/hex_gj.Rda", sep = ""))
+load(file = "Data/mclc_explorer.Rda")
+load(file = "Data/mclc_explorer_table.Rda")
+load(file = "Data/vb_adm_pop.Rda")
+load(file = "Data/state_table.Rda")
+load(file = "Data/state_table_wide.Rda")
+load(file = "Data/parole_table.Rda")
+load(file = "Data/parole_table_wide.Rda")
+load(file = "Data/probation_table.Rda")
+load(file = "Data/probation_table_wide.Rda")
+load(file = "Data/hex_gj.Rda")
 
 #______________________________________________________
-# colors
+# colors TBD
 #______________________________________________________
 
 # assign colors for visualizations
@@ -55,7 +49,7 @@ count_colors  <- c("#d1f4ff", lightblue, regblue, darkblue, "#2a6a99")
 change_colors <- c("#af4d03", orange, lightorange, lightblue, regblue, darkblue)
 
 #______________________________________________________
-# fonts
+# fonts TBD
 #______________________________________________________
 
 # default_fonts <- c("system-ui", "-apple-system", "Segoe UI", "Roboto",
@@ -63,3 +57,4 @@ change_colors <- c("#af4d03", orange, lightorange, lightblue, regblue, darkblue)
 #                    "sans-serif", "Apple Color Emoji", "Segoe UI Emoji",
 #                    "Segoe UI Symbol", "Noto Color Emoji")
 default_fonts <- c("Noto Sans")
+

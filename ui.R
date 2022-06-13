@@ -19,15 +19,15 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                            title = "",
 
-##############################################################################################################################
+                           ##############################################################################################################################
 
                            tabPanel("",icon = icon("home", lib = "glyphicon"),value = "home"),
 
-##############################################################################################################################
+                           ##############################################################################################################################
 
                            tabPanel("National Report"),
 
-##############################################################################################################################
+                           ##############################################################################################################################
 
                            tabPanel("Map Explorer",
 
@@ -47,33 +47,33 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                selectizeInput('data_map', div(style = "font-weight: bold", "Select Data"),
                                                                               choices = c("Total", "New Offense", "Supervision Violation", "Probation Violation", "Parole Violation", "Technical Violation"),
                                                                               multiple = FALSE))
-                                                 ),
+                                          ),
                                           column(width = 2,
                                                  #selectizeInput('adm_or_pop_map', label = "Select Type", choices = c("Admissions", "Population"), multiple = FALSE)
                                                  labeled_input('adm-pop-map-btn', "",
                                                                selectizeInput('adm_or_pop_map', div(style = "font-weight: bold", "Select Type"),
                                                                               choices = c("Admissions", "Population"),
                                                                               multiple = FALSE))
-                                                 ),
+                                          ),
                                           column(width = 2,
                                                  #selectizeInput('year_map', label = "Select Years", choices = c("2018 - 2019", "2019 - 2020"), multiple = FALSE)
                                                  labeled_input('year-map-btn', "",
                                                                selectizeInput('year_map', div(style = "font-weight: bold", "Select Years"),
                                                                               choices = c("2018 - 2019", "2019 - 2020"),
                                                                               multiple = FALSE))
-                                                 ),
+                                          ),
                                           column(width = 2,
                                                  #downloadButton(outputId = 'save_map', label = "Download Map", class = "download_this")
                                                  tags$style(type="text/css", "#save_map {background-color:#004270; color: #fff;}"),
                                                  labeled_input('save-map-btn', "",
                                                                downloadButton(outputId = 'save_map', label = "Download Map", class = "download_this"))
-                                                 ),
+                                          ),
                                           column(width = 2,
                                                  #downloadButton(outputId = 'save_map_data', label = "Download Data", class = "download_this")
                                                  tags$style(type="text/css", "#save_map_data {background-color:#004270; color: #fff;}"),
                                                  labeled_input('save-map-data-btn', "",
                                                                downloadButton(outputId = 'save_map_data', label = "Download Data", class = "download_this"))
-                                                 ),
+                                          ),
                                           column(width = 1)
                                         ) # end fluidRow
                                     ), # end div header
@@ -101,7 +101,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                     fluidRow(column(width = 1),
                                              column(width = 10, align = "left", div(id = "selected-map-table", textOutput("selected_map_table"))),
                                              column(width = 1)
-                                             ),
+                                    ),
 
                                     br(),
 
@@ -119,23 +119,23 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                            ), # end tabPanel
 
-##############################################################################################################################
+                           ##############################################################################################################################
 
                            tabPanel("State Reports"),
 
-##############################################################################################################################
+                           ##############################################################################################################################
 
                            tabPanel("Download"),
 
-##############################################################################################################################
+                           ##############################################################################################################################
 
                            tabPanel("Methodology"),
 
-##############################################################################################################################
+                           ##############################################################################################################################
 
                            tabPanel("Videos"),
 
-##############################################################################################################################
+                           ##############################################################################################################################
 
                            tabPanel("Project Credits"))
 )
