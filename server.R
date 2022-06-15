@@ -81,6 +81,7 @@ server <- function(input, output, session) {
 
       hc_colorAxis(min = min_map,
                    max = max_map,
+                   # minColor = "#af4d03", maxColor = darkblue) %>%
                    stops = color_stops(7, c("#af4d03", orange, lightorange, "#FFFFFF", lightblue, regblue, darkblue))) %>%
 
       hc_add_theme(hc_theme_jc) %>%
