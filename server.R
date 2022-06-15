@@ -57,19 +57,16 @@ server <- function(input, output, session) {
     hcoptslang$numericSymbols <-c( "%")
     options(highcharter.lang = hcoptslang)
 
+    # get minimum and maximum value
     min_map <- round(min(df_map()$change, na.rm = TRUE), 0)
     max_map <- round(max(df_map()$change, na.rm = TRUE), 0)
 
+    # create tooltip
     df_plot <- df_map() %>%
-      mutate(
-        tooltip = paste0(
-          "<b>", state, "</b><br>",
-          "Change from ", year, "<br>",
-          change, "%<br>"
-        )
-      )
+      mutate(tooltip = paste0("<b>", state, "</b><br>","Change from ", year, "<br>",change, "%<br>"))
 
     highchart() %>%
+
       hc_add_series_map(
         map = hex_gj,
         df = df_plot,
@@ -77,25 +74,26 @@ server <- function(input, output, session) {
         value = "change",
         dataLabels = list(enabled = TRUE, format = "{point.state_abb}",
                           style = list(fontSize = "11px", fontWeight = "regular", textOutline = 0)),
-        nullColor = "#e8e8e8"
-      ) %>%
+        nullColor = "#e8e8e8") %>%
+
       hc_colorAxis(min = min_map,
                    max = max_map,
                    stops = color_stops(7, c("#af4d03", orange, lightorange, "#FFFFFF", lightblue, regblue, darkblue))) %>%
-      #hc_add_dependency(x, name = "modules/exporting.js") %>%
-      #hc_add_dependency(name = "modules/offline-exporting.js") %>%
-      hc_add_theme(hc_theme_jc) %>%
+
+      hc_add_dependency(name = "plugins/series-label.js") %>%
+      hc_add_dependency(name = "plugins/accessibility.js") %>%
+      hc_add_dependency(name = "plugins/exporting.js") %>%
+      hc_add_dependency(name = "plugins/export-data.js") %>%
       hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
+      hc_plotOptions(series = list(label = list(enabled = TRUE))) %>%
+
+      hc_add_theme(hc_theme_jc) %>%
+
       hc_plotOptions(series = list(animation = FALSE)) %>%
+
       hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical", valueDecimals = 0, valueSuffix = "%") %>%
-      hc_xAxis(
-        title = "",
-        labels = list(y = 25)
-      ) %>%
-      hc_yAxis(
-        title = "",
-        labels = list(format = "{value:,.0f}")
-      )
+      hc_xAxis(title = "", labels = list(y = 25)) %>%
+      hc_yAxis(title = "", labels = list(format = "{value:,.0f}"))
     # hc_title(df_map_title())
   })
 

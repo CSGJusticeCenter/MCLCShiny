@@ -14,7 +14,8 @@ library(markdown)
 library(scico)
 library(zoo)
 
-# highcharter
+# highcharter - install an older version
+# remotes::install_github("batpigandme/highcharter@module-testing")
 library(highcharter)
 library(scales)
 library(gapminder)
