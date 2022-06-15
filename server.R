@@ -63,7 +63,10 @@ server <- function(input, output, session) {
 
     # create tooltip
     df_plot <- df_map() %>%
-      mutate(tooltip = paste0("<b>", state, "</b><br>","Change from ", year, "<br>",change, "%<br>"))
+      mutate(tooltip = paste0("<b>", state, "</b><br>","Change from ", year, "<br>",change, "%<br>"),
+             datalabel = ifelse(is.na(change), paste0("", state_abb, ""),
+                                paste0("<p style=", "text-align:center", ">", state_abb, "", "<br>",
+                                       round(change, 0), "%</p>")))
 
     highchart() %>%
 
@@ -72,29 +75,33 @@ server <- function(input, output, session) {
         df = df_plot,
         joinBy = "state_abb",
         value = "change",
-        dataLabels = list(enabled = TRUE, format = "{point.state_abb}",
-                          style = list(fontSize = "11px", fontWeight = "regular", textOutline = 0)),
+        dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
+                          style = list(fontSize = "14px", fontWeight = "regular", textOutline = 0)),
         nullColor = "#e8e8e8") %>%
 
       hc_colorAxis(min = min_map,
                    max = max_map,
                    stops = color_stops(7, c("#af4d03", orange, lightorange, "#FFFFFF", lightblue, regblue, darkblue))) %>%
 
+      hc_add_theme(hc_theme_jc) %>%
+
       hc_add_dependency(name = "plugins/series-label.js") %>%
       hc_add_dependency(name = "plugins/accessibility.js") %>%
       hc_add_dependency(name = "plugins/exporting.js") %>%
       hc_add_dependency(name = "plugins/export-data.js") %>%
       hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
-      hc_plotOptions(series = list(label = list(enabled = TRUE))) %>%
 
-      hc_add_theme(hc_theme_jc) %>%
-
-      hc_plotOptions(series = list(animation = FALSE)) %>%
+      hc_plotOptions(series = list(animation = FALSE, dataLabels = list(enabled = TRUE), cursor = "pointer", borderWidth = 3),
+                     accessibility = list(enabled = TRUE,
+                                          keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
+                                          landmarkVerbosity = "one"),
+                     area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
+      ) %>%
 
       hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical", valueDecimals = 0, valueSuffix = "%") %>%
       hc_xAxis(title = "", labels = list(y = 25)) %>%
-      hc_yAxis(title = "", labels = list(format = "{value:,.0f}"))
-    # hc_title(df_map_title())
+      hc_yAxis(title = "", labels = list(format = "{value}%"))
+
   })
 
   # output hex map
