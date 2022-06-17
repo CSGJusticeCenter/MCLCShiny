@@ -1,4 +1,3 @@
-
 /*######################################
           Screen Settings
 ########################################*/
@@ -193,7 +192,43 @@ button > div {
 /* Header font color and size for table under map */
 /* .thead{color: #004270;} */
 
+/*######################################
+          STATE REPORTS
+          Dropdowns
+########################################*/
 
+/* Format for selector input state-btn*/
+#state-btn {
+  margin: 17px 10px 17px 10px;
+  width: 175px;
+  color: #004270;
+}
+
+/* Format for selector input adm-pop-btn*/
+#adm-pop-btn {
+  margin: 17px 10px 17px 10px;
+  width: 175px;
+  color: #004270;
+}
+
+/* Format header, same as map explorer header */
+#state-header {
+  background-color:#DDE3E9 !important;
+  height: 100px;
+  padding: 0 0px;
+}
+
+/*######################################
+          STATE REPORTS
+          Title and value boxes
+########################################*/
+
+/* Title of state */
+#selected-state {
+  text-align: center;
+  font-weight: bold;
+  font-size: 24px;
+}
 
 
 
@@ -201,34 +236,27 @@ button > div {
 
 
 /* NOTES
-
 .navbar-default {
     background-color: #004270 !important;
 }
-
 .navbar-nav li a:hover, .navbar-nav > .active > a {
     color: #2EEBC4 !important;
     background-color:#004270 !important;
     background-image: none !important;
 }
-
 .skin-blue .main-header .logo {
 background-color: #f4b943;
 }
-
-
 *{
     font-size: 100%;
     font-family: Arial;
     color: black;
 }
-
 .navbar-nav li a:hover, .navbar-nav > .active > a {
     color: #fff !important;
     background-color:#004270 !important;
     background-image: none !important;
 }
-
 .navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
     color: #2EEBC4 !important;
     font-style: bold !important;

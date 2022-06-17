@@ -146,12 +146,38 @@ server <- function(input, output, session) {
                      `2019 - 2020` = percent))
   )
 
+  #######
+  # Download buttons near dropdowns
+  #######
+
+  output$save_map_data <- downloadHandler(
+    filename = function() {
+      paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, ".csv", sep="")
+    },
+    content = function(file) {
+      write.csv(df_map_table(), file)}
+    )
+
+  # fix this
+  output$save_map <- downloadHandler(
+    filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""),
+    content = function(file) {
+      png(file, width=800, height=800)
+      foundational_map()
+      dev.off()
+    },
+    contentType = "image/png")
 
   ##############################################################################################################################
   # State Reports
   ##############################################################################################################################
 
+  #######
+  # Hex map title
+  #######
 
+  # title of state based on user input
+  output$selected_state <- renderText({paste(input$adm_pop_report, " Trends in ", input$state_report, sep = "")})
 
   ##############################################################################################################################
   # Download

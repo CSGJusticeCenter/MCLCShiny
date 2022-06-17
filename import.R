@@ -22,23 +22,21 @@
 
 # load packages and functions
 source("library.R")
-default_fonts <- c("Noto Sans") #string requried to run functions.R 
+default_fonts <- c("Noto Sans") #string requried to run functions.R
 source("functions.R")
 
 # path to data on research div sharepoint
 # make sure SP folder is synced locally
 # https://csgorg.sharepoint.com/:f:/s/Team-JC-Research/EhdvImKN2rdPnmHQ2TrKlooBdYqnnWc0SUXBNuh9C7d41g?e=NCsh8I
-# in your Renviron, set CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"
+# in your Renviron (usethis::edit_r_environ()), set CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"
 
-FULL_JC_FOLDER <- FALSE 
+FULL_JC_FOLDER <- FALSE
 
 if (FULL_JC_FOLDER == TRUE){
   sp_data_path <- csgjcr::csg_sp_path(file.path("50 State Revocations Project/MCLC Shiny App"))
 } else {
   sp_data_path <- csgjcr::csg_sp_path(file.path("MCLC Shiny App"))
 }
-
-
 
 ########
 # Import data
@@ -107,10 +105,10 @@ adm_pop <- merge(adm, pop, by = c("state", "state_abbrev", "year"))
 # remove state abbrevs
 # change data types
 # calculate difference between total and supervision violations to get number of other
-adm_pop <- adm_pop %>% 
-  select(-state_abbrev) %>% 
-  mutate(state = factor(state)) %>% 
-  mutate_if(is.character, as.numeric) %>% 
+adm_pop <- adm_pop %>%
+  select(-state_abbrev) %>%
+  mutate(state = factor(state)) %>%
+  mutate_if(is.character, as.numeric) %>%
   mutate(other_admissions = total_admissions-total_violation_admissions,
          other_population = total_population-total_violation_population)
 
@@ -125,7 +123,7 @@ adm_pop[adm_pop == "NaN"] <- NA
 # make data long form
 # add prob and parole variables together to get total new offense and technical admissions and population
 # remove prob and parole variables
-mclc <- adm_pop %>% 
+mclc <- adm_pop %>%
   mutate(new_offense_admissions = new_offense_probation_violation_admissions + new_offense_parole_violation_admissions,
          new_offense_population = new_offense_probation_violation_population + new_offense_parole_violation_population,
          technical_admissions   = technical_probation_violation_admissions   + technical_parole_violation_admissions,
@@ -137,6 +135,7 @@ mclc <- adm_pop %>%
 
 # make long form
 mclc_all <- gather(mclc, data, total, total_admissions:technical_population)
+adm_pop_long <- gather(adm_pop, data, total, total_admissions:other_population)
 
 # create change from 2018 to 2019 to 2020
 # remove dups
@@ -146,9 +145,9 @@ mclc_all <- gather(mclc, data, total, total_admissions:technical_population)
 # add state abbreviations
 mclc_all <- mclc_all %>%
   group_by(state, data) %>%
-  mutate(change = total/lag(total) - 1) %>% 
-  distinct() %>% 
-  mutate(metric = 
+  mutate(change = total/lag(total) - 1) %>%
+  distinct() %>%
+  mutate(metric =
            case_when(data == "total_admissions"                            ~ "Total",
                      data == "total_violation_admissions"                  ~ "Supervision Violation",
                      data == "total_probation_violation_admissions"        ~ "Probation Violation",
@@ -156,7 +155,7 @@ mclc_all <- mclc_all %>%
                      data == "new_offense_admissions"                      ~ "New Offense",
                      data == "technical_admissions"                        ~ "Technical Violation",
                      data == "other_admissions"                            ~ "Other",
-                  
+
                      data == "total_population"                            ~ "Total",
                      data == "total_violation_population"                  ~ "Supervision Violation",
                      data == "total_probation_violation_population"        ~ "Probation Violation",
@@ -165,24 +164,24 @@ mclc_all <- mclc_all %>%
                      data == "technical_population"                        ~ "Technical Violation",
                      data == "other_population"                            ~ "Other"),
         adm_or_pop = ifelse(grepl("population", data), "Population", "Admissions"),
-        data = paste0(metric, " " , adm_or_pop)) %>% 
-  mutate_if(is.character, as.factor) %>% 
-  left_join(stateAbb, by = "state") %>% 
+        data = paste0(metric, " " , adm_or_pop)) %>%
+  mutate_if(is.character, as.factor) %>%
+  left_join(stateAbb, by = "state") %>%
   select(state, year, total, everything())
 
 # make data frame for counts
-# data is in wide form 
-mclc_counts <- mclc_all %>% 
+# data is in wide form
+mclc_counts <- mclc_all %>%
   select(-change)
-mclc_counts <- spread(mclc_counts, year, total) %>% 
+mclc_counts <- spread(mclc_counts, year, total) %>%
   select(state, data, `2018`, `2019`, `2020`)
 
 # make data frame for change
 # data is in wide form
-mclc_change <- mclc_all %>% 
-  filter(year != 2018) %>% 
+mclc_change <- mclc_all %>%
+  filter(year != 2018) %>%
   select(-total)
-mclc_change <-  
+mclc_change <-
   spread(mclc_change, year, change) %>%
   select(state,
          data,
@@ -194,7 +193,7 @@ mclc_explorer_table <- left_join(mclc_counts, mclc_change, by = c("state", "data
 
 # create year range
 mclc_explorer <- mclc_all %>%
-  filter(year != 2018) %>% 
+  filter(year != 2018) %>%
   mutate(year = case_when(year == 2019 ~ "2018 - 2019",
                           year == 2020 ~ "2019 - 2020"),
          change = round(change*100, 2)) %>%
@@ -208,10 +207,10 @@ mclc_explorer <- mclc_all %>%
 # filter to vb values (total, supervision violations, and technical violations)
 # create increase or decrease category for change
 # change data types
-vb_adm_pop <- mclc_all %>% 
+vb_adm_pop <- mclc_all %>%
   filter(metric == "Total" |
          metric == "Supervision Violation" |
-         metric == "Technical") %>% 
+         metric == "Technical") %>%
   mutate(change = round(change*100, 0),
          change_type = ifelse(change > 0, "increase", "decrease"),
          year = as.factor(year))
@@ -224,11 +223,11 @@ vb_adm_pop <- mclc_all %>%
 # summarise by type
 # remove probation, parole and other
 # create text for table
-state_table <- mclc_all %>% 
-  select(state, year, data, total, metric, adm_or_pop) %>% 
+state_table <- mclc_all %>%
+  select(state, year, data, total, metric, adm_or_pop) %>%
   group_by(state, year, metric, adm_or_pop) %>%
-  summarise(total = sum(total)) %>% 
-  filter(metric != "Other" & metric != "Probation Violation" & metric != "Parole Violation") %>% 
+  summarise(total = sum(total)) %>%
+  filter(metric != "Other" & metric != "Probation Violation" & metric != "Parole Violation") %>%
   mutate(text = case_when(metric == "New Offense" & adm_or_pop == "Admissions"            ~ "New Offense Admissions",
                           metric == "Supervision Violation" & adm_or_pop == "Admissions"  ~ "Supervision Violation Admissions",
                           metric == "Technical Violation" & adm_or_pop == "Admissions"    ~ "Technical Admissions",
@@ -236,10 +235,10 @@ state_table <- mclc_all %>%
                           metric == "New Offense" & adm_or_pop == "Population"            ~ "New Offense Population",
                           metric == "Supervision Violation" & adm_or_pop == "Population"  ~ "Supervision Violation Population",
                           metric == "Technical Violation" & adm_or_pop == "Population"    ~ "Technical Population",
-                          metric == "Total" & adm_or_pop == "Population"                  ~ "Total Population")) 
+                          metric == "Total" & adm_or_pop == "Population"                  ~ "Total Population"))
 
 # rearrange data
-state_table <- state_table %>% select(state, text, adm_or_pop, everything()) 
+state_table <- state_table %>% select(state, text, adm_or_pop, everything())
 
 # make wide form
 state_table_wide <- spread(state_table, key = year, value = total)
@@ -250,7 +249,7 @@ state_table_wide <- state_table_wide %>%
                            metric == "Supervision Violation"   ~ 2,
                            metric == "Technical Violation"     ~ 3,
                            metric == "Total"                   ~ 1,
-                       
+
                            metric == "New Offense"             ~ 4,
                            metric == "Supervision Violation"   ~ 2,
                            metric == "Technical Violation"     ~ 3,
@@ -267,18 +266,18 @@ state_table_wide <- state_table_wide %>% select(state, text, `2018`, `2019`, `20
 ################################################################################
 
 # make data long form
-prob_parole_tables <- gather(adm_pop, data, total, total_admissions:other_population) 
- 
+prob_parole_tables <- gather(adm_pop, data, total, total_admissions:other_population)
+
 # filter to prob and parole info only
-prob_parole_tables <- prob_parole_tables %>% 
-  select(state, year, data, total) %>% 
-  filter(grepl("parole|probation", data)) %>% 
+prob_parole_tables <- prob_parole_tables %>%
+  select(state, year, data, total) %>%
+  filter(grepl("parole|probation", data)) %>%
   mutate(adm_or_pop     = ifelse(grepl("population", data), "Population", "Admissions"),
          prob_vs_parole = ifelse(grepl("probation", data),  "Probation", "Parole"))
 
 # create metric and text for table
 prob_parole_tables <- fnc_create_data_text(prob_parole_tables)
-prob_parole_tables <- fnc_create_data_metric(prob_parole_tables) %>% 
+prob_parole_tables <- fnc_create_data_metric(prob_parole_tables) %>%
   group_by(state, year, metric, adm_or_pop, prob_vs_parole, text) %>%
   summarise(total = sum(total))
 
@@ -336,8 +335,8 @@ probation_table_wide <- probation_table_wide %>% select(state, text, `2018`, `20
 # save Rdata
 ################################################################################
 
-# save to SharePoint project folder 
-
+# save to SharePoint project folder
+save(adm_pop_long,            file=paste0(sp_data_path, "/Data/adm_pop_long.Rda", sep = ""))
 save(mclc_explorer,           file=paste0(sp_data_path, "/Data/mclc_explorer.Rda", sep = ""))
 save(mclc_explorer_table,     file=paste0(sp_data_path, "/Data/mclc_explorer_table.Rda", sep = ""))
 save(vb_adm_pop,              file=paste0(sp_data_path, "/Data/vb_adm_pop.Rda", sep = ""))
@@ -349,9 +348,8 @@ save(probation_table,         file=paste0(sp_data_path, "/Data/probation_table.R
 save(probation_table_wide,    file=paste0(sp_data_path, "/Data/probation_table_wide.Rda", sep = ""))
 save(hex_gj,                  file=paste0(sp_data_path, "/Data/hex_gj.Rda", sep = ""))
 
-
-# save to clone  
-
+# save to clone
+save(adm_pop_long,            file=paste0("Data/adm_pop_long.Rda", sep = ""))
 save(mclc_explorer,           file=paste0("Data/mclc_explorer.Rda", sep = ""))
 save(mclc_explorer_table,     file=paste0("Data/mclc_explorer_table.Rda", sep = ""))
 save(vb_adm_pop,              file=paste0("Data/vb_adm_pop.Rda", sep = ""))

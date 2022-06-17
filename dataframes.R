@@ -12,6 +12,7 @@
 # must be in local repo to publish app
 #______________________________________________________
 
+load(file = "Data/adm_pop_long.Rda")
 load(file = "Data/mclc_explorer.Rda")
 load(file = "Data/mclc_explorer_table.Rda")
 load(file = "Data/vb_adm_pop.Rda")

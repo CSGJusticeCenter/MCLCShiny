@@ -121,7 +121,43 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                            ##############################################################################################################################
 
-                           tabPanel("State Reports"),
+                           tabPanel("State Reports",
+
+                                    #######
+                                    # Dropdown and download buttons
+                                    #######
+
+                                    div(id = "state-header",
+
+                                        fluidRow(
+                                          column(width = 4),
+                                          column(width = 2,
+                                                 labeled_input('state-btn', "",
+                                                               selectizeInput('state_report', div(style = "font-weight: bold", "Select State"),
+                                                                              choices = unique(adm_pop_long$state),
+                                                                              multiple = FALSE))
+                                          ),
+                                          column(width = 2,
+                                                 labeled_input('adm-pop-btn', "",
+                                                               selectizeInput('adm_pop_report', div(style = "font-weight: bold", "Select Type"),
+                                                                              choices = c("Admissions", "Population"),
+                                                                              multiple = FALSE))
+                                          ),
+                                          column(width = 4)
+                                        ) # end fluidRow
+                                    ), # end div header
+
+                                    br(),
+
+                                    #######
+                                    # Value boxes
+                                    #######
+
+                                        fluidRow(column(width = 1),
+                                                 column(width = 10, align = "left", div(id = "selected-state", textOutput("selected_state"))),
+                                                 column(width = 1))
+
+                           ), # end tabPanel
 
                            ##############################################################################################################################
 
