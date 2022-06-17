@@ -22,13 +22,23 @@
 
 # load packages and functions
 source("library.R")
+default_fonts <- c("Noto Sans") #string requried to run functions.R 
 source("functions.R")
 
 # path to data on research div sharepoint
 # make sure SP folder is synced locally
 # https://csgorg.sharepoint.com/:f:/s/Team-JC-Research/EhdvImKN2rdPnmHQ2TrKlooBdYqnnWc0SUXBNuh9C7d41g?e=NCsh8I
 # in your Renviron, set CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"
-sp_data_path <- csg_sp_path(file.path("MCLC Shiny App"))
+
+FULL_JC_FOLDER <- FALSE 
+
+if (FULL_JC_FOLDER == TRUE){
+  sp_data_path <- csgjcr::csg_sp_path(file.path("50 State Revocations Project/MCLC Shiny App"))
+} else {
+  sp_data_path <- csgjcr::csg_sp_path(file.path("MCLC Shiny App"))
+}
+
+
 
 ########
 # Import data
@@ -326,6 +336,8 @@ probation_table_wide <- probation_table_wide %>% select(state, text, `2018`, `20
 # save Rdata
 ################################################################################
 
+# save to SharePoint project folder 
+
 save(mclc_explorer,           file=paste0(sp_data_path, "/Data/mclc_explorer.Rda", sep = ""))
 save(mclc_explorer_table,     file=paste0(sp_data_path, "/Data/mclc_explorer_table.Rda", sep = ""))
 save(vb_adm_pop,              file=paste0(sp_data_path, "/Data/vb_adm_pop.Rda", sep = ""))
@@ -335,5 +347,18 @@ save(parole_table,            file=paste0(sp_data_path, "/Data/parole_table.Rda"
 save(parole_table_wide,       file=paste0(sp_data_path, "/Data/parole_table_wide.Rda", sep = ""))
 save(probation_table,         file=paste0(sp_data_path, "/Data/probation_table.Rda", sep = ""))
 save(probation_table_wide,    file=paste0(sp_data_path, "/Data/probation_table_wide.Rda", sep = ""))
-
 save(hex_gj,                  file=paste0(sp_data_path, "/Data/hex_gj.Rda", sep = ""))
+
+
+# save to clone  
+
+save(mclc_explorer,           file=paste0("Data/mclc_explorer.Rda", sep = ""))
+save(mclc_explorer_table,     file=paste0("Data/mclc_explorer_table.Rda", sep = ""))
+save(vb_adm_pop,              file=paste0("Data/vb_adm_pop.Rda", sep = ""))
+save(state_table,             file=paste0("Data/state_table.Rda", sep = ""))
+save(state_table_wide,        file=paste0("Data/state_table_wide.Rda", sep = ""))
+save(parole_table,            file=paste0("Data/parole_table.Rda", sep = ""))
+save(parole_table_wide,       file=paste0("Data/parole_table_wide.Rda", sep = ""))
+save(probation_table,         file=paste0("Data/probation_table.Rda", sep = ""))
+save(probation_table_wide,    file=paste0("Data/probation_table_wide.Rda", sep = ""))
+save(hex_gj,                  file=paste0("Data/hex_gj.Rda", sep = ""))
