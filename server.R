@@ -198,13 +198,16 @@ server <- function(input, output, session) {
   output$table_map = DT::renderDataTable({
     # https://stackoverflow.com/questions/64097670/jquery-datatable-heading-and-search-on-the-same-line
     datatable(df_map_table(),
+              # callback = JS("$('#DataTables_Table_0_filter input').css('background-color', 'yellow');"),
               class = list(stripe = FALSE),
               options = list(dom = 'ft',
                              pageLength = 50,
-                             columnDefs = list(list(visible=FALSE, targets=c(1)))),
+                             language = list(searchPlaceholder = "Search"),
+                             columnDefs = list(list(visible=FALSE, targets=c(1)),
+                                               list(className = 'dt-left', targets = '_all'))),
               rownames = FALSE) %>%
-      formatPercentage(c("2018 - 2019", "2019 - 2020"), 2) %>%
-      formatCurrency(c("2018", "2019", "2020"), currency = "", interval = 3, mark = ",")
+              formatPercentage(c("2018 - 2019", "2019 - 2020"), 2) %>%
+              formatCurrency(c("2018", "2019", "2020"), currency = " ", interval = 3, mark = ",")
   })
   
   # output$table_map <-renderFormattable(

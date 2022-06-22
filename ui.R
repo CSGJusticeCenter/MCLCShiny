@@ -100,8 +100,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                     fluidRow(column(width = 1),
                                              column(width = 10, align = "left", div(id = "selected-map-table", textOutput("selected_map_table"))),
-                                             column(width = 1)
-                                    ),
+                                             column(width = 1)),
 
                                     br(),
 
@@ -112,9 +111,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                     fluidRow(column(width = 1),
                                              column(width = 10, align = "left", 
-                                                    div(id = "table-map", style="position: relative; top: 5px;", dataTableOutput("table_map")
-                                                        )
-                                                    ),
+                                                    div(id = "table-map", dataTableOutput("table_map"))),
                                              column(width = 1)),
 
                                     br(),

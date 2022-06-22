@@ -29,16 +29,11 @@ body > div {
 /* Change font family throughout */
 *{font-family: "Noto Sans", Helvetica, sans-serif;}
 
-/* Make title centered
-#app-title > h2 {
-  text-align: center;
-  font-weight: bold;
-} */
-
 /*######################################
           Navigation Bar Color and Font
 ########################################*/
 
+/* Navigation bar color and font style */
 .navbar{
   background-color: #004270;
   font-size: 16px;
@@ -57,6 +52,7 @@ body > div {
   background-color:#004270 !important;
 }
 
+/* Panel color */
 .tab-panel{background-color: #004270; color: #004270}
 
 /*######################################
@@ -102,7 +98,7 @@ body > div {
   color: #004270;
 }
 
-/* Format for selector input data-map*/
+/* Format for selector input data-map */
 #data-map-btn {
   margin: 17px 10px 17px 10px;
   width: 175px;
@@ -189,8 +185,10 @@ button > div {
   text-align: left;
 }
 
-/* Header font color and size for table under map */
-/* .thead{color: #004270;} */
+/* Align text with search bar */
+#selected-map-table {
+  position: relative; top: 40px;
+}
 
 /*######################################
           STATE REPORTS
@@ -223,42 +221,9 @@ button > div {
           Title and value boxes
 ########################################*/
 
-/* Title of state */
+/* Title of state settings */
 #selected-state {
   text-align: center;
   font-weight: bold;
   font-size: 24px;
 }
-
-
-
-
-
-
-/* NOTES
-.navbar-default {
-    background-color: #004270 !important;
-}
-.navbar-nav li a:hover, .navbar-nav > .active > a {
-    color: #2EEBC4 !important;
-    background-color:#004270 !important;
-    background-image: none !important;
-}
-.skin-blue .main-header .logo {
-background-color: #f4b943;
-}
-*{
-    font-size: 100%;
-    font-family: Arial;
-    color: black;
-}
-.navbar-nav li a:hover, .navbar-nav > .active > a {
-    color: #fff !important;
-    background-color:#004270 !important;
-    background-image: none !important;
-}
-.navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
-    color: #2EEBC4 !important;
-    font-style: bold !important;
-    background-color: #004270 !important;
-}*/
