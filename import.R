@@ -22,11 +22,11 @@
 
 # load packages and functions
 source("library.R")
-default_fonts <- c("Noto Sans") #string requried to run functions.R
+default_fonts <- c("Noto Sans") #string required to run functions.R
 source("functions.R")
 
 # path to data on research div sharepoint
-# make sure SP folder is synced locally
+# make sure sharepoint folder is synced locally
 # https://csgorg.sharepoint.com/:f:/s/Team-JC-Research/EhdvImKN2rdPnmHQ2TrKlooBdYqnnWc0SUXBNuh9C7d41g?e=NCsh8I
 # in your Renviron (usethis::edit_r_environ()), set CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"
 

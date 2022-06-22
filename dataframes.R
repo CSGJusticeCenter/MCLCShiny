@@ -12,7 +12,7 @@
 # must be in local repo to publish app
 #______________________________________________________
 
-load(file = "Data/adm_pop_long.Rda")
+#load(file = "Data/adm_pop_long.Rda")
 load(file = "Data/mclc_explorer.Rda")
 load(file = "Data/mclc_explorer_table.Rda")
 load(file = "Data/vb_adm_pop.Rda")
@@ -29,14 +29,21 @@ load(file = "Data/hex_gj.Rda")
 #______________________________________________________
 
 # assign colors for visualizations
-lightorange <- "#fcccac"
-orange      <- "#fc9c54"
-lightblue   <- "#9cccec"
-darkblue    <- "#2c6c9c"
-regblue     <- "#3c97da"
-brown       <- "#b26e39"
+# darkorange  <- "#b05d24"
+# darkblue    <- "#355da1"
+# darkorange  <- "#631c00"
+# darkblue    <- "#002b67"
+
+darkorange  <- "#7b3014"
+orange      <- "#d04a07"
+lightorange <- "#f98c40"
+white       <- "#FFFFFF"
+lightblue   <- "#5aa5cd"
+regblue     <- "#236ca7"
+darkblue    <- "#26456e"
+  
 gray        <- "#dcdcdc"
-lightgreen  <- "#a8ddb5"
+
 
 # assign colors to data types
 total_co <- lightorange
@@ -44,10 +51,6 @@ viol_co  <- orange
 tech_co  <- regblue
 new_o_co <- darkblue
 pp_co    <- lightblue
-bjs_co   <- lightgreen
-
-count_colors  <- c("#d1f4ff", lightblue, regblue, darkblue, "#2a6a99")
-change_colors <- c("#af4d03", orange, lightorange, lightblue, regblue, darkblue)
 
 #______________________________________________________
 # fonts TBD
