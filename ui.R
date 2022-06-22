@@ -106,13 +106,16 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                     br(),
 
                                     tags$head(tags$style(HTML("thead{color: #004270; font-size: 16px}"))),
-                                    fluidRow(column(width = 1),
-                                             column(width = 10, align = "left", div(id = "table-map", formattableOutput("table_map"))),
-                                             column(width = 1)),
-
                                     # fluidRow(column(width = 1),
-                                    #          column(width = 10, align = "left", div(id = "table-map", dataTableOutput("table_map"))),
+                                    #          column(width = 10, align = "left", div(id = "table-map", formattableOutput("table_map"))),
                                     #          column(width = 1)),
+
+                                    fluidRow(column(width = 1),
+                                             column(width = 10, align = "left", 
+                                                    div(id = "table-map", style="position: relative; top: 5px;", dataTableOutput("table_map")
+                                                        )
+                                                    ),
+                                             column(width = 1)),
 
                                     br(),
                                     br()
@@ -154,9 +157,11 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                     # Value boxes
                                     #######
 
-                                        fluidRow(column(width = 1),
-                                                 column(width = 10, align = "left", div(id = "selected-state", textOutput("selected_state"))),
-                                                 column(width = 1))
+                                    fluidRow(column(width = 1),
+                                             column(width = 10, align = "left", div(id = "selected-state", textOutput("selected_state"))),
+                                             column(width = 1)),
+                                    
+                                    br()
 
                            ), # end tabPanel
 

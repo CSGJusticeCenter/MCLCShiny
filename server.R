@@ -73,16 +73,15 @@ server <- function(input, output, session) {
     
     # determine the new min and max so that zero is centered
     if (min_map_type != max_map_type) {
+      
       NEW_MAX <- case_when(
         max_map_abs > min_map_abs ~ max_map_abs,
         max_map_abs < min_map_abs ~ min_map_abs,
-        max_map_abs == min_map_abs ~ max_map_abs
-      )
+        max_map_abs == min_map_abs ~ max_map_abs)
       NEW_MIN <- case_when(
         min_map_abs > max_map_abs ~ min_map_abs,
         min_map_abs < max_map_abs ~ max_map_abs,
-        min_map_abs == max_map_abs ~ min_map_abs
-      )
+        min_map_abs == max_map_abs ~ min_map_abs)
       NEW_MAX <- ifelse(max_map_type == "negative", -abs(NEW_MAX), abs(NEW_MAX))
       NEW_MIN <- ifelse(min_map_type == "negative", -abs(NEW_MIN), abs(NEW_MIN))
       
@@ -128,9 +127,12 @@ server <- function(input, output, session) {
         ) %>%
         hc_xAxis(title = "") %>%
         hc_yAxis(title = "")
+      
     } else {
+      
       NEW_MAX <- max_map
       NEW_MIN <- min_map
+      
       highchart() %>%
         
         hc_add_series_map(
@@ -192,34 +194,36 @@ server <- function(input, output, session) {
   # title of table under map based on user input
   output$selected_map_table <- renderText({paste(input$data_map, " ", input$adm_or_pop_map)})
 
-  # # table under hex map
-  # output$table_map = DT::renderDataTable({
-  #   # https://stackoverflow.com/questions/64097670/jquery-datatable-heading-and-search-on-the-same-line
-  #   datatable(df_map_table(),
-  #             class = list(stripe = FALSE),
-  #             options = list(dom = 'ft',
-  #                            pageLength = 50,
-  #                            columnDefs = list(list(visible=FALSE, targets=c(1)))),
-  #             rownames = FALSE) %>%
-  #     formatPercentage(c("2018 - 2019", "2019 - 2020"), 2) %>%
-  #     formatCurrency(c("2018", "2019", "2020"), currency = "", interval = 3, mark = ",")
-  # })
-  output$table_map <-renderFormattable(
-    formattable(df_map_table(),
-                align =c("l","l","l","l","l","l"),
-                list(State = formatter("span", style = x ~ formattable::style("font-weight" = "bold")),
-                     data = FALSE,
-                     `2018` = formatter("span", x ~ comma(x, digits = 0)),
-                     `2019` = formatter("span", x ~ comma(x, digits = 0)),
-                     `2020` = formatter("span", x ~ comma(x, digits = 0)),
-                     `2018 - 2019` = percent,
-                     `2019 - 2020` = percent))
-  )
+  # table under hex map
+  output$table_map = DT::renderDataTable({
+    # https://stackoverflow.com/questions/64097670/jquery-datatable-heading-and-search-on-the-same-line
+    datatable(df_map_table(),
+              class = list(stripe = FALSE),
+              options = list(dom = 'ft',
+                             pageLength = 50,
+                             columnDefs = list(list(visible=FALSE, targets=c(1)))),
+              rownames = FALSE) %>%
+      formatPercentage(c("2018 - 2019", "2019 - 2020"), 2) %>%
+      formatCurrency(c("2018", "2019", "2020"), currency = "", interval = 3, mark = ",")
+  })
+  
+  # output$table_map <-renderFormattable(
+  #   formattable(df_map_table(),
+  #               align =c("l","l","l","l","l","l"),
+  #               list(State = formatter("span", style = x ~ formattable::style("font-weight" = "bold")),
+  #                    data = FALSE,
+  #                    `2018` = formatter("span", x ~ comma(x, digits = 0)),
+  #                    `2019` = formatter("span", x ~ comma(x, digits = 0)),
+  #                    `2020` = formatter("span", x ~ comma(x, digits = 0)),
+  #                    `2018 - 2019` = percent,
+  #                    `2019 - 2020` = percent))
+  # )
 
   #######
   # Download buttons near dropdowns
   #######
 
+  # save table under map as csv
   output$save_map_data <- downloadHandler(
     filename = function() {
       paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, ".csv", sep="")
@@ -228,15 +232,19 @@ server <- function(input, output, session) {
       write.csv(df_map_table(), file)}
     )
 
-  # fix this
+  # save map as pdf
   output$save_map <- downloadHandler(
-    filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""),
+    filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".pdf", sep=""),
     content = function(file) {
-      png(file, width=800, height=800)
-      foundational_map()
-      dev.off()
-    },
-    contentType = "image/png")
+      # temporarily switch to the temp dir, in case you do not have write
+      # permission to the current working directory
+      owd <- setwd(tempdir())
+      on.exit(setwd(owd))
+
+      saveWidget(foundational_map(), "temp.html", selfcontained = FALSE)
+      webshot("temp.html", file = file, cliprect = "viewport")
+    }
+  )
 
   ##############################################################################################################################
   # State Reports
