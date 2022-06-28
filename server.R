@@ -464,6 +464,10 @@ server <- function(input, output, session) {
 
   })
 
+  #######
+  # Bar chart
+  #######
+
   # output bar chart
   output$state_bar_chart <- renderHighchart({
 
@@ -501,6 +505,102 @@ server <- function(input, output, session) {
                                           Image description: A grouped bar chart showing the number of technical violation admissions or population,
                                           and new offense admissions or population. The chart is interactive, and the user can hover over each state to see the total for each metric and year.')))
 
+  })
+
+  #######
+  # Table under state graphs
+  #######
+
+  output$state_table <- renderReactable({
+
+    # filter data
+    df <- state_table %>%
+      filter(state == input$state_report &
+             adm_or_pop == input$adm_pop_report) %>%
+      group_by(text) %>%
+      summarise(total_new = list(list(total)))
+    df1 <- state_table_wide %>%
+      filter(state == input$state_report &
+             adm_or_pop == input$adm_pop_report) %>%
+      arrange(order) %>%
+      select(-adm_or_pop, -state)
+
+    # merge data
+    df <- merge(df1, df, by = "text")
+    df <- df %>% arrange(order) %>% select(-order)
+
+    # choose colors
+    colpal_fill <- c("url(#total)",
+                     "url(#sup_viols)",
+                     "url(#technical)",
+                     "url(#new_offense)")
+    colpal_stroke <- c(total_co, viol_co , tech_co, new_o_co)
+
+    # create table with 3 year trend line in last column
+    reactable(df,
+              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
+              defaultColDef = colDef(format = colFormat(separators = TRUE), align = "center"),
+              compact = TRUE,
+              fullWidth = FALSE,
+              columns = list(
+                text            = colDef(name = "Metric",
+                                         align = "left",
+                                         minWidth = 275),
+                `2018`          = colDef(minWidth = 100),
+                `2019`          = colDef(minWidth = 100),
+                `2020`          = colDef(minWidth = 100),
+                three_yr_change = colDef(name = "3 Year Change",
+                                         format = colFormat(percent = TRUE, digits = 1)),
+                # add 3 year trend graphs to each row
+                total_new  = colDef(name = "3 Year Trend",
+                                    cell = function(value, index) {
+                                      dui_sparkline(
+                                        data = value[[1]],
+                                        height = 80,
+                                        margin = list(top = 30, right = 20, bottom = 30, left = 20),
+
+                                        components = list(
+                                          dui_sparkpatternlines(
+                                            id = "total",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = total_co,
+                                            strokeWidth = 2.5,
+                                            orientation = "diagonal"
+                                          ),
+
+                                          dui_sparkpatternlines(
+                                            id = "sup_viols",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = viol_co,
+                                            strokeWidth = 2.5,
+                                            orientation = "diagonal"
+                                          ),
+
+                                          dui_sparkpatternlines(
+                                            id = "technical",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = tech_co,
+                                            strokeWidth = 2.5,
+                                            orientation = "diagonal"
+                                          ),
+
+                                          dui_sparkpatternlines(
+                                            id = "new_offense",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = new_o_co,
+                                            strokeWidth = 2.5,
+                                            orientation = "diagonal"
+                                          ),
+
+                                          dui_sparklineseries(
+                                            curve = "linear",
+                                            showArea = FALSE,
+                                            fill = colpal_fill[index],
+                                            stroke = colpal_stroke[index])))})))
   })
 
   ##############################################################################################################################

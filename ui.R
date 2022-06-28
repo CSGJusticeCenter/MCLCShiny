@@ -42,34 +42,29 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                         fluidRow(
                                           column(width = 1),
                                           column(width = 2,
-                                                 #selectizeInput('data_map', label = "Select Data", choices = c("Total", "New Offense", "Supervision Violation", "Probation Violation", "Parole Violation", "Technical Violation"), multiple = FALSE)
                                                  labeled_input('data-map-btn', "",
                                                                selectizeInput('data_map', div(style = "font-weight: bold", "Select Data"),
                                                                               choices = c("Total", "New Offense", "Supervision Violation", "Probation Violation", "Parole Violation", "Technical Violation"),
                                                                               multiple = FALSE))
                                           ),
                                           column(width = 2,
-                                                 #selectizeInput('adm_or_pop_map', label = "Select Type", choices = c("Admissions", "Population"), multiple = FALSE)
                                                  labeled_input('adm-pop-map-btn', "",
                                                                selectizeInput('adm_or_pop_map', div(style = "font-weight: bold", "Select Type"),
                                                                               choices = c("Admissions", "Population"),
                                                                               multiple = FALSE))
                                           ),
                                           column(width = 2,
-                                                 #selectizeInput('year_map', label = "Select Years", choices = c("2018 - 2019", "2019 - 2020"), multiple = FALSE)
                                                  labeled_input('year-map-btn', "",
                                                                selectizeInput('year_map', div(style = "font-weight: bold", "Select Years"),
                                                                               choices = c("2018 - 2019", "2019 - 2020"),
                                                                               multiple = FALSE))
                                           ),
                                           column(width = 2,
-                                                 #downloadButton(outputId = 'save_map', label = "Download Map", class = "download_this")
                                                  tags$style(type="text/css", "#save_map {background-color:#004270; color: #fff;}"),
                                                  labeled_input('save-map-btn', "",
                                                                downloadButton(outputId = 'save_map', label = "Download Map", class = "download_this"))
                                           ),
                                           column(width = 2,
-                                                 #downloadButton(outputId = 'save_map_data', label = "Download Data", class = "download_this")
                                                  tags$style(type="text/css", "#save_map_data {background-color:#004270; color: #fff;}"),
                                                  labeled_input('save-map-data-btn', "",
                                                                downloadButton(outputId = 'save_map_data', label = "Download Data", class = "download_this"))
@@ -105,10 +100,6 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                     br(),
 
                                     tags$head(tags$style(HTML("thead{color: #004270; font-size: 16px}"))),
-                                    # fluidRow(column(width = 1),
-                                    #          column(width = 10, align = "left", div(id = "table-map", formattableOutput("table_map"))),
-                                    #          column(width = 1)),
-
                                     fluidRow(column(width = 1),
                                              column(width = 10, align = "left",
                                                     div(id = "table-map", dataTableOutput("table_map"))),
@@ -189,13 +180,12 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                                br(),
 
-                                                               fluidRow(column(width = 6,
-                                                                               highchartOutput("state_area_chart", height = 400, width = 600)),
-                                                                        column(width = 6,
-                                                                               highchartOutput("state_bar_chart", height = 400, width = 600))
-                                                                        ),
+                                                               fluidRow(column(width = 6, highchartOutput("state_area_chart", height = 400, width = 600)),
+                                                                        column(width = 6, highchartOutput("state_bar_chart", height = 400, width = 400))),
 
-                                                               br()
+                                                               br(),
+
+                                                               fluidRow(column(width = 12, align = "center", reactableOutput("state_table"))),
 
                                                       ), # end tabPanel
                                                     ) # end tabsetPanel

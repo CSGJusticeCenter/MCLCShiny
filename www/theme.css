@@ -27,7 +27,7 @@ body > div {
 }
 
 /* Change font family throughout */
-*{font-family: "Noto Sans", Helvetica, sans-serif;}
+*{font-family: "Noto Sans", "Helvetica", sans-serif;}
 
 /*######################################
           Navigation Bar Color and Font
