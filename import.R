@@ -210,10 +210,14 @@ mclc_explorer <- mclc_all %>%
 vb_adm_pop <- mclc_all %>%
   filter(metric == "Total" |
          metric == "Supervision Violation" |
-         metric == "Technical") %>%
+         metric == "Technical Violation" |
+         metric == "New Offense") %>%
   mutate(change = round(change*100, 0),
          change_type = ifelse(change > 0, "increase", "decrease"),
-         year = as.factor(year))
+         state = as.character(state),
+         year = as.character(year),
+         metric = as.character(metric),
+         adm_or_pop = as.character(adm_or_pop))
 
 ##############################
 # State table under graph

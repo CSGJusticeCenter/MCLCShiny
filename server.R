@@ -52,28 +52,29 @@ server <- function(input, output, session) {
   # create foundational hex map and store it as a reactive expression
   foundational_map <- reactive({
 
+    ################# TO DO find min and max values and put in dataframe in import.R
     # get minimum and maximum value
     min_map <- round(min(df_map()$change, na.rm = TRUE), -1)
     max_map <- round(max(df_map()$change, na.rm = TRUE), -1)
-    
+
     # get absolute value for comparison
     min_map_abs <- abs(min_map)
     max_map_abs <- abs(max_map)
-    
+
     # get neg or pos sign
     min_map_type <- ifelse(min_map >= 0, "positive", "negative")
     max_map_type <- ifelse(max_map >= 0, "positive", "negative")
-    
+
     # create tooltip
     df_plot <- df_map() %>%
       mutate(tooltip = paste0("<b>", state, "</b><br>","Change from ", year, "<br>",change, "%<br>"),
              datalabel = ifelse(is.na(change), paste0("", state_abb, ""),
                                 paste0("<p style=", "text-align:center", ">", state_abb, "", "<br>",
                                        round(change, 0), "%</p>")))
-    
+
     # determine the new min and max so that zero is centered
     if (min_map_type != max_map_type) {
-      
+
       NEW_MAX <- case_when(
         max_map_abs > min_map_abs ~ max_map_abs,
         max_map_abs < min_map_abs ~ min_map_abs,
@@ -84,12 +85,12 @@ server <- function(input, output, session) {
         min_map_abs == max_map_abs ~ min_map_abs)
       NEW_MAX <- ifelse(max_map_type == "negative", -abs(NEW_MAX), abs(NEW_MAX))
       NEW_MIN <- ifelse(min_map_type == "negative", -abs(NEW_MIN), abs(NEW_MIN))
-      
+
       # generate tile map
       # has diverging scales when there are neg and pos values which centers the color gradient at zero
       # has a gradient scale when both the min and max are both negative or both positive
       highchart() %>%
-        
+
         hc_add_series_map(
           map = hex_gj,
           df = df_plot,
@@ -98,43 +99,43 @@ server <- function(input, output, session) {
           dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
                             style = list(fontSize = "14px", fontWeight = "regular", textOutline = 0)),
           nullColor = "#e8e8e8") %>%
-        
+
         hc_colorAxis(min = NEW_MIN,
                      max = NEW_MAX,
                      stops = color_stops(7, c(darkorange, orange, lightorange, white, lightblue, regblue, darkblue)),
                      labels = list(format = "{value}%",
                                    style = list(fontSize = "14px"))
         ) %>%
-        
+
         hc_add_theme(hc_theme_jc) %>%
-        
+
         hc_add_dependency(name = "plugins/series-label.js") %>%
         hc_add_dependency(name = "plugins/accessibility.js") %>%
         hc_add_dependency(name = "plugins/exporting.js") %>%
         hc_add_dependency(name = "plugins/export-data.js") %>%
         hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
-        
+
         hc_plotOptions(series = list(animation = FALSE, dataLabels = list(enabled = TRUE), cursor = "pointer", borderWidth = 3),
                        accessibility = list(enabled = TRUE,
                                             keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
                                             landmarkVerbosity = "one"),
                        area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
         ) %>%
-        hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical", 
+        hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical",
                   #padding = 10,
                   symbolHeight = 200,
                   symbolWidth = 25
         ) %>%
         hc_xAxis(title = "") %>%
         hc_yAxis(title = "")
-      
+
     } else {
-      
+
       NEW_MAX <- max_map
       NEW_MIN <- min_map
-      
+
       highchart() %>%
-        
+
         hc_add_series_map(
           map = hex_gj,
           df = df_plot,
@@ -143,30 +144,30 @@ server <- function(input, output, session) {
           dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
                             style = list(fontSize = "14px", fontWeight = "regular", textOutline = 0)),
           nullColor = "#e8e8e8") %>%
-        
+
         hc_colorAxis(min = NEW_MIN,
                      max = NEW_MAX,
                      stops = color_stops(4, c(darkorange, orange, lightorange, white)),
                      labels = list(format = "{value}%",
                                    style = list(fontSize = "14px"))
         ) %>%
-        
+
         hc_add_theme(hc_theme_jc) %>%
-        
+
         hc_add_dependency(name = "plugins/series-label.js") %>%
         hc_add_dependency(name = "plugins/accessibility.js") %>%
         hc_add_dependency(name = "plugins/exporting.js") %>%
         hc_add_dependency(name = "plugins/export-data.js") %>%
         hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
-        
+
         hc_plotOptions(series = list(animation = FALSE, dataLabels = list(enabled = TRUE), cursor = "pointer", borderWidth = 3),
                        accessibility = list(enabled = TRUE,
                                             keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
                                             landmarkVerbosity = "one"),
                        area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
         ) %>%
-        
-        hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical", 
+
+        hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical",
                   #padding = 10,
                   symbolHeight = 200,
                   symbolWidth = 25
@@ -209,18 +210,6 @@ server <- function(input, output, session) {
               formatPercentage(c("2018 - 2019", "2019 - 2020"), 2) %>%
               formatCurrency(c("2018", "2019", "2020"), currency = " ", interval = 3, mark = ",")
   })
-  
-  # output$table_map <-renderFormattable(
-  #   formattable(df_map_table(),
-  #               align =c("l","l","l","l","l","l"),
-  #               list(State = formatter("span", style = x ~ formattable::style("font-weight" = "bold")),
-  #                    data = FALSE,
-  #                    `2018` = formatter("span", x ~ comma(x, digits = 0)),
-  #                    `2019` = formatter("span", x ~ comma(x, digits = 0)),
-  #                    `2020` = formatter("span", x ~ comma(x, digits = 0)),
-  #                    `2018 - 2019` = percent,
-  #                    `2019 - 2020` = percent))
-  # )
 
   #######
   # Download buttons near dropdowns
@@ -254,11 +243,159 @@ server <- function(input, output, session) {
   ##############################################################################################################################
 
   #######
-  # Hex map title
+  # State page title
   #######
 
   # title of state based on user input
   output$selected_state <- renderText({paste(input$adm_pop_report, " Trends in ", input$state_report, sep = "")})
+
+  #######
+  # Value boxes
+  #######
+
+  # filter data to totals
+  df_vb_total <- reactive({
+    vb_adm_pop %>%
+      filter(state == input$state_report &
+             adm_or_pop == input$adm_pop_report &
+             year == "2020" &
+             metric == "Total")
+  })
+
+  # filter data to sup viols
+  df_vb_sup_viols <- reactive({
+    vb_adm_pop %>%
+      filter(state == input$state_report &
+             adm_or_pop == input$adm_pop_report &
+             year == "2020" &
+             metric == "Supervision Violation")
+  })
+
+  # filter data to tech viols
+  df_vb_tech <- reactive({
+    vb_adm_pop %>%
+      filter(state == input$state_report &
+             adm_or_pop == input$adm_pop_report &
+             year == "2020" &
+             metric == "Technical Violation")
+  })
+
+  # filter data to new offense viols
+  df_vb_new_off <- reactive({
+    vb_adm_pop %>%
+      filter(state == input$state_report &
+             adm_or_pop == input$adm_pop_report &
+             year == "2020" &
+             metric == "New Offense")
+  })
+
+  # value box for change in total admissions or population
+  output$total_change <- renderValueBox({
+
+    if (is.na(df_vb_total()$change)) {
+      text <- "No Data"
+    } else if (df_vb_total()$change < 0) {
+      text <- tagList(HTML("&darr;"), paste0(df_vb_total()$change, "% from 2019"))
+    } else {
+      text <- tagList(HTML("&uarr;"), paste0(df_vb_total()$change, "% from 2019"))
+    }
+
+    if (is.na(df_vb_total()$total)) {
+      header <- "No Data"
+    } else {
+      header <- comma(df_vb_total()$total, digits = 0)
+    }
+
+    valueBox2(
+      header,
+      title = paste0("Overall ", input$adm_pop_report, "\n", " in 2020"),
+      subtitle = text,
+      color = "black",
+      href = NULL
+    )
+
+  })
+
+  # value box for change in supervision violation admissions or population
+  output$sup_change <- renderValueBox({
+
+    if (is.na(df_vb_sup_viols()$change)) {
+      text <- "No Data"
+    } else if (df_vb_sup_viols()$change < 0) {
+      text <- tagList(HTML("&darr;"), paste0(df_vb_sup_viols()$change, "% from 2019"))
+    } else {
+      text <- tagList(HTML("&uarr;"), paste0(df_vb_sup_viols()$change, "% from 2019"))
+    }
+
+    if (is.na(df_vb_sup_viols()$total)) {
+      header <- "No Data"
+    } else {
+      header <- comma(df_vb_sup_viols()$total, digits = 0)
+    }
+
+    valueBox2(
+      header,
+      title = paste0("Supervision Violation ", input$adm_pop_report, "\n in 2020"),
+      subtitle = text,
+      color = "black",
+      href = NULL
+    )
+
+  })
+
+  # value box for change in technical violation admissions or population
+  output$tech_change <- renderValueBox({
+
+    if (is.na(df_vb_tech()$change)) {
+      text <- "No Data"
+    } else if (df_vb_tech()$change < 0) {
+      text <- tagList(HTML("&darr;"), paste0(df_vb_tech()$change, "% from 2019"))
+    } else {
+      text <- tagList(HTML("&uarr;"), paste0(df_vb_tech()$change, "% from 2019"))
+    }
+
+    if (is.na(df_vb_tech()$total)) {
+      header <- "No Data"
+    } else {
+      header <- comma(df_vb_tech()$total, digits = 0)
+    }
+
+    valueBox2(
+      header,
+      title = paste0("Technical Violation ", input$adm_pop_report, "\n in 2020"),
+      subtitle = text,
+      color = "black",
+      href = NULL
+    )
+
+  })
+
+  # value box for change in new offense violation admissions or population
+  output$new_off_change <- renderValueBox({
+
+    if (is.na(df_vb_new_off()$change)) {
+      text <- "No Data"
+    } else if (df_vb_new_off()$change < 0) {
+      text <- tagList(HTML("&darr;"), paste0(df_vb_new_off()$change, "% from 2019"))
+    } else {
+      text <- tagList(HTML("&uarr;"), paste0(df_vb_new_off()$change, "% from 2019"))
+    }
+
+    if (is.na(df_vb_new_off()$total)) {
+      header <- "No Data"
+    } else {
+      header <- comma(df_vb_new_off()$total, digits = 0)
+    }
+
+    valueBox2(
+      header,
+      title = paste0("New Offense Violation ", input$adm_pop_report, "\n in 2020"),
+      subtitle = text,
+      color = "black",
+      href = NULL
+    )
+
+  })
 
   ##############################################################################################################################
   # Download

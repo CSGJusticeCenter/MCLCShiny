@@ -110,7 +110,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                     #          column(width = 1)),
 
                                     fluidRow(column(width = 1),
-                                             column(width = 10, align = "left", 
+                                             column(width = 10, align = "left",
                                                     div(id = "table-map", dataTableOutput("table_map"))),
                                              column(width = 1)),
 
@@ -157,7 +157,23 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                     fluidRow(column(width = 1),
                                              column(width = 10, align = "left", div(id = "selected-state", textOutput("selected_state"))),
                                              column(width = 1)),
-                                    
+
+                                    br(),
+
+                                    tags$style(".small-box.bg-black  {background-color: #004270 !important; color: #FFFFFF !important; }"),
+                                    tags$style(".small-box           {border: 1px; border-style: solid; border-color: #FFFFFF !important; border-radius: 1px; padding: 1em; }"),
+
+                                    fluidRow(column(width = 2),
+                                             column(width = 2,
+                                                    valueBoxOutput("total_change", width = 90)),
+                                             column(width = 2,
+                                                    valueBoxOutput("sup_change", width = 90)),
+                                             column(width = 2,
+                                                    valueBoxOutput("tech_change", width = 90)),
+                                             column(width = 2,
+                                                    valueBoxOutput("new_off_change", width = 90)),
+                                             column(width = 2)),
+
                                     br()
 
                            ), # end tabPanel
