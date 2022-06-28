@@ -190,8 +190,9 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                br(),
 
                                                                fluidRow(column(width = 6,
-                                                                               highchartOutput("state_area_chart", height = 400, width = 600)
-                                                                               )
+                                                                               highchartOutput("state_area_chart", height = 400, width = 600)),
+                                                                        column(width = 6,
+                                                                               highchartOutput("state_bar_chart", height = 400, width = 600))
                                                                         ),
 
                                                                br()

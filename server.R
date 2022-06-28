@@ -401,7 +401,7 @@ server <- function(input, output, session) {
   # Area chart
   #######
 
-  # filter data
+  # filter data for area chart
   df_area_chart <- reactive({
     adm_pop_long %>%
       filter(state == input$state_report &
@@ -412,10 +412,21 @@ server <- function(input, output, session) {
       mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
   })
 
+  # filter data for grouped barchart
+  df_bar_chart <- reactive({
+    adm_pop_long %>%
+      filter(state == input$state_report &
+             adm_or_pop == input$adm_pop_report) %>%
+      group_by(state, year, metric, adm_or_pop) %>%
+      summarise(total = sum(total)) %>%
+      filter(metric == "New Offense" | metric == "Technical Violation") %>%
+      mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
+  })
+
   # output area chart
   output$state_area_chart <- renderHighchart({
 
-     highchart() %>%
+      highchart() %>%
 
       hc_chart(type="area") %>%
       hc_add_series(data = subset(df_area_chart(), metric == "Total"), name = "Total", type = "area", hcaes(x = year, y = total), color = total_co) %>%
@@ -439,9 +450,7 @@ server <- function(input, output, session) {
       hc_add_dependency(name = "plugins/export-data.js") %>%
       hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
 
-      hc_exporting(enabled = TRUE
-                   # accessibility = list(enabled = TRUE)
-                   ) %>%
+      hc_exporting(enabled = TRUE) %>%
 
       hc_plotOptions(series = list(animation = FALSE, cursor = "pointer", borderWidth = 3),
                      accessibility = list(enabled = TRUE,
@@ -451,8 +460,46 @@ server <- function(input, output, session) {
                                           landmarkVerbosity = "one"),
                      area = list(accessibility = list(description = "This area chart was created by a selected state and selected data type, either admissions or population.
                                           Image description: An area chart showing the number of total admissions or population, supervision violation admissions or population, technical violation admissions or population,
-                                          and new offense admissions or population. The map is interactive, and the user can hover over each state to see the total for each metric and year."))
-      )
+                                          and new offense admissions or population. The map is interactive, and the user can hover over each state to see the total for each metric and year.")))
+
+  })
+
+  # output bar chart
+  output$state_bar_chart <- renderHighchart({
+
+    highchart() %>%
+      hc_chart(type = "column") %>%
+      hc_xAxis(categories = df_bar_chart()$metric) %>%
+      hc_add_series(data = subset(df_bar_chart(), metric == "Technical Violation"), name = "Technical Violation", type = "column", hcaes(x = year, y = total), color = tech_co) %>%
+      hc_add_series(data = subset(df_bar_chart(), metric == "New Offense"), name = "New Offense", type = "column", hcaes(x = year, y = total), color = new_o_co) %>%
+
+      hc_add_theme(hc_theme_jc) %>%
+
+      hc_xAxis(title = "", categories = c("2018", "2019", "2020")) %>%
+      hc_yAxis(title = "") %>%
+      hc_title(
+        text = paste0("Supervision Violation ", unique(df_area_chart()$adm_or_pop), " by Type"),
+        align = "left",
+        style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
+      ) %>%
+
+      hc_add_dependency(name = "plugins/series-label.js") %>%
+      hc_add_dependency(name = "plugins/accessibility.js") %>%
+      hc_add_dependency(name = "plugins/exporting.js") %>%
+      hc_add_dependency(name = "plugins/export-data.js") %>%
+      hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
+
+      hc_exporting(enabled = TRUE) %>%
+
+      hc_plotOptions(series = list(animation = FALSE, cursor = "pointer", borderWidth = 3),
+                     accessibility = list(enabled = TRUE,
+                                          keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This bar chart was created by a selected state and selected data type, either admissions or population.
+                                          Image description: A grouped bar chart showing the number of technical violation admissions or population,
+                                          and new offense admissions or population. The chart is interactive, and the user can hover over each state to see the total for each metric and year.',
+                                          landmarkVerbosity = "one"),
+                     area = list(accessibility = list(description = 'This bar chart was created by a selected state and selected data type, either admissions or population.
+                                          Image description: A grouped bar chart showing the number of technical violation admissions or population,
+                                          and new offense admissions or population. The chart is interactive, and the user can hover over each state to see the total for each metric and year.')))
 
   })
 
