@@ -137,6 +137,10 @@ mclc <- adm_pop %>%
 mclc_all <- gather(mclc, data, total, total_admissions:technical_population)
 adm_pop_long <- gather(adm_pop, data, total, total_admissions:other_population)
 
+# add text depending on data
+adm_pop_long <- fnc_create_data_metric(adm_pop_long)
+adm_pop_long <- fnc_create_adm_pop(adm_pop_long)
+
 # create change from 2018 to 2019 to 2020
 # remove dups
 # create label ready variable called metric

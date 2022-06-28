@@ -154,27 +154,54 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                     # Value boxes
                                     #######
 
-                                    fluidRow(column(width = 1),
-                                             column(width = 10, align = "left", div(id = "selected-state", textOutput("selected_state"))),
-                                             column(width = 1)),
+                                    fluidRow(column(width = 2),
+                                             column(width = 8, align = "left", div(id = "selected-state", textOutput("selected_state"))),
+                                             column(width = 2)),
 
                                     br(),
 
                                     tags$style(".small-box.bg-black  {background-color: #004270 !important; color: #FFFFFF !important; }"),
-                                    tags$style(".small-box           {border: 1px; border-style: solid; border-color: #FFFFFF !important; border-radius: 1px; padding: 1em; }"),
+                                    tags$style(".small-box           {border: 1px; border-style: solid; border-color: #FFFFFF !important; border-radius: 1px; padding: 0.75em; }"),
 
                                     fluidRow(column(width = 2),
                                              column(width = 2,
-                                                    valueBoxOutput("total_change", width = 90)),
+                                                    valueBoxOutput("total_change", width = 100)),
                                              column(width = 2,
-                                                    valueBoxOutput("sup_change", width = 90)),
+                                                    valueBoxOutput("sup_change", width = 100)),
                                              column(width = 2,
-                                                    valueBoxOutput("tech_change", width = 90)),
+                                                    valueBoxOutput("tech_change", width = 100)),
                                              column(width = 2,
-                                                    valueBoxOutput("new_off_change", width = 90)),
+                                                    valueBoxOutput("new_off_change", width = 100)),
                                              column(width = 2)),
 
-                                    br()
+                                    br(),
+                                    br(),
+
+                                    #######
+                                    # Panels for Overview, Parole, and Probation
+                                    #######
+
+                                    fluidRow(column(width = 12,
+
+                                                    tabsetPanel(
+
+                                                      tabPanel(value="1","Overview",
+
+                                                               br(),
+
+                                                               fluidRow(column(width = 6,
+                                                                               highchartOutput("state_area_chart", height = 400, width = 600)
+                                                                               )
+                                                                        ),
+
+                                                               br()
+
+                                                      ), # end tabPanel
+                                                    ) # end tabsetPanel
+                                             ) # end column
+                                    ) # end fluidRow
+
+
 
                            ), # end tabPanel
 

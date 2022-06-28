@@ -152,7 +152,7 @@ server <- function(input, output, session) {
                                    style = list(fontSize = "14px"))
         ) %>%
 
-        hc_add_theme(hc_theme_jc) %>%
+        hc_add_theme(hc_theme_map_jc) %>%
 
         hc_add_dependency(name = "plugins/series-label.js") %>%
         hc_add_dependency(name = "plugins/accessibility.js") %>%
@@ -308,7 +308,7 @@ server <- function(input, output, session) {
 
     valueBox2(
       header,
-      title = paste0("Overall ", input$adm_pop_report, "\n", " in 2020"),
+      title = paste0("Overall ", input$adm_pop_report, " in 2020"),
       subtitle = text,
       color = "black",
       href = NULL
@@ -335,7 +335,7 @@ server <- function(input, output, session) {
 
     valueBox2(
       header,
-      title = paste0("Supervision Violation ", input$adm_pop_report, "\n in 2020"),
+      title = paste0("Supervision Violation ", input$adm_pop_report, " in 2020"),
       subtitle = text,
       color = "black",
       href = NULL
@@ -362,7 +362,7 @@ server <- function(input, output, session) {
 
     valueBox2(
       header,
-      title = paste0("Technical Violation ", input$adm_pop_report, "\n in 2020"),
+      title = paste0("Technical Violation ", input$adm_pop_report, " in 2020"),
       subtitle = text,
       color = "black",
       href = NULL
@@ -389,11 +389,70 @@ server <- function(input, output, session) {
 
     valueBox2(
       header,
-      title = paste0("New Offense Violation ", input$adm_pop_report, "\n in 2020"),
+      title = paste0("New Offense ", input$adm_pop_report, " in 2020"),
       subtitle = text,
       color = "black",
       href = NULL
     )
+
+  })
+
+  #######
+  # Area chart
+  #######
+
+  # filter data
+  df_area_chart <- reactive({
+    adm_pop_long %>%
+      filter(state == input$state_report &
+             adm_or_pop == input$adm_pop_report &
+             (metric == "Total" | metric == "Supervision Violation" | metric == "New Offense" | metric == "Technical Violation")) %>%
+      group_by(state, year, metric, adm_or_pop) %>%
+      summarise(total = sum(total)) %>%
+      mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
+  })
+
+  # output area chart
+  output$state_area_chart <- renderHighchart({
+
+     highchart() %>%
+
+      hc_chart(type="area") %>%
+      hc_add_series(data = subset(df_area_chart(), metric == "Total"), name = "Total", type = "area", hcaes(x = year, y = total), color = total_co) %>%
+      hc_add_series(data = subset(df_area_chart(), metric == "Supervision Violation"), name = "Supervision Violation", type = "area", hcaes(x = year, y = total), color = viol_co) %>%
+      hc_add_series(data = subset(df_area_chart(), metric == "Technical Violation"), name = "Technical Violation", type = "area", hcaes(x = year, y = total), color = tech_co) %>%
+      hc_add_series(data = subset(df_area_chart(), metric == "New Offense"), name = "New Offense", type = "area", hcaes(x = year, y = total), color = new_o_co) %>%
+
+      hc_add_theme(hc_theme_jc) %>%
+
+      hc_xAxis(title = "", categories = c("2018", "2019", "2020")) %>%
+      hc_yAxis(title = "") %>%
+      hc_title(
+        text = paste0("Prison ", unique(df_area_chart()$adm_or_pop)),
+        align = "left",
+        style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
+      ) %>%
+
+      hc_add_dependency(name = "plugins/series-label.js") %>%
+      hc_add_dependency(name = "plugins/accessibility.js") %>%
+      hc_add_dependency(name = "plugins/exporting.js") %>%
+      hc_add_dependency(name = "plugins/export-data.js") %>%
+      hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
+
+      hc_exporting(enabled = TRUE
+                   # accessibility = list(enabled = TRUE)
+                   ) %>%
+
+      hc_plotOptions(series = list(animation = FALSE, cursor = "pointer", borderWidth = 3),
+                     accessibility = list(enabled = TRUE,
+                                          keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This area chart was created by a selected state and selected data type, either admissions or population.
+                                          Image description: An area chart showing the number of total admissions or population, supervision violation admissions or population, technical violation admissions or population,
+                                          and new offense admissions or population. The map is interactive, and the user can hover over each state to see the total for each metric and year.',
+                                          landmarkVerbosity = "one"),
+                     area = list(accessibility = list(description = "This area chart was created by a selected state and selected data type, either admissions or population.
+                                          Image description: An area chart showing the number of total admissions or population, supervision violation admissions or population, technical violation admissions or population,
+                                          and new offense admissions or population. The map is interactive, and the user can hover over each state to see the total for each metric and year."))
+      )
 
   })
 

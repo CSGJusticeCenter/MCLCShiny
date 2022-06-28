@@ -18,24 +18,16 @@ labeled_input <- function(id, label, input){
       input)
 }
 
-# custom highcharts theme
-hc_theme_jc <- hc_theme_merge(
+# custom highcharts theme for hex map
+hc_theme_map_jc <- hc_theme_merge(
   hc_theme_smpl(),
   hc_theme(
-    colors = c(
-      "#1795BF",
-      "#68C6A8",
-      "#F0EA44",
-      "#E1B32D",
-      "#001F35"
-    ),
     chart = list(
       marginTop = 75,
       style = list(fontFamily = default_fonts)
     ),
     title = list(style = list(fontFamily = default_fonts, fontSize = "24px")),
     subtitle = list(style = list(fontFamily = default_fonts, fontSize = "16px")),
-    # legend = list(align = "right", verticalAlign = "bottom", layout = "vertical"), # labels = list(format = "{percentage:.0f}")
     caption = list(align = "right", y = 15),
     xAxis = list(
       labels = list(
@@ -53,6 +45,22 @@ hc_theme_jc <- hc_theme_merge(
     )
   )
 )
+
+# custom highcharts theme for plots
+hc_theme_jc <- hc_theme(colors = c("#D25E2D", "#EDB799", "#C7E8F5", "#236ca7", "#D6C246", "#dcdcdc"),
+                        chart = list(style = list(fontFamily = default_fonts, color = "#666666")),
+                        title = list(align = "left", style = list(fontFamily = default_fonts, fontSize = "24px")),
+                        subtitle = list(align = "left", style = list(fontFamily = default_fonts, fontSize = "16px")),
+                        legend = list(align = "left", verticalAlign = "top"),
+                        xAxis = list(gridLineColor = "transparent", lineColor = "transparent", minorGridLineColor = "transparent", tickColor = "transparent"),
+                        yAxis = list(labels = list(enabled = FALSE), gridLineColor = "transparent", lineColor = "transparent", minorGridLineColor = "transparent", tickColor = "transparent"),
+                        plotOptions = list(line = list(marker = list(enabled = FALSE)),
+                                           spline = list(marker = list(enabled = FALSE)),
+                                           area = list(marker = list(enabled = FALSE)),
+                                           areaspline = list(marker = list(enabled = FALSE)),
+                                           arearange = list(marker = list(enabled = FALSE)),
+                                           bubble = list(maxSize = "10%")))
+
 
 # # set up highcharts download buttons
 # hc_setup <- function(x) {
@@ -76,7 +84,7 @@ hc_theme_jc <- hc_theme_merge(
 #     )
 # }
 
-# assign labels depending on data type
+# create text depending on data type
 fnc_create_data_text <- function(df){
   df <- df %>%
     mutate(text = case_when(
@@ -88,6 +96,7 @@ fnc_create_data_text <- function(df){
       data == "total_parole_violation_admissions"           ~  "Parole Violation Admissions",
       data == "new_offense_parole_violation_admissions"     ~  "Parole New Offense Admissions",
       data == "technical_parole_violation_admissions"       ~  "Parole Technical Admissions",
+      data == "other_admissions"                            ~  "Other Admissions",
 
       data == "total_population"                            ~  "Total Population",
       data == "total_violation_population"                  ~  "Supervision Violation Population",
@@ -96,9 +105,13 @@ fnc_create_data_text <- function(df){
       data == "technical_probation_violation_population"    ~  "Probation Technical Population",
       data == "total_parole_violation_population"           ~  "Parole Violation Population",
       data == "new_offense_parole_violation_population"     ~  "Parole New Offense Population",
-      data == "technical_parole_violation_population"       ~  "Parole Technical Population"
+      data == "technical_parole_violation_population"       ~  "Parole Technical Population",
+      data == "other_population"                            ~  "Other Population"
+
     ))
 }
+
+# create metric depending on data
 fnc_create_data_metric <- function(df){
   df <- df %>%
     mutate(metric = case_when(
@@ -110,6 +123,7 @@ fnc_create_data_metric <- function(df){
       data == "total_parole_violation_admissions"           ~  "Parole Violation",
       data == "new_offense_parole_violation_admissions"     ~  "New Offense",
       data == "technical_parole_violation_admissions"       ~  "Technical Violation",
+      data == "other_admissions"                            ~  "Other",
 
       data == "total_population"                            ~  "Total",
       data == "total_violation_population"                  ~  "Supervision Violation",
@@ -118,8 +132,15 @@ fnc_create_data_metric <- function(df){
       data == "technical_probation_violation_population"    ~  "Technical Violation",
       data == "total_parole_violation_population"           ~  "Parole Violation",
       data == "new_offense_parole_violation_population"     ~  "New Offense",
-      data == "technical_parole_violation_population"       ~  "Technical Violation"
+      data == "technical_parole_violation_population"       ~  "Technical Violation",
+      data == "other_population"                            ~  "Other"
     ))
+}
+
+# create adm vs pop depending on data
+fnc_create_adm_pop <- function(df){
+  df <- df %>%
+    mutate(adm_or_pop = ifelse(grepl("population", data), "Population", "Admissions"))
 }
 
 # clean bjs probation data sets
@@ -227,9 +248,9 @@ valueBox2 <- function(value, title, subtitle, icon = NULL, color = "aqua", width
     class = paste0("small-box bg-", color),
     div(
       class = "inner",
-      tags$small(title),
-      h3(value),
-      p(subtitle)
+      p(HTML(paste0("<b>", title, "</b>"))),
+      h1(HTML(paste0("<b>", value, "</b>"))),
+      p(HTML(paste0("<b>", subtitle, "</b>")))
     ),
     if (!is.null(icon)) div(class = "icon-large", icon)
   )
