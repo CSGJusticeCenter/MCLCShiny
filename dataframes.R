@@ -57,13 +57,15 @@ viol_co  <- yellow
 tech_co  <- orange
 new_o_co <- lightorange
 
+# choose colors
+colpal_fill <- c("url(#total)",
+                 "url(#sup_viols)",
+                 "url(#technical)",
+                 "url(#new_offense)")
+colpal_stroke <- c(total_co, viol_co , tech_co, new_o_co)
+
 #______________________________________________________
-# fonts TBD
+# fonts
 #______________________________________________________
 
-# default_fonts <- c("system-ui", "-apple-system", "Segoe UI", "Roboto",
-#                    "Helvetica Neue", "Arial", "Noto Sans", "Liberation Sans",
-#                    "sans-serif", "Apple Color Emoji", "Segoe UI Emoji",
-#                    "Segoe UI Symbol", "Noto Color Emoji")
-default_fonts <- c("Noto Sans")
-
+default_fonts <- c("Graphik")

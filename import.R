@@ -23,7 +23,12 @@
 # load packages and functions
 source("library.R")
 library(csgjcr)
-default_fonts <- c("Noto Sans") #string required to run functions.R
+
+# Add fonts required to run functions.R
+font_add("Graphik", regular = "www/Fonts/GraphikRegular.otf")
+showtext_auto()
+default_fonts <- c("Graphik")
+
 source("functions.R")
 
 # path to data on research div sharepoint
@@ -141,6 +146,7 @@ adm_pop_long <- gather(adm_pop, data, total, total_admissions:other_population)
 # add text depending on data
 adm_pop_long <- fnc_create_data_metric(adm_pop_long)
 adm_pop_long <- fnc_create_adm_pop(adm_pop_long)
+adm_pop_long <- fnc_create_prob_vs_parole(adm_pop_long)
 
 # create change from 2018 to 2019 to 2020
 # remove dups

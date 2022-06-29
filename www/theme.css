@@ -27,7 +27,7 @@ body > div {
 }
 
 /* Change font family throughout */
-*{font-family: "Noto Sans", "Helvetica", sans-serif;}
+*{font-family: "Graphik", sans-serif;}
 
 /*######################################
           Navigation Bar Color and Font
@@ -282,7 +282,7 @@ button > div {
   color: #FFFFFF;
   cursor: default;
   background-color: #004270;
-  border-bottom-color: transparent;
+  border-bottom-color: #cccccc;
 }
 
 .nav-tabs>li>a {

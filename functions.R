@@ -62,20 +62,17 @@ hc_theme_jc <- hc_theme(colors = c("#D25E2D", "#EDB799", "#C7E8F5", "#236ca7", "
                                            bubble = list(maxSize = "10%")))
 
 
-# # set up highcharts download buttons
-# hc_setup <- function(x) {
-#
-#   hc_exporting(enabled = TRUE) %>%
-#   hc_add_dependency(name = "plugins/series-label.js") %>%
-#   hc_add_dependency(name = "plugins/accessibility.js") %>%
-#   hc_add_dependency(name = "plugins/exporting.js") %>%
-#   hc_add_dependency(name = "plugins/export-data.js") %>%
-#   hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
-#
-#   hc_yAxis(title = "") %>%
-#   hc_add_theme(hc_theme_jc())
-#
-# }
+# set up highcharts download buttons
+hc_setup <- function(x) {
+
+  hc_add_dependency(x, name = "plugins/series-label.js") %>%
+  hc_add_dependency(name = "plugins/accessibility.js") %>%
+  hc_add_dependency(name = "plugins/exporting.js") %>%
+  hc_add_dependency(name = "plugins/export-data.js") %>%
+  hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
+  hc_exporting(enabled = TRUE)
+
+}
 
 # create text depending on data type
 fnc_create_data_text <- function(df){
@@ -127,6 +124,33 @@ fnc_create_data_metric <- function(df){
       data == "new_offense_parole_violation_population"     ~  "New Offense",
       data == "technical_parole_violation_population"       ~  "Technical Violation",
       data == "other_population"                            ~  "Other"
+    ))
+}
+
+# create text depending on data type
+fnc_create_prob_vs_parole <- function(df){
+  df <- df %>%
+    mutate(prob_vs_parole = case_when(
+      data == "total_admissions"                            ~  "Both",
+      data == "total_violation_admissions"                  ~  "Both",
+      data == "total_probation_violation_admissions"        ~  "Probation",
+      data == "new_offense_probation_violation_admissions"  ~  "Probation",
+      data == "technical_probation_violation_admissions"    ~  "Probation",
+      data == "total_parole_violation_admissions"           ~  "Parole",
+      data == "new_offense_parole_violation_admissions"     ~  "Parole",
+      data == "technical_parole_violation_admissions"       ~  "Parole",
+      data == "other_admissions"                            ~  "Both",
+
+      data == "total_population"                            ~  "Both",
+      data == "total_violation_population"                  ~  "Both",
+      data == "total_probation_violation_population"        ~  "Probation",
+      data == "new_offense_probation_violation_population"  ~  "Probation",
+      data == "technical_probation_violation_population"    ~  "Probation",
+      data == "total_parole_violation_population"           ~  "Parole",
+      data == "new_offense_parole_violation_population"     ~  "Parole",
+      data == "technical_parole_violation_population"       ~  "Parole",
+      data == "other_population"                            ~  "Both"
+
     ))
 }
 

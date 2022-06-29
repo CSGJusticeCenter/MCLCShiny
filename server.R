@@ -107,24 +107,6 @@ server <- function(input, output, session) {
                                    style = list(fontSize = "14px"))
         ) %>%
 
-        hc_add_theme(hc_theme_jc) %>%
-
-        hc_add_dependency(name = "plugins/series-label.js") %>%
-        hc_add_dependency(name = "plugins/accessibility.js") %>%
-        hc_add_dependency(name = "plugins/exporting.js") %>%
-        hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
-
-        hc_plotOptions(series = list(animation = FALSE,
-                                     dataLabels = list(enabled = TRUE),
-                                     cursor = "pointer",
-                                     borderWidth = 3),
-                       accessibility = list(enabled = TRUE,
-                                            keyboardNavigation = list(enabled = TRUE),
-                                            linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
-                                            landmarkVerbosity = "one"),
-                       area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
-        ) %>%
         hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical",
                   #padding = 10,
                   symbolHeight = 200,
@@ -136,6 +118,20 @@ server <- function(input, output, session) {
           text = paste0("Change in ", unique(df_plot$metric), " ", unique(df_plot$adm_or_pop), " from ", unique(df_plot$year)),
           align = "left",
           style = list(fontWeight = "bold", fontSize = "24px", useHTML = TRUE)
+        ) %>%
+
+        hc_add_theme(hc_theme_map_jc) %>%
+        hc_setup() %>%
+
+        hc_plotOptions(series = list(animation = FALSE,
+                                     dataLabels = list(enabled = TRUE),
+                                     cursor = "pointer",
+                                     borderWidth = 3),
+                       accessibility = list(enabled = TRUE,
+                                            keyboardNavigation = list(enabled = TRUE),
+                                            linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
+                                            landmarkVerbosity = "one"),
+                       area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
         )
 
     } else {
@@ -158,35 +154,28 @@ server <- function(input, output, session) {
                      max = NEW_MAX,
                      stops = color_stops(4, c(darkorange, orange, lightorange, white)),
                      labels = list(format = "{value}%",
-                                   style = list(fontSize = "14px"))
-        ) %>%
+                                   style = list(fontSize = "14px"))) %>%
+
+        hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical",
+                  #padding = 10,
+                  symbolHeight = 200,
+                  symbolWidth = 25) %>%
+
+        hc_xAxis(title = "") %>%
+        hc_yAxis(title = "") %>%
+        hc_title(
+          text = paste0("Change in ", unique(df_plot$metric), " ", unique(df_plot$adm_or_pop), " from ", unique(df_plot$year)),
+          align = "left",
+          style = list(fontWeight = "bold", fontSize = "24px", useHTML = TRUE)) %>%
 
         hc_add_theme(hc_theme_map_jc) %>%
-
-        hc_add_dependency(name = "plugins/series-label.js") %>%
-        hc_add_dependency(name = "plugins/accessibility.js") %>%
-        hc_add_dependency(name = "plugins/exporting.js") %>%
-        hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
+        hc_setup() %>%
 
         hc_plotOptions(series = list(animation = FALSE, dataLabels = list(enabled = TRUE), cursor = "pointer", borderWidth = 3),
                        accessibility = list(enabled = TRUE,
                                             keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
                                             landmarkVerbosity = "one"),
                        area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
-        ) %>%
-
-        hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical",
-                  #padding = 10,
-                  symbolHeight = 200,
-                  symbolWidth = 25
-        ) %>%
-        hc_xAxis(title = "") %>%
-        hc_yAxis(title = "") %>%
-        hc_title(
-          text = paste0("Change in ", unique(df_plot$metric), " ", unique(df_plot$adm_or_pop), " from ", unique(df_plot$year)),
-          align = "left",
-          style = list(fontWeight = "bold", fontSize = "24px", useHTML = TRUE)
         )
     }
 
@@ -449,8 +438,6 @@ server <- function(input, output, session) {
       hc_add_series(data = subset(df_area_chart(), metric == "Technical Violation"), name = "Technical Violation", type = "area", hcaes(x = year, y = total), color = tech_co) %>%
       hc_add_series(data = subset(df_area_chart(), metric == "New Offense"), name = "New Offense", type = "area", hcaes(x = year, y = total), color = new_o_co) %>%
 
-      hc_add_theme(hc_theme_jc) %>%
-
       hc_xAxis(title = "", categories = c("2018", "2019", "2020")) %>%
       hc_yAxis(title = "") %>%
       hc_title(
@@ -459,13 +446,8 @@ server <- function(input, output, session) {
         style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
       ) %>%
 
-      hc_add_dependency(name = "plugins/series-label.js") %>%
-      hc_add_dependency(name = "plugins/accessibility.js") %>%
-      hc_add_dependency(name = "plugins/exporting.js") %>%
-      hc_add_dependency(name = "plugins/export-data.js") %>%
-      hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
-
-      hc_exporting(enabled = TRUE) %>%
+      hc_add_theme(hc_theme_jc) %>%
+      hc_setup() %>%
 
       hc_plotOptions(series = list(animation = FALSE, cursor = "pointer", borderWidth = 3),
                      accessibility = list(enabled = TRUE,
@@ -492,8 +474,6 @@ server <- function(input, output, session) {
       hc_add_series(data = subset(df_bar_chart(), metric == "Technical Violation"), name = "Technical Violation", type = "column", hcaes(x = year, y = total), color = tech_co) %>%
       hc_add_series(data = subset(df_bar_chart(), metric == "New Offense"), name = "New Offense", type = "column", hcaes(x = year, y = total), color = new_o_co) %>%
 
-      hc_add_theme(hc_theme_jc) %>%
-
       hc_xAxis(title = "", categories = c("2018", "2019", "2020")) %>%
       hc_yAxis(title = "") %>%
       hc_title(
@@ -502,13 +482,8 @@ server <- function(input, output, session) {
         style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
       ) %>%
 
-      hc_add_dependency(name = "plugins/series-label.js") %>%
-      hc_add_dependency(name = "plugins/accessibility.js") %>%
-      hc_add_dependency(name = "plugins/exporting.js") %>%
-      hc_add_dependency(name = "plugins/export-data.js") %>%
-      hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
-
-      hc_exporting(enabled = TRUE) %>%
+      hc_add_theme(hc_theme_jc) %>%
+      hc_setup() %>%
 
       hc_plotOptions(series = list(animation = FALSE, cursor = "pointer", borderWidth = 3),
                      accessibility = list(enabled = TRUE,
@@ -543,13 +518,6 @@ server <- function(input, output, session) {
     # merge data
     df <- merge(df1, df, by = "text")
     df <- df %>% arrange(order) %>% select(-order)
-
-    # choose colors
-    colpal_fill <- c("url(#total)",
-                     "url(#sup_viols)",
-                     "url(#technical)",
-                     "url(#new_offense)")
-    colpal_stroke <- c(total_co, viol_co , tech_co, new_o_co)
 
     # create table with 3 year trend line in last column
     reactable(df,

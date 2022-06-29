@@ -125,8 +125,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                           column(width = 2,
                                                  labeled_input('state-btn', "",
                                                                selectizeInput('state_report', div(style = "font-weight: bold", "Select State"),
-                                                                              #choices = unique(adm_pop_long$state),
-                                                                              choices = c("Alabama", "Alaska"),
+                                                                              choices = unique(adm_pop_long$state),
                                                                               multiple = FALSE))
                                           ),
                                           column(width = 2,
@@ -185,13 +184,20 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                                br(),
 
-                                                               fluidRow(column(width = 12, align = "center", reactableOutput("state_table"))),
+                                                               fluidRow(column(width = 12, align = "center", reactableOutput("state_table")))
 
                                                       ), # end tabPanel
 
                                                       tabPanel(value="2","Parole",
 
-                                                              "Text"
+                                                               br(),
+
+                                                               fluidRow(column(width = 6, highchartOutput("parole_area_chart", height = 400, width = 600)),
+                                                                        column(width = 6, highchartOutput("parole_bar_chart", height = 400, width = 600))),
+
+                                                               br(),
+
+                                                               fluidRow(column(width = 12, align = "center", reactableOutput("parole_table")))
 
                                                       ), # end tabPanel
 
