@@ -529,13 +529,15 @@ server <- function(input, output, session) {
                 text            = colDef(name = "Metric",
                                          align = "left",
                                          minWidth = 275),
-                `2018`          = colDef(minWidth = 100),
-                `2019`          = colDef(minWidth = 100),
-                `2020`          = colDef(minWidth = 100),
-                three_yr_change = colDef(name = "3 Year Change",
+                `2018`          = colDef(minWidth = 95),
+                `2019`          = colDef(minWidth = 95),
+                `2020`          = colDef(minWidth = 95),
+                three_yr_change = colDef(minWidth = 110,
+                                         name = "3 Year Change",
                                          format = colFormat(percent = TRUE, digits = 1)),
                 # add 3 year trend graphs to each row
-                total_new  = colDef(name = "3 Year Trend",
+                total_new  = colDef(minWidth = 110,
+                                    name = "3 Year Trend",
                                     cell = function(value, index) {
                                       dui_sparkline(
                                         data = value[[1]],
@@ -584,6 +586,21 @@ server <- function(input, output, session) {
                                             showArea = FALSE,
                                             fill = colpal_fill[index],
                                             stroke = colpal_stroke[index])))})))
+  })
+
+  #######
+  # State notes
+  #######
+
+  # filter data
+  df_notes <- reactive({
+    notes %>%
+      filter(state == input$state_report)
+  })
+
+  # title of state based on user input
+  output$selected_state_note <- renderText({
+    paste(df_notes()$notes)
   })
 
   ##############################################################################################################################

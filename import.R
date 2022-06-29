@@ -65,6 +65,9 @@ pop18 <- read_excel(paste0(sp_data_path, "/Data/Data for web team 2021 v13.xlsx"
 pop19 <- read_excel(paste0(sp_data_path, "/Data/Data for web team 2021 v13.xlsx", sep = ""), sheet = "Population 2019")
 pop20 <- read_excel(paste0(sp_data_path, "/Data/Data for web team 2021 v13.xlsx", sep = ""), sheet = "Population 2020")
 
+# load states notes
+notes <- read_excel(paste0(sp_data_path, "/Data/Data for web team 2021 v13.xlsx", sep = ""), sheet = "Notes")
+
 ################################################################################
 # Reformat shapefile for hex map
 ################################################################################
@@ -82,6 +85,9 @@ stateAbb <- clean_names(stateAbb)
 # Admissions and populations dataset
 # Wide form of data
 ################################################################################
+
+# clean notes file
+notes <- clean_names(notes)
 
 # add year variable
 adm18$year <- "2018"
@@ -362,6 +368,7 @@ save(parole_table_wide,       file=paste0(sp_data_path, "/Data/parole_table_wide
 save(probation_table,         file=paste0(sp_data_path, "/Data/probation_table.Rda", sep = ""))
 save(probation_table_wide,    file=paste0(sp_data_path, "/Data/probation_table_wide.Rda", sep = ""))
 save(hex_gj,                  file=paste0(sp_data_path, "/Data/hex_gj.Rda", sep = ""))
+save(notes,                   file=paste0(sp_data_path, "/Data/notes.Rda", sep = ""))
 
 # save to clone
 save(adm_pop_long,            file=paste0("Data/adm_pop_long.Rda", sep = ""))
@@ -375,3 +382,4 @@ save(parole_table_wide,       file=paste0("Data/parole_table_wide.Rda", sep = ""
 save(probation_table,         file=paste0("Data/probation_table.Rda", sep = ""))
 save(probation_table_wide,    file=paste0("Data/probation_table_wide.Rda", sep = ""))
 save(hex_gj,                  file=paste0("Data/hex_gj.Rda", sep = ""))
+save(notes,                   file=paste0("Data/notes.Rda", sep = ""))

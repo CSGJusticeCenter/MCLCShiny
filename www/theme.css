@@ -299,3 +299,16 @@ button > div {
     background-color: transparent;
     border: 2px solid #cccccc;
 }*/
+
+/* State note title setting */
+#selected-state-note-title {
+  text-align: left;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+/* State note setting */
+#consistent-state-note {
+  text-align: left;
+  font-style: italic;
+}

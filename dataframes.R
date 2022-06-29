@@ -23,6 +23,7 @@ load(file = "Data/parole_table_wide.Rda")
 load(file = "Data/probation_table.Rda")
 load(file = "Data/probation_table_wide.Rda")
 load(file = "Data/hex_gj.Rda")
+load(file = "Data/notes.Rda")
 
 #______________________________________________________
 # colors TBD
@@ -69,3 +70,5 @@ colpal_stroke <- c(total_co, viol_co , tech_co, new_o_co)
 #______________________________________________________
 
 default_fonts <- c("Graphik")
+
+state_note <- c('Whether an incarceration is the result of a new offense or technical violation is often difficult and problematic to delineate, even in states with available data. Most states do not consider a supervision violation to be the result of a new offense unless a new felony conviction is present, meaning technical violations may include misdemeanor convictions or new arrests. "Prison" includes county jail if the county was reimbursed by the state for a person’s incarceration, which occurs in some, but not all, states. Supervision violations may include revocations (i.e., unsuccessful terminations of a supervision and completion of a sentence in prison or jail) or short-term sanctions (i.e., probation or parole jurisdiction is maintained and the person is incarcerated for a short period of time in prison or jail). Not all states impose or include short-term sanctions in their count of supervision violations.')
