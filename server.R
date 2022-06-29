@@ -17,8 +17,8 @@ server <- function(input, output, session) {
   # Hex map title
   #######
 
-  # title of map based on user input
-  output$selected_map <- renderText({paste("Change in ", input$data_map, " ", input$adm_or_pop_map, "from ", input$year_map)})
+  # # title of map based on user input
+  # output$selected_map <- renderText({paste("Change in ", input$data_map, " ", input$adm_or_pop_map, "from ", input$year_map)})
 
   #######
   # Hex map data
@@ -115,9 +115,13 @@ server <- function(input, output, session) {
         hc_add_dependency(name = "plugins/export-data.js") %>%
         hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
 
-        hc_plotOptions(series = list(animation = FALSE, dataLabels = list(enabled = TRUE), cursor = "pointer", borderWidth = 3),
+        hc_plotOptions(series = list(animation = FALSE,
+                                     dataLabels = list(enabled = TRUE),
+                                     cursor = "pointer",
+                                     borderWidth = 3),
                        accessibility = list(enabled = TRUE,
-                                            keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
+                                            keyboardNavigation = list(enabled = TRUE),
+                                            linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
                                             landmarkVerbosity = "one"),
                        area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
         ) %>%
@@ -127,7 +131,12 @@ server <- function(input, output, session) {
                   symbolWidth = 25
         ) %>%
         hc_xAxis(title = "") %>%
-        hc_yAxis(title = "")
+        hc_yAxis(title = "") %>%
+        hc_title(
+          text = paste0("Change in ", unique(df_plot$metric), " ", unique(df_plot$adm_or_pop), " from ", unique(df_plot$year)),
+          align = "left",
+          style = list(fontWeight = "bold", fontSize = "24px", useHTML = TRUE)
+        )
 
     } else {
 
@@ -173,7 +182,12 @@ server <- function(input, output, session) {
                   symbolWidth = 25
         ) %>%
         hc_xAxis(title = "") %>%
-        hc_yAxis(title = "")
+        hc_yAxis(title = "") %>%
+        hc_title(
+          text = paste0("Change in ", unique(df_plot$metric), " ", unique(df_plot$adm_or_pop), " from ", unique(df_plot$year)),
+          align = "left",
+          style = list(fontWeight = "bold", fontSize = "24px", useHTML = TRUE)
+        )
     }
 
   })
@@ -203,12 +217,13 @@ server <- function(input, output, session) {
               class = list(stripe = FALSE),
               options = list(dom = 'ft',
                              pageLength = 50,
-                             language = list(searchPlaceholder = "Search"),
+                             language = list(search = "", searchPlaceholder = "Search"),
                              columnDefs = list(list(visible=FALSE, targets=c(1)),
                                                list(className = 'dt-left', targets = '_all'))),
               rownames = FALSE) %>%
               formatPercentage(c("2018 - 2019", "2019 - 2020"), 2) %>%
-              formatCurrency(c("2018", "2019", "2020"), currency = " ", interval = 3, mark = ",")
+              formatCurrency(c("2018", "2019", "2020"), currency = " ", interval = 3, mark = ",") %>%
+              formatRound(columns=c("2018", "2019", "2020"), digits = 0)
   })
 
   #######

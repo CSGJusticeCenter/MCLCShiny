@@ -78,9 +78,9 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                     # Hex map
                                     #######
 
-                                    fluidRow(column(width = 1),
-                                             column(width = 10, align = "left", div(id = "selected-map", textOutput("selected_map"))),
-                                             column(width = 1)),
+                                    # fluidRow(column(width = 1),
+                                    #          column(width = 10, align = "left", div(id = "selected-map", textOutput("selected_map"))),
+                                    #          column(width = 1)),
 
                                     fluidRow(column(width = 1),
                                              column(width = 10, align = "center", highchartOutput("hex_map", height = 550, width = 1000)),
@@ -181,13 +181,26 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                br(),
 
                                                                fluidRow(column(width = 6, highchartOutput("state_area_chart", height = 400, width = 600)),
-                                                                        column(width = 6, highchartOutput("state_bar_chart", height = 400, width = 400))),
+                                                                        column(width = 6, highchartOutput("state_bar_chart", height = 400, width = 600))),
 
                                                                br(),
 
                                                                fluidRow(column(width = 12, align = "center", reactableOutput("state_table"))),
 
                                                       ), # end tabPanel
+
+                                                      tabPanel(value="2","Parole",
+
+                                                              "Text"
+
+                                                      ), # end tabPanel
+
+                                                      tabPanel(value="3","Probation",
+
+                                                               "Text"
+
+                                                      ) # end tabPanel
+
                                                     ) # end tabsetPanel
                                              ) # end column
                                     ) # end fluidRow

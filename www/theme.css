@@ -80,7 +80,7 @@ body > div {
           Dropdowns and buttons
 ########################################*/
 
-/* Remove rounded edges from drop downs */
+/* Remove rounded edges from drop downs and make blue */
 .selectize-input {
   border-radius:0px;
   color: #004270;
@@ -187,8 +187,29 @@ button > div {
 
 /* Align text with search bar */
 #selected-map-table {
-  position: relative; top: 40px;
+  position: relative; top: 60px;
 }
+
+/* Change search bar appearance */
+#table-map input {
+  border-radius: 0px;
+  border: 2px solid #004270;
+  width: 275px;
+  height: 32px;
+  background: #FFFFFF;
+}
+
+/*
+.dataTables_filter {
+    position: relative;
+}
+
+.dataTables_filter .fa-search {
+    position: absolute;
+    top: 10px;
+    left: auto;
+    right: 10px;
+}*/
 
 /*######################################
           STATE REPORTS
@@ -227,3 +248,54 @@ button > div {
   font-weight: bold;
   font-size: 24px;
 }
+
+/*######################################
+          STATE REPORTS
+          Tabset Panels
+########################################*/
+
+/* Tab formatting - figure out how to change width */
+.nav {
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+  margin: 0;
+  width: 100%
+  display: block;
+}
+
+.nav-tabs > li {
+  float:none;
+  display:inline-block;
+  zoom:1;
+}
+
+.nav-tabs {
+  text-align:center;
+  border-bottom: #cccccc !important;
+  border-bottom-style: solid !important;
+  border-bottom-width: 1px !important;
+  font-size: 14px;
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+  color: #FFFFFF;
+  cursor: default;
+  background-color: #004270;
+  border-bottom-color: transparent;
+}
+
+.nav-tabs>li>a {
+  margin-right: 2px;
+  line-height: 1.42857143;
+  border-radius: 0px 0px 0 0;
+  background-color: #F4F6F8;
+  color: #004270;
+}
+
+/* Affects top nav bar
+.nav>li>a:focus, .nav>li>a:hover {
+    text-decoration: none;
+    background-color: transparent;
+    border: 2px solid #cccccc;
+}*/

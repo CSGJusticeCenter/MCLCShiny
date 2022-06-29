@@ -47,7 +47,6 @@ yellow      <- "#D6C246"
 
 gray        <- "#dcdcdc"
 
-
 # assign colors to data types
 # total_co <- lightorange
 # viol_co  <- orange

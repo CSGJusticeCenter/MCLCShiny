@@ -22,6 +22,7 @@
 
 # load packages and functions
 source("library.R")
+library(csgjcr)
 default_fonts <- c("Noto Sans") #string required to run functions.R
 source("functions.R")
 
