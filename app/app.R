@@ -8,8 +8,8 @@
 #######################################
 
 # run ui and server code
-source("ui.R")
-source("server.R")
+source("app/ui.R")
+source("app/server.R")
 
 # launch shiny app
 shinyApp(ui = ui, server = server)

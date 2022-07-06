@@ -7,11 +7,11 @@
 #    User interface for shiny app
 #######################################
 
-source("library.R")
-source("dataframes.R")
-source("functions.R")
+source("app/library.R")
+source("app/dataframes.R")
+source("app/functions.R")
 
-ui <- fluidPage(includeCSS("www/theme.css"),
+ui <- fluidPage(includeCSS("app/www/theme.css"),
 
                 navbarPage(tags$style(type = "text/css", ".container-fluid {padding-left:0px; padding-right:0px;}"),
                            tags$style(type = "text/css", ".navbar {margin-bottom: .5px;}"),
