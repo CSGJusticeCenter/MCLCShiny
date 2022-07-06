@@ -7,6 +7,14 @@
 #    Run ui and server
 #######################################
 
+
+##when on shinyapps.io (linux) -- not sure if its required, please test
+if (Sys.info()[['sysname']] == "Linux"){
+  dir.create('~/.fonts')
+  file.copy("www/fonts/Graphik.ttf", "~/.fonts")
+  system('fc-cache -f ~/.fonts')
+}
+
 # run ui and server code
 source("ui.R")
 source("server.R")
