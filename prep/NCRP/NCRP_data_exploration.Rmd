@@ -1,0 +1,249 @@
+---
+title: "NCRP Data Exploration: Revocations 2015-2019" 
+date: "Last updated/ran: `r Sys.time()`"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, fig.width = 10)
+
+
+library(tidyverse)
+library(csgjcr)
+library(janitor)
+library(kableExtra)
+library(plotly)
+
+
+box::use(
+  scales[percent, comma]
+)
+
+logger::log_layout(logger::layout_glue_colors)
+#logger::log_threshold("TRACE")
+
+CC_path <- csg_sp_path("CC/DATA/Raw/NCRP/ICPSR_38048-V1/ICPSR_38048")
+
+```
+
+
+
+```{r import-and-rename-files}
+
+#load(file.path(CC_path,"DS0001","38048-0001-Data.rda"))
+load(file.path(CC_path,"DS0002","38048-0002-Data.rda"))
+
+## RECODE 
+levels_ADMTYPE <- c(
+    New        = "(1) New court commitment"
+  , Revocation = "(2) Parole return/revocation"
+  , Other      = "(3) Other admission (including unsentenced, transfer, AWOL/escapee return)"
+)
+
+levels_RACE <- c(
+    White    = "(1) White, non-Hispanic"
+  , Black    = "(2) Black, non-Hispanic"
+  , Hispanic = "(3) Hispanic, any race"
+  , Other    = "(4) Other race(s), non-Hispanic"
+)
+
+levels_OFFGENERAL <- c(
+    Violent = "(1) Violent"
+  , Property = "(2) Property"
+  , Drugs = "(3) Drugs"
+  , `Public order` = "(4) Public order"
+  , `Other/unspecified` = "(5) Other/unspecified"
+)
+
+levels_SEX <- c(
+    `M` = "(1) Male"
+  , `F` = "(2) Female"
+)
+
+
+
+```
+
+
+
+```{r}
+# want to look at ADMTYPE = (2) Parole return/revocation 
+## last 5 years - 2015, 2016, 2017, 2018, 2019
+revocations <- da38048.0002 %>% 
+  filter(as.integer(ADMTYPE) == 2, RPTYEAR >= 2015) 
+#%>% 
+  # mutate(
+  #     ADMTYPE    = fct_recode(ADMTYPE   , !!!levels_ADMTYPE)
+  #   , RACE       = fct_recode(RACE      , !!!levels_RACE)
+  #   , OFFGENERAL = fct_recode(OFFGENERAL, !!!levels_OFFGENERAL)
+  # )
+
+# check 
+check <- revocations %>% count(ADMTYPE)
+if (nrow(check) != 1){
+  logger::log_error("There are more than one ADMTYPE in filtered data")
+}  else {
+  logger::log_trace("Only one type of value for ADMTYPE")
+}
+
+if (check[1,1] == "Revocations"){ #"(2) Parole return/revocation"
+  logger::log_fatal("ADMTYPE filtered is not equal to revocations")
+} else {
+  logger::log_trace("Type of ADMTYPE == (2) Parole return/revocation")
+}
+rm(check)
+
+
+
+addprop <- function(DF){
+  DF %>%
+    mutate(prop = n/sum(n)) %>% 
+    adorn_totals()
+}
+
+
+maketable <- function(DF, title = NULL, allprop = FALSE, totallastrow = FALSE){
+  
+  if (allprop == FALSE){
+    num_cols <- which(sapply(DF, is.numeric) == TRUE & colnames(DF) != "prop") 
+    prop_col <- which(colnames(DF) == "prop")
+  } else {
+    num_cols <- NULL
+    prop_col <- which(sapply(DF, is.numeric) == TRUE)
+  }
+  
+  
+  main <- DF %>% 
+    mutate_at(.vars = num_cols, scales::comma) %>% 
+    mutate_at(.vars = prop_col, scales::percent) %>% 
+    kable(align = paste(c("l", rep("r", ncol(DF)-1)), collapse = ""), caption = title) %>% 
+    kable_styling() 
+  
+  if (totallastrow == TRUE){
+    OUT <- main %>% 
+      row_spec(nrow(DF), bold = TRUE, extra_css = "border-top: 1px solid;")
+  } else {
+    OUT <- main
+  }
+  
+  return(OUT)
+
+}
+
+```
+
+
+# Quick Overview
+
+
+```{r}
+revocations %>% skimr::skim_without_charts() %>% print(., n=0)
+```
+
+
+
+```{r}
+revocations %>% count(RACE) %>% 
+  addprop() %>% maketable(totallastrow = TRUE) %>% 
+  column_spec(2:3, width = "15%")
+
+revocations %>% count(SEX) %>% 
+  addprop() %>% maketable(totallastrow = TRUE) %>% 
+  column_spec(2:3, width = "15%")
+
+revocations %>% count(RPTYEAR) %>% 
+  addprop() %>% maketable(totallastrow = TRUE) %>% 
+  column_spec(2:3, width = "15%")
+
+revocations %>% count(OFFGENERAL) %>% 
+  addprop() %>% maketable(totallastrow = TRUE) %>% 
+  column_spec(2:3, width = "15%")
+```
+
+
+
+## OFFGENERAL by RPTYEAR by RACE 
+
+### OFFGENERAL by RPTYEAR 
+
+```{r}
+wide_table <- revocations %>% count(RPTYEAR, OFFGENERAL)  %>% 
+  pivot_wider(names_from = RPTYEAR, values_from = n) %>% 
+  adorn_totals() 
+
+long_table <- wide_table %>% 
+  pivot_longer(cols = -1, names_to = "RPTYEAR", values_to = "n") 
+
+# revocations %>% count(RPTYEAR, OFFGENERAL) %>% 
+#   ggplot(aes(x = RPTYEAR, y = n)) + 
+#   geom_point() + 
+#   geom_line() + 
+#   facet_grid(~OFFGENERAL) +
+#   scale_y_continuous(name = NULL) + 
+#   theme_bw() 
+
+```
+
+
+```{r, warning = FALSE}
+wide_table %>%   
+  mutate(line = "") %>% 
+  maketable(totallastrow = TRUE) %>% 
+  column_spec(7, image = spec_plot(split(long_table$n, long_table$OFFGENERAL), same_lim = FALSE))
+```
+
+
+### OFFGENERAL by RACE  {.tabset}
+
+```{r}
+revocations %>% count(OFFGENERAL, RACE) %>% 
+  pivot_wider(names_from = OFFGENERAL, values_from = n) %>% 
+  adorn_totals() %>% maketable(totallastrow = TRUE)
+
+YOR_df <- revocations %>% count(RPTYEAR, OFFGENERAL, RACE) %>% 
+  group_by(RPTYEAR, OFFGENERAL) %>%
+  mutate(
+      prop = n/sum(n)
+    , perc = round(prop*100, digits = 2)
+  )   #prop: % of specific race within off category by year
+```
+
+
+The main general offense categories (Violent, Property, Drugs, Public order) all saw a decrease in 2019.  Within the race categories there is also a decrease in the last year, though at varying degrees.  
+
+One interesting notes is that in 2018, the number of NA race categories increased while other categories of White, Black, Hispanic, all decreased.  
+
+#### By Year (Percent) 
+
+```{r}
+p_YOR <- YOR_df %>% 
+  ggplot(aes(x = RPTYEAR, y = perc, color = RACE, text = n)) + 
+  geom_line() + geom_point() + 
+  facet_grid(~OFFGENERAL) +
+  scale_y_continuous(name = NULL) + 
+  theme_bw() + 
+  theme(legend.position = "top")
+
+p_YOR %>% ggplotly() %>% 
+  layout(legend = list(orientation = 'h', x = 0, y = 1.15))
+```
+
+#### By Year (Count) 
+
+```{r}
+p_YOR <- YOR_df %>% 
+  ggplot(aes(x = RPTYEAR, y = n, color = RACE, text = perc)) + 
+  geom_line() + geom_point() + 
+  facet_grid(~OFFGENERAL) +
+  scale_y_continuous(name = NULL) + 
+  theme_bw() + 
+  theme(legend.position = "top")
+
+p_YOR %>% ggplotly() %>% 
+  layout(legend = list(orientation = 'h', x = 0, y = 1.15))
+```

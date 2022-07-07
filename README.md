@@ -5,19 +5,23 @@
 ```
 MCLCShiny 
 |
-| #code/app files 
-|-- library.R     # load packages  
-|-- import.R      # imports MCLC data and shapefiles    
-|-- dataframes.R  # loads converted data, colors, fonts  
-|-- functions.R   # custom functions  
-|-- ui.R          # user interface  
-|-- server.R      # server  
-|-- app.R         # run app  
+|-- app
+|   |-- library.R     # load packages  
+|   |-- dataframes.R  # loads converted data, colors, fonts  
+|   |-- functions.R   # custom functions  
+|   |-- ui.R          # user interface  
+|   |-- server.R      # server  
+|   |-- app.R         # run app  
+|   |
+|   |-- Data          # folder with data, add to clone 
+|   |
+|   |-- www             
+|       |-- theme.R   # custom CSS for app    
 |
-|-- Data          # folder with data, add to clone 
-|
-|--www             
-   |-- theme.R    # custom CSS for app    
+|-- import.R          # imports MCLC data and shapefiles  
+| 
+|-- prep              # folder for prep data/info for app 
+    |-- NCRP          # NCRP data exploration
 ```
 
 
@@ -40,7 +44,7 @@ MCLCShiny
 After creating a clone, there are a few other steps you will need to take in order to run the app.  
 
 1. Download necessary package, look at `library.R` file for package list
-1. Create a new folder, called `Data` 
+1. Create a new folder, called `Data` within the `app` folder
 1. Run the `import.R` file to create the data 
     * *Note:* You may need to change the `FULL_JC_FOLDER` variable depending on how you sync your SharePOint folder
     * `FULL_JC_FOLDER <- TRUE`: You sync the entire JC Rersearch - Documents folder to your machine, thus the folder path will include the project folder which is '50 State Revocations Project' 
