@@ -12,18 +12,18 @@
 # must be in local repo to publish app
 #______________________________________________________
 
-load(file = "Data/adm_pop_long.Rda")
-load(file = "Data/mclc_explorer.Rda")
-load(file = "Data/mclc_explorer_table.Rda")
-load(file = "Data/vb_adm_pop.Rda")
-load(file = "Data/state_table.Rda")
-load(file = "Data/state_table_wide.Rda")
-load(file = "Data/parole_table.Rda")
-load(file = "Data/parole_table_wide.Rda")
-load(file = "Data/probation_table.Rda")
-load(file = "Data/probation_table_wide.Rda")
-load(file = "Data/hex_gj.Rda")
-load(file = "Data/notes.Rda")
+load(file = "data/adm_pop_long.Rda")
+load(file = "data/mclc_explorer.Rda")
+load(file = "data/mclc_explorer_table.Rda")
+load(file = "data/vb_adm_pop.Rda")
+load(file = "data/state_table.Rda")
+load(file = "data/state_table_wide.Rda")
+load(file = "data/parole_table.Rda")
+load(file = "data/parole_table_wide.Rda")
+load(file = "data/probation_table.Rda")
+load(file = "data/probation_table_wide.Rda")
+load(file = "data/hex_gj.Rda")
+load(file = "data/notes.Rda")
 
 #______________________________________________________
 # colors TBD

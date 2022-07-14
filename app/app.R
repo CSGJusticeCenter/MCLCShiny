@@ -16,7 +16,7 @@ if (Sys.info()[['sysname']] == "Linux"){
 }
 
 # run ui and server code
-source("ui.R")
+source("aui.R")
 source("server.R")
 
 # launch shiny app

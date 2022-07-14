@@ -21,8 +21,18 @@
 #######################################
 
 # load packages and functions
-source("app/library.R")
+library(dplyr)
+library(tidyr)
 library(csgjcr)
+library(geojsonsf)
+library(janitor)
+library(jsonlite)
+library(readxl)
+library(sf)
+library(showtext)
+library(sysfonts)
+library(utils)
+library(highcharter)
 
 # Add fonts required to run functions.R
 font_add("Graphik", regular = "app/www/Fonts/GraphikRegular.otf")
@@ -371,15 +381,15 @@ save(hex_gj,                  file=paste0(sp_data_path, "/Data/hex_gj.Rda", sep 
 save(notes,                   file=paste0(sp_data_path, "/Data/notes.Rda", sep = ""))
 
 # save to clone
-save(adm_pop_long,            file=paste0("app/Data/adm_pop_long.Rda", sep = ""))
-save(mclc_explorer,           file=paste0("app/Data/mclc_explorer.Rda", sep = ""))
-save(mclc_explorer_table,     file=paste0("app/Data/mclc_explorer_table.Rda", sep = ""))
-save(vb_adm_pop,              file=paste0("app/Data/vb_adm_pop.Rda", sep = ""))
-save(state_table,             file=paste0("app/Data/state_table.Rda", sep = ""))
-save(state_table_wide,        file=paste0("app/Data/state_table_wide.Rda", sep = ""))
-save(parole_table,            file=paste0("app/Data/parole_table.Rda", sep = ""))
-save(parole_table_wide,       file=paste0("app/Data/parole_table_wide.Rda", sep = ""))
-save(probation_table,         file=paste0("app/Data/probation_table.Rda", sep = ""))
-save(probation_table_wide,    file=paste0("app/Data/probation_table_wide.Rda", sep = ""))
-save(hex_gj,                  file=paste0("app/Data/hex_gj.Rda", sep = ""))
-save(notes,                   file=paste0("app/Data/notes.Rda", sep = ""))
+save(adm_pop_long,            file=paste0("app/data/adm_pop_long.Rda", sep = ""))
+save(mclc_explorer,           file=paste0("app/data/mclc_explorer.Rda", sep = ""))
+save(mclc_explorer_table,     file=paste0("app/data/mclc_explorer_table.Rda", sep = ""))
+save(vb_adm_pop,              file=paste0("app/data/vb_adm_pop.Rda", sep = ""))
+save(state_table,             file=paste0("app/data/state_table.Rda", sep = ""))
+save(state_table_wide,        file=paste0("app/data/state_table_wide.Rda", sep = ""))
+save(parole_table,            file=paste0("app/data/parole_table.Rda", sep = ""))
+save(parole_table_wide,       file=paste0("app/data/parole_table_wide.Rda", sep = ""))
+save(probation_table,         file=paste0("app/data/probation_table.Rda", sep = ""))
+save(probation_table_wide,    file=paste0("app/data/probation_table_wide.Rda", sep = ""))
+save(hex_gj,                  file=paste0("app/data/hex_gj.Rda", sep = ""))
+save(notes,                   file=paste0("app/data/notes.Rda", sep = ""))
