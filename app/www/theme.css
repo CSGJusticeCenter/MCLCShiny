@@ -2,10 +2,10 @@
           Screen Settings
 ########################################*/
 
-/* Dont let the page get awkwardly wide on big screens - remove if you dont want white space*/
+/* Remove if you dont want white space on sides of navbar
 body > div {
   max-width: 1200px;
-}
+}*/
 
 /* Very top of page spans entire width */
 #page-top {
@@ -21,12 +21,11 @@ body > div {
           Font size and style
 ########################################*/
 
-/* add fonts */ 
+/* add fonts */
 @font-face {
     font-family: Graphik;
     src: url("fonts/GraphikRegular.otf") format('truetype');
 }
-
 
 /* Make some wordy sections smaller */
 .small_text {
@@ -60,7 +59,9 @@ body > div {
 }
 
 /* Panel color */
-.tab-panel{background-color: #004270; color: #004270}
+.tab-panel{
+  background-color: #004270;
+  color: #004270}
 
 /*######################################
           Header with dropdowns

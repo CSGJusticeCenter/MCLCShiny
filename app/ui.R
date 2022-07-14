@@ -13,7 +13,9 @@ source("functions.R")
 
 ui <- fluidPage(includeCSS("www/theme.css"),
 
-                navbarPage(tags$style(type = "text/css", ".container-fluid {padding-left:0px; padding-right:0px;}"),
+                navbarPage(id = "navbarID",
+
+                           tags$style(type = "text/css", ".container-fluid {padding-left:0px; padding-right:0px;}"),
                            tags$style(type = "text/css", ".navbar {margin-bottom: .5px;}"),
                            tags$style(type = "text/css", ".container-fluid .navbar-header .navbar-brand {margin-left: 0px;}"),
 
@@ -21,15 +23,15 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                            ##############################################################################################################################
 
-                           tabPanel("",icon = icon("home", lib = "glyphicon"),value = "home"),
+                           # tabPanel("",icon = icon("home", lib = "glyphicon"),value = "home"),
 
                            ##############################################################################################################################
 
-                           tabPanel("National Report"),
+                           # tabPanel("National Report"),
 
                            ##############################################################################################################################
 
-                           tabPanel("Map Explorer",
+                           tabPanel("Map Explorer", id = "map-explorer",
 
                                     # div(id = "app-title", titlePanel("Map Explorer")),
 
@@ -112,7 +114,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                            ##############################################################################################################################
 
-                           tabPanel("State Reports",
+                           tabPanel("State Reports", id = "state-reports",
 
                                     #######
                                     # Dropdown and download buttons
@@ -233,19 +235,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                            ##############################################################################################################################
 
-                           tabPanel("Download"),
-
-                           ##############################################################################################################################
-
-                           tabPanel("Methodology"),
-
-                           ##############################################################################################################################
-
-                           tabPanel("Videos"),
-
-                           ##############################################################################################################################
-
-                           tabPanel("Project Credits"))
+                           tabPanel("Download", id = "download-data"))
 )
 
 
