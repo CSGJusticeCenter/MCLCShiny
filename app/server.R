@@ -575,7 +575,7 @@ server <- function(input, output, session) {
   })
 
   # output bar chart
-  output$state_bar_chart <- renderHighchart({
+  output$parole_bar_chart <- renderHighchart({
 
     highchart() %>%
       hc_chart(type = "column") %>%
