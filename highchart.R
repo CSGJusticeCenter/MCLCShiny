@@ -9,6 +9,19 @@
 
 library(purrr)
 
+# path to data on research div sharepoint
+# make sure sharepoint folder is synced locally
+# https://csgorg.sharepoint.com/:f:/s/Team-JC-Research/EhdvImKN2rdPnmHQ2TrKlooBdYqnnWc0SUXBNuh9C7d41g?e=NCsh8I
+# in your Renviron (usethis::edit_r_environ()), set CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"
+
+FULL_JC_FOLDER <- FALSE
+
+if (FULL_JC_FOLDER == TRUE){
+  sp_data_path <- csgjcr::csg_sp_path(file.path("JC Research - 50 State Revocations Project/MCLC Shiny App"))
+} else {
+  sp_data_path <- csgjcr::csg_sp_path(file.path("MCLC Shiny App"))
+}
+
 # get state list
 states <- adm_pop_long$state %>%
   unique() %>%
