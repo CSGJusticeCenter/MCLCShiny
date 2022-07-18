@@ -64,9 +64,6 @@ server <- function(input, output, session) {
       arrange(state) %>%
       rename(State = state)
   })
-  # df_map_title <- reactive({
-  #   title <- paste("Change in ", input$data_map, " ", input$adm_or_pop_map, "from ", input$year_map)
-  # })
 
   #######
   # Hex map
@@ -75,10 +72,10 @@ server <- function(input, output, session) {
   # create foundational hex map and store it as a reactive expression
   foundational_map <- reactive({
 
-    ################# TO DO find min and max values and put in dataframe in import.R
+    ################ TO DO find min and max values and put in dataframe in import.R
     # get minimum and maximum value
-    min_map <- round(min(df_map()$change, na.rm = TRUE), -1)
-    max_map <- round(max(df_map()$change, na.rm = TRUE), -1)
+    min_map <- min(df_map()$change, na.rm = TRUE)
+    max_map <- max(df_map()$change, na.rm = TRUE)
 
     # get absolute value for comparison
     min_map_abs <- abs(min_map)
@@ -88,12 +85,12 @@ server <- function(input, output, session) {
     min_map_type <- ifelse(min_map >= 0, "positive", "negative")
     max_map_type <- ifelse(max_map >= 0, "positive", "negative")
 
-    # create tooltip
-    df_plot <- df_map() %>%
-      mutate(tooltip = paste0("<b>", state, "</b><br>","Change from ", year, "<br>",change, "%<br>"),
-             datalabel = ifelse(is.na(change), paste0("", state_abb, ""),
-                                paste0("<p style=", "text-align:center", ">", state_abb, "", "<br>",
-                                       round(change, 0), "%</p>")))
+    # # create tooltip
+    # df_plot <- df_map() %>%
+    #   mutate(tooltip = paste0("<b>", state, "</b><br>","Change from ", year, "<br>",change, "%<br>"),
+    #          datalabel = ifelse(is.na(change), paste0("", state_abb, ""),
+    #                             paste0("<p style=", "text-align:center", ">", state_abb, "", "<br>",
+    #                                    round(change, 0), "%</p>")))
 
     # determine the new min and max so that zero is centered
     if (min_map_type != max_map_type) {
@@ -116,7 +113,7 @@ server <- function(input, output, session) {
 
         hc_add_series_map(
           map = hex_gj,
-          df = df_plot,
+          df = df_map(),
           joinBy = "state_abb",
           value = "change",
           dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
@@ -138,7 +135,7 @@ server <- function(input, output, session) {
         hc_xAxis(title = "") %>%
         hc_yAxis(title = "") %>%
         hc_title(
-          text = paste0("Change in ", unique(df_plot$metric), " ", unique(df_plot$adm_or_pop), " from ", unique(df_plot$year)),
+          text = paste0("Change in ", unique(df_map()$metric), " ", unique(df_map()$adm_or_pop), " from ", unique(df_map()$year)),
           align = "left",
           style = list(fontWeight = "bold", fontSize = "24px", useHTML = TRUE)
         ) %>%
@@ -166,7 +163,7 @@ server <- function(input, output, session) {
 
         hc_add_series_map(
           map = hex_gj,
-          df = df_plot,
+          df = df_map(),
           joinBy = "state_abb",
           value = "change",
           dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
@@ -187,7 +184,7 @@ server <- function(input, output, session) {
         hc_xAxis(title = "") %>%
         hc_yAxis(title = "") %>%
         hc_title(
-          text = paste0("Change in ", unique(df_plot$metric), " ", unique(df_plot$adm_or_pop), " from ", unique(df_plot$year)),
+          text = paste0("Change in ", unique(df_map()$metric), " ", unique(df_map()$adm_or_pop), " from ", unique(df_map()$year)),
           align = "left",
           style = list(fontWeight = "bold", fontSize = "24px", useHTML = TRUE)) %>%
 
@@ -428,60 +425,15 @@ server <- function(input, output, session) {
   # Area chart
   #######
 
-  # filter data for area chart
-  df_area_chart <- reactive({
-    adm_pop_long %>%
-      filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report &
-             (metric == "Total" | metric == "Supervision Violation" | metric == "New Offense" | metric == "Technical Violation")) %>%
-      group_by(state, year, metric, adm_or_pop) %>%
-      summarise(total = sum(total)) %>%
-      mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
-  })
-
-  # filter data for grouped barchart
-  df_bar_chart <- reactive({
-    adm_pop_long %>%
-      filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report) %>%
-      group_by(state, year, metric, adm_or_pop) %>%
-      summarise(total = sum(total)) %>%
-      filter(metric == "New Offense" | metric == "Technical Violation") %>%
-      mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
-  })
-
   # output area chart
   output$state_area_chart <- renderHighchart({
-
-      highchart() %>%
-
-      hc_chart(type="area") %>%
-      hc_add_series(data = subset(df_area_chart(), metric == "Total"), name = "Total", type = "area", hcaes(x = year, y = total), color = total_co) %>%
-      hc_add_series(data = subset(df_area_chart(), metric == "Supervision Violation"), name = "Supervision Violation", type = "area", hcaes(x = year, y = total), color = viol_co) %>%
-      hc_add_series(data = subset(df_area_chart(), metric == "Technical Violation"), name = "Technical Violation", type = "area", hcaes(x = year, y = total), color = tech_co) %>%
-      hc_add_series(data = subset(df_area_chart(), metric == "New Offense"), name = "New Offense", type = "area", hcaes(x = year, y = total), color = new_o_co) %>%
-
-      hc_xAxis(title = "", categories = c("2018", "2019", "2020")) %>%
-      hc_yAxis(title = "") %>%
-      hc_title(
-        text = paste0("Prison ", unique(df_area_chart()$adm_or_pop)),
-        align = "left",
-        style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
-      ) %>%
-
-      hc_add_theme(hc_theme_jc) %>%
-      hc_setup() %>%
-
-      hc_plotOptions(series = list(animation = FALSE, cursor = "pointer", borderWidth = 3),
-                     accessibility = list(enabled = TRUE,
-                                          keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This area chart was created by a selected state and selected data type, either admissions or population.
-                                          Image description: An area chart showing the number of total admissions or population, supervision violation admissions or population, technical violation admissions or population,
-                                          and new offense admissions or population. The map is interactive, and the user can hover over each state to see the total for each metric and year.',
-                                          landmarkVerbosity = "one"),
-                     area = list(accessibility = list(description = "This area chart was created by a selected state and selected data type, either admissions or population.
-                                          Image description: An area chart showing the number of total admissions or population, supervision violation admissions or population, technical violation admissions or population,
-                                          and new offense admissions or population. The map is interactive, and the user can hover over each state to see the total for each metric and year.")))
-
+    # select highchart depending on selector input
+    # charts were saved in highchart.R
+    if (input$adm_pop_report == "Admissions") {
+      eval(parse(text = paste("all_state_area_adm$",input$state_report, sep = "")))
+    } else {
+      eval(parse(text = paste("all_state_area_pop$",input$state_report, sep = "")))
+    }
   })
 
   #######
@@ -490,34 +442,13 @@ server <- function(input, output, session) {
 
   # output bar chart
   output$state_bar_chart <- renderHighchart({
-
-    highchart() %>%
-      hc_chart(type = "column") %>%
-      hc_xAxis(categories = df_bar_chart()$metric) %>%
-      hc_add_series(data = subset(df_bar_chart(), metric == "Technical Violation"), name = "Technical Violation", type = "column", hcaes(x = year, y = total), color = tech_co) %>%
-      hc_add_series(data = subset(df_bar_chart(), metric == "New Offense"), name = "New Offense", type = "column", hcaes(x = year, y = total), color = new_o_co) %>%
-
-      hc_xAxis(title = "", categories = c("2018", "2019", "2020")) %>%
-      hc_yAxis(title = "") %>%
-      hc_title(
-        text = paste0("Supervision Violation ", unique(df_area_chart()$adm_or_pop), " by Type"),
-        align = "left",
-        style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
-      ) %>%
-
-      hc_add_theme(hc_theme_jc) %>%
-      hc_setup() %>%
-
-      hc_plotOptions(series = list(animation = FALSE, cursor = "pointer", borderWidth = 3),
-                     accessibility = list(enabled = TRUE,
-                                          keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This bar chart was created by a selected state and selected data type, either admissions or population.
-                                          Image description: A grouped bar chart showing the number of technical violation admissions or population,
-                                          and new offense admissions or population. The chart is interactive, and the user can hover over each state to see the total for each metric and year.',
-                                          landmarkVerbosity = "one"),
-                     area = list(accessibility = list(description = 'This bar chart was created by a selected state and selected data type, either admissions or population.
-                                          Image description: A grouped bar chart showing the number of technical violation admissions or population,
-                                          and new offense admissions or population. The chart is interactive, and the user can hover over each state to see the total for each metric and year.')))
-
+    # select highchart depending on selector input
+    # charts were saved in highchart.R
+    if (input$adm_pop_report == "Admissions") {
+      eval(parse(text = paste("all_state_bar_adm$",input$state_report, sep = "")))
+    } else {
+      eval(parse(text = paste("all_state_bar_pop$",input$state_report, sep = "")))
+    }
   })
 
   #######
@@ -608,7 +539,8 @@ server <- function(input, output, session) {
                                             curve = "linear",
                                             showArea = FALSE,
                                             fill = colpal_fill[index],
-                                            stroke = colpal_stroke[index])))})))
+                                            stroke = colpal_stroke[index])))}))
+              )
   })
 
   #######
@@ -626,26 +558,56 @@ server <- function(input, output, session) {
     paste(df_notes()$notes)
   })
 
+  #######
+  # Parole Tab
+  #######
+
+  # filter data for grouped barchart
+  df_parole_bar_chart <- reactive({
+    adm_pop_long %>%
+      filter(state == input$state_report &
+             adm_or_pop == input$adm_pop_report,
+             prob_vs_parole == "Parole") %>%
+      group_by(state, year, metric, adm_or_pop) %>%
+      summarise(total = sum(total)) %>%
+      filter(metric == "New Offense" | metric == "Technical Violation") %>%
+      mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
+  })
+
+  # output bar chart
+  output$state_bar_chart <- renderHighchart({
+
+    highchart() %>%
+      hc_chart(type = "column") %>%
+      hc_xAxis(categories = df_parole_bar_chart()$metric) %>%
+      hc_add_series(data = subset(df_parole_bar_chart(), metric == "Technical Violation"), name = "Technical Violation", type = "column", hcaes(x = year, y = total), color = tech_co) %>%
+      hc_add_series(data = subset(df_parole_bar_chart(), metric == "New Offense"), name = "New Offense", type = "column", hcaes(x = year, y = total), color = new_o_co) %>%
+
+      hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020)) %>%
+      hc_yAxis(title = "") %>%
+      hc_title(
+        text = paste0("Supervision Violation ", unique(df_parole_bar_chart()$adm_or_pop)),
+        align = "left",
+        style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
+      ) %>%
+
+      hc_add_theme(hc_theme_jc) %>%
+      hc_setup() %>%
+
+      hc_plotOptions(series = list(animation = FALSE, cursor = "pointer", borderWidth = 3),
+                     accessibility = list(enabled = TRUE,
+                                          keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This bar chart was created by a selected state and selected data type, either admissions or population.
+                                          Image description: A grouped bar chart showing the number of parole technical violation admissions or population,
+                                          and new offense admissions or population. The chart is interactive, and the user can hover over each state to see the total for each metric and year.',
+                                          landmarkVerbosity = "one"),
+                     area = list(accessibility = list(description = 'This bar chart was created by a selected state and selected data type, either admissions or population.
+                                          Image description: A grouped bar chart showing the number of parole technical violation admissions or population,
+                                          and new offense admissions or population. The chart is interactive, and the user can hover over each state to see the total for each metric and year.')))
+
+  })
+
   ##############################################################################################################################
   # Download
-  ##############################################################################################################################
-
-
-
-  ##############################################################################################################################
-  #Methodology
-  ##############################################################################################################################
-
-
-
-  ##############################################################################################################################
-  # Videos
-  ##############################################################################################################################
-
-
-
-  ##############################################################################################################################
-  #Project Credits"
   ##############################################################################################################################
 
 

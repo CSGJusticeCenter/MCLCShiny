@@ -184,15 +184,15 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                                    br(),
 
-                                                                   fluidRow(column(width = 5, highchartOutput("state_area_chart", height = 400, width = 400)),
-                                                                            column(width = 5, highchartOutput("state_bar_chart", height = 400, width = 400))
+                                                                   fluidRow(column(width = 6, highchartOutput("state_area_chart", height = 400, width = 390)),
+                                                                            column(width = 6, highchartOutput("state_bar_chart", height = 400, width =390))
                                                                    ),
 
                                                                    br(),
                                                                    br(),
                                                                    br(),
 
-                                                                   fluidRow(column(width = 10, align = "center", reactableOutput("state_table"))
+                                                                   fluidRow(column(width = 12, align = "center", reactableOutput("state_table"))
                                                                    )
 
                                                           ), # end tabPanel

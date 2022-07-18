@@ -49,7 +49,7 @@ source("app/functions.R")
 FULL_JC_FOLDER <- FALSE
 
 if (FULL_JC_FOLDER == TRUE){
-  sp_data_path <- csgjcr::csg_sp_path(file.path("50 State Revocations Project/MCLC Shiny App"))
+  sp_data_path <- csgjcr::csg_sp_path(file.path("JC Research - 50 State Revocations Project/MCLC Shiny App"))
 } else {
   sp_data_path <- csgjcr::csg_sp_path(file.path("MCLC Shiny App"))
 }
@@ -164,6 +164,11 @@ adm_pop_long <- fnc_create_data_metric(adm_pop_long)
 adm_pop_long <- fnc_create_adm_pop(adm_pop_long)
 adm_pop_long <- fnc_create_prob_vs_parole(adm_pop_long)
 
+# add tooltip
+adm_pop_long <- adm_pop_long %>%
+  mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
+
+
 # create change from 2018 to 2019 to 2020
 # remove dups
 # create label ready variable called metric
@@ -219,12 +224,25 @@ mclc_change <-
 mclc_explorer_table <- left_join(mclc_counts, mclc_change, by = c("state", "data"))
 
 # create year range
+# create min and max values
 mclc_explorer <- mclc_all %>%
   filter(year != 2018) %>%
+  rename(state_abb = code) %>%
   mutate(year = case_when(year == 2019 ~ "2018 - 2019",
                           year == 2020 ~ "2019 - 2020"),
-         change = round(change*100, 2)) %>%
-  rename(state_abb = code)
+         change = round(change*100, 2),
+         tooltip = paste0("<b>", state, "</b><br>","Change from ", year, "<br>",change, "%<br>"),
+         datalabel = ifelse(is.na(change), paste0("", state_abb, ""),
+                            paste0("<p style=", "text-align:center", ">", state_abb, "", "<br>",
+                                   round(change, 0), "%</p>"))) %>%
+  group_by(year, data) %>%
+  mutate(min_map = round(min(change, na.rm = TRUE), -1),
+         max_map = round(max(change, na.rm = TRUE), -1),
+         # get absolute value for comparison
+         min_map_abs = abs(min_map),
+         max_map_abs = abs(max_map),
+         min_map_type = ifelse(min_map >= 0, "positive", "negative"),
+         max_map_type = ifelse(max_map >= 0, "positive", "negative"))
 
 ################################################################################
 # STATE REPORTS PAGE
@@ -393,3 +411,4 @@ save(probation_table,         file=paste0("app/data/probation_table.Rda", sep = 
 save(probation_table_wide,    file=paste0("app/data/probation_table_wide.Rda", sep = ""))
 save(hex_gj,                  file=paste0("app/data/hex_gj.Rda", sep = ""))
 save(notes,                   file=paste0("app/data/notes.Rda", sep = ""))
+

@@ -74,6 +74,76 @@ hc_setup <- function(x) {
 
 }
 
+# function to create area chart for state page
+fnc_highchart_state_areachart <- function(df){
+  highchart() %>%
+
+    hc_chart(type="area") %>%
+    hc_add_series(data = subset(df, metric == "Total"), name = "Total", type = "area", hcaes(x = year, y = total), color = total_co) %>%
+    hc_add_series(data = subset(df, metric == "Supervision Violation"), name = "Supervision Violation", type = "area", hcaes(x = year, y = total), color = viol_co) %>%
+    hc_add_series(data = subset(df, metric == "Technical Violation"), name = "Technical Violation", type = "area", hcaes(x = year, y = total), color = tech_co) %>%
+    hc_add_series(data = subset(df, metric == "New Offense"), name = "New Offense", type = "area", hcaes(x = year, y = total), color = new_o_co) %>%
+
+    hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020)) %>%
+    hc_yAxis(title = "") %>%
+    hc_title(
+      text = paste0("Prison Admissions"),
+      align = "left",
+      style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
+    ) %>%
+
+    hc_add_theme(hc_theme_jc) %>%
+    hc_setup() %>%
+
+    hc_plotOptions(series = list(animation = FALSE, cursor = "pointer", borderWidth = 3),
+                   accessibility = list(enabled = TRUE,
+                                        keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This area chart was created by a selected state and selected data type, either admissions or population.
+                                          Image description: An area chart showing the number of total admissions or population, supervision violation admissions or population, technical violation admissions or population,
+                                          and new offense admissions or population. The map is interactive, and the user can hover over each state to see the total for each metric and year.',
+                                        landmarkVerbosity = "one"),
+                   area = list(accessibility = list(description = "This area chart was created by a selected state and selected data type, either admissions or population.
+                                          Image description: An area chart showing the number of total admissions or population, supervision violation admissions or population, technical violation admissions or population,
+                                          and new offense admissions or population. The map is interactive, and the user can hover over each state to see the total for each metric and year.")))
+}
+
+
+# function to create bar chart for state page
+fnc_highchart_state_barchart <- function(df){
+  highchart() %>%
+    hc_chart(type = "column") %>%
+    hc_xAxis(categories = df$metric) %>%
+    hc_add_series(data = subset(df, metric == "Technical Violation"), name = "Technical Violation", type = "column", hcaes(x = year, y = total), color = tech_co) %>%
+    hc_add_series(data = subset(df, metric == "New Offense"), name = "New Offense", type = "column", hcaes(x = year, y = total), color = new_o_co) %>%
+
+    hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020)) %>%
+    hc_yAxis(title = "") %>%
+    hc_title(
+      text = paste0("Supervision Violation ", unique(df$adm_or_pop)),
+      align = "left",
+      style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
+    ) %>%
+
+    hc_add_theme(hc_theme_jc) %>%
+    hc_setup() %>%
+
+    hc_plotOptions(series = list(animation = FALSE, cursor = "pointer", borderWidth = 3),
+                   accessibility = list(enabled = TRUE,
+                                        keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This bar chart was created by a selected state and selected data type, either admissions or population.
+                                          Image description: A grouped bar chart showing the number of technical violation admissions or population,
+                                          and new offense admissions or population. The chart is interactive, and the user can hover over each state to see the total for each metric and year.',
+                                        landmarkVerbosity = "one"),
+                   area = list(accessibility = list(description = 'This bar chart was created by a selected state and selected data type, either admissions or population.
+                                          Image description: A grouped bar chart showing the number of technical violation admissions or population,
+                                          and new offense admissions or population. The chart is interactive, and the user can hover over each state to see the total for each metric and year.')))
+
+}
+
+
+
+
+
+
+
 # create text depending on data type
 fnc_create_data_text <- function(df){
   df <- df %>%

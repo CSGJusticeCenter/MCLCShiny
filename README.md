@@ -13,12 +13,13 @@ MCLCShiny
 |   |-- server.R      # server  
 |   |-- app.R         # run app  
 |   |
-|   |-- Data          # folder with data, add to clone 
+|   |-- data          # folder with data, add to clone 
 |   |
 |   |-- www             
 |       |-- theme.R   # custom CSS for app    
 |
-|-- import.R          # imports MCLC data and shapefiles  
+|-- import.R          # imports MCLC data and shapefiles 
+|-- highchart.R       # create and save highcharts for app
 | 
 |-- prep              # folder for prep data/info for app 
     |-- NCRP          # NCRP data exploration

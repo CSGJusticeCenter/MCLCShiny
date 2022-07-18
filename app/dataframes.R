@@ -26,6 +26,16 @@ load(file = "data/hex_gj.Rda")
 load(file = "data/notes.Rda")
 
 #______________________________________________________
+# read in highcharts
+# must be in local repo to publish app
+#______________________________________________________
+
+load(file = "data/all_state_area_adm.Rda")
+load(file = "data/all_state_area_pop.Rda")
+load(file = "data/all_state_bar_adm.Rda")
+load(file = "data/all_state_bar_pop.Rda")
+
+#______________________________________________________
 # colors TBD
 #______________________________________________________
 
