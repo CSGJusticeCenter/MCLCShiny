@@ -40,13 +40,6 @@ load(file = "data/all_state_bar_pop.Rda")
 #______________________________________________________
 
 # assign colors for visualizations
-# darkorange  <- "#7b3014"
-# orange      <- "#d04a07"
-# lightorange <- "#f98c40"
-# white       <- "#FFFFFF"
-# lightblue   <- "#5aa5cd"
-# regblue     <- "#236ca7"
-# darkblue    <- "#26456e"
 darkorange  <- "#7b3014"
 orange      <- "#D25E2D"
 lightorange <- "#EDB799"
@@ -55,14 +48,9 @@ lightblue   <- "#C7E8F5"
 regblue     <- "#236ca7"
 darkblue    <- "#26456e"
 yellow      <- "#D6C246"
-
 gray        <- "#dcdcdc"
 
 # assign colors to data types
-# total_co <- lightorange
-# viol_co  <- orange
-# tech_co  <- regblue
-# new_o_co <- darkblue
 total_co <- lightblue
 viol_co  <- yellow
 tech_co  <- orange

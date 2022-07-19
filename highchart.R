@@ -9,6 +9,24 @@
 
 library(purrr)
 
+# assign colors for visualizations
+darkorange  <- "#7b3014"
+orange      <- "#D25E2D"
+lightorange <- "#EDB799"
+white       <- "#FFFFFF"
+lightblue   <- "#C7E8F5"
+regblue     <- "#236ca7"
+darkblue    <- "#26456e"
+yellow      <- "#D6C246"
+gray        <- "#dcdcdc"
+
+# assign colors to data types
+total_co <- lightblue
+viol_co  <- yellow
+tech_co  <- orange
+new_o_co <- lightorange
+
+
 # path to data on research div sharepoint
 # make sure sharepoint folder is synced locally
 # https://csgorg.sharepoint.com/:f:/s/Team-JC-Research/EhdvImKN2rdPnmHQ2TrKlooBdYqnnWc0SUXBNuh9C7d41g?e=NCsh8I

@@ -33,6 +33,7 @@ library(showtext)
 library(sysfonts)
 library(utils)
 library(highcharter)
+library(scales)
 
 # Add fonts required to run functions.R
 font_add("Graphik", regular = "app/www/Fonts/GraphikRegular.otf")
