@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: ui.R
 # Authors: Mari Roberts
-# Date last updated: June 7, 2022
+# Date last updated: July 19, 2022
 # Description:
 #    User interface for shiny app
 #######################################

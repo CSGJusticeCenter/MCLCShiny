@@ -33,7 +33,6 @@ library(showtext)
 library(sysfonts)
 library(utils)
 library(highcharter)
-library(scales)
 
 # Add fonts required to run functions.R
 font_add("Graphik", regular = "app/www/Fonts/GraphikRegular.otf")
@@ -50,9 +49,9 @@ source("app/functions.R")
 FULL_JC_FOLDER <- FALSE
 
 if (FULL_JC_FOLDER == TRUE){
-  sp_data_path <- csgjcr::csg_sp_path(file.path("JC Research - 50 State Revocations Project/MCLC Shiny App"))
-} else {
   sp_data_path <- csgjcr::csg_sp_path(file.path("MCLC Shiny App"))
+} else {
+  sp_data_path <- csgjcr::csg_sp_path(file.path("JC Research - 50 State Revocations Project", "MCLC Shiny App"))
 }
 
 ########
@@ -196,8 +195,8 @@ mclc_all <- mclc_all %>%
                      data == "new_offense_population"                      ~ "New Offense",
                      data == "technical_population"                        ~ "Technical Violation",
                      data == "other_population"                            ~ "Other"),
-        adm_or_pop = ifelse(grepl("population", data), "Population", "Admissions"),
-        data = paste0(metric, " " , adm_or_pop)) %>%
+         adm_or_pop = ifelse(grepl("population", data), "Population", "Admissions"),
+         data = paste0(metric, " " , adm_or_pop)) %>%
   mutate_if(is.character, as.factor) %>%
   left_join(stateAbb, by = "state") %>%
   select(state, year, total, everything())
@@ -255,9 +254,9 @@ mclc_explorer <- mclc_all %>%
 # change data types
 vb_adm_pop <- mclc_all %>%
   filter(metric == "Total" |
-         metric == "Supervision Violation" |
-         metric == "Technical Violation" |
-         metric == "New Offense") %>%
+           metric == "Supervision Violation" |
+           metric == "Technical Violation" |
+           metric == "New Offense") %>%
   mutate(change = round(change*100, 0),
          change_type = ifelse(change > 0, "increase", "decrease"),
          state = as.character(state),
@@ -412,4 +411,3 @@ save(probation_table,         file=paste0("app/data/probation_table.Rda", sep = 
 save(probation_table_wide,    file=paste0("app/data/probation_table_wide.Rda", sep = ""))
 save(hex_gj,                  file=paste0("app/data/hex_gj.Rda", sep = ""))
 save(notes,                   file=paste0("app/data/notes.Rda", sep = ""))
-

@@ -64,14 +64,12 @@ hc_theme_jc <- hc_theme(colors = c("#D25E2D", "#EDB799", "#C7E8F5", "#236ca7", "
 
 # set up highcharts download buttons
 hc_setup <- function(x) {
-
   hc_add_dependency(x, name = "plugins/series-label.js") %>%
-  hc_add_dependency(name = "plugins/accessibility.js") %>%
-  hc_add_dependency(name = "plugins/exporting.js") %>%
-  hc_add_dependency(name = "plugins/export-data.js") %>%
-  hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
-  hc_exporting(enabled = TRUE)
-
+    hc_add_dependency(name = "plugins/accessibility.js") %>%
+    hc_add_dependency(name = "plugins/exporting.js") %>%
+    hc_add_dependency(name = "plugins/export-data.js") %>%
+    hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
+    hc_exporting(enabled = TRUE)
 }
 
 # function to create area chart for state page
@@ -93,17 +91,23 @@ fnc_highchart_state_areachart <- function(df){
     ) %>%
 
     hc_add_theme(hc_theme_jc) %>%
-    hc_setup() %>%
+    hc_add_dependency(name = "plugins/series-label.js") %>%
+    hc_add_dependency(name = "plugins/accessibility.js") %>%
+    hc_add_dependency(name = "plugins/exporting.js") %>%
+    hc_add_dependency(name = "plugins/export-data.js") %>%
+    hc_exporting(enabled = TRUE) %>%
 
-    hc_plotOptions(series = list(animation = FALSE, cursor = "pointer", borderWidth = 3),
+    hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
+
+    hc_plotOptions(series = list(animation = FALSE,
+                                 cursor = "pointer",
+                                 borderWidth = 3),
                    accessibility = list(enabled = TRUE,
-                                        keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This area chart was created by a selected state and selected data type, either admissions or population.
-                                          Image description: An area chart showing the number of total admissions or population, supervision violation admissions or population, technical violation admissions or population,
-                                          and new offense admissions or population. The map is interactive, and the user can hover over each state to see the total for each metric and year.',
+                                        keyboardNavigation = list(enabled = TRUE),
+                                        linkedDescription = 'TEXT.',
                                         landmarkVerbosity = "one"),
-                   area = list(accessibility = list(description = "This area chart was created by a selected state and selected data type, either admissions or population.
-                                          Image description: An area chart showing the number of total admissions or population, supervision violation admissions or population, technical violation admissions or population,
-                                          and new offense admissions or population. The map is interactive, and the user can hover over each state to see the total for each metric and year.")))
+                   area = list(accessibility = list(description = "TEXT."))
+    )
 }
 
 
@@ -124,25 +128,24 @@ fnc_highchart_state_barchart <- function(df){
     ) %>%
 
     hc_add_theme(hc_theme_jc) %>%
-    hc_setup() %>%
+    hc_add_dependency(name = "plugins/series-label.js") %>%
+    hc_add_dependency(name = "plugins/accessibility.js") %>%
+    hc_add_dependency(name = "plugins/exporting.js") %>%
+    hc_add_dependency(name = "plugins/export-data.js") %>%
+    hc_exporting(enabled = TRUE) %>%
 
-    hc_plotOptions(series = list(animation = FALSE, cursor = "pointer", borderWidth = 3),
+    hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
+
+    hc_plotOptions(series = list(animation = FALSE,
+                                 cursor = "pointer",
+                                 borderWidth = 3),
                    accessibility = list(enabled = TRUE,
-                                        keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This bar chart was created by a selected state and selected data type, either admissions or population.
-                                          Image description: A grouped bar chart showing the number of technical violation admissions or population,
-                                          and new offense admissions or population. The chart is interactive, and the user can hover over each state to see the total for each metric and year.',
+                                        keyboardNavigation = list(enabled = TRUE),
+                                        linkedDescription = 'TEXT.',
                                         landmarkVerbosity = "one"),
-                   area = list(accessibility = list(description = 'This bar chart was created by a selected state and selected data type, either admissions or population.
-                                          Image description: A grouped bar chart showing the number of technical violation admissions or population,
-                                          and new offense admissions or population. The chart is interactive, and the user can hover over each state to see the total for each metric and year.')))
-
+                   area = list(accessibility = list(description = "TEXT."))
+    )
 }
-
-
-
-
-
-
 
 # create text depending on data type
 fnc_create_data_text <- function(df){

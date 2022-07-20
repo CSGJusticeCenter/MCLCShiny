@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: server.R
 # Authors: Mari Roberts
-# Date last updated: June 10, 2022
+# Date last updated: July 19, 2022
 # Description:
 #    Server for shiny app
 #######################################
@@ -220,7 +220,6 @@ server <- function(input, output, session) {
 
   # table under hex map
   output$table_map = DT::renderDataTable({
-    # https://stackoverflow.com/questions/64097670/jquery-datatable-heading-and-search-on-the-same-line
     datatable(df_map_table(),
               # callback = JS("$('#DataTables_Table_0_filter input').css('background-color', 'yellow');"),
               class = list(stripe = FALSE),
@@ -427,12 +426,10 @@ server <- function(input, output, session) {
 
   # output area chart
   output$state_area_chart <- renderHighchart({
-    # select highchart depending on selector input
-    # charts were saved in highchart.R
     if (input$adm_pop_report == "Admissions") {
-      eval(parse(text = paste("all_state_area_adm$",input$state_report, sep = "")))
+      all_state_area_adm[[input$state_report]]
     } else {
-      eval(parse(text = paste("all_state_area_pop$",input$state_report, sep = "")))
+      all_state_area_pop[[input$state_report]]
     }
   })
 
@@ -445,9 +442,9 @@ server <- function(input, output, session) {
     # select highchart depending on selector input
     # charts were saved in highchart.R
     if (input$adm_pop_report == "Admissions") {
-      eval(parse(text = paste("all_state_bar_adm$",input$state_report, sep = "")))
+      all_state_bar_adm[[input$state_report]]
     } else {
-      eval(parse(text = paste("all_state_bar_pop$",input$state_report, sep = "")))
+      all_state_bar_pop[[input$state_report]]
     }
   })
 
@@ -574,37 +571,37 @@ server <- function(input, output, session) {
       mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
   })
 
-  # output bar chart
-  output$parole_bar_chart <- renderHighchart({
-
-    highchart() %>%
-      hc_chart(type = "column") %>%
-      hc_xAxis(categories = df_parole_bar_chart()$metric) %>%
-      hc_add_series(data = subset(df_parole_bar_chart(), metric == "Technical Violation"), name = "Technical Violation", type = "column", hcaes(x = year, y = total), color = tech_co) %>%
-      hc_add_series(data = subset(df_parole_bar_chart(), metric == "New Offense"), name = "New Offense", type = "column", hcaes(x = year, y = total), color = new_o_co) %>%
-
-      hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020)) %>%
-      hc_yAxis(title = "") %>%
-      hc_title(
-        text = paste0("Supervision Violation ", unique(df_parole_bar_chart()$adm_or_pop)),
-        align = "left",
-        style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
-      ) %>%
-
-      hc_add_theme(hc_theme_jc) %>%
-      hc_setup() %>%
-
-      hc_plotOptions(series = list(animation = FALSE, cursor = "pointer", borderWidth = 3),
-                     accessibility = list(enabled = TRUE,
-                                          keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This bar chart was created by a selected state and selected data type, either admissions or population.
-                                          Image description: A grouped bar chart showing the number of parole technical violation admissions or population,
-                                          and new offense admissions or population. The chart is interactive, and the user can hover over each state to see the total for each metric and year.',
-                                          landmarkVerbosity = "one"),
-                     area = list(accessibility = list(description = 'This bar chart was created by a selected state and selected data type, either admissions or population.
-                                          Image description: A grouped bar chart showing the number of parole technical violation admissions or population,
-                                          and new offense admissions or population. The chart is interactive, and the user can hover over each state to see the total for each metric and year.')))
-
-  })
+  # # output bar chart
+  # output$parole_bar_chart <- renderHighchart({
+  #
+  #   highchart() %>%
+  #     hc_chart(type = "column") %>%
+  #     hc_xAxis(categories = df_parole_bar_chart()$metric) %>%
+  #     hc_add_series(data = subset(df_parole_bar_chart(), metric == "Technical Violation"), name = "Technical Violation", type = "column", hcaes(x = year, y = total), color = tech_co) %>%
+  #     hc_add_series(data = subset(df_parole_bar_chart(), metric == "New Offense"), name = "New Offense", type = "column", hcaes(x = year, y = total), color = new_o_co) %>%
+  #
+  #     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020)) %>%
+  #     hc_yAxis(title = "") %>%
+  #     hc_title(
+  #       text = paste0("Supervision Violation ", unique(df_parole_bar_chart()$adm_or_pop)),
+  #       align = "left",
+  #       style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
+  #     ) %>%
+  #
+  #     hc_add_theme(hc_theme_jc) %>%
+  #     hc_setup() %>%
+  #
+  #     hc_plotOptions(series = list(animation = FALSE, cursor = "pointer", borderWidth = 3),
+  #                    accessibility = list(enabled = TRUE,
+  #                                         keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This bar chart was created by a selected state and selected data type, either admissions or population.
+  #                                         Image description: A grouped bar chart showing the number of parole technical violation admissions or population,
+  #                                         and new offense admissions or population. The chart is interactive, and the user can hover over each state to see the total for each metric and year.',
+  #                                         landmarkVerbosity = "one"),
+  #                    area = list(accessibility = list(description = 'This bar chart was created by a selected state and selected data type, either admissions or population.
+  #                                         Image description: A grouped bar chart showing the number of parole technical violation admissions or population,
+  #                                         and new offense admissions or population. The chart is interactive, and the user can hover over each state to see the total for each metric and year.')))
+  #
+  # })
 
   ##############################################################################################################################
   # Download

@@ -35,6 +35,10 @@ load(file = "data/all_state_area_pop.Rda")
 load(file = "data/all_state_bar_adm.Rda")
 load(file = "data/all_state_bar_pop.Rda")
 
+load(file = "data/alabama_adm.Rda")
+load(file = "data/alabama_pop.Rda")
+load(file = "data/test_plot.Rda")
+
 #______________________________________________________
 # colors TBD
 #______________________________________________________
@@ -48,9 +52,9 @@ lightblue   <- "#C7E8F5"
 regblue     <- "#236ca7"
 darkblue    <- "#26456e"
 yellow      <- "#D6C246"
+
 gray        <- "#dcdcdc"
 
-# assign colors to data types
 total_co <- lightblue
 viol_co  <- yellow
 tech_co  <- orange

@@ -2,13 +2,14 @@
 # Project: MCLCShiny
 # File: libraries.R
 # Authors: Mari Roberts
-# Last date updated: July 14, 2022
+# Last date updated: July 19, 2022
 # Description:
 #    Load packages
 #######################################
 
 library(dplyr)
-library(utils)
+library(htmlwidgets)
+library(glue)
 
 # shiny
 library(shiny)
@@ -28,3 +29,4 @@ library(sp)
 # data visualizations
 library(dataui)
 library(highcharter)
+library(purrr)
