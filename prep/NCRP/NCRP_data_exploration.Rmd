@@ -15,6 +15,7 @@ library(janitor)
 library(kableExtra)
 library(plotly)
 library(geofacet)
+library(scales)
 
 box::use(
   scales[percent, comma]
@@ -209,6 +210,88 @@ p_YOR %>% ggplotly() %>%
   layout(legend = list(orientation = 'h', x = 0, y = 1.15))
 ```
 
+```{r}
+state_YOR <- function(STATENAME){
+  plotdf <- revocations %>% 
+    filter(STATE == STATENAME) %>% 
+    count(RPTYEAR, OFFGENERAL, RACE) %>% 
+    group_by(RPTYEAR, OFFGENERAL) %>%
+    mutate(
+        prop = n/sum(n)
+      , perc = round(prop*100, digits = 2)
+    ) 
+  
+  ggcnt <- plotdf %>% 
+    ggplot(aes(x = RPTYEAR, y = n, color = RACE, text = perc)) + 
+    geom_line() + geom_point() + 
+    facet_grid(~OFFGENERAL) +
+    scale_y_continuous(name = NULL) + 
+    scale_x_continuous(labels = c("'15", "'16", "'17", "'18", "'19")) + 
+    labs(title = STATENAME) + 
+    theme_bw() + 
+    theme(legend.position = "top")
+  
+    
+  ggperc <- plotdf %>% 
+    ggplot(aes(x = RPTYEAR, y = perc, color = RACE, text = n)) + 
+    geom_line() + geom_point() + 
+    facet_grid(~OFFGENERAL) +
+    scale_y_continuous(name = NULL) + 
+    scale_x_continuous(labels = c("'15", "'16", "'17", "'18", "'19")) + 
+    labs(title = STATENAME) + 
+    theme_bw() + 
+    theme(legend.position = "top")
+  
+  list(
+      "COUNT" = ggcnt
+    , "PERC" = ggperc
+  )
+  
+}
+
+
+display <- function(gg){
+  gg %>% ggplotly() %>% 
+  layout(legend = list(orientation = 'h', x = 0, y = 1.3))
+}
+```
+
+
+### Select States {.tabset .tabset-dropdown}
+
+#### Texas
+
+```{r}
+gg <- state_YOR("(48) Texas")
+display(gg$COUNT)
+display(gg$PERC)
+```
+
+
+#### Pennsylvania
+
+```{r}
+gg <- state_YOR("(42) Pennsylvania")
+display(gg$COUNT)
+display(gg$PERC)
+```
+
+#### New York
+
+```{r}
+gg <- state_YOR("(36) New York")
+display(gg$COUNT)
+display(gg$PERC)
+```
+
+#### Missouri
+
+```{r}
+gg <- state_YOR("(29) Missouri")
+display(gg$COUNT)
+display(gg$PERC)
+```
+ 
 
 
 ## Questions 
@@ -226,18 +309,8 @@ p_YOR %>% ggplotly() %>%
 "OFFGENERAL: 5-level categorization of **most serious sentenced offense**"  
 - [38048-Codebook, pg 28: Prison Admissions](`r SPLINK_codebook38048`)
 
-BJS_OFFENSE_1: The offense with the longest sentence.  
-"Crime(s) with the longest sentence for which the offender was admitted to prison on the current sentence(s). For **persons readmitted to prison, the original crime(s) in addition to any new crime(s) resulting in the current sentence(s)** should be indicated."  
-- [38047-Codebook, pg 13: Prison Term Records](`r SPLINK_codebook38047`)
-
-BJS_OFFENSE_2/BJS_OFFENSE_3  
-"Crime(s) for which the offender was admitted to prison on the current sentence(s). For persons **readmitted to prison, the original crime(s) in addition to any new crime(s) resulting in the current sentence(s)** should be indicated."  
-- [38047-Codebook, pg 14-16: Prison Term Records](`r SPLINK_codebook38047`)
-
 **QUESTION:** what does `OFFGENERAL` mean for revocations?
-
-- If revocation is caused due to a 'lesser' crime, then is `OFFGENERAL` the originally crime? 
-- Is `OFFGENERAL` always the originally crime for revocations or always the cause of the revocation? 
+"The OFFGENERAL is the most serious sentenced offense, so it does refers back to the original most serious offense they were **convicted of** – not the reason someone was revoked.  The clue here is that it says “SENTENCED OFFENSE” – and parole revocations do not include a new sentenced offense." - Jess Saunders 
 
 
 ### Overall Downward Trend in Admissions 
@@ -305,10 +378,10 @@ state_data %>%
   kable_styling()
 ```
 
-### State Admission Data by RACE {.tabset}
+### Revocation Data by RACE {.tabset}
 
 ```{r, fig.height = 8}
-state_race <- ADM_38048 %>% 
+state_race <- revocations %>% 
   count(RPTYEAR, STATE, RACE) %>% 
   group_by(RPTYEAR, STATE) %>% 
   mutate(total_yrstate = sum(n)) %>% 
@@ -325,9 +398,103 @@ state_race <- ADM_38048 %>%
 ```
 
 
+#### NA 
+
+```{r, fig.height = 8, warning = FALSE}
+state_race %>% 
+  filter(is.na(RACE)) %>% 
+  ggplot(aes(x = RPTYEAR, y = prop, group = abb)) + 
+  geom_area() + 
+  geom_point() + 
+  geom_point(data = filter(state_race, is.na(RACE) & prop < 0.01), color = "grey30", fill = "white", shape = 21) + 
+  facet_geo(~abb, grid = "us_state_grid2") +  
+  labs(
+    title = "Percent of NA (Missing) RACE in Revocations for years 2015-2019"
+    , subtitle = "If prop < 1% shown with empty circle"
+  ) + 
+  scale_y_continuous(
+      name = NULL
+    , breaks = c(0, 0.5, 1)
+    , labels = scales::percent
+    , expand = expansion(mult=0.10, add=0)
+  ) + 
+  scale_x_continuous(
+      name = NULL
+    , labels = ~paste0("'", substr(., 3, 4))
+  ) + 
+  theme_minimal() + 
+  theme(
+      legend.position = "top"
+    , panel.grid.minor = element_blank()
+    , axis.text = element_text(size = 6)
+    , strip.background = element_rect(fill = "grey90", color = NA)
+   , strip.text = element_text(margin = margin(t=2, r=0, b=3, l=0, unit = "pt"))
+  )
+```
+
+```{r}
+obs_by_state <- full_join(
+    revocations %>% distinct(RPTYEAR, STATE) %>% count(STATE) %>% rename(n_yrsofdata = n)
+  , revocations %>% count(STATE) %>% rename(n_totalobs = n)
+  , by = "STATE"
+) %>% 
+  mutate(avgobsperyear = n_totalobs/n_yrsofdata)
+
+```
+
+
+```{r}
+
+# state_race %>% 
+#   full_join(., tibble(STATE = ustate), by = "STATE")
+
+
+na_df <- state_race %>% 
+  full_join(., tibble(STATE = ustate), by = "STATE") %>% 
+  group_by(RPTYEAR, STATE) %>% 
+  mutate(prop_NA = ifelse(NA %in% RACE, prop[which(is.na(RACE))], 0)) %>% 
+  ungroup() %>% 
+  distinct(RPTYEAR, STATE, abb, prop_NA) %>% 
+  pivot_wider(names_from = RPTYEAR, values_from = prop_NA) %>% 
+  arrange(STATE) %>% 
+  select(-`NA`) %>% 
+  left_join(., obs_by_state, by = "STATE") 
+
+
+add_perc_fmt <- function(val){
+  case_when(
+      val == 0                        ~ "0%"
+    , val == 1                        ~ "100%"
+    , round(val*100, digits = 1) <  1 ~"<1%"
+    , round(val*100, digits = 1) > 99 ~ ">99%"
+    , TRUE                            ~ percent(val, accuracy = 1)
+  )
+}
+
+
+na_df %>% 
+  select(-abb) %>% 
+  DT::datatable(rownames = FALSE) %>% 
+  DT::formatPercentage(columns = c("2015", "2016", "2017", "2018", "2019"), digits = 2) %>% 
+  DT::formatRound(columns = c("n_totalobs", "avgobsperyear"), digits = 0)
+  # mutate_at(vars(as.character(2015:2019)), add_perc_fmt) %>% 
+  # mutate_if(is.numeric, comma_format(accuracy = 1)) %>% 
+  # kable(align = "lrrrrrrrr") %>% 
+  # kable_styling() %>% 
+  # column_spec(2, background = spec_color(na_df$`2015`, alpha = 0.2)) %>% 
+  # column_spec(3, background = spec_color(na_df$`2016`, alpha = 0.2)) %>% 
+  # column_spec(4, background = spec_color(na_df$`2017`, alpha = 0.2)) %>% 
+  # column_spec(5, background = spec_color(na_df$`2018`, alpha = 0.2)) %>% 
+  # column_spec(6, background = spec_color(na_df$`2019`, alpha = 0.2)) %>% 
+  # column_spec(8, background = spec_color(na_df$n_totalobs   , alpha = 0.25, option = "E")) %>% 
+  # column_spec(9, background = spec_color(na_df$avgobsperyear, alpha = 0.25, option = "E"))
+```
+
+
+
 #### Percent 
 
-```{r,  fig.height = 8}
+```{r, fig.height = 8}
 state_race %>% 
   ggplot(aes(x = RPTYEAR, y = prop, color = RACE)) + 
   geom_line() + 
@@ -365,9 +532,9 @@ state_race %>%
   labs(title = "Percent of RACE in Revocations for years 2015-2019") + 
   scale_y_continuous(
       name = NULL
-   # , breaks = c(0, 0.5, 1)
+    , breaks = c(0, 5000, 10000)
     , labels = scales::comma_format(suffix = "k", scale=0.001)
-    , expand = expansion(mult=0.10, add=0)
+  #  , expand = expansion(mult=0.10, add=0)
   ) + 
   scale_x_continuous(
       name = NULL

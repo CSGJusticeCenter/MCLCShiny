@@ -70,15 +70,16 @@ statedf <- tribble(
 ) 
 
 
-validtypes <- c("abb_usps", "abb_gpo", "name", "fips")
+validIN  <- colnames(statedf)[1:4]
+validOUT <- colnames(statedf)
 
 
 
 #' Convert State Indicator to Another Type 
 #'
 #' @param VALUE value currently representing a unique state
-#' @param TYPEIN  the type of indicator of value, options are "abb_usps", "abb_gpo", "name", "fips"
-#' @param TYPEOUT the type of indicator for output, options are "abb_usps", "abb_gpo", "name", "fips" 
+#' @param TYPEIN  the type of UNIQUE indicator of value, options are "abb_usps", "abb_gpo", "name", "fips"
+#' @param TYPEOUT the type of indicator for output, options are "abb_usps", "abb_gpo", "name", "fips", "eta_region", "type"
 #'
 #' When using with mutate() on a DF, need to group rowwise() 
 #'
@@ -94,8 +95,8 @@ validtypes <- c("abb_usps", "abb_gpo", "name", "fips")
 cnvrt <- function(VALUE, TYPEIN, TYPEOUT){
   
   #check validity of in/out types 
-  if (!TYPEIN  %in% validtypes){ stop('Invalid TYPEIN, valid options are "abb_usps", "abb_gpo", "name", "fips"')}
-  if (!TYPEOUT %in% validtypes){ stop('Invalid TYPEOUT, valid options are "abb_usps", "abb_gpo", "name", "fips"')}
+  if (!TYPEIN  %in% validIN ){ stop('Invalid TYPEIN, valid options are "abb_usps", "abb_gpo", "name", "fips"')}
+  if (!TYPEOUT %in% validOUT){ stop('Invalid TYPEOUT, valid options are "abb_usps", "abb_gpo", "name", "fips", "eta_region", "type"')}
   
   validvalues <- VALUE %in% statedf[[TYPEIN]]
   validity    <- case_when(
@@ -118,7 +119,7 @@ cnvrt <- function(VALUE, TYPEIN, TYPEOUT){
     rownumber <- which(statedf[[TYPEIN]] %in% VALUE)
     OUT <- statedf[[TYPEOUT]][rownumber]
   } else {
-    stop("Something went wrong, please review funciton code")
+    stop("Something went wrong, please review function code")
   }
   
   return(OUT)
