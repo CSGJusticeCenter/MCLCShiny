@@ -20,7 +20,7 @@
 #     Saves data to research SP folder
 #######################################
 
-# load packages and functions
+# load packages
 library(dplyr)
 library(tidyr)
 library(csgjcr)
@@ -39,6 +39,7 @@ font_add("Graphik", regular = "app/www/Fonts/GraphikRegular.otf")
 showtext_auto()
 default_fonts <- c("Graphik")
 
+# load custom functions
 source("app/functions.R")
 
 # path to data on research div sharepoint

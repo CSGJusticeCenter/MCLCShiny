@@ -427,9 +427,19 @@ server <- function(input, output, session) {
   # output area chart
   output$state_area_chart <- renderHighchart({
     if (input$adm_pop_report == "Admissions") {
-      all_state_area_adm[[input$state_report]]
+      all_state_area_adm[[input$state_report]] %>%
+        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+        highcharter::hc_exporting(enabled = TRUE)
     } else {
-      all_state_area_pop[[input$state_report]]
+      all_state_area_pop[[input$state_report]] %>%
+        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+        highcharter::hc_exporting(enabled = TRUE)
     }
   })
 
@@ -442,9 +452,19 @@ server <- function(input, output, session) {
     # select highchart depending on selector input
     # charts were saved in highchart.R
     if (input$adm_pop_report == "Admissions") {
-      all_state_bar_adm[[input$state_report]]
+      all_state_bar_adm[[input$state_report]] %>%
+        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+        highcharter::hc_exporting(enabled = TRUE)
     } else {
-      all_state_bar_pop[[input$state_report]]
+      all_state_bar_pop[[input$state_report]] %>%
+        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+        highcharter::hc_exporting(enabled = TRUE)
     }
   })
 

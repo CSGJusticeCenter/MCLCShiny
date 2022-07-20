@@ -7,6 +7,10 @@
 #    Create and save highcharts so the app loads faster
 #######################################
 
+# load data
+load(file = "data/adm_pop_long.Rda")
+
+# load packages
 library(purrr)
 library(dplyr)
 library(highcharter)

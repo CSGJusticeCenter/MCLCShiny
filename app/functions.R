@@ -64,12 +64,12 @@ hc_theme_jc <- hc_theme(colors = c("#D25E2D", "#EDB799", "#C7E8F5", "#236ca7", "
 
 # set up highcharts download buttons
 hc_setup <- function(x) {
-  hc_add_dependency(x, name = "plugins/series-label.js") %>%
-    hc_add_dependency(name = "plugins/accessibility.js") %>%
-    hc_add_dependency(name = "plugins/exporting.js") %>%
-    hc_add_dependency(name = "plugins/export-data.js") %>%
-    hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
-    hc_exporting(enabled = TRUE)
+    highcharter::hc_add_dependency(x, name = "plugins/series-label.js") %>%
+    highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+    highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+    highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+    highcharter::hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
+    highcharter::hc_exporting(enabled = TRUE)
 }
 
 # function to create area chart for state page
@@ -91,11 +91,6 @@ fnc_highchart_state_areachart <- function(df){
     ) %>%
 
     hc_add_theme(hc_theme_jc) %>%
-    hc_add_dependency(name = "plugins/series-label.js") %>%
-    hc_add_dependency(name = "plugins/accessibility.js") %>%
-    hc_add_dependency(name = "plugins/exporting.js") %>%
-    hc_add_dependency(name = "plugins/export-data.js") %>%
-    hc_exporting(enabled = TRUE) %>%
 
     hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
 
@@ -128,11 +123,6 @@ fnc_highchart_state_barchart <- function(df){
     ) %>%
 
     hc_add_theme(hc_theme_jc) %>%
-    hc_add_dependency(name = "plugins/series-label.js") %>%
-    hc_add_dependency(name = "plugins/accessibility.js") %>%
-    hc_add_dependency(name = "plugins/exporting.js") %>%
-    hc_add_dependency(name = "plugins/export-data.js") %>%
-    hc_exporting(enabled = TRUE) %>%
 
     hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
 

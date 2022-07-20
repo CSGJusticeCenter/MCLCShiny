@@ -52,9 +52,7 @@ lightblue   <- "#C7E8F5"
 regblue     <- "#236ca7"
 darkblue    <- "#26456e"
 yellow      <- "#D6C246"
-
 gray        <- "#dcdcdc"
-
 total_co <- lightblue
 viol_co  <- yellow
 tech_co  <- orange

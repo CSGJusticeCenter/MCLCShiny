@@ -7,7 +7,14 @@
 #    Load packages
 #######################################
 
-library(dplyr)
+# download older version of highcharter?
+# devtools::install_version("highcharter", "0.7.0")
+addResourcePath('highcharter', system.file('htmlwidgets/lib/highcharts', package='highcharter'))
+
+# data visualizations
+library(dataui)
+library(highcharter)
+library(purrr)
 library(htmlwidgets)
 library(glue)
 
@@ -22,11 +29,7 @@ library(reactable)
 library(DT)
 library(reactablefmtr)
 library(formattable)
+library(dplyr)
 
 # maps
 library(sp)
-
-# data visualizations
-library(dataui)
-library(highcharter)
-library(purrr)
