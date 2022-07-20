@@ -8,9 +8,9 @@
 #######################################
 
 source("library.R")
+source("colors.R")
 source("dataframes.R")
 source("functions.R")
-source("colors.R")
 
 ui <- fluidPage(includeCSS("www/theme.css"),
 

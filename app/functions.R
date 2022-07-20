@@ -7,10 +7,6 @@
 #    Defines custom functions
 #######################################
 
-# load colors
-source("colors.R")
-source("library.R")
-
 ##########################
 # Highchart
 ##########################
