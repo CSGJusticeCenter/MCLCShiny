@@ -1,0 +1,30 @@
+#######################################
+# Project: MCLCShiny
+# File: colors.R
+# Authors: Mari Roberts
+# Date last updated: July 20, 2022
+# Description:
+#    Assign colors
+#######################################
+
+# assign colors for plots
+darkorange  <- "#7b3014"
+orange      <- "#D25E2D"
+lightorange <- "#EDB799"
+white       <- "#FFFFFF"
+lightblue   <- "#C7E8F5"
+regblue     <- "#236ca7"
+darkblue    <- "#26456e"
+yellow      <- "#D6C246"
+gray        <- "#dcdcdc"
+total_co <- lightblue
+viol_co  <- yellow
+tech_co  <- orange
+new_o_co <- lightorange
+
+# choose colors for cute line graphs within tables
+colpal_fill <- c("url(#total)",
+                 "url(#sup_viols)",
+                 "url(#technical)",
+                 "url(#new_offense)")
+colpal_stroke <- c(total_co, viol_co , tech_co, new_o_co)

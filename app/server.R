@@ -432,7 +432,12 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        highcharter::hc_exporting(enabled = TRUE)
+        highcharter::hc_exporting(enabled = TRUE) %>%
+        hc_title(
+          text = paste0("Prison ", input$adm_pop_report),
+          align = "left",
+          style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
+        )
     } else {
       all_state_area_pop[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
@@ -457,14 +462,24 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        highcharter::hc_exporting(enabled = TRUE)
+        highcharter::hc_exporting(enabled = TRUE) %>%
+        hc_title(
+          text = paste0("Supervision Violation ", input$adm_pop_report),
+          align = "left",
+          style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
+        )
     } else {
       all_state_bar_pop[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        highcharter::hc_exporting(enabled = TRUE)
+        highcharter::hc_exporting(enabled = TRUE) %>%
+        hc_title(
+          text = paste0("Supervision Violation ", input$adm_pop_report),
+          align = "left",
+          style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
+        )
     }
   })
 
@@ -473,91 +488,13 @@ server <- function(input, output, session) {
   #######
 
   output$state_table <- renderReactable({
-
-    # filter data
-    df <- state_table %>%
-      filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report) %>%
-      group_by(text) %>%
-      summarise(total_new = list(list(total)))
-    df1 <- state_table_wide %>%
-      filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report) %>%
-      arrange(order) %>%
-      select(-adm_or_pop, -state)
-
-    # merge data
-    df <- merge(df1, df, by = "text")
-    df <- df %>% arrange(order) %>% select(-order)
-
-    # create table with 3 year trend line in last column
-    reactable(df,
-              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
-              defaultColDef = colDef(format = colFormat(separators = TRUE), align = "center"),
-              compact = TRUE,
-              fullWidth = FALSE,
-              columns = list(
-                text            = colDef(name = "Metric",
-                                         align = "left",
-                                         minWidth = 275),
-                `2018`          = colDef(minWidth = 95),
-                `2019`          = colDef(minWidth = 95),
-                `2020`          = colDef(minWidth = 95),
-                three_yr_change = colDef(minWidth = 110,
-                                         name = "3 Year Change",
-                                         format = colFormat(percent = TRUE, digits = 1)),
-                # add 3 year trend graphs to each row
-                total_new  = colDef(minWidth = 110,
-                                    name = "3 Year Trend",
-                                    cell = function(value, index) {
-                                      dui_sparkline(
-                                        data = value[[1]],
-                                        height = 80,
-                                        margin = list(top = 30, right = 20, bottom = 30, left = 20),
-
-                                        components = list(
-                                          dui_sparkpatternlines(
-                                            id = "total",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = total_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
-
-                                          dui_sparkpatternlines(
-                                            id = "sup_viols",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = viol_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
-
-                                          dui_sparkpatternlines(
-                                            id = "technical",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = tech_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
-
-                                          dui_sparkpatternlines(
-                                            id = "new_offense",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = new_o_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
-
-                                          dui_sparklineseries(
-                                            curve = "linear",
-                                            showArea = FALSE,
-                                            fill = colpal_fill[index],
-                                            stroke = colpal_stroke[index])))}))
-              )
+    # select reactable depending on selector input
+    # tables were saved in reactable.R
+    if (input$adm_pop_report == "Admissions") {
+      state_reactable_adm[[input$state_report]]
+    } else {
+      state_reactable_pop[[input$state_report]]
+    }
   })
 
   #######
@@ -579,49 +516,91 @@ server <- function(input, output, session) {
   # Parole Tab
   #######
 
-  # filter data for grouped barchart
-  df_parole_bar_chart <- reactive({
-    adm_pop_long %>%
-      filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report,
-             prob_vs_parole == "Parole") %>%
-      group_by(state, year, metric, adm_or_pop) %>%
-      summarise(total = sum(total)) %>%
-      filter(metric == "New Offense" | metric == "Technical Violation") %>%
-      mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
+  # output bar chart
+  output$parole_bar_chart <- renderHighchart({
+    # select highchart depending on selector input
+    # charts were saved in highchart.R
+    if (input$adm_pop_report == "Admissions") {
+      parole_bar_adm[[input$state_report]] %>%
+        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+        highcharter::hc_exporting(enabled = TRUE) %>%
+        hc_title(
+          text = paste0("Parole Violation ", input$adm_pop_report),
+          align = "left",
+          style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
+        )
+    } else {
+      parole_bar_pop[[input$state_report]] %>%
+        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+        highcharter::hc_exporting(enabled = TRUE) %>%
+        hc_title(
+          text = paste0("Parole Violation ", input$adm_pop_report),
+          align = "left",
+          style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
+        )
+    }
   })
 
-  # # output bar chart
-  # output$parole_bar_chart <- renderHighchart({
-  #
-  #   highchart() %>%
-  #     hc_chart(type = "column") %>%
-  #     hc_xAxis(categories = df_parole_bar_chart()$metric) %>%
-  #     hc_add_series(data = subset(df_parole_bar_chart(), metric == "Technical Violation"), name = "Technical Violation", type = "column", hcaes(x = year, y = total), color = tech_co) %>%
-  #     hc_add_series(data = subset(df_parole_bar_chart(), metric == "New Offense"), name = "New Offense", type = "column", hcaes(x = year, y = total), color = new_o_co) %>%
-  #
-  #     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020)) %>%
-  #     hc_yAxis(title = "") %>%
-  #     hc_title(
-  #       text = paste0("Supervision Violation ", unique(df_parole_bar_chart()$adm_or_pop)),
-  #       align = "left",
-  #       style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
-  #     ) %>%
-  #
-  #     hc_add_theme(hc_theme_jc) %>%
-  #     hc_setup() %>%
-  #
-  #     hc_plotOptions(series = list(animation = FALSE, cursor = "pointer", borderWidth = 3),
-  #                    accessibility = list(enabled = TRUE,
-  #                                         keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This bar chart was created by a selected state and selected data type, either admissions or population.
-  #                                         Image description: A grouped bar chart showing the number of parole technical violation admissions or population,
-  #                                         and new offense admissions or population. The chart is interactive, and the user can hover over each state to see the total for each metric and year.',
-  #                                         landmarkVerbosity = "one"),
-  #                    area = list(accessibility = list(description = 'This bar chart was created by a selected state and selected data type, either admissions or population.
-  #                                         Image description: A grouped bar chart showing the number of parole technical violation admissions or population,
-  #                                         and new offense admissions or population. The chart is interactive, and the user can hover over each state to see the total for each metric and year.')))
-  #
-  # })
+  output$parole_table <- renderReactable({
+    # select reactable depending on selector input
+    # tables were saved in reactable.R
+    if (input$adm_pop_report == "Admissions") {
+      parole_reactable_adm[[input$state_report]]
+    } else {
+      parole_reactable_pop[[input$state_report]]
+    }
+  })
+
+  #######
+  # Probation Tab
+  #######
+
+  # output bar chart
+  output$probation_bar_chart <- renderHighchart({
+    # select highchart depending on selector input
+    # charts were saved in highchart.R
+    if (input$adm_pop_report == "Admissions") {
+      probation_bar_adm[[input$state_report]] %>%
+        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+        highcharter::hc_exporting(enabled = TRUE) %>%
+        hc_title(
+          text = paste0("Probation Violation ", input$adm_pop_report),
+          align = "left",
+          style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
+        )
+    } else {
+      probation_bar_pop[[input$state_report]] %>%
+        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+        highcharter::hc_exporting(enabled = TRUE) %>%
+        hc_title(
+          text = paste0("Probation Violation ", input$adm_pop_report),
+          align = "left",
+          style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
+        )
+    }
+  })
+
+  output$probation_table <- renderReactable({
+    # select reactable depending on selector input
+    # tables were saved in reactable.R
+    if (input$adm_pop_report == "Admissions") {
+      probation_reactable_adm[[input$state_report]]
+    } else {
+      probation_reactable_pop[[input$state_report]]
+    }
+  })
 
   ##############################################################################################################################
   # Download

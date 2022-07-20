@@ -2,13 +2,12 @@
 # Project: MCLCShiny
 # File: app.R
 # Authors: Mari Roberts
-# Date last updated: June 7, 2022
+# Date last updated: July 20, 2022
 # Description:
 #    Run ui and server
 #######################################
 
-
-##when on shinyapps.io (linux) -- not sure if its required, please test
+# when on shinyapps.io (linux) -- not sure if its required, please test
 if (Sys.info()[['sysname']] == "Linux"){
   dir.create('~/.fonts')
   file.copy("www/fonts/Graphik.ttf", "~/.fonts")

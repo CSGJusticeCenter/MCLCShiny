@@ -7,8 +7,9 @@ MCLCShiny
 |
 |-- app
 |   |-- library.R     # load packages  
-|   |-- dataframes.R  # loads converted data, colors, fonts  
+|   |-- dataframes.R  # loads converted data, fonts  
 |   |-- functions.R   # custom functions  
+|   |-- colors.R      # assigned colors
 |   |-- ui.R          # user interface  
 |   |-- server.R      # server  
 |   |-- app.R         # run app  
@@ -20,6 +21,7 @@ MCLCShiny
 |
 |-- import.R          # imports MCLC data and shapefiles 
 |-- highchart.R       # create and save highcharts for app
+|-- reactable.R       # create and save reactable tables for app
 | 
 |-- prep              # folder for prep data/info for app 
     |-- NCRP          # NCRP data exploration

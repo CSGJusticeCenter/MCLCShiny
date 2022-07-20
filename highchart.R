@@ -2,34 +2,10 @@
 # Project: MCLCShiny
 # File: highchart.R
 # Authors: Mari Roberts
-# Date last updated: July 19, 2022
+# Date last updated: July 20, 2022
 # Description:
 #    Create and save highcharts so the app loads faster
 #######################################
-
-# load data
-load(file = "data/adm_pop_long.Rda")
-
-# load packages
-library(purrr)
-library(dplyr)
-library(highcharter)
-library(scales)
-
-# assign colors for visualizations
-darkorange  <- "#7b3014"
-orange      <- "#D25E2D"
-lightorange <- "#EDB799"
-white       <- "#FFFFFF"
-lightblue   <- "#C7E8F5"
-regblue     <- "#236ca7"
-darkblue    <- "#26456e"
-yellow      <- "#D6C246"
-gray        <- "#dcdcdc"
-total_co <- lightblue
-viol_co  <- yellow
-tech_co  <- orange
-new_o_co <- lightorange
 
 # path to data on research div sharepoint
 # make sure sharepoint folder is synced locally
@@ -43,6 +19,18 @@ if (FULL_JC_FOLDER == TRUE){
 } else {
   sp_data_path <- csgjcr::csg_sp_path(file.path("JC Research - 50 State Revocations Project", "MCLC Shiny App"))
 }
+
+# load data
+load(file = "app/data/adm_pop_long.Rda")
+
+# load packages
+library(purrr)
+library(dplyr)
+library(highcharter)
+library(scales)
+
+# assign colors for visualizations
+source("app/colors.R")
 
 # get state list
 states <- adm_pop_long$state %>%
@@ -121,17 +109,104 @@ all_state_bar_pop <- map(.x = states,  .f = function(x) {
 all_state_bar_pop <- setNames(all_state_bar_pop,c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"))
 
 ############
+# Parole bar chart
+############
+
+# generate list of state highcharts to call in app (admissions)
+parole_bar_adm <- map(.x = states,  .f = function(x) {
+  df1 <- adm_pop_long %>%
+    filter(state == x &
+           adm_or_pop == "Admissions",
+           prob_vs_parole == "Parole") %>%
+    group_by(state, year, metric, adm_or_pop) %>%
+    summarise(total = sum(total)) %>%
+    filter(metric == "New Offense" | metric == "Technical Violation") %>%
+    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
+  highcharts <- fnc_highchart_state_barchart(df1)
+  return(highcharts)
+})
+
+# set names of charts
+parole_bar_adm <- setNames(parole_bar_adm,c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"))
+
+# generate list of state highcharts to call in app (population)
+parole_bar_pop <- map(.x = states,  .f = function(x) {
+  df1 <- adm_pop_long %>%
+    filter(state == x &
+           adm_or_pop == "Population",
+           prob_vs_parole == "Probation") %>%
+    group_by(state, year, metric, adm_or_pop) %>%
+    summarise(total = sum(total)) %>%
+    filter(metric == "New Offense" | metric == "Technical Violation") %>%
+    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
+  highcharts <- fnc_highchart_state_barchart(df1)
+  return(highcharts)
+})
+
+# set names of charts
+parole_bar_pop <- setNames(parole_bar_pop,c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"))
+
+############
+# Probation bar chart
+############
+
+# generate list of state highcharts to call in app (admissions)
+probation_bar_adm <- map(.x = states,  .f = function(x) {
+  df1 <- adm_pop_long %>%
+    filter(state == x &
+           adm_or_pop == "Admissions",
+           prob_vs_parole == "Probation") %>%
+    group_by(state, year, metric, adm_or_pop) %>%
+    summarise(total = sum(total)) %>%
+    filter(metric == "New Offense" | metric == "Technical Violation") %>%
+    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
+  highcharts <- fnc_highchart_state_barchart(df1)
+  return(highcharts)
+})
+
+# set names of charts
+probation_bar_adm <- setNames(probation_bar_adm,c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"))
+
+# generate list of state highcharts to call in app (population)
+probation_bar_pop <- map(.x = states,  .f = function(x) {
+  df1 <- adm_pop_long %>%
+    filter(state == x &
+           adm_or_pop == "Population",
+           prob_vs_parole == "Probation") %>%
+    group_by(state, year, metric, adm_or_pop) %>%
+    summarise(total = sum(total)) %>%
+    filter(metric == "New Offense" | metric == "Technical Violation") %>%
+    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
+  highcharts <- fnc_highchart_state_barchart(df1)
+  return(highcharts)
+})
+
+# set names of charts
+probation_bar_pop <- setNames(probation_bar_pop,c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"))
+
+############
 # Save plots
 ############
 
 # save to sharepoint
 save(all_state_area_adm,     file=paste0(sp_data_path, "/Data/all_state_area_adm.Rda", sep = ""))
 save(all_state_area_pop,     file=paste0(sp_data_path, "/Data/all_state_area_pop.Rda", sep = ""))
-save(all_state_bar_adm,      file=paste0(sp_data_path, "/Data/all_state_bar_adm", sep = ""))
-save(all_state_bar_pop,      file=paste0(sp_data_path, "/Data/all_state_bar_pop", sep = ""))
+save(all_state_bar_adm,      file=paste0(sp_data_path, "/Data/all_state_bar_adm.Rda", sep = ""))
+save(all_state_bar_pop,      file=paste0(sp_data_path, "/Data/all_state_bar_pop.Rda", sep = ""))
+
+save(parole_bar_adm,         file=paste0(sp_data_path, "/Data/parole_bar_adm.Rda", sep = ""))
+save(parole_bar_pop,         file=paste0(sp_data_path, "/Data/parole_bar_pop.Rda", sep = ""))
+save(probation_bar_adm,      file=paste0(sp_data_path, "/Data/probation_bar_adm.Rda", sep = ""))
+save(probation_bar_pop,      file=paste0(sp_data_path, "/Data/probation_bar_pop.Rda", sep = ""))
 
 # save to clone
 save(all_state_area_adm,     file="app/data/all_state_area_adm.Rda")
 save(all_state_area_pop,     file="app/data/all_state_area_pop.Rda")
-save(all_state_bar_adm,      file="app/data/all_state_bar_pop.Rda")
-save(all_state_bar_pop,      file="app/data/all_state_bar_adm.Rda")
+save(all_state_bar_adm,      file="app/data/all_state_bar_adm.Rda")
+save(all_state_bar_pop,      file="app/data/all_state_bar_pop.Rda")
+
+save(parole_bar_adm,         file="app/data/parole_bar_adm.Rda")
+save(parole_bar_pop,         file="app/data/parole_bar_pop.Rda")
+save(probation_bar_adm,      file="app/data/probation_bar_adm.Rda")
+save(probation_bar_pop,      file="app/data/probation_bar_pop.Rda")
+

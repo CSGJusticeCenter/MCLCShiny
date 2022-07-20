@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: ui.R
 # Authors: Mari Roberts
-# Date last updated: July 19, 2022
+# Date last updated: July 20, 2022
 # Description:
 #    User interface for shiny app
 #######################################
@@ -10,6 +10,7 @@
 source("library.R")
 source("dataframes.R")
 source("functions.R")
+source("colors.R")
 
 ui <- fluidPage(includeCSS("www/theme.css"),
 
@@ -185,27 +186,41 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                    br(),
 
                                                                    fluidRow(column(width = 6, highchartOutput("state_area_chart", height = 400, width = 390)),
-                                                                            column(width = 6, highchartOutput("state_bar_chart", height = 400, width =390))
-                                                                   ),
+                                                                            column(width = 6, highchartOutput("state_bar_chart", height = 400, width =390))),
 
                                                                    br(),
                                                                    br(),
                                                                    br(),
 
-                                                                   fluidRow(column(width = 12, align = "center", reactableOutput("state_table"))
-                                                                   )
+                                                                   fluidRow(column(width = 12, align = "center", reactableOutput("state_table")))
 
                                                           ), # end tabPanel
 
                                                           tabPanel(value="2","Parole",
 
-                                                                   "Coming soon."
+                                                                   br(),
+
+                                                                   fluidRow(column(width = 12, highchartOutput("parole_bar_chart", height = 400, width = 390))),
+
+                                                                   br(),
+                                                                   br(),
+                                                                   br(),
+
+                                                                   fluidRow(column(width = 12, align = "center", reactableOutput("parole_table")))
 
                                                           ), # end tabPanel
 
                                                           tabPanel(value="3","Probation",
 
-                                                                   "Coming soon."
+                                                                   br(),
+
+                                                                   fluidRow(column(width = 12, highchartOutput("probation_bar_chart", height = 400, width = 390))),
+
+                                                                   br(),
+                                                                   br(),
+                                                                   br(),
+
+                                                                   fluidRow(column(width = 12, align = "center", reactableOutput("probation_table")))
 
                                                           ) # end tabPanel
 

@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: dataframes.R
 # Authors: Mari Roberts
-# Date last updated: June 13, 2022
+# Date last updated: July 20, 2022
 # Description:
 #    Load data files created in import.R, assign colors, and fonts
 #######################################
@@ -25,6 +25,9 @@ load(file = "data/probation_table_wide.Rda")
 load(file = "data/hex_gj.Rda")
 load(file = "data/notes.Rda")
 
+# consistent state note on each state report
+state_note <- c('Whether an incarceration is the result of a new offense or technical violation is often difficult and problematic to delineate, even in states with available data. Most states do not consider a supervision violation to be the result of a new offense unless a new felony conviction is present, meaning technical violations may include misdemeanor convictions or new arrests. "Prison" includes county jail if the county was reimbursed by the state for a person’s incarceration, which occurs in some, but not all, states. Supervision violations may include revocations (i.e., unsuccessful terminations of a supervision and completion of a sentence in prison or jail) or short-term sanctions (i.e., probation or parole jurisdiction is maintained and the person is incarcerated for a short period of time in prison or jail). Not all states impose or include short-term sanctions in their count of supervision violations.')
+
 #______________________________________________________
 # read in highcharts
 # must be in local repo to publish app
@@ -34,36 +37,28 @@ load(file = "data/all_state_area_adm.Rda")
 load(file = "data/all_state_area_pop.Rda")
 load(file = "data/all_state_bar_adm.Rda")
 load(file = "data/all_state_bar_pop.Rda")
+load(file = "data/parole_bar_adm.Rda")
+load(file = "data/parole_bar_pop.Rda")
+load(file = "data/probation_bar_adm.Rda")
+load(file = "data/probation_bar_pop.Rda")
 
-load(file = "data/alabama_adm.Rda")
-load(file = "data/alabama_pop.Rda")
-load(file = "data/test_plot.Rda")
+#______________________________________________________
+# read in reactable tables
+# must be in local repo to publish app
+#______________________________________________________
+
+load(file = "data/state_reactable_adm.Rda")
+load(file = "data/state_reactable_pop.Rda")
+load(file = "data/parole_reactable_adm.Rda")
+load(file = "data/parole_reactable_pop.Rda")
+load(file = "data/probation_reactable_adm.Rda")
+load(file = "data/probation_reactable_pop.Rda")
 
 #______________________________________________________
 # colors TBD
 #______________________________________________________
 
-# assign colors for visualizations
-darkorange  <- "#7b3014"
-orange      <- "#D25E2D"
-lightorange <- "#EDB799"
-white       <- "#FFFFFF"
-lightblue   <- "#C7E8F5"
-regblue     <- "#236ca7"
-darkblue    <- "#26456e"
-yellow      <- "#D6C246"
-gray        <- "#dcdcdc"
-total_co <- lightblue
-viol_co  <- yellow
-tech_co  <- orange
-new_o_co <- lightorange
-
-# choose colors
-colpal_fill <- c("url(#total)",
-                 "url(#sup_viols)",
-                 "url(#technical)",
-                 "url(#new_offense)")
-colpal_stroke <- c(total_co, viol_co , tech_co, new_o_co)
+source("colors.R")
 
 #______________________________________________________
 # fonts
@@ -71,4 +66,3 @@ colpal_stroke <- c(total_co, viol_co , tech_co, new_o_co)
 
 default_fonts <- c("Graphik")
 
-state_note <- c('Whether an incarceration is the result of a new offense or technical violation is often difficult and problematic to delineate, even in states with available data. Most states do not consider a supervision violation to be the result of a new offense unless a new felony conviction is present, meaning technical violations may include misdemeanor convictions or new arrests. "Prison" includes county jail if the county was reimbursed by the state for a person’s incarceration, which occurs in some, but not all, states. Supervision violations may include revocations (i.e., unsuccessful terminations of a supervision and completion of a sentence in prison or jail) or short-term sanctions (i.e., probation or parole jurisdiction is maintained and the person is incarcerated for a short period of time in prison or jail). Not all states impose or include short-term sanctions in their count of supervision violations.')

@@ -7,16 +7,12 @@
 #    Defines custom functions
 #######################################
 
-##########################
-# custom functions
-##########################
+# load colors
+source("colors.R")
 
-# add a nicely styled label above selection box
-labeled_input <- function(id, label, input){
-  div(id = id,
-      span(label, style = "font-size: small;"),
-      input)
-}
+##########################
+# Highchart
+##########################
 
 # custom highcharts theme for hex map
 hc_theme_map_jc <- hc_theme_merge(
@@ -84,11 +80,6 @@ fnc_highchart_state_areachart <- function(df){
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020)) %>%
     hc_yAxis(title = "") %>%
-    hc_title(
-      text = paste0("Prison Admissions"),
-      align = "left",
-      style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
-    ) %>%
 
     hc_add_theme(hc_theme_jc) %>%
 
@@ -116,11 +107,6 @@ fnc_highchart_state_barchart <- function(df){
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020)) %>%
     hc_yAxis(title = "") %>%
-    hc_title(
-      text = paste0("Supervision Violation ", unique(df$adm_or_pop)),
-      align = "left",
-      style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
-    ) %>%
 
     hc_add_theme(hc_theme_jc) %>%
 
@@ -136,6 +122,118 @@ fnc_highchart_state_barchart <- function(df){
                    area = list(accessibility = list(description = "TEXT."))
     )
 }
+
+##########################
+# Reactable tables
+##########################
+
+fnc_reatable_table <- function(df){
+  # create table with 3 year trend line in last column
+  reactable(df,
+            theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
+            defaultColDef = colDef(format = colFormat(separators = TRUE), align = "center"),
+            compact = TRUE,
+            fullWidth = FALSE,
+            columns = list(
+              text            = colDef(name = "Metric",
+                                       align = "left",
+                                       minWidth = 275),
+              `2018`          = colDef(minWidth = 95),
+              `2019`          = colDef(minWidth = 95),
+              `2020`          = colDef(minWidth = 95),
+              three_yr_change = colDef(minWidth = 110,
+                                       name = "3 Year Change",
+                                       format = colFormat(percent = TRUE, digits = 1)),
+              # add 3 year trend graphs to each row
+              total_new  = colDef(minWidth = 110,
+                                  name = "3 Year Trend",
+                                  cell = function(value, index) {
+                                    dui_sparkline(
+                                      data = value[[1]],
+                                      height = 80,
+                                      margin = list(top = 30, right = 20, bottom = 30, left = 20),
+
+                                      components = list(
+                                        dui_sparkpatternlines(
+                                          id = "total",
+                                          height = 4,
+                                          width = 4,
+                                          stroke = total_co,
+                                          strokeWidth = 2.5,
+                                          orientation = "diagonal"
+                                        ),
+
+                                        dui_sparkpatternlines(
+                                          id = "sup_viols",
+                                          height = 4,
+                                          width = 4,
+                                          stroke = viol_co,
+                                          strokeWidth = 2.5,
+                                          orientation = "diagonal"
+                                        ),
+
+                                        dui_sparkpatternlines(
+                                          id = "technical",
+                                          height = 4,
+                                          width = 4,
+                                          stroke = tech_co,
+                                          strokeWidth = 2.5,
+                                          orientation = "diagonal"
+                                        ),
+
+                                        dui_sparkpatternlines(
+                                          id = "new_offense",
+                                          height = 4,
+                                          width = 4,
+                                          stroke = new_o_co,
+                                          strokeWidth = 2.5,
+                                          orientation = "diagonal"
+                                        ),
+
+                                        dui_sparklineseries(
+                                          curve = "linear",
+                                          showArea = FALSE,
+                                          fill = colpal_fill[index],
+                                          stroke = colpal_stroke[index])))}))
+  )
+}
+
+##########################
+# Value boxes
+##########################
+
+# https://jkunst.com/blog/posts/2020-06-26-valuebox-and-sparklines/
+# create value boxes
+valueBox2 <- function(value, title, subtitle, icon = NULL, color = "aqua", width = 4, href = NULL){
+
+  shinydashboard:::validateColor(color)
+
+  if (!is.null(icon))
+    shinydashboard:::tagAssert(icon, type = "i")
+
+  boxContent <- div(
+    class = paste0("small-box bg-", color),
+    div(
+      class = "inner",
+      p(HTML(paste0("<b>", title, "</b>"))),
+      h1(HTML(paste0("<b>", value, "</b>"))),
+      p(HTML(paste0("<b>", subtitle, "</b>")))
+    ),
+    if (!is.null(icon)) div(class = "icon-large", icon)
+  )
+
+  if (!is.null(href))
+    boxContent <- a(href = href, boxContent)
+
+  div(
+    class = if (!is.null(width)) paste0("col-sm-", width),
+    boxContent
+  )
+}
+
+##########################
+# Data cleaning
+##########################
 
 # create text depending on data type
 fnc_create_data_text <- function(df){
@@ -315,32 +413,13 @@ bjs_prob_long_form <- function(df){
                factor_key=TRUE)
 }
 
-# https://jkunst.com/blog/posts/2020-06-26-valuebox-and-sparklines/
-# create value boxes
-valueBox2 <- function(value, title, subtitle, icon = NULL, color = "aqua", width = 4, href = NULL){
+##########################
+# Ui
+##########################
 
-  shinydashboard:::validateColor(color)
-
-  if (!is.null(icon))
-    shinydashboard:::tagAssert(icon, type = "i")
-
-  boxContent <- div(
-    class = paste0("small-box bg-", color),
-    div(
-      class = "inner",
-      p(HTML(paste0("<b>", title, "</b>"))),
-      h1(HTML(paste0("<b>", value, "</b>"))),
-      p(HTML(paste0("<b>", subtitle, "</b>")))
-    ),
-    if (!is.null(icon)) div(class = "icon-large", icon)
-  )
-
-  if (!is.null(href))
-    boxContent <- a(href = href, boxContent)
-
-  div(
-    class = if (!is.null(width)) paste0("col-sm-", width),
-    boxContent
-  )
+# add a nicely styled label above selection box
+labeled_input <- function(id, label, input){
+  div(id = id,
+      span(label, style = "font-size: small;"),
+      input)
 }
-
