@@ -23,7 +23,7 @@ if (FULL_JC_FOLDER == TRUE){
 # load data
 load(file = "app/data/state_table.Rda")
 load(file = "app/data/state_table_wide.Rda")
-load(file = "app//parole_table.Rda")
+load(file = "app/data/parole_table.Rda")
 load(file = "app/data/parole_table_wide.Rda")
 load(file = "app/data/probation_table.Rda")
 load(file = "app/data/probation_wide.Rda")
@@ -31,6 +31,8 @@ load(file = "app/data/probation_wide.Rda")
 # load packages
 library(dplyr)
 library(reactable)
+library(stats)
+library(purr)
 
 # assign colors for visualizations
 source("app/colors.R")

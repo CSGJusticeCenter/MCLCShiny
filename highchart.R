@@ -28,6 +28,7 @@ library(purrr)
 library(dplyr)
 library(highcharter)
 library(scales)
+library(stats)
 
 # assign colors for visualizations
 source("app/colors.R")
