@@ -8,9 +8,9 @@
 #######################################
 
 source("library.R")
+source("colors.R")
 source("dataframes.R")
 source("functions.R")
-source("colors.R")
 
 ui <- fluidPage(includeCSS("www/theme.css"),
 
@@ -24,7 +24,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                            ##############################################################################################################################
 
-                           tabPanel("Map Explorer", id = "mapexplorer",
+                           tabPanel("mapexplorer", id = "mapexplorer",
 
                                     # div(id = "app-title", titlePanel("Map Explorer")),
 
@@ -115,7 +115,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                            ##############################################################################################################################
 
-                           tabPanel("State Reports", id = "statereports",
+                           tabPanel("statereports", id = "statereports",
 
                                     #######
                                     # Dropdown and download buttons
@@ -254,7 +254,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                            ##############################################################################################################################
 
-                           tabPanel("Download", id = "downloaddata"))
+                           tabPanel("download", id = "downloaddata"))
 )
 
 

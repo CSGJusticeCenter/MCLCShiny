@@ -7,9 +7,6 @@
 #    Defines custom functions
 #######################################
 
-# load colors
-source("colors.R")
-
 ##########################
 # Highchart
 ##########################
@@ -126,6 +123,76 @@ fnc_highchart_state_barchart <- function(df){
 ##########################
 # Reactable tables
 ##########################
+
+# fnc_reatable_table <- function(df){
+#   # create table with 3 year trend line in last column
+#   reactable(df,
+#             theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
+#             defaultColDef = colDef(format = colFormat(separators = TRUE), align = "center"),
+#             compact = TRUE,
+#             fullWidth = FALSE)
+# }
+#
+# columns_formatting <- list(text            = colDef(name = "Metric",
+#                                                     align = "left",
+#                                                     minWidth = 275),
+#                            `2018`          = colDef(minWidth = 95),
+#                            `2019`          = colDef(minWidth = 95),
+#                            `2020`          = colDef(minWidth = 95),
+#                            three_yr_change = colDef(minWidth = 110,
+#                                                     name = "3 Year Change",
+#                                                     format = colFormat(percent = TRUE, digits = 1)),
+#                            # add 3 year trend graphs to each row
+#                            total_new  = colDef(minWidth = 110,
+#                                                name = "3 Year Trend",
+#                                                cell = function(value, index) {
+#                                                  dui_sparkline(
+#                                                    data = value[[1]],
+#                                                    height = 80,
+#                                                    margin = list(top = 30, right = 20, bottom = 30, left = 20),
+#
+#                                                    components = list(
+#                                                      dui_sparkpatternlines(
+#                                                        id = "total",
+#                                                        height = 4,
+#                                                        width = 4,
+#                                                        stroke = total_co,
+#                                                        strokeWidth = 2.5,
+#                                                        orientation = "diagonal"
+#                                                      ),
+#
+#                                                      dui_sparkpatternlines(
+#                                                        id = "sup_viols",
+#                                                        height = 4,
+#                                                        width = 4,
+#                                                        stroke = viol_co,
+#                                                        strokeWidth = 2.5,
+#                                                        orientation = "diagonal"
+#                                                      ),
+#
+#                                                      dui_sparkpatternlines(
+#                                                        id = "technical",
+#                                                        height = 4,
+#                                                        width = 4,
+#                                                        stroke = tech_co,
+#                                                        strokeWidth = 2.5,
+#                                                        orientation = "diagonal"
+#                                                      ),
+#
+#                                                      dui_sparkpatternlines(
+#                                                        id = "new_offense",
+#                                                        height = 4,
+#                                                        width = 4,
+#                                                        stroke = new_o_co,
+#                                                        strokeWidth = 2.5,
+#                                                        orientation = "diagonal"
+#                                                      ),
+#
+#                                                      dui_sparklineseries(
+#                                                        curve = "linear",
+#                                                        showArea = FALSE,
+#                                                        fill = colpal_fill[index],
+#                                                        stroke = colpal_stroke[index])))}))
 
 fnc_reatable_table <- function(df){
   # create table with 3 year trend line in last column
