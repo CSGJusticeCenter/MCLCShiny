@@ -487,14 +487,103 @@ server <- function(input, output, session) {
   # Table under state graphs
   #######
 
+  # this won't work because of library issues
+  # output$state_table <- renderReactable({
+  #   # select reactable depending on selector input
+  #   # tables were saved in reactable.R
+  #   if (input$adm_pop_report == "Admissions") {
+  #     state_reactable_adm[[input$state_report]]
+  #   } else {
+  #     state_reactable_pop[[input$state_report]]
+  #   }
+  # })
+
   output$state_table <- renderReactable({
-    # select reactable depending on selector input
-    # tables were saved in reactable.R
-    if (input$adm_pop_report == "Admissions") {
-      state_reactable_adm[[input$state_report]]
-    } else {
-      state_reactable_pop[[input$state_report]]
-    }
+
+    # filter data
+    df <- state_table %>%
+      filter(state == input$state_report &
+             adm_or_pop == input$adm_pop_report) %>%
+      group_by(text) %>%
+      summarise(total_new = list(list(total)))
+    df1 <- state_table_wide %>%
+      filter(state == input$state_report &
+             adm_or_pop == input$adm_pop_report) %>%
+      arrange(order) %>%
+      select(-adm_or_pop, -state)
+
+    # merge data
+    df <- merge(df1, df, by = "text")
+    df <- df %>% arrange(order) %>% select(-order)
+
+    # create table with 3 year trend line in last column
+    reactable(df,
+              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
+              defaultColDef = colDef(format = colFormat(separators = TRUE), align = "center"),
+              compact = TRUE,
+              fullWidth = FALSE,
+              columns = list(
+                text            = colDef(name = "Metric",
+                                         align = "left",
+                                         minWidth = 275),
+                `2018`          = colDef(minWidth = 95),
+                `2019`          = colDef(minWidth = 95),
+                `2020`          = colDef(minWidth = 95),
+                three_yr_change = colDef(minWidth = 110,
+                                         name = "3 Year Change",
+                                         format = colFormat(percent = TRUE, digits = 1)),
+                # add 3 year trend graphs to each row
+                total_new  = colDef(minWidth = 110,
+                                    name = "3 Year Trend",
+                                    cell = function(value, index) {
+                                      dui_sparkline(
+                                        data = value[[1]],
+                                        height = 80,
+                                        margin = list(top = 30, right = 20, bottom = 30, left = 20),
+
+                                        components = list(
+                                          dui_sparkpatternlines(
+                                            id = "total",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = total_co,
+                                            strokeWidth = 2.5,
+                                            orientation = "diagonal"
+                                          ),
+
+                                          dui_sparkpatternlines(
+                                            id = "sup_viols",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = viol_co,
+                                            strokeWidth = 2.5,
+                                            orientation = "diagonal"
+                                          ),
+
+                                          dui_sparkpatternlines(
+                                            id = "technical",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = tech_co,
+                                            strokeWidth = 2.5,
+                                            orientation = "diagonal"
+                                          ),
+
+                                          dui_sparkpatternlines(
+                                            id = "new_offense",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = new_o_co,
+                                            strokeWidth = 2.5,
+                                            orientation = "diagonal"
+                                          ),
+
+                                          dui_sparklineseries(
+                                            curve = "linear",
+                                            showArea = FALSE,
+                                            fill = colpal_fill[index],
+                                            stroke = colpal_stroke[index])))}))
+    )
   })
 
   #######
@@ -548,14 +637,93 @@ server <- function(input, output, session) {
   })
 
   output$parole_table <- renderReactable({
-    # select reactable depending on selector input
-    # tables were saved in reactable.R
-    if (input$adm_pop_report == "Admissions") {
-      parole_reactable_adm[[input$state_report]]
-    } else {
-      parole_reactable_pop[[input$state_report]]
-    }
+
+    # filter data
+    df <- parole_table %>%
+      filter(state == input$state_report &
+             adm_or_pop == input$adm_pop_report) %>%
+      group_by(text) %>%
+      summarise(total_new = list(list(total)))
+    df1 <- parole_table_wide %>%
+      filter(state == input$state_report &
+             adm_or_pop == input$adm_pop_report) %>%
+      arrange(order)
+
+    # merge data
+    df <- merge(df1, df, by = "text")
+    df <- df %>% arrange(order) %>% select(-c(order, adm_or_pop, state, prob_vs_parole, metric))
+
+    # create table with 3 year trend line in last column
+    reactable(df,
+              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
+              defaultColDef = colDef(format = colFormat(separators = TRUE), align = "center"),
+              compact = TRUE,
+              fullWidth = FALSE,
+              columns = list(
+                text            = colDef(name = "Metric",
+                                         align = "left",
+                                         minWidth = 275),
+                `2018`          = colDef(minWidth = 95),
+                `2019`          = colDef(minWidth = 95),
+                `2020`          = colDef(minWidth = 95),
+                three_yr_change = colDef(minWidth = 110,
+                                         name = "3 Year Change",
+                                         format = colFormat(percent = TRUE, digits = 1)),
+                # add 3 year trend graphs to each row
+                total_new  = colDef(minWidth = 110,
+                                    name = "3 Year Trend",
+                                    cell = function(value, index) {
+                                      dui_sparkline(
+                                        data = value[[1]],
+                                        height = 80,
+                                        margin = list(top = 30, right = 20, bottom = 30, left = 20),
+
+                                        components = list(
+                                          dui_sparkpatternlines(
+                                            id = "total",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = total_co,
+                                            strokeWidth = 2.5,
+                                            orientation = "diagonal"
+                                          ),
+
+                                          dui_sparkpatternlines(
+                                            id = "technical",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = tech_co,
+                                            strokeWidth = 2.5,
+                                            orientation = "diagonal"
+                                          ),
+
+                                          dui_sparkpatternlines(
+                                            id = "new_offense",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = new_o_co,
+                                            strokeWidth = 2.5,
+                                            orientation = "diagonal"
+                                          ),
+
+                                          dui_sparklineseries(
+                                            curve = "linear",
+                                            showArea = FALSE,
+                                            fill = colpal_fill[index],
+                                            stroke = colpal_stroke[index])))}))
+    )
   })
+
+  # # this won't work because of library issues
+  # output$parole_table <- renderReactable({
+  #   # select reactable depending on selector input
+  #   # tables were saved in reactable.R
+  #   if (input$adm_pop_report == "Admissions") {
+  #     parole_reactable_adm[[input$state_report]]
+  #   } else {
+  #     parole_reactable_pop[[input$state_report]]
+  #   }
+  # })
 
   #######
   # Probation Tab
@@ -593,14 +761,93 @@ server <- function(input, output, session) {
   })
 
   output$probation_table <- renderReactable({
-    # select reactable depending on selector input
-    # tables were saved in reactable.R
-    if (input$adm_pop_report == "Admissions") {
-      probation_reactable_adm[[input$state_report]]
-    } else {
-      probation_reactable_pop[[input$state_report]]
-    }
+
+    # filter data
+    df <- probation_table %>%
+      filter(state == input$state_report &
+             adm_or_pop == input$adm_pop_report) %>%
+      group_by(text) %>%
+      summarise(total_new = list(list(total)))
+    df1 <- probation_table_wide %>%
+      filter(state == input$state_report &
+             adm_or_pop == input$adm_pop_report) %>%
+      arrange(order)
+
+    # merge data
+    df <- merge(df1, df, by = "text")
+    df <- df %>% arrange(order) %>% select(-c(order, adm_or_pop, state, prob_vs_parole, metric))
+
+    # create table with 3 year trend line in last column
+    reactable(df,
+              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
+              defaultColDef = colDef(format = colFormat(separators = TRUE), align = "center"),
+              compact = TRUE,
+              fullWidth = FALSE,
+              columns = list(
+                text            = colDef(name = "Metric",
+                                         align = "left",
+                                         minWidth = 275),
+                `2018`          = colDef(minWidth = 95),
+                `2019`          = colDef(minWidth = 95),
+                `2020`          = colDef(minWidth = 95),
+                three_yr_change = colDef(minWidth = 110,
+                                         name = "3 Year Change",
+                                         format = colFormat(percent = TRUE, digits = 1)),
+                # add 3 year trend graphs to each row
+                total_new  = colDef(minWidth = 110,
+                                    name = "3 Year Trend",
+                                    cell = function(value, index) {
+                                      dui_sparkline(
+                                        data = value[[1]],
+                                        height = 80,
+                                        margin = list(top = 30, right = 20, bottom = 30, left = 20),
+
+                                        components = list(
+                                          dui_sparkpatternlines(
+                                            id = "total",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = total_co,
+                                            strokeWidth = 2.5,
+                                            orientation = "diagonal"
+                                          ),
+
+                                          dui_sparkpatternlines(
+                                            id = "technical",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = tech_co,
+                                            strokeWidth = 2.5,
+                                            orientation = "diagonal"
+                                          ),
+
+                                          dui_sparkpatternlines(
+                                            id = "new_offense",
+                                            height = 4,
+                                            width = 4,
+                                            stroke = new_o_co,
+                                            strokeWidth = 2.5,
+                                            orientation = "diagonal"
+                                          ),
+
+                                          dui_sparklineseries(
+                                            curve = "linear",
+                                            showArea = FALSE,
+                                            fill = colpal_fill[index],
+                                            stroke = colpal_stroke[index])))}))
+    )
   })
+
+  # this won't work because of library issues
+  # output$probation_table <- renderReactable({
+  #   # select reactable depending on selector input
+  #   # tables were saved in reactable.R
+  #   if (input$adm_pop_report == "Admissions") {
+  #     probation_reactable_adm[[input$state_report]]
+  #   } else {
+  #     probation_reactable_pop[[input$state_report]]
+  #   }
+  # })
 
   ##############################################################################################################################
   # Download

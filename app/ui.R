@@ -34,54 +34,54 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                         # Dropdown and download buttons
                                         #######
 
-                                        fluidRow(
+                                        fluidRow(column(width = 3),
+                                                 column(width = 6,
+                                                        splitLayout(
 
-                                          column(width = 3),
-                                          column(width = 1,
-                                                 labeled_input('data-map-btn', "",
-                                                               selectizeInput('data_map', div(style = "font-weight: bold", "Select Data"),
-                                                                              choices = c("Total", "New Offense", "Supervision Violation", "Probation Violation", "Parole Violation", "Technical Violation"),
-                                                                              multiple = FALSE))
-                                          ),
-                                          column(width = 1, align = "left",
-                                                 labeled_input('adm-pop-map-btn', "",
-                                                               selectizeInput('adm_or_pop_map', div(style = "font-weight: bold", "Select Type"),
-                                                                              choices = c("Admissions", "Population"),
-                                                                              multiple = FALSE))
-                                          ),
-                                          column(width = 1,
-                                                 labeled_input('year-map-btn', "",
-                                                               selectizeInput('year_map', div(style = "font-weight: bold", "Select Years"),
-                                                                              choices = c("2018 - 2019", "2019 - 2020"),
-                                                                              multiple = FALSE))
-                                          ),
-                                          column(width = 1),
-                                          column(width = 1,
-                                                 tags$style(type="text/css", "#save_map {background-color:#004270; color: #fff;}"),
-                                                 labeled_input('save-map-btn', "",
-                                                               downloadButton(outputId = 'save_map', label = "Download Map", class = "download_this"))
-                                          ),
-                                          column(width = 1,
-                                                 tags$style(type="text/css", "#save_map_data {background-color:#004270; color: #fff;}"),
-                                                 labeled_input('save-map-data-btn', "",
-                                                               downloadButton(outputId = 'save_map_data', label = "Download Data", class = "download_this"))
-                                          ),
-                                          column(width = 3)
+                                                          cellWidths = c("20%", "20%", "20%", "0%","20%", "0%","20%"),
+                                                          #cellWidths = c("200", "200", "200", "0","200", "0","200"),
+                                                          #cellArgs = list(style = "padding: 1px"),
 
+                                                          labeled_input('data-map-btn', "",
+                                                                        selectizeInput('data_map', div(style = "font-weight: bold", "Select Data"),
+                                                                                       choices = c("Total", "New Offense", "Supervision Violation", "Probation Violation", "Parole Violation", "Technical Violation"),
+                                                                                       multiple = FALSE)),
+
+                                                          labeled_input('adm-pop-map-btn', "",
+                                                                        selectizeInput('adm_or_pop_map', div(style = "font-weight: bold", "Select Type"),
+                                                                                       choices = c("Admissions", "Population"),
+                                                                                       multiple = FALSE)),
+
+                                                          labeled_input('year-map-btn', "",
+                                                                        selectizeInput('year_map', div(style = "font-weight: bold", "Select Years"),
+                                                                                       choices = c("2018 - 2019", "2019 - 2020"),
+                                                                                       multiple = FALSE)),
+
+                                                          tags$style(type="text/css", "#save_map {background-color:#004270; color: #fff;}"),
+                                                          downloadButton(outputId = 'save_map', label = "Download Map", class = "download_this"),
+
+                                                          tags$style(type="text/css", "#save_map_data {background-color:#004270; color: #fff;}"),
+                                                          downloadButton(outputId = 'save_map_data', label = "Download Data", class = "download_this"),
+
+                                                          # this formatting doesn't work
+                                                          # labeled_input('save-map-btn', "",
+                                                          #               downloadButton(outputId = 'save_map', label = "Download Map", class = "download_this")),
+                                                          #
+                                                          # labeled_input('save-map-data-btn', "",
+                                                          #               downloadButton(outputId = 'save_map_data', label = "Download Data", class = "download_this"))
+
+                                                        ) # end splitLayout
+                                                 ), # end column
+                                                 column(width = 3)
                                         ) # end fluidRow
-
                                     ), # end div header
                                     br(),
 
-                                    div(id = "mapbody",
+                                    div(id = "map-body",
 
                                         #######
                                         # Hex map
                                         #######
-
-                                        # fluidRow(column(width = 1),
-                                        #          column(width = 10, align = "left", div(id = "selected-map", textOutput("selected_map"))),
-                                        #          column(width = 1)),
 
                                         fluidRow(column(width = 1),
                                                  column(width = 10, align = "center", highchartOutput("hex_map", height = 550, width = 1000)),
@@ -109,7 +109,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                         br(),
                                         br()
 
-                                    ), # end div
+                                    ) # end div
 
                            ), # end tabPanel
 
@@ -143,7 +143,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                     br(),
 
-                                    div(id = "statebody",
+                                    div(id = "state-body",
 
                                         #######
                                         # Value boxes
@@ -246,16 +246,66 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                         fluidRow(column(width = 2),
                                                  column(width = 8, align = "left", div(id = "consistent-state-note", state_note)),
-                                                 column(width = 2)),
+                                                 column(width = 2))
 
-                                    ), # end div
+                                    ) # end div
 
                            ), # end tabPanel
 
                            ##############################################################################################################################
 
-                           tabPanel("download", id = "downloaddata"))
-)
+                           tabPanel("downloaddata", id = "downloaddata",
+
+                                    #######
+                                    # Dropdowns
+                                    #######
+
+                                    div(id = "download-header",
+                                        fluidRow(column(width = 3),
+                                                 column(width = 6,
+                                                        splitLayout(
+
+                                                          cellWidths = c("50%", "25%", "25%"),
+
+                                                          labeled_input('download-data-btn', "",
+                                                                        selectizeInput('download_data', div(style = "font-weight: bold", "Select Data"),
+                                                                                       choices = c("CSG: More Community, Less Confinement",
+                                                                                                   "BJS: Annual Parole Survey Series",
+                                                                                                   "BJS: Annual Probation Survey Series"),
+                                                                                       multiple = FALSE)),
+
+                                                          labeled_input('download-state-btn', "",
+                                                                        pickerInput(inputId = 'download_state',  div(style = "font-weight: bold", "Select State(s)"),
+                                                                                    choices = unique(csg$state), selected = "Alabama", multiple = TRUE,
+                                                                                    options = list(`actions-box` = TRUE))),
+
+                                                          labeled_input('download-year-btn', "",
+                                                                        pickerInput(inputId = 'download_year',  div(style = "font-weight: bold", "Select Years(s)"),
+                                                                                    choices = NULL, selected = "2018", multiple = TRUE,
+                                                                                    options = list(`actions-box` = TRUE)))
+
+                                                        ) # end splitLayout
+                                                 ), # end column
+                                                 column(width = 3)
+                                        ) # end fluidRow
+                                    ), # end div header
+
+                                    br(),
+
+                                    #######
+                                    # Download table
+                                    #######
+
+                                    div(id = "download-body",
+
+                                        fluidRow(column(width = 2),
+                                                 column(width = 8, align = "center", div(id = "selected-download", textOutput("selected_download"))),
+                                                 column(width = 2))
+
+                                    ) # end div
+
+                           ) # end tabPanel
+))
 
 
 # Useful links

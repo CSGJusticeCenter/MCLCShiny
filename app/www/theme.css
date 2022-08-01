@@ -4,10 +4,10 @@ Screen Settings
 
 /* Remove if you dont want white space on sides of navbar
 body > div {
-  max-width: 1200px;
+max-width: 1200px;
 }*/
 
-  /* Very top of page spans entire width
+/* Very top of page spans entire width
 #page-top {
 height: auto;
 width: 100vw;
@@ -17,17 +17,22 @@ padding-top: 6PX;
 position: relative;
 }*/
 
-  /* Make body smaller width than header which spans the entire page */
-  /* Center everything */
-  #mapbody {
+/* Make body smaller width than header which spans the entire page */
+/* Center everything */
+#map-body {
   max-width: 1200px;
-margin-left: auto;
-margin-right: auto;
+  margin-left: auto;
+  margin-right: auto;
 }
-#statebody {
-max-width: 1200px;
-margin-left: auto;
-margin-right: auto;
+#state-body {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+#download-body {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /*######################################
@@ -35,81 +40,58 @@ Font size and style
 ########################################*/
 
 /* Add fonts */
-  @font-face {
-    font-family: Graphik;
-    src: url("fonts/GraphikRegular.otf") format('truetype');
-  }
+@font-face {
+  font-family: Graphik;
+  src: url("fonts/GraphikRegular.otf") format('truetype');
+}
 
 /* Make some wordy sections smaller */
-  .small_text {
-    font-size: small;
-  }
+.small_text {
+  font-size: small;
+}
 
 /* Change font family throughout */
-  *{font-family: "Graphik", sans-serif;}
+*{font-family: "Graphik", sans-serif;}
+
 
 /*######################################
 Navigation Bar Color and Font
 ########################################*/
 
 /* Navigation bar color and font style */
-  .navbar{
-    background-color: #004270;
-      font-size: 16px;
-    font-weight: bold;
-  }
+.navbar{
+  background-color: #004270;
+  font-size: 16px;
+  font-weight: bold;
+}
 
 .navbar-default .navbar-nav>li>a, .navbar-default .navbar-nav>li>a{
   background-color: #004270 !important;
-    font-size: 16px;
+  font-size: 16px;
   font-weight: bold;
   color: #FFFFFF !important;
 }
 
 .navbar-nav li a:hover, .navbar-nav > .active > a {
   color: #2EEBC4 !important;
-    background-color:#004270 !important;
+  background-color:#004270 !important;
 }
 
 /* Panel color */
-  .tab-panel{
-    background-color: #004270;
-      color: #004270
-  }
-
-/*######################################
-Light blue header with dropdowns
-########################################*/
-
-/* Top of page is a small grid of controls and info*/
-  /* Can change background of header here background-color:#DEF0F6; */
-  #header {
-  /*margin: 1rem auto; making everything shift to the left*/
-  /*width: 768px;
-display: -ms-flexbox;
-display: flex; vertically aligns to the left */
-  background-color:#DDE3E9 !important;
-  height: 100px;
-padding: 0 0px;
-display: absolute;
-left: 50%;
-}
-
-/* Makes the label for header inputs sit centered on top */
-  #header > * > span {
-  text-align: center;
+.tab-panel{
+  background-color: #004270;
+  color: #004270
 }
 
 /*######################################
-MAP EXPLORER
-Dropdowns and buttons
+Header and global drop down options
 ########################################*/
 
 /* Remove rounded edges from drop downs and make blue */
-  .selectize-input {
-    border-radius:0px;
-    color: #004270;
-  }
+.selectize-input {
+  border-radius:0px;
+  color: #004270;
+}
 .selectize-input.dropdown-active {
   border-radius:0px;
   color: #004270;
@@ -123,45 +105,91 @@ Dropdowns and buttons
   color: #004270;
 }
 
+/* Top of page is a small grid of controls and info*/
+/* Can change background of header here background-color:#DEF0F6; */
+#header {
+  /*margin: 1rem auto; making everything shift to the left*/
+  /*width: 768px;
+  display: -ms-flexbox;
+  display: flex; vertically aligns to the left */
+  background-color:#DDE3E9 !important;
+  height: 100px;
+  padding: 0 0px;
+  display: absolute;
+  left: 50%;
+}
+
+/* without this, dropdown menus are cut off while using splitLayout */
+.shiny-split-layout > div {overflow: visible;}
+
+/* Makes the label for header inputs sit centered on top */
+#header > * > span {
+  text-align: center;
+}
+
+/* Format state header, same as map explorer header */
+#state-header {
+  background-color:#DDE3E9 !important;
+  height: 100px;
+  padding: 0 0px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Format download header, same as map explorer header */
+#download-header {
+  background-color:#DDE3E9 !important;
+  height: 100px;
+  padding: 0 0px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/*######################################
+MAP EXPLORER
+Dropdowns and buttons
+########################################*/
+
 /* Format for selector input data-map */
-  #data-map-btn {
+#data-map-btn {
   margin: 17px 10px 17px 10px;
-width: 175px;
-color: #004270;
-  }
+  width: 175px;
+  color: #004270;
+}
 
 /* Format for selector input adm-pop-map */
-  #adm-pop-map-btn {
+#adm-pop-map-btn {
   margin: 17px 10px 17px 10px;
-width: 175px;
-color: #004270;
-  }
+  width: 175px;
+  color: #004270;
+}
 
 /* Format for selector input year-map*/
-  #year-map-btn {
+#year-map-btn {
   margin: 17px 10px 17px 10px;
-width: 175px;
-color: #004270;
-  }
+  width: 175px;
+  color: #004270;
+}
 
 /* Size of download buttons */
-  .download_this{
-    text-align: left;
-    margin:41px 10px 41px 10px;
-    width:175px;
-    border-radius:0px;
-  }
-
-/* Buttons are set at a fixed width and if content is too big it gets elipsed */
-  button {
-    width: 50px;
-  }
-button > div {
-  -o-text-overflow: ellipsis;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
+.download_this{
+  text-align: left;
+  margin:41px 10px 41px 10px;
+  width:175px;
+  border-radius:0px;
 }
+
+/* Buttons are set at a fixed width and if content is too big it gets elipsed
+button {
+width: 50px;
+}
+
+button > div {
+-o-text-overflow: ellipsis;
+text-overflow: ellipsis;
+overflow: hidden;
+white-space: nowrap;
+}*/
 
 /*######################################
 MAP EXPLORER
@@ -169,24 +197,24 @@ Hex map
 ########################################*/
 
 /* Map select input margins and font style */
-  /* Text inputs bottom margin prevents it from lining up nicely, so remove */
-  .form-group.shiny-input-container,
+/* Text inputs bottom margin prevents it from lining up nicely, so remove */
+.form-group.shiny-input-container,
 .selectize-control {
   margin-bottom: 0;
 }
 
 /* Title of map settings */
-  #selected-map {
+#selected-map {
   text-align: left;
-font-weight: bold;
-font-size: 24px;
+  font-weight: bold;
+  font-size: 24px;
 }
 
 /* Map settings */
-  #hex-map{
+#hex-map{
   text-align: left;
-font-weight: bold;
-font-size:24px;
+  font-weight: bold;
+  font-size:24px;
 }
 
 /*######################################
@@ -195,70 +223,60 @@ Table
 ########################################*/
 
 /* Title of table under map settings */
-  #selected-map-table{
+#selected-map-table{
   text-align: left;
-font-weight: bold;
-font-size:24px;
+  font-weight: bold;
+  font-size:24px;
 }
 
 /* Table under map settings */
-  #table-map {
+#table-map {
   text-align: left;
 }
 
 /* Align text with search bar */
-  #selected-map-table {
+#selected-map-table {
   position: relative; top: 60px;
 }
 
 /* Change search bar appearance */
-  #table-map input {
+#table-map input {
   border-radius: 0px;
-border: 2px solid #004270;
-width: 275px;
-height: 32px;
-background: #FFFFFF;
-  }
+  border: 2px solid #004270;
+  width: 275px;
+  height: 32px;
+  background: #FFFFFF;
+}
 
 /*
-  .dataTables_filter {
-    position: relative;
-  }
-
+.dataTables_filter {
+position: relative;
+}
 .dataTables_filter .fa-search {
-  position: absolute;
-  top: 10px;
-  left: auto;
-  right: 10px;
+position: absolute;
+top: 10px;
+left: auto;
+right: 10px;
 }*/
 
-  /*######################################
+/*######################################
 STATE REPORTS
 Dropdowns
 ########################################*/
 
-/* Format header, same as map explorer header */
-  #state-header {
-  background-color:#DDE3E9 !important;
-  height: 100px;
-padding: 0 0px;
-margin-left: auto;
-margin-right: auto;
+/* State selection button */
+#state-btn {
+  margin: 17px 10px 17px 10px;
+  width: 175px;
+  color: #004270;
 }
 
-/* Format for selector input state-btn*/
-  #state-btn {
+/* Adm or pop selection button */
+#adm-pop-btn {
   margin: 17px 10px 17px 10px;
-width: 175px;
-color: #004270;
-  }
-
-/* Format for selector input adm-pop-btn*/
-  #adm-pop-btn {
-  margin: 17px 10px 17px 10px;
-width: 175px;
-color: #004270;
-  }
+  width: 175px;
+  color: #004270;
+}
 
 /*######################################
 STATE REPORTS
@@ -266,10 +284,10 @@ Title and value boxes
 ########################################*/
 
 /* Title of state settings */
-  #selected-state {
+#selected-state {
   text-align: center;
-font-weight: bold;
-font-size: 24px;
+  font-weight: bold;
+  font-size: 24px;
 }
 
 /*######################################
@@ -278,14 +296,14 @@ Tabset Panels
 ########################################*/
 
 /* Tab formatting - figure out how to change width */
-  .nav {
-    padding-left: 0;
-    margin-bottom: 0;
-    list-style: none;
-    margin: 0;
-    width: 100%
-    display: block;
-  }
+.nav {
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+  margin: 0;
+  width: 100%
+  display: block;
+}
 
 .nav-tabs > li {
   float:none;
@@ -296,16 +314,16 @@ Tabset Panels
 .nav-tabs {
   text-align:center;
   border-bottom: #cccccc !important;
-    border-bottom-style: solid !important;
+  border-bottom-style: solid !important;
   border-bottom-width: 1px !important;
   font-size: 14px;
 }
 
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
   color: #FFFFFF;
-    cursor: default;
+  cursor: default;
   background-color: #004270;
-    border-bottom-color: #cccccc;
+  border-bottom-color: #cccccc;
 }
 
 .nav-tabs>li>a {
@@ -313,25 +331,53 @@ Tabset Panels
   line-height: 1.42857143;
   border-radius: 0px 0px 0 0;
   background-color: #F4F6F8;
-    color: #004270;
+  color: #004270;
 }
 
 /* Affects top nav bar
 .nav>li>a:focus, .nav>li>a:hover {
-  text-decoration: none;
-  background-color: transparent;
-  border: 2px solid #cccccc;
+text-decoration: none;
+background-color: transparent;
+border: 2px solid #cccccc;
 }*/
 
-  /* State note title setting */
-  #selected-state-note-title {
+/* State note title setting */
+#selected-state-note-title {
   text-align: left;
-font-weight: bold;
-font-size: 24px;
+  font-weight: bold;
+  font-size: 24px;
 }
 
 /* State note setting */
-  #consistent-state-note {
+#consistent-state-note {
   text-align: left;
-font-style: italic;
+  font-style: italic;
+}
+
+/*######################################
+DOWNLOAD DATA
+Dropdowns
+########################################*/
+
+/* Format for selector input state-btn*/
+#download-data-btn {
+  margin: 17px 10px 17px 10px;
+  width: 400px;
+  color: #004270;
+}
+
+/* Format for selector input adm-pop-btn*/
+#download-state-btn {
+  margin: 17px 10px 17px 10px;
+  color: #004270;
+}
+
+/* Format for selector input adm-pop-btn*/
+#download-year-btn {
+  margin: 17px 10px 17px 10px;
+  color: #004270;
+}
+
+#download-header > * > span {
+  text-align: center;
 }
