@@ -150,7 +150,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                         #######
 
                                         fluidRow(column(width = 2),
-                                                 column(width = 8, align = "center", div(id = "selected-state", textOutput("selected_state"))),
+                                                 column(width = 8, div(id = "selected-state", textOutput("selected_state"))),
                                                  column(width = 2)),
 
                                         br(),
@@ -276,12 +276,12 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                           labeled_input('download-state-btn', "",
                                                                         pickerInput(inputId = 'download_state',  div(style = "font-weight: bold", "Select State(s)"),
-                                                                                    choices = unique(csg$state), selected = "Alabama", multiple = TRUE,
+                                                                                    choices = NULL, selected = NULL, multiple = TRUE,
                                                                                     options = list(`actions-box` = TRUE))),
 
                                                           labeled_input('download-year-btn', "",
                                                                         pickerInput(inputId = 'download_year',  div(style = "font-weight: bold", "Select Years(s)"),
-                                                                                    choices = NULL, selected = "2018", multiple = TRUE,
+                                                                                    choices = NULL, selected = NULL, multiple = TRUE,
                                                                                     options = list(`actions-box` = TRUE)))
 
                                                         ) # end splitLayout
@@ -299,8 +299,26 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                     div(id = "download-body",
 
                                         fluidRow(column(width = 2),
-                                                 column(width = 8, align = "center", div(id = "selected-download", textOutput("selected_download"))),
-                                                 column(width = 2))
+                                                 column(width = 8, h1("Download")),
+                                                 column(width = 2)),
+
+                                        br(),
+
+                                        fluidRow(column(width = 2),
+                                                 column(width = 8, div(id = "selected-download-title", textOutput("selected_download_title"))),
+                                                 column(width = 2)),
+
+                                        br(),
+                                        fluidRow(column(width = 2),
+                                                 column(width = 8, div(id = "selected-download-info", textOutput("selected_download_info"))),
+                                                 column(width = 2)),
+                                        br(),
+                                        br(),
+                                        fluidRow(column(width = 2),
+                                                 column(width = 8, div(id = "selected-download-table", DT::dataTableOutput("selected_download_table"))),
+                                                 column(width = 2)),
+                                        br(),
+                                        br()
 
                                     ) # end div
 

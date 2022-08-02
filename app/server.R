@@ -9,7 +9,7 @@
 
 server <- function(input, output, session) {
 
-  # Change URL depending on tab selection in navbar
+  # change URL depending on tab selection in navbar
   observeEvent(input$navbarID, {
 
     newURL <- paste0(
@@ -853,6 +853,94 @@ server <- function(input, output, session) {
   # Download
   ##############################################################################################################################
 
+  #######
+  # Download page title
+  #######
 
+  # render title of data depending on data selection: CSG vs BJS
+  output$selected_download_title <- renderText({
+    input$download_data
+  })
+
+  # change data description depending on data set selected
+  output$selected_download_info <- renderText({
+    if(input$download_data == "CSG: More Community, Less Confinement"){
+      "This dataset contains prison admissions and population numbers by state from 2018 to 2020. This dataset includes a breakdown of community supervision violations."
+    }
+    else if(input$download_data == "BJS: Annual Parole Survey Series"){
+      "This dataset includes administrative data from parole agencies in the United States. Data collected include the total number of adults on state and federal parole on January 1 and December 31 of each year, the number of adults entering and exiting parole supervision each year, and the characteristics of adults under the supervision of parole agencies. Published data include both national- and state-level data. The surveys cover all 50 states."
+    }
+    else if(input$download_data == "BJS: Annual Probation Survey Series"){
+      "This dataset includes administrative data from probation agencies in the United States. Data collected include the total number of adults on state and federal probation on January 1 and December 31 of each year, the number of adults entering and exiting probation supervision each year, and the characteristics of adults under the supervision of probation agencies. Published data include both national- and state-level data. The surveys cover all 50 states."
+    }
+  })
+
+  # change year drop down options depending on data selecion
+  filteredYears <- reactive({
+    if     (input$download_data == "CSG: More Community, Less Confinement"){
+      unique(csg$year)
+    }
+    else if(input$download_data == "BJS: Annual Parole Survey Series"){
+      unique(bjs_parole$year)
+    }
+    else if(input$download_data == "BJS: Annual Probation Survey Series"){
+      unique(bjs_probation$year)
+    }
+  })
+
+  observeEvent(filteredYears(), {
+    updatePickerInput(session, inputId = 'download_year', label = 'Select Year(s)', choices = filteredYears(), selected = filteredYears())
+  })
+
+  # react to selected states
+  filteredStates <- reactive({
+    if     (input$download_data == "CSG: More Community, Less Confinement"){
+      unique(csg$state)
+    }
+    else if(input$download_data == "BJS: Annual Parole Survey Series"){
+      unique(bjs_parole$state)
+    }
+    else if(input$download_data == "BJS: Annual Probation Survey Series"){
+      unique(bjs_probation$state)
+    }
+  })
+
+  observeEvent(filteredStates(), {
+    updatePickerInput(session, inputId = 'download_state', label = 'Select State(s)', choices = filteredStates(), selected = filteredStates())
+  })
+
+  # creative reactive element for table depending on data set
+  datasetInput <- reactive({
+    dataset <- switch(input$download_data,
+                      "CSG: More Community, Less Confinement" = csg,
+                      "BJS: Annual Parole Survey Series"      = bjs_parole,
+                      "BJS: Annual Probation Survey Series"   = bjs_probation)
+    dataset <- dataset %>% filter(year %in% input$download_year) %>%
+      filter(state %in% input$download_state) %>%
+      arrange(state, year)
+  })
+
+  # generate table depending on data set
+  output$selected_download_table <- DT::renderDataTable({
+
+    if(input$download_data == "CSG: More Community, Less Confinement"){
+      datatable(
+        datasetInput()
+      )
+    }
+
+    else if(input$download_data == "BJS: Annual Parole Survey Series"){
+      DT::datatable(
+        datasetInput()
+      )
+    }
+
+    else if(input$download_data == "BJS: Annual Probation Survey Series"){
+      DT::datatable(
+        datasetInput()
+      )
+    }
+
+  })
 
 }
