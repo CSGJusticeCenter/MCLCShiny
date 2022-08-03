@@ -1,0 +1,246 @@
+---
+title: "NCRP Mock-Up: Revocations 2015-2019" 
+date: "Last updated/ran: `r Sys.time()`"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+
+```{r, include = FALSE}
+box::use(
+  box/calc
+  , box/admin
+)
+
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, fig.height = 8, fig.width = 10)
+
+library(tidyverse)
+library(geofacet)
+library(highcharter)
+```
+
+```{r}
+quickfacet <- function(thisvar, multi = 1, main){
+  
+  x_breaks <- seq(2015, 2019, 2)
+  x_labels <-paste0("'", str_sub(x_breaks, 3, 4))
+  
+  CNTRTDF$R %>% 
+  ggplot(aes(x = RPTYEAR, y = CNTRTDF$R[[thisvar]]*multi, color = RACE)) + 
+    geom_point(alpha = 0.6) +
+    geom_line() + 
+    facet_geo(~ABB, grid = "us_state_grid2") + 
+    scale_x_continuous(name = NULL, breaks = x_breaks, labels = x_labels) + 
+    scale_y_continuous(name = NULL) + 
+    scale_color_manual(values = c(scales::hue_pal()(4), "grey50")) + 
+    labs(title = main) + 
+    theme_minimal() + 
+    theme(legend.position = "top", plot.title = element_text(hjust = 0.5))
+  
+}
+```
+
+```{r}
+CNTRTDF <- calc$combine_and_calcrates()
+```
+```{r}
+#copy over from Mari's code 
+
+###app/dataframes.R
+default_fonts <- c("Graphik")
+
+### app/functions.R
+# custom highcharts theme for plots
+hc_theme_jc2 <- hc_theme(
+    colors = c("#D25E2D", "#EDB799", "#C7E8F5", "#236ca7", "#D6C246", "#dcdcdc")
+  , chart = list(style = list(fontFamily = default_fonts, color = "#666666"))
+  , title = list(align = "left", style = list(fontFamily = default_fonts, fontSize = "24px")) 
+  , subtitle = list(align = "left", style = list(fontFamily = default_fonts, fontSize = "16px"))
+  , legend = list(align = "left", verticalAlign = "top")
+  , xAxis = list(
+        gridLineColor = "transparent"
+      , lineColor = "transparent"
+      , minorGridLineColor = "transparent"
+      , tickColor = "transparent"
+    )
+  , yAxis = list(
+        labels = list(enabled = FALSE)
+      , gridLineColor = "transparent"
+      , lineColor = "transparent"
+      , minorGridLineColor = "transparent"
+      , tickColor = "transparent"
+      )
+  , plotOptions = list(
+      #   line = list(marker = list(enabled = FALSE))
+      # , spline = list(marker = list(enabled = FALSE))
+      # , area = list(marker = list(enabled = FALSE))
+      # , areaspline = list(marker = list(enabled = FALSE))
+      # , arearange = list(marker = list(enabled = FALSE))
+       bubble = list(maxSize = "10%")
+      )
+)
+```
+
+# {.tabset} 
+
+
+## Overview {.tabset} 
+
+$$
+\begin{aligned}
+\text{values} \\
+n &= \text{count of revocations from the prison admission NCRP data} \\
+N &= \text{population estimate from the State Charactersitics Census data} \\ \\
+\text{sub-text} \\
+S &= \text{value for specific state} \\
+Y &= \text{value for specific year} \\
+R &= \text{value for specific race (NCPR categories)} \\ \\
+R & = 1  \text{ indicates RACE = White}
+\end{aligned}
+$$  
+
+
+### Data  
+
+
+```{r}
+CNTRTDF$R %>% 
+  select(-RATE_1K, -RATE_100K, -RATE_1MIL) %>% 
+  mutate(RATE = RATE*1000, WHITERATE = WHITERATE*1000) %>% 
+  rename(RATE_1K = RATE, WHITERATE_1K = WHITERATE) %>% 
+  DT::datatable() %>% 
+  DT::formatRound(columns = c("REVCNT", "POPEST"), digits = 0) %>% 
+  DT::formatRound(columns = c("RATE_1K", "WHITERATE_1K"), digits = 4) %>% 
+  DT::formatRound(columns = c("RRI"), digits =2)
+```
+
+
+
+### Counts 
+
+$$
+n_{SYR}
+$$
+
+```{r}
+quickfacet("REVCNT", main = "Revocations Counts")
+```
+
+
+### Rate per 1000 
+
+$$
+\frac{n_{SYR}}{N_{SYR}} \cdot 1,000
+$$
+
+```{r, warning = FALSE}
+quickfacet("RATE", multi = 1000, main = "Revocations Rate per 1,000")
+```
+
+
+### Relative Rate Index 
+
+$$
+\frac{n_{SYR}/N_{SYR}}{n_{SY1}/N_{SY1}}
+$$
+```{r, warning = FALSE}
+quickfacet("RRI", main = "Revocations Relative Rate Index")
+
+main <- "Revocations Relative Rate Index (W/O DC)"
+thisvar <- "RRI"
+
+x_breaks <- seq(2015, 2019, 2)
+x_labels <-paste0("'", str_sub(x_breaks, 3, 4))
+  
+CNTRTDF$R %>% 
+  filter(ABB != "DC") %>% 
+ggplot(aes(x = RPTYEAR, y = RRI, color = RACE)) + 
+  geom_point(alpha = 0.6) +
+  geom_line() + 
+  facet_geo(~ABB, grid = "us_state_grid2") + 
+  scale_x_continuous(name = NULL, breaks = x_breaks, labels = x_labels) + 
+  scale_y_continuous(name = NULL) + 
+  scale_color_manual(values = c(scales::hue_pal()(4), "grey50")) + 
+  labs(title = main) + 
+  theme_minimal() + 
+  theme(legend.position = "top", plot.title = element_text(hjust = 0.5))
+```
+
+
+## States {.tabset} 
+
+```{r}
+
+ABB <- "CA"
+VAR <- "RRI"
+
+fnc_highchart_RO <- function(ABB, VAR){
+  
+  ptfmt <- case_when(
+      VAR == "REVCNT"  ~ "{point.VAR:,.0f}" #0 decimal places 
+    , VAR == "RATE_1K" ~ "{point.VAR:,.2f}" #2 decimal places 
+    , VAR == "RRI"     ~ "{point.VAR:,.1f}" #1 decimal place
+    )
+  
+  plotdata <-  CNTRTDF$OR %>% 
+    filter(ABB == !!ABB) %>% 
+    rename("VAR" = !!VAR) %>% 
+    filter(!RACE %in% admin$lev_RACE[5]) %>% #REMOVE MISSING RACE 
+    filter(!OFFGENERAL %in% admin$lev_OFFGENERAL[-c(1:4)])#REMOVE OTHER/MISSING OFFGENERAL 
+    
+  map(admin$lev_OFFGENERAL[1:4], function(OG){
+    
+    plotdata %>% 
+      filter(OFFGENERAL == OG) %>% 
+      hchart("line"
+        , hcaes(x = RPTYEAR, y = VAR, group = RACE)
+       # , showInLegend = FALSE
+        , tooltip = list(pointFormat = ptfmt) 
+      ) %>% 
+      hc_title(text = OG) %>% 
+      #hc_subtitle(text = OG) %>%
+      hc_yAxis(min = 0, max = max(plotdata$VAR, na.rm = TRUE), title = list(text = "")) %>% 
+      hc_xAxis(title = list(text = "")) %>% 
+      hc_add_theme(hc_theme_jc2)
+  }) %>% 
+  hw_grid(rowheight = 350, ncol = 4) %>% 
+    htmltools::browsable()
+  
+}
+```
+
+
+### CA {.tabset} 
+
+#### Revocation Counts 
+```{r}
+fnc_highchart_RO("CA", "REVCNT")
+```
+
+#### Rate per 1,000 of Population 
+```{r}
+fnc_highchart_RO("CA", "RATE_1K")
+```
+
+#### Relative Rate Index 
+```{r}
+fnc_highchart_RO("CA", "RRI")
+```
+
+### MN {.tabset} 
+
+#### Revocation Counts 
+```{r}
+fnc_highchart_RO("MN", "REVCNT")
+```
+
+#### Rate per 1,000 of Population 
+```{r}
+fnc_highchart_RO("MN", "RATE_1K")
+```
+
+#### Relative Rate Index 
+```{r}
+fnc_highchart_RO("MN", "RRI")
+```
