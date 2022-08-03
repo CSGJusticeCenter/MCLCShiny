@@ -2,19 +2,24 @@
 Screen Settings
 ########################################*/
 
-/* Remove if you dont want white space on sides of navbar
+/* Hide navigation bar menu items */
+#navbarID{
+  display:none;
+}
+
+/* Adds white space on sides of navbar
 body > div {
-max-width: 1200px;
+  max-width: 1200px;
 }*/
 
 /* Very top of page spans entire width
 #page-top {
-height: auto;
-width: 100vw;
-margin-left: calc(50% - 50vw);
-padding: 0;
-padding-top: 6PX;
-position: relative;
+  height: auto;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  padding: 0;
+  padding-top: 6PX;
+  position: relative;
 }*/
 
 /* Make body smaller width than header which spans the entire page */
@@ -58,7 +63,7 @@ Font size and style
 Navigation Bar Color and Font
 ####################################################################################################################*/
 
-/* Navigation bar color and font style */
+/* Navigation bar color and font style, don't need since the naviagation bar is hidden
 .navbar{
   background-color: #004270;
   font-size: 16px;
@@ -77,11 +82,16 @@ Navigation Bar Color and Font
   background-color:#004270 !important;
 }
 
-/* Panel color */
 .tab-panel{
   background-color: #004270;
   color: #004270
+}*/
+
+/* Hide navigation bar */
+.navbar{
+  display:none !important;
 }
+
 
 /*##################################################################################################################
 Header and global drop down options
