@@ -151,8 +151,6 @@ Header and global drop down options
   background-color:#DDE3E9 !important;
   height: 100px;
   padding: 0 0px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 /*##################################################################################################################
@@ -369,10 +367,11 @@ DOWNLOAD DATA
 Dropdowns
 ####################################################################################################################*/
 
+/*.dropdown-menu span {text-align: left; width: 100%;}*/
+
 /* Format for selector input state-btn*/
 #download-data-btn {
   margin: 17px 10px 17px 10px;
-  width: 400px;
   color: #004270;
 }
 
@@ -388,9 +387,10 @@ Dropdowns
   color: #004270;
 }
 
+/*
 #download-header > * > span {
   text-align: center;
-}
+}*/
 
 /* Title of download page */
 #download-title {

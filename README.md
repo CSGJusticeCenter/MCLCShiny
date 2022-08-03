@@ -1,5 +1,12 @@
 # MCLCShiny
 
+Links to pages:  
+
+- https://csgjc.shinyapps.io/MCLCShiny/#mapexplorer  
+- https://csgjc.shinyapps.io/MCLCShiny/#statereports 
+- https://csgjc.shinyapps.io/MCLCShiny/#downloaddata  
+
+
 # Repository Structure
 
 ```

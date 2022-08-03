@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: ui.R
 # Authors: Mari Roberts
-# Date last updated: July 20, 2022
+# Date last updated: August 3, 2022
 # Description:
 #    User interface for shiny app
 #######################################
@@ -124,21 +124,27 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                     div(id = "state-header",
 
-                                        fluidRow(
-                                          column(width = 5),
-                                          column(width = 1,
-                                                 labeled_input('state-btn', "",
-                                                               selectizeInput('state_report', div(style = "font-weight: bold", "Select State"),
-                                                                              choices = unique(adm_pop_long$state),
-                                                                              multiple = FALSE))
-                                          ),
-                                          column(width = 1,
-                                                 labeled_input('adm-pop-btn', "",
-                                                               selectizeInput('adm_pop_report', div(style = "font-weight: bold", "Select Type"),
-                                                                              choices = c("Admissions", "Population"),
-                                                                              multiple = FALSE))
-                                          ),
-                                          column(width = 5)
+                                        fluidRow(column(width = 4),
+                                                 column(width = 4,
+                                                        splitLayout(
+
+                                                          cellWidths = c("20%","30%", "30%", "20%"),
+
+                                                          "",
+                                                          labeled_input('state-btn', "",
+                                                                        selectizeInput('state_report', div(style = "font-weight: bold", "Select State"),
+                                                                                       choices = unique(adm_pop_long$state),
+                                                                                       multiple = FALSE)),
+
+                                                          labeled_input('adm-pop-btn', "",
+                                                                        selectizeInput('adm_pop_report', div(style = "font-weight: bold", "Select Type"),
+                                                                                       choices = c("Admissions", "Population"),
+                                                                                       multiple = FALSE)),
+                                                          "",
+
+                                                        ) # end splitLayout
+                                                 ), # end column
+                                                 column(width = 4)
                                         ) # end fluidRow
                                     ), # end div header
 
@@ -266,7 +272,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                  column(width = 6,
                                                         splitLayout(
 
-                                                          cellWidths = c("50%", "25%", "25%"),
+                                                          cellWidths = c("33%", "33%", "33%"),
 
                                                           labeled_input('download-data-btn', "",
                                                                         selectizeInput('download_data', div(style = "font-weight: bold", "Select Data"),
@@ -275,13 +281,13 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                                                    "BJS: Annual Probation Survey Series"),
                                                                                        multiple = FALSE)),
 
-                                                          labeled_input('download-state-btn', "",
-                                                                        pickerInput(inputId = 'download_state',  div(style = "font-weight: bold", "Select State(s)"),
+                                                          labeled_input('download-state-btn', "Select State(s)",
+                                                                        pickerInput(inputId = 'download_state', width = "100%",
                                                                                     choices = NULL, selected = NULL, multiple = TRUE,
                                                                                     options = list(`actions-box` = TRUE))),
 
-                                                          labeled_input('download-year-btn', "",
-                                                                        pickerInput(inputId = 'download_year',  div(style = "font-weight: bold", "Select Years(s)"),
+                                                          labeled_input('download-year-btn', "Select Year(s)",
+                                                                        pickerInput(inputId = 'download_year', width = "100%",
                                                                                     choices = NULL, selected = NULL, multiple = TRUE,
                                                                                     options = list(`actions-box` = TRUE)))
 
@@ -325,8 +331,3 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                            ) # end tabPanel
 ))
-
-
-# Useful links
-# DIRECTING TO WEB PAGE - https://stackoverflow.com/questions/43244468/how-to-direct-to-another-web-page-after-clicking-tabpanel-in-shiny-app
-# SEARCH BAR - https://stackoverflow.com/questions/55848517/how-do-i-add-search-widget-to-my-shiny-app
