@@ -1,0 +1,361 @@
+---
+title: "NCRP Mock-Up: Revocations 2015-2019" 
+date: "Last updated/ran: `r Sys.time()`"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r, include = FALSE}
+box::use(
+  box/calc
+  , box/admin
+)
+
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, fig.height = 8, fig.width = 10)
+
+library(tidyverse)
+library(highcharter)
+```
+
+
+
+```{r}
+CNTRTDF <- calc$combine_and_calcrates()
+```
+```{r}
+#copy over from Mari's code 
+
+###app/dataframes.R
+default_fonts <- c("Graphik")
+
+gcolors <- c("#D25E2D", "#EDB799", "#C7E8F5", "#236ca7", "#D6C246", "#dcdcdc")
+
+### app/functions.R
+# custom highcharts theme for plots
+hc_theme_jc2 <- hc_theme(
+    #colors = c("#D25E2D", "#EDB799", "#C7E8F5", "#236ca7", "#D6C246", "#dcdcdc")
+    chart = list(style = list(fontFamily = default_fonts, color = "#666666"))
+  , title = list(align = "left", style = list(fontFamily = default_fonts, fontSize = "24px")) 
+  , subtitle = list(align = "left", style = list(fontFamily = default_fonts, fontSize = "16px"))
+  , legend = list(align = "left", verticalAlign = "top")
+  , xAxis = list(
+        gridLineColor = "transparent"
+      , lineColor = "transparent"
+      , minorGridLineColor = "transparent"
+      , tickColor = "transparent"
+    )
+  # , yAxis = list(
+  #       labels = list(enabled = FALSE)
+  #     , gridLineColor = "transparent"
+  #     , lineColor = "transparent"
+  #     , minorGridLineColor = "transparent"
+  #     , tickColor = "transparent"
+  #     )
+  , plotOptions = list(
+      #   line = list(marker = list(enabled = FALSE))
+      # , spline = list(marker = list(enabled = FALSE))
+      # , area = list(marker = list(enabled = FALSE))
+      # , areaspline = list(marker = list(enabled = FALSE))
+      # , arearange = list(marker = list(enabled = FALSE))
+       bubble = list(maxSize = "10%")
+      )
+)
+
+
+rri_wline <-  list(list(
+      value  = 1
+    , color  = "#666666"
+    , width  = 2
+    , zIndex = 4
+    , dashStyle = "Dash" #https://api.highcharts.com/class-reference/Highcharts#.DashStyleValue
+    , label = list(
+        text = "White (reference group)"
+      , rotation = 0
+      , style = list(
+          color = "#666666"
+        , fontWeight = "bold"
+        ) #end style list
+    ) #end label list
+  )) #end doublelist
+
+
+```
+
+# {.tabset} 
+
+All examples are shown with CA.  
+
+## Line Charts {.tabset} 
+
+```{r}
+ABB <- "CA"
+VAR <- "REVCNT"
+
+fnc_highchart_ROline <- function(ABB, VAR){
+  
+  ptfmt <- case_when(
+      VAR == "REVCNT"  ~ "{point.VAR:,.0f}" #0 decimal places 
+    , VAR == "RATE_1K" ~ "{point.VAR:,.2f}" #2 decimal places 
+    , VAR == "RRI"     ~ "{point.VAR:,.1f}" #1 decimal place
+    )
+  
+  plotdata <-  CNTRTDF$OR %>% 
+    filter(ABB == !!ABB) %>% 
+    rename("VAR" = !!VAR) %>% 
+    filter(!RACE %in% admin$lev_RACE[5]) %>% #REMOVE MISSING RACE 
+    filter(!OFFGENERAL %in% admin$lev_OFFGENERAL[-c(1:4)])#REMOVE OTHER/MISSING OFFGENERAL 
+    
+  map(admin$lev_OFFGENERAL[1:4], function(OG){
+    
+    plotdata %>% 
+      filter(OFFGENERAL == OG) %>% 
+      hchart("line"
+        , hcaes(x = RPTYEAR, y = VAR, group = RACE)
+        , color = gcolors[1:4] 
+        , tooltip = list(pointFormat = ptfmt)
+      ) %>% 
+      hc_title(text = OG) %>% 
+      hc_yAxis(min = 0, max = max(plotdata$VAR, na.rm = TRUE), title = list(text = "")) %>% 
+      hc_xAxis(title = list(text = "")) %>% 
+      hc_add_theme(hc_theme_jc2)
+  }) %>% 
+  hw_grid(rowheight = 350, ncol = 4) %>% 
+    htmltools::browsable()
+  
+}
+```
+### Revocation Counts 
+
+```{r}
+fnc_highchart_ROline("CA", "REVCNT")
+```
+
+### Rate Per 1,000
+
+```{r}
+fnc_highchart_ROline("CA", "RATE_1K")
+```
+
+### Relative Rate Index 
+
+```{r}
+fnc_highchart_ROline("CA", "RRI")
+```
+
+
+## Other RRI Options {.tabset}
+
+### Column 
+
+```{r}
+## COLUMN CHART
+ABB <- "CA"
+VAR <- "RRI"
+
+#fnc_highchart_RO <- function(ABB, VAR){
+
+  ptfmt <- case_when(
+      VAR == "REVCNT"  ~ "{point.VAR:,.0f}" #0 decimal places 
+    , VAR == "RATE_1K" ~ "{point.VAR:,.2f}" #2 decimal places 
+    , VAR == "RRI"     ~ "{point.VAR:,.1f}" #1 decimal place
+    )
+  
+  plotdata <-  CNTRTDF$OR %>% 
+    filter(ABB == !!ABB) %>% 
+    rename("VAR" = !!VAR) %>% 
+    filter(!RACE %in% admin$lev_RACE[-c(2:3)]) %>% #REMOVE MISSING/OTHER RACE 
+    filter(!OFFGENERAL %in% admin$lev_OFFGENERAL[-c(1:4)])#REMOVE OTHER/MISSING OFFGENERAL 
+
+    
+  map(admin$lev_OFFGENERAL[1:4], function(OG){
+    
+    plotdata %>% 
+      filter(OFFGENERAL == OG) %>% 
+      hchart("column"
+        , hcaes(x = RPTYEAR, y = VAR, group = RACE)
+        , color = gcolors[2:3]
+        , tooltip = list(pointFormat = ptfmt) 
+      ) %>% 
+      hc_title(text = OG) %>% 
+      hc_yAxis(min = min(plotdata$VAR, na.rm = TRUE), max = max(plotdata$VAR, na.rm = TRUE), title = list(text = ""), plotLines = rri_wline) %>% 
+      hc_xAxis(title = list(text = "")) %>% 
+      hc_add_theme(hc_theme_jc2)
+  }) %>% 
+  hw_grid(rowheight = 350, ncol = 4) %>% 
+    htmltools::browsable()
+#}
+  
+```
+### Bar {.tabset} 
+
+#### Year by Rate by OFFGENEARL 
+
+```{r}
+##  BAR CHART
+ABB <- "CA"
+VAR <- "RRI"
+
+#fnc_highchart_RO <- function(ABB, VAR){
+  ptfmt <- case_when(
+      VAR == "REVCNT"  ~ "{point.VAR:,.0f}" #0 decimal places 
+    , VAR == "RATE_1K" ~ "{point.VAR:,.2f}" #2 decimal places 
+    , VAR == "RRI"     ~ "{point.VAR:,.1f}" #1 decimal place
+    )
+  
+  plotdata <-  CNTRTDF$OR %>% 
+    filter(ABB == !!ABB) %>% 
+    rename("VAR" = !!VAR) %>% 
+    filter(!RACE %in% admin$lev_RACE[-c(2:3)]) %>% #REMOVE MISSING RACE 
+    filter(!OFFGENERAL %in% admin$lev_OFFGENERAL[-c(1:4)])#REMOVE OTHER/MISSING OFFGENERAL 
+
+    
+  map(admin$lev_OFFGENERAL[1:4], function(OG){
+    
+    plotdata %>% 
+      filter(OFFGENERAL == OG) %>% 
+      hchart("bar"
+        , hcaes(x = RPTYEAR, y = VAR, group = RACE)
+        , color = gcolors[2:3]
+        , tooltip = list(pointFormat = ptfmt) 
+      ) %>% 
+      hc_title(text = OG) %>% 
+      hc_yAxis(min = min(plotdata$VAR, na.rm = TRUE), max = max(plotdata$VAR, na.rm = TRUE), title = list(text = ""), plotLines = rri_wline) %>% 
+      hc_xAxis(title = list(text = "")) %>% 
+      hc_add_theme(hc_theme_jc2)
+  }) %>% 
+  hw_grid(rowheight = 350, ncol = 4) %>% 
+    htmltools::browsable()
+#}
+  
+```
+
+
+#### OFFGENERAL by Rate by Year 
+
+```{r}
+##  BAR CHART
+ABB <- "CA"
+VAR <- "RRI"
+
+#fnc_highchart_RO <- function(ABB, VAR){
+  
+  ptfmt <- case_when(
+      VAR == "REVCNT"  ~ "{point.VAR:,.0f}" #0 decimal places 
+    , VAR == "RATE_1K" ~ "{point.VAR:,.2f}" #2 decimal places 
+    , VAR == "RRI"     ~ "{point.VAR:,.1f}" #1 decimal place
+    )
+  
+  plotdata <-  CNTRTDF$OR %>% 
+    filter(ABB == !!ABB) %>% 
+    rename("VAR" = !!VAR) %>% 
+    filter(!RACE %in% admin$lev_RACE[-c(2:3)]) %>% #REMOVE MISSING RACE 
+    filter(!OFFGENERAL %in% admin$lev_OFFGENERAL[-c(1:4)])#REMOVE OTHER/MISSING OFFGENERAL 
+
+    
+  map(sort(unique(plotdata$RPTYEAR)), function(YR){
+    
+    plotdata %>% 
+      filter(RPTYEAR == YR) %>% 
+      hchart("bar"
+        , hcaes(x = OFFGENERAL, y = VAR, group = RACE)
+        , color = gcolors[2:3]
+        , tooltip = list(pointFormat = ptfmt) 
+      ) %>% 
+      hc_title(text = YR) %>% 
+      hc_yAxis(min = 0, max = max(plotdata$VAR, na.rm = TRUE), title = list(text = ""), plotLines = rri_wline) %>% 
+      hc_xAxis(title = list(text = "")) %>% 
+      hc_add_theme(hc_theme_jc2)
+  }) %>%
+  hw_grid(rowheight = 350, ncol = 5) %>%
+    htmltools::browsable()
+#}
+  
+```
+
+### Diverging Bar(X)
+
+- recalculate RRI when group is less likely than White baseline 
+- i.e. 'Other' = 0.5 --> -1/0.5 = -2; otherwise won't diverge 
+- left side is White is #x more likely than ___
+- right side is ___ is #x more likely than white 
+
+```{r}
+## DIVERGING BAR CHART
+ABB <- "CA"
+VAR <- "RRI"
+
+#fnc_highchart_RO <- function(ABB, VAR){
+  
+  ptfmt <- case_when(
+      VAR == "REVCNT"  ~ "{point.VAR:,.0f}" #0 decimal places 
+    , VAR == "RATE_1K" ~ "{point.VAR:,.2f}" #2 decimal places 
+    , VAR == "RRI"     ~ "{point.VAR:,.1f}" #1 decimal place
+    )
+  
+  plotdata <-  CNTRTDF$OR %>% 
+    mutate(RRI = ifelse(RRI < 1, -1/RRI, RRI)) %>% 
+    filter(ABB == !!ABB) %>% 
+    rename("VAR" = !!VAR) %>% 
+    filter(!RACE %in% admin$lev_RACE[-c(2:4)]) %>% #REMOVE MISSING RACE 
+    filter(!OFFGENERAL %in% admin$lev_OFFGENERAL[-c(1:4)])#REMOVE OTHER/MISSING OFFGENERAL 
+
+    
+  map(admin$lev_OFFGENERAL[1:4], function(OG){
+    
+    plotdata %>% 
+      filter(OFFGENERAL == OG) %>% 
+      hchart("bar"
+        , hcaes(x = RPTYEAR, y = VAR, group = RACE)
+        , color = gcolors[2:4]
+        , tooltip = list(pointFormat = ptfmt) 
+      ) %>% 
+      hc_title(text = OG) %>% 
+      hc_yAxis(min = min(plotdata$VAR, na.rm = TRUE), max = max(plotdata$VAR, na.rm = TRUE), title = list(text = "")) %>% 
+      hc_xAxis(title = list(text = "")) %>% 
+      hc_add_theme(hc_theme_jc2)
+  }) %>% 
+  hw_grid(rowheight = 350, ncol = 4) %>% 
+    htmltools::browsable()
+#}
+  
+```
+
+
+### DrillDown(X) 
+
+- can't get drilldown plot to separate RACE into side by side plots 
+- drilldown seems to only work well with single column charts (i.e. plain counts)
+
+```{r}
+  df_dd <- 
+  CNTRTDF$OR %>% 
+    filter(ABB == !!ABB, RACE != "White", OFFGENERAL %in% admin$lev_OFFGENERAL[1:4]) %>% 
+    mutate(RPTYEAR = as.character(RPTYEAR)) %>% 
+    select(RPTYEAR, RACE, OFFGENERAL, RRI) %>% 
+    group_nest(RPTYEAR) %>% 
+    mutate(
+        id = RPTYEAR
+      , type = "column"
+      , data = map(data, mutate, name = OFFGENERAL, y = RRI, group = RACE)
+      , data = map(data, list_parse)
+    )
+
+  
+  df <- CNTRTDF$R %>% 
+    mutate(RPTYEAR = as.character(RPTYEAR)) %>% 
+    filter(ABB == !!ABB, RACE != "White") 
+  
+  
+  hchart(
+    df, "column", 
+    hcaes(x = RPTYEAR, y = RRI, group = RACE,  drilldown = RPTYEAR), 
+    color = gcolors[2:4]
+  ) %>% 
+  hc_drilldown(
+    allowPointDrilldown = TRUE,
+    series = list_parse(df_dd)
+  ) 
+```
+
