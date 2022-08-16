@@ -9,11 +9,11 @@ editor_options:
 
 ```{r, include = FALSE}
 box::use(
-  box/calc
+    box/calc
   , box/admin
 )
 
-knitr::opts_chunk$set(echo = FALSE, message = FALSE, fig.height = 8, fig.width = 10)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.height = 8, fig.width = 10)
 
 library(tidyverse)
 library(highcharter)
@@ -25,12 +25,14 @@ library(highcharter)
 CNTRTDF <- calc$combine_and_calcrates()
 ```
 ```{r}
-#copy over from Mari's code 
+#copy over from Mari's code, make some edits for these plots 
 
 ###app/dataframes.R
 default_fonts <- c("Graphik")
 
-gcolors <- c("#D25E2D", "#EDB799", "#C7E8F5", "#236ca7", "#D6C246", "#dcdcdc")
+#gcolors <- c("#D25E2D", "#EDB799", "#C7E8F5", "#236ca7", "#D6C246", "#dcdcdc")
+
+gcolors <- c("#666666", "#D25E2D", "#236ca7", "#D6C246", "#EDB799", "#C7E8F5")
 
 ### app/functions.R
 # custom highcharts theme for plots
@@ -56,7 +58,7 @@ hc_theme_jc2 <- hc_theme(
   , plotOptions = list(
       #   line = list(marker = list(enabled = FALSE))
       # , spline = list(marker = list(enabled = FALSE))
-      # , area = list(marker = list(enabled = FALSE))
+      #  area = list(marker = list(enabled = FALSE))
       # , areaspline = list(marker = list(enabled = FALSE))
       # , arearange = list(marker = list(enabled = FALSE))
        bubble = list(maxSize = "10%")
@@ -64,7 +66,7 @@ hc_theme_jc2 <- hc_theme(
 )
 
 
-rri_wline <-  list(list(
+rri_wline_dark <-  list(list(
       value  = 1
     , color  = "#666666"
     , width  = 2
@@ -81,30 +83,82 @@ rri_wline <-  list(list(
   )) #end doublelist
 
 
+rri_wline_lite <-  list(list(
+      value  = 1
+    , color  = "#666666"
+    , width  = 2
+    , zIndex = 4
+    , dashStyle = "Dash" #https://api.highcharts.com/class-reference/Highcharts#.DashStyleValue
+    , label = list(
+        text = "White (reference group)"
+      , rotation = 0
+      , style = list(
+          color = "#666666"
+        , fontWeight = "bold"
+        ) #end style list
+    ) #end label list
+  )) #end doublelist
+
+
+
+refgroup <- function(hc, col = "dark"){
+  
+  thisColor <- case_when(
+      col == "dark"  ~ "#666666"
+    , col == "light" ~ "#dcdcdc"
+    , TRUE           ~ col
+  )
+  
+  
+  hc_add_series(
+    hc
+        , data = data.frame(x = 2015:2019, y = 1)
+        , type = "line"
+        , color = thisColor
+        , dashStyle = "Dash"
+        , name = "White (reference group)"
+        , marker = FALSE
+)
+}
+
 ```
 
 # {.tabset} 
 
 All examples are shown with CA.  
 
-## Line Charts {.tabset} 
+When multiple options are available, I put a \* at the front of the tab title to indicate my personal (Martha) preference(s).  
+
+I also include a 'Stats' section that shows summary statistics and a histogram from the variable.  This is to give a sense of what types of values will be shown by the graphics (given that the example is just one state).  
 
 ```{r}
 ABB <- "CA"
 VAR <- "REVCNT"
+```
 
+```{r}
 fnc_highchart_ROline <- function(ABB, VAR){
   
   ptfmt <- case_when(
-      VAR == "REVCNT"  ~ "{point.VAR:,.0f}" #0 decimal places 
-    , VAR == "RATE_1K" ~ "{point.VAR:,.2f}" #2 decimal places 
-    , VAR == "RRI"     ~ "{point.VAR:,.1f}" #1 decimal place
+      VAR == "REVCNT"    ~ "{point.VAR:,.0f}" #0 decimal places 
+    , VAR == "RATE_1K"   ~ "{point.VAR:,.2f}" #2 decimal places 
+    , VAR == "RATE_100K" ~ "{point.VAR:,.1f}" #1 decimal place
+    , VAR == "RATE_1MIL" ~ "{point.VAR:,.1f}" #1 decimal place
+    , VAR == "RRI"       ~ "{point.VAR:,.1f}" #1 decimal place
     )
+  
+  if (substr(VAR, 1, 3) == "RRI"){
+    theseRE   <- admin$lev_RACE[1:3] #only include black and hispanic 
+    theseCols <- gcolors[1:3]
+  } else {
+    theseRE <- admin$lev_RACE[1:4] #White, Black, Hispanic, Other 
+    theseCols <- gcolors[1:4]
+  }
   
   plotdata <-  CNTRTDF$OR %>% 
     filter(ABB == !!ABB) %>% 
     rename("VAR" = !!VAR) %>% 
-    filter(!RACE %in% admin$lev_RACE[5]) %>% #REMOVE MISSING RACE 
+    filter(RACE %in% theseRE) %>% 
     filter(!OFFGENERAL %in% admin$lev_OFFGENERAL[-c(1:4)])#REMOVE OTHER/MISSING OFFGENERAL 
     
   map(admin$lev_OFFGENERAL[1:4], function(OG){
@@ -113,7 +167,7 @@ fnc_highchart_ROline <- function(ABB, VAR){
       filter(OFFGENERAL == OG) %>% 
       hchart("line"
         , hcaes(x = RPTYEAR, y = VAR, group = RACE)
-        , color = gcolors[1:4] 
+        , color = theseCols
         , tooltip = list(pointFormat = ptfmt)
       ) %>% 
       hc_title(text = OG) %>% 
@@ -126,236 +180,320 @@ fnc_highchart_ROline <- function(ABB, VAR){
   
 }
 ```
-### Revocation Counts 
+## Revocation Counts 
 
 ```{r}
 fnc_highchart_ROline("CA", "REVCNT")
 ```
 
-### Rate Per 1,000
+#### Stats 
+
+```{r}
+CNTRTDF$OR$REVCNT |> summary()
+CNTRTDF$OR |> ggplot(aes(x = REVCNT)) + 
+  geom_histogram(color = "grey50", fill = "grey80", bins = 50) + 
+  ggtitle("Histogram") + 
+  theme_minimal()
+```
+
+
+## Rate by Population {.tabset} 
+
+$$
+\begin{aligned}
+&\text{Rate per } x = \frac{\text{Counts}_i}{\text{Population}_i} \cdot x \\
+&i  = \text{Race/Ethnicity Group}
+\end{aligned}
+$$
+
+### Rate per 1,000
 
 ```{r}
 fnc_highchart_ROline("CA", "RATE_1K")
 ```
 
-### Relative Rate Index 
+#### Stats 
+
+Many of the rates per 1000 are below 1 which I think makes it more difficult to understand to users.  
+
+```{r}
+CNTRTDF$OR$RATE_1K |> summary()
+CNTRTDF$OR |> ggplot(aes(x = RATE_1K)) + 
+  geom_histogram(color = "grey50", fill = "grey80", bins = 50) + 
+  ggtitle("Histogram") + 
+  theme_minimal()
+CNTRTDF$OR |> ggplot(aes(x = RATE_1K)) + 
+  stat_ecdf(geom = "step") + 
+  ggtitle("Empirical Cumulative Distribution") + 
+  geom_vline(xintercept = 1, color = "red", linetype = "dotted") + 
+  annotate("text", x = 1, y = 0.875, label = "RATE = 1", hjust = -0.1, color = "red") +
+  theme_minimal() 
+```
+
+### \*Rate per 100,000
+
+```{r}
+fnc_highchart_ROline("CA", "RATE_100K")
+```
+
+
+#### Stats
+
+I think rate per 100,000 makes the most sense because the majority of the values are above 1 but the largest values aren't 'too' large.  
+
+```{r}
+CNTRTDF$OR$RATE_100K |> summary()
+CNTRTDF$OR |> ggplot(aes(x = RATE_100K)) + 
+  geom_histogram(color = "grey50", fill = "grey80", bins = 50) + 
+  ggtitle("Histogram") + 
+  theme_minimal()
+CNTRTDF$OR |> ggplot(aes(x = RATE_100K)) + 
+  stat_ecdf(geom = "step") + 
+  ggtitle("Empirical Cumulative Distribution") + 
+  geom_vline(xintercept = 1, color = "red", linetype = "dotted") + 
+  annotate("text", x = 1, y = 1, label = "RATE = 1", hjust = -0.1, color = "red") +
+  theme_minimal() 
+```
+
+
+### Rate per 1,000,000
+
+```{r}
+fnc_highchart_ROline("CA", "RATE_1MIL")
+```
+
+
+#### Stats 
+
+I think the values are a bit too large.  
+
+```{r}
+CNTRTDF$OR$RATE_1MIL |> summary()
+CNTRTDF$OR |> ggplot(aes(x = RATE_1MIL)) + 
+  geom_histogram(color = "grey50", fill = "grey80", bins = 50) + 
+  ggtitle("Histogram") + 
+  theme_minimal()
+CNTRTDF$OR |> ggplot(aes(x = RATE_1MIL)) + 
+  stat_ecdf(geom = "step") + 
+  ggtitle("Empirical Cumulative Distribution") + 
+  geom_vline(xintercept = 1, color = "red", linetype = "dotted") + 
+  annotate("text", x = 1, y = 1, label = "RATE = 1", hjust = -0.1, color = "red") +
+  theme_minimal()
+```
+
+
+
+## Relative Rate Index {.tabset}
+
+Only includes `Black` and `Hispanic` categories 
+
+
+### Line Chart {.tabset} 
+
+#### Line Chart A
+
 
 ```{r}
 fnc_highchart_ROline("CA", "RRI")
 ```
 
+White reference group is treated the same as Black/Hispanic   
+Same style as previous line charts (count and rate) but maybe not clear that white is the reference group.  
 
-## Other RRI Options {.tabset}
-
-### Column 
+#### \*Line Chart B
 
 ```{r}
-## COLUMN CHART
-ABB <- "CA"
 VAR <- "RRI"
 
-#fnc_highchart_RO <- function(ABB, VAR){
+  ptfmt <- "{point.VAR:,.1f}" #1 decimal place
+  theseRE   <- admin$lev_RACE[2:3] #only include black and hispanic 
+  theseCols <- gcolors[2:3]
 
-  ptfmt <- case_when(
-      VAR == "REVCNT"  ~ "{point.VAR:,.0f}" #0 decimal places 
-    , VAR == "RATE_1K" ~ "{point.VAR:,.2f}" #2 decimal places 
-    , VAR == "RRI"     ~ "{point.VAR:,.1f}" #1 decimal place
-    )
   
   plotdata <-  CNTRTDF$OR %>% 
     filter(ABB == !!ABB) %>% 
     rename("VAR" = !!VAR) %>% 
-    filter(!RACE %in% admin$lev_RACE[-c(2:3)]) %>% #REMOVE MISSING/OTHER RACE 
+    # filter(RACE %in% theseRE) %>% 
     filter(!OFFGENERAL %in% admin$lev_OFFGENERAL[-c(1:4)])#REMOVE OTHER/MISSING OFFGENERAL 
-
     
   map(admin$lev_OFFGENERAL[1:4], function(OG){
     
-    plotdata %>% 
-      filter(OFFGENERAL == OG) %>% 
-      hchart("column"
+    bh <- plotdata %>% filter(OFFGENERAL == OG, RACE %in% theseRE)
+    #should all == 1,, instead of just putting as 1, leave as is (will help check calcs are done right)
+    w  <- plotdata %>% filter(OFFGENERAL == OG, RACE == admin$lev_RACE[1]) %>% select(x = RPTYEAR, y = VAR)
+    
+    hchart(bh, "line"
         , hcaes(x = RPTYEAR, y = VAR, group = RACE)
-        , color = gcolors[2:3]
-        , tooltip = list(pointFormat = ptfmt) 
+        , color = theseCols
+        , tooltip = list(pointFormat = ptfmt)
       ) %>% 
+      refgroup(col = "dark") %>% 
       hc_title(text = OG) %>% 
-      hc_yAxis(min = min(plotdata$VAR, na.rm = TRUE), max = max(plotdata$VAR, na.rm = TRUE), title = list(text = ""), plotLines = rri_wline) %>% 
+      hc_yAxis(min = 0, max = max(plotdata$VAR, na.rm = TRUE), title = list(text = "")) %>% 
       hc_xAxis(title = list(text = "")) %>% 
       hc_add_theme(hc_theme_jc2)
   }) %>% 
   hw_grid(rowheight = 350, ncol = 4) %>% 
     htmltools::browsable()
-#}
   
-```
-### Bar {.tabset} 
+  
 
-#### Year by Rate by OFFGENEARL 
+```
+
+
+White reference group is a separate series, make dotted and remove markers.  
+Still very similar to other line charts, but clear that white is the reference group   
+
+#### Line Chart C
 
 ```{r}
-##  BAR CHART
-ABB <- "CA"
 VAR <- "RRI"
 
-#fnc_highchart_RO <- function(ABB, VAR){
-  ptfmt <- case_when(
-      VAR == "REVCNT"  ~ "{point.VAR:,.0f}" #0 decimal places 
-    , VAR == "RATE_1K" ~ "{point.VAR:,.2f}" #2 decimal places 
-    , VAR == "RRI"     ~ "{point.VAR:,.1f}" #1 decimal place
-    )
+  ptfmt <- "{point.VAR:,.1f}" #1 decimal place
+  theseRE   <- admin$lev_RACE[2:3] #only include black and hispanic 
+  theseCols <- gcolors[2:3]
+
   
   plotdata <-  CNTRTDF$OR %>% 
     filter(ABB == !!ABB) %>% 
     rename("VAR" = !!VAR) %>% 
-    filter(!RACE %in% admin$lev_RACE[-c(2:3)]) %>% #REMOVE MISSING RACE 
+    # filter(RACE %in% theseRE) %>% 
     filter(!OFFGENERAL %in% admin$lev_OFFGENERAL[-c(1:4)])#REMOVE OTHER/MISSING OFFGENERAL 
-
     
   map(admin$lev_OFFGENERAL[1:4], function(OG){
     
-    plotdata %>% 
-      filter(OFFGENERAL == OG) %>% 
-      hchart("bar"
+    bh <- plotdata %>% filter(OFFGENERAL == OG, RACE %in% theseRE)
+    
+    hchart(bh, "line"
         , hcaes(x = RPTYEAR, y = VAR, group = RACE)
-        , color = gcolors[2:3]
-        , tooltip = list(pointFormat = ptfmt) 
+        , color = theseCols
+        , tooltip = list(pointFormat = ptfmt)
       ) %>% 
       hc_title(text = OG) %>% 
-      hc_yAxis(min = min(plotdata$VAR, na.rm = TRUE), max = max(plotdata$VAR, na.rm = TRUE), title = list(text = ""), plotLines = rri_wline) %>% 
+      hc_yAxis(min = 0, max = max(plotdata$VAR, na.rm = TRUE), title = list(text = ""), plotLines = rri_wline_dark) %>% 
       hc_xAxis(title = list(text = "")) %>% 
       hc_add_theme(hc_theme_jc2)
   }) %>% 
   hw_grid(rowheight = 350, ncol = 4) %>% 
     htmltools::browsable()
-#}
-  
 ```
 
+White reference group is static line.  Difficulty with placing label so that it doesn't cover any Black/Hispanic lines or markers.  Also does not show value when hover, but is always on the graph (can't be removed since not a series shown in legend). 
 
-#### OFFGENERAL by Rate by Year 
+### Area {.tabset} 
+
+#### \*Area A
+
 
 ```{r}
-##  BAR CHART
-ABB <- "CA"
 VAR <- "RRI"
 
-#fnc_highchart_RO <- function(ABB, VAR){
-  
-  ptfmt <- case_when(
-      VAR == "REVCNT"  ~ "{point.VAR:,.0f}" #0 decimal places 
-    , VAR == "RATE_1K" ~ "{point.VAR:,.2f}" #2 decimal places 
-    , VAR == "RRI"     ~ "{point.VAR:,.1f}" #1 decimal place
-    )
+  ptfmt <- "{point.VAR:,.1f}" #1 decimal place
+  theseRE   <- admin$lev_RACE[2:3] #only include black and hispanic 
+  theseCols <- gcolors[2:3]
+
   
   plotdata <-  CNTRTDF$OR %>% 
     filter(ABB == !!ABB) %>% 
     rename("VAR" = !!VAR) %>% 
-    filter(!RACE %in% admin$lev_RACE[-c(2:3)]) %>% #REMOVE MISSING RACE 
+    # filter(RACE %in% theseRE) %>% 
     filter(!OFFGENERAL %in% admin$lev_OFFGENERAL[-c(1:4)])#REMOVE OTHER/MISSING OFFGENERAL 
-
-    
-  map(sort(unique(plotdata$RPTYEAR)), function(YR){
-    
-    plotdata %>% 
-      filter(RPTYEAR == YR) %>% 
-      hchart("bar"
-        , hcaes(x = OFFGENERAL, y = VAR, group = RACE)
-        , color = gcolors[2:3]
-        , tooltip = list(pointFormat = ptfmt) 
-      ) %>% 
-      hc_title(text = YR) %>% 
-      hc_yAxis(min = 0, max = max(plotdata$VAR, na.rm = TRUE), title = list(text = ""), plotLines = rri_wline) %>% 
-      hc_xAxis(title = list(text = "")) %>% 
-      hc_add_theme(hc_theme_jc2)
-  }) %>%
-  hw_grid(rowheight = 350, ncol = 5) %>%
-    htmltools::browsable()
-#}
-  
-```
-
-### Diverging Bar(X)
-
-- recalculate RRI when group is less likely than White baseline 
-- i.e. 'Other' = 0.5 --> -1/0.5 = -2; otherwise won't diverge 
-- left side is White is #x more likely than ___
-- right side is ___ is #x more likely than white 
-
-```{r}
-## DIVERGING BAR CHART
-ABB <- "CA"
-VAR <- "RRI"
-
-#fnc_highchart_RO <- function(ABB, VAR){
-  
-  ptfmt <- case_when(
-      VAR == "REVCNT"  ~ "{point.VAR:,.0f}" #0 decimal places 
-    , VAR == "RATE_1K" ~ "{point.VAR:,.2f}" #2 decimal places 
-    , VAR == "RRI"     ~ "{point.VAR:,.1f}" #1 decimal place
-    )
-  
-  plotdata <-  CNTRTDF$OR %>% 
-    mutate(RRI = ifelse(RRI < 1, -1/RRI, RRI)) %>% 
-    filter(ABB == !!ABB) %>% 
-    rename("VAR" = !!VAR) %>% 
-    filter(!RACE %in% admin$lev_RACE[-c(2:4)]) %>% #REMOVE MISSING RACE 
-    filter(!OFFGENERAL %in% admin$lev_OFFGENERAL[-c(1:4)])#REMOVE OTHER/MISSING OFFGENERAL 
-
     
   map(admin$lev_OFFGENERAL[1:4], function(OG){
     
-    plotdata %>% 
-      filter(OFFGENERAL == OG) %>% 
-      hchart("bar"
+    bh <- plotdata %>% filter(OFFGENERAL == OG, RACE %in% theseRE)
+    #should all == 1,, instead of just putting as 1, leave as is (will help check calcs are done right)
+    w  <- plotdata %>% filter(OFFGENERAL == OG, RACE == admin$lev_RACE[1]) %>% select(x = RPTYEAR, y = VAR)
+    
+    hchart(bh, "area"
         , hcaes(x = RPTYEAR, y = VAR, group = RACE)
-        , color = gcolors[2:4]
-        , tooltip = list(pointFormat = ptfmt) 
+        , color = theseCols
+        , tooltip = list(pointFormat = ptfmt)
+        , marker = FALSE
       ) %>% 
+      refgroup(col = "light") %>% 
       hc_title(text = OG) %>% 
-      hc_yAxis(min = min(plotdata$VAR, na.rm = TRUE), max = max(plotdata$VAR, na.rm = TRUE), title = list(text = "")) %>% 
+      hc_yAxis(min = 0, max = max(plotdata$VAR, na.rm = TRUE), title = list(text = "")) %>% 
       hc_xAxis(title = list(text = "")) %>% 
       hc_add_theme(hc_theme_jc2)
   }) %>% 
   hw_grid(rowheight = 350, ncol = 4) %>% 
     htmltools::browsable()
-#}
-  
 ```
 
+Area chart using bright colors for Black/Hispanic.  Area chart really highlights the difference between Black/Hispanic and the white referencce group.  Using bright colors means that the White reference line can't be dark grey, it is shown in light grey so it can be slightly seen in the legend (probably not accessible contrast) but can more easily see contrast against bright orange and blue.  This one is my favorite, but we may need to play around with colors to get the right contrast levels.  
 
-### DrillDown(X) 
 
-- can't get drilldown plot to separate RACE into side by side plots 
-- drilldown seems to only work well with single column charts (i.e. plain counts)
+#### Area B
 
 ```{r}
-  df_dd <- 
-  CNTRTDF$OR %>% 
-    filter(ABB == !!ABB, RACE != "White", OFFGENERAL %in% admin$lev_OFFGENERAL[1:4]) %>% 
-    mutate(RPTYEAR = as.character(RPTYEAR)) %>% 
-    select(RPTYEAR, RACE, OFFGENERAL, RRI) %>% 
-    group_nest(RPTYEAR) %>% 
-    mutate(
-        id = RPTYEAR
-      , type = "column"
-      , data = map(data, mutate, name = OFFGENERAL, y = RRI, group = RACE)
-      , data = map(data, list_parse)
-    )
+VAR <- "RRI"
+
+  ptfmt <- "{point.VAR:,.1f}" #1 decimal place
+  theseRE   <- admin$lev_RACE[2:3] #only include black and hispanic 
+  theseCols <- gcolors[5:6]
 
   
-  df <- CNTRTDF$R %>% 
-    mutate(RPTYEAR = as.character(RPTYEAR)) %>% 
-    filter(ABB == !!ABB, RACE != "White") 
-  
-  
-  hchart(
-    df, "column", 
-    hcaes(x = RPTYEAR, y = RRI, group = RACE,  drilldown = RPTYEAR), 
-    color = gcolors[2:4]
-  ) %>% 
-  hc_drilldown(
-    allowPointDrilldown = TRUE,
-    series = list_parse(df_dd)
-  ) 
+  plotdata <-  CNTRTDF$OR %>% 
+    filter(ABB == !!ABB) %>% 
+    rename("VAR" = !!VAR) %>% 
+    # filter(RACE %in% theseRE) %>% 
+    filter(!OFFGENERAL %in% admin$lev_OFFGENERAL[-c(1:4)])#REMOVE OTHER/MISSING OFFGENERAL 
+    
+  map(admin$lev_OFFGENERAL[1:4], function(OG){
+    
+    bh <- plotdata %>% filter(OFFGENERAL == OG, RACE %in% theseRE)
+    #should all == 1,, instead of just putting as 1, leave as is (will help check calcs are done right)
+    w  <- plotdata %>% filter(OFFGENERAL == OG, RACE == admin$lev_RACE[1]) %>% select(x = RPTYEAR, y = VAR)
+    
+    hchart(bh, "area"
+        , hcaes(x = RPTYEAR, y = VAR, group = RACE)
+        , color = theseCols
+        , tooltip = list(pointFormat = ptfmt)
+        , marker = FALSE
+      ) %>% 
+      refgroup(col = "dark") %>% 
+      hc_title(text = OG) %>% 
+      hc_yAxis(min = 0, max = max(plotdata$VAR, na.rm = TRUE), title = list(text = "")) %>% 
+      hc_xAxis(title = list(text = "")) %>% 
+      hc_add_theme(hc_theme_jc2)
+  }) %>% 
+  hw_grid(rowheight = 350, ncol = 4) %>% 
+    htmltools::browsable()
 ```
 
+
+#### Contrast Values 
+
+
+Contrast values, found using [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/).  
+
+
+| Foreground/Background |Orange #D25E2D| Blue #236CA7| Light Orange #EDB799 | Light Blue #C7E8F5|   
+|:----------            |---------:|-------:|---------:|---------:|
+| #FFFFFF (white)       | 3.90     | 5.56   |  1.77    |  1.28    | 
+| #DCDCDC (light grey)  | 2.84     | 4.05   |  1.29    |  1.06    | 
+| #666666 (dark grey)   | 1.47     | 1.03   |  3.23    |  4.45    | 
+| #000000 (black)       | 5.56     | 3.77   | 11.83    | 16.28    | 
+
+
+| Level | Passing Contrast | 
+|:---------------------------------|:----|
+|WCAG Level AA Large text   | 3   |
+|WCAG Level AA Graphical Objects/UI Components | 3   | 
+|WCAG Level AA Normal text  | 4.5 | 
+|WCAG Level AAA Large text  | 4.5 | 
+|WCAG Level AAA Normal text | 7   | 
+
+
+### Stats 
+
+```{r}
+CNTRTDF$OR |> filter(RACE %in% c("Black", "Hispanic")) |> 
+  pull(RRI) |> summary()
+CNTRTDF$OR |> filter(RACE %in% c("Black", "Hispanic")) |> 
+  ggplot(aes(x = RRI)) + 
+  geom_histogram(color = "grey50", fill = "grey80", bins = 50) + 
+  ggtitle("Histogram") + 
+  theme_minimal()
+```
