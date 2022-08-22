@@ -1,0 +1,156 @@
+---
+title: "General Documentation: MCLC NCRP Revocations 2015-2019" 
+subtitle: "Last updated/ran: `r Sys.time()`"
+format: 
+  html:
+    page-layout: full
+editor: source
+self-contained: true
+---
+
+```{r, include=FALSE}
+box::use(
+    box/admin
+  , box/calc
+  , box/clean_SC
+)
+```
+
+
+
+
+::: panel-tabset
+
+## Data Source 
+
+### [NCRP: National Corrections Reporting Program 1991-2019 ICPSR 38048](https://www.icpsr.umich.edu/web/ICPSR/studies/38048) 
+
+### [SC - Census State Population by Characteristics](https://www.census.gov/programs-surveys/popest/technical-documentation/research/evaluation-estimates/2020-evaluation-estimates/2010s-state-detail.html) 
+
+
+#### SC --> NCRP 
+
+-   filter data to be 18+, combine sex, and combine ORIGIN
+-   re-code RACE/ORIGIN categories to match RACE NCRP categories
+-   sum across categories
+-   add state ids
+
+#### RACE/ORIGIN --\> RACE
+
+SC has `ORIGIN`(Ethnicity) and `RACE` that need to be fit into the NCRP `RACE` categories.
+
+| SC `ORIGIN`      | SC `RACE`                                            | NCRP `RACE`                       | Label                 |
+|:--------------|:-----------------------|:-----------------|:--------------|
+| 1 (Not Hispanic) | 1 (White Alone)                                      | \(1\) White, non-Hispanic         | `r admin$lev_RACE[1]` |
+| 1 (Not Hispanic) | 2 (Black or African American Alone)                  | \(2\) Black, non-Hispanic         | `r admin$lev_RACE[2]` |
+| 1 (Not Hispanic) | 3 (American Indian or Alaska Native Alone)           | \(4\) Other race(s), non-Hispanic | `r admin$lev_RACE[4]` |
+| 1 (Not Hispanic) | 4 (Asian Alone)                                      | \(4\) Other race(s), non-Hispanic | `r admin$lev_RACE[4]` |
+| 1 (Not Hispanic) | 5 (Native Hawaiian and Other Pacific Islander Alone) | \(4\) Other race(s), non-Hispanic | `r admin$lev_RACE[4]` |
+| 1 (Not Hispanic) | 6 (Two or more races)                                | \(4\) Other race(s), non-Hispanic | `r admin$lev_RACE[4]` |
+| 2 (Hispanic)     | 1 (White Alone)                                      | \(3\) Hispanic, any race          | `r admin$lev_RACE[3]` |
+| 2 (Hispanic)     | 2 (Black or African American Alone)                  | \(3\) Hispanic, any race          | `r admin$lev_RACE[3]` |
+| 2 (Hispanic)     | 3 (American Indian or Alaska Native Alone)           | \(3\) Hispanic, any race          | `r admin$lev_RACE[3]` |
+| 2 (Hispanic)     | 4 (Asian Alone)                                      | \(3\) Hispanic, any race          | `r admin$lev_RACE[3]` |
+| 2 (Hispanic)     | 5 (Native Hawaiian and Other Pacific Islander Alone) | \(3\) Hispanic, any race          | `r admin$lev_RACE[3]` |
+| 2 (Hispanic)     | 6 (Two or more races)                                | \(3\) Hispanic, any race          | `r admin$lev_RACE[3]` |
+
+
+
+## Code 
+
+Imports data, cleans, combines and calculates metrics.  Output is a list of 4 data frames: 
+
+| DF | Meaning | 
+|:---|:----------------------|
+| `cs_OR`        | Cross Section by STATE, RPTYEAR, OFFGENERAL, RACE (offense and race) |
+| `cs_O`         | Cross Section by STATE, RPTYEAR, OFFGENERAL (offense) |
+| `cs_R`         | Cross Section by STATE, RPTYEAR, RACE (race) |
+| `cs_t`         | Cross Section by STATE, RPTYEAR (total)  |
+
+```{r}
+calc$combine_and_calcrates()
+```
+
+
+
+## Metrics
+
+::: grid
+::: g-col-6
+Values:\
+$n$ revocation count\
+$N$ population estimate\
+$R$ rate\
+$I$ Relative rate index
+:::
+
+<!--end {.g-col-6} -->
+
+::: g-col-6
+Sub-text:\
+$s$ State\
+$o$ offense general category\
+$r$ race/ethnicity\
+$y$ year
+:::
+
+<!--end {.g-col-6} -->
+:::
+
+<!-- end {.grid}-->
+
+::: panel-tabset
+### Revocation Counts, $n$
+
+Count the individual level data from NCRP by specific metrics.
+
+| DF      | Equation      | Meaning                                                                 |
+|:---------------|:-----------------|:-------------------------------------|
+| `cs_OR` | $n^{sy}_{or}$ | Revocation count by STATE, RPTYEAR, OFFGENERAL, RACE (offense and race) |
+| `cs_O`  | $n^{sy}_{o}$  | Revocation count by STATE, RPTYEAR, OFFGENERAL (offense)                |
+| `cs_R`  | $n^{sy}_{r}$  | Revocation count by STATE, RPTYEAR, RACE (race)                         |
+| `cs_t`  | $n^{sy}$      | Revocation count by STATE, RPTYEAR (total)                              |
+
+### Rate, $R$
+
+Revocation counts for a specific cross section divided by the population estimate for that specific cross section. Population is available by state, year, and race/ethnicity.
+
+| DF      | Equation                                                       | Meaning                                                     |
+|:---------------|:-----------------|:-------------------------------------|
+| `cs_OR` | $R^{sy}_{or} = \frac{n^{sy}_{or} }{N^{sy}_{r} }$ | Rate by STATE, RPTYEAR, OFFGENERAL, RACE (offense and race) |
+| `cs_O`  | $R^{sy}_{o} = \frac{n^{sy}_{o} }{N^{sy} }$       | Rate by STATE, RPTYEAR, OFFGENERAL (offense)                |
+| `cs_R`  | $R^{sy}_{r} = \frac{n^{sy}_{r} }{N^{sy}_{r} }$   | Rate by STATE, RPTYEAR, RACE (race)                         |
+| `cs_t`  | $R^{sy} = \frac{n^{sy} }{N^{sy} }$               | Rate by STATE, RPTYEAR (total)                              |
+
+
+#### Rate per 
+
+| Variable | Equation | Meaning | 
+|:----|:------|:---------------|
+|`RATE` | $R$ | plain rate | 
+|`RATE_1K` | $R \cdot 1,000$ | Rate per 1,000 | 
+|`RATE_100K` | $R \cdot 100,000$ | Rate per 100,000 | 
+|`RATE_1MIL` | $R \cdot 1,000,000$ | Rate per 1,000,000 | 
+
+
+
+### Relative Rate Index (RRI), $I$
+
+Relative Rate Index is compare the $r = 1$ (White) to the other race/ethnicity groups.
+
+*Note:* The RRI is calculated for all four race groups but will only be shown for $r = 2$ (Black) and $r = 3$ (Hispanic). When $r = 1$ (White) $\implies I = 1$. The last category, $r = 4$ (Other) is removed due to small counts and difficultly gather meaning from 'Other' category.
+
+| DF      | Equation                                          | Meaning                                                    |
+|:---------------|:-----------------|:-------------------------------------|
+| `cs_OR` | $I^{sy}_{or} = \frac{R^{sy}_{or} }{R^{sy}_{o1} }$ | RRI by STATE, RPTYEAR, OFFGENERAL, RACE (offense and race) |
+| `cs_O`  | N/A                                               | N/A                                                        |
+| `cs_R`  | $I^{sy}_{r} = \frac{R^{sy}_{r} }{R^{sy}_{1} }$    | RRI by STATE, RPTYEAR, RACE (race)                         |
+| `cs_t`  | N/A                                               | N/A                                                        |
+:::
+
+<!-- end {.panel-tabset} -->
+
+
+
+:::
+<!-- end {.panel-tabset} -->
