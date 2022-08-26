@@ -10,11 +10,11 @@ box::use(
 
 
 
-calcrate_race <- function(DF, SC_R){
+calcrate_race <- function(DF, POP_R){
   
   R_RR <- DF %>% 
     #add population estimates 
-    left_join(., SC_R  , by = c(admin$groupcols, "RACE")) %>% 
+    left_join(., POP_R  , by = c(admin$groupcols, "RACE")) %>% 
     #add column for just white population estimate 
     #calculate rates 
     mutate(RATE = REVCNT/POPEST) 
@@ -40,11 +40,11 @@ calcrate_race <- function(DF, SC_R){
 
 
 
-calcrate_total <- function(DF, SC_t){
+calcrate_total <- function(DF, POP_t){
   
   DF %>% 
     #add population estimates  
-    left_join(., SC_t, by = c(admin$groupcols)) %>% 
+    left_join(., POP_t, by = c(admin$groupcols)) %>% 
     #calculate rate 
     mutate(RATE = REVCNT/POPEST)
   
@@ -55,14 +55,25 @@ calcrate_total <- function(DF, SC_t){
 #'
 #' @return list of 4 df's with rates
 #' @export
-combine_and_calcrates <- function(){
+combine_and_calcrates <- function(pop_denom = "SC"){
   
   NCRP <- clean_NCRP$prep()
-  SC   <- clean_SC$prep()
+  
+  if (pop_denom == "SC"){
+    POP  <- clean_SC$prep()
+  } else if (pop_denom == "ACS"){
+    
+  } else if (pop_denom == "BLSPP"){
+    
+  } else {
+    stop("Invalid population denom")
+  }
+  
+  
   
   CNTRT_DF <-c(
-      map(NCRP[c("OR", "R")], calcrate_race,  SC_R = SC$R)
-    , map(NCRP[c("O" , "t")], calcrate_total, SC_t = SC$t)
+      map(NCRP[c("OR", "R")], calcrate_race,  POP_R = POP$R)
+    , map(NCRP[c("O" , "t")], calcrate_total, POP_t = POP$t)
     ) %>% 
     map(., ~mutate(., RATE_1K = RATE*1E3, RATE_100K = RATE*1E5, RATE_1MIL = RATE*1E6))
   
