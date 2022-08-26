@@ -1,0 +1,463 @@
+---
+title: "NCRP Revocations Rate Comparison" 
+subtitle: "Last updated/ran: `r Sys.time()`"
+format: 
+  html:
+    page-layout: full
+    fontsize: 1em
+execute: 
+  echo: false
+editor: source
+self-contained: true
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r}
+#| label: setup
+#| message: FALSE
+box::use(
+    box/admin
+  , box/calc
+  , box/clean_SC
+  , glue[glue]
+)
+
+
+library(tidyverse)
+library(geofacet)
+library(scales)
+library(knitr)
+
+denom_SC <- calc$combine_and_calcrates()
+gcolors <- c("#666666", "#D25E2D", "#236ca7", "#D6C246", "#EDB799", "#C7E8F5", "#DCDCDC")
+```
+
+All data are shown at the `OFFGENERAL`/`RACE` cross section level. 
+
+
+::: {.panel-tabset} 
+
+## State Charactersitics
+
+```{r}
+#| label: SC-RRI-df
+dfOR <- denom_SC$OR %>% 
+  select(ABB, RPTYEAR, OFFGENERAL, RACE, REVCNT, POPEST, RATE_100K, RRI) %>% 
+  left_join(., select(denom_SC$t, ABB, RPTYEAR, TOTAL_REVCNT = REVCNT), by = c("ABB", "RPTYEAR")) %>% 
+  mutate(PROP_OF_TOT_REVCNT = REVCNT/TOTAL_REVCNT)
+
+dfR <- denom_SC$R %>% 
+  select(ABB, RPTYEAR, RACE, REVCNT, POPEST, RATE_100K, RRI) %>% 
+  left_join(., select(denom_SC$t, ABB, RPTYEAR, TOTAL_REVCNT = REVCNT), by = c("ABB", "RPTYEAR")) %>% 
+  mutate(PROP_OF_TOT_REVCNT = REVCNT/TOTAL_REVCNT)
+```
+
+::: {.panel-tabset} 
+
+
+### Rate per 100k
+
+```{r}
+dfOR_rate <- dfOR %>% filter(RACE %in% admin$lev_RACE[1:4], OFFGENERAL %in% admin$lev_OFFGENERAL[1:4])
+dfR_rate  <- dfR  %>% filter(RACE %in% admin$lev_RACE[1:4])
+```
+
+Filtered data used:  
+
+- `RACE` equal to `r paste(admin$lev_RACE[1:4], collapse = ", ")`  
+- `OFFGENERAL` equal to `r paste(admin$lev_OFFGENERAL[1:4], collapse = ", ")`
+
+::: {.panel-tabset} 
+
+#### Overview 
+
+
+```{r}
+dfOR_rate %>% 
+  select(RATE_100K, OFFGENERAL, RACE) %>% 
+  group_by(OFFGENERAL, RACE) %>% 
+  skimr::skim_without_charts()
+```
+
+
+```{r}
+#| fig.width: 12
+#| fig.height: 8
+dfOR_rate %>% 
+  filter(!is.na(RATE_100K)) %>% 
+  ggplot(aes(y = OFFGENERAL, x = RATE_100K)) + 
+  geom_boxplot(alpha = 0.5, fill = "grey35", color = "grey35") + 
+  facet_wrap(~RACE, ncol = 1) + 
+  scale_x_continuous(limits = c(0, NA), expand = c(0.01, 0)) + 
+  scale_y_discrete(limits = rev) + 
+  theme_bw()
+```
+
+
+#### State Facet
+
+
+```{r}
+#| fig.width: 12
+#| fig.height: 8
+#| warning: FALSE
+RATE_statefacet <- function(OFFGEN){
+  
+  if (OFFGEN %in% c(1:4)){
+    
+    plotdf <- dfOR_rate %>% 
+        filter(OFFGENERAL == admin$lev_OFFGENERAL[OFFGEN], !is.na(RATE_100K))
+    title <- glue("Rate per 100,000 by Report Year (2015-2019) and RACE where OFFGENERAL = {admin$lev_OFFGENERAL[OFFGEN]}")
+    
+  } else if (toupper(OFFGEN) == "ALL"){
+    
+    plotdf <- dfR_rate %>% 
+      filter(RACE %in% admin$lev_RACE[1:4], !is.na(RATE_100K))
+    title <- glue("Rate per 100,000 by Report Year (2015-2019) and RACE for any OFFGENERAL")
+    
+  }
+  
+  
+plotdf %>% 
+  ggplot(aes(x = RPTYEAR, y = RATE_100K, color = RACE)) + 
+  geom_line(size = 0.65) + 
+  facet_geo(~ABB, grid = "us_state_grid2", scales = "free") + 
+  scale_color_manual(values = gcolors[c(1, 2, 3, 4)])+ 
+  scale_x_continuous(breaks = NULL, labels = ~substr(., 3, 4)) +
+  labs(
+      title = title
+    , x = NULL
+    , y = NULL
+  ) + 
+  theme_minimal() + 
+  theme(
+    legend.position = "top"
+    , panel.grid.major.x = element_blank()
+    , panel.grid.minor.x = element_blank()
+    , panel.grid.minor.y = element_blank()
+  )
+  
+}
+
+RATE_statefacet("all")
+RATE_statefacet(1)
+RATE_statefacet(2)
+RATE_statefacet(3)
+RATE_statefacet(4)
+
+```
+
+
+:::
+<!-- end {.panel-tabset} RRI -->
+
+### RRI
+
+Filtered data used:  
+
+- `RACE` equal to `r paste(admin$lev_RACE[2:3], collapse = ", ")`  
+- `OFFGENERAL` equal to `r paste(admin$lev_OFFGENERAL[1:4], collapse = ", ")`
+
+::: {.panel-tabset} 
+
+```{r}
+dfOR_rri    <- dfOR     %>% filter(RACE %in% admin$lev_RACE[2:3], OFFGENERAL %in% admin$lev_OFFGENERAL[1:4])
+dfR_rri     <- dfR      %>% filter(RACE %in% admin$lev_RACE[2:3])
+dfOR_rri_1l <- dfOR_rri %>% filter(RRI < 1)
+dfOR_l1     <- dfOR     %>% filter(RRI < 1)
+
+#df_l1 <- df%>% filter(RRI < 1)
+
+#df_f    <- df %>% filter(RACE %in% admin$lev_RACE[2:3], OFFGENERAL %in% admin$lev_OFFGENERAL[1:4])
+#df_f_l1 <- df_f %>% filter(RRI < 1)
+```
+
+
+#### Overview 
+
+```{r}
+dfOR_rri %>% 
+  select(RRI, OFFGENERAL, RACE) %>% 
+  group_by(OFFGENERAL, RACE) %>% 
+  skimr::skim_without_charts()
+```
+
+
+```{r}
+#| fig.width: 12
+#| fig.height: 4
+dfOR_rri %>% 
+  filter(!is.na(RRI)) %>% 
+  ggplot(aes(y = OFFGENERAL, x = RRI)) + 
+  geom_boxplot(alpha = 0.5, fill = "grey35", color = "grey35") + 
+  facet_wrap(~RACE, ncol = 1) + 
+  scale_x_continuous(limits = c(0, NA), expand = c(0.01, 0)) + 
+  scale_y_discrete(limits = rev) + 
+  theme_bw()
+```
+
+#### State Facet
+
+
+```{r}
+#| fig.width: 12
+#| fig.height: 8
+RRI_statefacet <- function(OFFGEN){
+  
+  if (OFFGEN %in% c(1:4)){
+    
+    plotdf <- dfOR_rri %>% 
+        filter(OFFGENERAL == admin$lev_OFFGENERAL[OFFGEN], !is.na(RRI))
+    wrg_o <- expand.grid(ABB = unique(plotdf$ABB), RPTYEAR = c(2015:2019)) %>% 
+      mutate(RACE = "White", RRI = 1)
+    title <- glue("RRI by Report Year (2015-2019) and RACE where OFFGENERAL = {admin$lev_OFFGENERAL[OFFGEN]}")
+    
+    
+  } else if (toupper(OFFGEN) == "ALL"){
+    
+    plotdf <- dfR_rri %>% 
+      filter(RACE %in% admin$lev_RACE[2:3], !is.na(RRI))
+    wrg_o <- expand.grid(ABB = unique(plotdf$ABB), RPTYEAR = c(2015:2019)) %>% 
+      mutate(RACE = "White", RRI = 1)
+    title <- glue("RRI by Report Year (2015-2019) and RACE for any OFFGENERAL")
+    
+  }
+
+
+plotdf %>% 
+  full_join(., wrg_o, by = c("ABB", "RPTYEAR", "RACE", "RRI")) %>% 
+  ggplot(aes(x = RPTYEAR, y = RRI, fill = RACE, alpha = RACE)) + 
+  #geom_col(width = 1, alpha = 0.8, color = "white", position = "identity") + 
+  geom_area(color = "white", position = "identity", size = 0.25) + 
+  facet_geo(~ABB, grid = "us_state_grid2", scales = "free") + 
+  scale_fill_manual(values = gcolors[c(2, 3, 7)])+ 
+  scale_alpha_manual(values = c(0.8, 0.9, 0.5)) + 
+  scale_x_continuous(breaks = NULL, labels = ~substr(., 3, 4)) +
+  labs(
+      title = title
+    , x = NULL
+    , y = NULL
+  ) + 
+  theme_minimal() + 
+  theme(
+    legend.position = "top"
+    , panel.grid.major.x = element_blank()
+    , panel.grid.minor.x = element_blank()
+    , panel.grid.minor.y = element_blank()
+  )
+  
+}
+
+RRI_statefacet("all")
+RRI_statefacet(1)
+RRI_statefacet(2)
+RRI_statefacet(3)
+RRI_statefacet(4)
+
+```
+
+
+
+
+#### `RRI < 1`
+
+All includes all rows (includes `RACE` of `r paste(admin$lev_RACE[-c(2:3)])` and `OFFGENERAL` of `r paste(admin$lev_OFFGENERAL[-c(1:4)])`)
+
+```{r}
+#| label: SC-RRI-tablevals
+n    <- nrow(dfOR)
+n_NA <- nrow(filter(dfOR, is.na(RRI)))
+n_l1 <- nrow(dfOR_l1)
+n_l1_cl10  <- dfOR_l1 %>% filter(REVCNT <  10) %>% nrow()
+n_l1_cl25  <- dfOR_l1 %>% filter(REVCNT <  25) %>% nrow()
+n_l1_cl50  <- dfOR_l1 %>% filter(REVCNT <  50) %>% nrow()
+n_l1_cl100 <- dfOR_l1 %>% filter(REVCNT < 100) %>% nrow()
+n_l1_pl.05 <- dfOR_l1 %>% filter(PROP_OF_TOT_REVCNT <  0.05) %>% nrow()
+n_l1_pl.01 <- dfOR_l1 %>% filter(PROP_OF_TOT_REVCNT <  0.01) %>% nrow()
+n_l1_r2    <- dfOR_l1 %>% filter(RACE == admin$lev_RACE[2]) %>% nrow()
+n_l1_r3    <- dfOR_l1 %>% filter(RACE == admin$lev_RACE[3]) %>% nrow()
+n_l1_r4    <- dfOR_l1 %>% filter(RACE == admin$lev_RACE[4]) %>% nrow()
+n_l1_o1    <- dfOR_l1 %>% filter(OFFGENERAL == admin$lev_OFFGENERAL[1]) %>% nrow()
+n_l1_o2    <- dfOR_l1 %>% filter(OFFGENERAL == admin$lev_OFFGENERAL[2]) %>% nrow()
+n_l1_o3    <- dfOR_l1 %>% filter(OFFGENERAL == admin$lev_OFFGENERAL[3]) %>% nrow()
+n_l1_o4    <- dfOR_l1 %>% filter(OFFGENERAL == admin$lev_OFFGENERAL[4]) %>% nrow()
+n_l1_o5    <- dfOR_l1 %>% filter(OFFGENERAL == admin$lev_OFFGENERAL[5]) %>% nrow()
+n_l1_o6    <- dfOR_l1 %>% filter(OFFGENERAL == admin$lev_OFFGENERAL[6]) %>% nrow()
+
+
+fn    <- nrow(dfOR_rri)
+fn_NA <- nrow(filter(dfOR_rri, is.na(RRI)))
+fn_l1 <- nrow(dfOR_rri_1l)
+fn_l1_cl10  <- dfOR_rri_1l %>% filter(REVCNT <  10) %>% nrow()
+fn_l1_cl25  <- dfOR_rri_1l %>% filter(REVCNT <  25) %>% nrow()
+fn_l1_cl50  <- dfOR_rri_1l %>% filter(REVCNT <  50) %>% nrow()
+fn_l1_cl100 <- dfOR_rri_1l %>% filter(REVCNT < 100) %>% nrow()
+fn_l1_pl.05 <- dfOR_rri_1l %>% filter(PROP_OF_TOT_REVCNT <  0.05) %>% nrow()
+fn_l1_pl.01 <- dfOR_rri_1l %>% filter(PROP_OF_TOT_REVCNT <  0.01) %>% nrow()
+fn_l1_r2    <- dfOR_rri_1l %>% filter(RACE == admin$lev_RACE[2]) %>% nrow()
+fn_l1_r3    <- dfOR_rri_1l %>% filter(RACE == admin$lev_RACE[3]) %>% nrow()
+fn_l1_o1    <- dfOR_rri_1l %>% filter(OFFGENERAL == admin$lev_OFFGENERAL[1]) %>% nrow()
+fn_l1_o2    <- dfOR_rri_1l %>% filter(OFFGENERAL == admin$lev_OFFGENERAL[2]) %>% nrow()
+fn_l1_o3    <- dfOR_rri_1l %>% filter(OFFGENERAL == admin$lev_OFFGENERAL[3]) %>% nrow()
+fn_l1_o4    <- dfOR_rri_1l %>% filter(OFFGENERAL == admin$lev_OFFGENERAL[4]) %>% nrow()
+
+```
+
+::: {style="line-height: 1em;"}
+
+| Description                       | All<br>Count| <br>Percent       | Filtered<br>Count | <br> Percent      |
+|:-----------------------              |-------:     |:----              |-------:           |:----              |
+| **Overall:**                       |             |                   |                   |                   |
+| &emsp;Count              | `r n`       |                   | `r fn`            |                   |
+| &emsp;Count where RRI = NA  | `r n_NA`    |`r percent(n_NA/n)`| `r fn_NA`         |`r percent(fn_NA/fn)`|
+| &emsp;Count where RRI < 1| `r n_l1`    |`r percent(n_l1/n)`| `r fn_l1`         |`r percent(fn_l1/fn)`|
+|
+| **When RRI < 1:**         |             |                   |                   |                   |
+| &emsp;Count where REVCNT < 10|`r n_l1_cl10`|`r percent(n_l1_cl10/n_l1)`|`r fn_l1_cl10`|`r percent(fn_l1_cl10/fn_l1)`|
+| &emsp;Count where REVCNT < 25|`r n_l1_cl25`|`r percent(n_l1_cl25/n_l1)`|`r fn_l1_cl25`|`r percent(fn_l1_cl25/fn_l1)`|
+| &emsp;Count where REVCNT < 50|`r n_l1_cl50`|`r percent(n_l1_cl50/n_l1)`|`r fn_l1_cl50`|`r percent(fn_l1_cl50/fn_l1)`|
+| &emsp;Count where REVCNT < 100|`r n_l1_cl100`|`r percent(n_l1_cl100/n_l1)`|`r fn_l1_cl100`|`r percent(fn_l1_cl100/fn_l1)`|
+| &emsp;Count where REVCNT/TOTAL_REVCNT[^1] < 1%  |`r n_l1_pl.01`|`r percent(n_l1_pl.01/n_l1)`|`r fn_l1_pl.01`|`r percent(fn_l1_pl.01/fn_l1)`|
+| &emsp;Count where REVCNT/TOTAL_REVCNT < 5% |`r n_l1_pl.05`|`r percent(n_l1_pl.05/n_l1)`|`r fn_l1_pl.05`|`r percent(fn_l1_pl.05/fn_l1)`|
+| &emsp;Count where RACE = `r admin$lev_RACE[2]` |`r n_l1_r2`|`r percent(n_l1_r2/n_l1)`|`r fn_l1_r2`|`r percent(fn_l1_r2/fn_l1)`|
+| &emsp;Count where RACE = `r admin$lev_RACE[3]` |`r n_l1_r3`|`r percent(n_l1_r3/n_l1)`|`r fn_l1_r3`|`r percent(fn_l1_r3/fn_l1)`|
+| &emsp;Count where RACE = `r admin$lev_RACE[4]` |`r n_l1_r4`|`r percent(n_l1_r4/n_l1)`| | |
+| &emsp;Count where OFFGENERAL = `r admin$lev_OFFGENERAL[1]` |`r n_l1_o1`|`r percent(n_l1_o1/n_l1)`|`r fn_l1_o1`|`r percent(fn_l1_o1/fn_l1)`|
+| &emsp;Count where OFFGENERAL = `r admin$lev_OFFGENERAL[2]` |`r n_l1_o2`|`r percent(n_l1_o2/n_l1)`|`r fn_l1_o2`|`r percent(fn_l1_o2/fn_l1)`|
+| &emsp;Count where OFFGENERAL = `r admin$lev_OFFGENERAL[3]` |`r n_l1_o3`|`r percent(n_l1_o3/n_l1)`|`r fn_l1_o3`|`r percent(fn_l1_o3/fn_l1)`|
+| &emsp;Count where OFFGENERAL = `r admin$lev_OFFGENERAL[4]` |`r n_l1_o4`|`r percent(n_l1_o4/n_l1)`|`r fn_l1_o4`|`r percent(fn_l1_o4/fn_l1)`|
+| &emsp;Count where OFFGENERAL = `r admin$lev_OFFGENERAL[5]` |`r n_l1_o5`|`r percent(n_l1_o5/n_l1)`| | |
+| &emsp;Count where OFFGENERAL = `r admin$lev_OFFGENERAL[6]` |`r n_l1_o6`|`r percent(n_l1_o6/n_l1)`| | |
+
+:::
+<!-- end STYLE FOR TABLE -->
+
+[^1]: `TOTAL_REVCNT` is the total revocation count for a specific state and year, this sums the revocations across the `RACE` and `OFFGENERAL` categories
+
+
+```{r}
+#| fig.height: 3
+#| fig.width: 10
+dfOR_rri %>% 
+  drop_na(RRI) %>% 
+  ggplot(aes(x = RRI)) + 
+  geom_histogram(bins = 100, fill = "grey80", color = "grey35") + 
+  geom_vline(xintercept = 1, color = "red", alpha = 0.5) + 
+  labs(
+      title = "Histogram of RRI values for Filtered Data"
+    , subtitle = "Vertical red line indicates RRI = 1"
+  ) + 
+  theme_bw() + 
+  theme(plot.subtitle = element_text(color = "red"))
+```
+
+
+```{r}
+#| fig.height: 6
+#| fig.width: 10
+dfOR_rri %>% 
+  drop_na(RRI) %>% 
+  ggplot(aes(x = RRI)) + 
+  geom_histogram(bins = 50, fill = "grey80", color = "grey35") + 
+  geom_vline(xintercept = 1, color = "red", alpha = 0.5) + 
+  facet_wrap(RACE~OFFGENERAL, scales = "free", nrow = 2) + 
+  labs(
+      title = "Histogram of RRI values by RACE/OFFGENERAL for Filtered Data"
+    , subtitle = "Vertical red line indicates RRI = 1"
+  ) + 
+  theme_bw() + 
+  theme(plot.subtitle = element_text(color = "red"))
+```
+
+
+```{r}
+#| fig.height: 7
+#| fig.width: 12
+dfOR_rri %>% 
+  drop_na(RRI) %>% 
+  mutate(REVCNT_less_10 = ifelse(REVCNT < 10, TRUE, FALSE)) %>% 
+  ggplot(aes(x = RRI, y = PROP_OF_TOT_REVCNT, color = REVCNT_less_10)) + 
+  geom_vline(xintercept = 1, linetype = "dashed") + 
+  scale_y_continuous(name = "REVCNT/TOTAL_REVCNT\n(Cross-Section Count / Total Count for State/Year)", labels = scales::percent) + 
+  geom_point(alpha = 0.5) + 
+  facet_wrap(RACE~OFFGENERAL, scales = "free", nrow = 2) + 
+  labs(
+    title = "Scatter Plot of PROP_OF_TOT_REVCNT by RRI, by cross-section for Filtered Data"
+    , subtitle = "Vertical dashed line indicates RRI = 1"
+  ) + 
+  theme_bw() + 
+  theme(legend.position = "top")
+```
+
+```{r}
+#| fig.height: 7
+#| fig.width: 12
+dfOR_rri %>% 
+  filter(RRI < 1) %>% 
+  mutate(REVCNT_less_10 = ifelse(REVCNT < 10, TRUE, FALSE)) %>% 
+  ggplot(aes(x = RRI, y = PROP_OF_TOT_REVCNT, color = REVCNT_less_10)) + 
+  geom_vline(xintercept = 1, linetype = "dashed") + 
+  scale_y_continuous(name = "REVCNT/TOTAL_REVCNT\n(Cross-Section Count / Total Count for State/Year)", labels = scales::percent) + 
+  geom_point(alpha = 0.5) + 
+  facet_wrap(RACE~OFFGENERAL, scales = "free", nrow = 2) + 
+  labs(
+    title = "Scatter Plot of PROP_OF_TOT_REVCNT by RRI, by cross-section for Filtered Data where RRI < 1"
+    , subtitle = "Vertical dashed line indicates RRI = 1"
+  ) + 
+  theme_bw() + 
+  theme(legend.position = "top")
+```
+
+
+
+#### Tables where `RRI` < 1 
+
+##### All: `RRI` < 1 & `REVCNT` > 100: 
+
+- four states (Hawaii, Illinois, New York, and Texas) 
+- `RACE` = Hispanic and  `RACE` = Other (which will not be shown in dashboard) 
+
+```{r}
+#| label: SC-RRI-DTcntg100
+dfOR_l1 %>%
+  filter(REVCNT > 100) %>%
+  kable(caption = "Instances where RRI < 1 AND REVCNT > 100")
+```
+
+
+##### All: `RRI` < 1 & `REVCNT`/`TOTAL_REVCNT` > 5%
+
+- three states (Hawaii, Nevada, and Texas) 
+- Nevada and Texas instances are all for `RACE` = Hispanic 
+- Hawaii instances are all for `RACE` = Other,  which will not be shown in dashboard 
+
+```{r}
+#| label: SC-RRI-DTpropless5per
+dfOR_l1 %>%
+  filter(PROP_OF_TOT_REVCNT > 0.05) %>%
+  kable(caption = "Instances where RRI < 1 AND REVCNT/TOTAL_REVCNT > 5%")
+```
+
+
+##### Filtered: `RRI` < 1 & RACE = Black
+
+- only 5 instances 
+- REVCNT = 1 or 2 in all instances 
+
+```{r}
+#| label: SC-RRI-dtrace=black
+dfOR_rri_1l %>% 
+  filter(RACE == admin$lev_RACE[2], OFFGENERAL %in% admin$lev_OFFGENERAL[1:4]) %>% 
+  kable(caption = "Instances where RRI < 1 AND RACE = Black AND OFFGENERAL != Other/missing")
+```
+
+
+:::
+<!-- end {.panel-tabset} RRI -->
+
+:::
+<!-- end {.panel-tabset} STATE CHAR-->
+
+:::
+<!-- end {.panel-tabset} ALLLLLL-->
