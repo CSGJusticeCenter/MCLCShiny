@@ -1,18 +1,9 @@
 
 sp_path <- csgjcr::csg_sp_path("50 State Revocations Project/MCLC Shiny App/products")
 
-## save Rmd's to sharepoint path 
-run_Rmd <- function(SP_PATH, IN, OUT){
-  
-  datestamp <- gsub("-", "", Sys.Date())
-  outfile1 <- file.path(SP_PATH, "datestamp", paste0(datestamp, "_", OUT))
-  outfile2 <- file.path(SP_PATH,                        OUT )
-  
-  rmarkdown::render(input = IN, output_file = outfile1)
-  rmarkdown::render(input = IN, output_file = outfile2)
-  file.show(outfile2)
-  
-}
+
+###############################
+### QMD's 
 
 ## save qmd's to sharepoint path 
 run_qmd <- function(SP_PATH, IN, OUT){
@@ -36,15 +27,29 @@ run_qmd <- function(SP_PATH, IN, OUT){
   
 }
 
+run_qmd(sp_path, "prep/gen_documentation.qmd", "General_Documentation.html")
+run_qmd(sp_path, "prep/rate_comp.qmd"        , "Rate_Comparison.html")
 
+
+###############################
 ### RMD's 
 
-run_Rmd(sp_path, "prep/NCRP/NCRP_demo.Rmd", "NCRP_Revocations_Demo.html")
+## save Rmd's to sharepoint path 
+run_Rmd <- function(SP_PATH, IN, OUT){
+  
+  datestamp <- gsub("-", "", Sys.Date())
+  outfile1 <- file.path(SP_PATH, "datestamp", paste0(datestamp, "_", OUT))
+  outfile2 <- file.path(SP_PATH,                        OUT )
+  
+  rmarkdown::render(input = IN, output_file = outfile1)
+  rmarkdown::render(input = IN, output_file = outfile2)
+  file.show(outfile2)
+  
+}
+
+run_Rmd(sp_path, "prep/NCRP_demo.Rmd", "NCRP_Revocations_Demo.html")
 
 
-### QMD's 
-
-run_qmd(sp_path, "prep/NCRP/gen_documentation.qmd", "General_Documentation.html")
 
 
 
