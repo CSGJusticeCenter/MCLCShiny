@@ -4,6 +4,7 @@ subtitle: "Last updated/ran: `r Sys.time()`"
 format: 
   html:
     page-layout: full
+    fontsize: 1em
 editor: source
 self-contained: true
 ---
@@ -21,12 +22,25 @@ box::use(
 
 ::: panel-tabset
 
-## Data Source 
+## Data Sources
 
-### [NCRP: National Corrections Reporting Program 1991-2019 ICPSR 38048](https://www.icpsr.umich.edu/web/ICPSR/studies/38048) 
+::: panel-tabset
 
-### [SC - Census State Population by Characteristics](https://www.census.gov/programs-surveys/popest/technical-documentation/research/evaluation-estimates/2020-evaluation-estimates/2010s-state-detail.html) 
+### NCRP 
 
+Source: [NCRP: National Corrections Reporting Program 1991-2019 ICPSR 38048](https://www.icpsr.umich.edu/web/ICPSR/studies/38048)   
+SharePoint: [JC Research - Documents/CC/data/raw/NCRP](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2FCC%2Fdata%2Fraw%2FNCRP&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98) 
+
+- Admission individual records, `DS0002/38048-0002-Data.rda`
+- filter to only include `ADMTYPE` == "(2) Parole return/revocation" and `RPTYEAR` >= 2015
+- recode `RACE` variable to shorter names 
+- Count based on different cross sections 
+
+
+### SC 
+
+Source:  [SC - Census State Population by Characteristics](https://www.census.gov/programs-surveys/popest/technical-documentation/research/evaluation-estimates/2020-evaluation-estimates/2010s-state-detail.html)  
+SharePoint: [JC Research - Documents/CC/data/raw/SC_EST](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2FCC%2Fdata%2Fraw%2FSC%2DEST&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98) 
 
 #### SC --> NCRP 
 
@@ -34,6 +48,7 @@ box::use(
 -   re-code RACE/ORIGIN categories to match RACE NCRP categories
 -   sum across categories
 -   add state ids
+-   use population estimates for 2015-2019 (population estimate for a specific year is used for calculating rates for that NCRP rates for that year)
 
 #### RACE/ORIGIN --\> RACE
 
@@ -54,6 +69,8 @@ SC has `ORIGIN`(Ethnicity) and `RACE` that need to be fit into the NCRP `RACE` c
 | 2 (Hispanic)     | 5 (Native Hawaiian and Other Pacific Islander Alone) | \(3\) Hispanic, any race          | `r admin$lev_RACE[3]` |
 | 2 (Hispanic)     | 6 (Two or more races)                                | \(3\) Hispanic, any race          | `r admin$lev_RACE[3]` |
 
+::: 
+<!--end panel.tabset DATA SOURCES --> 
 
 
 ## Code 
@@ -104,7 +121,7 @@ $y$ year
 
 Count the individual level data from NCRP by specific metrics.
 
-| DF      | Equation      | Meaning                                                                 |
+| DF      | Equation for `REVCNT`      | Meaning                                                                 |
 |:---------------|:-----------------|:-------------------------------------|
 | `cs_OR` | $n^{sy}_{or}$ | Revocation count by STATE, RPTYEAR, OFFGENERAL, RACE (offense and race) |
 | `cs_O`  | $n^{sy}_{o}$  | Revocation count by STATE, RPTYEAR, OFFGENERAL (offense)                |
@@ -115,7 +132,7 @@ Count the individual level data from NCRP by specific metrics.
 
 Revocation counts for a specific cross section divided by the population estimate for that specific cross section. Population is available by state, year, and race/ethnicity.
 
-| DF      | Equation                                                       | Meaning                                                     |
+| DF      | Equation for `RATE` | Meaning                                                     |
 |:---------------|:-----------------|:-------------------------------------|
 | `cs_OR` | $R^{sy}_{or} = \frac{n^{sy}_{or} }{N^{sy}_{r} }$ | Rate by STATE, RPTYEAR, OFFGENERAL, RACE (offense and race) |
 | `cs_O`  | $R^{sy}_{o} = \frac{n^{sy}_{o} }{N^{sy} }$       | Rate by STATE, RPTYEAR, OFFGENERAL (offense)                |
@@ -140,7 +157,7 @@ Relative Rate Index is compare the $r = 1$ (White) to the other race/ethnicity g
 
 *Note:* The RRI is calculated for all four race groups but will only be shown for $r = 2$ (Black) and $r = 3$ (Hispanic). When $r = 1$ (White) $\implies I = 1$. The last category, $r = 4$ (Other) is removed due to small counts and difficultly gather meaning from 'Other' category.
 
-| DF      | Equation                                          | Meaning                                                    |
+| DF      | Equation for `RRI` | Meaning                                                    |
 |:---------------|:-----------------|:-------------------------------------|
 | `cs_OR` | $I^{sy}_{or} = \frac{R^{sy}_{or} }{R^{sy}_{o1} }$ | RRI by STATE, RPTYEAR, OFFGENERAL, RACE (offense and race) |
 | `cs_O`  | N/A                                               | N/A                                                        |
