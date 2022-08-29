@@ -2,6 +2,7 @@
 box::use(
     glue[glue]
   , dplyr[...]
+  , tidyr[pivot_longer]
 )
 
 
@@ -31,7 +32,7 @@ lev_RACE <- c(
   , "Black"    # "(2) Black, non-Hispanic"
   , "Hispanic" # "(3) Hispanic, any race"
   , "Other"    # "(4) Other race(s), non-Hispanic"
-  , "Missing"
+  , "missing"
 )
 
 #' @export
@@ -44,7 +45,7 @@ lev_OFFGENERAL <- c(
   , "Drugs"        # "(3) Drugs"
   , "Public order" # "(4) Public order"
   , "Other"        # "(5) Other/unspecified"
-  , "Missing"
+  , "missing"
 )
 
 
@@ -67,7 +68,7 @@ NCRPlev_RACE <- function(){
 }
 
 
-#' NCRP levels with New levels as names 
+#' Convert SC RACE/ORIGIN --> NCPR RACE
 #' @export
 SC_RE <- function(DF){
   
@@ -87,6 +88,41 @@ SC_RE <- function(DF){
   
 }
 
+
+
+#' Convert APS race variables --> NCRP RACE
+#' @export
+APS_RE <- function(DF){
+  
+  DF |>
+    ## calculate other race category 
+    rowwise() %>% 
+    mutate(
+      OTHER = ifelse(
+          UNKRACE == TOTRACE
+        , NA
+        , TOTRACE - sum(c(WHITE, BLACK, HISP, UNKRACE), na.rm = TRUE)
+      )
+    ) %>% 
+    ungroup() %>% 
+    #drop TOTRACE variable 
+    select(-TOTRACE) %>% 
+    #pivot longer: multiple race variables into 1 race variable 
+    pivot_longer(cols = c(WHITE, BLACK, HISP, UNKRACE, OTHER), names_to = "APS_RACE", values_to = "POPEST") %>% 
+    #recode race to match NCRP 
+    mutate(
+      RACE = case_when(
+          APS_RACE == "WHITE"   ~ lev_RACE[1]
+        , APS_RACE == "BLACK"   ~ lev_RACE[2]
+        , APS_RACE == "HISP"    ~ lev_RACE[3]
+        , APS_RACE == "OTHER"   ~ lev_RACE[4]
+        , APS_RACE == "UNKRACE" ~ lev_RACE[5]
+      )
+    ) %>% 
+    #remove old race variable 
+    select(-APS_RACE)
+  
+}
 
 
 #' NCRP levels with New levels as names 

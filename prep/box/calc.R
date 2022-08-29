@@ -3,6 +3,7 @@ box::use(
     ./admin
   , ./clean_NCRP
   , ./clean_SC
+  , ./clean_APS
   , dplyr[...]
   , purrr[...]
 )
@@ -61,9 +62,8 @@ combine_and_calcrates <- function(pop_denom = "SC"){
   
   if (pop_denom == "SC"){
     POP  <- clean_SC$prep()
-  } else if (pop_denom == "ACS"){
-    
-  } else if (pop_denom == "BLSPP"){
+  } else if (pop_denom == "AParS"){
+    POP <- clean_APS$prep()
     
   } else {
     stop("Invalid population denom")

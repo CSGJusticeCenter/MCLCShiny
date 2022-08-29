@@ -52,7 +52,7 @@ prep <- function(){
     , "\n   -- sum across categories"
     , "\n   -- add state ids "
     ))
-  cs_R <- RAW %>% 
+  cs_R <-RAW %>% 
     filter(
         AGE    >= 18 #only include ages 18+
       , ORIGIN != 0  #remove rows that combine Hispanic and not-Hispanic
@@ -67,7 +67,7 @@ prep <- function(){
       , values_to = "POPEST"
     ) %>% 
     #combine/sum over rows 
-    group_by(STATE, NAME, POPESTYR, RACE) %>% 
+    group_by(STATE, NAME, POPESTYR, RACE, POPTYPE) %>% 
     summarise(POPEST = sum(POPEST), .groups = "keep") %>% 
     #add/factor state ids 
     addSTATEids() %>% 
@@ -79,15 +79,10 @@ prep <- function(){
     #arrange
     arrange(STATE, RPTYEAR, RACE) 
   
-  #admin$isWhite(sort(unique(cs_R$RACE))[admin$fctnum_white])
-  # admin$mylog("WHITEPOPEST only ")
-  # cs_R_W <-  cs_R %>% 
-  #       filter(as.numeric(RACE) == admin$fctnum_white) %>% 
-  #       select(STATE, FIPS, ABB, RPTYEAR, WHITEPOPEST = POPEST)
   
   admin$mylog("Sum accross state and year")
   cs_t <- cs_R %>% 
-    group_by(STATE, FIPS, ABB, RPTYEAR) %>%
+    group_by(STATE, FIPS, ABB, RPTYEAR, POPTYPE) %>%
     summarise(POPEST = sum(POPEST), .groups = "keep") %>% 
     ungroup()
   
@@ -95,7 +90,6 @@ prep <- function(){
   out <- list(
       "R"  = cs_R  #cross section by RACE
     , "t"  = cs_t  #no cross section, total by STATE/RPTYEAR 
-   # , "R_W"= cs_R_W #white population 
   )
   
   admin$mylog("Complete SC prep")
