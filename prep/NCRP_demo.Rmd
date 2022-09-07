@@ -17,6 +17,8 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.height
 
 library(tidyverse)
 library(highcharter)
+library(kableExtra)
+library(reactable)
 ```
 
 
@@ -139,20 +141,9 @@ All examples are shown with CA.
 
 **UPDATES**
 
-- General
-  * make line widths larger (size = 3)
-  * reference lines are kept same size as before (size = 2) 
-  * remove markers 
-- Rate by Population 
-  * remove charts for rate per 1000 and rate per 1mil, just keep rate per 100k 
-  * add text to point label: {val} per 100,000
-- Relative Rate Index 
-  * add 'x' to axis labels 
-  * add text to point label: {RACE} is {val}x as likely as White 
-  * update reference line label from "White (reference group) to "White (ref. group)"
-  * Area 
-    - add small (size = 1) white line on top of area charts to separate groups 
-    - change reference line to reference area 
+- only show area RRI chart
+- add REVCNT and RATE_100K to tooltip in RRI chart 
+- add table with all 3 values 
 
 ```{r}
 ABB <- "CA"
@@ -202,120 +193,67 @@ fnc_highchart_ROline <- function(ABB, VAR){
     htmltools::browsable()
   
 }
-```
-## Revocation Counts 
 
-```{r}
-fnc_highchart_ROline("CA", "REVCNT")
-```
+# fnc_highchart_ROline("CA", "REVCNT")
 
-#### Stats 
 
-```{r}
-CNTRTDF$OR$REVCNT |> summary()
-CNTRTDF$OR |> ggplot(aes(x = REVCNT)) + 
-  geom_histogram(color = "grey50", fill = "grey80", bins = 50) + 
-  ggtitle("Histogram") + 
-  theme_minimal()
 ```
 
 
-## Rate by Population {.tabset} 
+
+## Revocations 
 
 
 
 ```{r}
-fnc_highchart_ROline("CA", "RATE_100K")
+# VAR <- "RRI"
+# 
+#   ptfmt <- "{point.RACE} is {point.VAR:,.1f}x as likely as White" #1 decimal place
+#   theseRE   <- admin$lev_RACE[2:3] #only include black and hispanic 
+#   theseCols <- gcolors[2:3]
+# 
+#   
+#   plotdata <-  CNTRTDF$OR %>% 
+#     filter(ABB == !!ABB) %>% 
+#     rename("VAR" = !!VAR) %>% 
+#     # filter(RACE %in% theseRE) %>% 
+#     filter(!OFFGENERAL %in% admin$lev_OFFGENERAL[-c(1:4)])#REMOVE OTHER/MISSING OFFGENERAL 
+#     
+#   map(admin$lev_OFFGENERAL[1:4], function(OG){
+#     
+#     bh <- plotdata %>% filter(OFFGENERAL == OG, RACE %in% theseRE)
+#     #should all == 1,, instead of just putting as 1, leave as is (will help check calcs are done right)
+#     w  <- plotdata %>% filter(OFFGENERAL == OG, RACE == admin$lev_RACE[1]) %>% select(x = RPTYEAR, y = VAR)
+#     
+#     hchart(bh, "line"
+#         , hcaes(x = RPTYEAR, y = VAR, group = RACE)
+#         , color = theseCols
+#         , tooltip = list(pointFormat = ptfmt)
+#       ) %>% 
+#       refgroup(col = "dark") %>% 
+#       hc_title(text = OG) %>% 
+#       hc_yAxis(
+#           min = 0
+#         , max = max(plotdata$VAR, na.rm = TRUE)
+#         , title = list(text = "")
+#         , labels  = list(format = "{text}x")
+#         ) %>% 
+#       hc_xAxis(title = list(text = "")) %>% 
+#       hc_add_theme(hc_theme_jc2)
+#   }) %>% 
+#   hw_grid(rowheight = 350, ncol = 4) %>% 
+#     htmltools::browsable()
+#   
+#   
+
 ```
 
-
-$$
-\begin{aligned}
-&\text{Rate per } 100,000 = \frac{\text{Count}_i}{\text{Population}_i} \cdot 100,000 \\
-&i  = \text{Race/Ethnicity Group}
-\end{aligned}
-$$
-
-#### Stats
-
-I think rate per 100,000 makes the most sense because the majority of the values are above 1 but the largest values aren't 'too' large.  
-
-```{r}
-CNTRTDF$OR$RATE_100K |> summary()
-CNTRTDF$OR |> ggplot(aes(x = RATE_100K)) + 
-  geom_histogram(color = "grey50", fill = "grey80", bins = 50) + 
-  ggtitle("Histogram") + 
-  theme_minimal()
-CNTRTDF$OR |> ggplot(aes(x = RATE_100K)) + 
-  stat_ecdf(geom = "step") + 
-  ggtitle("Empirical Cumulative Distribution") + 
-  geom_vline(xintercept = 1, color = "red", linetype = "dotted") + 
-  annotate("text", x = 1, y = 1, label = "RATE = 1", hjust = -0.1, color = "red") +
-  theme_minimal() 
-```
-
-
-## Relative Rate Index {.tabset}
-
-Only includes `Black` and `Hispanic` categories 
-
-
-### Line Chart 
-
+### Relative Rate Index of Revocations 
 
 ```{r}
 VAR <- "RRI"
 
-  ptfmt <- "{point.RACE} is {point.VAR:,.1f}x as likely as White" #1 decimal place
-  theseRE   <- admin$lev_RACE[2:3] #only include black and hispanic 
-  theseCols <- gcolors[2:3]
-
-  
-  plotdata <-  CNTRTDF$OR %>% 
-    filter(ABB == !!ABB) %>% 
-    rename("VAR" = !!VAR) %>% 
-    # filter(RACE %in% theseRE) %>% 
-    filter(!OFFGENERAL %in% admin$lev_OFFGENERAL[-c(1:4)])#REMOVE OTHER/MISSING OFFGENERAL 
-    
-  map(admin$lev_OFFGENERAL[1:4], function(OG){
-    
-    bh <- plotdata %>% filter(OFFGENERAL == OG, RACE %in% theseRE)
-    #should all == 1,, instead of just putting as 1, leave as is (will help check calcs are done right)
-    w  <- plotdata %>% filter(OFFGENERAL == OG, RACE == admin$lev_RACE[1]) %>% select(x = RPTYEAR, y = VAR)
-    
-    hchart(bh, "line"
-        , hcaes(x = RPTYEAR, y = VAR, group = RACE)
-        , color = theseCols
-        , tooltip = list(pointFormat = ptfmt)
-      ) %>% 
-      refgroup(col = "dark") %>% 
-      hc_title(text = OG) %>% 
-      hc_yAxis(
-          min = 0
-        , max = max(plotdata$VAR, na.rm = TRUE)
-        , title = list(text = "")
-        , labels  = list(format = "{text}x")
-        ) %>% 
-      hc_xAxis(title = list(text = "")) %>% 
-      hc_add_theme(hc_theme_jc2)
-  }) %>% 
-  hw_grid(rowheight = 350, ncol = 4) %>% 
-    htmltools::browsable()
-  
-  
-
-```
-
-
- 
-
-### Area 
-
-
-```{r}
-VAR <- "RRI"
-
-  ptfmt <- "{point.RACE} is {point.VAR:,.1f}x as likely as White" #1 decimal place
+  ptfmt <- "{point.RACE} is {point.VAR:,.1f}x as likely as White<br>Rate per 100,000: {point.RATE_100K:,.1f}<br>Revocation count: {point.REVCNT}" #1 decimal place
   theseRE   <- admin$lev_RACE[2:3] #only include black and hispanic 
   theseCols <- gcolors[2:3]
 
@@ -329,7 +267,7 @@ VAR <- "RRI"
     
     bh <- plotdata %>% filter(OFFGENERAL == OG, RACE %in% theseRE)
     #should all == 1,, instead of just putting as 1, leave as is (will help check calcs are done right)
-    w  <- plotdata %>% filter(OFFGENERAL == OG, RACE == admin$lev_RACE[1]) %>% select(x = RPTYEAR, y = VAR)
+    w  <- plotdata %>% filter(OFFGENERAL == OG, RACE == admin$lev_RACE[1]) %>% select(x = RPTYEAR, y = VAR, REVCNT, RATE_100K)
     
     hchart(bh, "area"
         , hcaes(x = RPTYEAR, y = VAR, group = RACE)
@@ -339,7 +277,18 @@ VAR <- "RRI"
         , lineColor = "white"
         , lineWidth = 1
       ) %>% 
-      refgroup(col = "light", dash = "Solid", width = 1, type = "area", lineColor = "white") %>% 
+        hc_add_series(
+          data = w
+        , type = "area"
+        , color = "#dcdcdc"
+        , dashStyle = "Solid"  
+        , name = "White (ref. group)"
+        , marker = FALSE
+        , lineWidth = 1
+        , lineColor = "white"
+        , tooltip = list(pointFormat ="White (Reference Group) = 1<br>Rate per 100,000: {point.RATE_100K:,.1f}<br>Revocation count: {point.REVCNT}" )
+      ) %>% 
+      #refgroup(col = "light", dash = "Solid", width = 1, type = "area", lineColor = "white") %>% 
       hc_title(text = OG) %>% 
       hc_yAxis(min = 0
                , max = max(plotdata$VAR, na.rm = TRUE)
@@ -354,37 +303,394 @@ VAR <- "RRI"
 ```
 
 
-### Contrast Values 
+```{r}
+
+fmt_mdig <- function(x, mdig = 1){
+  format(round(x, digits = mdig), nsmall = mdig, trim = TRUE)
+}
+
+getRows <- function(lev){
+  vec <- which(table_numeric$RACE == admin$lev_RACE[lev])
+  c(min(vec), max(vec))
+}
+
+og_all_name <- "Any category"
+```
 
 
-Contrast values, found using [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/).  
+### Table Options {.tabset} 
 
 
-| Foreground/Background |Orange #D25E2D| Blue #236CA7| Light Orange #EDB799 | Light Blue #C7E8F5|   
-|:----------            |---------:|-------:|---------:|---------:|
-| #FFFFFF (white)       | 3.90     | 5.56   |  1.77    |  1.28    | 
-| #DCDCDC (light grey)  | 2.84     | 4.05   |  1.29    |  1.06    | 
-| #666666 (dark grey)   | 1.47     | 1.03   |  3.23    |  4.45    | 
-| #000000 (black)       | 5.56     | 3.77   | 11.83    | 16.28    | 
+#### 1 Table O>R by M>Y
 
-
-| Level | Passing Contrast | 
-|:---------------------------------|:----|
-|WCAG Level AA Large text   | 3   |
-|WCAG Level AA Graphical Objects/UI Components | 3   | 
-|WCAG Level AA Normal text  | 4.5 | 
-|WCAG Level AAA Large text  | 4.5 | 
-|WCAG Level AAA Normal text | 7   | 
-
-
-### Stats 
+OFFGENERAL>RACE by METRIC>YEAR 
 
 ```{r}
-CNTRTDF$OR |> filter(RACE %in% c("Black", "Hispanic")) |> 
-  pull(RRI) |> summary()
-CNTRTDF$OR |> filter(RACE %in% c("Black", "Hispanic")) |> 
-  ggplot(aes(x = RRI)) + 
-  geom_histogram(color = "grey50", fill = "grey80", bins = 50) + 
-  ggtitle("Histogram") + 
-  theme_minimal()
+table_numeric <- bind_rows(
+    CNTRTDF$R %>% 
+      filter(ABB == !!ABB, RACE %in% admin$lev_RACE[1:3]) %>% 
+      select(RPTYEAR, RACE, REVCNT, RATE_100K, RRI) %>% 
+      mutate(OFFGENERAL = og_all_name) 
+  , CNTRTDF$OR %>% 
+      filter(ABB == !!ABB, OFFGENERAL %in% admin$lev_OFFGENERAL[1:4], RACE %in% admin$lev_RACE[1:3]) %>% 
+      select(RPTYEAR, OFFGENERAL, RACE, REVCNT, RATE_100K, RRI)
+) %>%
+  pivot_longer(cols = c(REVCNT, RATE_100K, RRI), names_to = "METRIC", values_to = "VALUE") %>%
+  pivot_wider(names_from = c(METRIC, RPTYEAR), values_from = VALUE) %>% 
+  mutate(
+      RACE = as.character(RACE)
+    , OFFGENEARL = factor(OFFGENERAL, levels = c(og_all_name, admin$lev_OFFGENERAL))
+  ) %>% 
+  select(
+      OFFGENEARL
+    , RACE
+    , paste0("REVCNT_"   , 2015:2019)
+    , paste0("RATE_100K_", 2015:2019)
+    , paste0("RRI_"      , 2015:2019)
+  ) %>% 
+  arrange(OFFGENEARL, RACE) 
+
+
+rm_count <- JS("function(cellInfo) {return cellInfo.value}")
+
+
+yrnames <- map(paste0(2015:2019), ~colDef(name = .x, align = "right"))
+yr_colnames <- c(yrnames, yrnames, yrnames)
+names(yr_colnames) <-  c(paste0("REVCNT_"   , 2015:2019)
+    , paste0("RATE_100K_", 2015:2019)
+    , paste0("RRI_"      , 2015:2019))
+
+
+colnames_table <- c(
+    list("OFFGENEARL" = colDef(name = "Offense Category", align = "left", minWidth = 80, grouped = rm_count))
+  , list("RACE"       = colDef(name = "Race"            , align = "left", minWidth =  70))
+  , yr_colnames
+)
+
+table_numeric %>% 
+  mutate_at(vars(paste0("REVCNT_"   , 2015:2019)), ~scales::comma(., accuracy = 1)) %>% 
+  mutate_at(vars(paste0("RATE_100K_", 2015:2019)), ~fmt_mdig(.)) %>% 
+  mutate_at(vars(paste0("RRI_"      , 2015:2019)), ~paste0(fmt_mdig(.), "x")) %>% 
+  reactable(
+      theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"))
+    , compact = TRUE
+    , fullWidth = TRUE
+    , highlight = TRUE 
+    , pagination = FALSE
+    , groupBy = c("OFFGENEARL")
+    , defaultExpanded = TRUE
+    , columns = colnames_table
+    , defaultColDef = colDef(align = "right", minWidth = 50, headerVAlign =  "bottom")
+    , columnGroups = list(
+          colGroup(name = "Revocation Count"   , columns = paste0("REVCNT_"   , 2015:2019))
+        , colGroup(name = "Rate per 100,000"   , columns = paste0("RATE_100K_", 2015:2019))
+        , colGroup(name = "Relative Rate Index", columns = paste0("RRI_"      , 2015:2019))
+    )
+  )
 ```
+
+
+
+#### 1 Table: M>O>R by Y
+
+ METRIC>OFFGENERAL>RACE by YEAR
+
+
+```{r}
+table_numeric <- bind_rows(
+    CNTRTDF$R %>% 
+      filter(ABB == !!ABB, RACE %in% admin$lev_RACE[1:3]) %>% 
+      select(RPTYEAR, RACE, REVCNT, RATE_100K, RRI) %>% 
+      mutate(OFFGENERAL = og_all_name) 
+  , CNTRTDF$OR %>% 
+      filter(ABB == !!ABB, OFFGENERAL %in% admin$lev_OFFGENERAL[1:4], RACE %in% admin$lev_RACE[1:3]) %>% 
+      select(RPTYEAR, OFFGENERAL, RACE, REVCNT, RATE_100K, RRI)
+) %>%
+  pivot_longer(cols = c(REVCNT, RATE_100K, RRI), names_to = "METRIC", values_to = "VALUE") %>%
+  pivot_wider(names_from = RPTYEAR, values_from = VALUE) %>% 
+  mutate(
+      RACE = as.character(RACE)
+    , METRIC = factor(METRIC, levels = c("RRI", "RATE_100K", "REVCNT"))
+    , OFFGENEARL = factor(OFFGENERAL, levels = c(og_all_name, admin$lev_OFFGENERAL))
+  ) %>% 
+  select(METRIC, OFFGENEARL, RACE, paste0(2015:2019)) %>% 
+  arrange(METRIC, OFFGENEARL, RACE)
+
+
+
+rm_count <- JS("function(cellInfo) {return cellInfo.value}")
+
+
+table_numeric %>% 
+  filter(!(RACE == admin$lev_RACE[1] & METRIC == "RRI")) %>% 
+  mutate_at(
+      vars(paste0(2015:2019))
+    , ~case_when(
+        METRIC == "REVCNT"                          ~ scales::comma(., accuracy = 1)
+      , METRIC == "RATE_100K"                       ~ fmt_mdig(.)
+      , METRIC == "RRI" & RACE == admin$lev_RACE[1] ~ "1 (ref)"
+      , METRIC == "RRI" & RACE != admin$lev_RACE[1] ~ paste0(fmt_mdig(.), "x")
+    )
+  ) %>% 
+  mutate(
+    METRIC = fct_recode(
+        METRIC
+      , "Revocation Count"   = "REVCNT"
+      , "Rate per 100,000"   = "RATE_100K"
+      , "Relative Rate Index"= "RRI"
+    )
+  ) %>% 
+  reactable(
+    theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"))
+    , defaultColDef = colDef(align = "right", minWidth = 70)
+    , compact = TRUE
+    , fullWidth = TRUE
+    , columns = list(
+          "METRIC"     = colDef(name = "Metric",         , align = "left", minWidth = 160, grouped = rm_count)
+        , "OFFGENEARL" = colDef(name = "Offense Category", align = "left", minWidth = 125, grouped = rm_count)
+        , "RACE"       = colDef(name = "Race"            , align = "left", minWidth =  70)
+    )
+    , highlight = TRUE 
+    , pagination = FALSE
+    , groupBy = c("METRIC", "OFFGENEARL")
+    , defaultExpanded = TRUE
+  )
+
+```
+
+#### 3 M tables: O>R by Y
+
+3 Metric tables: OFFGENERAL>RACE by YEAR
+
+
+```{r}
+
+table_numeric <- bind_rows(
+    CNTRTDF$R %>% 
+      filter(ABB == !!ABB, RACE %in% admin$lev_RACE[1:3]) %>% 
+      select(RPTYEAR, RACE, REVCNT, RATE_100K, RRI) %>% 
+      mutate(OFFGENERAL = og_all_name) 
+  , CNTRTDF$OR %>% 
+      filter(ABB == !!ABB, OFFGENERAL %in% admin$lev_OFFGENERAL[1:4], RACE %in% admin$lev_RACE[1:3]) %>% 
+      select(RPTYEAR, OFFGENERAL, RACE, REVCNT, RATE_100K, RRI)
+) %>%
+  pivot_longer(cols = c(REVCNT, RATE_100K, RRI), names_to = "METRIC", values_to = "VALUE") %>%
+  pivot_wider(names_from = RPTYEAR, values_from = VALUE) %>% 
+  mutate(
+      RACE = as.character(RACE)
+    , METRIC = factor(METRIC, levels = c("RRI", "RATE_100K", "REVCNT"))
+    , OFFGENEARL = factor(OFFGENERAL, levels = c(og_all_name, admin$lev_OFFGENERAL))
+  ) %>% 
+  select(METRIC, OFFGENEARL, RACE, paste0(2015:2019)) %>% 
+  arrange(METRIC, OFFGENEARL, RACE)
+
+
+
+
+
+rm_count <- JS("function(cellInfo) {return cellInfo.value}")
+
+
+reactable_1metric <- function(metric){
+  
+  if (metric == "RRI"){
+    filtered_table <- table_numeric %>% filter(METRIC == metric, RACE %in% admin$lev_RACE[2:3])
+  } else { 
+    filtered_table <- table_numeric %>% filter(METRIC == metric)
+  }
+  
+  filtered_table %>% 
+  filter(METRIC == metric) %>% 
+  mutate_at(
+      vars(paste0(2015:2019))
+    , ~case_when(
+        METRIC == "REVCNT"                          ~ scales::comma(., accuracy = 1)
+      , METRIC == "RATE_100K"                       ~ fmt_mdig(.)
+      , METRIC == "RRI" & RACE == admin$lev_RACE[1] ~ "Ref. Group"
+      , METRIC == "RRI" & RACE != admin$lev_RACE[1] ~ paste0(fmt_mdig(.), "x")
+    )
+  ) %>% 
+  select(-METRIC) %>% 
+  reactable(
+    theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"))
+    , defaultColDef = colDef(align = "right", minWidth = 70)
+    , compact = TRUE
+    , columns = list(
+          "OFFGENEARL" = colDef(name = "Offense Category", align = "left", minWidth = 125, grouped = rm_count)
+        , "RACE"       = colDef(name = "Race"            , align = "left", minWidth =  70)
+    )
+    , highlight = TRUE 
+    , pagination = FALSE
+    , groupBy = c("OFFGENEARL")
+    , defaultExpanded = TRUE
+  )
+  
+}
+
+
+
+```
+
+
+##### Relative Rate Index, White Reference Group
+
+```{r}
+reactable_1metric("RRI")
+```
+
+
+##### Rate per 100,000
+
+```{r}
+reactable_1metric("RATE_100K")
+```
+
+##### Revocation Counts
+
+```{r}
+reactable_1metric("REVCNT")
+```
+
+
+```{r, eval = FALSE}
+
+og_order <- c(admin$lev_OFFGENERAL[1:4], "ALL")
+
+table_numeric <- bind_rows(
+    CNTRTDF$R %>% 
+      filter(ABB == !!ABB, RACE %in% admin$lev_RACE[1:3]) %>% 
+      select(RPTYEAR, RACE, REVCNT, RATE_100K, RRI) %>% 
+      mutate(OFFGENERAL = "ALL") 
+  , CNTRTDF$OR %>% 
+      filter(ABB == !!ABB, OFFGENERAL %in% admin$lev_OFFGENERAL[1:4], RACE %in% admin$lev_RACE[1:3]) %>% 
+      select(RPTYEAR, OFFGENERAL, RACE, REVCNT, RATE_100K, RRI)
+) %>% 
+  pivot_wider(names_from = OFFGENERAL, values_from = c(REVCNT, RATE_100K, RRI)) %>% 
+  mutate(RACE = as.character(RACE)) %>% 
+  arrange(RACE, RPTYEAR) %>% 
+  select(
+      RACE
+    , RPTYEAR
+    , paste0("REVCNT_", og_order)
+    , paste0("RATE_100K_", og_order)
+    , paste0("RRI_", og_order)
+  ) 
+
+
+
+# colnames_OG1 <- map(og_order, ~colDef(name = .x))
+# colnames_OG3 <- c(colnames_OG1, colnames_OG1, colnames_OG1)
+# 
+# names(colnames_OG3) <- c(
+#     paste0("REVCNT_"   , og_order)
+#   , paste0("RATE_100K_", og_order)
+#   , paste0("RRI_"      , og_order)
+# )
+
+
+colnames_revcnt <- map(og_order, ~colDef(name = .x, format = colFormat(separators = TRUE), align = "right"))
+names(colnames_revcnt) <- paste0("REVCNT_" , og_order)
+
+colnames_rate100k <- map(og_order, ~colDef(name = .x, format = colFormat(digits = 1), align = "right"))
+names(colnames_rate100k) <- paste0("RATE_100K_", og_order)
+
+colnames_rri <- map(og_order, ~colDef(name = .x, , align = "right"))
+names(colnames_rri) <- paste0("RRI_", og_order)
+
+colnames_table <- c(
+    list("RPTYEAR" = colDef(name = "Year"))
+  , list("RACE" = colDef(name = "Race", align = "left"))
+  , colnames_revcnt
+  , colnames_rate100k
+  , colnames_rri
+)
+
+table_numeric %>% 
+  mutate_at(vars(paste0("RRI_", og_order)), ~ifelse(RACE == admin$lev_RACE[1], "ref", paste0(fmt_1dig(.), "x"))) %>% 
+  reactable(
+    theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "right"))
+    #, defaultColDef = colDef(format = colFormat(separators = TRUE), align = "right")
+    , compact = TRUE
+    , fullWidth = FALSE
+    , columns = colnames_table
+    , columnGroups = list(
+          colGroup(name = "Revocation Count"   , columns = paste0("REVCNT_"   , og_order))
+        , colGroup(name = "Rate per 100,000"   , columns = paste0("RATE_100K_", og_order))
+        , colGroup(name = "Relative Rate Index", columns = paste0("RRI_"      , og_order))
+    )
+   # , groupBy = "RPTYEAR"
+  ) 
+  
+
+
+        # , `REVCNT_Property`
+        # , `REVCNT_Drugs`
+        # , `REVCNT_Public order`
+        # , `REVCNT_ALL`
+        # , `RATE_100K_Violent`
+        # , `RATE_100K_Property`
+        # , `RATE_100K_Drugs`
+# [11] "RATE_100K_Public order" "RATE_100K_ALL"         
+# [13] "RRI_Violent"            "RRI_Property"          
+# [15] "RRI_Drugs"              "RRI_Public order"      
+# [17] "RRI_ALL"
+  
+```
+
+
+```{r, eval = FALSE}
+
+# table_numeric %>% 
+#   mutate_at(vars(paste0("REVCNT_", og_order)), scales::comma) %>% 
+#   mutate_at(vars(paste0("RATE_100K_", og_order)),  ~fmt_1dig(.)) %>% 
+#   mutate_at(vars(paste0("RRI_", og_order)), ~ifelse(RACE == admin$lev_RACE[1], "ref", paste0(fmt_1dig(.), "x"))) %>% 
+#   select(-RACE) %>% 
+#   kable(
+#     align = paste(rep("r", ncol(table_numeric)-1), collapse = "")
+#     , col.names = c("Year", rep(og_order, 3))
+#     
+#   ) %>% 
+#   kable_styling() %>% 
+#   add_header_above(c(" " = 1, "Revocations Count" = 5, "Rate per 100,000" = 5, "Relative Rate Index" = 5)) %>% 
+#   pack_rows(admin$lev_RACE[1], getRows(1)[1], getRows(1)[2]) %>% 
+#   pack_rows(admin$lev_RACE[2], getRows(2)[1], getRows(2)[2]) %>% 
+#   pack_rows(admin$lev_RACE[3], getRows(3)[1], getRows(3)[2]) %>% 
+#   column_spec(column =  1:16, width = "6.25%")
+# 
+# 
+# og_order <- c(admin$lev_OFFGENERAL[1:4])
+# 
+# table_numeric <-  CNTRTDF$OR %>% 
+#       filter(ABB == !!ABB, OFFGENERAL %in% admin$lev_OFFGENERAL[1:4], RACE %in% admin$lev_RACE[1:3]) %>% 
+#       select(RPTYEAR, OFFGENERAL, RACE, REVCNT, RATE_100K, RRI) %>% 
+#   pivot_wider(names_from = OFFGENERAL, values_from = c(REVCNT, RATE_100K, RRI)) %>% 
+#   mutate(RACE = as.character(RACE)) %>% 
+#   arrange(RACE, RPTYEAR) %>% 
+#   select(
+#       RACE
+#     , RPTYEAR
+#     , paste0("REVCNT_", og_order)
+#     , paste0("RATE_100K_", og_order)
+#     , paste0("RRI_", og_order)
+#   ) 
+
+
+# table_numeric %>% 
+#   mutate_at(vars(paste0("REVCNT_", og_order)), scales::comma) %>% 
+#   mutate_at(vars(paste0("RATE_100K_", og_order)),  ~fmt_1dig(.)) %>% 
+#   mutate_at(vars(paste0("RRI_", og_order)), ~ifelse(RACE == admin$lev_RACE[1], "ref", paste0(fmt_1dig(.), "x"))) %>% 
+#   select(-RACE) %>% 
+#   kable(
+#     align = paste(rep("r", ncol(table_numeric)-1), collapse = "")
+#     , col.names = c("Year", rep(og_order, 3))
+#     
+#   ) %>% 
+#   kable_styling() %>% 
+#   add_header_above(c(" " = 1, "Revocations Count" = 4, "Rate per 100,000" = 4, "Relative Rate Index" = 4)) %>% 
+#   pack_rows(admin$lev_RACE[1], getRows(1)[1], getRows(1)[2]) %>% 
+#   pack_rows(admin$lev_RACE[2], getRows(2)[1], getRows(2)[2]) %>% 
+#   pack_rows(admin$lev_RACE[3], getRows(3)[1], getRows(3)[2]) %>% 
+#   column_spec(column =  1:16, width = "6.25%")
+```
+
+
