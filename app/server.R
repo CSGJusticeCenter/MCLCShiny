@@ -138,12 +138,13 @@ server <- function(input, output, session) {
         hc_yAxis(title = "") %>%
         hc_title(
           text = paste0("Change in ", unique(df_map()$metric), " ", unique(df_map()$adm_or_pop), " from ", unique(df_map()$year)),
-          align = "left",
+          align = "center",
           style = list(fontWeight = "bold", fontSize = "24px", useHTML = TRUE)
         ) %>%
 
         hc_add_theme(hc_theme_map_jc) %>%
         hc_setup() %>%
+        hc_exporting(enabled = FALSE) %>%
 
         hc_plotOptions(series = list(animation = FALSE,
                                      dataLabels = list(enabled = TRUE),
@@ -187,11 +188,12 @@ server <- function(input, output, session) {
         hc_yAxis(title = "") %>%
         hc_title(
           text = paste0("Change in ", unique(df_map()$metric), " ", unique(df_map()$adm_or_pop), " from ", unique(df_map()$year)),
-          align = "left",
+          align = "center",
           style = list(fontWeight = "bold", fontSize = "24px", useHTML = TRUE)) %>%
 
         hc_add_theme(hc_theme_map_jc) %>%
         hc_setup() %>%
+        hc_exporting(enabled = FALSE) %>%
 
         hc_plotOptions(series = list(animation = FALSE, dataLabels = list(enabled = TRUE), cursor = "pointer", borderWidth = 3),
                        accessibility = list(enabled = TRUE,
@@ -227,9 +229,12 @@ server <- function(input, output, session) {
               class = list(stripe = FALSE),
               options = list(dom = 'ft',
                              pageLength = 50,
-                             language = list(search = "", searchPlaceholder = "Search"),
+                             language = list(search = "", searchPlaceholder = "Find Your State"),
                              columnDefs = list(list(visible=FALSE, targets=c(1)),
-                                               list(className = 'dt-left', targets = '_all'))),
+                                               list(className = 'dt-right', targets = c(2:6)),
+                                               list(className = 'dt-left', targets = c(0))
+                                               )
+                             ),
               rownames = FALSE) %>%
               formatPercentage(c("2018 - 2019", "2019 - 2020"), 2) %>%
               formatCurrency(c("2018", "2019", "2020"), currency = " ", interval = 3, mark = ",") %>%
@@ -434,7 +439,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        highcharter::hc_exporting(enabled = TRUE) %>%
+        highcharter::hc_exporting(enabled = FALSE) %>%
         hc_title(
           text = paste0("Prison ", input$adm_pop_report),
           align = "left",
@@ -446,7 +451,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        highcharter::hc_exporting(enabled = TRUE)
+        highcharter::hc_exporting(enabled = FALSE)
     }
   })
 
@@ -464,7 +469,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        highcharter::hc_exporting(enabled = TRUE) %>%
+        highcharter::hc_exporting(enabled = FALSE) %>%
         hc_title(
           text = paste0("Supervision Violation ", input$adm_pop_report),
           align = "left",
@@ -476,7 +481,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        highcharter::hc_exporting(enabled = TRUE) %>%
+        highcharter::hc_exporting(enabled = FALSE) %>%
         hc_title(
           text = paste0("Supervision Violation ", input$adm_pop_report),
           align = "left",
@@ -617,7 +622,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        highcharter::hc_exporting(enabled = TRUE) %>%
+        highcharter::hc_exporting(enabled = FALSE) %>%
         hc_title(
           text = paste0("Parole Violation ", input$adm_pop_report),
           align = "left",
@@ -629,7 +634,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        highcharter::hc_exporting(enabled = TRUE) %>%
+        highcharter::hc_exporting(enabled = FALSE) %>%
         hc_title(
           text = paste0("Parole Violation ", input$adm_pop_report),
           align = "left",
@@ -741,7 +746,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        highcharter::hc_exporting(enabled = TRUE) %>%
+        highcharter::hc_exporting(enabled = FALSE) %>%
         hc_title(
           text = paste0("Probation Violation ", input$adm_pop_report),
           align = "left",
@@ -753,7 +758,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        highcharter::hc_exporting(enabled = TRUE) %>%
+        highcharter::hc_exporting(enabled = FALSE) %>%
         hc_title(
           text = paste0("Probation Violation ", input$adm_pop_report),
           align = "left",

@@ -20,7 +20,13 @@
 #     Saves data to research SP folder
 #######################################
 
+# install this version of highcharter
+# remotes::install_github("batpigandme/highcharter@module-testing")
+# remotes::install_github("jbkunst/highcharter")
+install.packages("highcharter")
+
 # load packages
+library(rlang)
 library(dplyr)
 library(tidyr)
 library(csgjcr)

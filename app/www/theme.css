@@ -92,7 +92,6 @@ Navigation Bar Color and Font
   display:none !important;
 }
 
-
 /*##################################################################################################################
 Header and global drop down options
 ####################################################################################################################*/
@@ -125,7 +124,7 @@ Header and global drop down options
   background-color:#DDE3E9 !important;
   height: 100px;
   padding: 0 0px;
-  display: absolute;
+  display: absolute; /* without this the blue part of the header disappears */
   left: 50%;
 }
 
@@ -151,6 +150,8 @@ Header and global drop down options
   background-color:#DDE3E9 !important;
   height: 100px;
   padding: 0 0px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /*##################################################################################################################
@@ -187,7 +188,7 @@ Dropdowns and buttons
   border-radius:0px;
 }
 
-/* Buttons are set at a fixed width and if content is too big it gets elipsed
+/* Buttons are set at a fixed width and if content is too big it gets elipsed*/
 button {
 width: 50px;
 }
@@ -197,7 +198,7 @@ button > div {
 text-overflow: ellipsis;
 overflow: hidden;
 white-space: nowrap;
-}*/
+}
 
 /*######################################
 MAP EXPLORER
@@ -213,14 +214,14 @@ Hex map
 
 /* Title of map settings */
 #selected-map {
-  text-align: left;
+  text-align: center; /* not working */
   font-weight: bold;
   font-size: 24px;
 }
 
 /* Map settings */
 #hex-map{
-  text-align: left;
+  text-align: center; /* not working */
   font-weight: bold;
   font-size:24px;
 }
@@ -232,25 +233,26 @@ Table
 
 /* Title of table under map settings */
 #selected-map-table{
-  text-align: left;
+  text-align: center;
   font-weight: bold;
   font-size:24px;
 }
 
 /* Table under map settings */
 #table-map {
-  text-align: left;
+  text-align: center; /* not working */
+  white-space: nowrap;
 }
 
 /* Align text with search bar */
 #selected-map-table {
-  position: relative; top: 60px;
+  position: relative; top: 55px;
 }
 
 /* Change search bar appearance */
 #table-map input {
   border-radius: 0px;
-  border: 2px solid #004270;
+  border: 3px color: #004270;
   width: 275px;
   height: 32px;
   background: #FFFFFF;
@@ -293,7 +295,7 @@ Title and value boxes
 
 /* Title of state settings */
 #selected-state {
-  text-align: left;
+  text-align: center;
   font-weight: bold;
   font-size: 24px;
 }
@@ -310,12 +312,12 @@ Tabset Panels
   list-style: none;
   margin: 0;
   width: 100%
-  display: block;
+  display: inline;
 }
 
 .nav-tabs > li {
   float:none;
-  display:inline-block;
+  display:inline-block; /* maintains tab structure for parole, prob and revocations */
   zoom:1;
 }
 
