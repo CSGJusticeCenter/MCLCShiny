@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: import.R
 # Authors: Mari Roberts
-# Date last updated: June 10, 2022
+# Date last updated: September 28, 2022
 
 # Description:
 #    Loads packages
@@ -33,12 +33,17 @@ library(showtext)
 library(sysfonts)
 library(utils)
 library(highcharter)
-library(janitor)
+library(extrafont)
 
 # Add fonts required to run functions.R
+# fonts are found in app folder
 font_add("Graphik", regular = "app/www/Fonts/GraphikRegular.otf")
 showtext_auto()
 default_fonts <- c("Graphik")
+
+# test
+# library(ggplot2)
+# qplot(1:10)+theme(text=element_text(family="Graphik Regular"))
 
 # load custom functions
 source("app/functions.R")
@@ -171,12 +176,9 @@ adm <- rbind(adm18, adm19, adm20)
 pop <- rbind(pop18, pop19, pop20)
 
 # clean names
-adm <- clean_names(adm)
-pop <- clean_names(pop)
-
 # rename variable
-adm <- adm %>% rename(state = states)
-pop <- pop %>% rename(state = states)
+adm <- clean_names(adm) %>% rename(state = states)
+pop <- clean_names(pop) %>% rename(state = states)
 
 # add adm and pop data together
 adm_pop <- merge(adm, pop, by = c("state", "state_abbrev", "year"))
@@ -199,7 +201,6 @@ adm_pop[adm_pop == "NaN"] <- NA
 # Value box data
 ################################################################################
 
-# make data long form
 # add prob and parole variables together to get total new offense and technical admissions and population
 # remove prob and parole variables
 mclc <- adm_pop %>%
@@ -216,15 +217,16 @@ mclc <- adm_pop %>%
 mclc_all <- gather(mclc, data, total, total_admissions:technical_population)
 adm_pop_long <- gather(adm_pop, data, total, total_admissions:other_population)
 
-# add text depending on data
+# custom function to add text label depending on metric
+# custom function to create an adm vs pop variable
+# custom function to create a prob vs parole variable
 adm_pop_long <- fnc_create_data_metric(adm_pop_long)
 adm_pop_long <- fnc_create_adm_pop(adm_pop_long)
 adm_pop_long <- fnc_create_prob_vs_parole(adm_pop_long)
 
 # add tooltip
 adm_pop_long <- adm_pop_long %>%
-  mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
-
+  mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", formattable::comma(total, digits = 0), "<br>"))
 
 # create change from 2018 to 2019 to 2020
 # remove dups
@@ -281,7 +283,7 @@ mclc_change <-
 mclc_explorer_table <- left_join(mclc_counts, mclc_change, by = c("state", "data"))
 
 # create year range
-# create min and max values
+# create min and max values for legend scale
 mclc_explorer <- mclc_all %>%
   filter(year != 2018) %>%
   rename(state_abb = code) %>%
@@ -306,7 +308,7 @@ mclc_explorer <- mclc_all %>%
 # Value box data
 ################################################################################
 
-# filter to vb values (total, supervision violations, and technical violations)
+# filter to value box values (total, supervision violations, and technical violations)
 # create increase or decrease category for change
 # change data types
 vb_adm_pop <- mclc_all %>%
@@ -326,7 +328,7 @@ vb_adm_pop <- mclc_all %>%
 ##############################
 
 # select variables
-# summarise by type
+# sum by type
 # remove probation, parole and other
 # create text for table
 state_table <- mclc_all %>%
@@ -341,10 +343,8 @@ state_table <- mclc_all %>%
                           metric == "New Offense" & adm_or_pop == "Population"            ~ "New Offense Population",
                           metric == "Supervision Violation" & adm_or_pop == "Population"  ~ "Supervision Violation Population",
                           metric == "Technical Violation" & adm_or_pop == "Population"    ~ "Technical Population",
-                          metric == "Total" & adm_or_pop == "Population"                  ~ "Total Population"))
-
-# rearrange data
-state_table <- state_table %>% select(state, text, adm_or_pop, everything())
+                          metric == "Total" & adm_or_pop == "Population"                  ~ "Total Population")) %>%
+  select(state, text, adm_or_pop, everything())
 
 # make wide form
 state_table_wide <- spread(state_table, key = year, value = total)
@@ -360,10 +360,8 @@ state_table_wide <- state_table_wide %>%
                            metric == "Supervision Violation"   ~ 2,
                            metric == "Technical Violation"     ~ 3,
                            metric == "Total"                   ~ 1),
-         three_yr_change = (`2020`-`2018`)/`2018`)
-
-# rearrange data
-state_table_wide <- state_table_wide %>% select(state, text, `2018`, `2019`, `2020`, three_yr_change, everything()) %>%
+         three_yr_change = (`2020`-`2018`)/`2018`) %>%
+  select(state, text, `2018`, `2019`, `2020`, three_yr_change, everything()) %>%
   ungroup() %>%
   select(-metric)
 
@@ -388,7 +386,10 @@ prob_parole_tables <- fnc_create_data_metric(prob_parole_tables) %>%
   summarise(total = sum(total))
 
 # filter to parole
-parole_table <- prob_parole_tables %>% filter(prob_vs_parole == "Parole")
+parole_table <- prob_parole_tables %>%
+  filter(prob_vs_parole == "Parole") %>%
+  select(state, text, adm_or_pop, everything()) %>%
+  select(-metric)
 
 # make wide form
 parole_table_wide <- spread(parole_table, key = year, value = total)
@@ -399,15 +400,8 @@ parole_table_wide <- parole_table_wide %>%
     metric == "New Offense"             ~ 3,
     metric == "Technical Violation"     ~ 2,
     metric == "Parole Violation"        ~ 1)) %>%
-  # 3 year change
-  mutate(three_yr_change = (`2020`-`2018`)/`2018`)
-
-# rearrange data
-parole_table <- parole_table %>% select(state, text, adm_or_pop, everything()) %>%
-  select(-metric)
-
-# rearrange data
-parole_table_wide <- parole_table_wide %>% select(state, text, `2018`, `2019`, `2020`, three_yr_change, everything()) %>%
+  mutate(three_yr_change = (`2020`-`2018`)/`2018`) %>%
+  select(state, text, `2018`, `2019`, `2020`, three_yr_change, everything()) %>%
   select(-metric)
 
 ################################################################################
@@ -415,7 +409,10 @@ parole_table_wide <- parole_table_wide %>% select(state, text, `2018`, `2019`, `
 ################################################################################
 
 # filter to probation
-probation_table <- prob_parole_tables %>% filter(prob_vs_parole == "Probation")
+probation_table <- prob_parole_tables %>%
+  filter(prob_vs_parole == "Probation") %>%
+  select(state, text, adm_or_pop, everything()) %>%
+  select(-metric)
 
 # make wide form
 probation_table_wide <- spread(probation_table, key = year, value = total)
@@ -427,14 +424,8 @@ probation_table_wide <- probation_table_wide %>%
     metric == "Technical Violation"     ~ 2,
     metric == "Probation Violation"        ~ 1)) %>%
   # 3 year change
-  mutate(three_yr_change = (`2020`-`2018`)/`2018`)
-
-# rearrange data
-probation_table <- probation_table %>% select(state, text, adm_or_pop, everything()) %>%
-  select(-metric)
-
-# rearrange data
-probation_table_wide <- probation_table_wide %>% select(state, text, `2018`, `2019`, `2020`, three_yr_change, everything()) %>%
+  mutate(three_yr_change = (`2020`-`2018`)/`2018`) %>%
+  select(state, text, `2018`, `2019`, `2020`, three_yr_change, everything()) %>%
   select(-metric)
 
 ################################################################################
@@ -455,7 +446,7 @@ csg <- csg %>% ungroup() %>%
   mutate(state = as.character(state))
 
 ########
-# BJS download data
+# BJS download data - don't need but keeping just in case
 ########
 
 # create year variable and select variables
@@ -502,12 +493,6 @@ bjs_probation <- bjs_probation %>% select(stateid, year,
                                           inc_new_sentence = exincnew,     # incarceration with new sentence
                                           inc_current_sentence = exincurr  # incarceration with current sentence
                                           )
-  # mutate(text = case_when(data == "total_pop_end"         ~ "Total Probation Population (End of Year)",
-  #                         data == "entries_w_inc"         ~ "Entries with Incarceration",
-  #                         data == "entries_wo_inc"        ~ "Entries without Incarceration",
-  #                         data == "entries_total"         ~ "Total Entries to Probation",
-  #                         data == "inc_new_sentence"      ~ "Incarcerated with New Sentence",
-  #                         data == "inc_current_sentence"  ~ "Incarcerated under Current Sentence"))
 
 # remove punctuation and numbers from state name
 bjs_parole$stateid <- gsub('[[:punct:]]+','',bjs_parole$stateid)

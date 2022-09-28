@@ -7,6 +7,8 @@
 #    Server for shiny app
 #######################################
 
+################################## ADD LABELS TO CHARTS
+
 server <- function(input, output, session) {
 
   # change URL depending on tab selection in navbar
