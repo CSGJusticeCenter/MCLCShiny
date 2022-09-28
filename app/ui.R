@@ -199,7 +199,19 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                    br(),
                                                                    br(),
 
-                                                                   fluidRow(column(width = 12, align = "center", reactableOutput("state_table")))
+                                                                   fluidRow(column(width = 12, align = "center", reactableOutput("state_table"))),
+
+                                                                   br(),
+
+                                                                   fluidRow(column(width = 12, align = "left", div(id = "selected-state-note-title", "State Notes"))),
+
+                                                                   br(),
+
+                                                                   fluidRow(column(width = 12, align = "left", div(id = "selected-state-note", textOutput("selected_state_note")))),
+
+                                                                   br(),
+
+                                                                   fluidRow(column(width = 12, align = "left", div(id = "consistent-state-note", state_note)))
 
                                                           ), # end tabPanel
 
@@ -207,7 +219,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                                    br(),
 
-                                                                   fluidRow(column(width = 12, highchartOutput("parole_bar_chart", height = 400, width = 390))),
+                                                                   fluidRow(column(width = 12, align = "center", highchartOutput("parole_bar_chart", height = 400, width = 390))),
 
                                                                    br(),
                                                                    br(),
@@ -221,13 +233,21 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                                    br(),
 
-                                                                   fluidRow(column(width = 12, highchartOutput("probation_bar_chart", height = 400, width = 390))),
+                                                                   fluidRow(column(width = 12, align = "center", highchartOutput("probation_bar_chart", height = 400, width = 390))),
 
                                                                    br(),
                                                                    br(),
                                                                    br(),
 
                                                                    fluidRow(column(width = 12, align = "center", reactableOutput("probation_table")))
+
+                                                          ), # end tabPanel
+
+                                                          tabPanel(value="4","Revocations",
+
+                                                                   br(),
+
+                                                                   "Coming soon."
 
                                                           ) # end tabPanel
 
@@ -236,24 +256,24 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                  column(width = 2)
                                         ), # end fluidRow
 
-                                        br(),
-                                        br(),
-
-                                        fluidRow(column(width = 2),
-                                                 column(width = 8, align = "left", div(id = "selected-state-note-title", "State Notes")),
-                                                 column(width = 2)),
-
-                                        br(),
-
-                                        fluidRow(column(width = 2),
-                                                 column(width = 8, align = "left", div(id = "selected-state-note", textOutput("selected_state_note"))),
-                                                 column(width = 2)),
-
-                                        br(),
-
-                                        fluidRow(column(width = 2),
-                                                 column(width = 8, align = "left", div(id = "consistent-state-note", state_note)),
-                                                 column(width = 2))
+                                        br()
+                                        # br(),
+                                        #
+                                        # fluidRow(column(width = 2),
+                                        #          column(width = 8, align = "left", div(id = "selected-state-note-title", "State Notes")),
+                                        #          column(width = 2)),
+                                        #
+                                        # br(),
+                                        #
+                                        # fluidRow(column(width = 2),
+                                        #          column(width = 8, align = "left", div(id = "selected-state-note", textOutput("selected_state_note"))),
+                                        #          column(width = 2)),
+                                        #
+                                        # br(),
+                                        #
+                                        # fluidRow(column(width = 2),
+                                        #          column(width = 8, align = "left", div(id = "consistent-state-note", state_note)),
+                                        #          column(width = 2))
 
                                     ) # end div
 

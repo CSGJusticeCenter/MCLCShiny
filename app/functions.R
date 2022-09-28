@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: functions.R
 # Authors: Mari Roberts
-# Date: June 10, 2022
+# Date last updated: September 28, 2022
 # Description:
 #    Defines custom functions
 #######################################
