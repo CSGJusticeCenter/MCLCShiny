@@ -17,18 +17,18 @@ library(tidyverse)
 
 ###############
 #plotting setup
-blankitout <-   theme(axis.line=element_blank(),
-                      axis.text.x=element_blank(),
-                      axis.text.y=element_blank(),
-                      axis.ticks=element_blank(),
-                      axis.title.x=element_blank(),
-                      axis.title.y=element_blank(),
-                      legend.position="none",
-                      panel.background=element_blank(),
-                      panel.border=element_blank(),
-                      panel.grid.major=element_blank(),
-                      panel.grid.minor=element_blank(),
-                      plot.background=element_blank())
+blankitout <-   theme(axis.line        = element_blank(),
+                      axis.text.x      = element_blank(),
+                      axis.text.y      = element_blank(),
+                      axis.ticks       = element_blank(),
+                      axis.title.x     = element_blank(),
+                      axis.title.y     = element_blank(),
+                      legend.position  = "none",
+                      panel.background = element_blank(),
+                      panel.border     = element_blank(),
+                      panel.grid.major = element_blank(),
+                      panel.grid.minor = element_blank(),
+                      plot.background  = element_blank())
 
 
 #not full human
@@ -46,6 +46,7 @@ cols0 <- c(rgb(255,255,255,maxColorValue = 255),
 ################human setup
 # Load png file with human
 img <- readPNG("C:/Users/jmallett/OneDrive - The Council of State Governments/Work_other/human2.png")
+#make all values binary (0/1)
 img <- ifelse(img>0 & img<1,1,
               ifelse(img==0,0,
                      ifelse(img==1,1,1)))
@@ -62,11 +63,15 @@ RRI       <- setrri        #RRI
 numfull   <- floor(RRI)    #round RRI to determine how many filled infographics
 numremain <- RRI - numfull #find partial fill for single infographic
 
+
 #########set number of rows to plot infographics
 if (infogs-setrri<1) {
   infogs<-floor(setrri)+2;
   warning(paste0("There are not enough infographics to plot! Number of infographics reset to ",floor(setrri)+2))}
 if (infogs>=8) {rows<-2} else {rows<-1}
+
+#########starting position of blank infographic humans
+blank <- numfull + 2     
 
 ############NOT FULL HUMAN 
 #percent of interest
@@ -78,13 +83,13 @@ w     <- dim(img)[2]
 pos1    <- which(apply(img[,,1], 1, function(y) any(y==1)))
 min     <- min(pos1)
 max     <- 437 #max position must be manually set due to issues with finding top of PNG fill
-pospct <- round((max-min)*pcts2/100+min)
+pospct  <- round((max-min)*pcts2/100+min)
 
 # Fill bodies with a different color according to percentages
 finalimg                 <- img[h:1,,1]
 bkgr                     <- (finalimg==1)
 colfill                  <- matrix(rep(FALSE,h*w),nrow=h)
-colfill[max:pospct,1:w] <- TRUE
+colfill[max:pospct,1:w]  <- TRUE
 finalimg[bkgr & colfill] <- 0.5
 
 #convert matrix into  df for ggplot
@@ -105,7 +110,7 @@ pospct <- round((max-min)*pcts0/100+min)
 finalimg                  <- img[h:1,,1]
 bkgr                      <- (finalimg==1)
 colfill                   <- matrix(rep(FALSE,h*w),nrow=h)
-colfill[max:pospct,1:w] <- TRUE
+colfill[max:pospct,1:w]   <- TRUE
 finalimg[bkgr & colfill]  <- 0.5
 
 #convert matrix into  df for ggplot
@@ -124,10 +129,10 @@ pcts <- 100
 pospct <- round((max-min)*pcts/100+min)
 
 # Fill bodies with a different color according to percentages
-finalimg <- img[h:1,,1]
-bkgr <- (finalimg==1)
-colfill <- matrix(rep(FALSE,h*w),nrow=h)
-colfill[max:pospct,1:w] <- TRUE
+finalimg                 <- img[h:1,,1]
+bkgr                     <- (finalimg==1)
+colfill                  <- matrix(rep(FALSE,h*w),nrow=h)
+colfill[max:pospct,1:w]  <- TRUE
 finalimg[bkgr & colfill] <- 0.5
 
 #convert matrix into  df for ggplot
@@ -150,7 +155,6 @@ for (i in 1:numfull){
   plot_list[[numfull+1]] <- plot2
 
 #RRI>1, empty human
-blank <-numfull+2
 for (i in blank:infogs){
   plot0<-ggplot(df0, aes(x = Var2, y = Var1, fill = factor(value)))+
     geom_tile() +
@@ -167,7 +171,6 @@ for (i in blank:infogs){
     blankitout
   plot_list[[1]] <- plot2
   
-  blank <-numfull+2
   for (i in blank:infogs){
     plot0<-ggplot(df0, aes(x = Var2, y = Var1, fill = factor(value)))+
       geom_tile() +
