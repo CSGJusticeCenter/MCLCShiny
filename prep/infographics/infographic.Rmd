@@ -15,24 +15,6 @@ library(ggplot2)
 library(reshape2)
 library(tidyverse)
 
-#####################################
-#create function to call infographics
-#function does not currently account for RRI of 1!!!!!
-#setrri = input the RRI for the race/ethnicity being plotted
-#infogs = how many humans to plot - if the value of infogs is too small to plot due to RRI, function corrects the value for plotting
-create_infograph <- function(setrri,infogs=16) {
-
-#########set RRI
-RRI       <- setrri        #RRI
-numfull   <- floor(RRI)    #round RRI to determine how many filled infographics
-numremain <- RRI - numfull #find partial fill for single infographic
-
-#########set number of rows to plot infographics
-if (infogs-setrri<1) {
-  infogs<-floor(setrri)+2;
-  warning(paste0("There are not enough infographics to plot! Number of infographics reset to ",floor(setrri)+2))}
-if (infogs>=8) {rows<-2} else {rows<-1}
-
 ###############
 #plotting setup
 blankitout <-   theme(axis.line=element_blank(),
@@ -68,6 +50,24 @@ img <- ifelse(img>0 & img<1,1,
               ifelse(img==0,0,
                      ifelse(img==1,1,1)))
 
+#####################################
+#create function to call infographics
+#function does not currently account for RRI of 1!!!!!
+#setrri = input the RRI for the race/ethnicity being plotted
+#infogs = how many humans to plot - if the value of infogs is too small to plot due to RRI, function corrects the value for plotting
+create_infograph <- function(setrri,infogs=16) {
+
+#########set RRI
+RRI       <- setrri        #RRI
+numfull   <- floor(RRI)    #round RRI to determine how many filled infographics
+numremain <- RRI - numfull #find partial fill for single infographic
+
+#########set number of rows to plot infographics
+if (infogs-setrri<1) {
+  infogs<-floor(setrri)+2;
+  warning(paste0("There are not enough infographics to plot! Number of infographics reset to ",floor(setrri)+2))}
+if (infogs>=8) {rows<-2} else {rows<-1}
+
 ############NOT FULL HUMAN 
 #percent of interest
 pcts2 <- numremain*100
@@ -78,13 +78,13 @@ w     <- dim(img)[2]
 pos1    <- which(apply(img[,,1], 1, function(y) any(y==1)))
 min     <- min(pos1)
 max     <- 437 #max position must be manually set due to issues with finding top of PNG fill
-pospctM <- round((max-min)*pcts2/100+min)
+pospct <- round((max-min)*pcts2/100+min)
 
 # Fill bodies with a different color according to percentages
 finalimg                 <- img[h:1,,1]
 bkgr                     <- (finalimg==1)
 colfill                  <- matrix(rep(FALSE,h*w),nrow=h)
-colfill[max:pospctM,1:w] <- TRUE
+colfill[max:pospct,1:w] <- TRUE
 finalimg[bkgr & colfill] <- 0.5
 
 #convert matrix into  df for ggplot
@@ -99,13 +99,13 @@ df2 <- reshape2::melt(finalimg) %>%
 pcts0 <- 0
 
 # Find the rows where feet starts and head ends
-pospctM <- round((max-min)*pcts0/100+min)
+pospct <- round((max-min)*pcts0/100+min)
 
 # Fill bodies with a different color according to percentages
 finalimg                  <- img[h:1,,1]
 bkgr                      <- (finalimg==1)
 colfill                   <- matrix(rep(FALSE,h*w),nrow=h)
-colfill[max:pospctM,1:w] <- TRUE
+colfill[max:pospct,1:w] <- TRUE
 finalimg[bkgr & colfill]  <- 0.5
 
 #convert matrix into  df for ggplot
@@ -121,13 +121,13 @@ if (RRI>1) {
 pcts <- 100
 
 # Find the rows where feet starts and head ends
-pospctM <- round((max-min)*pcts/100+min)
+pospct <- round((max-min)*pcts/100+min)
 
 # Fill bodies with a different color according to percentages
 finalimg <- img[h:1,,1]
 bkgr <- (finalimg==1)
 colfill <- matrix(rep(FALSE,h*w),nrow=h)
-colfill[max:pospctM,1:w] <- TRUE
+colfill[max:pospct,1:w] <- TRUE
 finalimg[bkgr & colfill] <- 0.5
 
 #convert matrix into  df for ggplot
