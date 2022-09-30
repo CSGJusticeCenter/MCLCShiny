@@ -5,16 +5,20 @@
 #infogs = how many humans to plot - if the value of infogs is too small to plot due to RRI, function corrects the value for plotting - default is 9 humans
 #emptyhumans = the default will plot empty humans (TRUE). If set to FALSE, no empty humans will plot
 #fillcolor = set color of what the RRI color will fill with. Default is CSG Blue. Colors can be set with R color names or HEX values
+
 create_infograph <- function(setrri,infogs=9,emptyhumans=TRUE,fillcolor="#0055B8") {
-  
+
   #######COLORS
   #not full human
-  cols3 <- c(rgb(255,255,255,maxColorValue = 255), #white
+  cols2 <- c(rgb(255,255,255,maxColorValue = 255), #white
              rgb(167,169,172,maxColorValue = 255), #CSGJC gray
              rgb(col2rgb(fillcolor)[1],col2rgb(fillcolor)[2],col2rgb(fillcolor)[3],
                  maxColorValue = 255))    #CSGJC blue
+  #empty human colors
+  cols0 <- c(rgb(255,255,255,maxColorValue = 255),
+             rgb(167,169,172,maxColorValue = 255))
   #full human
-  cols2 <- c(rgb(255,255,255,maxColorValue = 255), 
+  cols1 <- c(rgb(255,255,255,maxColorValue = 255), 
              rgb(col2rgb(fillcolor)[1],col2rgb(fillcolor)[2],col2rgb(fillcolor)[3],
                  maxColorValue = 255))
   
@@ -26,23 +30,41 @@ create_infograph <- function(setrri,infogs=9,emptyhumans=TRUE,fillcolor="#0055B8
   #########set number of rows to plot infographics
   if (infogs-setrri<1) {
     infogs<-floor(setrri)+2;
-    warning(paste0("There are not enough infographics to plot! Number of infographics reset to ",floor(setrri)+2))}
-  if (infogs>=10) {rows<-2} else {rows<-1}
+    warning(paste0("There are not enough infographics to plot! Number of infographics reset to ",floor(setrri)+2))
+    }
+  if (infogs>=10) {
+    rows<-2
+  } else {
+      rows<-1
+      }
   
   #########starting position of blank infographic humans
   blank <- numfull + 2     
   
-  ############NOT FULL HUMAN 
-  #percent of interest
-  pcts2 <- numremain*100
+  # Find the rows where left arm starts and right arm ends
   h     <- dim(img)[1]
   w     <- dim(img)[2]
+  pos1  <- which(apply(img[,,1], 2, function(y) any(y==1)))
+  min   <- min(pos1)
+  max   <- 182 #max position must be manually set due to issues with finding top of PNG fill
   
-  # Find the rows where feet starts and head ends
-  pos1    <- which(apply(img[,,1], 2, function(y) any(y==1)))
-  min     <- min(pos1)
-  max     <- 182 #max position must be manually set due to issues with finding top of PNG fill
-  pospct  <- round((max-min)*pcts2/100+min)
+  #set colors, plots, and RRIs for looping graphics
+  finalcolors <- c('cols2',       'cols0', 'cols1')
+  finalplots  <- c('plot2',       'plot0', 'plot1')
+  finalpcts   <- c(numremain*100, 0,       100)
+  
+  #configure how many plots to create based on user request
+  if (emptyhumans==TRUE) {
+    if (RRI>1) {numplots<-1:3} else {numplots<-1:2}
+  } else {
+    if (RRI>1) {numplots<-c(1,3)} else {numplots<-1}
+  }
+  
+  #create three types of plots (not full, empty, full human)
+  for (j in numplots) {  
+  #percent of interest
+  pcts    <- finalpcts[j]
+  pospct  <- round((max-min)*pcts/100+min)
   
   # Fill bodies with a different color according to percentages
   finalimg                 <- img[h:1,,1]
@@ -52,59 +74,15 @@ create_infograph <- function(setrri,infogs=9,emptyhumans=TRUE,fillcolor="#0055B8
   finalimg[bkgr & colfill] <- 0.5
   
   #convert matrix into  df for ggplot
-  df2 <- reshape2::melt(finalimg)
+  df <- reshape2::melt(finalimg)
   
-  #plot df2
-  plot2<-ggplot(df2, aes(x = Var2, y = Var1, fill = factor(value)))+
+  #plot df
+  plot <- ggplot(df, aes(x = Var2, y = Var1, fill = factor(value))) +
     geom_tile() +
-    scale_fill_manual(values = cols3) +
+    scale_fill_manual(values = unlist(mget(finalcolors[j]), use.names=FALSE)) +
     blankitout
-  
-  ############EMPTY HUMAN 
-  #percent of interest
-  pcts0 <- 0
-  
-  # Find the rows where feet starts and head ends
-  pospct <- round((max-min)*pcts0/100+min)
-  
-  # Fill bodies with a different color according to percentages
-  finalimg                  <- img[h:1,,1]
-  bkgr                      <- (finalimg==1)
-  colfill                   <- matrix(rep(FALSE,h*w),nrow=h)
-  colfill[1:h,max:pospct]   <- TRUE
-  finalimg[bkgr & colfill]  <- 0.5
-  
-  #convert matrix into  df for ggplot
-  df0 <- reshape2::melt(finalimg)
-  
-  #plot df0
-  plot0<-ggplot(df0, aes(x = Var2, y = Var1, fill = factor(value)))+
-    geom_tile() +
-    scale_fill_manual(values = cols0) +
-    blankitout
-  
-  ############FULL HUMAN
-  #percent of interest
-  pcts <- 100
-  
-  # Find the rows where feet starts and head ends
-  pospct <- round((max-min)*pcts/100+min)
-  
-  # Fill bodies with a different color according to percentages
-  finalimg                 <- img[h:1,,1]
-  bkgr                     <- (finalimg==1)
-  colfill                  <- matrix(rep(FALSE,h*w),nrow=h)
-  colfill[1:h,max:pospct]  <- TRUE
-  finalimg[bkgr & colfill] <- 0.5
-  
-  #convert matrix into  df for ggplot
-  df1 <- reshape2::melt(finalimg) 
-  
-  #plot df1
-  plot1<-ggplot(df1, aes(x = Var2, y = Var1, fill = factor(value)))+
-    geom_tile() +
-    scale_fill_manual(values = cols2) +
-    blankitout
+  assign(finalplots[j],plot)
+  }
   
   ############create grid of RRIs
   plot_list <- list()
@@ -139,7 +117,7 @@ create_infograph <- function(setrri,infogs=9,emptyhumans=TRUE,fillcolor="#0055B8
     }
     
     #otherwise, DO NOT plot empty humans  
-  } else{
+  } else {
     
     #for RRI>1, create full human(s), not full human
     if (RRI>1) {

@@ -30,9 +30,7 @@ blankitout <-   theme(axis.line        = element_blank(),
                       panel.grid.minor = element_blank(),
                       plot.background  = element_blank())
 
-#empty human colors
-cols0 <- c(rgb(255,255,255,maxColorValue = 255),
-           rgb(167,169,172,maxColorValue = 255))
+
 
 ###########################
 ################human setup
