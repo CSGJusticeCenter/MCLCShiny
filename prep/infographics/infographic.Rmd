@@ -30,177 +30,61 @@ blankitout <-   theme(axis.line        = element_blank(),
                       panel.grid.minor = element_blank(),
                       plot.background  = element_blank())
 
-
-#not full human
-cols3 <- c(rgb(255,255,255,maxColorValue = 255), #white
-           rgb(167,169,172,maxColorValue = 255), #CSGJC gray
-           rgb(0,85,184,maxColorValue = 255))    #CSGJC blue
-#full human
-cols2 <- c(rgb(255,255,255,maxColorValue = 255), 
-           rgb(0,85,184,maxColorValue = 255))
-#empty human
+#empty human colors
 cols0 <- c(rgb(255,255,255,maxColorValue = 255),
            rgb(167,169,172,maxColorValue = 255))
 
 ###########################
 ################human setup
 # Load png file with human
-img <- readPNG("C:/Users/jmallett/OneDrive - The Council of State Governments/Work_other/human2.png")
+img <- readPNG("C:/Users/jmallett/OneDrive - The Council of State Governments/GitProjects/MCLCShiny/prep/infographics/human2.png")
 #make all values binary (0/1)
 img <- ifelse(img>0 & img<1,1,
               ifelse(img==0,0,
                      ifelse(img==1,1,1)))
 
-#####################################
-#create function to call infographics
-#function does not currently account for RRI of 1!!!!!
-#setrri = input the RRI for the race/ethnicity being plotted
-#infogs = how many humans to plot - if the value of infogs is too small to plot due to RRI, function corrects the value for plotting
-create_infograph <- function(setrri,infogs=16) {
-
-#########set RRI
-RRI       <- setrri        #RRI
-numfull   <- floor(RRI)    #round RRI to determine how many filled infographics
-numremain <- RRI - numfull #find partial fill for single infographic
-
-
-#########set number of rows to plot infographics
-if (infogs-setrri<1) {
-  infogs<-floor(setrri)+2;
-  warning(paste0("There are not enough infographics to plot! Number of infographics reset to ",floor(setrri)+2))}
-if (infogs>=8) {rows<-2} else {rows<-1}
-
-#########starting position of blank infographic humans
-blank <- numfull + 2     
-
-############NOT FULL HUMAN 
-#percent of interest
-pcts2 <- numremain*100
-h     <- dim(img)[1]
-w     <- dim(img)[2]
-
-# Find the rows where feet starts and head ends
-pos1    <- which(apply(img[,,1], 1, function(y) any(y==1)))
-min     <- min(pos1)
-max     <- 437 #max position must be manually set due to issues with finding top of PNG fill
-pospct  <- round((max-min)*pcts2/100+min)
-
-# Fill bodies with a different color according to percentages
-finalimg                 <- img[h:1,,1]
-bkgr                     <- (finalimg==1)
-colfill                  <- matrix(rep(FALSE,h*w),nrow=h)
-colfill[max:pospct,1:w]  <- TRUE
-finalimg[bkgr & colfill] <- 0.5
-
-#convert matrix into  df for ggplot
-df2 <- reshape2::melt(finalimg) %>%
-  #issue with height of PNG coloring, so manually forcing 5 rows of pixels
-  mutate(
-    value = ifelse((Var1==432 | Var1==433 | Var1==434 | Var1==435 | Var1==436) & value!=0, 0.5, value)
-  )
-
-############EMPTY HUMAN 
-#percent of interest
-pcts0 <- 0
-
-# Find the rows where feet starts and head ends
-pospct <- round((max-min)*pcts0/100+min)
-
-# Fill bodies with a different color according to percentages
-finalimg                  <- img[h:1,,1]
-bkgr                      <- (finalimg==1)
-colfill                   <- matrix(rep(FALSE,h*w),nrow=h)
-colfill[max:pospct,1:w]   <- TRUE
-finalimg[bkgr & colfill]  <- 0.5
-
-#convert matrix into  df for ggplot
-df0 <- reshape2::melt(finalimg)
-
-############create grid of RRIs
-plot_list <- list()
-
-#for RRI>1, create full human(s), not full human, empty human(s)
-if (RRI>1) {
-############FULL HUMAN
-#percent of interest
-pcts <- 100
-
-# Find the rows where feet starts and head ends
-pospct <- round((max-min)*pcts/100+min)
-
-# Fill bodies with a different color according to percentages
-finalimg                 <- img[h:1,,1]
-bkgr                     <- (finalimg==1)
-colfill                  <- matrix(rep(FALSE,h*w),nrow=h)
-colfill[max:pospct,1:w]  <- TRUE
-finalimg[bkgr & colfill] <- 0.5
-
-#convert matrix into  df for ggplot
-df1 <- reshape2::melt(finalimg) 
-
-#create initial list of filled in infographics
-for (i in 1:numfull){
-  #RRI>1, full human
-  plot1<-ggplot(df1, aes(x = Var2, y = Var1, fill = factor(value)))+
-    geom_tile() +
-    scale_fill_manual(values = cols2) +
-    blankitout
-  plot_list[[i]] <- plot1
-}
-  #RRI>1, not full human
-  plot2<-ggplot(df2, aes(x = Var2, y = Var1, fill = factor(value)))+
-    geom_tile() +
-    scale_fill_manual(values = cols3) +
-    blankitout
-  plot_list[[numfull+1]] <- plot2
-
-#RRI>1, empty human
-for (i in blank:infogs){
-  plot0<-ggplot(df0, aes(x = Var2, y = Var1, fill = factor(value)))+
-    geom_tile() +
-    scale_fill_manual(values = cols0) +
-    blankitout
-  plot_list[[i]] <- plot0
-}
-
-#for RRI<1, not full human, empty humans
-} else {
-  plot2<-ggplot(df2, aes(x = Var2, y = Var1, fill = factor(value)))+
-    geom_tile() +
-    scale_fill_manual(values = cols3) +
-    blankitout
-  plot_list[[1]] <- plot2
-  
-  for (i in blank:infogs){
-    plot0<-ggplot(df0, aes(x = Var2, y = Var1, fill = factor(value)))+
-      geom_tile() +
-      scale_fill_manual(values = cols0) +
-      blankitout
-    plot_list[[i]] <- plot0
-  }  
-}
-
-#plot the infographics!  
-plot_grid(plotlist=plot_list,nrow=rows)
-}
+source("create_infograph_function.R")
 ```
 
-## Example: RRI > 1
+## Example: RRI > 1 (with creepy zombies)
 
-The first argument is the RRI, the second argument is the number of infographics to plot (default is 16)
+The first argument is the RRI, the second argument is the number of infographics to plot (default is 9)
 
-```{r echo=TRUE, message=FALSE, warning=TRUE} 
-create_infograph(8.35,2)
+```{r echo=TRUE, message=FALSE, warning=TRUE,fig.height=4} 
+create_infograph(11.35)
 ```
 
-## Example: RRI < 1
+## Example: RRI < 1 (with creepy zombies)
 
-The first argument is the RRI, the second argument is the number of infographics to plot (default is 16)
+The first argument is the RRI, the second argument is the number of infographics to plot (default is 9)
 
-```{r echo=TRUE, message=FALSE, warning=TRUE} 
+```{r echo=TRUE, message=FALSE, warning=TRUE,fig.height=2} 
 create_infograph(.9,7)
 ```
 
+## Example: RRI > 1 (no zombies)
+
+The first argument is the RRI, the second argument removes empty infographics from the plot 
+
+```{r echo=TRUE, message=FALSE, warning=TRUE,fig.height=2} 
+create_infograph(6.35,emptyhumans=FALSE)
+```
+
+## Example: RRI < 1 (no zombies)
+
+The first argument is the RRI, the second argument removes empty infographics from the plot
+
+```{r echo=TRUE, message=FALSE, warning=TRUE,fig.width=1,fig.height=2} 
+create_infograph(0.35,emptyhumans=FALSE)
+```
+
+## Example: RRI > 1 (no zombies), testing all arguments
+
+The first argument is the RRI, the second argument is the number of infographics to plot (default is 9), the third argument removes empty infographics from the plot, and the fourth argument changes the fill color of the infographics
+
+```{r echo=TRUE, message=FALSE, warning=TRUE, fig.width=4, fig.height=2} 
+create_infograph(setrri=3.5, infog=3, emptyhumans=FALSE, fillcolor="orange")
+```
 
 
 
