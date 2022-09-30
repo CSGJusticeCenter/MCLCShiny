@@ -5,8 +5,9 @@
 #infogs = how many humans to plot - if the value of infogs is too small to plot due to RRI, function corrects the value for plotting - default is 9 humans
 #emptyhumans = the default will plot empty humans (TRUE). If set to FALSE, no empty humans will plot
 #fillcolor = set color of what the RRI color will fill with. Default is CSG Blue. Colors can be set with R color names or HEX values
+#fillHoriz = set direction of the color fill for the infographic - default is horizontal (TRUE) - FALSE makes the infographic fill vertically
 
-create_infograph <- function(setrri,infogs=9,emptyhumans=TRUE,fillcolor="#0055B8") {
+create_infograph <- function(setrri,infogs=9,emptyhumans=TRUE,fillcolor="#0055B8",fillHoriz=TRUE) {
 
   #######COLORS
   #not full human
@@ -42,11 +43,16 @@ create_infograph <- function(setrri,infogs=9,emptyhumans=TRUE,fillcolor="#0055B8
   blank <- numfull + 2     
   
   # Find the rows where left arm starts and right arm ends
+  if (fillHoriz==TRUE) {
+    pos1 <- which(apply(img[,,1], 2, function(y) any(y==1)))
+    max  <- 182 #max position must be adjusted due to issues with finding max PNG fill
+  } else {
+    pos1 <- which(apply(img[,,1], 1, function(y) any(y==1)))
+    max  <- 437 #max position must be adjusted due to issues with finding max PNG fill
+  }
   h     <- dim(img)[1]
   w     <- dim(img)[2]
-  pos1  <- which(apply(img[,,1], 2, function(y) any(y==1)))
   min   <- min(pos1)
-  max   <- 182 #max position must be manually set due to issues with finding top of PNG fill
   
   #set colors, plots, and RRIs for looping graphics
   finalcolors <- c('cols2',       'cols0', 'cols1')
@@ -70,7 +76,11 @@ create_infograph <- function(setrri,infogs=9,emptyhumans=TRUE,fillcolor="#0055B8
   finalimg                 <- img[h:1,,1]
   bkgr                     <- (finalimg==1)
   colfill                  <- matrix(rep(FALSE,h*w),nrow=h)
-  colfill[1:h,max:pospct]  <- TRUE
+  if (fillHoriz==TRUE) {
+    colfill[1:h,max:pospct]  <- TRUE
+  } else {
+    colfill[max:pospct,1:w]  <- TRUE
+  }
   finalimg[bkgr & colfill] <- 0.5
   
   #convert matrix into  df for ggplot

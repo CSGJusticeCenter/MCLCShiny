@@ -78,10 +78,10 @@ create_infograph(0.35,emptyhumans=FALSE)
 
 ## Example: RRI > 1 (no zombies), testing all arguments
 
-The first argument is the RRI, the second argument is the number of infographics to plot (default is 9), the third argument removes empty infographics from the plot, and the fourth argument changes the fill color of the infographics
+The first argument is the RRI, the second argument is the number of infographics to plot (default is 9), the third argument removes empty infographics from the plot, the fourth argument changes the fill color of the infographics, and the fifth argument changes the direction of the fill color (horizontal v. vertical)
 
 ```{r echo=TRUE, message=FALSE, warning=TRUE, fig.width=4, fig.height=2} 
-create_infograph(setrri=3.5, infog=3, emptyhumans=FALSE, fillcolor="orange")
+create_infograph(setrri=3.5, infog=3, emptyhumans=FALSE, fillcolor="orange", fillHoriz=FALSE)
 ```
 
 
