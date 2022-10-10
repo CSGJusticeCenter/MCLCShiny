@@ -2,7 +2,6 @@
 box::use(
     ./admin
   , ./import
-  , ./STCNVRT
   , dplyr[...]
   , stringr[str_sub]
   , tidyr[pivot_longer, drop_na]
@@ -20,11 +19,11 @@ addSTATEids <- function(DF){
   
   DF %>% 
     rename(ABB = STATE) %>% 
-    #create other state id columns: FIPS, NAME, ABB | rowwise requried for STCNVRT$cnvrt()
+    #create other state id columns: FIPS, NAME, ABB 
     rowwise() %>%
     mutate(
-        FIPS    = STCNVRT$cnvrt(ABB, "abb_usps", "fips")
-      , STATE   = STCNVRT$cnvrt(ABB, "abb_usps", "name")
+        FIPS    = csgjcr::csg_state_convert(ABB, "abbr", "fips")
+      , STATE   = csgjcr::csg_state_convert(ABB, "abbr", "name")
       , FCT_NUM = as.numeric(FIPS)
     ) %>% 
     ungroup() %>% 
@@ -47,10 +46,12 @@ addSTATEids <- function(DF){
 #' @export
 prep <- function(){
   
-  admin$mylog("Import Annual Parole/Probation Survey (APS) data")
-  RAW <- import$APS(type = "parole")
+  
+  RAW <- import$APS()
+  
+  admin$mylog("STart - APS prep")
 
-  admin$mylog(paste0("Data prep:"
+  admin$mylog(paste0("APS prep - "
     , "\n   -- Drop Federal total row"
     , "\n   -- calculate other race category, pivot longer, recode into single race variable"
     , "\n   -- make new race variable a factor "
@@ -87,7 +88,7 @@ prep <- function(){
     , "t"  = cs_t  #no cross section, total by STATE/RPTYEAR 
   )
   
-  admin$mylog("Complete APS prep")
+  admin$mylog("End   - APS prep")
   
   return(out)
   

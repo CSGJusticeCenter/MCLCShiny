@@ -6,6 +6,7 @@ box::use(
   , ./clean_APS
   , dplyr[...]
   , purrr[...]
+  , glue[glue]
 )
 
 
@@ -58,24 +59,30 @@ calcrate_total <- function(DF, POP_t){
 #' @export
 combine_and_calcrates <- function(pop_denom = "SC"){
   
+  admin$mylog(glue("Import and clean NCRP revocations data"))
+  
   NCRP <- clean_NCRP$prep()
   
   if (pop_denom == "SC"){
-    POP  <- clean_SC$prep()
-  } else if (pop_denom == "AParS"){
-    POP <- clean_APS$prep()
+    admin$mylog(glue("Import and clean SC for population (denominator)"))
     
+    POP  <- clean_SC$prep()
+  } else if (pop_denom == "APS"){
+    admin$mylog(glue("Import and clean APS for population (denominator)"))
+    POP <- clean_APS$prep()
   } else {
     stop("Invalid population denom")
   }
   
   
-  
+  admin$mylog(glue("Start - rate/RRI calcuations"))
   CNTRT_DF <-c(
       map(NCRP[c("OR", "R")], calcrate_race,  POP_R = POP$R)
     , map(NCRP[c("O" , "t")], calcrate_total, POP_t = POP$t)
     ) %>% 
     map(., ~mutate(., RATE_1K = RATE*1E3, RATE_100K = RATE*1E5, RATE_1MIL = RATE*1E6))
+  
+  admin$mylog(glue("End   - rate/RRI calcuations"))
   
   return(CNTRT_DF)
 }

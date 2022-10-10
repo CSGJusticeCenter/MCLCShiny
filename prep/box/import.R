@@ -51,14 +51,14 @@ NCRP_ARN <- function(){
 #' @export
 NCRP_A <- function(){
   
-  admin$mylog("Start NCRP import for admissions")
+  admin$mylog("Start - NCRP import for admissions")
   
   #da38048.0002 -- prison admissions
   load(file.path(CC_path,"NCRP/ICPSR_38048-V1/ICPSR_38048", "DS0002/38048-0002-Data.rda"))
   
   raw <- da38048.0002
   
-  admin$mylog("Complete NCRP import for admissions")
+  admin$mylog("End   - NCRP import for admissions")
   return(raw)
 } 
 
@@ -72,9 +72,10 @@ NCRP_A <- function(){
 #' @examples
 SC <- function(){
   
+  admin$mylog("Start - SC import")
   raw <- read_csv(file.path(CC_path, "SC-EST/SC-EST2020-ALLDATA6.csv"), show_col_types = FALSE) %>% 
     mutate(POPTYPE = "SC")
-  admin$mylog("Complete SC import")
+  admin$mylog("End   - SC import")
   
   return(raw)
   
@@ -83,17 +84,29 @@ SC <- function(){
 
 
 
-load_combine_APSindyrs <- function(folder, startyr = NA, endyr = NA){
+#' Annual Parole Survey
+#'
+#' @param startyr 
+#' @param endyr 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+APS <- function(startyr = NA, endyr = NA){
   
   
-  metadata <- read_csv(file.path(CC_path, glue("{folder}/{tolower(folder)}_idyear.csv")), show_col_types = FALSE)
+  folder <- "AParS"
+  metadata <- read_csv(file.path(CC_path, glue("BJS/{folder}/{tolower(folder)}_idyear.csv")), show_col_types = FALSE)
   minyr <- ifelse(is.na(startyr), min(metadata$RPTYEAR), startyr) 
   maxyr <- ifelse(is.na(endyr)  , max(metadata$RPTYEAR), endyr)
   thisdata <- metadata[metadata$RPTYEAR >= minyr & metadata$RPTYEAR <= maxyr, ]
   
+  
+  admin$mylog(glue("Start - BJS APS (Parole) import for {minyr}-{maxyr}"))
 
   ## load files into R 
-  purrr::walk( thisdata$rda_pathway, ~load(file.path(CC_path, folder, .x), .GlobalEnv) )
+  purrr::walk( thisdata$rda_pathway, ~load(file.path(CC_path, "BJS", folder, .x), .GlobalEnv) )
   
   ## add rptyear and folder (type) to indv year data sets, bind year data sets together
   # need to switch from numeric -> factor, probation (2013, 2015-2018)
@@ -119,7 +132,7 @@ load_combine_APSindyrs <- function(folder, startyr = NA, endyr = NA){
   ## remove originally loaded data frames (indv data frames by year) 
   rm(list = thisdata$rda_name, envir = .GlobalEnv)
   
-  admin$mylog(glue("Complete {folder} import for {minyr}-{maxyr}"))
+  admin$mylog(glue("End   - BJS APS (Parole) import for {minyr}-{maxyr}"))
   
   
   return(rawcombined)
@@ -127,33 +140,9 @@ load_combine_APSindyrs <- function(folder, startyr = NA, endyr = NA){
 }
 
 
-#' Annual Parole/Probation Survey  
-#'
-#' @return
-#' @export
-#'
-#' @examples
-APS <- function(type = "both", startyr = NA, endyr = NA){
-  
-  
-  if (tolower(type) == "both"){
-    parole <- load_combine_APSindyrs("AParS",  startyr, endyr)
-    probat <- load_combine_APSindyrs("AProbS", startyr, endyr)
-    OUT <- list(
-        "parole" = parole
-      , "probat" = probat
-    )
-  } else if (tolower(type) == "parole"){
-    parole <- load_combine_APSindyrs("AParS",  startyr, endyr)
-    OUT <- parole
-  } else if (tolower(type) %in% c("probat", "probation")){
-    probat <- load_combine_APSindyrs("AProbS",  startyr, endyr)
-    OUT <- probat
-  } else { 
-    stop("Issue with type specified")
-  }
-  
-  return(OUT)
-  
 
-}
+
+
+
+
+

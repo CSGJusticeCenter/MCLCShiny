@@ -2,7 +2,6 @@
 box::use(
     ./admin
   , ./import
-  , ./STCNVRT
   , dplyr[...]
   , stringr[str_sub]
   , tidyr[pivot_longer]
@@ -20,11 +19,11 @@ addSTATEids <- function(DF){
   
   DF %>% 
     rename(FIPS = STATE, STATE = NAME) %>% 
-    #create other state id columns: FIPS, NAME, ABB | rowwise requried for STCNVRT$cnvrt()
+    #create other state id columns: FIPS, NAME, ABB
     rowwise() %>%
     mutate(
         FCT_NUM = as.numeric(FIPS)
-      , ABB     = STCNVRT$cnvrt(FIPS, "fips", "abb_usps")
+      , ABB     = csgjcr::csg_state_convert(FIPS, "fips", "abbr")
     ) %>% 
     ungroup() %>% 
     #make state id columns the same factor levels (based on FIPS)
@@ -43,10 +42,11 @@ addSTATEids <- function(DF){
 #' @export
 prep <- function(){
   
-  admin$mylog("Import State Charactersitics (SC) data")
   RAW <- import$SC()
   
-  admin$mylog(paste0("Data prep:"
+  admin$mylog("STart - SC prep")
+  
+  admin$mylog(paste0("SC prep:"
     , "\n   -- Filter data to be 18+, combined sex, and combine ORIGIN"
     , "\n   -- recode RACE/ORIGIN categories"
     , "\n   -- sum across categories"
@@ -80,7 +80,7 @@ prep <- function(){
     arrange(STATE, RPTYEAR, RACE) 
   
   
-  admin$mylog("Sum accross state and year")
+  admin$mylog("SC prep - Sum accross state and year")
   cs_t <- cs_R %>% 
     group_by(STATE, FIPS, ABB, RPTYEAR, POPTYPE) %>%
     summarise(POPEST = sum(POPEST), .groups = "keep") %>% 
@@ -92,7 +92,7 @@ prep <- function(){
     , "t"  = cs_t  #no cross section, total by STATE/RPTYEAR 
   )
   
-  admin$mylog("Complete SC prep")
+  admin$mylog("End   - SC prep")
   
   return(out)
   

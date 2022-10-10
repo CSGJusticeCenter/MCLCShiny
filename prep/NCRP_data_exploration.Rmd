@@ -19,7 +19,6 @@ library(scales)
 
 box::use(
   scales[percent, comma]
-  , box/STCNVRT
 )
 
 logger::log_layout(logger::layout_glue_colors)
@@ -391,7 +390,7 @@ state_race <- revocations %>%
   mutate(
       fips = str_sub(STATE, 2, 3)
     , name = str_sub(STATE, 6, -1)
-    , abb  = STCNVRT$cnvrt(fips, "fips", "abb_usps")
+    , abb  = csgjcr::csg_state_convert(fips, "fips", "abbr")
   ) %>% 
   ungroup()
 

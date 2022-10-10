@@ -34,7 +34,7 @@ box::use(
 
 
 +:--------------+:--------------------------------------------------------------------------------------------------------+
-| **Usage**     | Revocation Counts by state/year/race/offense general |
+| **Usage**     | Revocation Counts by state/year/race/offense general 
 +---------------+---------------+
 | **Source**    | [National Corrections Reporting Program 1991-2019 ICPSR 38048](https://www.icpsr.umich.edu/web/ICPSR/studies/38048) |
 +---------------+---------------+
@@ -86,19 +86,31 @@ SC has `ORIGIN`(Ethnicity) and `RACE` that need to be fit into the NCRP `RACE` c
 | 2 (Hispanic)     | 6 (Two or more races)                                | `r admin$NCRPlev_RACE()[3]`| `r admin$lev_RACE[3]` |
 
 
+### BJS 
 
-### BLS - APS 
+::: {.panel-tabset}
 
-+:--------------+:--------------------------------------------------------------------------------------------------------+
-| **Usage**     | Parole/Probation Population Estimates by state/year/race, denominator to calculate rates  |
-+---------------+---------------+
-| **Source**    | - [BLS Annual Probation Survey and Annual Parole Surve -> Documentation -> Codebooks and datasets](https://bjs.ojp.gov/data-collection/annual-probation-survey-and-annual-parole-survey#documentation-0) | 
-|               | - Parole: [Annual Parole Survey series](https://www.icpsr.umich.edu/web/NACJD/series/328) |
-|               | - Probation: [Annual Probation Survey series](https://www.icpsr.umich.edu/web/NACJD/series/327) | 
-+---------------+---------------+
-| **SharePoint**| - Parole: [JC Research - Documents/CC/data/raw/AParS](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2FCC%2Fdata%2Fraw%2FAParS&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98) |
-|               | - Probation: [JC Research - Documents/CC/data/raw/AProbS](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2FCC%2Fdata%2Fraw%2FAProbS&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98) | 
-+---------------+---------------+
+#### BJS - APS
+
+
+```{r}
+#| echo: false 
+bjslink     <- "https://bjs.ojp.gov/data-collection/annual-probation-survey-and-annual-parole-survey#documentation-0"
+splink_par  <- "https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2FCC%2Fdata%2Fraw%2FBJS%2FAParS&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98"
+splink_prob <- "https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2FCC%2Fdata%2Fraw%2FBJS%2FAProbS&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98"
+```
+
+
++:--------------+:----------------------------------------------------------------------------------------------------------------+
+| **Usage**     | Projection of population on parole or probation                                                                 |
++---------------+-----------------------------------------------------------------------------------------------------------------+
+| **Source**    | - [BJS Annual Probation Survey and Annual Parole Survey -> Documentation -> Codebooks and datasets](`r bjslink`) 
+|               | - Parole: [Annual Parole Survey series](https://www.icpsr.umich.edu/web/NACJD/series/328)                       
+|               | - Probation: [Annual Probation Survey series](https://www.icpsr.umich.edu/web/NACJD/series/327)                  
++---------------+-----------------------------------------------------------------------------------------------------------------+
+| **SharePoint**| - Parole: [JC Research - Documents/CC/data/raw/BJS/AParS](`r splink_par`)                                       |
+|               | - Probation: [JC Research - Documents/CC/data/raw/BJS/AProbS](`r splink_prob`)                                  | 
++---------------+-----------------------------------------------------------------------------------------------------------------+
 
 
 - only available to 2018
@@ -115,10 +127,57 @@ SC has `ORIGIN`(Ethnicity) and `RACE` that need to be fit into the NCRP `RACE` c
   * Note that `TOTRACE` == `TOTEND` (total at year end) in all instances for Parole/Probation 2013-2018
   * `RPTYEAR` year of survey (added variable during import)
 
+##### Variables 
+
+::: {.grid style="font-size: 0.9em;"} 
+
+::: {.g-col-8}
+
+| Variable | Description | 
+|:--|:-------------------|
+|`STATEID` | mix of usage, i.e. `1`, `(1) Alabama`, `(01) Alabama` |
+|`TOTEN`   |total entries to parole/probation | 
+|`ESTOTEN` | `TOTEN` value type, whether based on estimated/actual data by reporting agencies | 
+|`TOTEX`   | total exits (discharges) from parole/probation |
+|`ESTTOEX` | `TOTEX` value type, whether based on estimated/actual data by reporting agencies | 
+|`TOTEND`  | parole/probation population end of year |
+|`ESTOTEND`| `TOTEND` value type, whether based on estimated/actual data by reporting agencies | 
+
+:Variables Directly from APS
+  
+::: 
+<!-- end {.g-col-8} --> 
+
+::: {.g-col-4}
+
+| Variable | Description | 
+|:--|:-------------------|
+|`FIPS`   | created from `STATEID`, **use this variable to id state, consistent format**  |
+|`RPTYEAR`| year of survey  | 
+|`SOURCE` | rda file where data came from | 
+
+
+:Variables Created at Import 
+  
+::: 
+<!-- end {.g-col-4} --> 
+
+
+::: 
+<!-- end {.grid} --> 
   
 
 
-#### Race/Ethnicity Re-code 
+
+##### Value Types (Estimation - `ES####`) Categories 
+
+- \(1\) Estimated 
+- \(2\) Actual 
+- \(3\) Both estimate and actual from reporting entities 
+- \(4\) BJC imputed data 
+
+  
+##### Race/Ethnicity Re-code (not used in projection! )
 
 
 The parole/probation surveys are count based data (each row is a count, not an individual person).  Therefore there are multiple race **variables** that indicate counts, instead of a single race variable that has different values indicating the race/ethnicity of a person.  
@@ -137,8 +196,102 @@ The parole/probation surveys are count based data (each row is a count, not an i
 | `UNKRACE`   | 10i. Not known                                             | NA                        |`r admin$lev_RACE[5]`|
 | `TOTRACE`   | Total (Sum of items 10a through 10i should equal item 4)   | NA                        | NA |
 
-The re-code `r admin$lev_RACE[4]` category can also be calculated by subtracting certain categicorgies from the total:  
+The re-code `r admin$lev_RACE[4]` category is calculated by subtracting certain categories from the total:  
 `r admin$lev_RACE[4]` = `TOTRACE` - `WHITE` - `BLACK` - `HISP` - `UNKRACE` 
+
+```{r}
+#| echo: false 
+rm(bjslink, splink_par, splink_prob)
+```
+
+
+#### BJS - PPUS 
+
+
+```{r}
+#| echo: false 
+bjslink     <- "https://bjs.ojp.gov/library/publications/list?series_filter=Probation%20and%20Parole%20Populations"
+splink_ppus <- "https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2FCC%2Fdata%2Fraw%2FBJS%2FPPUS&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98"
+```
+
+
++:--------------+:----------------------------------------------------------------------------------------------------------------+
+| **Usage**     | Projection of population on parole or probation                                                                 |
++---------------+-----------------------------------------------------------------------------------------------------------------+
+| **Source**    | - [BJS: Probation and Parole Populations series](`r bjslink`)                                                   
+|               | - [2020](https://bjs.ojp.gov/library/publications/probation-and-parole-united-states-2020)                      
+|               | - [2019](https://bjs.ojp.gov/library/publications/probation-and-parole-united-states-2019)                      
+|               | - [2017-2018](https://bjs.ojp.gov/library/publications/probation-and-parole-united-states-2017-2018)            
++---------------+-----------------------------------------------------------------------------------------------------------------+
+| **SharePoint**| [JC Research - Documents/CC/data/raw/BJS/PPUS](`r splink_ppus`)                                                 |
++---------------+-----------------------------------------------------------------------------------------------------------------+
+
+
+- for a specific year, go to Downloads > Data tables 
+- report pdf and folder with tables (in csv form) are downloaded
+- special import instructions for each year and probation/parole table in `ppus_table.csv` specify which table and columns to use for specific variables 
+- THIS DOES NOT HAVE VALUES BROKEN OUT BY RACE --> CANNOT BE USED TO CALCULATE RATES (AND THUS CANNOT BE USED TO CALCULATED RRI)
+
+
+##### Variables 
+
+::: {.grid style="font-size: 0.9em;"} 
+
+::: {.g-col-4}
+
+| Variable | Description | 
+|:--|:-------------------|
+|`STATEID` | state name, includes footnote tags |
+|`TOTEN`   | total entries to parole/probation | 
+|`TOTEX`   | total exits (discharges) from parole/probation |
+|`TOTEND`  | parole/probation population end of year |
+
+:Variables Directly from PPUS Table
+  
+::: 
+<!-- end {.g-col-4} --> 
+
+::: {.g-col-8}
+
+| Variable | Description | 
+|:--|:-------------------|
+|`FIPS`   | created from `STATEID`, **use this variable to id state, consistent format** |
+|`RPTYEAR`| year of survey  | 
+|`SOURCE` | table csv file where data came from | 
+|`ESTOTEN` | `TOTEN` value type, whether based on estimated/actual data by reporting agencies  | 
+|`ESTOTEX` | `TOTEX` value type, whether based on estimated/actual data by reporting agencies | 
+
+
+:Variables Created at Import 
+  
+::: 
+<!-- end {.g-col-8} --> 
+
+
+::: 
+<!-- end {.grid} --> 
+
+
+##### Creating `ES###` Columns 
+
+Tables are set up with 2 side by side columns, one for Reported and one for Estimated.  
+
+**When reported is not missing:** use the value from the reported column and assign `(2) Actual` for the `ES####` variable  
+**When reported is missing (`NA`):** use the value form the estimated column and assign `(1) Estimated` for the `ES####` variable 
+
+*NOTE:* `ESTOTEND` is not created because within the tables available, there is only one column with data (it is not split into reported/estimated like the entries and exits) 
+  
+
+
+```{r}
+#| echo: false 
+rm(bjslink, splink_ppus)
+```
+
+
+
+::: 
+<!--end {panel.tabset} BJS --> 
 
 ### ACS  
 
@@ -148,7 +301,7 @@ The re-code `r admin$lev_RACE[4]` category can also be calculated by subtracting
 +---------------+---------------+
 | **Source**    | [American Community Survey - B01001 SEX BY AGE Tables](https://data.census.gov/cedsci/table?q=B01001%3A%20SEX%20BY%20AGE&tid=ACSDT5Y2020.B01001)   |
 +---------------+---------------+
-| **SharePoint**|  |
+| **SharePoint**|  NA 
 +---------------+---------------+
 
 
@@ -191,7 +344,7 @@ Using this data will:
 <!--end panel.tabset DATA SOURCES --> 
 
 
-## Analytical Files 
+## Analytical File
 
 `calc$combine_and_calcrates()` imports data, cleans, combines and calculates metrics.  Output is a list of 4 data sets: 
 
@@ -226,12 +379,6 @@ Using this data will:
 ::: 
 <!--end STYLE for table --> 
 
-
-
-
-```{r}
-calc$combine_and_calcrates(pop_denom = "SC")
-```
 
 
 
@@ -310,9 +457,36 @@ Relative Rate Index is compare the $r = 1$ (White) to the other race/ethnicity g
 | `cs_t`  | N/A                                               | N/A                                                        |
 :::
 
-<!-- end {.panel-tabset} -->
+<!-- end {.panel-tabset} METRICS-->
+
+## Data Steps 
+
+::: {.panel-tabset} 
+
+### Box Modules 
+
+|            |     |            |     |            |
+|:----------:|:-:|:----------:|:-:|:----------:|
+| admin.R<br>import.R| --> | calc_APS.R<br>clean_NCRP.R<br>clean_SC.R | --> | calc.R | 
 
 
+### Community Population (SC) 
+
+```{r}
+calc$combine_and_calcrates(pop_denom = "SC")
+```
+
+
+### Parole Population (APS) 
+
+```{r}
+calc$combine_and_calcrates(pop_denom = "APS")
+```
+
+
+
+:::
+<!-- end {.panel-tabset} DATA STEPS -->
 
 :::
 <!-- end {.panel-tabset} -->

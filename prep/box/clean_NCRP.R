@@ -2,7 +2,6 @@
 box::use(
     ./admin
   , ./import
-  , ./STCNVRT
   , dplyr[...]
   , stringr[str_sub]
   , forcats[fct_recode, fct_explicit_na]
@@ -37,13 +36,13 @@ refct <- function(DF){
 addSTATEids <- function(DF){
   
   DF %>% 
-    #create other state id columns: FIPS, NAME, ABB | rowwise requried for STCNVRT$cnvrt()
+    #create other state id columns: FIPS, NAME, ABB 
     rowwise() %>%
     mutate(
         FIPS    = as.factor(str_sub(STATE, 2, 3))
       , FCT_NUM = as.numeric(as.character(FIPS))
-      , ABB     = STCNVRT$cnvrt(FIPS, "fips", "abb_usps")
-      , STATE   = STCNVRT$cnvrt(FIPS, "fips", "name")
+      , ABB     = csgjcr::csg_state_convert(FIPS, "fips", "abbr")
+      , STATE   = csgjcr::csg_state_convert(FIPS, "fips", "name")
     ) %>% 
     ungroup() %>% 
     #make state id columns the same factor levels (based on FIPS)
@@ -63,17 +62,18 @@ addSTATEids <- function(DF){
 #' @export
 prep <- function(){
   
-  admin$mylog("Import NCRP data")
   RAW <- import$NCRP_A()
   
-  admin$mylog("Filter data to include reovations and 2015+ and recode RACE")
+  admin$mylog("Start - NCRP prep")
+  
+  admin$mylog("NCPR prep - Filter data to include reovations and 2015+ and recode RACE")
   FILTERDF <- RAW %>% 
     #filter down to revocations from 2015+ 
     filter(ADMTYPE == "(2) Parole return/revocation", RPTYEAR >= 2015) %>% 
     #re-factor RACE and OFFGENERAL cateogires 
     refct() 
   
-  admin$mylog("Create diffrent cross sections by OFFGENERAL and RACE")
+  admin$mylog("NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE")
   cs_OR <- FILTERDF %>% count(STATE, RPTYEAR, OFFGENERAL, RACE) %>% rename("REVCNT" = n)
   cs_O  <- FILTERDF %>% count(STATE, RPTYEAR, OFFGENERAL)       %>% rename("REVCNT" = n)
   cs_R  <- FILTERDF %>% count(STATE, RPTYEAR, RACE)             %>% rename("REVCNT" = n)
@@ -89,7 +89,7 @@ prep <- function(){
   
   out <- map(cs, addSTATEids)
   
-  admin$mylog("Complete NCRP prep")
+  admin$mylog("End   - NCRP prep")
   
   return(out)
   
