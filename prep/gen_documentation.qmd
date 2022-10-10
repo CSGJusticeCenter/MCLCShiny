@@ -371,9 +371,9 @@ Using this data will:
 |`RATE`      |&#10003;|&#10003;|&#10003;|&#10003;|numeric| Rate of revocation count per population, `REVCNT`/`POPEST` <br>for a specific `RACE`, `STATE`, `RPTYEAR`, `OFFGENERAL` cross section |
 |`WHITERATE` |&#10003;|        |&#10003;|        |numeric| `REVCNT`/`POPEST` where `RACE` = white <br>for a specific `STATE`, `RPTYEAR`, `OFFGENERAL` cross section | 
 | `RRI`      |&#10003;|        |&#10003;|        |numeric| Relative Rate Index, `RATE`/`WHITERATE`<br> for a specific `STATE`, `RPTYEAR`, `OFFGENERAL` cross section | 
-|`RATE_1K`   |&#10003;|&#10003;|&#10003;|&#10003;|numeric| `RATE` $\cdot$ 1,000, Rate of revocation per 1,000 people in the population  | 
 |`RATE_100K` |&#10003;|&#10003;|&#10003;|&#10003;|numeric| `RATE` $\cdot$ 100,000, Rate of revocation per 100,000 people in the population  | 
-|`RATE_1MIL` |&#10003;|&#10003;|&#10003;|&#10003;|numeric| `RATE` $\cdot$ 1,000,000, Rate of revocation per 100,000 people in the population | 
+|`RECENT_YR` |&#10003;|&#10003;|&#10003;|&#10003;|numeric| Most recent year where `POPEST` is available  | 
+
 
 : Variable Included in Output Data and Variable Descriptions
 ::: 

@@ -7,6 +7,8 @@ box::use(
 
 
 
+sp_data <- csgjcr::csg_sp_path("50 State Revocations Project/MCLC Shiny App/data_new/analysis")
+
 #' Log Message 
 #'
 #' @param text string 
@@ -24,6 +26,36 @@ idcols <- c("STATE", "FIPS", "ABB")
 #' @export
 groupcols <- c("STATE", "FIPS", "ABB", "RPTYEAR")
 
+
+#' Variable Cross Section
+#'
+#' @param cs 
+#' @export
+varcs <- function(cs, combinelst = FALSE, includeYR = TRUE){
+  
+  if (includeYR == TRUE){
+    basevar <- groupcols
+  } else {
+    basevar <- idcols 
+  }
+  
+  list <- case_when(
+      cs == "t"  ~ list(c(basevar), NA)
+    , cs == "OR" ~ list(c(basevar), c("OFFGENERAL", "RACE"))
+    , cs == "R"  ~ list(c(basevar), c("RACE"))
+    , cs == "O"  ~ list(c(basevar), c("OFFGENERAL"))
+  )
+  
+  if (combinelst == TRUE){
+    out <- c(list[[1]], list[[2]])
+    out <- out[!is.na(out)]
+  } else {
+    out <- list
+  }
+  
+  return(out)
+  
+}
 
 
 #' @export
@@ -162,3 +194,27 @@ isWhite <- function(VAL){
 
 
 
+#' Save RDS on SP, overwrite and datestamp 
+#'
+#' @param SP_PATH 
+#' @param IN 
+#' @param OUT 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+SPsaveRDS <- function(IN, OUT){
+  
+  SP_PATH <- sp_data
+  
+  datestamp <- gsub("-", "", Sys.Date())
+  outfile1 <- file.path(SP_PATH, "datestamp", paste0(datestamp, "_", OUT))
+  outfile2 <- file.path(SP_PATH,                        OUT )
+  
+  saveRDS(IN, file=outfile1)
+  saveRDS(IN, file=outfile2)
+  mylog(glue("Saved {deparse(substitute(IN))} - {OUT} (included a date stamped version)"))
+  
+  
+}
