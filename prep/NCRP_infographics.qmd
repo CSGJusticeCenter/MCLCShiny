@@ -36,7 +36,7 @@ box::use(
 ```{r}
 #| label: import data 
 REV_APS <- readRDS(file.path(admin$sp_data, "NCRP_REV_APS.RDS"))
-#REV_SC  <- readRDS(file.path(admin$sp_data, "NCRP_REV_SC.RDS"))
+REV_SC  <- readRDS(file.path(admin$sp_data, "NCRP_REV_SC.RDS"))
 ```
 
 
@@ -58,13 +58,21 @@ IG_DF <- REV_APS$R %>%
   filter(n_groups > 1) %>% 
   filter(ABB != "DC")
 
-#IG_DF$RRI |> summary()
+
+# 
+# IG_DF %>% 
+#   filter(RACE != "White") %>% 
+#   ggplot(aes(x = RRI, y = ABB)) + 
+#   geom_vline(xintercept = 1, color = "grey50", linetype = "dotted") + 
+#   geom_point(aes(color = RACE)) + 
+#   theme_bw()
+# IG_DF$RRI |> summary()
 ```
 
 
 ```{r}
-#| fig-height: 3.3
-#| fig-width: 6
+#| fig-height: 3
+#| fig-width: 13.3
 IG_DF_AZ <- IG_DF %>% filter(ABB == "AZ")
 
 pmap(
@@ -72,6 +80,7 @@ pmap(
       race    = IG_DF_AZ$RACE
     , rri_raw = IG_DF_AZ$RRI
     , state   = IG_DF_AZ$ABB
+    , infogs  = 10
   )
   , infograph$create_infograph 
 )
@@ -79,6 +88,13 @@ pmap(
 
 
 
+```
+
+
+```{r}
+#| fig-height: 6
+#| fig-width: 13.3
+infograph$create_infograph(rri_raw = 10.5, infogs = 20)
 ```
 
 

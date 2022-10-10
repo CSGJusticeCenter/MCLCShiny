@@ -11,6 +11,9 @@ box::use(
 )
 
 
+img_ar_hw <- (453/201)
+img_ar_wh <- (201/453)
+
 ###############
 #plotting setup
 blankitout <- function(){
@@ -18,7 +21,7 @@ blankitout <- function(){
     theme_void(), 
     theme(
       legend.position = "none", 
-      aspect.ratio = (453/201) #pixels of humans2.png  
+      aspect.ratio = img_ar_hw #pixels of humans2.png  
     ) #end theme 
   ) #end list 
 }
@@ -40,13 +43,6 @@ img <- ifelse(rawimg == 0, 0, 1)
 bg_color    <- "#FFFFFF"
 empty_color <- "#A7A9AC" #csg grey
 
-# rri_raw = 1.5
-# rri_digits = 2 
-# fillcolor = "#0055B8" 
-# emptyhumans = TRUE
-# emptycolor = "white"
-# infogs  = 3 
-# fillHoriz = FALSE
 
 
 #####################################
@@ -77,6 +73,11 @@ create_humans <- function(
     fillHoriz = FALSE
 ) {
   
+  if (infogs-rri_raw<0) {
+    infogs<-floor(rri_raw)+1;
+    warning(paste0("There are not enough infographics to plot! Number of infographics reset to ",floor(rri_raw)+1))
+  }
+  
   # set colors 
   cols0 <- c(bg_color, emptycolor) 
   cols1 <- c(bg_color, fillcolor)              #full human 
@@ -106,6 +107,7 @@ create_humans <- function(
   finalcolors <- c('cols2',       'cols0', 'cols1')
   finalplots  <- c('plot2',       'plot0', 'plot1')
   finalpcts   <- c(numremain*100, 0,       100)
+  
   
   
   # configure how many plots to create based on user request
@@ -180,8 +182,14 @@ create_humans <- function(
     }
   }
   
+  if (infogs>10) {
+    rows<-2
+  } else {
+    rows<-1
+  }
+  
   #plot the infographics!  
-  plot_grid(plotlist=plot_list,nrow=1)
+  plot_grid(plotlist=plot_list,nrow=rows)
 }
 
 
@@ -202,9 +210,9 @@ create_humans <- function(
 #'
 #' @examples
 create_infograph <- function(
-    race, 
+    race = "tst", 
     rri_raw, 
-    state, 
+    state = "tst", 
     rri_digits = 2, 
     fillcolor = "#0055B8", 
     infogs  = 3, 
@@ -213,6 +221,14 @@ create_infograph <- function(
   
   title.rel <- 0.175
   value.rel <- 1.75
+  
+  if (infogs>10) {
+    rows<-ceiling(rri_raw/10)
+    cols <- 10
+  } else {
+    rows<-1
+    cols <- infogs
+  }
   
   title <- ggdraw() + 
     draw_label(
@@ -250,7 +266,7 @@ create_infograph <- function(
     ggtemp_justpeople
     , title
     , ncol = 1
-    , rel_heights = c(1, title.rel)
+    , rel_heights = c(1, title.rel/rows)
   )
   
   
@@ -258,16 +274,17 @@ create_infograph <- function(
     value
     , ggtemp_wclient
     , nrow = 1
-    , rel_widths = c(value.rel, infogs)
+    , rel_widths = c(value.rel, cols)
   )
   
   
   
   if (savefile == TRUE){
     
+    
     baseval<- 3
-    h.full <- (baseval*(1+title.rel))
-    w.full <- (((201/453)*baseval))*(infogs+value.rel)
+    h.full <- ((baseval*rows)*(1+title.rel))
+    w.full <- ((img_ar_wh*baseval))*(cols+value.rel)
     
     ggsave(
       file.path(admin$sp_data, "infographs", glue("{state}_{race}.png"))
