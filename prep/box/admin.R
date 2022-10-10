@@ -6,7 +6,7 @@ box::use(
 )
 
 
-
+#' @export
 sp_data <- csgjcr::csg_sp_path("50 State Revocations Project/MCLC Shiny App/data_new/analysis")
 
 #' Log Message 
