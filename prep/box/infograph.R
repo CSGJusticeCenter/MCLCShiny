@@ -11,8 +11,54 @@ box::use(
 )
 
 
-img_ar_hw <- (453/201)
-img_ar_wh <- (201/453)
+# install.packages("extrafont")
+# remotes::install_version("Rttf2pt1", version = "1.3.8")
+# 
+# extrafont::font_import(
+#   paths = csgjcr::csg_sp_path("50 State Revocations Project/MCLC Shiny App/background/Fonts/Graphik_ttf")
+#   , prompt = FALSE
+# )
+
+extrafont::loadfonts(device = "win", quiet = TRUE) 
+
+
+gcolors <- c("#666666", "#D25E2D", "#236ca7", "#D6C246", "#EDB799", "#C7E8F5")
+
+
+###########################
+################IMAGE setup
+# Load png file with human
+#make all values binary (0/1)
+#use  if/else statements to retain array structure 
+
+
+whichimage <- "person-2745706-bw"
+
+if (whichimage == "person-2745706-bw"){
+  # black icon, white background 
+  img_ar_hw <- (521/323)
+  img_ar_wh <- (323/521)
+  rawimg <- readPNG(file.path(admin$sp_data_raw, glue("human/{whichimage}.png")))
+  img <- ifelse(rawimg == 0, 1, 0) #need to invert 
+}
+
+if (whichimage == "human2"){
+  #white icon, black background 
+  img_ar_hw <- (453/201)
+  img_ar_wh <- (201/453)
+  rawimg <- readPNG(file.path(admin$sp_data_raw, glue("human/{whichimage}.png")))
+  img <- ifelse(rawimg == 0, 0, 1)
+}
+
+
+
+
+
+
+#######COLORS, can be in plain hex codes 
+bg_color    <- "#FFFFFF"
+empty_color <- "#A7A9AC" #csg grey
+
 
 ###############
 #plotting setup
@@ -21,27 +67,12 @@ blankitout <- function(){
     theme_void(), 
     theme(
       legend.position = "none", 
-      aspect.ratio = img_ar_hw #pixels of humans2.png  
+      aspect.ratio = img_ar_hw, #pixels of humans2.png  
+      panel.background = element_rect(color = "green")
     ) #end theme 
   ) #end list 
 }
 
-
-
-
-###########################
-################IMAGE setup
-# Load png file with human
-rawimg <- readPNG(file.path(admin$sp_data_raw, "human/human2.png"))
-#make all values binary (0/1)
-#use  if/else statements to retain array structure 
-# if rawimg == 0 ~ 0; anything else == 1 
-img <- ifelse(rawimg == 0, 0, 1)
-
-
-#######COLORS, can be in plain hex codes 
-bg_color    <- "#FFFFFF"
-empty_color <- "#A7A9AC" #csg grey
 
 
 
@@ -65,10 +96,10 @@ empty_color <- "#A7A9AC" #csg grey
 #' @examples
 create_humans <- function(
     rri_raw, 
-    rri_digits = 2, 
+    rri_digits = 1, 
     fillcolor = "#0055B8", 
     emptyhumans = TRUE, 
-    emptycolor = "white", 
+    emptyhumanscolor = "white", 
     infogs  = 3, 
     fillHoriz = FALSE
 ) {
@@ -79,9 +110,9 @@ create_humans <- function(
   }
   
   # set colors 
-  cols0 <- c(bg_color, emptycolor) 
+  cols0 <- c(bg_color, emptyhumanscolor)        #empty human  
   cols1 <- c(bg_color, fillcolor)              #full human 
-  cols2 <- c(bg_color, empty_color, fillcolor) #not full human
+  cols2 <- c(bg_color, empty_color, fillcolor) #partial human
   
   # set RRI
   RRI       <- round(rri_raw, digits = rri_digits) #RRI, rounded to number of digits 
@@ -94,10 +125,12 @@ create_humans <- function(
   # Find the rows where left arm starts and right arm ends
   if (fillHoriz==FALSE) {
     pos1 <- which(apply(img[,,1], 2, function(y) any(y==1)))
-    max  <- 182 #max position must be adjusted due to issues with finding max PNG fill
+    #max  <- 182 #max position must be adjusted due to issues with finding max PNG fill
+    max <- max(pos1)
   } else {
     pos1 <- which(apply(img[,,1], 1, function(y) any(y==1)))
-    max  <- 437 #max position must be adjusted due to issues with finding max PNG fill
+    #max  <- 437 #max position must be adjusted due to issues with finding max PNG fill
+    max <- max(pos1)
   }
   h     <- dim(img)[1]
   w     <- dim(img)[2]
@@ -136,6 +169,11 @@ create_humans <- function(
     
     #convert matrix into  df for ggplot
     df <- reshape2::melt(finalimg)
+    
+    ### issue with halfperson, group of 20 rows where value = 0.5, should only be 1 & 2
+    if (finalplots[j] == "plot1"){
+      df[df$value == 0.5, ] <- 0
+    }
     
     #plot df
     plot <- ggplot(df, aes(x = Var2, y = Var1, fill = factor(value))) +
@@ -194,33 +232,60 @@ create_humans <- function(
 
 
 
+### FOR TESTING 
+
+rri_raw = 1.5
+race = "Hispanic"
+state = "tst"
+rri_digits = 1
+fillcolor = "#236ca7"
+infogs  = 4
+savefile = TRUE
+returngg = FALSE
+
 
 #' Create and SAVE full info graphic 
+
+#' @param rri_raw
 #'
 #' @param race 
-#' @param rri_raw 
 #' @param rri_digits 
 #' @param fillcolor 
 #' @param infogs 
 #' @param state 
 #' @param savefile 
+#' @param returngg 
 #'
 #' @return
 #' @export
 #'
 #' @examples
 create_infograph <- function(
-    race = "tst", 
     rri_raw, 
+    race = "tst",
     state = "tst", 
-    rri_digits = 2, 
+    rri_digits = 1, 
     fillcolor = "#0055B8", 
-    infogs  = 3, 
-    savefile = FALSE 
+    infogs  = 4, 
+    savefile = FALSE, 
+    returngg = FALSE
 ) {
   
-  title.rel <- 0.175
-  value.rel <- 1.75
+  if (whichimage == "person-2745706-bw"){
+    title.rel <- 0.4
+    value.rel <- 2.5
+    title.size <- 60
+    value.size <- 110
+  }
+  
+  
+  if (whichimage == "human2"){
+    title.rel <- 0.175
+    value.rel <- 1.75
+    title.size <- 36
+    value.size <- 56
+  }
+  
   
   if (infogs>10) {
     rows<-ceiling(rri_raw/10)
@@ -230,34 +295,46 @@ create_infograph <- function(
     cols <- infogs
   }
   
+  
   title <- ggdraw() + 
     draw_label(
       glue("{str_to_title(race)} Clients")
-      , fontface = "italic"
       , x = 0
       , hjust = 0
       , vjust = 0.25
-      , color = "grey50"
-      , size = 36
-    ) 
+      , color = "#666666"
+      , size = title.size
+      , fontfamily = "Graphik Regular"
+    ) + 
+    theme(panel.background = element_rect(color = "red"))
+  
+  display_value <- ifelse(
+    race == admin$lev_RACE[1]
+    , sprintf(glue("%.0fx"),            round(rri_raw, rri_digits))
+    , sprintf(glue("%.{rri_digits}fx"), round(rri_raw, rri_digits))
+  )
   
   value <- ggdraw() + 
     draw_label(
-      glue("{round(rri_raw, rri_digits)}x")
-      , fontface = "bold"
-      , x = 0
-      , hjust = 0
+      display_value
+      , x = 0.9
+      , hjust = 1
       , vjust = 0.5
-      , size = 56
-    ) 
+      , color = "#666666"
+      , size = value.size
+      , fontfamily = "Graphik Medium"
+    ) + 
+    theme(
+      panel.background = element_rect(color = "blue")
+    )
   
   ggtemp_justpeople <- create_humans(
-    rri_raw = rri_raw
+      rri_raw = rri_raw
     , rri_digits = rri_digits
     , infogs = infogs
     , fillcolor = fillcolor
     , emptyhumans = TRUE
-    , emptycolor = "white"
+    , emptyhumanscolor = "white"
     , fillHoriz = FALSE 
   )
   
@@ -286,6 +363,7 @@ create_infograph <- function(
     h.full <- ((baseval*rows)*(1+title.rel))
     w.full <- ((img_ar_wh*baseval))*(cols+value.rel)
     
+    #ggsave will not save fonts unless uninstall {ragg}
     ggsave(
       file.path(admin$sp_data, "infographs", glue("{state}_{race}.png"))
       , plot = fullinfog
@@ -293,9 +371,16 @@ create_infograph <- function(
       , width = w.full
       , bg = "white"
     )
+    file.show(file.path(admin$sp_data, "infographs", glue("{state}_{race}.png")))
+    admin$mylog(glue("Save image for {state} {race} - {display_value}, h={h.full}, w={w.full}"))
+    
+  }
+  
+  if (returngg == TRUE){
+    return(fullinfog)
   }
 
-  return(fullinfog)
+  
   
   
 } 
