@@ -33,20 +33,11 @@ box::use(
 ```
 
 
+
+
 ```{r}
-#| label: import data 
 REV_APS <- readRDS(file.path(admin$sp_data, "NCRP_REV_APS.RDS"))
-REV_SC  <- readRDS(file.path(admin$sp_data, "NCRP_REV_SC.RDS"))
-```
 
-
-
-::: {.panel-tabset}
-<!-- start {.panel-tabset} ALLLL --> 
-
-
-
-```{r}
 IG_DF <- REV_APS$R %>% 
   filter(RACE %in% admin$lev_RACE[1:3]) %>% 
   filter(RPTYEAR == RECENT_YR) %>% 
@@ -58,55 +49,33 @@ IG_DF <- REV_APS$R %>%
   filter(n_groups > 1) %>% 
   filter(ABB != "DC")
 
-
-# 
-# IG_DF %>% 
-#   filter(RACE != "White") %>% 
-#   ggplot(aes(x = RRI, y = ABB)) + 
-#   geom_vline(xintercept = 1, color = "grey50", linetype = "dotted") + 
-#   geom_point(aes(color = RACE)) + 
-#   theme_bw()
-# IG_DF$RRI |> summary()
-```
-
-
-```{r}
-#| fig-height: 4.2
-#| fig-width: 12
-#| eval: false 
 IG_DF_AZ <- IG_DF %>% filter(ABB == "AZ")
 
-pmap(
+pwalk(
   list(
       race    = IG_DF_AZ$RACE
     , rri_raw = IG_DF_AZ$RRI
     , state   = IG_DF_AZ$ABB
     , savefile= TRUE
-    , returngg = FALSE
   )
   , infograph$create_infograph 
 )
 
-```
 
-
-<img src="`r file.path(admin$sp_data, 'infographs/AZ_White.png')`" style = "width:40%;">  
-<img src="`r file.path(admin$sp_data, 'infographs/AZ_Black.png')`" style = "width:40%;">  
-<img src="`r file.path(admin$sp_data, 'infographs/AZ_Hispanic.png')`" style = "width:40%;"> 
-
-
-
-
-
-```{r}
-#| fig-height: 6
-#| fig-width: 13.3
-#infograph$create_infograph(rri_raw = 10.5, infogs = 20)
+infograph$create_infograph(rri_raw = 10.5, race = "test", state = "test", infogs = 20, save = TRUE)
 ```
 
 
 
-::: 
-<!-- end {.panel-tabset} ALLLL --> 
+
+
+<img src="`r file.path(admin$sp_data, 'infographs/AZ_White.png')`"    style = "height:100px; margin: 10px;">  
+<img src="`r file.path(admin$sp_data, 'infographs/AZ_Black.png')`"    style = "height:100px; margin: 10px;">  
+<img src="`r file.path(admin$sp_data, 'infographs/AZ_Hispanic.png')`" style = "height:100px; margin: 10px;">  
+<img src="`r file.path(admin$sp_data, 'infographs/test_test.png')`"   style = "height:200px; margin: 10px;">  
+
+
+
+
 
 

@@ -11,64 +11,54 @@ box::use(
 )
 
 
+## set up fonts 
 # install.packages("extrafont")
 # remotes::install_version("Rttf2pt1", version = "1.3.8")
-# 
-# extrafont::font_import(
-#   paths = csgjcr::csg_sp_path("50 State Revocations Project/MCLC Shiny App/background/Fonts/Graphik_ttf")
-#   , prompt = FALSE
-# )
-
+# extrafont::font_import(paths = csgjcr::csg_sp_path("50 State Revocations Project/MCLC Shiny App/background/Fonts/Graphik_ttf"), prompt = FALSE)
 extrafont::loadfonts(device = "win", quiet = TRUE) 
 
 
-gcolors <- c("#666666", "#D25E2D", "#236ca7", "#D6C246", "#EDB799", "#C7E8F5")
+## set up colors 
+bg_color    <- "#FFFFFF"
+empty_color <- "#A7A9AC" #csg grey
+mclc_dk_grey  <- "#666666"
+mclc_dk_orange<- "#D25E2D"
+mclc_dk_blue  <- "#236ca7"
+mclc_dk_yellow<- "#D6C246"
+mclc_lt_orange<- "#EDB799"
+mclc_lt_blue  <- "#C7E8F5"
 
 
-###########################
-################IMAGE setup
-# Load png file with human
+##image set up 
 #make all values binary (0/1)
 #use  if/else statements to retain array structure 
-
-
 whichimage <- "person-2745706-bw"
 
 if (whichimage == "person-2745706-bw"){
   # black icon, white background 
-  img_ar_hw <- (521/323)
-  img_ar_wh <- (323/521)
+  px_h <- 521 #height of image in pixels
+  px_w <- 323 #width of image in pixels
+  ex_h <- 0.005 #expand height by this (affect vertical padding, top/bottom)
+  ex_w <- 0.02  #expand width by this (affect horizontal padding, left/right) 
+  img_ar_hw <- (px_h*(1+ex_h)) / (px_w*(1+ex_w))
+  img_ar_wh <- (px_w*(1+ex_w)) / (px_h*(1+ex_h)) 
   rawimg <- readPNG(file.path(admin$sp_data_raw, glue("human/{whichimage}.png")))
   img <- ifelse(rawimg == 0, 1, 0) #need to invert 
 }
 
-if (whichimage == "human2"){
-  #white icon, black background 
-  img_ar_hw <- (453/201)
-  img_ar_wh <- (201/453)
-  rawimg <- readPNG(file.path(admin$sp_data_raw, glue("human/{whichimage}.png")))
-  img <- ifelse(rawimg == 0, 0, 1)
-}
 
 
 
-
-
-
-#######COLORS, can be in plain hex codes 
-bg_color    <- "#FFFFFF"
-empty_color <- "#A7A9AC" #csg grey
-
-
-###############
-#plotting setup
+## plotting setup
 blankitout <- function(){
   list(
-    theme_void(), 
-    theme(
-      legend.position = "none", 
-      aspect.ratio = img_ar_hw, #pixels of humans2.png  
-      panel.background = element_rect(color = "green")
+    theme_void()
+  , scale_x_continuous(expand = expansion(mult = ex_w, add = 0))
+  , scale_y_continuous(expand = expansion(mult = ex_h, add = 0))
+  , theme(
+        legend.position = "none"
+      , aspect.ratio = img_ar_hw 
+      #, panel.background = element_rect(color = "green")
     ) #end theme 
   ) #end list 
 }
@@ -76,90 +66,75 @@ blankitout <- function(){
 
 
 
-#####################################
-#create function to call infographics
 
-
-#' Create single infographic with as-needed number of humans (i.e. if RRI = 1.2
-#' use 2 humans only)
+#' Create Plot list of empty, full, and partial icons 
 #'
-#' @param rri_raw input the RRI for the race/ethnicity being plotted
-#' @param rri_digits how many digits to round RRI to, default is 2 digits 
-#' @param emptyhumans the default will plot empty humans (TRUE). If set to FALSE, no empty humans will plot
-#' @param infogs  how many humans to plot - if the value of infogs is too small to plot due to RRI, function corrects the value for plotting - default is 3 humans
-#' @param fillHoriz et direction of the color fill for the infographic - default is vertical (FALSE) 
-#' @param fillcolor set color of what the RRI color will fill with. Default is CSG Blue. Colors can be set with R color names or HEX values
+#' @param partialval 
+#' @param empty   empty   filled icon  color (default is white, so they are not shown)
+#' @param fill    fully   filled icon color (default is MCLC dark blue)
+#' @param partial partial filled icon color (default is MCLC light blue)
+#' @param bg  #background color (defualt is white) 
+#' @param fillHoriz 
 #'
 #' @return
 #' @export
 #'
 #' @examples
-create_humans <- function(
-    rri_raw, 
-    rri_digits = 1, 
-    fillcolor = "#0055B8", 
-    emptyhumans = TRUE, 
-    emptyhumanscolor = "white", 
-    infogs  = 3, 
-    fillHoriz = FALSE
-) {
+icon_options <- function(
+    partialval 
+  , empty   = "#FFFFFF"
+  , fill    = mclc_dk_blue
+  , partial = mclc_lt_blue
+  , bg = "#FFFFFF"
+  , fillHoriz = FALSE
+){
   
-  if (infogs-rri_raw<0) {
-    infogs<-floor(rri_raw)+1;
-    warning(paste0("There are not enough infographics to plot! Number of infographics reset to ",floor(rri_raw)+1))
+  if (partialval <0 | partialval >= 1){
+    stop("partialvalue must be between 0 and 1")
   }
   
-  # set colors 
-  cols0 <- c(bg_color, emptyhumanscolor)        #empty human  
-  cols1 <- c(bg_color, fillcolor)              #full human 
-  cols2 <- c(bg_color, empty_color, fillcolor) #partial human
+  cols_lst <- list(
+      "empty"   = c(bg, empty)
+    , "full"    = c(bg, fill)
+    , "partial" = c(bg, partial, fill)
+  )
   
-  # set RRI
-  RRI       <- round(rri_raw, digits = rri_digits) #RRI, rounded to number of digits 
-  numfull   <- floor(RRI)    #foor RRI to determine how many filled infographics
-  numremain <- RRI - numfull #find partial fill for single infographic
+  pcts_lst <- list(
+      "empty"   = 0
+    , "full"    = 100
+    , "partial" = partialval*100
+  )
   
-  # starting position of blank infographic humans
-  blank <- ifelse(numremain != 0, numfull + 2, numfull + 1)
+  
+  plot_lst <- list(
+      "empty"   = NULL
+    , "full"    = NULL
+    , "partial" = NULL
+  )
   
   # Find the rows where left arm starts and right arm ends
   if (fillHoriz==FALSE) {
     pos1 <- which(apply(img[,,1], 2, function(y) any(y==1)))
-    #max  <- 182 #max position must be adjusted due to issues with finding max PNG fill
     max <- max(pos1)
   } else {
     pos1 <- which(apply(img[,,1], 1, function(y) any(y==1)))
-    #max  <- 437 #max position must be adjusted due to issues with finding max PNG fill
     max <- max(pos1)
   }
   h     <- dim(img)[1]
   w     <- dim(img)[2]
   min   <- min(pos1)
-  
-  # set colors, plots, and RRIs for looping graphics
-  finalcolors <- c('cols2',       'cols0', 'cols1')
-  finalplots  <- c('plot2',       'plot0', 'plot1')
-  finalpcts   <- c(numremain*100, 0,       100)
-  
-  
-  
-  # configure how many plots to create based on user request
-  if (RRI>=1) {
-    numplots<-1:3
-  } else {
-    numplots<-1:2
-  }
+
   
   #create three types of plots (not full, empty, full human)
-  for (j in numplots) {  
+  for (j in names(plot_lst)) {  
     #percent of interest
-    pcts    <- finalpcts[j]
+    pcts    <- pcts_lst[[j]]
     pospct  <- round((max-min)*pcts/100+min)
     
     # Fill bodies with a different color according to percentages
-    finalimg                 <- img[h:1,,1]
-    bkgr                     <- (finalimg==1)
-    colfill                  <- matrix(rep(FALSE,h*w),nrow=h)
+    finalimg  <- img[h:1,,1]
+    bkgr      <- (finalimg==1)
+    colfill   <- matrix(rep(FALSE,h*w),nrow=h)
     if (fillHoriz==FALSE) {
       colfill[1:h,max:pospct]  <- TRUE
     } else {
@@ -170,19 +145,72 @@ create_humans <- function(
     #convert matrix into  df for ggplot
     df <- reshape2::melt(finalimg)
     
-    ### issue with halfperson, group of 20 rows where value = 0.5, should only be 1 & 2
-    if (finalplots[j] == "plot1"){
+    #issue with halfperson, group of 20 rows where value = 0.5, should only be 1 & 2
+    if (j == "full"){
       df[df$value == 0.5, ] <- 0
     }
+    
     
     #plot df
     plot <- ggplot(df, aes(x = Var2, y = Var1, fill = factor(value))) +
       geom_raster() +
-      scale_fill_manual(values = unlist(mget(finalcolors[j]), use.names=FALSE)) +
+      scale_fill_manual(values = cols_lst[[j]]) +
       blankitout()
-    assign(finalplots[j],plot)
+    
+    plot_lst[[j]] <- plot
+    
   } # end  for (j in numplots)
   
+  return(plot_lst)
+  
+  
+}
+
+
+#' Create just the icon part of the infographic
+
+#'
+#' @param rri_raw 
+#' @param rri_digits 
+#' @param fillcolor 
+#' @param partialcolor 
+#' @param emptyhumans 
+#' @param emptycolor 
+#' @param infogs 
+#' @param fillHoriz 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+create_icons <- function(
+    rri_raw 
+  , rri_digits = 1 
+  , fillcolor    = mclc_dk_blue 
+  , partialcolor = mclc_lt_blue
+  , emptyhumans = TRUE
+  , emptycolor = "white" 
+  , infogs  = 4 
+  , fillHoriz = FALSE
+) {
+  
+  if (infogs-rri_raw<0) {
+    infogs<-floor(rri_raw)+1;
+    warning(paste0("There are not enough infographics to plot! Number of infographics reset to ",floor(rri_raw)+1))
+  }
+  
+  # set RRI
+  RRI       <- round(rri_raw, digits = rri_digits) #RRI, rounded to number of digits 
+  numfull   <- floor(RRI)    #foor RRI to determine how many filled infographics
+  numremain <- RRI - numfull #find partial fill for single infographic
+  
+  plot_opts <- icon_options(
+      partialval= numremain
+    , empty     =  emptycolor
+    , fill      =  fillcolor 
+    , partial   = partialcolor 
+    , fillHoriz = fillHoriz
+  )
   
   ## SET UP PLOTTING LIST
   # reate grid of RRIs
@@ -192,31 +220,35 @@ create_humans <- function(
   if (RRI>1 & numremain != 0) { # multiple humans, 1 partial 
     #print("multiple humans, 1 parital")
     for (i in 1:numfull){ 
-      plot_list[[i]] <- plot1 
+      plot_list[[i]] <- plot_opts$full 
     }
-    plot_list[[numfull+1]] <- plot2 
+    plot_list[[numfull+1]] <- plot_opts$partial 
     
   } else if (RRI>1 & numremain == 0) { #multiple humans, all complete 
     #print("multiple humans, all complete")
     for (i in 1:numfull){ 
-      plot_list[[i]] <- plot1 
+      plot_list[[i]] <- plot_opts$full 
     }
     
   } else if (RRI == 1){ # 1 human, complete 
     #print("1 human, complete")
-    plot_list[[1]] <- plot1 
+    plot_list[[1]] <- plot_opts$full 
     
   } else if (RRI < 1) { #1 human, partial 
     #print("1 human, partial")
-    plot_list[[1]] <- plot2 
+    plot_list[[1]] <- plot_opts$partial 
     
   } else {
     stop("RRI and numremain did not meet expected assumptions")
   }
   
   if (emptyhumans == TRUE){
-    for (i in blank:infogs){
-      plot_list[[i]] <- plot0
+    
+    # starting position of empty infographic humans
+    st_empty <- ifelse(numremain != 0, numfull + 2, numfull + 1)
+    
+    for (i in st_empty:infogs){
+      plot_list[[i]] <- plot_opts$empty 
     }
   }
   
@@ -232,16 +264,6 @@ create_humans <- function(
 
 
 
-### FOR TESTING 
-
-rri_raw = 1.5
-race = "Hispanic"
-state = "tst"
-rri_digits = 1
-fillcolor = "#236ca7"
-infogs  = 4
-savefile = TRUE
-returngg = FALSE
 
 
 #' Create and SAVE full info graphic 
@@ -261,30 +283,24 @@ returngg = FALSE
 #'
 #' @examples
 create_infograph <- function(
-    rri_raw, 
-    race = "tst",
-    state = "tst", 
-    rri_digits = 1, 
-    fillcolor = "#0055B8", 
-    infogs  = 4, 
-    savefile = FALSE, 
-    returngg = FALSE
+    rri_raw 
+  , race = "tst"
+  , state = "tst"
+  , rri_digits = 1 
+  , fillcolor = mclc_dk_blue
+  , partialcolor = mclc_lt_blue
+  , infogs  = 4 
+  , savefile = FALSE 
+  , returngg = FALSE
 ) {
   
   if (whichimage == "person-2745706-bw"){
     title.rel <- 0.4
-    value.rel <- 2.5
+    value.rel <- 3
     title.size <- 60
     value.size <- 110
   }
   
-  
-  if (whichimage == "human2"){
-    title.rel <- 0.175
-    value.rel <- 1.75
-    title.size <- 36
-    value.size <- 56
-  }
   
   
   if (infogs>10) {
@@ -305,8 +321,7 @@ create_infograph <- function(
       , color = "#666666"
       , size = title.size
       , fontfamily = "Graphik Regular"
-    ) + 
-    theme(panel.background = element_rect(color = "red"))
+    ) #+ theme(panel.background = element_rect(color = "red"))
   
   display_value <- ifelse(
     race == admin$lev_RACE[1]
@@ -323,19 +338,17 @@ create_infograph <- function(
       , color = "#666666"
       , size = value.size
       , fontfamily = "Graphik Medium"
-    ) + 
-    theme(
-      panel.background = element_rect(color = "blue")
-    )
+    ) #+ theme(panel.background = element_rect(color = "blue"))
   
-  ggtemp_justpeople <- create_humans(
+  ggtemp_justpeople <- create_icons(
       rri_raw = rri_raw
     , rri_digits = rri_digits
-    , infogs = infogs
-    , fillcolor = fillcolor
+    , infogs  = infogs
+    , fillcolor    = fillcolor 
+    , partialcolor = partialcolor
     , emptyhumans = TRUE
-    , emptyhumanscolor = "white"
-    , fillHoriz = FALSE 
+    , emptycolor = "white" 
+    , fillHoriz = FALSE
   )
   
   
@@ -358,7 +371,6 @@ create_infograph <- function(
   
   if (savefile == TRUE){
     
-    
     baseval<- 3
     h.full <- ((baseval*rows)*(1+title.rel))
     w.full <- ((img_ar_wh*baseval))*(cols+value.rel)
@@ -371,7 +383,6 @@ create_infograph <- function(
       , width = w.full
       , bg = "white"
     )
-    file.show(file.path(admin$sp_data, "infographs", glue("{state}_{race}.png")))
     admin$mylog(glue("Save image for {state} {race} - {display_value}, h={h.full}, w={w.full}"))
     
   }
