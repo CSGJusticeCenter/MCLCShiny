@@ -269,8 +269,7 @@ create_icons <- function(
 #' Create and SAVE full info graphic 
 
 #' @param rri_raw
-#'
-#' @param race 
+#' @param race
 #' @param rri_digits 
 #' @param fillcolor 
 #' @param infogs 
@@ -284,8 +283,8 @@ create_icons <- function(
 #' @examples
 create_infograph <- function(
     rri_raw 
-  , race = "tst"
-  , state = "tst"
+  , race ="tst"
+  , label = "tst"
   , rri_digits = 1 
   , fillcolor = mclc_dk_blue
   , partialcolor = mclc_lt_blue
@@ -377,13 +376,13 @@ create_infograph <- function(
     
     #ggsave will not save fonts unless uninstall {ragg}
     ggsave(
-      file.path(admin$sp_data, "infographs", glue("{state}_{race}.png"))
+      file.path(admin$sp_data, "infographs", glue("{label}.png"))
       , plot = fullinfog
       , height = h.full
       , width = w.full
       , bg = "white"
     )
-    admin$mylog(glue("Save image for {state} {race} - {display_value}, h={h.full}, w={w.full}"))
+    admin$mylog(glue("Save image for {label} - {display_value}, h={h.full}, w={w.full}"))
     
   }
   

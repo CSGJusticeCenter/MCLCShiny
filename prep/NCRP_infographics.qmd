@@ -1,5 +1,5 @@
 ---
-title: "Info-graphics Quick AZ plots" 
+title: "Info-graphics Demo" 
 description: "Last User: `r stringr::str_sub(getwd(), 10, stringr::str_locate(stringr::str_sub(getwd(), 10, -1), '/')[1]+10-2)`"
 date: last-modified
 date-format: "YYYY-MM-DD HH:mm:ss"
@@ -20,11 +20,26 @@ editor_options:
   chunk_output_type: console
 ---
 
+
+<style>
+
+.txt_h {
+  text-align: center;
+}
+
+
+</style>
+
 ```{r}
 #| label: setup
 #| include: false  
 
 library(tidyverse)
+library(knitr)
+library(kableExtra)
+
+#https://stackoverflow.com/questions/66974669/collapse-rows-is-not-collapsed-and-updating-packages-does-not-fix
+#devtools::install_github(repo="haozhu233/kableExtra", ref="a6af5c0") #to get collapse rows to work 
 
 box::use(
     box/admin
@@ -33,49 +48,262 @@ box::use(
 ```
 
 
+```{r}
+REV_APS <- readRDS(file.path(admin$sp_data, "NCRP_REV_APS.RDS"))
+REV_SC <- readRDS(file.path(admin$sp_data, "NCRP_REV_SC.RDS"))
+```
 
 
 ```{r}
-REV_APS <- readRDS(file.path(admin$sp_data, "NCRP_REV_APS.RDS"))
+#| eval: true 
+#| message: false 
 
 IG_DF <- REV_APS$R %>% 
-  filter(RACE %in% admin$lev_RACE[1:3]) %>% 
-  filter(RPTYEAR == RECENT_YR) %>% 
-  filter(!is.na(RRI), RRI != Inf) %>% 
-  select(STATE, ABB, RPTYEAR, RACE, RRI, RECENT_YR) %>% 
-  group_by(STATE) %>% 
+  filter(RACE %in% admin$lev_RACE[1:3]) %>% #only look at White, Black, Hispanic
+  filter(RPTYEAR == RECENT_YR) %>%  #most recent year
+  filter(!is.na(RRI), RRI != Inf) %>% #remove if RRI is NA or RRI = Inf (devided by 0
+  group_by(STATE) %>% #figure out if able to create infograh -- need at least 2 groups 
   mutate(n_groups = sum(!is.na(RACE))) %>%
   ungroup() %>% 
   filter(n_groups > 1) %>% 
-  filter(ABB != "DC")
-
-IG_DF_AZ <- IG_DF %>% filter(ABB == "AZ")
+  filter(ABB == "CA") #remove dc 
 
 pwalk(
   list(
-      race    = IG_DF_AZ$RACE
-    , rri_raw = IG_DF_AZ$RRI
-    , state   = IG_DF_AZ$ABB
+      rri_raw = IG_DF$RRI
+    , race = IG_DF$RACE
+    , label   = paste0("BJS_", IG_DF$ABB, "_", IG_DF$RACE)
     , savefile= TRUE
+    , infogs  = 10
   )
   , infograph$create_infograph 
 )
 
+rm(IG_DF)
+```
 
-infograph$create_infograph(rri_raw = 10.5, race = "test", state = "test", infogs = 20, save = TRUE)
+```{r}
+#| eval: true 
+#| message: false 
+
+IG_DF <- REV_SC$R %>% 
+  filter(RACE %in% admin$lev_RACE[1:3]) %>% #only look at White, Black, Hispanic
+  filter(RPTYEAR == RECENT_YR) %>%  #most recent year
+  filter(!is.na(RRI), RRI != Inf) %>% #remove if RRI is NA or RRI = Inf (devided by 0
+  group_by(STATE) %>% #figure out if able to create infograh -- need at least 2 groups 
+  mutate(n_groups = sum(!is.na(RACE))) %>%
+  ungroup() %>% 
+  filter(n_groups > 1) %>% 
+  filter(ABB == "CA") #remove dc 
+
+pwalk(
+  list(
+      rri_raw = IG_DF$RRI
+    , race = IG_DF$RACE
+    , label   = paste0("SC_", IG_DF$ABB, "_", IG_DF$RACE)
+    , savefile= TRUE
+    , infogs  = 10
+  )
+  , infograph$create_infograph 
+)
+
+rm(IG_DF)
 ```
 
 
+- single year RRI infographic for just any offense category 
+- BJS data is not available for all years 
+  * states have missing years (i.e. CA is missing 2016 and 2018)
+  * data broken out by race and states is only available up to 2018 (there is data for 2019 and 2020, but that data is NOT available by state and race) 
+
+# Racial and Ethnic Disparities 
+
+<!-- start {.panel-tabset} --> 
+::: {.panel-tabset} 
+
+## Disparities in parole revocations {.txt_h}
+
+### Relative Rate Index for Any Offense Category, 2018
+
+<br>
+
+![](`r file.path(admin$sp_data, 'infographs/BJS_CA_Black.png')`){fig-align="center" width="500px"}
+
+![](`r file.path(admin$sp_data, 'infographs/BJS_CA_Hispanic.png')`){fig-align="center" width="500px"}
+
+![](`r file.path(admin$sp_data, 'infographs/BJS_CA_White.png')`){fig-align="center" width="500px"}
+
+
+### Tables
+
+#### Relative Rate Index (White Reference Group)
+
+```{r}
+
+bind_rows(
+  REV_APS$R %>% 
+    filter(RACE %in% admin$lev_RACE[2:3]) %>% 
+    filter(ABB == "CA") %>% 
+    mutate(OFFGENERAL = "Any Category") %>% 
+    select(`Offense Category` = OFFGENERAL, `Race` = RACE, RPTYEAR, RRI) %>% 
+    pivot_wider(names_from = RPTYEAR, values_from = RRI)
+  , 
+  REV_APS$OR %>% 
+    filter(OFFGENERAL %in% admin$lev_OFFGENERAL[1:4], RACE %in% admin$lev_RACE[2:3]) %>% 
+    filter(ABB == "CA") %>% 
+    select(`Offense Category` = OFFGENERAL, `Race` = RACE, RPTYEAR, RRI) %>% 
+    pivot_wider(names_from = RPTYEAR, values_from = RRI)
+) %>% 
+  mutate_if(is.numeric, ~ifelse(is.na(.), NA, sprintf("%.1fx", .))) %>% 
+  kable(align = "llrrrrr", format = "html", table.attr = "style='width:800px;'") %>% 
+  kable_styling(bootstrap_options = c("condensed")) %>% 
+  collapse_rows(columns = 1, valign = "top") %>% 
+  row_spec(1:2, bold = TRUE)
+```
+
+
+#### Rate per 100,000 People in Population 
+
+```{r}
+bind_rows(
+  REV_APS$R %>% 
+    filter(RACE %in% admin$lev_RACE[1:3]) %>% 
+    filter(ABB == "CA") %>% 
+    mutate(OFFGENERAL = "Any Category") %>% 
+    select(`Offense Category` = OFFGENERAL, `Race` = RACE, RPTYEAR, RATE_100K) %>% 
+    pivot_wider(names_from = RPTYEAR, values_from = RATE_100K)
+  , 
+  REV_APS$OR %>% 
+    filter(OFFGENERAL %in% admin$lev_OFFGENERAL[1:4], RACE %in% admin$lev_RACE[1:3]) %>% 
+    filter(ABB == "CA") %>% 
+    select(`Offense Category` = OFFGENERAL, `Race` = RACE, RPTYEAR, RATE_100K) %>% 
+    pivot_wider(names_from = RPTYEAR, values_from = RATE_100K)
+) %>% 
+  mutate_if(is.numeric, ~ifelse(is.na(.), NA, scales::comma(., accuracy = 0.1))) %>% 
+  kable(align = "llrrrrr", format = "html", table.attr = "style='width:800px;'") %>%
+  kable_styling(bootstrap_options = c("condensed")) %>% 
+  collapse_rows(columns = 1, valign = "top") %>% 
+  row_spec(1:3, bold = TRUE)
+```
+
+
+#### Revocations Counts 
+
+```{r}
+bind_rows(
+  REV_APS$R %>% 
+    filter(RACE %in% admin$lev_RACE[1:3]) %>% 
+    filter(ABB == "CA") %>% 
+    mutate(OFFGENERAL = "Any Category") %>% 
+    select(`Offense Category` = OFFGENERAL, `Race` = RACE, RPTYEAR, REVCNT) %>% 
+    pivot_wider(names_from = RPTYEAR, values_from = REVCNT)
+  , 
+  REV_APS$OR %>% 
+    filter(OFFGENERAL %in% admin$lev_OFFGENERAL[1:4], RACE %in% admin$lev_RACE[1:3]) %>% 
+    filter(ABB == "CA") %>% 
+    select(`Offense Category` = OFFGENERAL, `Race` = RACE, RPTYEAR, REVCNT) %>% 
+    pivot_wider(names_from = RPTYEAR, values_from = REVCNT)
+) %>% 
+  mutate_if(is.numeric, ~ifelse(is.na(.), NA, scales::comma(., accuracy = 1))) %>% 
+  kable(align = "llrrrrr", format = "html", table.attr = "style='width:800px;'") %>%
+  kable_styling(bootstrap_options = c("condensed")) %>% 
+  collapse_rows(columns = 1, valign = "top") %>% 
+  row_spec(1:3, bold = TRUE)
+```
+
+## Cumulative disparities across the criminal justice system {.txt_h}
+
+
+### Relative Rate Index for Any Offense Category, 2019
+<br>
+
+![](`r file.path(admin$sp_data, 'infographs/SC_CA_Black.png')`){fig-align="center" width="500px"}
+
+![](`r file.path(admin$sp_data, 'infographs/SC_CA_Hispanic.png')`){fig-align="center" width="500px"}
+
+![](`r file.path(admin$sp_data, 'infographs/SC_CA_White.png')`){fig-align="center" width="500px"}
 
 
 
-<img src="`r file.path(admin$sp_data, 'infographs/AZ_White.png')`"    style = "height:100px; margin: 10px;">  
-<img src="`r file.path(admin$sp_data, 'infographs/AZ_Black.png')`"    style = "height:100px; margin: 10px;">  
-<img src="`r file.path(admin$sp_data, 'infographs/AZ_Hispanic.png')`" style = "height:100px; margin: 10px;">  
-<img src="`r file.path(admin$sp_data, 'infographs/test_test.png')`"   style = "height:200px; margin: 10px;">  
+### Tables
 
 
+#### Relative Rate Index (White Reference Group)
+
+```{r}
+
+bind_rows(
+  REV_SC$R %>% 
+    filter(RACE %in% admin$lev_RACE[2:3]) %>% 
+    filter(ABB == "CA") %>% 
+    mutate(OFFGENERAL = "Any Category") %>% 
+    select(`Offense Category` = OFFGENERAL, `Race` = RACE, RPTYEAR, RRI) %>% 
+    pivot_wider(names_from = RPTYEAR, values_from = RRI)
+  , 
+  REV_SC$OR %>% 
+    filter(OFFGENERAL %in% admin$lev_OFFGENERAL[1:4], RACE %in% admin$lev_RACE[2:3]) %>% 
+    filter(ABB == "CA") %>% 
+    select(`Offense Category` = OFFGENERAL, `Race` = RACE, RPTYEAR, RRI) %>% 
+    pivot_wider(names_from = RPTYEAR, values_from = RRI)
+) %>% 
+  mutate_if(is.numeric, ~ifelse(is.na(.), NA, sprintf("%.1fx", .))) %>% 
+  kable(align = "llrrrrr", format = "html", table.attr = "style='width:800px;'") %>%
+  kable_styling(bootstrap_options = c("condensed")) %>% 
+  collapse_rows(columns = 1, valign = "top") %>% 
+  row_spec(1:2, bold = TRUE)
+```
 
 
+#### Rate per 100,000 People in Population 
+
+```{r}
+bind_rows(
+  REV_SC$R %>% 
+    filter(RACE %in% admin$lev_RACE[1:3]) %>% 
+    filter(ABB == "CA") %>% 
+    mutate(OFFGENERAL = "Any Category") %>% 
+    select(`Offense Category` = OFFGENERAL, `Race` = RACE, RPTYEAR, RATE_100K) %>% 
+    pivot_wider(names_from = RPTYEAR, values_from = RATE_100K)
+  , 
+  REV_SC$OR %>% 
+    filter(OFFGENERAL %in% admin$lev_OFFGENERAL[1:4], RACE %in% admin$lev_RACE[1:3]) %>% 
+    filter(ABB == "CA") %>% 
+    select(`Offense Category` = OFFGENERAL, `Race` = RACE, RPTYEAR, RATE_100K) %>% 
+    pivot_wider(names_from = RPTYEAR, values_from = RATE_100K)
+) %>% 
+  mutate_if(is.numeric, ~ifelse(is.na(.), NA, scales::comma(., accuracy = 0.1))) %>% 
+  kable(align = "llrrrrr", format = "html", table.attr = "style='width:800px;'") %>%
+  kable_styling(bootstrap_options = c("condensed")) %>% 
+  collapse_rows(columns = 1, valign = "top") %>% 
+  row_spec(1:3, bold = TRUE)
+```
+
+
+#### Revocations Counts 
+
+```{r}
+bind_rows(
+  REV_SC$R %>% 
+    filter(RACE %in% admin$lev_RACE[1:3]) %>% 
+    filter(ABB == "CA") %>% 
+    mutate(OFFGENERAL = "Any Category") %>% 
+    select(`Offense Category` = OFFGENERAL, `Race` = RACE, RPTYEAR, REVCNT) %>% 
+    pivot_wider(names_from = RPTYEAR, values_from = REVCNT)
+  , 
+  REV_SC$OR %>% 
+    filter(OFFGENERAL %in% admin$lev_OFFGENERAL[1:4], RACE %in% admin$lev_RACE[1:3]) %>% 
+    filter(ABB == "CA") %>% 
+    select(`Offense Category` = OFFGENERAL, `Race` = RACE, RPTYEAR, REVCNT) %>% 
+    pivot_wider(names_from = RPTYEAR, values_from = REVCNT)
+) %>% 
+  mutate_if(is.numeric, ~ifelse(is.na(.), NA, scales::comma(., accuracy = 1))) %>% 
+  kable(align = "llrrrrr", format = "html", table.attr = "style='width:800px;'") %>%
+  kable_styling(bootstrap_options = c("condensed")) %>% 
+  collapse_rows(columns = 1, valign = "top") %>% 
+  row_spec(1:3, bold = TRUE)
+```
+
+:::
+<!-- end {.panel-tabset} --> 
 
 
