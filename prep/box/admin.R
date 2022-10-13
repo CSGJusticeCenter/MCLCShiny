@@ -84,6 +84,18 @@ lev_OFFGENERAL <- c(
 )
 
 
+#' @export
+lev_OFFGENERAL2 <- c(
+    "All categories"
+  , "Violent"      # "(1) Violent"
+  , "Property"     # "(2) Property"
+  , "Drugs"        # "(3) Drugs"
+  , "Public order" # "(4) Public order"
+  , "Other"        # "(5) Other/unspecified"
+  , "missing"
+)
+
+
 #' NCRP levels with New levels as names 
 #' @export
 NCRPlev_RACE <- function(){
