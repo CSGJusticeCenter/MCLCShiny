@@ -313,7 +313,7 @@ create_infograph <- function(
   
   title <- ggdraw() + 
     draw_label(
-      glue("{str_to_title(race)} Clients")
+      glue("{str_to_title(race)} client{ifelse(round(rri_raw, rri_digits) == 1, ' is', 's are')} revoked")
       , x = 0
       , hjust = 0
       , vjust = 0.25
@@ -324,14 +324,14 @@ create_infograph <- function(
   
   display_value <- ifelse(
     race == admin$lev_RACE[1]
-    , sprintf(glue("%.0fx"),            round(rri_raw, rri_digits))
-    , sprintf(glue("%.{rri_digits}fx"), round(rri_raw, rri_digits))
+    , sprintf(glue("%.0f"),            round(rri_raw, rri_digits))
+    , sprintf(glue("%.{rri_digits}f"), round(rri_raw, rri_digits))
   )
   
   value <- ggdraw() + 
     draw_label(
       display_value
-      , x = 0.9
+      , x = 0.8
       , hjust = 1
       , vjust = 0.5
       , color = "#666666"
