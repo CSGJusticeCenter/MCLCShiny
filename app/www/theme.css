@@ -49,7 +49,7 @@ Font size and style
 /* Add fonts */
 @font-face {
     font-family: Graphik;
-    src: url("fonts/GraphikRegular.otf") format('truetype');
+    src: url("fonts/GraphikRegular.ttf") format('truetype');
 }
 
 /* Make some wordy sections smaller */
