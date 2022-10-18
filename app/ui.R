@@ -35,13 +35,55 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                         # Dropdown and download buttons
                                         #######
 
+                                        # fluidRow(column(width = 3),
+                                        #          column(width = 6,
+                                        #                 splitLayout(
+                                        #
+                                        #                   cellWidths = c("20%", "20%", "20%", "0%","20%", "0%","20%"),
+                                        #                   #cellWidths = c("200", "200", "200", "0","200", "0","200"),
+                                        #                   #cellArgs = list(style = "padding: 1px"),
+                                        #
+                                        #                   labeled_input('data-map-btn', "",
+                                        #                                 selectizeInput('data_map', div(style = "font-weight: bold", "Select Data"),
+                                        #                                                choices = c("Total", "New Offense", "Supervision Violation", "Probation Violation", "Parole Violation", "Technical Violation"),
+                                        #                                                multiple = FALSE)),
+                                        #
+                                        #                   labeled_input('adm-pop-map-btn', "",
+                                        #                                 selectizeInput('adm_or_pop_map', div(style = "font-weight: bold", "Select Type"),
+                                        #                                                choices = c("Admissions", "Population"),
+                                        #                                                multiple = FALSE)),
+                                        #
+                                        #                   labeled_input('year-map-btn', "",
+                                        #                                 selectizeInput('year_map', div(style = "font-weight: bold", "Select Years"),
+                                        #                                                choices = c("2018 - 2019", "2019 - 2020"),
+                                        #                                                multiple = FALSE)),
+                                        #
+                                        #                   tags$style(type="text/css", "#save_map {background-color:#004270; color: #fff;}"),
+                                        #                   downloadButton(outputId = 'save_map', label = "Download Map", class = "download_this"),
+                                        #
+                                        #                   tags$style(type="text/css", "#save_map_data {background-color:#004270; color: #fff;}"),
+                                        #                   downloadButton(outputId = 'save_map_data', label = "Download Data", class = "download_this"),
+                                        #
+                                        #                   # this formatting doesn't work
+                                        #                   # labeled_input('save-map-btn', "",
+                                        #                   #               downloadButton(outputId = 'save_map', label = "Download Map", class = "download_this")),
+                                        #                   #
+                                        #                   # labeled_input('save-map-data-btn', "",
+                                        #                   #               downloadButton(outputId = 'save_map_data', label = "Download Data", class = "download_this"))
+                                        #
+                                        #                 ) # end splitLayout
+                                        #          ), # end column
+                                        #          column(width = 3)
+                                        # ) # end fluidRow
+
+                                        # split layout is causing layout issues
                                         fluidRow(column(width = 3),
                                                  column(width = 6,
                                                         splitLayout(
 
-                                                          cellWidths = c("20%", "20%", "20%", "0%","20%", "0%","20%"),
+                                                          cellWidths = c("25%", "25%", "25%", "25%"),
                                                           #cellWidths = c("200", "200", "200", "0","200", "0","200"),
-                                                          #cellArgs = list(style = "padding: 1px"),
+                                                          # cellArgs = list(style = "padding: 6px"), # causes spacing issues with map below drop downs
 
                                                           labeled_input('data-map-btn', "",
                                                                         selectizeInput('data_map', div(style = "font-weight: bold", "Select Data"),
@@ -58,23 +100,20 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                                        choices = c("2018 - 2019", "2019 - 2020"),
                                                                                        multiple = FALSE)),
 
-                                                          tags$style(type="text/css", "#save_map {background-color:#004270; color: #fff;}"),
-                                                          downloadButton(outputId = 'save_map', label = "Download Map", class = "download_this"),
+                                                          labeled_input('save-map-btn', "",
+                                                                        downloadButton(outputId = 'save_map', "Download Map",
+                                                                                       #div(style = "font-weight: bold", "Download Data"), # this causes spacing issues within the button
+                                                                                       class = "download_this"))
 
-                                                          tags$style(type="text/css", "#save_map_data {background-color:#004270; color: #fff;}"),
-                                                          downloadButton(outputId = 'save_map_data', label = "Download Data", class = "download_this"),
-
-                                                          # this formatting doesn't work
-                                                          # labeled_input('save-map-btn', "",
-                                                          #               downloadButton(outputId = 'save_map', label = "Download Map", class = "download_this")),
-                                                          #
-                                                          # labeled_input('save-map-data-btn', "",
-                                                          #               downloadButton(outputId = 'save_map_data', label = "Download Data", class = "download_this"))
+                                                          # div(style="display:inline-block",downloadButton(outputId = 'save_map', div(style = "font-weight: bold", "Download Data"), class = "download_this"))
+                                                          # div(style="position:relative; left:calc(25%);", downloadButton("dd", "Download .zip"))
 
                                                         ) # end splitLayout
                                                  ), # end column
                                                  column(width = 3)
                                         ) # end fluidRow
+
+
                                     ), # end div header
                                     br(),
 
@@ -85,7 +124,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                         #######
 
                                         fluidRow(column(width = 1),
-                                                 column(width = 10, align = "center", highchartOutput("hex_map", height = 550, width = 1000)),
+                                                 column(width = 10, align = "center", highchartOutput("hex_map", height = 550, width = "100%")),
                                                  column(width = 1)),
 
                                         br(),
@@ -350,4 +389,4 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                     ) # end div
 
                            ) # end tabPanel
-))
+                ))

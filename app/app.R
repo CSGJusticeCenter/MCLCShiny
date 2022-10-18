@@ -7,7 +7,7 @@
 #    Run ui and server
 #######################################
 
-# when on shinyapps.io (linux) -- not sure if its required, please test
+# when on shinyapps.io (linux) -- not sure if its required, please test - look into this 10/4
 if (Sys.info()[['sysname']] == "Linux"){
   dir.create('~/.fonts')
   file.copy("www/fonts/Graphik.ttf", "~/.fonts")

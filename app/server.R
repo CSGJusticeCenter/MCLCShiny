@@ -245,14 +245,15 @@ server <- function(input, output, session) {
   # Download buttons near dropdowns
   #######
 
-  # save table under map as csv
-  output$save_map_data <- downloadHandler(
-    filename = function() {
-      paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, ".csv", sep="")
-    },
-    content = function(file) {
-      write.csv(df_map_table(), file)}
-    )
+  # Don't need for now
+  # # save table under map as csv
+  # output$save_map_data <- downloadHandler(
+  #   filename = function() {
+  #     paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, ".csv", sep="")
+  #   },
+  #   content = function(file) {
+  #     write.csv(df_map_table(), file)}
+  #   )
 
   # save map as pdf
   output$save_map <- downloadHandler(

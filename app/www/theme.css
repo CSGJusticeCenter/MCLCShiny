@@ -12,14 +12,14 @@ body > div {
   max-width: 1200px;
 }*/
 
-/* Very top of page spans entire width
+  /* Very top of page spans entire width
 #page-top {
-  height: auto;
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  padding: 0;
-  padding-top: 6PX;
-  position: relative;
+height: auto;
+width: 100vw;
+margin-left: calc(50% - 50vw);
+padding: 0;
+padding-top: 6PX;
+position: relative;
 }*/
 
 /* Make body smaller width than header which spans the entire page */
@@ -29,11 +29,13 @@ body > div {
   margin-left: auto;
   margin-right: auto;
 }
+
 #state-body {
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
 }
+
 #download-body {
   max-width: 1200px;
   margin-left: auto;
@@ -46,8 +48,8 @@ Font size and style
 
 /* Add fonts */
 @font-face {
-  font-family: Graphik;
-  src: url("fonts/GraphikRegular.otf") format('truetype');
+    font-family: Graphik;
+    src: url("fonts/GraphikRegular.otf") format('truetype');
 }
 
 /* Make some wordy sections smaller */
@@ -58,34 +60,9 @@ Font size and style
 /* Change font family throughout */
 *{font-family: "Graphik", sans-serif;}
 
-
 /*##################################################################################################################
-Navigation Bar Color and Font
+Navigation Bar
 ####################################################################################################################*/
-
-/* Navigation bar color and font style, don't need since the naviagation bar is hidden
-.navbar{
-  background-color: #004270;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.navbar-default .navbar-nav>li>a, .navbar-default .navbar-nav>li>a{
-  background-color: #004270 !important;
-  font-size: 16px;
-  font-weight: bold;
-  color: #FFFFFF !important;
-}
-
-.navbar-nav li a:hover, .navbar-nav > .active > a {
-  color: #2EEBC4 !important;
-  background-color:#004270 !important;
-}
-
-.tab-panel{
-  background-color: #004270;
-  color: #004270
-}*/
 
 /* Hide navigation bar */
 .navbar{
@@ -128,8 +105,22 @@ Header and global drop down options
   left: 50%;
 }
 
-/* without this, dropdown menus are cut off while using splitLayout */
-.shiny-split-layout > div {overflow: visible;}
+/* FIX THIS
+/* without this, dropdown menus are cut off while using splitLayout - Don't need if not using split layout
+overflow:hidden; gets rid of scroll but not overlap
+/*display: inline-block; gets rid of overlap but not scroll*/
+
+.shiny-split-layout > div {
+  overflow:visible;
+}
+
+/* FIX THIS
+button > div {
+  -o-text-overflow: visible;
+  text-overflow: visible;
+  overflow: visible;
+  white-space: visible;
+}*/
 
 /* Makes the label for header inputs sit centered on top */
 #header > * > span {
@@ -161,43 +152,39 @@ Dropdowns and buttons
 
 /* Format for selector input data-map */
 #data-map-btn {
-  margin: 17px 10px 17px 10px;
-  width: 175px;
+  /*margin: 17px 0px 17px 0px;*/
+  margin: 1em 1em 1em 1em;
+  width: 13em;
+  /* width: 175px;*/
   color: #004270;
 }
 
 /* Format for selector input adm-pop-map */
 #adm-pop-map-btn {
-  margin: 17px 10px 17px 10px;
-  width: 175px;
+  margin: 1em 1em 1em 1em;
+  width: 13em;
+  /* width: 175px;*/
   color: #004270;
 }
 
 /* Format for selector input year-map*/
 #year-map-btn {
-  margin: 17px 10px 17px 10px;
-  width: 175px;
+  margin: 1em 1em 1em 1em;
+  width: 13em;
+  /* width: 175px;*/
   color: #004270;
 }
 
-/* Size of download buttons */
-.download_this{
-  text-align: left;
-  margin:41px 10px 41px 10px;
-  width:175px;
+/* Format for download map button */
+.download_this {
+  margin: 2.7em 1em 2.7em 1em;
   border-radius:0px;
-}
-
-/* Buttons are set at a fixed width and if content is too big it gets elipsed*/
-button {
-width: 50px;
-}
-
-button > div {
--o-text-overflow: ellipsis;
-text-overflow: ellipsis;
-overflow: hidden;
-white-space: nowrap;
+  color: #004270;
+  text-align: left;
+  width: 13em;
+  /* width: 175px;*/
+  background-color:#004270;
+  color: #fff;
 }
 
 /*######################################
@@ -206,21 +193,20 @@ Hex map
 ########################################*/
 
 /* Map select input margins and font style */
-/* Text inputs bottom margin prevents it from lining up nicely, so remove */
-.form-group.shiny-input-container,
-.selectize-control {
+  /* Text inputs bottom margin prevents it from lining up nicely, so remove */
+.form-group.shiny-input-container, .selectize-control {
   margin-bottom: 0;
 }
 
 /* Title of map settings */
-#selected-map {
+  #selected-map {
   text-align: center; /* not working */
   font-weight: bold;
   font-size: 24px;
 }
 
 /* Map settings */
-#hex-map{
+  #hex-map{
   text-align: center; /* not working */
   font-weight: bold;
   font-size:24px;
@@ -232,20 +218,20 @@ Table
 ########################################*/
 
 /* Title of table under map settings */
-#selected-map-table{
+  #selected-map-table{
   text-align: center;
   font-weight: bold;
   font-size:24px;
 }
 
 /* Table under map settings */
-#table-map {
+  #table-map {
   text-align: center; /* not working */
   white-space: nowrap;
 }
 
 /* Align text with search bar */
-#selected-map-table {
+  #selected-map-table {
   position: relative; top: 55px;
 }
 
@@ -256,37 +242,37 @@ Table
   width: 275px;
   height: 32px;
   background: #FFFFFF;
-}
+  }
 
 /*
-.dataTables_filter {
-position: relative;
-}
+  .dataTables_filter {
+    position: relative;
+  }
 .dataTables_filter .fa-search {
-position: absolute;
-top: 10px;
-left: auto;
-right: 10px;
+  position: absolute;
+  top: 10px;
+  left: auto;
+  right: 10px;
 }*/
 
-/*##################################################################################################################
+  /*##################################################################################################################
 STATE REPORTS
 Dropdowns
 ####################################################################################################################*/
 
 /* State selection button */
-#state-btn {
+  #state-btn {
   margin: 17px 10px 17px 10px;
-  width: 175px;
-  color: #004270;
-}
+width: 175px;
+color: #004270;
+  }
 
 /* Adm or pop selection button */
-#adm-pop-btn {
+  #adm-pop-btn {
   margin: 17px 10px 17px 10px;
-  width: 175px;
-  color: #004270;
-}
+width: 175px;
+color: #004270;
+  }
 
 /*######################################
 STATE REPORTS
@@ -294,10 +280,10 @@ Title and value boxes
 ########################################*/
 
 /* Title of state settings */
-#selected-state {
+  #selected-state {
   text-align: center;
-  font-weight: bold;
-  font-size: 24px;
+font-weight: bold;
+font-size: 24px;
 }
 
 /*######################################
@@ -306,20 +292,20 @@ Tabset Panels
 ########################################*/
 
 /* Tab formatting - figure out how to change width */
-.nav {
-  padding-left: 0;
-  margin-bottom: 0;
-  list-style: none;
-  margin: 0;
-  width: 100%
-  display: inline;
-  padding: 1px 0; /* raise tabs slightly above line */
-}
+  .nav {
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+    margin: 0;
+    width: 100%
+    display: inline;
+    padding: 1px 0; /* raise tabs slightly above line */
+  }
 
 .nav-tabs > li {
   float:none;
   display:inline-block; /* maintains horizontal tab structure for parole, prob and revocations */
-  zoom:1;
+    zoom:1;
   width: 150px;
   padding: 0px 14px; /* changes spacing between tabpanels */
 }
@@ -327,44 +313,44 @@ Tabset Panels
 .nav-tabs {
   text-align:center;
   border-bottom: #cccccc !important;
-  border-bottom-style: solid !important;
+    border-bottom-style: solid !important;
   border-bottom-width: 1px !important;
   font-size: 14px;
 }
 
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
   color: #FFFFFF;
-  cursor: default;
+    cursor: default;
   background-color: #004270;
-  border-bottom-color: #cccccc;
+    border-bottom-color: #cccccc;
 }
 
 .nav-tabs>li>a {
   margin-right: 2px;
   line-height: 1.42857143; /* height of tab panel buttons */
-  border-radius: 0px 0px 0 0;
+    border-radius: 0px 0px 0 0;
   background-color: #F4F6F8;
-  color: #004270;
+    color: #004270;
 }
 
 /* Affects top nav bar
 .nav>li>a:focus, .nav>li>a:hover {
-text-decoration: none;
-background-color: transparent;
-border: 2px solid #cccccc;
+  text-decoration: none;
+  background-color: transparent;
+  border: 2px solid #cccccc;
 }*/
 
-/* State note title setting */
-#selected-state-note-title {
+  /* State note title setting */
+  #selected-state-note-title {
   text-align: left;
-  font-weight: bold;
-  font-size: 24px;
+font-weight: bold;
+font-size: 24px;
 }
 
 /* State note setting */
-#consistent-state-note {
+  #consistent-state-note {
   text-align: left;
-  font-style: italic;
+font-style: italic;
 }
 
 /*##################################################################################################################
@@ -374,39 +360,39 @@ Dropdowns
 
 /*.dropdown-menu span {text-align: left; width: 100%;}*/
 
-/* Format for selector input state-btn*/
-#download-data-btn {
+  /* Format for selector input state-btn*/
+  #download-data-btn {
   margin: 17px 10px 17px 10px;
-  color: #004270;
-}
+color: #004270;
+  }
 
 /* Format for selector input adm-pop-btn*/
-#download-state-btn {
+  #download-state-btn {
   margin: 17px 10px 17px 10px;
-  color: #004270;
-}
+color: #004270;
+  }
 
 /* Format for selector input adm-pop-btn*/
-#download-year-btn {
+  #download-year-btn {
   margin: 17px 10px 17px 10px;
-  color: #004270;
-}
+color: #004270;
+  }
 
 /*
-#download-header > * > span {
+  #download-header > * > span {
   text-align: center;
 }*/
 
-/* Title of download page */
-#download-title {
+  /* Title of download page */
+  #download-title {
   text-align: left;
-  font-weight: bold;
-  font-size: 32px;
+font-weight: bold;
+font-size: 32px;
 }
 
 /* Title of data table selected for download */
-#selected-download-title {
+  #selected-download-title {
   text-align: left;
-  font-weight: bold;
-  font-size: 24px;
+font-weight: bold;
+font-size: 24px;
 }
