@@ -236,9 +236,9 @@ server <- function(input, output, session) {
                                                )
                              ),
               rownames = FALSE) %>%
-              formatPercentage(c("2018 - 2019", "2019 - 2020"), 2) %>%
-              formatCurrency(c("2018", "2019", "2020"), currency = " ", interval = 3, mark = ",") %>%
-              formatRound(columns=c("2018", "2019", "2020"), digits = 0)
+              formatPercentage(c("2018 - 2019", "2019 - 2020", "2020 - 2021","All (2018 - 2021)"), 2) %>%
+              formatCurrency(c("2018", "2019", "2020",  "2021"), currency = " ", interval = 3, mark = ",") %>%
+              formatRound(columns=c("2018", "2019", "2020",  "2021"), digits = 0)
   })
 
   #######
@@ -524,7 +524,7 @@ server <- function(input, output, session) {
     df <- merge(df1, df, by = "text")
     df <- df %>% arrange(order) %>% select(-order)
 
-    # create table with 3 year trend line in last column
+    # create table with 4 Year trend line in last column
     reactable(df,
               theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
               defaultColDef = colDef(format = colFormat(separators = TRUE), align = "center"),
@@ -538,11 +538,11 @@ server <- function(input, output, session) {
                 `2019`          = colDef(minWidth = 95),
                 `2020`          = colDef(minWidth = 95),
                 four_yr_change = colDef(minWidth = 110,
-                                         name = "3 Year Change",
+                                         name = "4 Year Change",
                                          format = colFormat(percent = TRUE, digits = 1)),
-                # add 3 year trend graphs to each row
+                # add 4 Year trend graphs to each row
                 total_new  = colDef(minWidth = 110,
-                                    name = "3 Year Trend",
+                                    name = "4 Year Trend",
                                     cell = function(value, index) {
                                       dui_sparkline(
                                         data = value[[1]],
@@ -661,7 +661,7 @@ server <- function(input, output, session) {
     df <- merge(df1, df, by = "text")
     df <- df %>% arrange(order) %>% select(-c(order, adm_or_pop, state, prob_vs_parole, metric))
 
-    # create table with 3 year trend line in last column
+    # create table with 4 Year trend line in last column
     reactable(df,
               theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
               defaultColDef = colDef(format = colFormat(separators = TRUE), align = "center"),
@@ -675,11 +675,11 @@ server <- function(input, output, session) {
                 `2019`          = colDef(minWidth = 95),
                 `2020`          = colDef(minWidth = 95),
                 four_yr_change = colDef(minWidth = 110,
-                                         name = "3 Year Change",
+                                         name = "4 Year Change",
                                          format = colFormat(percent = TRUE, digits = 1)),
-                # add 3 year trend graphs to each row
+                # add 4 Year trend graphs to each row
                 total_new  = colDef(minWidth = 110,
-                                    name = "3 Year Trend",
+                                    name = "4 Year Trend",
                                     cell = function(value, index) {
                                       dui_sparkline(
                                         data = value[[1]],
@@ -785,7 +785,7 @@ server <- function(input, output, session) {
     df <- merge(df1, df, by = "text")
     df <- df %>% arrange(order) %>% select(-c(order, adm_or_pop, state, prob_vs_parole, metric))
 
-    # create table with 3 year trend line in last column
+    # create table with 4 Year trend line in last column
     reactable(df,
               theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
               defaultColDef = colDef(format = colFormat(separators = TRUE), align = "center"),
@@ -799,11 +799,11 @@ server <- function(input, output, session) {
                 `2019`          = colDef(minWidth = 95),
                 `2020`          = colDef(minWidth = 95),
                 four_yr_change = colDef(minWidth = 110,
-                                         name = "3 Year Change",
+                                         name = "4 Year Change",
                                          format = colFormat(percent = TRUE, digits = 1)),
-                # add 3 year trend graphs to each row
+                # add 4 Year trend graphs to each row
                 total_new  = colDef(minWidth = 110,
-                                    name = "3 Year Trend",
+                                    name = "4 Year Trend",
                                     cell = function(value, index) {
                                       dui_sparkline(
                                         data = value[[1]],

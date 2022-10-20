@@ -203,6 +203,7 @@ mclc_all <- gather(mclc, data, total, total_admissions:technical_population)
 # add state abbreviations
 mclc_all <- mclc_all %>%
   ungroup() %>%
+  arrange(state) %>%
   group_by(state, data) %>%
   mutate(change = total/lag(total) - 1) %>%
   distinct() %>%
@@ -228,6 +229,9 @@ mclc_all <- mclc_all %>%
   left_join(stateAbb, by = "state") %>%
   select(state, year, total, everything())
 
+# save labels
+labels <- mclc_all %>% ungroup() %>% select(data, metric, adm_or_pop) %>% distinct()
+
 # make data frame for counts
 # data is in wide form
 mclc_counts <- mclc_all %>%
@@ -242,23 +246,38 @@ mclc_change <- mclc_all %>%
   select(-total)
 mclc_change <-
   spread(mclc_change, year, change) %>%
+  # left_join(mclc_explorer_table_4_yr, by = c("state", "data")) %>%
   select(state,
          data,
          `2018 - 2019` = `2019`,
          `2019 - 2020` = `2020`,
-         `2020 - 2021` = `2021`)
+         `2020 - 2021` = `2021`
+         )
 
 # combine counts and change tables together
-mclc_explorer_table <- left_join(mclc_counts, mclc_change, by = c("state", "data"))
+mclc_explorer_table <- left_join(mclc_counts, mclc_change, by = c("state", "data")) %>%
+  mutate(`All (2018 - 2021)` = (`2021`-`2018`)/`2018`)
+
+# Get 4 year change
+mclc_explorer_table_4_yr <- mclc_explorer_table %>%
+  select(state, data, change = `All (2018 - 2021)`) %>%
+  left_join(stateAbb, by = "state") %>%
+  left_join(labels, by = "data") %>%
+  rename(state_abb = code) %>%
+  mutate(year = 2022) %>%
+  select(-abbrev)
 
 # create year range
 # create min and max values for legend scale
 mclc_explorer <- mclc_all %>%
   filter(year != 2018) %>%
   rename(state_abb = code) %>%
+  select(-abbrev) %>%
+  full_join(mclc_explorer_table_4_yr, by = c("state", "data", "year", "change", "state_abb", "metric", "adm_or_pop")) %>%
   mutate(year = case_when(year == 2019 ~ "2018 - 2019",
                           year == 2020 ~ "2019 - 2020",
-                          year == 2021 ~ "2020 - 2021"),
+                          year == 2021 ~ "2020 - 2021",
+                          year == 2022 ~ "All (2018 - 2021)"),
          change = round(change*100, 2),
          tooltip = paste0("<b>", state, "</b><br>","Change from ", year, "<br>",change, "%<br>"),
          datalabel = ifelse(is.na(change), paste0("", state_abb, ""),
@@ -405,6 +424,19 @@ probation_table_wide <- probation_table_wide %>%
 ########
 # CSG download data
 ########
+
+adm_pop_long <- gather(adm_pop, data, total, total_admissions:other_population)
+
+# custom function to add text label depending on metric
+# custom function to create an adm vs pop variable
+# custom function to create a prob vs parole variable
+adm_pop_long <- fnc_create_data_metric(adm_pop_long)
+adm_pop_long <- fnc_create_adm_pop(adm_pop_long)
+adm_pop_long <- fnc_create_prob_vs_parole(adm_pop_long)
+
+# add tooltip
+adm_pop_long <- adm_pop_long %>%
+  mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", formattable::comma(total, digits = 0), "<br>"))
 
 # create new df
 csg <- adm_pop_long

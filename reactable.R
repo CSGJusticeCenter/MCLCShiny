@@ -26,7 +26,7 @@ load(file = "app/data/state_table_wide.Rda")
 load(file = "app/data/parole_table.Rda")
 load(file = "app/data/parole_table_wide.Rda")
 load(file = "app/data/probation_table.Rda")
-load(file = "app/data/probation_wide.Rda")
+load(file = "app/data/probation_table_wide.Rda")
 
 # load packages
 library(dplyr)

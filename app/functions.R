@@ -75,7 +75,7 @@ fnc_highchart_state_areachart <- function(df){
     hc_add_series(data = subset(df, metric == "Technical Violation"), name = "Technical Violation", type = "area", hcaes(x = year, y = total), color = tech_co) %>%
     hc_add_series(data = subset(df, metric == "New Offense"), name = "New Offense", type = "area", hcaes(x = year, y = total), color = new_o_co) %>%
 
-    hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020)) %>%
+    hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
     hc_yAxis(title = "") %>%
 
     hc_add_theme(hc_theme_jc) %>%
@@ -102,7 +102,7 @@ fnc_highchart_state_barchart <- function(df){
     hc_add_series(data = subset(df, metric == "Technical Violation"), name = "Technical Violation", type = "column", hcaes(x = year, y = total), color = tech_co) %>%
     hc_add_series(data = subset(df, metric == "New Offense"), name = "New Offense", type = "column", hcaes(x = year, y = total), color = new_o_co) %>%
 
-    hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020)) %>%
+    hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
     hc_yAxis(title = "") %>%
 
     hc_add_theme(hc_theme_jc) %>%
@@ -125,7 +125,7 @@ fnc_highchart_state_barchart <- function(df){
 ##########################
 
 # fnc_reatable_table <- function(df){
-#   # create table with 3 year trend line in last column
+#   # create table with 4 Year trend line in last column
 #   reactable(df,
 #             theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
 #             defaultColDef = colDef(format = colFormat(separators = TRUE), align = "center"),
@@ -139,12 +139,12 @@ fnc_highchart_state_barchart <- function(df){
 #                            `2018`          = colDef(minWidth = 95),
 #                            `2019`          = colDef(minWidth = 95),
 #                            `2020`          = colDef(minWidth = 95),
-#                            three_yr_change = colDef(minWidth = 110,
-#                                                     name = "3 Year Change",
+#                            four_yr_change = colDef(minWidth = 110,
+#                                                     name = "4 Year Change",
 #                                                     format = colFormat(percent = TRUE, digits = 1)),
-#                            # add 3 year trend graphs to each row
+#                            # add 4 Year trend graphs to each row
 #                            total_new  = colDef(minWidth = 110,
-#                                                name = "3 Year Trend",
+#                                                name = "4 Year Trend",
 #                                                cell = function(value, index) {
 #                                                  dui_sparkline(
 #                                                    data = value[[1]],
@@ -195,7 +195,7 @@ fnc_highchart_state_barchart <- function(df){
 #                                                        stroke = colpal_stroke[index])))}))
 
 fnc_reatable_table <- function(df){
-  # create table with 3 year trend line in last column
+  # create table with 4 Year trend line in last column
   reactable(df,
             theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
             defaultColDef = colDef(format = colFormat(separators = TRUE), align = "center"),
@@ -208,12 +208,14 @@ fnc_reatable_table <- function(df){
               `2018`          = colDef(minWidth = 95),
               `2019`          = colDef(minWidth = 95),
               `2020`          = colDef(minWidth = 95),
-              three_yr_change = colDef(minWidth = 110,
-                                       name = "3 Year Change",
+              `2021`          = colDef(minWidth = 95),
+
+              four_yr_change = colDef(minWidth = 110,
+                                       name = "4 Year Change",
                                        format = colFormat(percent = TRUE, digits = 1)),
-              # add 3 year trend graphs to each row
+              # add 4 Year trend graphs to each row
               total_new  = colDef(minWidth = 110,
-                                  name = "3 Year Trend",
+                                  name = "4 Year Trend",
                                   cell = function(value, index) {
                                     dui_sparkline(
                                       data = value[[1]],
@@ -382,103 +384,11 @@ fnc_create_prob_vs_parole <- function(df){
     ))
 }
 
-# create adm vs pop depending on data
-fnc_create_adm_pop <- function(df){
-  df <- df %>%
-    mutate(adm_or_pop = ifelse(grepl("population", data), "Population", "Admissions"))
-}
-
-# clean bjs probation data sets
-clean_bjs_prob <- function(df){
-
-  df$state <- gsub('/c','',df$state)
-  df$state <- gsub('/b','',df$state)
-  df$state <- gsub('/d','',df$state)
-  df$state <- gsub('[[:punct:]]+','',df$state)
-  df$state <- gsub('[[:digit:]]+', '', df$state)
-  # df$state <- gsub('†','',df$state)
-  df$state <- gsub("\u2020", "", df$state)
-  df$state <- gsub('*','',df$state)
-  df$state <- trimws(df$state, whitespace = "[\\h\\v]")
-
-  # remove DC
-  df <- df %>% filter(state != "District of Columbia" & state != "US total" & state != "District Of Columbia")
-
-  # get indices for alabama and wyoming to subset rows to rows with values
-  alabama <- which(df$state == "Alabama")
-  wyoming <- which(df$state == "Wyoming")
-
-  # remove NA rows
-  df <- df[alabama:wyoming,]
-
-}
-
-# clean bjs parole data sets
-clean_bjs_parole <- function(df){
-
-  df$state <- gsub('/c','',df$state)
-  df$state <- gsub('/b','',df$state)
-  df$state <- gsub('/d','',df$state)
-  df$state <- gsub('[[:punct:]]+','',df$state)
-  df$state <- gsub('[[:digit:]]+', '', df$state)
-  # df$state <- gsub('†','',df$state)
-  df$state <- gsub("\u2020", "", df$state)
-  df$state <- gsub('*','',df$state)
-  df$state <- trimws(df$state, whitespace = "[\\h\\v]")
-
-  # remove DC
-  df <- df %>% filter(state != "District of Columbia" & state != "US total" & state != "District Of Columbia")
-
-  # get indices for alabama and wyoming to subset rows to rows with values
-  alabama <- which(df$state == "Alabama")
-  wyoming <- which(df$state == "Wyoming")
-
-  # remove NA rows
-  df <- df[alabama:wyoming,]
-
-}
-
-# create incarcerated variable
-incarcerated_bjs_prob <- function(df){
-  df[] <- lapply(df, gsub, pattern = "..", replacement = NA, fixed = TRUE)
-  df[] <- lapply(df, gsub, pattern = ",", replacement = "", fixed = TRUE)
-  df$inc_new_sentence <- as.numeric(df$inc_new_sentence)
-  df$inc_current_sentence <- as.numeric(df$inc_current_sentence)
-  df <- df %>% rowwise() %>% mutate(incarcerated = sum(inc_current_sentence, inc_new_sentence))
-  df <- data.frame(df)
-  df <- df %>% select(state, year, type, incarcerated)
-}
-
-# create incarcerated variable
-incarcerated_bjs_parole <- function(df){
-  df[] <- lapply(df, gsub, pattern = "..", replacement = NA, fixed = TRUE)
-  df[] <- lapply(df, gsub, pattern = ",", replacement = "", fixed = TRUE)
-  df$inc_new_sentence <- as.numeric(df$inc_new_sentence)
-  df$inc_revocation <- as.numeric(df$inc_revocation)
-  df <- df %>% rowwise() %>% mutate(incarcerated = sum(inc_revocation, inc_new_sentence))
-  df <- data.frame(df)
-  df <- df %>% select(state, year, type, incarcerated)
-}
-
-# make parole data long form
-bjs_parole_long_form <- function(df){
-
-  df <- gather(df,
-               data,
-               total,
-               incarcerated,
-               factor_key=TRUE)
-}
-
-# make probation data long form
-bjs_prob_long_form <- function(df){
-
-  df <- gather(df,
-               data,
-               total,
-               incarcerated,
-               factor_key=TRUE)
-}
+# # create adm vs pop depending on data
+# fnc_create_adm_pop <- function(df){
+#   df <- df %>%
+#     mutate(adm_or_pop = ifelse(grepl("population", data), "Population", "Admissions"))
+# }
 
 ##########################
 # Ui

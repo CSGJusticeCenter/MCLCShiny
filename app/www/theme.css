@@ -235,14 +235,14 @@ Table
   position: relative; top: 55px;
 }
 
-/* Change search bar appearance */
+/* Change search bar appearance - need to figure out how to keep the style consistent when clicked*/
 #table-map input {
   border-radius: 0px;
   border: 3px color: #004270;
   width: 275px;
   height: 32px;
   background: #FFFFFF;
-  }
+}
 
 /*
   .dataTables_filter {

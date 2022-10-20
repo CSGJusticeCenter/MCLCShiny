@@ -55,7 +55,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                                          labeled_input('year-map-btn', "",
                                                                                        selectizeInput('year_map', div(style = "font-weight: bold", "Select Years"),
-                                                                                                      choices = c("2018 - 2019", "2019 - 2020"),
+                                                                                                      choices = c("2018 - 2019", "2019 - 2020", "2020 - 2021", "All (2018 - 2021)"),
                                                                                                       multiple = FALSE))),
                                                                  column(width = 3,
 
