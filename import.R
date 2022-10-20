@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: import.R
 # Authors: Mari Roberts
-# Date last updated: September 28, 2022
+# Date last updated: October 20, 2022
 
 # Description:
 #    Loads packages
@@ -12,7 +12,8 @@
 #    Creates data files for app
 
 # Input:
-#    "Data for web team v13.xlsx"
+#    "Data for web team v13.xlsx" notes
+#    "mclc_data_2022_v2.xlsx"     2022 survey data
 #     Map files
 
 # Output:
@@ -21,11 +22,11 @@
 #######################################
 
 # install this version of highcharter
-# remotes::install_github("batpigandme/highcharter@module-testing")
-# remotes::install_github("jbkunst/highcharter")
-install.packages("highcharter")
+# Remotes::install_github("batpigandme/highcharter@module-testing")
+# Remotes::install_github("jbkunst/highcharter")
+# install.packages("highcharter")
 
-# load packages
+# Load packages
 library(rlang)
 library(dplyr)
 library(tidyr)
@@ -42,22 +43,18 @@ library(highcharter)
 library(extrafont)
 
 # Add fonts required to run functions.R
-# fonts are found in app folder
+# Fonts are found in app folder
 font_add("Graphik", regular = "app/www/Fonts/GraphikRegular.otf")
 showtext_auto()
 default_fonts <- c("Graphik")
 
-# test
-# library(ggplot2)
-# qplot(1:10)+theme(text=element_text(family="Graphik Regular"))
-
-# load custom functions
+# Load custom functions
 source("app/functions.R")
 
-# path to data on research div sharepoint
-# make sure sharepoint folder is synced locally
+# Path to data on research div sharepoint
+# Make sure sharepoint folder is synced locally
 # https://csgorg.sharepoint.com/:f:/s/Team-JC-Research/EhdvImKN2rdPnmHQ2TrKlooBdYqnnWc0SUXBNuh9C7d41g?e=NCsh8I
-# in your Renviron (usethis::edit_r_environ()), set CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"
+# In your Renviron (usethis::edit_r_environ()), set CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"
 
 FULL_JC_FOLDER <- FALSE
 
@@ -71,80 +68,27 @@ if (FULL_JC_FOLDER == TRUE){
 # Import data
 ########
 
-# load sp file
+# Load sp file
 hex <- read_sf(file.path(paste0(sp_data_path, "/Data/us_states_hexgrid.geojson", sep = ""))) %>%
   select(state_abb = iso3166_2)
 
-# load state abb
+# Load state abb
 stateAbb <- read.csv(paste0(sp_data_path, "/Data/stateAbb.csv", sep = ""))
 
-# load admissions data
-adm18 <- read_excel(paste0(sp_data_path, "/Data/Data for web team 2021 v13.xlsx", sep = ""), sheet = "Admissions 2018")
-adm19 <- read_excel(paste0(sp_data_path, "/Data/Data for web team 2021 v13.xlsx", sep = ""), sheet = "Admissions 2019")
-adm20 <- read_excel(paste0(sp_data_path, "/Data/Data for web team 2021 v13.xlsx", sep = ""), sheet = "Admissions 2020")
+# Load admissions data
+adm18 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v2.xlsx", sep = ""), sheet = "Admissions 2018")
+adm19 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v2.xlsx", sep = ""), sheet = "Admissions 2019")
+adm20 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v2.xlsx", sep = ""), sheet = "Admissions 2020")
+adm21 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v2.xlsx", sep = ""), sheet = "Admissions 2021")
 
-# load population data
-pop18 <- read_excel(paste0(sp_data_path, "/Data/Data for web team 2021 v13.xlsx", sep = ""), sheet = "Population 2018")
-pop19 <- read_excel(paste0(sp_data_path, "/Data/Data for web team 2021 v13.xlsx", sep = ""), sheet = "Population 2019")
-pop20 <- read_excel(paste0(sp_data_path, "/Data/Data for web team 2021 v13.xlsx", sep = ""), sheet = "Population 2020")
+# Load population data
+pop18 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v2.xlsx", sep = ""), sheet = "Population 2018")
+pop19 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v2.xlsx", sep = ""), sheet = "Population 2019")
+pop20 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v2.xlsx", sep = ""), sheet = "Population 2020")
+pop21 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v2.xlsx", sep = ""), sheet = "Population 2021")
 
-# load states notes
+# Load states  - will change to new notes when ready ????????????????????????????????
 notes <- read_excel(paste0(sp_data_path, "/Data/Data for web team 2021 v13.xlsx", sep = ""), sheet = "Notes")
-
-# load bjs parole and probation survey data (2010-2018)
-load(file = paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Series (2010-2018)/BJS_Parole_2010/ICPSR_34382/DS0001/34382-0001-Data.rda"))
-load(file = paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Series (2010-2018)/BJS_Parole_2011/ICPSR_34718/DS0001/34718-0001-Data.rda"))
-load(file = paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Series (2010-2018)/BJS_Parole_2012/ICPSR_35257/DS0001/35257-0001-Data.rda"))
-load(file = paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Series (2010-2018)/BJS_Parole_2013/ICPSR_35629/DS0001/35629-0001-Data.rda"))
-load(file = paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Series (2010-2018)/BJS_Parole_2014/ICPSR_36320/DS0001/36320-0001-Data.rda"))
-load(file = paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Series (2010-2018)/BJS_Parole_2015/ICPSR_36619/DS0001/36619-0001-Data.rda"))
-load(file = paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Series (2010-2018)/BJS_Parole_2016/ICPSR_37441/DS0001/37441-0001-Data.rda"))
-load(file = paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Series (2010-2018)/BJS_Parole_2017/ICPSR_37471/DS0001/37471-0001-Data.rda"))
-load(file = paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Series (2010-2018)/BJS_Parole_2018/ICPSR_38058/DS0001/38058-0001-Data.rda"))
-
-load(file = paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Series (2010-2018)/BJS_Probation_2010/ICPSR_34321/DS0001/34321-0001-Data.rda"))
-load(file = paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Series (2010-2018)/BJS_Probation_2011/ICPSR_34717/DS0001/34717-0001-Data.rda"))
-load(file = paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Series (2010-2018)/BJS_Probation_2012/ICPSR_35256/DS0001/35256-0001-Data.rda"))
-load(file = paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Series (2010-2018)/BJS_Probation_2013/ICPSR_35631/DS0001/35631-0001-Data.rda"))
-load(file = paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Series (2010-2018)/BJS_Probation_2014/ICPSR_36343/DS0001/36343-0001-Data.rda"))
-load(file = paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Series (2010-2018)/BJS_Probation_2015/ICPSR_36618/DS0001/36618-0001-Data.rda"))
-load(file = paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Series (2010-2018)/BJS_Probation_2016/ICPSR_37459/DS0001/37459-0001-Data.rda"))
-load(file = paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Series (2010-2018)/BJS_Probation_2017/ICPSR_37482/DS0001/37482-0001-Data.rda"))
-load(file = paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Series (2010-2018)/BJS_Probation_2018/ICPSR_38057/DS0001/38057-0001-Data.rda"))
-
-# rename rda tables
-bjs_parole_2010.rda <- da34382.0001
-bjs_parole_2011.rda <- da34718.0001
-bjs_parole_2012.rda <- da35257.0001
-bjs_parole_2013.rda <- da35629.0001
-bjs_parole_2014.rda <- da36320.0001
-bjs_parole_2015.rda <- da36619.0001
-bjs_parole_2016.rda <- da37441.0001
-bjs_parole_2017.rda <- da37471.0001
-bjs_parole_2018.rda <- da38058.0001
-bjs_probation_2010.rda <- da34321.0001
-bjs_probation_2011.rda <- da34717.0001
-bjs_probation_2012.rda <- da35256.0001
-bjs_probation_2013.rda <- da35631.0001
-bjs_probation_2014.rda <- da36343.0001
-bjs_probation_2015.rda <- da36618.0001
-bjs_probation_2016.rda <- da37459.0001
-bjs_probation_2017.rda <- da38057.0001
-bjs_probation_2018.rda <- da38057.0001
-
-# load bjs parole and probation exits and entries data (2015-2020)
-bjs_parole_exits_2015.csv <- read.csv(paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Entries and Exits (2015-2020)/parole_exits_15.csv", sep = ""))
-bjs_parole_exits_2016.csv <- read.csv(paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Entries and Exits (2015-2020)/parole_exits_16.csv", sep = ""))
-bjs_parole_exits_2017.csv <- read.csv(paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Entries and Exits (2015-2020)/parole_exits_17.csv", sep = ""))
-bjs_parole_exits_2018.csv <- read.csv(paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Entries and Exits (2015-2020)/parole_exits_18.csv", sep = ""))
-bjs_parole_exits_2019.csv <- read.csv(paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Entries and Exits (2015-2020)/parole_exits_19.csv", sep = ""))
-bjs_parole_exits_2020.csv <- read.csv(paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Entries and Exits (2015-2020)/parole_exits_20.csv", sep = ""))
-bjs_probation_exits_2015.csv <- read.csv(paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Entries and Exits (2015-2020)/prob_exits_15.csv", sep = ""))
-bjs_probation_exits_2016.csv <- read.csv(paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Entries and Exits (2015-2020)/prob_exits_16.csv", sep = ""))
-bjs_probation_exits_2017.csv <- read.csv(paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Entries and Exits (2015-2020)/prob_exits_17.csv", sep = ""))
-bjs_probation_exits_2018.csv <- read.csv(paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Entries and Exits (2015-2020)/prob_exits_18.csv", sep = ""))
-bjs_probation_exits_2019.csv <- read.csv(paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Entries and Exits (2015-2020)/prob_exits_19.csv", sep = ""))
-bjs_probation_exits_2020.csv <- read.csv(paste0(sp_data_path, "/Data/BJS Annual Probation and Parole Entries and Exits (2015-2020)/prob_exits_20.csv", sep = ""))
 
 ################################################################################
 # Reformat shapefile for hex map
@@ -171,33 +115,62 @@ notes <- clean_names(notes)
 adm18$year <- "2018"
 adm19$year <- "2019"
 adm20$year <- "2020"
+adm21$year <- "2021"
 
 # add year variable
 pop18$year <- "2018"
 pop19$year <- "2019"
 pop20$year <- "2020"
+pop21$year <- "2021"
 
 # add data together
-adm <- rbind(adm18, adm19, adm20)
-pop <- rbind(pop18, pop19, pop20)
+adm <- rbind(adm18, adm19, adm20, adm21)
+pop <- rbind(pop18, pop19, pop20, pop21)
 
 # clean names
 # rename variable
-adm <- clean_names(adm) %>% rename(state = states)
-pop <- clean_names(pop) %>% rename(state = states)
+adm <- clean_names(adm)
+pop <- clean_names(pop)
 
 # add adm and pop data together
-adm_pop <- merge(adm, pop, by = c("state", "state_abbrev", "year"))
+adm_pop <- merge(adm, pop, by = c("state", "year"))
 
 # remove state abbrevs
 # change data types
 # calculate difference between total and supervision violations to get number of other
 adm_pop <- adm_pop %>%
-  select(-state_abbrev) %>%
+  ungroup() %>%
+  select(state, year, everything()) %>%
+  select(-c(total_technical_violation_admissions,
+            total_new_offense_admissions,
+            total_technical_violation_population,
+            total_new_offense_population)) %>%
   mutate(state = factor(state)) %>%
   mutate_if(is.character, as.numeric) %>%
-  mutate(other_admissions = total_admissions-total_violation_admissions,
-         other_population = total_population-total_violation_population)
+
+  mutate(other_admissions = total_prison_admissions-total_supervision_violation_admissions,
+         other_population = total_prison_population-total_supervision_violation_population) %>%
+
+  select(state,
+         year,
+         total_admissions                            = total_prison_admissions,
+         total_violation_admissions                  = total_supervision_violation_admissions,
+         total_probation_violation_admissions        = probation_violation_admissions,
+         new_offense_probation_violation_admissions,
+         technical_probation_violation_admissions,
+         total_parole_violation_admissions           = parole_violation_admissions,
+         new_offense_parole_violation_admissions,
+         technical_parole_violation_admissions,
+         total_population                            = total_prison_population,
+         total_violation_population                  = total_supervision_violation_population,
+         total_probation_violation_population        = probation_violation_population,
+         new_offense_probation_violation_population,
+         technical_probation_violation_population,
+         total_parole_violation_population           = parole_violation_population,
+         new_offense_parole_violation_population,
+         technical_parole_violation_population,
+         other_admissions,
+         other_population)
 
 # replace all NaN with NA
 adm_pop[adm_pop == "NaN"] <- NA
@@ -221,18 +194,6 @@ mclc <- adm_pop %>%
 
 # make long form
 mclc_all <- gather(mclc, data, total, total_admissions:technical_population)
-adm_pop_long <- gather(adm_pop, data, total, total_admissions:other_population)
-
-# custom function to add text label depending on metric
-# custom function to create an adm vs pop variable
-# custom function to create a prob vs parole variable
-adm_pop_long <- fnc_create_data_metric(adm_pop_long)
-adm_pop_long <- fnc_create_adm_pop(adm_pop_long)
-adm_pop_long <- fnc_create_prob_vs_parole(adm_pop_long)
-
-# add tooltip
-adm_pop_long <- adm_pop_long %>%
-  mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", formattable::comma(total, digits = 0), "<br>"))
 
 # create change from 2018 to 2019 to 2020
 # remove dups
@@ -241,6 +202,7 @@ adm_pop_long <- adm_pop_long %>%
 # change data types
 # add state abbreviations
 mclc_all <- mclc_all %>%
+  ungroup() %>%
   group_by(state, data) %>%
   mutate(change = total/lag(total) - 1) %>%
   distinct() %>%
@@ -271,7 +233,7 @@ mclc_all <- mclc_all %>%
 mclc_counts <- mclc_all %>%
   select(-change)
 mclc_counts <- spread(mclc_counts, year, total) %>%
-  select(state, data, `2018`, `2019`, `2020`)
+  select(state, data, `2018`, `2019`, `2020`, `2021`)
 
 # make data frame for change
 # data is in wide form
@@ -283,7 +245,8 @@ mclc_change <-
   select(state,
          data,
          `2018 - 2019` = `2019`,
-         `2019 - 2020` = `2020`)
+         `2019 - 2020` = `2020`,
+         `2020 - 2021` = `2021`)
 
 # combine counts and change tables together
 mclc_explorer_table <- left_join(mclc_counts, mclc_change, by = c("state", "data"))
@@ -294,7 +257,8 @@ mclc_explorer <- mclc_all %>%
   filter(year != 2018) %>%
   rename(state_abb = code) %>%
   mutate(year = case_when(year == 2019 ~ "2018 - 2019",
-                          year == 2020 ~ "2019 - 2020"),
+                          year == 2020 ~ "2019 - 2020",
+                          year == 2021 ~ "2020 - 2021"),
          change = round(change*100, 2),
          tooltip = paste0("<b>", state, "</b><br>","Change from ", year, "<br>",change, "%<br>"),
          datalabel = ifelse(is.na(change), paste0("", state_abb, ""),
@@ -366,8 +330,8 @@ state_table_wide <- state_table_wide %>%
                            metric == "Supervision Violation"   ~ 2,
                            metric == "Technical Violation"     ~ 3,
                            metric == "Total"                   ~ 1),
-         three_yr_change = (`2020`-`2018`)/`2018`) %>%
-  select(state, text, `2018`, `2019`, `2020`, three_yr_change, everything()) %>%
+         four_yr_change = (`2021`-`2018`)/`2018`) %>%
+  select(state, text, `2018`, `2019`, `2020`, `2021`, four_yr_change, everything()) %>%
   ungroup() %>%
   select(-metric)
 
@@ -406,8 +370,8 @@ parole_table_wide <- parole_table_wide %>%
     metric == "New Offense"             ~ 3,
     metric == "Technical Violation"     ~ 2,
     metric == "Parole Violation"        ~ 1)) %>%
-  mutate(three_yr_change = (`2020`-`2018`)/`2018`) %>%
-  select(state, text, `2018`, `2019`, `2020`, three_yr_change, everything()) %>%
+  mutate(four_yr_change = (`2021`-`2018`)/`2018`) %>%
+  select(state, text, `2018`, `2019`, `2020`, `2021`, four_yr_change, everything()) %>%
   select(-metric)
 
 ################################################################################
@@ -430,8 +394,8 @@ probation_table_wide <- probation_table_wide %>%
     metric == "Technical Violation"     ~ 2,
     metric == "Probation Violation"        ~ 1)) %>%
   # 3 year change
-  mutate(three_yr_change = (`2020`-`2018`)/`2018`) %>%
-  select(state, text, `2018`, `2019`, `2020`, three_yr_change, everything()) %>%
+  mutate(four_yr_change = (`2021`-`2018`)/`2018`) %>%
+  select(state, text, `2018`, `2019`, `2020`, `2021`, four_yr_change, everything()) %>%
   select(-metric)
 
 ################################################################################
@@ -451,68 +415,6 @@ csg <- csg %>% ungroup() %>%
   select(state, year, text, total, adm_or_pop) %>%
   mutate(state = as.character(state))
 
-########
-# BJS download data - don't need but keeping just in case
-########
-
-# create year variable and select variables
-bjs_parole_2013 <- bjs_parole_2013.rda %>% clean_names() %>% mutate(year = 2013)
-bjs_parole_2014 <- bjs_parole_2014.rda %>% clean_names() %>% mutate(year = 2014)
-bjs_parole_2015 <- bjs_parole_2015.rda %>% clean_names() %>% mutate(year = 2015)
-bjs_parole_2016 <- bjs_parole_2016.rda %>% clean_names() %>% mutate(year = 2016)
-bjs_parole_2017 <- bjs_parole_2017.rda %>% clean_names() %>% mutate(year = 2017)
-bjs_parole_2018 <- bjs_parole_2018.rda %>% clean_names() %>% mutate(year = 2018)
-
-# create year variable and select variables
-bjs_probation_2013 <- bjs_probation_2013.rda %>% clean_names() %>% mutate(year = 2013)
-bjs_probation_2014 <- bjs_probation_2014.rda %>% clean_names() %>% mutate(year = 2014)
-bjs_probation_2015 <- bjs_probation_2015.rda %>% clean_names() %>% mutate(year = 2015)
-bjs_probation_2016 <- bjs_probation_2016.rda %>% clean_names() %>% mutate(year = 2016)
-bjs_probation_2017 <- bjs_probation_2017.rda %>% clean_names() %>% mutate(year = 2017)
-bjs_probation_2018 <- bjs_probation_2018.rda %>% clean_names() %>% mutate(year = 2018)
-
-# add data together
-bjs_parole <- rbind(bjs_parole_2013, bjs_parole_2014, bjs_parole_2015, bjs_parole_2016, bjs_parole_2017, bjs_parole_2018)
-bjs_probation <- rbind(bjs_probation_2013, bjs_probation_2014, bjs_probation_2015, bjs_probation_2016, bjs_probation_2017, bjs_probation_2018)
-
-# rename variables
-# create metric description
-bjs_parole <- bjs_parole %>% select(stateid, year,
-                                    total_parole_end = totend,       # total parole population end of year
-                                    total_entries_to_parole = toten, # total entries to parole
-                                    inc_new_sentence = exincnew,     # incarcerated with a new sentence
-                                    inc_revocation = exincrev        # incarcerated with a revocation (no new sentence)
-                                    )
-  # mutate(text = case_when(data == "total_parole_end"        ~ "Total Parole Population (End of Year)",
-  #                         data == "total_entries_to_parole" ~ "Total Entries to Parole",
-  #                         data == "inc_new_sentence"        ~ "Entries with New Sentence",
-  #                         data == "inc_revocation"          ~ "Entries with Revocation"
-  #                         ))
-
-# rename variables
-# create metric description
-bjs_probation <- bjs_probation %>% select(stateid, year,
-                                          total_prob_end = totend,         # prob population end of year
-                                          entries_w_inc = eninc,           # entries with incarceration
-                                          entries_wo_inc = ennoinc,        # entries without incarceration
-                                          entries_total = toten,           # total entries to prob
-                                          inc_new_sentence = exincnew,     # incarceration with new sentence
-                                          inc_current_sentence = exincurr  # incarceration with current sentence
-                                          )
-
-# remove punctuation and numbers from state name
-bjs_parole$stateid <- gsub('[[:punct:]]+','',bjs_parole$stateid)
-bjs_parole$stateid <- gsub('[[:digit:]]+', '', bjs_parole$stateid)
-bjs_probation$stateid <- gsub('[[:punct:]]+','',bjs_probation$stateid)
-bjs_probation$stateid <- gsub('[[:digit:]]+', '', bjs_probation$stateid)
-bjs_probation$stateid <- trimws(bjs_probation$stateid, whitespace = "[\\h\\v]")
-bjs_parole$stateid <- trimws(bjs_parole$stateid, whitespace = "[\\h\\v]")
-
-# remove federal and DC
-# rename state variable
-bjs_parole <- bjs_parole %>% filter(stateid != "Federal" & stateid != "District of Columbia") %>% rename(state = stateid)
-bjs_probation <- bjs_probation %>% filter(stateid != "Federal" & stateid != "District of Columbia") %>% rename(state = stateid)
-
 ################################################################################
 # save Rdata
 ################################################################################
@@ -530,8 +432,6 @@ save(probation_table,         file=paste0(sp_data_path, "/Data/probation_table.R
 save(probation_table_wide,    file=paste0(sp_data_path, "/Data/probation_table_wide.Rda", sep = ""))
 save(hex_gj,                  file=paste0(sp_data_path, "/Data/hex_gj.Rda", sep = ""))
 save(notes,                   file=paste0(sp_data_path, "/Data/notes.Rda", sep = ""))
-save(bjs_parole,              file=paste0(sp_data_path, "/Data/bjs_parole.Rda", sep = ""))
-save(bjs_probation,           file=paste0(sp_data_path, "/Data/bjs_probation.Rda", sep = ""))
 save(csg,                     file=paste0(sp_data_path, "/Data/csg.Rda", sep = ""))
 
 # save to clone
@@ -547,6 +447,4 @@ save(probation_table,         file=paste0("app/data/probation_table.Rda", sep = 
 save(probation_table_wide,    file=paste0("app/data/probation_table_wide.Rda", sep = ""))
 save(hex_gj,                  file=paste0("app/data/hex_gj.Rda", sep = ""))
 save(notes,                   file=paste0("app/data/notes.Rda", sep = ""))
-save(bjs_parole,              file=paste0("app/data/bjs_parole.Rda", sep = ""))
-save(bjs_probation,           file=paste0("app/data/bjs_probation.Rda", sep = ""))
 save(csg,                     file=paste0("app/data/csg.Rda", sep = ""))

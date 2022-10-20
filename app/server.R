@@ -537,7 +537,7 @@ server <- function(input, output, session) {
                 `2018`          = colDef(minWidth = 95),
                 `2019`          = colDef(minWidth = 95),
                 `2020`          = colDef(minWidth = 95),
-                three_yr_change = colDef(minWidth = 110,
+                four_yr_change = colDef(minWidth = 110,
                                          name = "3 Year Change",
                                          format = colFormat(percent = TRUE, digits = 1)),
                 # add 3 year trend graphs to each row
@@ -674,7 +674,7 @@ server <- function(input, output, session) {
                 `2018`          = colDef(minWidth = 95),
                 `2019`          = colDef(minWidth = 95),
                 `2020`          = colDef(minWidth = 95),
-                three_yr_change = colDef(minWidth = 110,
+                four_yr_change = colDef(minWidth = 110,
                                          name = "3 Year Change",
                                          format = colFormat(percent = TRUE, digits = 1)),
                 # add 3 year trend graphs to each row
@@ -798,7 +798,7 @@ server <- function(input, output, session) {
                 `2018`          = colDef(minWidth = 95),
                 `2019`          = colDef(minWidth = 95),
                 `2020`          = colDef(minWidth = 95),
-                three_yr_change = colDef(minWidth = 110,
+                four_yr_change = colDef(minWidth = 110,
                                          name = "3 Year Change",
                                          format = colFormat(percent = TRUE, digits = 1)),
                 # add 3 year trend graphs to each row

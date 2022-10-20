@@ -35,84 +35,38 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                         # Dropdown and download buttons
                                         #######
 
-                                        # fluidRow(column(width = 3),
-                                        #          column(width = 6,
-                                        #                 splitLayout(
-                                        #
-                                        #                   cellWidths = c("20%", "20%", "20%", "0%","20%", "0%","20%"),
-                                        #                   #cellWidths = c("200", "200", "200", "0","200", "0","200"),
-                                        #                   #cellArgs = list(style = "padding: 1px"),
-                                        #
-                                        #                   labeled_input('data-map-btn', "",
-                                        #                                 selectizeInput('data_map', div(style = "font-weight: bold", "Select Data"),
-                                        #                                                choices = c("Total", "New Offense", "Supervision Violation", "Probation Violation", "Parole Violation", "Technical Violation"),
-                                        #                                                multiple = FALSE)),
-                                        #
-                                        #                   labeled_input('adm-pop-map-btn', "",
-                                        #                                 selectizeInput('adm_or_pop_map', div(style = "font-weight: bold", "Select Type"),
-                                        #                                                choices = c("Admissions", "Population"),
-                                        #                                                multiple = FALSE)),
-                                        #
-                                        #                   labeled_input('year-map-btn', "",
-                                        #                                 selectizeInput('year_map', div(style = "font-weight: bold", "Select Years"),
-                                        #                                                choices = c("2018 - 2019", "2019 - 2020"),
-                                        #                                                multiple = FALSE)),
-                                        #
-                                        #                   tags$style(type="text/css", "#save_map {background-color:#004270; color: #fff;}"),
-                                        #                   downloadButton(outputId = 'save_map', label = "Download Map", class = "download_this"),
-                                        #
-                                        #                   tags$style(type="text/css", "#save_map_data {background-color:#004270; color: #fff;}"),
-                                        #                   downloadButton(outputId = 'save_map_data', label = "Download Data", class = "download_this"),
-                                        #
-                                        #                   # this formatting doesn't work
-                                        #                   # labeled_input('save-map-btn', "",
-                                        #                   #               downloadButton(outputId = 'save_map', label = "Download Map", class = "download_this")),
-                                        #                   #
-                                        #                   # labeled_input('save-map-data-btn', "",
-                                        #                   #               downloadButton(outputId = 'save_map_data', label = "Download Data", class = "download_this"))
-                                        #
-                                        #                 ) # end splitLayout
-                                        #          ), # end column
-                                        #          column(width = 3)
-                                        # ) # end fluidRow
-
-                                        # split layout is causing layout issues
                                         fluidRow(column(width = 3),
+
                                                  column(width = 6,
-                                                        splitLayout(
 
-                                                          cellWidths = c("25%", "25%", "25%", "25%"),
-                                                          #cellWidths = c("200", "200", "200", "0","200", "0","200"),
-                                                          # cellArgs = list(style = "padding: 6px"), # causes spacing issues with map below drop downs
+                                                        fluidRow(column(width = 3,
 
-                                                          labeled_input('data-map-btn', "",
-                                                                        selectizeInput('data_map', div(style = "font-weight: bold", "Select Data"),
-                                                                                       choices = c("Total", "New Offense", "Supervision Violation", "Probation Violation", "Parole Violation", "Technical Violation"),
-                                                                                       multiple = FALSE)),
+                                                                         labeled_input('data-map-btn', "",
+                                                                               selectizeInput('data_map', div(style = "font-weight: bold", "Select Data"),
+                                                                                              choices = c("Total", "New Offense", "Supervision Violation", "Probation Violation", "Parole Violation", "Technical Violation"),
+                                                                                              multiple = FALSE))),
+                                                                 column(width = 3,
 
-                                                          labeled_input('adm-pop-map-btn', "",
-                                                                        selectizeInput('adm_or_pop_map', div(style = "font-weight: bold", "Select Type"),
-                                                                                       choices = c("Admissions", "Population"),
-                                                                                       multiple = FALSE)),
+                                                                         labeled_input('adm-pop-map-btn', "",
+                                                                                       selectizeInput('adm_or_pop_map', div(style = "font-weight: bold", "Select Type"),
+                                                                                                      choices = c("Admissions", "Population"),
+                                                                                                      multiple = FALSE))),
+                                                                 column(width = 3,
 
-                                                          labeled_input('year-map-btn', "",
-                                                                        selectizeInput('year_map', div(style = "font-weight: bold", "Select Years"),
-                                                                                       choices = c("2018 - 2019", "2019 - 2020"),
-                                                                                       multiple = FALSE)),
+                                                                         labeled_input('year-map-btn', "",
+                                                                                       selectizeInput('year_map', div(style = "font-weight: bold", "Select Years"),
+                                                                                                      choices = c("2018 - 2019", "2019 - 2020"),
+                                                                                                      multiple = FALSE))),
+                                                                 column(width = 3,
 
-                                                          labeled_input('save-map-btn', "",
-                                                                        downloadButton(outputId = 'save_map', "Download Map",
-                                                                                       #div(style = "font-weight: bold", "Download Data"), # this causes spacing issues within the button
-                                                                                       class = "download_this"))
-
-                                                          # div(style="display:inline-block",downloadButton(outputId = 'save_map', div(style = "font-weight: bold", "Download Data"), class = "download_this"))
-                                                          # div(style="position:relative; left:calc(25%);", downloadButton("dd", "Download .zip"))
-
-                                                        ) # end splitLayout
-                                                 ), # end column
-                                                 column(width = 3)
+                                                                         labeled_input('save-map-btn', "",
+                                                                                       downloadButton(outputId = 'save_map', "Download Map",
+                                                                                                      #div(style = "font-weight: bold", "Download Data"), # this causes spacing issues within the button
+                                                                                                      class = "download_this")))
+                                                        ) # end fluidRow
+                                                  ),
+                                                  column(width = 3)
                                         ) # end fluidRow
-
 
                                     ), # end div header
                                     br(),
@@ -162,29 +116,28 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                     #######
 
                                     div(id = "state-header",
+                                        fluidRow(column(width = 3),
 
-                                        fluidRow(column(width = 4),
-                                                 column(width = 4,
-                                                        splitLayout(
+                                                 column(width = 6,
 
-                                                          cellWidths = c("20%","30%", "30%", "20%"),
+                                                        fluidRow(column(width = 3),
+                                                                 column(width = 3,
+                                                                        labeled_input('state-btn', "",
+                                                                                      selectizeInput('state_report', div(style = "font-weight: bold", "Select State"),
+                                                                                                     choices = unique(adm_pop_long$state),
+                                                                                                     multiple = FALSE))),
 
-                                                          "",
-                                                          labeled_input('state-btn', "",
-                                                                        selectizeInput('state_report', div(style = "font-weight: bold", "Select State"),
-                                                                                       choices = unique(adm_pop_long$state),
-                                                                                       multiple = FALSE)),
+                                                                 column(width = 3,
+                                                                        labeled_input('adm-pop-btn', "",
+                                                                                      selectizeInput('adm_pop_report', div(style = "font-weight: bold", "Select Type"),
+                                                                                                     choices = c("Admissions", "Population"),
+                                                                                                     multiple = FALSE))),
+                                                                 column(width = 3)
+                                                                 )),
 
-                                                          labeled_input('adm-pop-btn', "",
-                                                                        selectizeInput('adm_pop_report', div(style = "font-weight: bold", "Select Type"),
-                                                                                       choices = c("Admissions", "Population"),
-                                                                                       multiple = FALSE)),
-                                                          "",
+                                                 column(width = 3)
 
-                                                        ) # end splitLayout
-                                                 ), # end column
-                                                 column(width = 4)
-                                        ) # end fluidRow
+                                                 ) # fluidRow
                                     ), # end div header
 
                                     br(),
