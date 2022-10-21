@@ -57,15 +57,29 @@ server <- function(input, output, session) {
              metric     == input$data_map,
              year       == input$year_map)
   })
-  # filter data depending on user input
-  # table under map data
+
+  # # was being used for datatable but now we're using reactable, save for now
+  # # filter data depending on user input
+  # # table under map data
+  # df_map_table <- reactive({
+  #   filter_by <- paste0(input$data_map, " ", input$adm_or_pop_map)
+  #   mclc_explorer_table %>%
+  #     filter(data == filter_by) %>%
+  #     arrange(state) %>%
+  #     rename(State = state)
+  # })
+
   df_map_table <- reactive({
     filter_by <- paste0(input$data_map, " ", input$adm_or_pop_map)
-    mclc_explorer_table %>%
+    #select_column = input$year_map
+    df <- mclc_explorer_table[, c('state', 'data', '2018', '2019', '2020', '2021', 'total_new')]
+    df <- df %>%
       filter(data == filter_by) %>%
       arrange(state) %>%
-      rename(State = state)
+      rename(State = state,
+             change = 7)
   })
+
 
   #######
   # Hex map
@@ -74,7 +88,7 @@ server <- function(input, output, session) {
   # create foundational hex map and store it as a reactive expression
   foundational_map <- reactive({
 
-    ################ TO DO find min and max values and put in dataframe in import.R
+    # ################ TO DO find min and max values and put in dataframe in import.R
     # get minimum and maximum value
     min_map <- min(df_map()$change, na.rm = TRUE)
     max_map <- max(df_map()$change, na.rm = TRUE)
@@ -86,13 +100,6 @@ server <- function(input, output, session) {
     # get neg or pos sign
     min_map_type <- ifelse(min_map >= 0, "positive", "negative")
     max_map_type <- ifelse(max_map >= 0, "positive", "negative")
-
-    # # create tooltip
-    # df_plot <- df_map() %>%
-    #   mutate(tooltip = paste0("<b>", state, "</b><br>","Change from ", year, "<br>",change, "%<br>"),
-    #          datalabel = ifelse(is.na(change), paste0("", state_abb, ""),
-    #                             paste0("<p style=", "text-align:center", ">", state_abb, "", "<br>",
-    #                                    round(change, 0), "%</p>")))
 
     # determine the new min and max so that zero is centered
     if (min_map_type != max_map_type) {
@@ -222,38 +229,88 @@ server <- function(input, output, session) {
   # title of table under map based on user input
   output$selected_map_table <- renderText({paste(input$data_map, " ", input$adm_or_pop_map)})
 
-  # table under hex map
-  output$table_map = DT::renderDataTable({
-    datatable(df_map_table(),
-              # callback = JS("$('#DataTables_Table_0_filter input').css('background-color', 'yellow');"),
-              class = list(stripe = FALSE),
-              options = list(dom = 'ft',
-                             pageLength = 50,
-                             language = list(search = "", searchPlaceholder = "Find Your State"),
-                             columnDefs = list(list(visible=FALSE, targets=c(1)),
-                                               list(className = 'dt-right', targets = c(2:6)),
-                                               list(className = 'dt-left', targets = c(0))
-                                               )
-                             ),
-              rownames = FALSE) %>%
-              formatPercentage(c("2018 - 2019", "2019 - 2020", "2020 - 2021","All (2018 - 2021)"), 2) %>%
-              formatCurrency(c("2018", "2019", "2020",  "2021"), currency = " ", interval = 3, mark = ",") %>%
-              formatRound(columns=c("2018", "2019", "2020",  "2021"), digits = 0)
+  # # Not using data table for now
+  # # table under hex map
+  # output$table_map = DT::renderDataTable({
+  #   datatable(df_map_table(),
+  #             # callback = JS("$('#DataTables_Table_0_filter input').css('background-color', 'yellow');"),
+  #             class = list(stripe = FALSE),
+  #             options = list(dom = 'ft',
+  #                            pageLength = 50,
+  #                            language = list(search = "", searchPlaceholder = "Find Your State"),
+  #                            columnDefs = list(list(visible=FALSE, targets=c(1)),
+  #                                              list(className = 'dt-right', targets = c(2:6)),
+  #                                              list(className = 'dt-left', targets = c(0))
+  #                                              )
+  #                            ),
+  #             rownames = FALSE) %>%
+  #             formatPercentage(c("2018 - 2019", "2019 - 2020", "2020 - 2021","All (2018 - 2021)"), 2) %>%
+  #             formatCurrency(c("2018", "2019", "2020",  "2021"), currency = " ", interval = 3, mark = ",") %>%
+  #             formatRound(columns=c("2018", "2019", "2020",  "2021"), digits = 0)
+  # })
+
+  # Reactable table under hex map
+  output$table_map <- renderReactable({
+
+    filter_by <- paste0(input$data_map, " ", input$adm_or_pop_map)
+    select_column = "2018 - 2019"
+    df <- mclc_explorer_table[, c('state', 'data', '2018', '2019', '2020', '2021', select_column, 'total_new')]
+    df <- df %>%
+      filter(data == "Total Admissions") %>%
+      arrange(state) %>%
+      rename(State = state,
+             change = 7)
+
+    reactable(df,
+              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
+              defaultColDef = colDef(format = colFormat(separators = TRUE), align = "right"),
+              compact = TRUE,
+              fullWidth = FALSE,
+              searchable = TRUE,
+              pagination = FALSE,
+              columns = list(
+                State           = colDef(name = "State", align = "left", minWidth = 140,
+                                         style = list(fontWeight = "bold")),
+                data            = colDef(name = "Metric", align = "left", minWidth = 240,
+                                         style = list(fontWeight = "bold")),
+                `2018`          = colDef(minWidth = 95),
+                `2019`          = colDef(minWidth = 95),
+                `2020`          = colDef(minWidth = 95),
+                `2021`          = colDef(minWidth = 95),
+
+                change = colDef(minWidth = 110,
+                                name = select_column,
+                                style = list(fontWeight = "bold"),
+                                format = colFormat(percent = TRUE, digits = 1)),
+                # add 4 Year trend graphs to each row
+                total_new  =
+                  colDef(minWidth = 110,
+                         name = "4 Year Trend",
+                         cell = function(value, index) {
+                           dui_sparkline(
+                             data = value[[1]],
+                             height = 60,
+                             #margin = list(top = 30, right = 20, bottom = 30, left = 20),
+                             components = list(
+                               dui_sparkpatternlines(
+                                 id = "total",
+                                 height = 4,
+                                 width = 4,
+                                 stroke = regblue,
+                                 strokeWidth = 2.5,
+                                 orientation = "diagonal"),
+
+                               dui_sparklineseries(
+                                 curve = "linear",
+                                 showArea = FALSE,
+                                 fill = regblue,
+                                 stroke = regblue)))})))
+
   })
 
   #######
-  # Download buttons near dropdowns
+  # Download map button near dropdowns
   #######
-
-  # Don't need for now
-  # # save table under map as csv
-  # output$save_map_data <- downloadHandler(
-  #   filename = function() {
-  #     paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, ".csv", sep="")
-  #   },
-  #   content = function(file) {
-  #     write.csv(df_map_table(), file)}
-  #   )
 
   # save map as pdf
   output$save_map <- downloadHandler(
@@ -289,7 +346,7 @@ server <- function(input, output, session) {
     vb_adm_pop %>%
       filter(state == input$state_report &
              adm_or_pop == input$adm_pop_report &
-             year == "2020" &
+             year == "2021" &
              metric == "Total")
   })
 
@@ -298,7 +355,7 @@ server <- function(input, output, session) {
     vb_adm_pop %>%
       filter(state == input$state_report &
              adm_or_pop == input$adm_pop_report &
-             year == "2020" &
+             year == "2021" &
              metric == "Supervision Violation")
   })
 
@@ -307,7 +364,7 @@ server <- function(input, output, session) {
     vb_adm_pop %>%
       filter(state == input$state_report &
              adm_or_pop == input$adm_pop_report &
-             year == "2020" &
+             year == "2021" &
              metric == "Technical Violation")
   })
 
@@ -316,7 +373,7 @@ server <- function(input, output, session) {
     vb_adm_pop %>%
       filter(state == input$state_report &
              adm_or_pop == input$adm_pop_report &
-             year == "2020" &
+             year == "2021" &
              metric == "New Offense")
   })
 
@@ -326,9 +383,9 @@ server <- function(input, output, session) {
     if (is.na(df_vb_total()$change)) {
       text <- "No Data"
     } else if (df_vb_total()$change < 0) {
-      text <- tagList(HTML("&darr;"), paste0(df_vb_total()$change, "% from 2019"))
+      text <- tagList(HTML("&darr;"), paste0(df_vb_total()$change, "% from 2020"))
     } else {
-      text <- tagList(HTML("&uarr;"), paste0(df_vb_total()$change, "% from 2019"))
+      text <- tagList(HTML("&uarr;"), paste0(df_vb_total()$change, "% from 2020"))
     }
 
     if (is.na(df_vb_total()$total)) {
@@ -339,7 +396,7 @@ server <- function(input, output, session) {
 
     valueBox2(
       header,
-      title = paste0("Overall ", input$adm_pop_report, " in 2020"),
+      title = paste0("Overall ", input$adm_pop_report, " in 2021"),
       subtitle = text,
       color = "black",
       href = NULL
@@ -353,9 +410,9 @@ server <- function(input, output, session) {
     if (is.na(df_vb_sup_viols()$change)) {
       text <- "No Data"
     } else if (df_vb_sup_viols()$change < 0) {
-      text <- tagList(HTML("&darr;"), paste0(df_vb_sup_viols()$change, "% from 2019"))
+      text <- tagList(HTML("&darr;"), paste0(df_vb_sup_viols()$change, "% from 2020"))
     } else {
-      text <- tagList(HTML("&uarr;"), paste0(df_vb_sup_viols()$change, "% from 2019"))
+      text <- tagList(HTML("&uarr;"), paste0(df_vb_sup_viols()$change, "% from 2020"))
     }
 
     if (is.na(df_vb_sup_viols()$total)) {
@@ -366,7 +423,7 @@ server <- function(input, output, session) {
 
     valueBox2(
       header,
-      title = paste0("Supervision Violation ", input$adm_pop_report, " in 2020"),
+      title = paste0("Supervision Violation ", input$adm_pop_report, " in 2021"),
       subtitle = text,
       color = "black",
       href = NULL
@@ -380,9 +437,9 @@ server <- function(input, output, session) {
     if (is.na(df_vb_tech()$change)) {
       text <- "No Data"
     } else if (df_vb_tech()$change < 0) {
-      text <- tagList(HTML("&darr;"), paste0(df_vb_tech()$change, "% from 2019"))
+      text <- tagList(HTML("&darr;"), paste0(df_vb_tech()$change, "% from 2020"))
     } else {
-      text <- tagList(HTML("&uarr;"), paste0(df_vb_tech()$change, "% from 2019"))
+      text <- tagList(HTML("&uarr;"), paste0(df_vb_tech()$change, "% from 2020"))
     }
 
     if (is.na(df_vb_tech()$total)) {
@@ -393,7 +450,7 @@ server <- function(input, output, session) {
 
     valueBox2(
       header,
-      title = paste0("Technical Violation ", input$adm_pop_report, " in 2020"),
+      title = paste0("Technical Violation ", input$adm_pop_report, " in 2021"),
       subtitle = text,
       color = "black",
       href = NULL
@@ -407,9 +464,9 @@ server <- function(input, output, session) {
     if (is.na(df_vb_new_off()$change)) {
       text <- "No Data"
     } else if (df_vb_new_off()$change < 0) {
-      text <- tagList(HTML("&darr;"), paste0(df_vb_new_off()$change, "% from 2019"))
+      text <- tagList(HTML("&darr;"), paste0(df_vb_new_off()$change, "% from 2020"))
     } else {
-      text <- tagList(HTML("&uarr;"), paste0(df_vb_new_off()$change, "% from 2019"))
+      text <- tagList(HTML("&uarr;"), paste0(df_vb_new_off()$change, "% from 2020"))
     }
 
     if (is.na(df_vb_new_off()$total)) {
@@ -420,7 +477,7 @@ server <- function(input, output, session) {
 
     valueBox2(
       header,
-      title = paste0("New Offense ", input$adm_pop_report, " in 2020"),
+      title = paste0("New Offense ", input$adm_pop_report, " in 2021"),
       subtitle = text,
       color = "black",
       href = NULL
@@ -532,14 +589,16 @@ server <- function(input, output, session) {
               fullWidth = FALSE,
               columns = list(
                 text            = colDef(name = "Metric",
-                                         align = "left",
-                                         minWidth = 275),
+                                       align = "left",
+                                       minWidth = 275,
+                                       style = list(fontWeight = "bold")),
                 `2018`          = colDef(minWidth = 95),
                 `2019`          = colDef(minWidth = 95),
                 `2020`          = colDef(minWidth = 95),
                 four_yr_change = colDef(minWidth = 110,
-                                         name = "4 Year Change",
-                                         format = colFormat(percent = TRUE, digits = 1)),
+                                        name = "4 Year Change",
+                                        style = list(fontWeight = "bold"),
+                                        format = colFormat(percent = TRUE, digits = 1)),
                 # add 4 Year trend graphs to each row
                 total_new  = colDef(minWidth = 110,
                                     name = "4 Year Trend",
@@ -670,13 +729,15 @@ server <- function(input, output, session) {
               columns = list(
                 text            = colDef(name = "Metric",
                                          align = "left",
+                                         style = list(fontWeight = "bold"),
                                          minWidth = 275),
                 `2018`          = colDef(minWidth = 95),
                 `2019`          = colDef(minWidth = 95),
                 `2020`          = colDef(minWidth = 95),
                 four_yr_change = colDef(minWidth = 110,
-                                         name = "4 Year Change",
-                                         format = colFormat(percent = TRUE, digits = 1)),
+                                        name = "4 Year Change",
+                                        style = list(fontWeight = "bold"),
+                                        format = colFormat(percent = TRUE, digits = 1)),
                 # add 4 Year trend graphs to each row
                 total_new  = colDef(minWidth = 110,
                                     name = "4 Year Trend",
@@ -794,13 +855,15 @@ server <- function(input, output, session) {
               columns = list(
                 text            = colDef(name = "Metric",
                                          align = "left",
+                                         style = list(fontWeight = "bold"),
                                          minWidth = 275),
                 `2018`          = colDef(minWidth = 95),
                 `2019`          = colDef(minWidth = 95),
                 `2020`          = colDef(minWidth = 95),
                 four_yr_change = colDef(minWidth = 110,
-                                         name = "4 Year Change",
-                                         format = colFormat(percent = TRUE, digits = 1)),
+                                        name = "4 Year Change",
+                                        style = list(fontWeight = "bold"),
+                                        format = colFormat(percent = TRUE, digits = 1)),
                 # add 4 Year trend graphs to each row
                 total_new  = colDef(minWidth = 110,
                                     name = "4 Year Trend",
@@ -861,69 +924,19 @@ server <- function(input, output, session) {
   # Download
   ##############################################################################################################################
 
-  #######
-  # Download page title
-  #######
-
-  # render title of data depending on data selection: CSG vs BJS
-  output$selected_download_title <- renderText({
-    input$download_data
-  })
-
-  # change data description depending on data set selected
-  output$selected_download_info <- renderText({
-    if(input$download_data == "CSG: More Community, Less Confinement"){
-      "This dataset contains prison admissions and population numbers by state from 2018 to 2020. This dataset includes a breakdown of community supervision violations."
-    }
-    else if(input$download_data == "BJS: Annual Parole Survey Series"){
-      "This dataset includes administrative data from parole agencies in the United States. Data collected include the total number of adults on state and federal parole on January 1 and December 31 of each year, the number of adults entering and exiting parole supervision each year, and the characteristics of adults under the supervision of parole agencies. Published data include both national- and state-level data. The surveys cover all 50 states."
-    }
-    else if(input$download_data == "BJS: Annual Probation Survey Series"){
-      "This dataset includes administrative data from probation agencies in the United States. Data collected include the total number of adults on state and federal probation on January 1 and December 31 of each year, the number of adults entering and exiting probation supervision each year, and the characteristics of adults under the supervision of probation agencies. Published data include both national- and state-level data. The surveys cover all 50 states."
-    }
-  })
-
   # change year drop down options depending on data selecion
   filteredYears <- reactive({
-    if     (input$download_data == "CSG: More Community, Less Confinement"){
-      unique(csg$year)
-    }
-    else if(input$download_data == "BJS: Annual Parole Survey Series"){
-      unique(bjs_parole$year)
-    }
-    else if(input$download_data == "BJS: Annual Probation Survey Series"){
-      unique(bjs_probation$year)
-    }
+    unique(csg$year)
   })
 
   observeEvent(filteredYears(), {
     updatePickerInput(session, inputId = 'download_year', label = 'Select Year(s)', choices = filteredYears(), selected = filteredYears())
   })
 
-  # react to selected states
-  filteredStates <- reactive({
-    if     (input$download_data == "CSG: More Community, Less Confinement"){
-      unique(csg$state)
-    }
-    else if(input$download_data == "BJS: Annual Parole Survey Series"){
-      unique(bjs_parole$state)
-    }
-    else if(input$download_data == "BJS: Annual Probation Survey Series"){
-      unique(bjs_probation$state)
-    }
-  })
-
-  observeEvent(filteredStates(), {
-    updatePickerInput(session, inputId = 'download_state', label = 'Select State(s)', choices = filteredStates(), selected = filteredStates())
-  })
-
-  # creative reactive element for table depending on data set
-  datasetInput <- reactive({
-    dataset <- switch(input$download_data,
-                      "CSG: More Community, Less Confinement" = csg,
-                      "BJS: Annual Parole Survey Series"      = bjs_parole,
-                      "BJS: Annual Probation Survey Series"   = bjs_probation)
-    dataset <- dataset %>% filter(year %in% input$download_year) %>%
+  # filter data depending on user input
+  df_download_table <- reactive({
+    csg %>%
+      filter(year %in% input$download_year) %>%
       filter(state %in% input$download_state) %>%
       arrange(state, year)
   })
@@ -931,23 +944,7 @@ server <- function(input, output, session) {
   # generate table depending on data set
   output$selected_download_table <- DT::renderDataTable({
 
-    if(input$download_data == "CSG: More Community, Less Confinement"){
-      datatable(
-        datasetInput()
-      )
-    }
-
-    else if(input$download_data == "BJS: Annual Parole Survey Series"){
-      DT::datatable(
-        datasetInput()
-      )
-    }
-
-    else if(input$download_data == "BJS: Annual Probation Survey Series"){
-      DT::datatable(
-        datasetInput()
-      )
-    }
+      datatable(df_download_table())
 
   })
 

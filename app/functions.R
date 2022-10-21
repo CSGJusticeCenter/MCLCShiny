@@ -384,11 +384,11 @@ fnc_create_prob_vs_parole <- function(df){
     ))
 }
 
-# # create adm vs pop depending on data
-# fnc_create_adm_pop <- function(df){
-#   df <- df %>%
-#     mutate(adm_or_pop = ifelse(grepl("population", data), "Population", "Admissions"))
-# }
+# create adm vs pop depending on data
+fnc_create_adm_pop <- function(df){
+  df <- df %>%
+    mutate(adm_or_pop = ifelse(grepl("population", data), "Population", "Admissions"))
+}
 
 ##########################
 # Ui

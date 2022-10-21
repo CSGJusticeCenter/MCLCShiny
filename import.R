@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: import.R
 # Authors: Mari Roberts
-# Date last updated: October 20, 2022
+# Date last updated: October 21, 2022
 
 # Description:
 #    Loads packages
@@ -246,7 +246,6 @@ mclc_change <- mclc_all %>%
   select(-total)
 mclc_change <-
   spread(mclc_change, year, change) %>%
-  # left_join(mclc_explorer_table_4_yr, by = c("state", "data")) %>%
   select(state,
          data,
          `2018 - 2019` = `2019`,
@@ -267,6 +266,17 @@ mclc_explorer_table_4_yr <- mclc_explorer_table %>%
   mutate(year = 2022) %>%
   select(-abbrev)
 
+# save reactable version of map explorer table
+mclc_explorer_table_long <- mclc_explorer_table %>%
+  select(state, data, `2018`, `2019`, `2020`, `2021`) %>%
+  pivot_longer(cols=c(`2018`, `2019`, `2020`, `2021`),
+               names_to='year',
+               values_to='total') %>%
+  group_by(state, data) %>%
+  summarise(total_new = list(list(total)))
+
+mclc_explorer_table <- merge(mclc_explorer_table, mclc_explorer_table_long, by = c("state", "data"))
+
 # create year range
 # create min and max values for legend scale
 mclc_explorer <- mclc_all %>%
@@ -283,10 +293,11 @@ mclc_explorer <- mclc_all %>%
          datalabel = ifelse(is.na(change), paste0("", state_abb, ""),
                             paste0("<p style=", "text-align:center", ">", state_abb, "", "<br>",
                                    round(change, 0), "%</p>"))) %>%
+  ungroup() %>%
   group_by(year, data) %>%
-  mutate(min_map = round(min(change, na.rm = TRUE), -1),
-         max_map = round(max(change, na.rm = TRUE), -1),
-         # get absolute value for comparison
+  mutate(min_map = round(min(change, na.rm = TRUE), 0),      # use -1 to round up to nearest tenth
+         max_map = round(max(change, na.rm = TRUE), 0)) %>%
+  mutate(# get absolute value for comparison
          min_map_abs = abs(min_map),
          max_map_abs = abs(max_map),
          min_map_type = ifelse(min_map >= 0, "positive", "negative"),

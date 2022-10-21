@@ -97,7 +97,11 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                         tags$head(tags$style(HTML("thead{color: #004270; font-size: 16px}"))),
                                         fluidRow(column(width = 1),
                                                  column(width = 10, align = "left",
-                                                        div(id = "table-map", dataTableOutput("table_map"))),
+                                                        div(id = "table-map",
+                                                            # dataTableOutput("table_map")
+                                                            reactableOutput("table_map")
+                                                            )
+                                                        ),
                                                  column(width = 1)),
 
                                         br(),
@@ -148,9 +152,9 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                         # Value boxes
                                         #######
 
-                                        fluidRow(column(width = 2),
-                                                 column(width = 8, div(id = "selected-state", textOutput("selected_state"))),
-                                                 column(width = 2)),
+                                        fluidRow(column(width = 1),
+                                                 column(width = 10, div(id = "selected-state", textOutput("selected_state"))),
+                                                 column(width = 1)),
 
                                         br(),
 
@@ -175,8 +179,8 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                         # Panels for Overview, Parole, and Probation
                                         #######
 
-                                        fluidRow(column(width = 2),
-                                                 column(width = 8,
+                                        fluidRow(column(width = 1),
+                                                 column(width = 10,
 
                                                         tabsetPanel(
 
@@ -203,7 +207,10 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                                    br(),
 
-                                                                   fluidRow(column(width = 12, align = "left", div(id = "consistent-state-note", state_note)))
+                                                                   fluidRow(column(width = 12, align = "left", div(id = "consistent-state-note", state_note))),
+
+                                                                   br(),
+                                                                   br()
 
                                                           ), # end tabPanel
 
@@ -217,7 +224,10 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                    br(),
                                                                    br(),
 
-                                                                   fluidRow(column(width = 12, align = "center", reactableOutput("parole_table")))
+                                                                   fluidRow(column(width = 12, align = "center", reactableOutput("parole_table"))),
+
+                                                                   br(),
+                                                                   br()
 
                                                           ), # end tabPanel
 
@@ -231,7 +241,10 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                    br(),
                                                                    br(),
 
-                                                                   fluidRow(column(width = 12, align = "center", reactableOutput("probation_table")))
+                                                                   fluidRow(column(width = 12, align = "center", reactableOutput("probation_table"))),
+
+                                                                   br(),
+                                                                   br()
 
                                                           ), # end tabPanel
 
@@ -239,13 +252,16 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                                    br(),
 
-                                                                   "Coming soon."
+                                                                   "Coming soon.",
+
+                                                                   br(),
+                                                                   br()
 
                                                           ) # end tabPanel
 
                                                         ) # end tabsetPanel
                                                  ), # end column
-                                                 column(width = 2)
+                                                 column(width = 1)
                                         ), # end fluidRow
 
                                         br()
@@ -281,32 +297,27 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                     div(id = "download-header",
                                         fluidRow(column(width = 3),
+
                                                  column(width = 6,
-                                                        splitLayout(
 
-                                                          cellWidths = c("33%", "33%", "33%"),
+                                                        fluidRow(column(width = 3),
+                                                                 column(width = 3,
+                                                                        labeled_input('download-state-btn', "Select State(s)",
+                                                                                      pickerInput(inputId = 'download_state', width = "100%",
+                                                                                                  choices = NULL, selected = NULL, multiple = TRUE,
+                                                                                                  options = list(`actions-box` = TRUE)))),
 
-                                                          labeled_input('download-data-btn', "",
-                                                                        selectizeInput('download_data', div(style = "font-weight: bold", "Select Data"),
-                                                                                       choices = c("CSG: More Community, Less Confinement",
-                                                                                                   "BJS: Annual Parole Survey Series",
-                                                                                                   "BJS: Annual Probation Survey Series"),
-                                                                                       multiple = FALSE)),
+                                                                 column(width = 3,
+                                                                        labeled_input('download-year-btn', "Select Year(s)",
+                                                                                      pickerInput(inputId = 'download_year', width = "100%",
+                                                                                                  choices = NULL, selected = NULL, multiple = TRUE,
+                                                                                                  options = list(`actions-box` = TRUE)))),
+                                                                 column(width = 3)
+                                                        )),
 
-                                                          labeled_input('download-state-btn', "Select State(s)",
-                                                                        pickerInput(inputId = 'download_state', width = "100%",
-                                                                                    choices = NULL, selected = NULL, multiple = TRUE,
-                                                                                    options = list(`actions-box` = TRUE))),
-
-                                                          labeled_input('download-year-btn', "Select Year(s)",
-                                                                        pickerInput(inputId = 'download_year', width = "100%",
-                                                                                    choices = NULL, selected = NULL, multiple = TRUE,
-                                                                                    options = list(`actions-box` = TRUE)))
-
-                                                        ) # end splitLayout
-                                                 ), # end column
                                                  column(width = 3)
-                                        ) # end fluidRow
+
+                                        ) # fluidRow
                                     ), # end div header
 
                                     br(),
@@ -317,25 +328,29 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                     div(id = "download-body",
 
-                                        fluidRow(column(width = 2),
-                                                 column(width = 8, h1("Download")),
-                                                 column(width = 2)),
+                                        fluidRow(column(width = 1),
+                                                 column(width = 10, h1("Download")),
+                                                 column(width = 1)),
 
                                         br(),
 
-                                        fluidRow(column(width = 2),
-                                                 column(width = 8, div(id = "selected-download-title", textOutput("selected_download_title"))),
-                                                 column(width = 2)),
+                                        fluidRow(column(width = 1),
+                                                 column(width = 10, div(id = "selected-download-title", "More Community, Less Confinement (2022)")),
+                                                 column(width = 1)),
 
                                         br(),
-                                        fluidRow(column(width = 2),
-                                                 column(width = 8, div(id = "selected-download-info", textOutput("selected_download_info"))),
-                                                 column(width = 2)),
+
+                                        fluidRow(column(width = 1),
+                                                 column(width = 10, div(id = "selected-download-info", "To understand the impact of community supervision (i.e., probation, parole, post-release supervision) on state prison populations, The Council of State Governments (CSG) Justice Center surveyed corrections leaders in all 50 states. This project was supported by Arnold Ventures and produced in partnership with the Correctional Leaders Association (CLA). The resulting data span 4 years—from 2018 to 2021—and demonstrate how the number of people sent to prison for supervision violations changed.")),
+                                                 column(width = 1)),
                                         br(),
-                                        br(),
-                                        fluidRow(column(width = 2),
-                                                 column(width = 8, div(id = "selected-download-table", DT::dataTableOutput("selected_download_table"))),
-                                                 column(width = 2)),
+
+                                        fluidRow(column(width = 1),
+                                                 column(width = 10,
+                                                        div(id = "selected-download-table", DT::dataTableOutput("selected_download_table"))
+                                                 ),
+                                                 column(width = 1)),
+
                                         br(),
                                         br()
 
