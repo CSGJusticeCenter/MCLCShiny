@@ -44,7 +44,7 @@ library(extrafont)
 
 # Add fonts required to run functions.R
 # Fonts are found in app folder
-font_add("Graphik", regular = "app/www/Fonts/GraphikRegular.otf")
+font_add("Graphik", regular = "app/www/fonts/GraphikRegular.otf")
 showtext_auto()
 default_fonts <- c("Graphik")
 

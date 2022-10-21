@@ -51,14 +51,30 @@ Font size and style
     font-family: Graphik;
     src: url("fonts/Graphik.ttf") format('truetype');
 }
+@font-face {
+    font-family: GraphikBold;
+    src: url("fonts/GraphikBold.ttf") format('truetype');
+}
+@font-face {
+    font-family: Graphik-Bold;
+    src: url("fonts/Graphik-Bold.ttf") format('truetype');
+}
+@font-face {
+    font-family: GraphikBold;
+    src: url("fonts/Graphik-Bold.ttf") format('truetype');
+}
+@font-face {
+    font-family: Graphik-Bold;
+    src: url("fonts/GraphikBold.ttf") format('truetype');
+}
 
-/* Make some wordy sections smaller */
+/* Make some wordy sections smaller
 .small_text {
   font-size: small;
 }
 
-/* Change font family throughout */
-*{font-family: "Graphik", sans-serif;}
+/* Change font family throughout The issue here is that it changes all the bold text back to regular
+*{font-family: "Graphik", sans-serif;}*/
 
 /*##################################################################################################################
 Navigation Bar
@@ -199,17 +215,19 @@ Hex map
 }
 
 /* Title of map settings */
-  #selected-map {
+#selected-map {
   text-align: center; /* not working */
   font-weight: bold;
-  font-size: 24px;
+  font-size: 32px;
+  font-family: Graphik-Bold;
 }
 
 /* Map settings */
-  #hex-map{
+#hex-map{
   text-align: center; /* not working */
   font-weight: bold;
-  font-size:24px;
+  font-size: 32px;
+  font-family: Graphik-Bold;
 }
 
 /*######################################
@@ -218,21 +236,22 @@ Table
 ########################################*/
 
 /* Title of table under map settings */
-  #selected-map-table{
+#selected-map-table{
   text-align: center;
-  font-weight: bold;
-  font-size:24px;
+  font-size: 32px;
+  font-family: Graphik-Bold;
 }
 
 /* Table under map settings */
-  #table-map {
+#table-map {
   text-align: center; /* not working */
   white-space: nowrap;
 }
 
 /* Align text with search bar */
-  #selected-map-table {
-  position: relative; top: 55px;
+#selected-map-table {
+  /*position: relative; top: 55px;*/
+  position: relative; top: 30px;
 }
 
 /* Change search bar appearance - need to figure out how to keep the style consistent when clicked*/
@@ -242,6 +261,7 @@ Table
   width: 275px;
   height: 32px;
   background: #FFFFFF;
+  position: relative; bottom: 30px;
 }
 
 /*
@@ -261,18 +281,18 @@ Dropdowns
 ####################################################################################################################*/
 
 /* State selection button */
-  #state-btn {
+#state-btn {
   margin: 17px 10px 17px 10px;
-width: 175px;
-color: #004270;
-  }
+  width: 175px;
+  color: #004270;
+}
 
 /* Adm or pop selection button */
-  #adm-pop-btn {
+#adm-pop-btn {
   margin: 17px 10px 17px 10px;
-width: 175px;
-color: #004270;
-  }
+  width: 175px;
+  color: #004270;
+}
 
 /*######################################
 STATE REPORTS
@@ -280,10 +300,11 @@ Title and value boxes
 ########################################*/
 
 /* Title of state settings */
-  #selected-state {
+#selected-state {
   text-align: center;
-font-weight: bold;
-font-size: 24px;
+  /*font-weight: bold;*/
+  font-size: 32px;
+  font-family: Graphik-Bold;
 }
 
 /*######################################
@@ -305,7 +326,7 @@ Tabset Panels
 .nav-tabs > li {
   float:none;
   display:inline-block; /* maintains horizontal tab structure for parole, prob and revocations */
-    zoom:1;
+  zoom:1;
   width: 150px;
   padding: 0px 14px; /* changes spacing between tabpanels */
 }
@@ -313,24 +334,24 @@ Tabset Panels
 .nav-tabs {
   text-align:center;
   border-bottom: #cccccc !important;
-    border-bottom-style: solid !important;
+  border-bottom-style: solid !important;
   border-bottom-width: 1px !important;
   font-size: 14px;
 }
 
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
   color: #FFFFFF;
-    cursor: default;
+  cursor: default;
   background-color: #004270;
-    border-bottom-color: #cccccc;
+  border-bottom-color: #cccccc;
 }
 
 .nav-tabs>li>a {
   margin-right: 2px;
   line-height: 1.42857143; /* height of tab panel buttons */
-    border-radius: 0px 0px 0 0;
+  border-radius: 0px 0px 0 0;
   background-color: #F4F6F8;
-    color: #004270;
+  color: #004270;
 }
 
 /* Affects top nav bar
@@ -340,17 +361,18 @@ Tabset Panels
   border: 2px solid #cccccc;
 }*/
 
-  /* State note title setting */
-  #selected-state-note-title {
-  text-align: left;
-font-weight: bold;
-font-size: 24px;
+/* State note title setting */
+#selected-state-note-title {
+  text-align: center;
+  font-size: 32px;
+  font-family: Graphik-Bold;
 }
 
 /* State note setting */
-  #consistent-state-note {
+#consistent-state-note {
   text-align: left;
-font-style: italic;
+  font-style: italic;
+  font-family: Graphik;
 }
 
 /*##################################################################################################################
@@ -360,22 +382,22 @@ Dropdowns
 
 /*.dropdown-menu span {text-align: left; width: 100%;}*/
 
-  /* Format for selector input state-btn*/
-  #download-data-btn {
+/* Format for selector input state-btn*/
+#download-data-btn {
   margin: 17px 10px 17px 10px;
-color: #004270;
+  color: #004270;
   }
 
 /* Format for selector input adm-pop-btn*/
-  #download-state-btn {
+#download-state-btn {
   margin: 17px 10px 17px 10px;
-color: #004270;
+  color: #004270;
   }
 
 /* Format for selector input adm-pop-btn*/
-  #download-year-btn {
+#download-year-btn {
   margin: 17px 10px 17px 10px;
-color: #004270;
+  color: #004270;
   }
 
 /*
@@ -384,15 +406,15 @@ color: #004270;
 }*/
 
   /* Title of download page */
-  #download-title {
-  text-align: left;
-font-weight: bold;
-font-size: 32px;
+#download-title {
+  text-align: center;
+  font-size: 32px;
+  font-family: Graphik-Bold;
 }
 
 /* Title of data table selected for download */
-  #selected-download-title {
+#selected-download-title {
   text-align: left;
-font-weight: bold;
-font-size: 24px;
+  font-family: Graphik-Bold;
+  font-size: 24px;
 }

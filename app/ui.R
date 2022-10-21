@@ -89,7 +89,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                         #######
 
                                         fluidRow(column(width = 1),
-                                                 column(width = 10, align = "left", div(id = "selected-map-table", textOutput("selected_map_table"))),
+                                                 column(width = 10, align = "center", div(id = "selected-map-table", textOutput("selected_map_table"))),
                                                  column(width = 1)),
 
                                         br(),
@@ -265,23 +265,6 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                         ), # end fluidRow
 
                                         br()
-                                        # br(),
-                                        #
-                                        # fluidRow(column(width = 2),
-                                        #          column(width = 8, align = "left", div(id = "selected-state-note-title", "State Notes")),
-                                        #          column(width = 2)),
-                                        #
-                                        # br(),
-                                        #
-                                        # fluidRow(column(width = 2),
-                                        #          column(width = 8, align = "left", div(id = "selected-state-note", textOutput("selected_state_note"))),
-                                        #          column(width = 2)),
-                                        #
-                                        # br(),
-                                        #
-                                        # fluidRow(column(width = 2),
-                                        #          column(width = 8, align = "left", div(id = "consistent-state-note", state_note)),
-                                        #          column(width = 2))
 
                                     ) # end div
 
@@ -329,7 +312,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                     div(id = "download-body",
 
                                         fluidRow(column(width = 1),
-                                                 column(width = 10, h1("Download")),
+                                                 column(width = 10, div(id = "download-title", "Download Data")),
                                                  column(width = 1)),
 
                                         br(),

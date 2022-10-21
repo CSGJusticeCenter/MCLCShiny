@@ -146,7 +146,10 @@ server <- function(input, output, session) {
         hc_title(
           text = paste0("Change in ", unique(df_map()$metric), " ", unique(df_map()$adm_or_pop), " from ", unique(df_map()$year)),
           align = "center",
-          style = list(fontWeight = "bold", fontSize = "24px", useHTML = TRUE)
+          style = list(fontWeight = "bold",
+                       fontFamily = "Graphik-Bold",
+                       fontSize = "32px",
+                       useHTML = TRUE)
         ) %>%
 
         hc_add_theme(hc_theme_map_jc) %>%
@@ -196,7 +199,10 @@ server <- function(input, output, session) {
         hc_title(
           text = paste0("Change in ", unique(df_map()$metric), " ", unique(df_map()$adm_or_pop), " from ", unique(df_map()$year)),
           align = "center",
-          style = list(fontWeight = "bold", fontSize = "24px", useHTML = TRUE)) %>%
+          style = list(#fontWeight = "bold",
+                       fontFamily = "Graphik-Bold",
+                       fontSize = "32px",
+                       useHTML = TRUE)) %>%
 
         hc_add_theme(hc_theme_map_jc) %>%
         hc_setup() %>%
@@ -262,6 +268,7 @@ server <- function(input, output, session) {
              change = 7)
 
     reactable(df,
+              style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
               theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
               defaultColDef = colDef(format = colFormat(separators = TRUE), align = "right"),
               compact = TRUE,
@@ -583,6 +590,7 @@ server <- function(input, output, session) {
 
     # create table with 4 Year trend line in last column
     reactable(df,
+              style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
               theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
               defaultColDef = colDef(format = colFormat(separators = TRUE), align = "center"),
               compact = TRUE,
@@ -722,6 +730,7 @@ server <- function(input, output, session) {
 
     # create table with 4 Year trend line in last column
     reactable(df,
+              style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
               theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
               defaultColDef = colDef(format = colFormat(separators = TRUE), align = "center"),
               compact = TRUE,
@@ -848,6 +857,7 @@ server <- function(input, output, session) {
 
     # create table with 4 Year trend line in last column
     reactable(df,
+              style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
               theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
               defaultColDef = colDef(format = colFormat(separators = TRUE), align = "center"),
               compact = TRUE,

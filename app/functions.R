@@ -197,6 +197,9 @@ fnc_highchart_state_barchart <- function(df){
 fnc_reatable_table <- function(df){
   # create table with 4 Year trend line in last column
   reactable(df,
+            style = list(fontFamily = "Graphik, sans-serif"
+                         #fontSize = "0.875rem"
+                         ),
             theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
             defaultColDef = colDef(format = colFormat(separators = TRUE), align = "center"),
             compact = TRUE,
