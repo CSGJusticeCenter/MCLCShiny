@@ -507,7 +507,7 @@ server <- function(input, output, session) {
         highcharter::hc_exporting(enabled = FALSE) %>%
         hc_title(
           text = paste0("Prison ", input$adm_pop_report),
-          align = "left",
+          align = "center",
           style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
         )
     } else {
@@ -537,7 +537,7 @@ server <- function(input, output, session) {
         highcharter::hc_exporting(enabled = FALSE) %>%
         hc_title(
           text = paste0("Supervision Violation ", input$adm_pop_report),
-          align = "left",
+          align = "center",
           style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
         )
     } else {
@@ -549,7 +549,7 @@ server <- function(input, output, session) {
         highcharter::hc_exporting(enabled = FALSE) %>%
         hc_title(
           text = paste0("Supervision Violation ", input$adm_pop_report),
-          align = "left",
+          align = "center",
           style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
         )
     }
@@ -693,7 +693,7 @@ server <- function(input, output, session) {
         highcharter::hc_exporting(enabled = FALSE) %>%
         hc_title(
           text = paste0("Parole Violation ", input$adm_pop_report),
-          align = "left",
+          align = "center",
           style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
         )
     } else {
@@ -705,7 +705,7 @@ server <- function(input, output, session) {
         highcharter::hc_exporting(enabled = FALSE) %>%
         hc_title(
           text = paste0("Parole Violation ", input$adm_pop_report),
-          align = "left",
+          align = "center",
           style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
         )
     }
@@ -820,7 +820,7 @@ server <- function(input, output, session) {
         highcharter::hc_exporting(enabled = FALSE) %>%
         hc_title(
           text = paste0("Probation Violation ", input$adm_pop_report),
-          align = "left",
+          align = "center",
           style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
         )
     } else {
@@ -832,7 +832,7 @@ server <- function(input, output, session) {
         highcharter::hc_exporting(enabled = FALSE) %>%
         hc_title(
           text = paste0("Probation Violation ", input$adm_pop_report),
-          align = "left",
+          align = "center",
           style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
         )
     }

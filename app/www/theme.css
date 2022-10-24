@@ -67,14 +67,17 @@ Font size and style
     font-family: Graphik-Bold;
     src: url("fonts/GraphikBold.ttf") format('truetype');
 }
-
+@font-face {
+    font-family: Graphik;
+    src: url("fonts/Graphik.otf") format('opentype');
+}
 /* Make some wordy sections smaller
 .small_text {
   font-size: small;
 }
 
 /* Change font family throughout The issue here is that it changes all the bold text back to regular
-*{font-family: "Graphik", sans-serif;}*/
+*{font-family: "Graphik", sans-serif !important;}*/
 
 /*##################################################################################################################
 Navigation Bar
@@ -173,6 +176,7 @@ Dropdowns and buttons
   width: 13em;
   /* width: 175px;*/
   color: #004270;
+  font-family: Graphik;
 }
 
 /* Format for selector input adm-pop-map */
@@ -181,6 +185,7 @@ Dropdowns and buttons
   width: 13em;
   /* width: 175px;*/
   color: #004270;
+  font-family: Graphik;
 }
 
 /* Format for selector input year-map*/
@@ -189,6 +194,7 @@ Dropdowns and buttons
   width: 13em;
   /* width: 175px;*/
   color: #004270;
+  font-family: Graphik;
 }
 
 /* Format for download map button */
@@ -201,6 +207,7 @@ Dropdowns and buttons
   /* width: 175px;*/
   background-color:#004270;
   color: #fff;
+  font-family: Graphik;
 }
 
 /*######################################
@@ -239,7 +246,7 @@ Table
 #selected-map-table{
   text-align: center;
   font-size: 32px;
-  font-family: Graphik-Bold;
+  font-family: Graphik-Bold !important;
 }
 
 /* Table under map settings */
@@ -285,6 +292,7 @@ Dropdowns
   margin: 17px 10px 17px 10px;
   width: 175px;
   color: #004270;
+  font-family: Graphik;
 }
 
 /* Adm or pop selection button */
@@ -292,6 +300,7 @@ Dropdowns
   margin: 17px 10px 17px 10px;
   width: 175px;
   color: #004270;
+  font-family: Graphik;
 }
 
 /*######################################
@@ -329,6 +338,7 @@ Tabset Panels
   zoom:1;
   width: 150px;
   padding: 0px 14px; /* changes spacing between tabpanels */
+  font-family: Graphik;
 }
 
 .nav-tabs {
@@ -337,6 +347,7 @@ Tabset Panels
   border-bottom-style: solid !important;
   border-bottom-width: 1px !important;
   font-size: 14px;
+  font-family: Graphik;
 }
 
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
@@ -344,6 +355,7 @@ Tabset Panels
   cursor: default;
   background-color: #004270;
   border-bottom-color: #cccccc;
+  font-family: Graphik;
 }
 
 .nav-tabs>li>a {
@@ -352,6 +364,7 @@ Tabset Panels
   border-radius: 0px 0px 0 0;
   background-color: #F4F6F8;
   color: #004270;
+  font-family: Graphik;
 }
 
 /* Affects top nav bar
@@ -366,6 +379,12 @@ Tabset Panels
   text-align: center;
   font-size: 32px;
   font-family: Graphik-Bold;
+}
+
+/* State note setting */
+#selected-state-note {
+  text-align: left;
+  font-family: Graphik;
 }
 
 /* State note setting */
@@ -386,19 +405,22 @@ Dropdowns
 #download-data-btn {
   margin: 17px 10px 17px 10px;
   color: #004270;
-  }
+  font-family: Graphik;
+}
 
 /* Format for selector input adm-pop-btn*/
 #download-state-btn {
   margin: 17px 10px 17px 10px;
   color: #004270;
-  }
+  font-family: Graphik;
+}
 
 /* Format for selector input adm-pop-btn*/
 #download-year-btn {
   margin: 17px 10px 17px 10px;
   color: #004270;
-  }
+  font-family: Graphik;
+}
 
 /*
   #download-header > * > span {
@@ -417,4 +439,10 @@ Dropdowns
   text-align: left;
   font-family: Graphik-Bold;
   font-size: 24px;
+}
+
+/* State note setting */
+#selected-download-info {
+  text-align: left;
+  font-family: Graphik;
 }
