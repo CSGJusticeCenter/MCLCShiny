@@ -259,7 +259,7 @@ server <- function(input, output, session) {
   output$table_map <- renderReactable({
 
     filter_by <- paste0(input$data_map, " ", input$adm_or_pop_map)
-    select_column = "2018 - 2019"
+    select_column = input$year_map
     df <- mclc_explorer_table[, c('state', 'data', '2018', '2019', '2020', '2021', select_column, 'total_new')]
     df <- df %>%
       filter(data == "Total Admissions") %>%
