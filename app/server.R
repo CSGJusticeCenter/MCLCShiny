@@ -349,7 +349,7 @@ server <- function(input, output, session) {
       on.exit(setwd(owd))
 
       saveWidget(foundational_map(), "temp.html")
-      webshot("temp.html", file = file, cliprect = "viewport")
+      webshot2::webshot("temp.html", file = file, cliprect = "viewport")
     }
   )
 

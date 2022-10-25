@@ -44,7 +44,7 @@ library(extrafont)
 
 # Add fonts required to run functions.R
 # Fonts are found in app folder
-font_add("Graphik", regular = "app/www/fonts/GraphikRegular.otf")
+font_add("Graphik",      regular = "app/www/fonts/GraphikRegular.otf")
 font_add("Graphik-Bold", regular = "app/www/fonts/GraphikBold.otf")
 
 showtext_auto()

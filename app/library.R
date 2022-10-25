@@ -133,5 +133,5 @@ library(dplyr)
 library(sp)
 
 # save highchart
+library(webshot)
 library(webshot2)
-
