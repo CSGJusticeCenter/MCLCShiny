@@ -74,7 +74,7 @@ pwalk(
   list(
       rri_raw = IG_DF$RRI
     , race = IG_DF$RACE
-    , label   = paste0("BJS_", IG_DF$ABB, "_", IG_DF$RACE)
+    , label   = paste0("BJS_", IG_DF$STATE, "_", IG_DF$RACE)
     , savefile= TRUE
     , infogs  = 10
   )
@@ -102,7 +102,7 @@ pwalk(
   list(
       rri_raw = IG_DF$RRI
     , race = IG_DF$RACE
-    , label   = paste0("SC_", IG_DF$ABB, "_", IG_DF$RACE)
+    , label   = paste0("SC_", IG_DF$STATE, "_", IG_DF$RACE)
     , savefile= TRUE
     , infogs  = 10
   )
@@ -131,9 +131,9 @@ rm(IG_DF)
 
 <br>
 
-![](`r file.path(admin$sp_data, 'infographs/BJS_CA_Black.png')`){fig-align="center" width="500px"}
+![](`r file.path(admin$sp_data, 'infographs/BJS_California_Black.png')`){fig-align="center" width="500px"}
 
-![](`r file.path(admin$sp_data, 'infographs/BJS_CA_Hispanic.png')`){fig-align="center" width="500px"}
+![](`r file.path(admin$sp_data, 'infographs/BJS_California_Hispanic.png')`){fig-align="center" width="500px"}
 
 
 
@@ -223,9 +223,9 @@ bind_rows(
 ### For every <img src="`r humansvg`" style="height: 1em;"> White client that is revoked ... 
 <br>
 
-![](`r file.path(admin$sp_data, 'infographs/SC_CA_Black.png')`){fig-align="center" width="500px"}
+![](`r file.path(admin$sp_data, 'infographs/SC_California_Black.png')`){fig-align="center" width="500px"}
 
-![](`r file.path(admin$sp_data, 'infographs/SC_CA_Hispanic.png')`){fig-align="center" width="500px"}
+![](`r file.path(admin$sp_data, 'infographs/SC_California_Hispanic.png')`){fig-align="center" width="500px"}
 
 
 
