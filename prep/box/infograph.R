@@ -201,6 +201,10 @@ create_icons <- function(
   
   # set RRI
   RRI       <- round(rri_raw, digits = rri_digits) #RRI, rounded to number of digits 
+  #if rounded RRI = 0, change to digit value 
+  if (RRI == 0 & rri_raw > 0){
+    RRI <- as.numeric(glue("1e-{rri_digits}"))
+  }
   numfull   <- floor(RRI)    #foor RRI to determine how many filled infographics
   numremain <- RRI - numfull #find partial fill for single infographic
   
@@ -242,8 +246,8 @@ create_icons <- function(
     stop("RRI and numremain did not meet expected assumptions")
   }
   
-  if (emptyhumans == TRUE){
-    
+  # add additional empty humans, check to make sure the partial isn't the last person 
+  if (emptyhumans == TRUE & length(plot_list) != infogs){
     # starting position of empty infographic humans
     st_empty <- ifelse(numremain != 0, numfull + 2, numfull + 1)
     
@@ -322,10 +326,17 @@ create_infograph <- function(
       , fontfamily = "Graphik Regular"
     ) #+ theme(panel.background = element_rect(color = "red"))
   
-  display_value <- ifelse(
-    race == admin$lev_RACE[1]
-    , sprintf(glue("%.0f"),            round(rri_raw, rri_digits))
-    , sprintf(glue("%.{rri_digits}f"), round(rri_raw, rri_digits))
+  # display_value <- ifelse(
+  #   race == admin$lev_RACE[1]
+  #   , sprintf(glue("%.0f"),            round(rri_raw, rri_digits))
+  #   , sprintf(glue("%.{rri_digits}f"), round(rri_raw, rri_digits))
+  # )
+  
+  
+  display_value <- case_when(
+      rri_raw > 0               & round(rri_raw, rri_digits) == 0 ~ "<0.1"
+    , race == admin$lev_RACE[1] & round(rri_raw, rri_digits) >  0 ~ sprintf(glue("%.0f"),            round(rri_raw, rri_digits))
+    , race != admin$lev_RACE[1] & round(rri_raw, rri_digits) >  0 ~ sprintf(glue("%.{rri_digits}f"), round(rri_raw, rri_digits))
   )
   
   value <- ggdraw() + 
