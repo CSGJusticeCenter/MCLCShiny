@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: import.R
 # Authors: Mari Roberts
-# Date last updated: October 21, 2022
+# Date last updated: October 25, 2022
 
 # Description:
 #    Loads packages
@@ -12,7 +12,7 @@
 #    Creates data files for app
 
 # Input:
-#    "Data for web team v13.xlsx" notes
+#    "Data for web team v13.xlsx" Notes are here for now
 #    "mclc_data_2022_v2.xlsx"     2022 survey data
 #     Map files
 
@@ -21,7 +21,7 @@
 #     Saves data to research SP folder
 #######################################
 
-# install this version of highcharter
+# Install this version of highcharter???
 # Remotes::install_github("batpigandme/highcharter@module-testing")
 # Remotes::install_github("jbkunst/highcharter")
 # install.packages("highcharter")
@@ -45,6 +45,8 @@ library(extrafont)
 # Add fonts required to run functions.R
 # Fonts are found in app folder
 font_add("Graphik", regular = "app/www/fonts/GraphikRegular.otf")
+font_add("Graphik-Bold", regular = "app/www/fonts/GraphikBold.otf")
+
 showtext_auto()
 default_fonts <- c("Graphik")
 
@@ -455,8 +457,12 @@ csg <- fnc_create_data_text(csg)
 
 # select data and change data types
 csg <- csg %>% ungroup() %>%
-  select(state, year, text, total, adm_or_pop) %>%
-  mutate(state = as.character(state))
+  select(state,
+         year,
+         metric = text,
+         total) %>%
+  mutate(state = as.character(state),
+         year = as.character(year))
 
 ################################################################################
 # save Rdata

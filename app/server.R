@@ -71,8 +71,8 @@ server <- function(input, output, session) {
 
   df_map_table <- reactive({
     filter_by <- paste0(input$data_map, " ", input$adm_or_pop_map)
-    #select_column = input$year_map
-    df <- mclc_explorer_table[, c('state', 'data', '2018', '2019', '2020', '2021', 'total_new')]
+    select_column = input$year_map
+    df <- mclc_explorer_table[, c('state', 'data', '2018', '2019', '2020', '2021', select_column, 'total_new')]
     df <- df %>%
       filter(data == filter_by) %>%
       arrange(state) %>%
@@ -141,6 +141,9 @@ server <- function(input, output, session) {
                   symbolHeight = 200,
                   symbolWidth = 25
         ) %>%
+
+        hc_add_theme(hc_theme_map_jc) %>%
+
         hc_xAxis(title = "") %>%
         hc_yAxis(title = "") %>%
         hc_title(
@@ -148,11 +151,10 @@ server <- function(input, output, session) {
           align = "center",
           style = list(fontWeight = "bold",
                        fontFamily = "Graphik-Bold",
-                       fontSize = "32px",
+                       fontSize = "30px",
                        useHTML = TRUE)
         ) %>%
 
-        hc_add_theme(hc_theme_map_jc) %>%
         hc_setup() %>%
         hc_exporting(enabled = FALSE) %>%
 
@@ -180,7 +182,7 @@ server <- function(input, output, session) {
           joinBy = "state_abb",
           value = "change",
           dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
-                            style = list(fontSize = "14px", fontWeight = "regular", textOutline = 0)),
+                            style = list(fontSize = "14px", fontWeight = "regular", fontFamily = "Graphik", textOutline = 0)),
           nullColor = "#e8e8e8") %>%
 
         hc_colorAxis(min = NEW_MIN,
@@ -194,6 +196,9 @@ server <- function(input, output, session) {
                   symbolHeight = 200,
                   symbolWidth = 25) %>%
 
+        hc_add_theme(hc_theme_map_jc) %>%
+
+
         hc_xAxis(title = "") %>%
         hc_yAxis(title = "") %>%
         hc_title(
@@ -201,10 +206,9 @@ server <- function(input, output, session) {
           align = "center",
           style = list(#fontWeight = "bold",
                        fontFamily = "Graphik-Bold",
-                       fontSize = "32px",
+                       fontSize = "30px",
                        useHTML = TRUE)) %>%
 
-        hc_add_theme(hc_theme_map_jc) %>%
         hc_setup() %>%
         hc_exporting(enabled = FALSE) %>%
 
@@ -262,7 +266,7 @@ server <- function(input, output, session) {
     select_column = input$year_map
     df <- mclc_explorer_table[, c('state', 'data', '2018', '2019', '2020', '2021', select_column, 'total_new')]
     df <- df %>%
-      filter(data == "Total Admissions") %>%
+      filter(data == filter_by) %>%
       arrange(state) %>%
       rename(State = state,
              change = 7)
@@ -278,12 +282,13 @@ server <- function(input, output, session) {
               columns = list(
                 State           = colDef(name = "State", align = "left", minWidth = 140,
                                          style = list(fontWeight = "bold")),
-                data            = colDef(name = "Metric", align = "left", minWidth = 240,
+                data            = colDef(show = F,
+                                         name = "Metric", align = "left", minWidth = 240,
                                          style = list(fontWeight = "bold")),
-                `2018`          = colDef(minWidth = 95),
-                `2019`          = colDef(minWidth = 95),
-                `2020`          = colDef(minWidth = 95),
-                `2021`          = colDef(minWidth = 95),
+                `2018`          = colDef(minWidth = 110),
+                `2019`          = colDef(minWidth = 110),
+                `2020`          = colDef(minWidth = 110),
+                `2021`          = colDef(minWidth = 110),
 
                 change = colDef(minWidth = 110,
                                 name = select_column,
@@ -291,7 +296,8 @@ server <- function(input, output, session) {
                                 format = colFormat(percent = TRUE, digits = 1)),
                 # add 4 Year trend graphs to each row
                 total_new  =
-                  colDef(minWidth = 110,
+                  colDef(minWidth = 140,
+                         align = "center",
                          name = "4 Year Trend",
                          cell = function(value, index) {
                            dui_sparkline(
@@ -303,15 +309,15 @@ server <- function(input, output, session) {
                                  id = "total",
                                  height = 4,
                                  width = 4,
-                                 stroke = regblue,
+                                 stroke = orange,
                                  strokeWidth = 2.5,
                                  orientation = "diagonal"),
 
                                dui_sparklineseries(
                                  curve = "linear",
                                  showArea = FALSE,
-                                 fill = regblue,
-                                 stroke = regblue)))})))
+                                 fill = orange,
+                                 stroke = orange)))})))
 
   })
 
@@ -319,16 +325,30 @@ server <- function(input, output, session) {
   # Download map button near dropdowns
   #######
 
-  # save map as pdf
+  # # save map as pdf
+  # output$save_map <- downloadHandler(
+  #   filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".pdf", sep=""),
+  #   content = function(file) {
+  #     # temporarily switch to the temp dir, in case you do not have write
+  #     # permission to the current working directory
+  #     owd <- setwd(tempdir())
+  #     on.exit(setwd(owd))
+  #
+  #     saveWidget(foundational_map(), "temp.html", selfcontained = FALSE)
+  #     webshot("temp.html", file = file, cliprect = "viewport")
+  #   }
+  # )
+
+  # save map as png
   output$save_map <- downloadHandler(
-    filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".pdf", sep=""),
+    filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""),
     content = function(file) {
       # temporarily switch to the temp dir, in case you do not have write
       # permission to the current working directory
       owd <- setwd(tempdir())
       on.exit(setwd(owd))
 
-      saveWidget(foundational_map(), "temp.html", selfcontained = FALSE)
+      saveWidget(foundational_map(), "temp.html")
       webshot("temp.html", file = file, cliprect = "viewport")
     }
   )
@@ -934,16 +954,29 @@ server <- function(input, output, session) {
   # Download
   ##############################################################################################################################
 
-  # change year drop down options depending on data selecion
+  # Select multiple years
   filteredYears <- reactive({
     unique(csg$year)
   })
-
   observeEvent(filteredYears(), {
-    updatePickerInput(session, inputId = 'download_year', label = 'Select Year(s)', choices = filteredYears(), selected = filteredYears())
+    updatePickerInput(session, inputId = 'download_year',
+                      label = 'Select Year(s)',
+                      choices = filteredYears(),
+                      selected = filteredYears())
   })
 
-  # filter data depending on user input
+  # Select multiple state
+  filteredState <- reactive({
+    unique(csg$state)
+  })
+  observeEvent(filteredState(), {
+    updatePickerInput(session, inputId = 'download_state',
+                      label = 'Select State(s)',
+                      choices = filteredState(),
+                      selected = filteredState())
+  })
+
+  # Filter data depending on user input
   df_download_table <- reactive({
     csg %>%
       filter(year %in% input$download_year) %>%
@@ -951,10 +984,21 @@ server <- function(input, output, session) {
       arrange(state, year)
   })
 
-  # generate table depending on data set
+  # Generate table depending on user input
   output$selected_download_table <- DT::renderDataTable({
 
-      datatable(df_download_table())
+      df_download_table() %>%
+      datatable(#filter = c("top"),
+                #class = 'cell-border',
+                # Download options
+                extensions = 'Buttons',
+                options = list(dom = 'Blfrtip',
+                               buttons = c('csv', 'excel', 'pdf'),
+                               lengthMenu = list(c(25,50,100,-1),
+                                                 c(25,50,100,"All")),
+                               info=F, searching=F
+                               )
+                )
 
   })
 

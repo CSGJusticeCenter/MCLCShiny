@@ -225,7 +225,7 @@ Hex map
 #selected-map {
   text-align: center; /* not working */
   font-weight: bold;
-  font-size: 32px;
+  font-size: 30px;
   font-family: Graphik-Bold;
 }
 
@@ -233,7 +233,7 @@ Hex map
 #hex-map{
   text-align: center; /* not working */
   font-weight: bold;
-  font-size: 32px;
+  font-size: 30px;
   font-family: Graphik-Bold;
 }
 
@@ -245,7 +245,7 @@ Table
 /* Title of table under map settings */
 #selected-map-table{
   text-align: center;
-  font-size: 32px;
+  font-size: 30px;
   font-family: Graphik-Bold !important;
 }
 
@@ -258,7 +258,7 @@ Table
 /* Align text with search bar */
 #selected-map-table {
   /*position: relative; top: 55px;*/
-  position: relative; top: 30px;
+  /*position: relative; top: 30px;*/
 }
 
 /* Change search bar appearance - need to figure out how to keep the style consistent when clicked*/
@@ -268,7 +268,8 @@ Table
   width: 275px;
   height: 32px;
   background: #FFFFFF;
-  position: relative; bottom: 30px;
+  position: relative; bottom: 10px;
+  /*position: relative; bottom: 30px;*/
 }
 
 /*
@@ -312,7 +313,7 @@ Title and value boxes
 #selected-state {
   text-align: center;
   /*font-weight: bold;*/
-  font-size: 32px;
+  font-size: 30px;
   font-family: Graphik-Bold;
 }
 
@@ -377,7 +378,7 @@ Tabset Panels
 /* State note title setting */
 #selected-state-note-title {
   text-align: center;
-  font-size: 32px;
+  font-size: 30px;
   font-family: Graphik-Bold;
 }
 
@@ -430,7 +431,7 @@ Dropdowns
   /* Title of download page */
 #download-title {
   text-align: center;
-  font-size: 32px;
+  font-size: 30px;
   font-family: Graphik-Bold;
 }
 
@@ -446,3 +447,4 @@ Dropdowns
   text-align: left;
   font-family: Graphik;
 }
+

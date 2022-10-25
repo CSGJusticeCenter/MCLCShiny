@@ -131,3 +131,7 @@ library(dplyr)
 
 # maps
 library(sp)
+
+# save highchart
+library(webshot2)
+

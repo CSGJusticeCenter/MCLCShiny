@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: functions.R
 # Authors: Mari Roberts
-# Date last updated: September 28, 2022
+# Date last updated: October 25, 2022
 # Description:
 #    Defines custom functions
 #######################################
@@ -11,16 +11,16 @@
 # Highchart
 ##########################
 
-# custom highcharts theme for hex map
+# Highcharts theme for hex map
 hc_theme_map_jc <- hc_theme_merge(
   hc_theme_smpl(),
   hc_theme(
     chart = list(
       marginTop = 75,
-      style = list(fontFamily = default_fonts)
+      style = list(fontFamily = "Graphik")
     ),
-    title = list(style = list(fontFamily = default_fonts, fontSize = "24px")),
-    subtitle = list(style = list(fontFamily = default_fonts, fontSize = "16px")),
+    #title = list(style = list(fontFamily = "Graphik", fontSize = "24px")),
+    #subtitle = list(style = list(fontFamily = "Graphik", fontSize = "16px")),
     caption = list(align = "right", y = 15),
     xAxis = list(
       labels = list(
@@ -39,11 +39,11 @@ hc_theme_map_jc <- hc_theme_merge(
   )
 )
 
-# custom highcharts theme for plots
+# Highcharts theme for plots
 hc_theme_jc <- hc_theme(colors = c("#D25E2D", "#EDB799", "#C7E8F5", "#236ca7", "#D6C246", "#dcdcdc"),
-                        chart = list(style = list(fontFamily = default_fonts, color = "#666666")),
-                        title = list(align = "center", style = list(fontFamily = default_fonts, fontSize = "24px")),
-                        subtitle = list(align = "center", style = list(fontFamily = default_fonts, fontSize = "16px")),
+                        chart = list(style = list(fontFamily = "Graphik", color = "#666666")),
+                        #title = list(align = "center", style = list(fontFamily = "Graphik", fontSize = "24px")),
+                        #subtitle = list(align = "center", style = list(fontFamily = "Graphik", fontSize = "16px")),
                         legend = list(align = "center", verticalAlign = "top"),
                         xAxis = list(gridLineColor = "transparent", lineColor = "transparent", minorGridLineColor = "transparent", tickColor = "transparent"),
                         yAxis = list(labels = list(enabled = FALSE), gridLineColor = "transparent", lineColor = "transparent", minorGridLineColor = "transparent", tickColor = "transparent"),
@@ -55,7 +55,7 @@ hc_theme_jc <- hc_theme(colors = c("#D25E2D", "#EDB799", "#C7E8F5", "#236ca7", "
                                            bubble = list(maxSize = "10%")))
 
 
-# set up highcharts download buttons
+# Highcharts download buttons
 hc_setup <- function(x) {
     highcharter::hc_add_dependency(x, name = "plugins/series-label.js") %>%
     highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
@@ -65,7 +65,7 @@ hc_setup <- function(x) {
     highcharter::hc_exporting(enabled = TRUE)
 }
 
-# function to create area chart for state page
+# Highchart area chart for state page
 fnc_highchart_state_areachart <- function(df){
   highchart() %>%
 
@@ -94,7 +94,7 @@ fnc_highchart_state_areachart <- function(df){
 }
 
 
-# function to create bar chart for state page
+# Supervision violation highchart bar chart for state page
 fnc_highchart_state_barchart <- function(df){
   highchart() %>%
     hc_chart(type = "column") %>%
@@ -194,8 +194,8 @@ fnc_highchart_state_barchart <- function(df){
 #                                                        fill = colpal_fill[index],
 #                                                        stroke = colpal_stroke[index])))}))
 
+# Reactable table with 4 Year trend line in last column
 fnc_reatable_table <- function(df){
-  # create table with 4 Year trend line in last column
   reactable(df,
             style = list(fontFamily = "Graphik, sans-serif"
                          #fontSize = "0.875rem"
@@ -275,7 +275,7 @@ fnc_reatable_table <- function(df){
 ##########################
 
 # https://jkunst.com/blog/posts/2020-06-26-valuebox-and-sparklines/
-# create value boxes
+# Value boxes
 valueBox2 <- function(value, title, subtitle, icon = NULL, color = "aqua", width = 4, href = NULL){
 
   shinydashboard:::validateColor(color)
@@ -307,7 +307,7 @@ valueBox2 <- function(value, title, subtitle, icon = NULL, color = "aqua", width
 # Data cleaning
 ##########################
 
-# create text depending on data type
+# Text depending on data type
 fnc_create_data_text <- function(df){
   df <- df %>%
     mutate(text = case_when(
@@ -334,7 +334,7 @@ fnc_create_data_text <- function(df){
     ))
 }
 
-# create metric depending on data
+# Metric depending on data
 fnc_create_data_metric <- function(df){
   df <- df %>%
     mutate(metric = case_when(
@@ -360,7 +360,7 @@ fnc_create_data_metric <- function(df){
     ))
 }
 
-# create text depending on data type
+# Prob vs parole depending on data type
 fnc_create_prob_vs_parole <- function(df){
   df <- df %>%
     mutate(prob_vs_parole = case_when(
@@ -387,7 +387,7 @@ fnc_create_prob_vs_parole <- function(df){
     ))
 }
 
-# create adm vs pop depending on data
+# Adm vs pop depending on data type
 fnc_create_adm_pop <- function(df){
   df <- df %>%
     mutate(adm_or_pop = ifelse(grepl("population", data), "Population", "Admissions"))
@@ -397,7 +397,7 @@ fnc_create_adm_pop <- function(df){
 # Ui
 ##########################
 
-# add a nicely styled label above selection box
+# Add a nicely styled label above selection box
 labeled_input <- function(id, label, input){
   div(id = id,
       span(label, style = "font-size: small;"),
