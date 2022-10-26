@@ -7,6 +7,34 @@
 #    Load packages
 #######################################
 
+# Data visualizations
+library(dataui)
+library(highcharter)
+library(purrr)
+library(htmlwidgets)
+library(glue)
+
+# Shiny
+library(shiny)
+library(shinyWidgets)
+library(dashboardthemes)
+library(shinydashboard)
+
+# Tables
+library(reactable)
+library(DT)
+library(reactablefmtr)
+library(formattable)
+library(dplyr)
+
+# Maps
+library(sp)
+
+# Save highchart
+# Download this! webshot removes font styles when saving so webshot2 is better
+# remotes::install_github("rstudio/webshot2")
+library(webshot2)
+
 # load specific functions instead of entire packages - not working
 # library(box)
 # box::use(
@@ -108,31 +136,3 @@
 #   utils[head],
 #   utils[write.csv]
 # )
-
-# data visualizations
-library(dataui)
-library(highcharter)
-library(purrr)
-library(htmlwidgets)
-library(glue)
-
-# shiny
-library(shiny)
-library(shinyWidgets)
-library(dashboardthemes)
-library(shinydashboard)
-
-# tables
-library(reactable)
-library(DT)
-library(reactablefmtr)
-library(formattable)
-library(dplyr)
-
-# maps
-library(sp)
-
-# save highchart
-library(webshot)
-# remotes::install_github("rstudio/webshot2")
-# library(webshot2)

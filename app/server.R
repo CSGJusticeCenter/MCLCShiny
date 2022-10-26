@@ -39,6 +39,38 @@ server <- function(input, output, session) {
   ##############################################################################################################################
 
   #######
+  # Download map button near dropdowns
+  #######
+
+  # Save map as png
+  output$save_map <- downloadHandler(
+    filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""),
+    content = function(file) {
+      # temporarily switch to the temp dir, in case you do not have write
+      # permission to the current working directory
+      owd <- setwd(tempdir())
+      on.exit(setwd(owd))
+
+      saveWidget(foundational_map(), "temp.html")
+      # webshot2::webshot("temp.html", file = file, cliprect = "viewport")
+      webshot2::webshot("temp.html", file = file,
+                       delay = 2
+                       #cliprect = "viewport"
+                       )
+    }
+  )
+
+  # This comes out blank
+  # https://stackoverflow.com/questions/53927629/download-all-high-chart-output-from-r-shiny
+  # output$save_map <- downloadHandler(filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""),
+  #                                    content = function(file) {
+  #                                     png(file, width=1200, height=1200)
+  #                                     foundational_map()
+  #                                     dev.off()
+  #                                   },
+  #                                    contentType = "image/png")
+
+  #######
   # Hex map title
   #######
 
@@ -327,26 +359,6 @@ server <- function(input, output, session) {
                                  stroke = orange)))})))
 
   })
-
-  #######
-  # Download map button near dropdowns
-  #######
-
-  # Save map as png
-  output$save_map <- downloadHandler(
-    filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""),
-    content = function(file) {
-      # temporarily switch to the temp dir, in case you do not have write
-      # permission to the current working directory
-      owd <- setwd(tempdir())
-      on.exit(setwd(owd))
-
-      saveWidget(foundational_map(), "temp.html")
-      # webshot2::webshot("temp.html", file = file, cliprect = "viewport")
-      webshot("temp.html", file = file, cliprect = "viewport")
-
-    }
-  )
 
   ##############################################################################################################################
   # State Reports
