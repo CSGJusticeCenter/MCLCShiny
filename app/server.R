@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: server.R
 # Authors: Mari Roberts
-# Date last updated: September 28, 2022
+# Date last updated: October 26, 2022
 # Description:
 #    Server for shiny app
 #######################################
@@ -11,7 +11,7 @@
 
 server <- function(input, output, session) {
 
-  # change URL depending on tab selection in navbar
+  # Change URL depending on tab selection in navbar
   observeEvent(input$navbarID, {
 
     newURL <- paste0(
@@ -42,14 +42,14 @@ server <- function(input, output, session) {
   # Hex map title
   #######
 
-  # # title of map based on user input
+  # # Title of map based on user input
   # output$selected_map <- renderText({paste("Change in ", input$data_map, " ", input$adm_or_pop_map, "from ", input$year_map)})
 
   #######
   # Hex map data
   #######
 
-  # filter data depending on user input
+  # Filter data depending on user input for map explorer
   # map data
   df_map <- reactive({
     mclc_explorer %>%
@@ -58,9 +58,9 @@ server <- function(input, output, session) {
              year       == input$year_map)
   })
 
-  # # was being used for datatable but now we're using reactable, save for now
-  # # filter data depending on user input
-  # # table under map data
+  # # Was being used for datatable but now we're using reactable, save for now
+  # # Filter data depending on user input
+  # # Table under map data
   # df_map_table <- reactive({
   #   filter_by <- paste0(input$data_map, " ", input$adm_or_pop_map)
   #   mclc_explorer_table %>%
@@ -69,6 +69,7 @@ server <- function(input, output, session) {
   #     rename(State = state)
   # })
 
+  # Data for table under map
   df_map_table <- reactive({
     filter_by <- paste0(input$data_map, " ", input$adm_or_pop_map)
     select_column = input$year_map
@@ -85,23 +86,29 @@ server <- function(input, output, session) {
   # Hex map
   #######
 
-  # create foundational hex map and store it as a reactive expression
+  # Create foundational hex map and store it as a reactive expression
+  # This is necessary to download the map
   foundational_map <- reactive({
 
     # ################ TO DO find min and max values and put in dataframe in import.R
-    # get minimum and maximum value
+    # Get minimum and maximum value
     min_map <- min(df_map()$change, na.rm = TRUE)
     max_map <- max(df_map()$change, na.rm = TRUE)
 
-    # get absolute value for comparison
+    # Get absolute value for comparison
     min_map_abs <- abs(min_map)
     max_map_abs <- abs(max_map)
 
-    # get neg or pos sign
+    # Get neg or pos sign for min and max
     min_map_type <- ifelse(min_map >= 0, "positive", "negative")
     max_map_type <- ifelse(max_map >= 0, "positive", "negative")
 
-    # determine the new min and max so that zero is centered
+    # Generate tile map
+    # Has diverging scales when there are neg and pos values which centers the color gradient at zero
+    # Has a gradient scale when both the min and max are both negative or both positive
+
+    # Determine the new min and max so that zero is centered
+    # For example, If the highest positive value is 20 than the negative value is -20
     if (min_map_type != max_map_type) {
 
       NEW_MAX <- case_when(
@@ -115,9 +122,6 @@ server <- function(input, output, session) {
       NEW_MAX <- ifelse(max_map_type == "negative", -abs(NEW_MAX), abs(NEW_MAX))
       NEW_MIN <- ifelse(min_map_type == "negative", -abs(NEW_MIN), abs(NEW_MIN))
 
-      # generate tile map
-      # has diverging scales when there are neg and pos values which centers the color gradient at zero
-      # has a gradient scale when both the min and max are both negative or both positive
       highchart() %>%
 
         hc_add_series_map(
@@ -171,6 +175,8 @@ server <- function(input, output, session) {
 
     } else {
 
+
+      # Determine the new min and max where all values are negative
       NEW_MAX <- max_map
       NEW_MIN <- min_map
 
@@ -227,10 +233,10 @@ server <- function(input, output, session) {
     foundational_map()
   })
 
-  # store the current user-created version of the  map for download in a reactive expression
-  final_map <- reactive({
-    foundational_map()
-  })
+  # # store the current user-created version of the  map for download in a reactive expression
+  # final_map <- reactive({
+  #   foundational_map()
+  # })
 
   #######
   # Table under hex map
@@ -984,21 +990,66 @@ server <- function(input, output, session) {
       arrange(state, year)
   })
 
-  # Generate table depending on user input
-  output$selected_download_table <- DT::renderDataTable({
+  # # Generate table depending on user input
+  # output$selected_download_table <- DT::renderDataTable({
+  #
+  #     df_download_table() %>%
+  #     datatable(#filter = c("top"),
+  #               #class = 'cell-border',
+  #               # Download options
+  #               extensions = 'Buttons',
+  #               options = list(dom = 'Blfrtip',
+  #                              buttons = c('csv', 'excel', 'pdf'),
+  #                              lengthMenu = list(c(25,50,100,-1),
+  #                                                c(25,50,100,"All")),
+  #                              info=F, searching=F
+  #                              )
+  #               )
+  #
+  # })
 
-      df_download_table() %>%
-      datatable(#filter = c("top"),
-                #class = 'cell-border',
-                # Download options
-                extensions = 'Buttons',
-                options = list(dom = 'Blfrtip',
-                               buttons = c('csv', 'excel', 'pdf'),
-                               lengthMenu = list(c(25,50,100,-1),
-                                                 c(25,50,100,"All")),
-                               info=F, searching=F
-                               )
-                )
+  # Save data as csv
+  output$save_data <- downloadHandler(
+    filename = function() {
+      paste("test.csv", sep = "")
+    },
+    content = function(con) {
+      write.csv(df_download_table(), con,
+                row.names = FALSE)
+    }
+  )
+
+  output$selected_download_table <- renderReactable({
+
+
+    df1 <- df_download_table() %>%
+      mutate(state = factor(state))
+
+    reactable(df1,
+              style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
+              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
+              defaultColDef = colDef(format = colFormat(separators = TRUE), align = "left"),
+              compact = TRUE,
+              fullWidth = FALSE,
+              defaultPageSize = 50,
+              #filterable = TRUE,
+
+              columns = list(
+                state  = colDef(name = "State",
+                                align = "left",
+                                style = list(fontWeight = "bold"),
+                                minWidth = 200,
+                                ),
+                metric = colDef(name = "Metric",
+                                minWidth = 370),
+                year   = colDef(name = "Year",
+                                minWidth = 110),
+                total  = colDef(name = "Total",
+                                align = "right",
+                                minWidth = 110,
+                                filterable = FALSE)
+              )
+              )
 
   })
 

@@ -133,5 +133,6 @@ library(dplyr)
 library(sp)
 
 # save highchart
-library(webshot)
+# library(webshot)
+# remotes::install_github("rstudio/webshot2")
 library(webshot2)

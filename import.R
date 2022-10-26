@@ -72,7 +72,8 @@ if (FULL_JC_FOLDER == TRUE){
 
 # Load sp file
 hex <- read_sf(file.path(paste0(sp_data_path, "/Data/us_states_hexgrid.geojson", sep = ""))) %>%
-  select(state_abb = iso3166_2)
+  select(state_abb = iso3166_2) %>%
+  filter(state_abb != "DC")
 
 # Load state abb
 stateAbb <- read.csv(paste0(sp_data_path, "/Data/stateAbb.csv", sep = ""))
@@ -290,7 +291,7 @@ mclc_explorer <- mclc_all %>%
                           year == 2020 ~ "2019 - 2020",
                           year == 2021 ~ "2020 - 2021",
                           year == 2022 ~ "All (2018 - 2021)"),
-         change = round(change*100, 2),
+         change = round(change*100, 1),
          tooltip = paste0("<b>", state, "</b><br>","Change from ", year, "<br>",change, "%<br>"),
          datalabel = ifelse(is.na(change), paste0("", state_abb, ""),
                             paste0("<p style=", "text-align:center", ">", state_abb, "", "<br>",
@@ -458,8 +459,8 @@ csg <- fnc_create_data_text(csg)
 # select data and change data types
 csg <- csg %>% ungroup() %>%
   select(state,
-         year,
          metric = text,
+         year,
          total) %>%
   mutate(state = as.character(state),
          year = as.character(year))

@@ -198,7 +198,7 @@ Dropdowns and buttons
 }
 
 /* Format for download map button */
-.download_this {
+.download_map {
   margin: 2.7em 1em 2.7em 1em;
   border-radius:0px;
   color: #004270;
@@ -402,25 +402,49 @@ Dropdowns
 
 /*.dropdown-menu span {text-align: left; width: 100%;}*/
 
-/* Format for selector input state-btn*/
+/* Format for selector input about data type
 #download-data-btn {
   margin: 17px 10px 17px 10px;
   color: #004270;
   font-family: Graphik;
-}
+}*/
 
-/* Format for selector input adm-pop-btn*/
+/* Format for selector input picking state(s)*/
 #download-state-btn {
   margin: 17px 10px 17px 10px;
   color: #004270;
   font-family: Graphik;
+  width: 15em;
 }
 
-/* Format for selector input adm-pop-btn*/
+/* Format for selector input picking year(s)*/
 #download-year-btn {
   margin: 17px 10px 17px 10px;
   color: #004270;
   font-family: Graphik;
+  width: 15em;
+}
+
+/* Format for download data button */
+.download_data {
+  margin: 2.7em 1em 2.7em 1em;
+  border-radius:0px;
+  color: #004270;
+  text-align: left;
+  width: 15em;
+  /* width: 175px;*/
+  background-color:#004270;
+  color: #fff;
+  font-family: Graphik;
+  font-style: bold;
+}
+
+.picker-style {
+  color: #004270;
+  border-radius:0px;
+  font-family: Graphik;
+  width: 15em;
+  background-color:#FFFFFF;
 }
 
 /*
@@ -436,15 +460,14 @@ Dropdowns
 }
 
 /* Title of data table selected for download */
-#selected-download-title {
+#download-title {
   text-align: left;
   font-family: Graphik-Bold;
   font-size: 24px;
 }
 
-/* State note setting */
-#selected-download-info {
+/* Download info setting */
+#download-info {
   text-align: left;
   font-family: Graphik;
 }
-

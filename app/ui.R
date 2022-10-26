@@ -62,7 +62,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                          labeled_input('save-map-btn', "",
                                                                                        downloadButton(outputId = 'save_map', "Download Map",
                                                                                                       #div(style = "font-weight: bold", "Download Data"), # this causes spacing issues within the button
-                                                                                                      class = "download_this")))
+                                                                                                      class = "download_map")))
                                                         ) # end fluidRow
                                                   ),
                                                   column(width = 3)
@@ -283,19 +283,34 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                  column(width = 6,
 
-                                                        fluidRow(column(width = 3),
-                                                                 column(width = 3,
-                                                                        labeled_input('download-state-btn', "Select State(s)",
-                                                                                      pickerInput(inputId = 'download_state', width = "100%",
-                                                                                                  choices = NULL, selected = NULL, multiple = TRUE,
-                                                                                                  options = list(`actions-box` = TRUE)))),
+                                                        fluidRow(#column(width = 3),
+                                                                 column(width = 4,
+                                                                        labeled_input('download-state-btn', "", #"Select State(s)",
+                                                                                      pickerInput(inputId = 'download_state',
+                                                                                                  width = "100%",
+                                                                                                  choices = NULL,
+                                                                                                  selected = NULL,
+                                                                                                  multiple = TRUE,
+                                                                                                  div(style = "font-weight: bold", "Select State(s)"),
+                                                                                                  options = list(`actions-box` = TRUE,
+                                                                                                                 style = "picker-style")))),
 
-                                                                 column(width = 3,
-                                                                        labeled_input('download-year-btn', "Select Year(s)",
-                                                                                      pickerInput(inputId = 'download_year', width = "100%",
-                                                                                                  choices = NULL, selected = NULL, multiple = TRUE,
-                                                                                                  options = list(`actions-box` = TRUE)))),
-                                                                 column(width = 3)
+                                                                 column(width = 4,
+                                                                        labeled_input('download-year-btn', "", #"Select Year(s)",
+                                                                                      pickerInput(inputId = 'download_year',
+                                                                                                  width = "100%",
+                                                                                                  choices = NULL,
+                                                                                                  selected = NULL,
+                                                                                                  multiple = TRUE,
+                                                                                                  div(style = "font-weight: bold", "Select Year(s)"),
+                                                                                                  options = list(`actions-box` = TRUE,
+                                                                                                                 style = "picker-style")))),
+                                                                 # column(width = 3)
+                                                                 column(width = 4,
+                                                                        labeled_input('save-data-btn', "",
+                                                                                      downloadButton(outputId = 'save_data', "Download Data",
+                                                                                                     #div(style = "font-weight: bold", "Download Data"), # this causes spacing issues within the button
+                                                                                                     class = "download_data")))
                                                         )),
 
                                                  column(width = 3)
@@ -311,28 +326,30 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                     div(id = "download-body",
 
-                                        fluidRow(column(width = 1),
-                                                 column(width = 10, div(id = "download-title", "Download Data")),
-                                                 column(width = 1)),
+                                        fluidRow(column(width = 2),
+                                                 column(width = 8, div(id = "download-title", "Download Data")),
+                                                 column(width = 2)),
 
                                         br(),
 
-                                        fluidRow(column(width = 1),
-                                                 column(width = 10, div(id = "selected-download-title", "More Community, Less Confinement (2022)")),
-                                                 column(width = 1)),
+                                        fluidRow(column(width = 2),
+                                                 column(width = 8, div(id = "download-title", "More Community, Less Confinement (2022)")),
+                                                 column(width = 2)),
 
                                         br(),
 
-                                        fluidRow(column(width = 1),
-                                                 column(width = 10, div(id = "selected-download-info", "To understand the impact of community supervision (i.e., probation, parole, post-release supervision) on state prison populations, The Council of State Governments (CSG) Justice Center surveyed corrections leaders in all 50 states. This project was supported by Arnold Ventures and produced in partnership with the Correctional Leaders Association (CLA). The resulting data span 4 years—from 2018 to 2021—and demonstrate how the number of people sent to prison for supervision violations changed.")),
-                                                 column(width = 1)),
+                                        fluidRow(column(width = 2),
+                                                 column(width = 8, div(id = "download-info", "To understand the impact of community supervision (i.e., probation, parole, post-release supervision) on state prison populations, The Council of State Governments (CSG) Justice Center surveyed corrections leaders in all 50 states. This project was supported by Arnold Ventures and produced in partnership with the Correctional Leaders Association (CLA). The resulting data span 4 years—from 2018 to 2021—and demonstrate how the number of people sent to prison for supervision violations changed.")),
+                                                 column(width = 2)),
                                         br(),
 
-                                        fluidRow(column(width = 1),
-                                                 column(width = 10,
-                                                        div(id = "selected-download-table", DT::dataTableOutput("selected_download_table"))
+                                        fluidRow(column(width = 2),
+                                                 column(width = 8,
+                                                        align = "center",
+                                                        # div(id = "selected-download-table", DT::dataTableOutput("selected_download_table"))
+                                                        div(id = "selected-download-table", reactableOutput("selected_download_table"))
                                                  ),
-                                                 column(width = 1)),
+                                                 column(width = 2)),
 
                                         br(),
                                         br()
