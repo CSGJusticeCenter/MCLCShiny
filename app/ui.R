@@ -179,7 +179,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                         br(),
 
                                         #######
-                                        # Panels for Overview, Parole, and Probation
+                                        # Panels for Overview, Parole, Probation, and Revocations
                                         #######
 
                                         fluidRow(column(width = 1),

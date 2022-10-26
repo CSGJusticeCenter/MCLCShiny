@@ -130,7 +130,10 @@ server <- function(input, output, session) {
           joinBy = "state_abb",
           value = "change",
           dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
-                            style = list(fontSize = "14px", fontWeight = "regular", textOutline = 0)),
+                            style = list(fontSize = "14px",
+                                         fontWeight = "regular",
+                                         fontFamily = "Graphik",
+                                         textOutline = 0)),
           nullColor = "#e8e8e8") %>%
 
         hc_colorAxis(min = NEW_MIN,
@@ -188,7 +191,10 @@ server <- function(input, output, session) {
           joinBy = "state_abb",
           value = "change",
           dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
-                            style = list(fontSize = "14px", fontWeight = "regular", fontFamily = "Graphik", textOutline = 0)),
+                            style = list(fontSize = "14px",
+                                         fontWeight = "regular",
+                                         fontFamily = "Graphik",
+                                         textOutline = 0)),
           nullColor = "#e8e8e8") %>%
 
         hc_colorAxis(min = NEW_MIN,
@@ -232,11 +238,6 @@ server <- function(input, output, session) {
   output$hex_map <- renderHighchart({
     foundational_map()
   })
-
-  # # Store the current user-created version of the  map for download in a reactive expression
-  # Final_map <- reactive({
-  #   foundational_map()
-  # })
 
   #######
   # Table under hex map
@@ -333,7 +334,7 @@ server <- function(input, output, session) {
 
   # Save map as png
   output$save_map <- downloadHandler(
-    filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, "_" , Sys.Date(), ".png", sep=""),
+    filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""),
     content = function(file) {
       # temporarily switch to the temp dir, in case you do not have write
       # permission to the current working directory
@@ -341,7 +342,9 @@ server <- function(input, output, session) {
       on.exit(setwd(owd))
 
       saveWidget(foundational_map(), "temp.html")
-      webshot2::webshot("temp.html", file = file, cliprect = "viewport")
+      # webshot2::webshot("temp.html", file = file, cliprect = "viewport")
+      webshot("temp.html", file = file, cliprect = "viewport")
+
     }
   )
 
