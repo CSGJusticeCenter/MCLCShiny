@@ -42,23 +42,41 @@ server <- function(input, output, session) {
   # Download map button near dropdowns
   #######
 
+  # # Save map as png
+  # output$save_map <- downloadHandler(
+  #   filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""),
+  #   content = function(file) {
+  #     # temporarily switch to the temp dir, in case you do not have write
+  #     # permission to the current working directory
+  #     owd <- setwd(tempdir())
+  #     on.exit(setwd(owd))
+  #
+  #     saveWidget(foundational_map(), "temp.html")
+  #     # webshot2::webshot("temp.html", file = file, cliprect = "viewport")
+  #     webshot2::webshot("temp.html", file = file,
+  #                      delay = 2
+  #                      #cliprect = "viewport"
+  #                      )
+  #   }
+  # )
+
   # Save map as png
   output$save_map <- downloadHandler(
     filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""),
     content = function(file) {
-      # temporarily switch to the temp dir, in case you do not have write
-      # permission to the current working directory
+
       owd <- setwd(tempdir())
       on.exit(setwd(owd))
 
       saveWidget(foundational_map(), "temp.html")
-      # webshot2::webshot("temp.html", file = file, cliprect = "viewport")
       webshot2::webshot("temp.html", file = file,
-                       delay = 2
-                       #cliprect = "viewport"
-                       )
+                        delay = 1
+      )
     }
   )
+
+  # https://stackoverflow.com/questions/61347676/datalabels-in-r-highcharter-cannot-be-seen-after-print-as-png-or-jpg
+
 
   # This comes out blank
   # https://stackoverflow.com/questions/53927629/download-all-high-chart-output-from-r-shiny
@@ -194,7 +212,7 @@ server <- function(input, output, session) {
                        useHTML = TRUE)
         ) %>%
 
-        hc_setup() %>%
+        #hc_setup() %>%
         hc_exporting(enabled = FALSE) %>%
 
         hc_plotOptions(series = list(animation = FALSE,
@@ -253,7 +271,7 @@ server <- function(input, output, session) {
                        fontSize = "30px",
                        useHTML = TRUE)) %>%
 
-        hc_setup() %>%
+        #hc_setup() %>%
         hc_exporting(enabled = FALSE) %>%
 
         hc_plotOptions(series = list(animation = FALSE, dataLabels = list(enabled = TRUE), cursor = "pointer", borderWidth = 3),

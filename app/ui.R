@@ -296,6 +296,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                                                   selected = NULL,
                                                                                                   multiple = TRUE,
                                                                                                   div(style = "font-weight: bold", "Select State(s)"),
+                                                                                                  choicesOpt = list(style = "color: rgba(119, 119, 119, 0.5);"),
                                                                                                   options = list(`actions-box` = TRUE,
                                                                                                                  style = "picker-style")))),
                                                                  # Select Metric(s)
@@ -307,6 +308,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                                                   selected = NULL,
                                                                                                   multiple = TRUE,
                                                                                                   div(style = "font-weight: bold", "Select Metric(s)"),
+
                                                                                                   options = list(`actions-box` = TRUE,
                                                                                                                  style = "picker-style")))),
                                                                  # Select Year(s)
@@ -318,6 +320,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                                                   selected = NULL,
                                                                                                   multiple = TRUE,
                                                                                                   div(style = "font-weight: bold", "Select Year(s)"),
+
                                                                                                   options = list(`actions-box` = TRUE,
                                                                                                                  style = "picker-style")))),
                                                                  # Download Data
