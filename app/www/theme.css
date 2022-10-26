@@ -119,7 +119,7 @@ Header and global drop down options
   display: flex; vertically aligns to the left */
   background-color:#DDE3E9 !important;
   /*height: 100px;*/
-  height: 7.0em;
+  min-height: 7.0em;
   /*padding: 0 0px;*/
   display: absolute; /* without this the blue part of the header disappears */
   left: 50%;
@@ -151,7 +151,7 @@ button > div {
 #state-header {
   background-color:#DDE3E9 !important;
   /*height: 100px;*/
-    height: 7.0em;
+  min-height: 7.0em;
   /*padding: 0 0px;*/
   margin-left: auto;
   margin-right: auto;
@@ -161,7 +161,7 @@ button > div {
 #download-header {
   background-color:#DDE3E9 !important;
   /*height: 100px;*/
-    height: 7.0em;
+  min-height: 7.0em;
   /*padding: 0 0px;*/
   margin-left: auto;
   margin-right: auto;

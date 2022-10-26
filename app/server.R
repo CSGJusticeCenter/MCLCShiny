@@ -212,7 +212,7 @@ server <- function(input, output, session) {
                        useHTML = TRUE)
         ) %>%
 
-        #hc_setup() %>%
+        hc_setup() %>%
         hc_exporting(enabled = FALSE) %>%
 
         hc_plotOptions(series = list(animation = FALSE,
@@ -271,7 +271,7 @@ server <- function(input, output, session) {
                        fontSize = "30px",
                        useHTML = TRUE)) %>%
 
-        #hc_setup() %>%
+        hc_setup() %>%
         hc_exporting(enabled = FALSE) %>%
 
         hc_plotOptions(series = list(animation = FALSE, dataLabels = list(enabled = TRUE), cursor = "pointer", borderWidth = 3),

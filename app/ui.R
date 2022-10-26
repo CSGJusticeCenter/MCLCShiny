@@ -287,6 +287,8 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                  column(width = 6,
 
+                                                        # https://stackoverflow.com/questions/67212995/r-shiny-pickerinput-chiocesopt
+
                                                         fluidRow(# Select State(s)
                                                                  column(width = 3,
                                                                         labeled_input('download-state-btn', "", #"Select State(s)",
@@ -296,7 +298,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                                                   selected = NULL,
                                                                                                   multiple = TRUE,
                                                                                                   div(style = "font-weight: bold", "Select State(s)"),
-                                                                                                  choicesOpt = list(style = "color: rgba(119, 119, 119, 0.5);"),
+                                                                                                  # choicesOpt = list(style = sprintf('background:%s;', 'green')), # choicesOpt is not working
                                                                                                   options = list(`actions-box` = TRUE,
                                                                                                                  style = "picker-style")))),
                                                                  # Select Metric(s)
@@ -308,7 +310,6 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                                                   selected = NULL,
                                                                                                   multiple = TRUE,
                                                                                                   div(style = "font-weight: bold", "Select Metric(s)"),
-
                                                                                                   options = list(`actions-box` = TRUE,
                                                                                                                  style = "picker-style")))),
                                                                  # Select Year(s)
