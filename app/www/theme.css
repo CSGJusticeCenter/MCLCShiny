@@ -118,13 +118,14 @@ Header and global drop down options
   display: -ms-flexbox;
   display: flex; vertically aligns to the left */
   background-color:#DDE3E9 !important;
-  height: 100px;
-  padding: 0 0px;
+  /*height: 100px;*/
+  height: 7.0em;
+  /*padding: 0 0px;*/
   display: absolute; /* without this the blue part of the header disappears */
   left: 50%;
 }
 
-/* FIX THIS
+/* Issues with splitlayout
 /* without this, dropdown menus are cut off while using splitLayout - Don't need if not using split layout
 overflow:hidden; gets rid of scroll but not overlap
 /*display: inline-block; gets rid of overlap but not scroll*/
@@ -133,13 +134,13 @@ overflow:hidden; gets rid of scroll but not overlap
   overflow:visible;
 }
 
-/* FIX THIS
+/* FIX THIS*/
 button > div {
   -o-text-overflow: visible;
   text-overflow: visible;
   overflow: visible;
   white-space: visible;
-}*/
+}
 
 /* Makes the label for header inputs sit centered on top */
 #header > * > span {
@@ -149,8 +150,9 @@ button > div {
 /* Format state header, same as map explorer header */
 #state-header {
   background-color:#DDE3E9 !important;
-  height: 100px;
-  padding: 0 0px;
+  /*height: 100px;*/
+    height: 7.0em;
+  /*padding: 0 0px;*/
   margin-left: auto;
   margin-right: auto;
 }
@@ -158,8 +160,9 @@ button > div {
 /* Format download header, same as map explorer header */
 #download-header {
   background-color:#DDE3E9 !important;
-  height: 100px;
-  padding: 0 0px;
+  /*height: 100px;*/
+    height: 7.0em;
+  /*padding: 0 0px;*/
   margin-left: auto;
   margin-right: auto;
 }
@@ -173,7 +176,7 @@ Dropdowns and buttons
 #data-map-btn {
   /*margin: 17px 0px 17px 0px;*/
   margin: 1em 1em 1em 1em;
-  width: 13em;
+ width: 15em;
   /* width: 175px;*/
   color: #004270;
   font-family: Graphik;
@@ -182,7 +185,7 @@ Dropdowns and buttons
 /* Format for selector input adm-pop-map */
 #adm-pop-map-btn {
   margin: 1em 1em 1em 1em;
-  width: 13em;
+  width: 15em;
   /* width: 175px;*/
   color: #004270;
   font-family: Graphik;
@@ -191,19 +194,19 @@ Dropdowns and buttons
 /* Format for selector input year-map*/
 #year-map-btn {
   margin: 1em 1em 1em 1em;
-  width: 13em;
+  width: 15em;
   /* width: 175px;*/
   color: #004270;
   font-family: Graphik;
 }
 
 /* Format for download map button */
-.download_map {
-  margin: 2.7em 1em 2.7em 1em;
+.download-map {
+  margin: 2.75em 1em 2.75em 1em;
   border-radius:0px;
   color: #004270;
   text-align: left;
-  width: 13em;
+  width: 15em;
   /* width: 175px;*/
   background-color:#004270;
   color: #fff;
@@ -291,7 +294,7 @@ Dropdowns
 /* State selection button */
 #state-btn {
   margin: 17px 10px 17px 10px;
-  width: 175px;
+  width: 15em;
   color: #004270;
   font-family: Graphik;
 }
@@ -299,7 +302,8 @@ Dropdowns
 /* Adm or pop selection button */
 #adm-pop-btn {
   margin: 17px 10px 17px 10px;
-  width: 175px;
+  /*width: 175px;*/
+  width: 15em;
   color: #004270;
   font-family: Graphik;
 }
@@ -402,13 +406,6 @@ Dropdowns
 
 /*.dropdown-menu span {text-align: left; width: 100%;}*/
 
-/* Format for selector input about data type
-#download-data-btn {
-  margin: 17px 10px 17px 10px;
-  color: #004270;
-  font-family: Graphik;
-}*/
-
 /* Format for selector input picking state(s)*/
 #download-state-btn {
   margin: 17px 10px 17px 10px;
@@ -416,6 +413,16 @@ Dropdowns
   font-family: Graphik;
   width: 15em;
 }
+
+
+/* Format for selector input picking year(s)*/
+#download-metric-btn {
+  margin: 17px 10px 17px 10px;
+  color: #004270;
+  font-family: Graphik;
+  width: 15em;
+}
+
 
 /* Format for selector input picking year(s)*/
 #download-year-btn {
@@ -426,8 +433,8 @@ Dropdowns
 }
 
 /* Format for download data button */
-.download_data {
-  margin: 2.7em 1em 2.7em 1em;
+.download-data {
+  margin: 2.9em 1em 2.4em 1em;
   border-radius:0px;
   color: #004270;
   text-align: left;
@@ -447,11 +454,6 @@ Dropdowns
   background-color:#FFFFFF;
 }
 
-/*
-  #download-header > * > span {
-  text-align: center;
-}*/
-
   /* Title of download page */
 #download-title {
   text-align: center;
@@ -460,7 +462,7 @@ Dropdowns
 }
 
 /* Title of data table selected for download */
-#download-title {
+#download-data-title {
   text-align: left;
   font-family: Graphik-Bold;
   font-size: 24px;

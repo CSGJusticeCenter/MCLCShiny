@@ -11,7 +11,7 @@
 
 server <- function(input, output, session) {
 
-  # Change URL depending on tab selection in navbar
+  # Cange URL depending on tab selection in navbar
   observeEvent(input$navbarID, {
 
     newURL <- paste0(
@@ -50,7 +50,7 @@ server <- function(input, output, session) {
   #######
 
   # Filter data depending on user input for map explorer
-  # map data
+  # Map data
   df_map <- reactive({
     mclc_explorer %>%
       filter(adm_or_pop == input$adm_or_pop_map,
@@ -233,8 +233,8 @@ server <- function(input, output, session) {
     foundational_map()
   })
 
-  # # store the current user-created version of the  map for download in a reactive expression
-  # final_map <- reactive({
+  # # Store the current user-created version of the  map for download in a reactive expression
+  # Final_map <- reactive({
   #   foundational_map()
   # })
 
@@ -242,7 +242,7 @@ server <- function(input, output, session) {
   # Table under hex map
   #######
 
-  # title of table under map based on user input
+  # Title of table under map based on user input
   output$selected_map_table <- renderText({paste(input$data_map, " ", input$adm_or_pop_map)})
 
   # # Not using data table for now
@@ -331,23 +331,9 @@ server <- function(input, output, session) {
   # Download map button near dropdowns
   #######
 
-  # # save map as pdf
-  # output$save_map <- downloadHandler(
-  #   filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".pdf", sep=""),
-  #   content = function(file) {
-  #     # temporarily switch to the temp dir, in case you do not have write
-  #     # permission to the current working directory
-  #     owd <- setwd(tempdir())
-  #     on.exit(setwd(owd))
-  #
-  #     saveWidget(foundational_map(), "temp.html", selfcontained = FALSE)
-  #     webshot("temp.html", file = file, cliprect = "viewport")
-  #   }
-  # )
-
-  # save map as png
+  # Save map as png
   output$save_map <- downloadHandler(
-    filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""),
+    filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, "_" , Sys.Date(), ".png", sep=""),
     content = function(file) {
       # temporarily switch to the temp dir, in case you do not have write
       # permission to the current working directory
@@ -367,14 +353,14 @@ server <- function(input, output, session) {
   # State page title
   #######
 
-  # title of state based on user input
+  # Title of state based on user input
   output$selected_state <- renderText({paste(input$adm_pop_report, " Trends in ", input$state_report, sep = "")})
 
   #######
   # Value boxes
   #######
 
-  # filter data to totals
+  # Filter data to totals
   df_vb_total <- reactive({
     vb_adm_pop %>%
       filter(state == input$state_report &
@@ -383,7 +369,7 @@ server <- function(input, output, session) {
              metric == "Total")
   })
 
-  # filter data to sup viols
+  # Filter data to sup viols
   df_vb_sup_viols <- reactive({
     vb_adm_pop %>%
       filter(state == input$state_report &
@@ -392,7 +378,7 @@ server <- function(input, output, session) {
              metric == "Supervision Violation")
   })
 
-  # filter data to tech viols
+  # Filter data to tech viols
   df_vb_tech <- reactive({
     vb_adm_pop %>%
       filter(state == input$state_report &
@@ -401,7 +387,7 @@ server <- function(input, output, session) {
              metric == "Technical Violation")
   })
 
-  # filter data to new offense viols
+  # Filter data to new offense viols
   df_vb_new_off <- reactive({
     vb_adm_pop %>%
       filter(state == input$state_report &
@@ -410,7 +396,7 @@ server <- function(input, output, session) {
              metric == "New Offense")
   })
 
-  # value box for change in total admissions or population
+  # Value box for change in total admissions or population
   output$total_change <- renderValueBox({
 
     if (is.na(df_vb_total()$change)) {
@@ -437,7 +423,7 @@ server <- function(input, output, session) {
 
   })
 
-  # value box for change in supervision violation admissions or population
+  # Value box for change in supervision violation admissions or population
   output$sup_change <- renderValueBox({
 
     if (is.na(df_vb_sup_viols()$change)) {
@@ -464,7 +450,7 @@ server <- function(input, output, session) {
 
   })
 
-  # value box for change in technical violation admissions or population
+  # Value box for change in technical violation admissions or population
   output$tech_change <- renderValueBox({
 
     if (is.na(df_vb_tech()$change)) {
@@ -491,7 +477,7 @@ server <- function(input, output, session) {
 
   })
 
-  # value box for change in new offense violation admissions or population
+  # Value box for change in new offense violation admissions or population
   output$new_off_change <- renderValueBox({
 
     if (is.na(df_vb_new_off()$change)) {
@@ -522,7 +508,7 @@ server <- function(input, output, session) {
   # Area chart
   #######
 
-  # output area chart
+  # Area chart
   output$state_area_chart <- renderHighchart({
     if (input$adm_pop_report == "Admissions") {
       all_state_area_adm[[input$state_report]] %>%
@@ -550,10 +536,10 @@ server <- function(input, output, session) {
   # Bar chart
   #######
 
-  # output bar chart
+  # Bar chart
   output$state_bar_chart <- renderHighchart({
-    # select highchart depending on selector input
-    # charts were saved in highchart.R
+    # Select highchart depending on selector input
+    # Carts were saved in highchart.R
     if (input$adm_pop_report == "Admissions") {
       all_state_bar_adm[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
@@ -585,9 +571,9 @@ server <- function(input, output, session) {
   # Table under state graphs
   #######
 
-  # this won't work because of library issues
+  # This won't work because of library issues
   # output$state_table <- renderReactable({
-  #   # select reactable depending on selector input
+  #   # Select reactable depending on selector input
   #   # tables were saved in reactable.R
   #   if (input$adm_pop_report == "Admissions") {
   #     state_reactable_adm[[input$state_report]]
@@ -596,9 +582,10 @@ server <- function(input, output, session) {
   #   }
   # })
 
+  # State table
   output$state_table <- renderReactable({
 
-    # filter data
+    # Filter data
     df <- state_table %>%
       filter(state == input$state_report &
              adm_or_pop == input$adm_pop_report) %>%
@@ -610,11 +597,11 @@ server <- function(input, output, session) {
       arrange(order) %>%
       select(-adm_or_pop, -state)
 
-    # merge data
+    # Merge data
     df <- merge(df1, df, by = "text")
     df <- df %>% arrange(order) %>% select(-order)
 
-    # create table with 4 Year trend line in last column
+    # Create table with 4 Year trend line in last column
     reactable(df,
               style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
               theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
@@ -633,7 +620,7 @@ server <- function(input, output, session) {
                                         name = "4 Year Change",
                                         style = list(fontWeight = "bold"),
                                         format = colFormat(percent = TRUE, digits = 1)),
-                # add 4 Year trend graphs to each row
+                # Add 4 Year trend graphs to each row
                 total_new  = colDef(minWidth = 110,
                                     name = "4 Year Trend",
                                     cell = function(value, index) {
@@ -691,13 +678,13 @@ server <- function(input, output, session) {
   # State notes
   #######
 
-  # filter data
+  # Filter data
   df_notes <- reactive({
     notes %>%
       filter(state == input$state_report)
   })
 
-  # title of state based on user input
+  # Title of state based on user input
   output$selected_state_note <- renderText({
     paste(df_notes()$notes)
   })
@@ -706,10 +693,10 @@ server <- function(input, output, session) {
   # Parole Tab
   #######
 
-  # output bar chart
+  # Bar chart
   output$parole_bar_chart <- renderHighchart({
-    # select highchart depending on selector input
-    # charts were saved in highchart.R
+    # Select highchart depending on selector input
+    # Carts were saved in highchart.R
     if (input$adm_pop_report == "Admissions") {
       parole_bar_adm[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
@@ -737,9 +724,10 @@ server <- function(input, output, session) {
     }
   })
 
+  # Parole table
   output$parole_table <- renderReactable({
 
-    # filter data
+    # Filter data
     df <- parole_table %>%
       filter(state == input$state_report &
              adm_or_pop == input$adm_pop_report) %>%
@@ -750,11 +738,11 @@ server <- function(input, output, session) {
              adm_or_pop == input$adm_pop_report) %>%
       arrange(order)
 
-    # merge data
+    # Merge data
     df <- merge(df1, df, by = "text")
     df <- df %>% arrange(order) %>% select(-c(order, adm_or_pop, state, prob_vs_parole, metric))
 
-    # create table with 4 Year trend line in last column
+    # Create table with 4 Year trend line in last column
     reactable(df,
               style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
               theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
@@ -818,9 +806,9 @@ server <- function(input, output, session) {
     )
   })
 
-  # # this won't work because of library issues
+  # # This won't work because of library issues
   # output$parole_table <- renderReactable({
-  #   # select reactable depending on selector input
+  #   # Select reactable depending on selector input
   #   # tables were saved in reactable.R
   #   if (input$adm_pop_report == "Admissions") {
   #     parole_reactable_adm[[input$state_report]]
@@ -833,10 +821,10 @@ server <- function(input, output, session) {
   # Probation Tab
   #######
 
-  # output bar chart
+  # Bar chart
   output$probation_bar_chart <- renderHighchart({
-    # select highchart depending on selector input
-    # charts were saved in highchart.R
+    # Select highchart depending on selector input
+    # Carts were saved in highchart.R
     if (input$adm_pop_report == "Admissions") {
       probation_bar_adm[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
@@ -864,9 +852,10 @@ server <- function(input, output, session) {
     }
   })
 
+  # Probation table
   output$probation_table <- renderReactable({
 
-    # filter data
+    # Filter data
     df <- probation_table %>%
       filter(state == input$state_report &
              adm_or_pop == input$adm_pop_report) %>%
@@ -877,11 +866,11 @@ server <- function(input, output, session) {
              adm_or_pop == input$adm_pop_report) %>%
       arrange(order)
 
-    # merge data
+    # Merge data
     df <- merge(df1, df, by = "text")
     df <- df %>% arrange(order) %>% select(-c(order, adm_or_pop, state, prob_vs_parole, metric))
 
-    # create table with 4 Year trend line in last column
+    # Create table with 4 Year trend line in last column
     reactable(df,
               style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
               theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
@@ -945,9 +934,9 @@ server <- function(input, output, session) {
     )
   })
 
-  # this won't work because of library issues
+  # This won't work because of library issues
   # output$probation_table <- renderReactable({
-  #   # select reactable depending on selector input
+  #   # Select reactable depending on selector input
   #   # tables were saved in reactable.R
   #   if (input$adm_pop_report == "Admissions") {
   #     probation_reactable_adm[[input$state_report]]
@@ -982,11 +971,23 @@ server <- function(input, output, session) {
                       selected = filteredState())
   })
 
+  # Select multiple metrics
+  filteredMetric <- reactive({
+    unique(csg$metric)
+  })
+  observeEvent(filteredMetric(), {
+    updatePickerInput(session, inputId = 'download_metric',
+                      label = 'Select Metric(s)',
+                      choices = filteredMetric(),
+                      selected = filteredMetric())
+  })
+
   # Filter data depending on user input
   df_download_table <- reactive({
     csg %>%
       filter(year %in% input$download_year) %>%
       filter(state %in% input$download_state) %>%
+      filter(metric %in% input$download_metric) %>%
       arrange(state, year)
   })
 
@@ -1011,7 +1012,7 @@ server <- function(input, output, session) {
   # Save data as csv
   output$save_data <- downloadHandler(
     filename = function() {
-      paste("test.csv", sep = "")
+      paste("MCLC_", Sys.Date(), ".csv", sep = "")
     },
     content = function(con) {
       write.csv(df_download_table(), con,
@@ -1019,6 +1020,7 @@ server <- function(input, output, session) {
     }
   )
 
+  # Reactable table of MCLC data for download
   output$selected_download_table <- renderReactable({
 
 

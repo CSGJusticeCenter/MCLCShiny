@@ -39,30 +39,31 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                  column(width = 6,
 
-                                                        fluidRow(column(width = 3,
-
+                                                        fluidRow(# Select Data
+                                                                 column(width = 3,
                                                                          labeled_input('data-map-btn', "",
                                                                                selectizeInput('data_map', div(style = "font-weight: bold", "Select Data"),
                                                                                               choices = c("Total", "New Offense", "Supervision Violation", "Probation Violation", "Parole Violation", "Technical Violation"),
                                                                                               multiple = FALSE))),
+                                                                 # Select Adm or Pop
                                                                  column(width = 3,
-
                                                                          labeled_input('adm-pop-map-btn', "",
                                                                                        selectizeInput('adm_or_pop_map', div(style = "font-weight: bold", "Select Type"),
                                                                                                       choices = c("Admissions", "Population"),
                                                                                                       multiple = FALSE))),
+                                                                 # Select Year Change
                                                                  column(width = 3,
-
                                                                          labeled_input('year-map-btn', "",
                                                                                        selectizeInput('year_map', div(style = "font-weight: bold", "Select Years"),
                                                                                                       choices = c("2018 - 2019", "2019 - 2020", "2020 - 2021", "All (2018 - 2021)"),
                                                                                                       multiple = FALSE))),
-                                                                 column(width = 3,
 
+                                                                 # Download Map
+                                                                 column(width = 3,
                                                                          labeled_input('save-map-btn', "",
                                                                                        downloadButton(outputId = 'save_map', "Download Map",
                                                                                                       #div(style = "font-weight: bold", "Download Data"), # this causes spacing issues within the button
-                                                                                                      class = "download_map")))
+                                                                                                      class = "download-map")))
                                                         ) # end fluidRow
                                                   ),
                                                   column(width = 3)
@@ -125,12 +126,14 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                  column(width = 6,
 
                                                         fluidRow(column(width = 3),
+
+                                                                 # Select State
                                                                  column(width = 3,
                                                                         labeled_input('state-btn', "",
                                                                                       selectizeInput('state_report', div(style = "font-weight: bold", "Select State"),
                                                                                                      choices = unique(adm_pop_long$state),
                                                                                                      multiple = FALSE))),
-
+                                                                 # Select Adm or Pop
                                                                  column(width = 3,
                                                                         labeled_input('adm-pop-btn', "",
                                                                                       selectizeInput('adm_pop_report', div(style = "font-weight: bold", "Select Type"),
@@ -188,8 +191,8 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                                    br(),
 
-                                                                   fluidRow(column(width = 6, highchartOutput("state_area_chart", height = 400, width = 390)),
-                                                                            column(width = 6, highchartOutput("state_bar_chart", height = 400, width =390))),
+                                                                   fluidRow(column(width = 6, align = "center", highchartOutput("state_area_chart", height = 400, width = 390)),
+                                                                            column(width = 6, align = "center", highchartOutput("state_bar_chart", height = 400, width =390))),
 
                                                                    br(),
                                                                    br(),
@@ -279,12 +282,13 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                     #######
 
                                     div(id = "download-header",
+
                                         fluidRow(column(width = 3),
 
                                                  column(width = 6,
 
-                                                        fluidRow(#column(width = 3),
-                                                                 column(width = 4,
+                                                        fluidRow(# Select State(s)
+                                                                 column(width = 3,
                                                                         labeled_input('download-state-btn', "", #"Select State(s)",
                                                                                       pickerInput(inputId = 'download_state',
                                                                                                   width = "100%",
@@ -294,8 +298,19 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                                                   div(style = "font-weight: bold", "Select State(s)"),
                                                                                                   options = list(`actions-box` = TRUE,
                                                                                                                  style = "picker-style")))),
-
-                                                                 column(width = 4,
+                                                                 # Select Metric(s)
+                                                                 column(width = 3,
+                                                                        labeled_input('download-metric-btn', "", #"Select Metric(s)",
+                                                                                      pickerInput(inputId = 'download_metric',
+                                                                                                  width = "100%",
+                                                                                                  choices = NULL,
+                                                                                                  selected = NULL,
+                                                                                                  multiple = TRUE,
+                                                                                                  div(style = "font-weight: bold", "Select Metric(s)"),
+                                                                                                  options = list(`actions-box` = TRUE,
+                                                                                                                 style = "picker-style")))),
+                                                                 # Select Year(s)
+                                                                 column(width = 3,
                                                                         labeled_input('download-year-btn', "", #"Select Year(s)",
                                                                                       pickerInput(inputId = 'download_year',
                                                                                                   width = "100%",
@@ -305,12 +320,12 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                                                   div(style = "font-weight: bold", "Select Year(s)"),
                                                                                                   options = list(`actions-box` = TRUE,
                                                                                                                  style = "picker-style")))),
-                                                                 # column(width = 3)
-                                                                 column(width = 4,
+                                                                 # Download Data
+                                                                 column(width = 3,
                                                                         labeled_input('save-data-btn', "",
                                                                                       downloadButton(outputId = 'save_data', "Download Data",
                                                                                                      #div(style = "font-weight: bold", "Download Data"), # this causes spacing issues within the button
-                                                                                                     class = "download_data")))
+                                                                                                     class = "download-data")))
                                                         )),
 
                                                  column(width = 3)
@@ -333,7 +348,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                         br(),
 
                                         fluidRow(column(width = 2),
-                                                 column(width = 8, div(id = "download-title", "More Community, Less Confinement (2022)")),
+                                                 column(width = 8, div(id = "download-data-title", "More Community, Less Confinement (2022)")),
                                                  column(width = 2)),
 
                                         br(),
