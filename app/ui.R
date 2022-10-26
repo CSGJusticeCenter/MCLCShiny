@@ -287,10 +287,14 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                  column(width = 6,
 
+                                                        # https://stackoverflow.com/questions/51355878/how-to-text-wrap-choices-from-a-pickerinput-if-the-length-of-the-choices-are-lo
                                                         # https://stackoverflow.com/questions/67212995/r-shiny-pickerinput-chiocesopt
+                                                        # https://stackoverflow.com/questions/63255906/change-colour-of-pickerinput-items-in-shiny
+                                                        # https://stackoverflow.com/questions/70222968/how-to-change-the-font-size-of-a-pickerinput-in-shiny
 
                                                         fluidRow(# Select State(s)
                                                                  column(width = 3,
+
                                                                         labeled_input('download-state-btn', "", #"Select State(s)",
                                                                                       pickerInput(inputId = 'download_state',
                                                                                                   width = "100%",
@@ -298,9 +302,19 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                                                   selected = NULL,
                                                                                                   multiple = TRUE,
                                                                                                   div(style = "font-weight: bold", "Select State(s)"),
-                                                                                                  # choicesOpt = list(style = sprintf('background:%s;', 'green')), # choicesOpt is not working
+
+                                                                                                  # choicesOpt is not working
+                                                                                                  # choicesOpt = list(
+                                                                                                  #   style = rep(("color: black; background: lightgrey; font-weight: bold;"),50)),
+                                                                                                  # choicesOpt = list(`actions-box` = TRUE,
+                                                                                                  #                   style = "picker-style"),
+                                                                                                  # choicesOpt = list(
+                                                                                                  #   style = rep_len("font-size: 10%; line-height: 1.6;", 50)
+                                                                                                  # ), # choices style
+                                                                                                  # choicesOpt = list(style = sprintf('background:%s;', 'green')),
                                                                                                   options = list(`actions-box` = TRUE,
                                                                                                                  style = "picker-style")))),
+
                                                                  # Select Metric(s)
                                                                  column(width = 3,
                                                                         labeled_input('download-metric-btn', "", #"Select Metric(s)",
