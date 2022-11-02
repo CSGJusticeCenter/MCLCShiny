@@ -412,11 +412,22 @@ Tabset Panels
 }
 
 
-h3.rriheader {
+h3.reh3 {
   font-family: Graphik-Bold !important; 
   font-size: 30px; /* same as selected-state-note-title */  
-  margin-top: 12px; 
-  margin-bottom: 9px;
+  margin-top: 18px; 
+  margin-bottom: 12px;
+  /*text-transform: uppercase; */
+  /*font-variant: small-caps; */
+}
+
+
+h4.reh4 {
+  font-family: Graphik-Bold !important; 
+  font-size: 24px; /* same as selected-state-note-title */  
+  margin-top: 18px; 
+  margin-bottom: 12px;
+  color: #004270; 
   /*text-transform: uppercase; */
   /*font-variant: small-caps; */
 }

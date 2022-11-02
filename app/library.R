@@ -35,6 +35,12 @@ library(sp)
 # remotes::install_github("rstudio/webshot2")
 library(webshot2)
 
+
+box::use(
+    box/raceethnicity
+  , glue[glue]
+)
+
 # load specific functions instead of entire packages - not working
 # library(box)
 # box::use(

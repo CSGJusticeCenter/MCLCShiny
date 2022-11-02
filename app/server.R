@@ -1033,18 +1033,18 @@ server <- function(input, output, session) {
   }, deleteFile = FALSE)
   
   
-  output$rriheader <- renderUI({
+  output$infogheader <- renderUI({
     
     
     dataavail <- rridata[[input$rri_pop]][[input$state_report]]$INFOGRAPH$DATAAVAIL
     
     if (dataavail == 1){
       
-      out <- "<h3 class='rriheader'>For every White Client that is revoked ... </h3>"
+      out <- "<h3 class='reh3'>For every White Client that is revoked ... </h3>"
       
     } else { 
       
-      out <- paste0("<h3 class='rriheader'>No data</h3>"
+      out <- paste0("<h3 class='reh3'>No data</h3>"
                     , "<div style = 'font-size: 1.25em; margin-top: 10px; font-family: Graphik;'>"
                     , "Data to calculate disparites in parole revocations is not available.<br>"
                     , rridata[[input$rri_pop]][[input$state_report]]$INFOGRAPH$NOTE
@@ -1057,6 +1057,71 @@ server <- function(input, output, session) {
     
   })
   
+  
+  output$table_rri_header <- renderUI({
+    df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "RRI")
+    if (nrow(df) > 0){
+      out <- "<h4 class='reh4'> Relative Rate Index - White Reference Group</h4>"
+    } else {
+      out <- paste0("<div style = 'font-size: 1.25em; margin-top: 10px; font-family: Graphik;'>"
+      , "Data to calculate relative rate index were not available for "
+      , input$state_report
+      , "</div>"
+      )
+    }
+    HTML(out)
+  })
+  
+  output$table_rri <- renderReactable({
+    df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "RRI")
+    if (nrow(df) > 0){
+      raceethnicity$create_reactable(df, "RRI")
+    }
+  })
+  
+  
+  output$table_rate_header <- renderUI({
+    df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "RATE_100K")
+    if (nrow(df) > 0){
+      out <- "<h4 class='reh4'> Rate per 100,000 persons in the Population</h4>"
+    } else {
+      out <- paste0("<div style = 'font-size: 1.25em; margin-top: 10px; font-family: Graphik;'>"
+                    , "Data to calculate rates index were not available for "
+                    , input$state_report
+                    , "</div>"
+      )
+    }
+    HTML(out)
+  })
+  
+  output$table_rate <- renderReactable({
+    df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "RATE_100K")
+    if (nrow(df) > 0){
+      raceethnicity$create_reactable(df, "RATE_100K")
+    }
+  })
+  
+  
+  output$table_revcnt_header <- renderUI({
+    df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "REVCNT")
+    if (nrow(df) > 0){
+      out <- "<h4 class='reh4'>Parole Revocations Counts</h4>"
+    } else {
+      out <- paste0("<div style = 'font-size: 1.25em; margin-top: 10px; font-family: Graphik;'>"
+                    , "Parole revocations data were not available for "
+                    , input$state_report
+                    , "</div>"
+      )
+    }
+    HTML(out)
+  })
+  
+  output$table_revcnt <- renderReactable({
+    df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "REVCNT")
+    if (nrow(df) > 0){
+      raceethnicity$create_reactable(df, "REVCNT")
+    }
+  })
   
   ##############################################################################################################################
   # Download

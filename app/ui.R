@@ -185,7 +185,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                         fluidRow(column(width = 1),
                                                  column(width = 10,
 
-                                                        tabsetPanel(
+                                                        tabsetPanel(selected = "4", 
 
                                                           tabPanel(value="1","Overview",
 
@@ -261,9 +261,9 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                                               , inline=T) #end radioButtons 
                                                                    ), 
                                                                    fluidRow(column(width = 12, align = "center", 
-                                                                                   div(htmlOutput("rriheader")), 
+                                                                                   div(htmlOutput("infogheader")), 
                                                                                    div(imageOutput("infogblack", height = "70%", ), style = "margin-bottom: 0.5em;"),
-                                                                                   div(imageOutput("infoghisp", height = "70%")),# style = "border: 1px solid black;")           
+                                                                                   div(imageOutput("infoghisp", height = "70%")),
                                                                                    
                                                                                    
                                                                    )), #end fluidRow>column 
@@ -272,8 +272,13 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                    br(), 
                                                                    
                                                                    fluidRow(column(width = 12, align = "center", 
-                                                                                   h3("Tables", class = "rriheader")
-                                                                                   
+                                                                                   div(h3("Tables", class = "reh3")), 
+                                                                                   div(htmlOutput(     "table_rri_header")), 
+                                                                                   div(reactableOutput("table_rri"), style="padding-bottom: 24px;"), 
+                                                                                   div(htmlOutput(     "table_rate_header")), 
+                                                                                   div(reactableOutput("table_rate"), style="padding-bottom: 24px;"),
+                                                                                   div(htmlOutput(     "table_revcnt_header")), 
+                                                                                   div(reactableOutput("table_revcnt"))
                                                                                    
                                                                    )), #end fluidRow>column 
                                                                    
