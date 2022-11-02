@@ -11,10 +11,6 @@
 if (Sys.info()[['sysname']] == "Linux"){
   dir.create('~/.fonts')
   file.copy("www/fonts/Graphik.otf", "~/.fonts")
-  system('fc-cache -f ~/.fonts')
-}
-if (Sys.info()[['sysname']] == "Linux"){
-  dir.create('~/.fonts')
   file.copy("www/fonts/GraphikBold.otf", "~/.fonts")
   system('fc-cache -f ~/.fonts')
 }
