@@ -399,6 +399,29 @@ Tabset Panels
   font-family: Graphik;
 }
 
+#rri-radio {
+  text-align: center; 
+  margin-top: 7px; 
+  font-family: Graphik; 
+  font-weight: bold;
+  vertical-align: center;
+}
+
+#rri-radio-opts {
+  font-family: Graphik;
+}
+
+
+h3.rriheader {
+  font-family: Graphik-Bold !important; 
+  font-size: 30px; /* same as selected-state-note-title */  
+  margin-top: 12px; 
+  margin-bottom: 9px;
+  /*text-transform: uppercase; */
+  /*font-variant: small-caps; */
+}
+
+
 /*##################################################################################################################
 DOWNLOAD DATA
 Dropdowns

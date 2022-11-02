@@ -251,12 +251,32 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                           ), # end tabPanel
 
-                                                          tabPanel(value="4","Revocations",
-
+                                                          tabPanel(value="4","Race/Ethnicity", #MYE HERE 
+                                                                   
                                                                    br(),
-
-                                                                   "Coming soon.",
-
+                                                                   labeled_input(id = "rri-radio", div("Racial and Ethnic Disparities", style = "font-size: 16px;"),
+                                                                                 radioButtons("rri_pop", "", 
+                                                                                              c("Disparities in parole revocations" = "BJS", 
+                                                                                                "Cumulative disparities across the criminal justice system" = "SC") 
+                                                                                              , inline=T) #end radioButtons 
+                                                                   ), 
+                                                                   fluidRow(column(width = 12, align = "center", 
+                                                                                   div(htmlOutput("rriheader")), 
+                                                                                   div(imageOutput("infogblack", height = "70%", ), style = "margin-bottom: 0.5em;"),
+                                                                                   div(imageOutput("infoghisp", height = "70%")),# style = "border: 1px solid black;")           
+                                                                                   
+                                                                                   
+                                                                   )), #end fluidRow>column 
+                                                                   
+                                                                   
+                                                                   br(), 
+                                                                   
+                                                                   fluidRow(column(width = 12, align = "center", 
+                                                                                   h3("Tables", class = "rriheader")
+                                                                                   
+                                                                                   
+                                                                   )), #end fluidRow>column 
+                                                                   
                                                                    br(),
                                                                    br()
 

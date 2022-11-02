@@ -977,7 +977,87 @@ server <- function(input, output, session) {
   #     probation_reactable_pop[[input$state_report]]
   #   }
   # })
-
+  
+  #### 
+  ## RACE/ETHNICITY DISPARITIES MYE HERE
+  ###
+  
+  output$infogblack <- renderImage({
+    
+    dataavail <- rridata[[input$rri_pop]][[input$state_report]]$INFOGRAPH$DATAAVAIL
+    
+    if (dataavail == 1){
+      plot <- glue("data/infogs/{input$rri_pop}_{input$state_report}_Black.png")
+      list(
+          src =normalizePath(plot)
+        , contentType = "image/png"
+        , alt = glue("alt text placeholder: {input$rri_pop} {input$state_report}")
+        , width = "70%"
+      )
+    } else {
+      plot <- ggplot2::ggplot() + ggplot2::theme_void()
+      file <- tempfile(fileext = ".png")
+      ggplot2::ggsave(filename = file, plot = plot, width = 24, height = 0.5)
+      list(
+          src =normalizePath(file)
+        , contentType = "image/png"
+        , alt = glue("alt text placeholder: {input$rri_pop} {input$state_report}")
+        , width = "70%"
+      )
+    }
+  }, deleteFile = FALSE)
+  
+  output$infoghisp <- renderImage({
+    
+    dataavail <- rridata[[input$rri_pop]][[input$state_report]]$INFOGRAPH$DATAAVAIL
+    
+    if (dataavail == 1){
+      plot <- glue("data/infogs/{input$rri_pop}_{input$state_report}_Hispanic.png")
+      list(
+          src =normalizePath(plot)
+        , contentType = "image/png"
+        , alt = glue("alt text placeholder: {input$rri_pop} {input$state_report}")
+        , width = "70%"
+      )
+    } else {
+      plot <- ggplot2::ggplot() + ggplot2::theme_void()
+      file <- tempfile(fileext = ".png")
+      ggplot2::ggsave(filename = file, plot = plot, width = 24, height = 0.5)
+      list(
+          src =normalizePath(file)
+        , contentType = "image/png"
+        , alt = glue("alt text placeholder: {input$rri_pop} {input$state_report}")
+        , width = "70%"
+      )
+    }
+  }, deleteFile = FALSE)
+  
+  
+  output$rriheader <- renderUI({
+    
+    
+    dataavail <- rridata[[input$rri_pop]][[input$state_report]]$INFOGRAPH$DATAAVAIL
+    
+    if (dataavail == 1){
+      
+      out <- "<h3 class='rriheader'>For every White Client that is revoked ... </h3>"
+      
+    } else { 
+      
+      out <- paste0("<h3 class='rriheader'>No data</h3>"
+                    , "<div style = 'font-size: 1.25em; margin-top: 10px; font-family: Graphik;'>"
+                    , "Data to calculate disparites in parole revocations is not available.<br>"
+                    , rridata[[input$rri_pop]][[input$state_report]]$INFOGRAPH$NOTE
+                    , "</div>"
+      )
+      
+    }
+    
+    HTML(out)
+    
+  })
+  
+  
   ##############################################################################################################################
   # Download
   ##############################################################################################################################
