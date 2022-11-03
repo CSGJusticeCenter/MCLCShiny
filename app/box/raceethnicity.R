@@ -9,18 +9,34 @@ box::use(
 create_tabledf <- function(RRIDATA, whichPOP, whichSTATE, whichVAL){
   
   
-  df <- RRIDATA[[whichPOP]][[whichSTATE]][[whichVAL]]
-  
+  df <- RRIDATA[[whichPOP]][[whichSTATE]][[whichVAL]] %>% arrange(OFFGENERAL, RACE)
+  yr_vars <- df %>% select(-OFFGENERAL, -RACE) %>% colnames() %>% sort()
   df$OFFGENERALB <- df$OFFGENERAL
   df$OFFGENERAL <- ifelse(  df$OFFGENERAL == lag(df$OFFGENERAL) & !is.na(lag(df$OFFGENERAL)), "", df$OFFGENERAL)
+  df <- df %>% select(OFFGENERAL, RACE, all_of(yr_vars), OFFGENERALB) 
   
-  return(df)
   
+  
+  nodata <- df %>% filter(if_all(yr_vars, ~ is.na(.))) 
+  
+  if (nrow(df) == nrow(nodata)){
+    #all data missing 
+    out <-df[0,]
+  } 
+  
+  if (nrow(df) != nrow(nodata)){
+    #some or none data missing 
+    out <-df 
+  } 
+  
+
+  
+  return(out)
   
 }
 
 
-## TESTING
+# TESTING
 # rridata <- readRDS("data/NCRP_RRI_tables.RDS")
 # DF <- create_tabledf(rridata, "BJS", "Arizona", "RRI")
 # whichVAL <- "RRI"

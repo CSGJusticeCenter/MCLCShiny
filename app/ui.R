@@ -131,7 +131,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                  column(width = 3,
                                                                         labeled_input('state-btn', "",
                                                                                       selectizeInput('state_report', div(style = "font-weight: bold", "Select State"),
-                                                                                                     choices = unique(adm_pop_long$state),
+                                                                                                     choices = unique(adm_pop_long$state), 
                                                                                                      multiple = FALSE))),
                                                                  # Select Adm or Pop
                                                                  column(width = 3,
@@ -274,10 +274,10 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                    fluidRow(column(width = 12, align = "center", 
                                                                                    div(h3("Tables", class = "reh3")), 
                                                                                    div(htmlOutput(     "table_rri_header")), 
-                                                                                   div(reactableOutput("table_rri"), style="padding-bottom: 24px;"), 
-                                                                                   div(htmlOutput(     "table_rate_header")), 
-                                                                                   div(reactableOutput("table_rate"), style="padding-bottom: 24px;"),
-                                                                                   div(htmlOutput(     "table_revcnt_header")), 
+                                                                                   div(reactableOutput("table_rri")), 
+                                                                                   div(htmlOutput(     "table_rate_header"),  style = "padding-top: 24px;"), 
+                                                                                   div(reactableOutput("table_rate")),
+                                                                                   div(htmlOutput(     "table_revcnt_header"), style = "padding-top: 24px;"), 
                                                                                    div(reactableOutput("table_revcnt"))
                                                                                    
                                                                    )), #end fluidRow>column 

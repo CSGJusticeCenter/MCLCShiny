@@ -1060,14 +1060,16 @@ server <- function(input, output, session) {
   
   output$table_rri_header <- renderUI({
     df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "RRI")
+    main <- "<h4 class='reh4'> Relative Rate Index (White Reference Group)</h4>"
     if (nrow(df) > 0){
-      out <- "<h4 class='reh4'> Relative Rate Index - White Reference Group</h4>"
+      out <- main
     } else {
-      out <- paste0("<div style = 'font-size: 1.25em; margin-top: 10px; font-family: Graphik;'>"
-      , "Data to calculate relative rate index were not available for "
-      , input$state_report
-      , "</div>"
-      )
+      out <- paste0( main 
+                    , "<div class = 'retnote'>"
+                    , "Data to calculate relative rate index were not available for "
+                    , input$state_report
+                    , "</div>"
+                    )
     }
     HTML(out)
   })
@@ -1076,17 +1078,21 @@ server <- function(input, output, session) {
     df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "RRI")
     if (nrow(df) > 0){
       raceethnicity$create_reactable(df, "RRI")
+    } else {
+      raceethnicity$create_reactable(df[0, 1:2], "RRI")
     }
   })
   
   
   output$table_rate_header <- renderUI({
     df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "RATE_100K")
+    main <- "<h4 class='reh4'> Rate per 100,000 persons in the Population</h4>"
     if (nrow(df) > 0){
-      out <- "<h4 class='reh4'> Rate per 100,000 persons in the Population</h4>"
+      out <- main
     } else {
-      out <- paste0("<div style = 'font-size: 1.25em; margin-top: 10px; font-family: Graphik;'>"
-                    , "Data to calculate rates index were not available for "
+      out <- paste0(  main 
+                    , "<div class = 'retnote'>"
+                    , "Data to calculate rates were not available for "
                     , input$state_report
                     , "</div>"
       )
@@ -1098,16 +1104,20 @@ server <- function(input, output, session) {
     df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "RATE_100K")
     if (nrow(df) > 0){
       raceethnicity$create_reactable(df, "RATE_100K")
+    } else {
+      raceethnicity$create_reactable(df[0, 1:2], "RRI")
     }
   })
   
   
   output$table_revcnt_header <- renderUI({
     df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "REVCNT")
+    main <- "<h4 class='reh4'>Parole Revocations Counts</h4>"
     if (nrow(df) > 0){
-      out <- "<h4 class='reh4'>Parole Revocations Counts</h4>"
+      out <- main
     } else {
-      out <- paste0("<div style = 'font-size: 1.25em; margin-top: 10px; font-family: Graphik;'>"
+      out <- paste0(  main 
+                    , "<div class = 'retnote'>"
                     , "Parole revocations data were not available for "
                     , input$state_report
                     , "</div>"
@@ -1120,6 +1130,8 @@ server <- function(input, output, session) {
     df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "REVCNT")
     if (nrow(df) > 0){
       raceethnicity$create_reactable(df, "REVCNT")
+    } else {
+      raceethnicity$create_reactable(df[0, 1:2], "RRI")
     }
   })
   
