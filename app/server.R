@@ -1064,7 +1064,7 @@ server <- function(input, output, session) {
     if (nrow(df) > 0){
       out <- main
     } else {
-      out <- paste0( main 
+      out <- paste0( main
                     , "<div class = 'retnote'>"
                     , "Data to calculate relative rate index were not available for "
                     , input$state_report
@@ -1076,21 +1076,18 @@ server <- function(input, output, session) {
   
   output$table_rri <- renderReactable({
     df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "RRI")
-    if (nrow(df) > 0){
-      raceethnicity$create_reactable(df, "RRI")
-    } else {
-      raceethnicity$create_reactable(df[0, 1:2], "RRI")
-    }
+    raceethnicity$create_reactable(df)
   })
   
   
   output$table_rate_header <- renderUI({
-    df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "RATE_100K")
-    main <- "<h4 class='reh4'> Rate per 100,000 persons in the Population</h4>"
+    df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "RATE")
+    mult <- scales::comma(rridata[[input$rri_pop]][[input$state_report]][["RATE"]]$mult)
+    main <- paste0("<h4 class='reh4'> Rate per ", mult, " persons in the Population</h4>")
     if (nrow(df) > 0){
       out <- main
     } else {
-      out <- paste0(  main 
+      out <- paste0(  main
                     , "<div class = 'retnote'>"
                     , "Data to calculate rates were not available for "
                     , input$state_report
@@ -1101,12 +1098,8 @@ server <- function(input, output, session) {
   })
   
   output$table_rate <- renderReactable({
-    df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "RATE_100K")
-    if (nrow(df) > 0){
-      raceethnicity$create_reactable(df, "RATE_100K")
-    } else {
-      raceethnicity$create_reactable(df[0, 1:2], "RRI")
-    }
+    df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "RATE")
+    raceethnicity$create_reactable(df)
   })
   
   
@@ -1128,11 +1121,7 @@ server <- function(input, output, session) {
   
   output$table_revcnt <- renderReactable({
     df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "REVCNT")
-    if (nrow(df) > 0){
-      raceethnicity$create_reactable(df, "REVCNT")
-    } else {
-      raceethnicity$create_reactable(df[0, 1:2], "RRI")
-    }
+    raceethnicity$create_reactable(df)
   })
   
   ##############################################################################################################################

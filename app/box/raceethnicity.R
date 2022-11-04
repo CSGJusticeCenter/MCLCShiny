@@ -6,22 +6,25 @@ box::use(
 )
 
 
-create_tabledf <- function(RRIDATA, whichPOP, whichSTATE, whichVAL){
+create_tabledf <- function(RRIDATA, whichPOP, whichSTATE, whichVAL, whichTABLE = "table_asis"){
   
   
-  df <- RRIDATA[[whichPOP]][[whichSTATE]][[whichVAL]] %>% arrange(OFFGENERAL, RACE)
-  yr_vars <- df %>% select(-OFFGENERAL, -RACE) %>% colnames() %>% sort()
-  df$OFFGENERALB <- df$OFFGENERAL
-  df$OFFGENERAL <- ifelse(  df$OFFGENERAL == lag(df$OFFGENERAL) & !is.na(lag(df$OFFGENERAL)), "", df$OFFGENERAL)
-  df <- df %>% select(OFFGENERAL, RACE, all_of(yr_vars), OFFGENERALB) 
+  table <- RRIDATA[[whichPOP]][[whichSTATE]][[whichVAL]][[whichTABLE]] 
+  yrs <- colnames(table)[-c(1:2)]
+  
+  df <- table %>% 
+    mutate(
+        OFFGENERALB = OFFGENERAL
+      , OFFGENERAL  = as.character(OFFGENERAL)
+      , OFFGENERAL  = ifelse( OFFGENERAL == lag(OFFGENERAL) & !is.na(lag(OFFGENERAL)), "", OFFGENERAL)
+    )
   
   
-  
-  nodata <- df %>% filter(if_all(yr_vars, ~ is.na(.))) 
+  nodata <- df %>% filter(if_all(all_of(yrs), ~ is.na(.))) 
   
   if (nrow(df) == nrow(nodata)){
     #all data missing 
-    out <-df[0,]
+    out <-df[0, c("OFFGENERAL", "RACE", "OFFGENERALB")]
   } 
   
   if (nrow(df) != nrow(nodata)){
@@ -37,19 +40,14 @@ create_tabledf <- function(RRIDATA, whichPOP, whichSTATE, whichVAL){
 
 
 # TESTING
-# rridata <- readRDS("data/NCRP_RRI_tables.RDS")
-# DF <- create_tabledf(rridata, "BJS", "Arizona", "RRI")
+# RRIDATA <- readRDS("app/data/NCRP_RRI_tables.RDS")
+# whichPOP <- "BJS"
+# whichSTATE <- "Arizona"
 # whichVAL <- "RRI"
+# whichTABLE <- "table_asis"
 
-create_reactable <- function(DF, whichVAL){
-  
-  ndigits <- case_when(
-      whichVAL == "RRI"       ~ 2
-    , whichVAL == "RATE_100K" ~ 0
-    , whichVAL == "RATE_1K"   ~ 0
-    , whichVAL == "REVCNT"    ~ 0
-    , TRUE                    ~ 0 
-  )
+
+create_reactable <- function(DF){
   
   
   reactable(
@@ -57,8 +55,7 @@ create_reactable <- function(DF, whichVAL){
     , style = list(fontFamily = "Graphik, sans-serfit", fontsize = "1.4rem")
     , theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"))
     , defaultColDef = colDef(
-      format = colFormat(separators = TRUE, digits = ndigits)
-      , minWidth = 100
+        minWidth = 100
       , align = "right"
       , headerVAlign = "bottom"
     )
@@ -66,6 +63,7 @@ create_reactable <- function(DF, whichVAL){
     , fullWidth = FALSE
     , searchable = FALSE
     , pagination = FALSE
+    , sortable = FALSE
     , columns = list(
         OFFGENERAL = colDef(
             name = "Offense Category"

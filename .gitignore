@@ -1,3 +1,4 @@
+
 *.httr-oauth
 *.xlsx
 *.xls
@@ -30,14 +31,9 @@
 *.gz
 *.PPTX
 *.dta
-*.RData
-*.Rdata
 *.pptx
 *.csv
-*.rds
 *.dta
-*.RDa
-*.Rda
 *.dcf
 *.rtf
 *.lst

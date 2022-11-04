@@ -2,10 +2,12 @@
 box::use(
     ./admin
   , ./infograph 
+  , ./calc
   , dplyr[...]
   , tidyr[pivot_wider, drop_na]
   , purrr[...]
   , glue[glue]
+  , scales[comma]
 )
 
 
@@ -20,9 +22,17 @@ box::use(
 #' @param whichABB 
 #' @param whichMETRIC 
 #'
-state_table_single_metric <- function(DATA, whichYEARS, whichRACE, whichSTATE, whichMETRIC){
+state_table_single_metric <- function(DATA, whichYEARS, whichRACE, whichSTATE, whichMETRIC, mult = 1){
+  
+  
+  
+  ex_grid <- expand.grid(
+      OFFGENERAL = admin$lev_OFFGENERAL2[1:5]
+    , RACE = whichRACE
+    , RPTYEAR = whichYEARS
+  )
 
-  bind_rows(
+  longdf <- bind_rows(
     DATA$R %>% 
       filter(
           RPTYEAR %in% whichYEARS
@@ -30,8 +40,7 @@ state_table_single_metric <- function(DATA, whichYEARS, whichRACE, whichSTATE, w
         , STATE    ==  whichSTATE
       ) %>% 
       mutate(OFFGENERAL = admin$lev_OFFGENERAL2[1]) %>% 
-      select(OFFGENERAL, RACE, RPTYEAR, all_of(whichMETRIC)) %>% 
-      pivot_wider(names_from = RPTYEAR, values_from = all_of(whichMETRIC))
+      select(OFFGENERAL, RACE, RPTYEAR, all_of(whichMETRIC)) 
     , 
     DATA$OR %>% 
       filter(
@@ -40,9 +49,35 @@ state_table_single_metric <- function(DATA, whichYEARS, whichRACE, whichSTATE, w
         , STATE    ==  whichSTATE
         , OFFGENERAL %in% admin$lev_OFFGENERAL[1:4]
       ) %>% 
-      select(OFFGENERAL, RACE, RPTYEAR, all_of(whichMETRIC)) %>% 
-      pivot_wider(names_from = RPTYEAR, values_from = all_of(whichMETRIC))
+      select(OFFGENERAL, RACE, RPTYEAR, all_of(whichMETRIC)) 
+  ) %>% 
+    full_join(., ex_grid, by = c("OFFGENERAL", "RACE", "RPTYEAR")) %>% 
+    mutate(OFFGENERAL = factor(OFFGENERAL, levels = admin$lev_OFFGENERAL2)) %>% 
+    mutate_at(vars(all_of(whichMETRIC)), ~ifelse(. == Inf, NA, .)) %>% 
+    arrange(OFFGENERAL, RACE) 
+  
+  thisAccuracy <- case_when(
+    whichMETRIC == "RRI" ~ 0.01
+    , TRUE               ~ 1
   )
+  
+  
+  asis <- longdf %>% 
+    mutate_at(vars(all_of(whichMETRIC)), ~comma(.*mult, accuracy = thisAccuracy)) %>% 
+    select(OFFGENERAL, RACE, RPTYEAR, all_of(whichMETRIC)) %>% 
+    pivot_wider(names_from = RPTYEAR, values_from = all_of(whichMETRIC)) %>% 
+    select(OFFGENERAL, RACE, all_of(as.character(whichYEARS))) %>% 
+    arrange(OFFGENERAL, RACE)
+  
+  
+  OUT <- list(
+      "longdf" = longdf
+    , "table_asis" = asis
+    , "mult"       = mult
+  )
+  
+  
+  return(OUT)
 
 }
 
@@ -54,7 +89,7 @@ state_table_single_metric <- function(DATA, whichYEARS, whichRACE, whichSTATE, w
 #' @param whichSTATE 
 #'
 #' @examples
-data_for_info_graphic <- function(DATA, whichRACE, whichSTATE){
+data_for_info_graphic <- function(DATA, whichRACE, whichSTATE, whichPOP){
 
   DF <- DATA$R %>% 
     filter(RACE %in% whichRACE) %>% 
@@ -65,12 +100,38 @@ data_for_info_graphic <- function(DATA, whichRACE, whichSTATE){
   
   
   if (nrow(DF) == 0){
-    OUT <- "NODATA"
+    outDF <- "NODATA"
+    dataavail <- 0
+    note <- case_when(
+        whichSTATE == "Alabama"                    ~ "Alabama did not report any person with Black or Hispanic race/ethnicity."
+      , whichSTATE == "Alaska"                     ~ "Alaska did not report any parole data in the NCRP data set."
+      , whichSTATE == "Connecticut"                ~ "Connecticut did not report any parole data in the NCRP data set."
+      , whichSTATE == "Hawaii" & whichPOP == "BJS" ~ "Hawaii does not have parole poulation data (BJS) broken out by race."
+      , whichSTATE == "Louisiana"                  ~ "Majority of NCRP parole data for Louisiana is missing race/ethnicity. All the obersvations that are not missing are for a single race/ethnicity category: Hispanic."
+      , whichSTATE == "Maine"  & whichPOP == "BJS" ~ "Maine has single digits counts of clients on parole who are listed as Black. The parole population (BJS) data lists the population estimate for Black clinets as 0, so rates based on this population cannot be calculated"
+      , whichSTATE == "Michigan"                   ~ "Majority of NCRP parole data for Michigan is missing race/ethnicity. All the obersvations that are not missing are for a single race/ethnicity category: Hispanic."
+      , whichSTATE == "Nevada" & whichPOP == "BJS" ~ "Nevada does not have parole poulation data (BJS) broken out by race"
+      , whichSTATE == "Oklahoma"                   ~ "Majority of NCRP parole data for Oklahoma is missing race/ethnicity. All the obersvations that are not missing are for a single race/ethnicity category: Hispanic."
+      , whichSTATE == "Oregon"                     ~ "Oregon did not report any parole data in the NCRP data set"
+      , whichSTATE == "South Dakota"               ~ "South Dakota did not report race/ethnicity category for paroles in the NCRP data."
+      , whichSTATE == "Vermont"                    ~ "Vermont did not report race/ethnicity category for paroles in the NCRP data."
+      , 
+    ) 
   } 
   
   if (nrow(DF) > 0){
-    OUT <- DF
+    outDF <- DF
+    dataavail <- 1
+    note <- NA
+    
   }
+  
+  
+  OUT <- list(
+      "DF" = outDF
+    , "DATAAVAIL" = dataavail
+    , "NOTE" = note
+  )
   
   return(OUT)
 
@@ -84,20 +145,23 @@ data_for_info_graphic <- function(DATA, whichRACE, whichSTATE){
 #' @examples
 create_tables <- function(){
   
+  
+  #REV_BJS <- calc$combine_and_calcrates("APS")
+  #REV_SC  <- calc$combine_and_calcrates("SC")
   REV_BJS <- readRDS(file.path(admin$sp_data, "NCRP_REV_APS.RDS")) 
   REV_SC  <- readRDS(file.path(admin$sp_data, "NCRP_REV_SC.RDS"))  
   
   state_vec <- sort(levels(REV_SC$t$STATE)) %>% .[. != "District of Columbia"]
   
-  admin$mylog("Start creating tables")
+  admin$mylog("Start creating tables, takes ~40-50 seconds")
   
   tables <- list(
       "BJS" = map(
       state_vec %>% set_names(),
       ~list(
-          "INFOGRAPH" = data_for_info_graphic(    REV_BJS,            admin$lev_RACE[2:3], .x)
+          "INFOGRAPH" = data_for_info_graphic(    REV_BJS,            admin$lev_RACE[2:3], .x, "BJS")
         , "RRI"       = state_table_single_metric(REV_BJS, 2015:2018, admin$lev_RACE[2:3], .x, "RRI")
-        , "RATE_100K" = state_table_single_metric(REV_BJS, 2015:2018, admin$lev_RACE[1:3], .x, "RATE_100K")
+        , "RATE"      = state_table_single_metric(REV_BJS, 2015:2018, admin$lev_RACE[1:3], .x, "RATE", mult = 1e+03)
         , "REVCNT"    = state_table_single_metric(REV_BJS, 2015:2018, admin$lev_RACE[1:3], .x, "REVCNT")
         , "POPEST"    = state_table_single_metric(REV_BJS, 2015:2018, admin$lev_RACE[1:3], .x, "POPEST")
       ) #end list 
@@ -105,9 +169,9 @@ create_tables <- function(){
     ,   "SC" = map(
       state_vec %>% set_names(),
       ~list(
-          "INFOGRAPH" = data_for_info_graphic(    REV_SC,             admin$lev_RACE[2:3], .x)
+          "INFOGRAPH" = data_for_info_graphic(    REV_SC,             admin$lev_RACE[2:3], .x, "SC")
         , "RRI"       = state_table_single_metric(REV_SC,  2015:2019, admin$lev_RACE[2:3], .x, "RRI")
-        , "RATE_100K" = state_table_single_metric(REV_SC,  2015:2019, admin$lev_RACE[1:3], .x, "RATE_100K")
+        , "RATE"      = state_table_single_metric(REV_SC,  2015:2018, admin$lev_RACE[1:3], .x, "RATE", mult = 1e+05)
         , "REVCNT"    = state_table_single_metric(REV_SC,  2015:2019, admin$lev_RACE[1:3], .x, "REVCNT")
         , "POPEST"    = state_table_single_metric(REV_SC,  2015:2018, admin$lev_RACE[1:3], .x, "POPEST")
       ) #end list 
@@ -141,22 +205,23 @@ prep_for_shiny <- function(){
   tables <- create_tables()
   state_vec <- tables$STATEVEC
   
-  params_for_loop <- tidyr::expand_grid(POP = c("BJS", "SC"), STATE = state_vec)
-  n_of_loops <- nrow(params_for_loop)
   
   admin$mylog("Start creating infographics")
   
+  params_for_loop <- tidyr::expand_grid(POP = c("BJS", "SC"), STATE = state_vec)
+  n_of_loops <- nrow(params_for_loop)
+  
   for (i in 1:n_of_loops){
-    
     admin$mylog(glue("{i} out of {n_of_loops}"))
     
     whichPOP   <- params_for_loop$POP[i]
     whichSTATE <- params_for_loop$STATE[i]
     
     
-    df <- tables[[whichPOP]][[whichSTATE]]$INFOGRAPH
+    df <- tables[[whichPOP]][[whichSTATE]]$INFOGRAPH$DF
+    dataavail <- tables[[whichPOP]][[whichSTATE]]$INFOGRAPH$DATAAVAIL
     
-    if (is.data.frame(df)){
+    if (dataavail == 1){
       pwalk(
         list(
             rri_raw = df$RRI
@@ -167,7 +232,7 @@ prep_for_shiny <- function(){
         )
         , infograph$create_infograph 
       )
-    } else if (is.character(df) & df == "NODATA") {
+    } else if (dataavail == 0) {
       admin$mylog(glue("{whichPOP} {whichSTATE} does NOT have data for infographics"))
     } else {
       stop("error with DF")
