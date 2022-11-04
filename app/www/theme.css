@@ -399,23 +399,18 @@ Tabset Panels
   font-family: Graphik;
 }
 
-#rri-radio {
-  text-align: center; 
-  margin-top: 7px; 
-  font-family: Graphik; 
-  font-weight: bold;
-  vertical-align: center;
-}
 
-#rri-radio-opts {
+div.retxt {
   font-family: Graphik;
+  font-size: 1em;
+  margin-top: 10px;
 }
 
 
 h3.reh3 {
   font-family: Graphik-Bold !important; 
-  font-size: 30px; /* same as selected-state-note-title */  
-  margin-top: 24px; 
+  font-size: 30px !important;  /*same as selected-state-note-title */  
+  /*margin-top: 24px; */ 
   margin-bottom: 12px;
   /*text-transform: uppercase; */
   /*font-variant: small-caps; */
@@ -433,11 +428,6 @@ h4.reh4 {
 }
 
 
-div.retnote {
-  font-size: 1.25em; 
-  margin-top: 10px; 
-  font-family: Graphik;
-}
 
 
 

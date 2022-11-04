@@ -25,92 +25,92 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                            ##############################################################################################################################
 
-                           tabPanel("mapexplorer", id = "mapexplorer",
-
-                                    # div(id = "app-title", titlePanel("Map Explorer")),
-
-                                    div(id = "header",
-
-                                        #######
-                                        # Dropdown and download buttons
-                                        #######
-
-                                        fluidRow(column(width = 3),
-
-                                                 column(width = 6,
-
-                                                        fluidRow(# Select Data
-                                                                 column(width = 3,
-                                                                         labeled_input('data-map-btn', "",
-                                                                               selectizeInput('data_map', div(style = "font-weight: bold", "Select Data"),
-                                                                                              choices = c("Total", "New Offense", "Supervision Violation", "Probation Violation", "Parole Violation", "Technical Violation"),
-                                                                                              multiple = FALSE))),
-                                                                 # Select Adm or Pop
-                                                                 column(width = 3,
-                                                                         labeled_input('adm-pop-map-btn', "",
-                                                                                       selectizeInput('adm_or_pop_map', div(style = "font-weight: bold", "Select Type"),
-                                                                                                      choices = c("Admissions", "Population"),
-                                                                                                      multiple = FALSE))),
-                                                                 # Select Year Change
-                                                                 column(width = 3,
-                                                                         labeled_input('year-map-btn', "",
-                                                                                       selectizeInput('year_map', div(style = "font-weight: bold", "Select Years"),
-                                                                                                      choices = c("2018 - 2019", "2019 - 2020", "2020 - 2021", "All (2018 - 2021)"),
-                                                                                                      multiple = FALSE))),
-
-                                                                 # Download Map
-                                                                 column(width = 3,
-                                                                         labeled_input('save-map-btn', "",
-                                                                                       downloadButton(outputId = 'save_map', "Download Map",
-                                                                                                      #div(style = "font-weight: bold", "Download Data"), # this causes spacing issues within the button
-                                                                                                      class = "download-map")))
-                                                        ) # end fluidRow
-                                                  ),
-                                                  column(width = 3)
-                                        ) # end fluidRow
-
-                                    ), # end div header
-                                    br(),
-
-                                    div(id = "map-body",
-
-                                        #######
-                                        # Hex map
-                                        #######
-
-                                        fluidRow(column(width = 1),
-                                                 column(width = 10, align = "center", highchartOutput("hex_map", height = 550, width = "100%")),
-                                                 column(width = 1)),
-
-                                        br(),
-                                        br(),
-
-                                        #######
-                                        # Hex map table
-                                        #######
-
-                                        fluidRow(column(width = 1),
-                                                 column(width = 10, align = "center", div(id = "selected-map-table", textOutput("selected_map_table"))),
-                                                 column(width = 1)),
-
-                                        br(),
-
-                                        tags$head(tags$style(HTML("thead{color: #004270; font-size: 16px}"))),
-                                        fluidRow(column(width = 1),
-                                                 column(width = 10, align = "left",
-                                                        div(id = "table-map",
-                                                            # dataTableOutput("table_map")
-                                                            reactableOutput("table_map")
-                                                            )
-                                                        ),
-                                                 column(width = 1)),
-
-                                        br(),
-                                        br()
-
-                                    ) # end div
-
-                           ), # end tabPanel
+                           # tabPanel("mapexplorer", id = "mapexplorer",
+                           # 
+                           #          # div(id = "app-title", titlePanel("Map Explorer")),
+                           # 
+                           #          div(id = "header",
+                           # 
+                           #              #######
+                           #              # Dropdown and download buttons
+                           #              #######
+                           # 
+                           #              fluidRow(column(width = 3),
+                           # 
+                           #                       column(width = 6,
+                           # 
+                           #                              fluidRow(# Select Data
+                           #                                       column(width = 3,
+                           #                                               labeled_input('data-map-btn', "",
+                           #                                                     selectizeInput('data_map', div(style = "font-weight: bold", "Select Data"),
+                           #                                                                    choices = c("Total", "New Offense", "Supervision Violation", "Probation Violation", "Parole Violation", "Technical Violation"),
+                           #                                                                    multiple = FALSE))),
+                           #                                       # Select Adm or Pop
+                           #                                       column(width = 3,
+                           #                                               labeled_input('adm-pop-map-btn', "",
+                           #                                                             selectizeInput('adm_or_pop_map', div(style = "font-weight: bold", "Select Type"),
+                           #                                                                            choices = c("Admissions", "Population"),
+                           #                                                                            multiple = FALSE))),
+                           #                                       # Select Year Change
+                           #                                       column(width = 3,
+                           #                                               labeled_input('year-map-btn', "",
+                           #                                                             selectizeInput('year_map', div(style = "font-weight: bold", "Select Years"),
+                           #                                                                            choices = c("2018 - 2019", "2019 - 2020", "2020 - 2021", "All (2018 - 2021)"),
+                           #                                                                            multiple = FALSE))),
+                           # 
+                           #                                       # Download Map
+                           #                                       column(width = 3,
+                           #                                               labeled_input('save-map-btn', "",
+                           #                                                             downloadButton(outputId = 'save_map', "Download Map",
+                           #                                                                            #div(style = "font-weight: bold", "Download Data"), # this causes spacing issues within the button
+                           #                                                                            class = "download-map")))
+                           #                              ) # end fluidRow
+                           #                        ),
+                           #                        column(width = 3)
+                           #              ) # end fluidRow
+                           # 
+                           #          ), # end div header
+                           #          br(),
+                           # 
+                           #          div(id = "map-body",
+                           # 
+                           #              #######
+                           #              # Hex map
+                           #              #######
+                           # 
+                           #              fluidRow(column(width = 1),
+                           #                       column(width = 10, align = "center", highchartOutput("hex_map", height = 550, width = "100%")),
+                           #                       column(width = 1)),
+                           # 
+                           #              br(),
+                           #              br(),
+                           # 
+                           #              #######
+                           #              # Hex map table
+                           #              #######
+                           # 
+                           #              fluidRow(column(width = 1),
+                           #                       column(width = 10, align = "center", div(id = "selected-map-table", textOutput("selected_map_table"))),
+                           #                       column(width = 1)),
+                           # 
+                           #              br(),
+                           # 
+                           #              tags$head(tags$style(HTML("thead{color: #004270; font-size: 16px}"))),
+                           #              fluidRow(column(width = 1),
+                           #                       column(width = 10, align = "left",
+                           #                              div(id = "table-map",
+                           #                                  # dataTableOutput("table_map")
+                           #                                  reactableOutput("table_map")
+                           #                                  )
+                           #                              ),
+                           #                       column(width = 1)),
+                           # 
+                           #              br(),
+                           #              br()
+                           # 
+                           #          ) # end div
+                           # 
+                           # ), # end tabPanel
 
                            ##############################################################################################################################
 
@@ -254,24 +254,33 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                           tabPanel(value="4","Race/Ethnicity", #MYE HERE 
                                                                    
                                                                    br(),
-                                                                   labeled_input(id = "rri-radio", div("Racial and Ethnic Disparities", style = "font-size: 16px;"),
-                                                                                 radioButtons("rri_pop", "", 
-                                                                                              c("Disparities in parole revocations" = "BJS", 
-                                                                                                "Cumulative disparities across the criminal justice system" = "SC") 
-                                                                                              , inline=T) #end radioButtons 
-                                                                   ), 
-                                                                   fluidRow(column(width = 12, align = "center", 
-                                                                                   div(htmlOutput("infogheader")), 
-                                                                                   div(imageOutput("infogblack", height = "70%", ), style = "margin-bottom: 0.5em;"),
-                                                                                   div(imageOutput("infoghisp", height = "70%")),
+                                                                   fluidRow(
+                                                                     column(width = 2), 
+                                                                     column(width = 8, align = "center", 
+                                                                       div(class = "retxt", style = "margin-top: 7px !important;", 
+                                                                           radioButtons("pop_denom", 
+                                                                              div(h3("Racial and Ethnic Disparities", class = "reh3")), #style = "font-size: 16px;"),
+                                                                              c(
+                                                                                "Disparities in Parole Revocations"                         = "BJS", 
+                                                                                "Cumulative Disparities across the criminal justice system" = "SC"
+                                                                               ) 
+                                                                              , inline=T) #end radioButtons 
+                                                                       ), 
+                                                                       div(htmlOutput("infogheader")),
+                                                                       div(imageOutput("infogblack", height = "100%", ), style = "margin-bottom: 0.5em;"),
+                                                                       div(imageOutput("infoghisp", height = "100%")),
+                                                                       
+                                                                     ), #end column width=8
+                                                                     column(width = 2)
                                                                                    
-                                                                                   
-                                                                   )), #end fluidRow>column 
+                                                                   ), #end fluidRow 
                                                                    
                                                                    
                                                                    br(), 
                                                                    
-                                                                   fluidRow(column(width = 12, align = "center", 
+                                                                   fluidRow(
+                                                                     column(width = 2), 
+                                                                     column(width = 8, align = "center", 
                                                                                    div(h3("Tables", class = "reh3")), 
                                                                                    div(htmlOutput(     "table_rri_header")), 
                                                                                    div(reactableOutput("table_rri")), 
@@ -280,7 +289,9 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                                    div(htmlOutput(     "table_revcnt_header"), style = "padding-top: 24px;"), 
                                                                                    div(reactableOutput("table_revcnt"))
                                                                                    
-                                                                   )), #end fluidRow>column 
+                                                                     ),  #end column width = 10
+                                                                     column(width = 2)
+                                                                   ), #end fluidRow
                                                                    
                                                                    br(),
                                                                    br()

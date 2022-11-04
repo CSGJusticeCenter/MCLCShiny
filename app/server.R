@@ -984,15 +984,15 @@ server <- function(input, output, session) {
   
   output$infogblack <- renderImage({
     
-    dataavail <- rridata[[input$rri_pop]][[input$state_report]]$INFOGRAPH$DATAAVAIL
+    png_file  <- glue("data/infogs/{input$pop_denom}_{input$state_report}_Black.png")
     
-    if (dataavail == 1){
-      plot <- glue("data/infogs/{input$rri_pop}_{input$state_report}_Black.png")
+    if (file.exists(png_file)){
+      plot <- png_file
       list(
           src =normalizePath(plot)
         , contentType = "image/png"
-        , alt = glue("alt text placeholder: {input$rri_pop} {input$state_report}")
-        , width = "70%"
+        , alt = glue("alt text placeholder: {input$pop_denom} {input$state_report}")
+        , width = "100%"
       )
     } else {
       plot <- ggplot2::ggplot() + ggplot2::theme_void()
@@ -1001,23 +1001,23 @@ server <- function(input, output, session) {
       list(
           src =normalizePath(file)
         , contentType = "image/png"
-        , alt = glue("alt text placeholder: {input$rri_pop} {input$state_report}")
-        , width = "70%"
+        , alt = glue("alt text placeholder: {input$pop_denom} {input$state_report}")
+        , width = "100%"
       )
     }
   }, deleteFile = FALSE)
   
   output$infoghisp <- renderImage({
     
-    dataavail <- rridata[[input$rri_pop]][[input$state_report]]$INFOGRAPH$DATAAVAIL
+    png_file  <- glue("data/infogs/{input$pop_denom}_{input$state_report}_Hispanic.png")
     
-    if (dataavail == 1){
-      plot <- glue("data/infogs/{input$rri_pop}_{input$state_report}_Hispanic.png")
+    if (file.exists(png_file)){
+      plot <- png_file
       list(
           src =normalizePath(plot)
         , contentType = "image/png"
-        , alt = glue("alt text placeholder: {input$rri_pop} {input$state_report}")
-        , width = "70%"
+        , alt = glue("alt text placeholder: {input$pop_denom} {input$state_report}")
+        , width = "100%"
       )
     } else {
       plot <- ggplot2::ggplot() + ggplot2::theme_void()
@@ -1026,8 +1026,8 @@ server <- function(input, output, session) {
       list(
           src =normalizePath(file)
         , contentType = "image/png"
-        , alt = glue("alt text placeholder: {input$rri_pop} {input$state_report}")
-        , width = "70%"
+        , alt = glue("alt text placeholder: {input$pop_denom} {input$state_report}")
+        , width = "100%"
       )
     }
   }, deleteFile = FALSE)
@@ -1036,18 +1036,22 @@ server <- function(input, output, session) {
   output$infogheader <- renderUI({
     
     
-    dataavail <- rridata[[input$rri_pop]][[input$state_report]]$INFOGRAPH$DATAAVAIL
+    dataavail <- rridata[[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
     
     if (dataavail == 1){
       
-      out <- "<h3 class='reh3'>For every White Client that is revoked ... </h3>"
+      out <- paste0(
+          "<div class = 'retxt'>"
+        , raceethnicity$pop_denom_text(input$pop_denom)
+        , "</div>"
+      )
       
     } else { 
       
       out <- paste0("<h3 class='reh3'>No data</h3>"
-                    , "<div style = 'font-size: 1.25em; margin-top: 10px; font-family: Graphik;'>"
+                    , "<div class = 'retxt'>"
                     , "Data to calculate disparites in parole revocations is not available.<br>"
-                    , rridata[[input$rri_pop]][[input$state_report]]$INFOGRAPH$NOTE
+                    , rridata[[input$pop_denom]][[input$state_report]]$INFOGRAPH$NOTE
                     , "</div>"
       )
       
@@ -1059,13 +1063,13 @@ server <- function(input, output, session) {
   
   
   output$table_rri_header <- renderUI({
-    df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "RRI")
+    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "RRI")
     main <- "<h4 class='reh4'> Relative Rate Index (White Reference Group)</h4>"
     if (nrow(df) > 0){
       out <- main
     } else {
       out <- paste0( main
-                    , "<div class = 'retnote'>"
+                    , "<div class = 'retxt'>"
                     , "Data to calculate relative rate index were not available for "
                     , input$state_report
                     , "</div>"
@@ -1075,20 +1079,20 @@ server <- function(input, output, session) {
   })
   
   output$table_rri <- renderReactable({
-    df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "RRI")
+    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "RRI")
     raceethnicity$create_reactable(df)
   })
   
   
   output$table_rate_header <- renderUI({
-    df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "RATE")
-    mult <- scales::comma(rridata[[input$rri_pop]][[input$state_report]][["RATE"]]$mult)
+    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "RATE")
+    mult <- scales::comma(rridata[[input$pop_denom]][[input$state_report]][["RATE"]]$mult)
     main <- paste0("<h4 class='reh4'> Rate per ", mult, " persons in the Population</h4>")
     if (nrow(df) > 0){
       out <- main
     } else {
       out <- paste0(  main
-                    , "<div class = 'retnote'>"
+                    , "<div class = 'retxt'>"
                     , "Data to calculate rates were not available for "
                     , input$state_report
                     , "</div>"
@@ -1098,19 +1102,19 @@ server <- function(input, output, session) {
   })
   
   output$table_rate <- renderReactable({
-    df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "RATE")
+    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "RATE")
     raceethnicity$create_reactable(df)
   })
   
   
   output$table_revcnt_header <- renderUI({
-    df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "REVCNT")
+    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "REVCNT")
     main <- "<h4 class='reh4'>Parole Revocations Counts</h4>"
     if (nrow(df) > 0){
       out <- main
     } else {
       out <- paste0(  main 
-                    , "<div class = 'retnote'>"
+                    , "<div class = 'retxt'>"
                     , "Parole revocations data were not available for "
                     , input$state_report
                     , "</div>"
@@ -1120,7 +1124,7 @@ server <- function(input, output, session) {
   })
   
   output$table_revcnt <- renderReactable({
-    df <- raceethnicity$create_tabledf(rridata, input$rri_pop, input$state_report, "REVCNT")
+    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "REVCNT")
     raceethnicity$create_reactable(df)
   })
   

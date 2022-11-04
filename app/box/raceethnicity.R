@@ -6,6 +6,18 @@ box::use(
 )
 
 
+#' Create table that will be shown in shiny app 
+#'
+#' @param RRIDATA 
+#' @param whichPOP 
+#' @param whichSTATE 
+#' @param whichVAL 
+#' @param whichTABLE 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 create_tabledf <- function(RRIDATA, whichPOP, whichSTATE, whichVAL, whichTABLE = "table_asis"){
   
   
@@ -45,8 +57,17 @@ create_tabledf <- function(RRIDATA, whichPOP, whichSTATE, whichVAL, whichTABLE =
 # whichSTATE <- "Arizona"
 # whichVAL <- "RRI"
 # whichTABLE <- "table_asis"
+# DF <- create_tabledf(RRIDATA, whichPOP, whichSTATE, whichVAL, whichTABLE)
 
 
+#' Create reactable tables for Shiny 
+#'
+#' @param DF 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 create_reactable <- function(DF){
   
   
@@ -55,12 +76,12 @@ create_reactable <- function(DF){
     , style = list(fontFamily = "Graphik, sans-serfit", fontsize = "1.4rem")
     , theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"))
     , defaultColDef = colDef(
-        minWidth = 100
+        minWidth = 70
       , align = "right"
       , headerVAlign = "bottom"
     )
     , compact = TRUE
-    , fullWidth = FALSE
+    , fullWidth = TRUE
     , searchable = FALSE
     , pagination = FALSE
     , sortable = FALSE
@@ -68,7 +89,7 @@ create_reactable <- function(DF){
         OFFGENERAL = colDef(
             name = "Offense Category"
           , align = "left"
-          , minWidth = 150
+          , minWidth = 130
           #no border when witin offense category 
           , style = JS( 
             "function(rowInfo) {
@@ -79,7 +100,7 @@ create_reactable <- function(DF){
               return {borderTop: borderTop}
               }")
         )
-      , RACE       = colDef(name = "Race/Ethnicity", align = "left", minWidth = 150)
+      , RACE       = colDef(name = "Race/Ethnicity", align = "left", minWidth = 130)
       , OFFGENERALB = colDef(show = FALSE)
       
     ) #end columns list
@@ -98,5 +119,41 @@ create_reactable <- function(DF){
 }
 
 
+
+#' Text to display the pop_denom 
+#'
+#' @param pop_denom 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+pop_denom_text <- function(pop_denom){
+  
+  rlang::arg_match(pop_denom, c("BJS", "SC"))
+  
+  prefix <- "<span style='font-family: Graphik-Bold !important;'>"
+  suffix <- "</span>"
+  
+  fill1 <- case_when(
+      pop_denom == "BJS" ~ paste0(prefix, "disparities in parole revocations"                        , suffix)
+    , pop_denom == "SC"  ~ paste0(prefix, "cumulative disparities across the criminal justice system", suffix)
+  )
+  
+  fill2 <- case_when(
+      pop_denom == "BJS" ~ paste0(prefix, "parole population", suffix) 
+    , pop_denom == "SC"  ~ paste0(prefix, "community"        , suffix)
+  )
+  
+  outtext <- paste0(
+     "To highlight "
+     , fill1
+     , " for each racial and ethnic group in the "
+     , fill2
+     , ", rates are shown relative to White individuals to highlight higher or lower than expected representation.<br>"
+     , "<h3 class = 'reh3'>For every White Client that is revoked ...<h3>"
+  )
+  
+}
 
 
