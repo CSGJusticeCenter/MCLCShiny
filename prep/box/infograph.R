@@ -21,12 +21,14 @@ extrafont::loadfonts(device = "win", quiet = TRUE)
 ## set up colors 
 bg_color    <- "#FFFFFF"
 empty_color <- "#A7A9AC" #csg grey
-mclc_dk_grey  <- "#666666"
+mclc_dk_grey  <- "#333333" #"#666666"
 mclc_dk_orange<- "#D25E2D"
-mclc_dk_blue  <- "#236ca7"
+mclc_dk_blue  <- "#004270"  # "#236ca7"
 mclc_dk_yellow<- "#D6C246"
 mclc_lt_orange<- "#EDB799"
 mclc_lt_blue  <- "#C7E8F5"
+default_ncols <- 10
+
 
 
 ##image set up 
@@ -190,7 +192,8 @@ create_icons <- function(
   , partialcolor = mclc_lt_blue
   , emptyhumans = TRUE
   , emptycolor = "white" 
-  , infogs  = 4 
+  , infogs  = default_ncols
+  , infogs_ncol = default_ncols
   , fillHoriz = FALSE
 ) {
   
@@ -256,8 +259,8 @@ create_icons <- function(
     }
   }
   
-  if (infogs>10) {
-    rows<-2
+  if (infogs>infogs_ncol) {
+    rows<-ceiling(rri_raw/infogs_ncol)
   } else {
     rows<-1
   }
@@ -292,7 +295,8 @@ create_infograph <- function(
   , rri_digits = 1 
   , fillcolor = mclc_dk_blue
   , partialcolor = mclc_lt_blue
-  , infogs  = 4 
+  , infogs  = default_ncols
+  , infogs_ncol = default_ncols
   , savefile = FALSE 
   , returngg = FALSE
 ) {
@@ -304,11 +308,15 @@ create_infograph <- function(
     value.size <- 110
   }
   
+  if (infogs-rri_raw<0) {
+    infogs<-floor(rri_raw)+1;
+    warning(paste0("There are not enough infographics to plot! Number of infographics reset to ",floor(rri_raw)+1))
+  }
   
   
-  if (infogs>10) {
-    rows<-ceiling(rri_raw/10)
-    cols <- 10
+  if (infogs>infogs_ncol) {
+    rows<-ceiling(rri_raw/infogs_ncol)
+    cols <- infogs_ncol
   } else {
     rows<-1
     cols <- infogs
@@ -321,7 +329,7 @@ create_infograph <- function(
       , x = 0
       , hjust = 0
       , vjust = 0.25
-      , color = "#666666"
+      , color = mclc_dk_grey
       , size = title.size
       , fontfamily = "Graphik Regular"
     ) #+ theme(panel.background = element_rect(color = "red"))
@@ -345,7 +353,7 @@ create_infograph <- function(
       , x = 0.8
       , hjust = 1
       , vjust = 0.5
-      , color = "#666666"
+      , color = mclc_dk_grey
       , size = value.size
       , fontfamily = "Graphik Medium"
     ) #+ theme(panel.background = element_rect(color = "blue"))
@@ -354,6 +362,7 @@ create_infograph <- function(
       rri_raw = rri_raw
     , rri_digits = rri_digits
     , infogs  = infogs
+    , infogs_ncol = infogs_ncol
     , fillcolor    = fillcolor 
     , partialcolor = partialcolor
     , emptyhumans = TRUE
@@ -401,12 +410,6 @@ create_infograph <- function(
     return(fullinfog)
   }
 
-  
-  
-  
 } 
-
-
-
 
 

@@ -248,7 +248,7 @@ prep_for_shiny <- function(){
   
   file.copy(
     from = file.path(admin$sp_data, "NCRP_RRI_tables.RDS")
-    , to = "../../app/data/NCRP_RRI_tables.RDS"
+    , to = "app/data/NCRP_RRI_tables.RDS"
     , overwrite = TRUE
   )
   
@@ -258,7 +258,7 @@ prep_for_shiny <- function(){
     png_lst
     , ~file.copy(
       from = file.path(admin$sp_data, "infographs", .x)
-      , to = file.path("../../app/data/infogs", .x)
+      , to = file.path("app/data/infogs", .x)
       , overwrite = TRUE
     )
   )
