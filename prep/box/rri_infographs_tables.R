@@ -146,10 +146,10 @@ data_for_info_graphic <- function(DATA, whichRACE, whichSTATE, whichPOP){
 create_tables <- function(){
   
   
-  #REV_BJS <- calc$combine_and_calcrates("APS")
-  #REV_SC  <- calc$combine_and_calcrates("SC")
-  REV_BJS <- readRDS(file.path(admin$sp_data, "NCRP_REV_APS.RDS")) 
-  REV_SC  <- readRDS(file.path(admin$sp_data, "NCRP_REV_SC.RDS"))  
+  REV_BJS <- calc$combine_and_calcrates("APS")
+  REV_SC  <- calc$combine_and_calcrates("SC")
+  #REV_BJS <- readRDS(file.path(admin$sp_data, "NCRP_REV_APS.RDS")) 
+  #REV_SC  <- readRDS(file.path(admin$sp_data, "NCRP_REV_SC.RDS"))  
   
   state_vec <- sort(levels(REV_SC$t$STATE)) %>% .[. != "District of Columbia"]
   
@@ -170,9 +170,9 @@ create_tables <- function(){
       state_vec %>% set_names(),
       ~list(
           "INFOGRAPH" = data_for_info_graphic(    REV_SC,             admin$lev_RACE[2:3], .x, "SC")
-        , "RRI"       = state_table_single_metric(REV_SC,  2015:2019, admin$lev_RACE[2:3], .x, "RRI")
+        , "RRI"       = state_table_single_metric(REV_SC,  2015:2018, admin$lev_RACE[2:3], .x, "RRI")
         , "RATE"      = state_table_single_metric(REV_SC,  2015:2018, admin$lev_RACE[1:3], .x, "RATE", mult = 1e+05)
-        , "REVCNT"    = state_table_single_metric(REV_SC,  2015:2019, admin$lev_RACE[1:3], .x, "REVCNT")
+        , "REVCNT"    = state_table_single_metric(REV_SC,  2015:2018, admin$lev_RACE[1:3], .x, "REVCNT")
         , "POPEST"    = state_table_single_metric(REV_SC,  2015:2018, admin$lev_RACE[1:3], .x, "POPEST")
       ) #end list 
     ) #end map SC
