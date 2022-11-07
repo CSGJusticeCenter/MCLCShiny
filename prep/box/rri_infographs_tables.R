@@ -88,7 +88,7 @@ state_table_single_metric <- function(DATA, whichYEARS, whichRACE, whichSTATE, w
     
     suppress <- longdf %>% 
       mutate_at(vars(all_of(S_whichMETRIC)), ~comma(.*mult, accuracy = thisAccuracy)) %>% 
-      mutate_at(vars(all_of(S_whichMETRIC)), ~ifelse(SUPPRESS == 1, paste0("<", ., "*"), .)) %>% 
+      mutate_at(vars(all_of(S_whichMETRIC)), ~ifelse(SUPPRESS == 1 & !is.na(.), paste0("<", ., "*"), .)) %>% 
       select(OFFGENERAL, RACE, RPTYEAR, all_of(S_whichMETRIC)) %>% 
       pivot_wider(names_from = RPTYEAR, values_from = all_of(S_whichMETRIC)) %>% 
       select(OFFGENERAL, RACE, all_of(as.character(whichYEARS))) %>% 

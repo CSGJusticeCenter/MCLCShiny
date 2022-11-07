@@ -73,27 +73,44 @@ prep <- function(){
     #re-factor RACE and OFFGENERAL cateogires 
     refct() 
   
+  
+  exgrid_OR <- expand.grid(
+      STATE      = factor(levels(FILTERDF$STATE), levels = levels(FILTERDF$STATE))
+    , RPTYEAR    = range(FILTERDF$RPTYEAR)[1]:range(FILTERDF$RPTYEAR)[2]
+    , OFFGENERAL = factor(levels(FILTERDF$OFFGENERAL)[1:4], levels = levels(FILTERDF$OFFGENERAL)[1:4])
+    , RACE       = factor(levels(FILTERDF$RACE)[1:3], levels = levels(FILTERDF$RACE)[1:3])
+  ) %>% as_tibble()
+  
   admin$mylog("NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE")
-  cs_OR <- FILTERDF %>% count(STATE, RPTYEAR, OFFGENERAL, RACE) %>% rename("REVCNT" = n) %>% arrange(STATE, RPTYEAR, OFFGENERAL, RACE)
-  cs_O  <- FILTERDF %>% count(STATE, RPTYEAR, OFFGENERAL)       %>% rename("REVCNT" = n) %>% arrange(STATE, RPTYEAR, OFFGENERAL)
-  cs_R  <- FILTERDF %>% count(STATE, RPTYEAR, RACE)             %>% rename("REVCNT" = n) %>% arrange(STATE, RPTYEAR, RACE)
-  cs_t  <- FILTERDF %>% count(STATE, RPTYEAR)                   %>% rename("REVCNT" = n) %>% arrange(STATE, RPTYEAR)
-  
-  
-  cs <- list(
-      "OR" = cs_OR #cross section by OFFGENERAL and RACE
-    , "O"  = cs_O  #cross section by OFFGENERAL
-    , "R"  = cs_R  #cross section by RACE
-    , "t"  = cs_t  #no cross section, total by STATE/RPTYEAR 
+
+  cs_list <- list(
+      "OR" = FILTERDF
+    , "O"  = FILTERDF
+    , "R"  = FILTERDF
+    , "t"  = FILTERDF
   )
   
-  out <- map(
-    cs
-    , ~addSTATEids(.) %>% 
+  var_list <- list(
+      "OR" = c("STATE", "RPTYEAR", "OFFGENERAL", "RACE")
+    , "O"  = c("STATE", "RPTYEAR", "OFFGENERAL"        )
+    , "R"  = c("STATE", "RPTYEAR",               "RACE")
+    , "t"  = c("STATE", "RPTYEAR"                      )
+  )
+  
+  
+  out <- purrr::map2(
+    cs_list, var_list
+    , ~.x %>% 
+      count(across(all_of(.y))) %>% 
+      rename("REVCNT" = n) %>% 
+      full_join(., distinct(exgrid_OR, across(all_of(.y))), by = .y) %>% 
+      arrange(across(all_of(.y))) %>% 
+      addSTATEids() %>% 
       mutate(
-          SUPPRESS = ifelse(REVCNT < 5, 1, 0)
-        , S_REVCNT = ifelse(REVCNT < 5, 5, REVCNT)
+          SUPPRESS = ifelse(!is.na(REVCNT) & REVCNT < 5, 1, 0)
+        , S_REVCNT = ifelse(!is.na(REVCNT) & REVCNT < 5, 5, REVCNT)
       )
+
   )
   
   admin$mylog("End   - NCRP prep")
