@@ -325,7 +325,7 @@ create_infograph <- function(
   
   title <- ggdraw() + 
     draw_label(
-      glue("{str_to_title(race)} client{ifelse(round(rri_raw, rri_digits) == 1, ' is', 's are')} revoked")
+      glue("{str_to_title(race)} clients are revoked")
       , x = 0
       , hjust = 0
       , vjust = 0.25
