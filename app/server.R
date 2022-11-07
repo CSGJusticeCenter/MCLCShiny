@@ -1038,24 +1038,31 @@ server <- function(input, output, session) {
     
     dataavail <- rridata[[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
     
-    if (dataavail == 1){
-      
-      out <- paste0(
-          "<div class = 'retxt'>"
-        , raceethnicity$pop_denom_text(input$pop_denom)
-        , "</div>"
-      )
-      
-    } else { 
-      
-      out <- paste0("<h3 class='reh3'>No data</h3>"
-                    , "<div class = 'retxt'>"
-                    , "Data to calculate disparites in parole revocations is not available.<br>"
-                    , rridata[[input$pop_denom]][[input$state_report]]$INFOGRAPH$NOTE
-                    , "</div>"
-      )
-      
-    }
+    # if (dataavail == 1){
+    #   
+    #   out <- paste0(
+    #       "<div class = 'retxt'>"
+    #     , raceethnicity$pop_denom_text(input$pop_denom)
+    #     , raceethnicity$infographic_header(dataavial)
+    #     , "</div>"
+    #   )
+    #   
+    # } else { 
+    #   
+    #   out <- paste0(
+    #                   "<h3 class='reh3'>No data</h3>"
+    #                 , "<div class = 'retxt'>"
+    #                 , "Data to calculate disparites in parole revocations is not available.<br>"
+    #                 , rridata[[input$pop_denom]][[input$state_report]]$INFOGRAPH$NOTE
+    #                 , "</div>"
+    #   )
+    #   
+    # }
+    
+    out <- paste0(
+        raceethnicity$pop_denom_text(input$pop_denom)
+      , raceethnicity$infographic_header(dataavail, rridata[[input$pop_denom]][[input$state_report]]$INFOGRAPH$NOTE)
+    )
     
     HTML(out)
     
@@ -1063,7 +1070,7 @@ server <- function(input, output, session) {
   
   
   output$table_rri_header <- renderUI({
-    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "RRI")
+    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "RRI", whichTABLE = "table_suppress")
     main <- "<h4 class='reh4'> Relative Rate Index (White Reference Group)</h4>"
     if (nrow(df) > 0){
       out <- main
@@ -1079,13 +1086,13 @@ server <- function(input, output, session) {
   })
   
   output$table_rri <- renderReactable({
-    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "RRI")
+    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "RRI", whichTABLE = "table_suppress")
     raceethnicity$create_reactable(df)
   })
   
   
   output$table_rate_header <- renderUI({
-    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "RATE")
+    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "RATE", whichTABLE = "table_suppress")
     mult <- scales::comma(rridata[[input$pop_denom]][[input$state_report]][["RATE"]]$mult)
     main <- paste0("<h4 class='reh4'> Rate per ", mult, " persons in the Population</h4>")
     if (nrow(df) > 0){
@@ -1102,13 +1109,13 @@ server <- function(input, output, session) {
   })
   
   output$table_rate <- renderReactable({
-    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "RATE")
+    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "RATE", whichTABLE = "table_suppress")
     raceethnicity$create_reactable(df)
   })
   
   
   output$table_revcnt_header <- renderUI({
-    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "REVCNT")
+    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")
     main <- "<h4 class='reh4'>Parole Revocations Counts</h4>"
     if (nrow(df) > 0){
       out <- main
@@ -1124,7 +1131,7 @@ server <- function(input, output, session) {
   })
   
   output$table_revcnt <- renderReactable({
-    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "REVCNT")
+    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")
     raceethnicity$create_reactable(df)
   })
   

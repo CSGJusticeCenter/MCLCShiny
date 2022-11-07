@@ -19,7 +19,10 @@ calcrate_race <- function(DF, POP_R){
     left_join(., POP_R  , by = c(admin$groupcols, "RACE")) %>% 
     #add column for just white population estimate 
     #calculate rates 
-    mutate(RATE = REVCNT/POPEST) 
+    mutate(
+          RATE =   REVCNT/POPEST
+      , S_RATE = S_REVCNT/POPEST
+    ) 
   
   #check that 1st factor is white 
   admin$isWhite(sort(unique(R_RR$RACE))[admin$fctnum_white])
@@ -28,13 +31,16 @@ calcrate_race <- function(DF, POP_R){
     #only include White 
     filter(as.numeric(RACE) == admin$fctnum_white) %>% 
     #select factor columns (STATE, ABB, FIPS, RACE, and possible OFFGENERAL)
-    select(where(is.factor), RPTYEAR, WHITERATE = RATE) %>% 
+    select(where(is.factor), RPTYEAR, WHITERATE = RATE, S_WHITERATE = S_RATE) %>% 
     #remove RACE
     select(-RACE)
   
   OUT <- left_join(R_RR, RR_W) %>% 
     #calculate relative rate index 
-    mutate(RRI = RATE/WHITERATE)
+    mutate(
+          RRI =   RATE/  WHITERATE
+      , S_RRI = S_RATE/S_WHITERATE
+    )
   
   return(OUT)
   
@@ -48,7 +54,10 @@ calcrate_total <- function(DF, POP_t){
     #add population estimates  
     left_join(., POP_t, by = c(admin$groupcols)) %>% 
     #calculate rate 
-    mutate(RATE = REVCNT/POPEST)
+    mutate(
+          RATE =   REVCNT/POPEST
+      , S_RATE = S_REVCNT/POPEST
+    )
   
 }
 
@@ -83,8 +92,8 @@ combine_and_calcrates <- function(pop_denom){
   if (pop_denom == "SC"){
     admin$mylog(glue("Import and clean SC for population (denominator)"))
     POP  <- clean_SC$prep()
-  } else if (pop_denom == "APS"){
-    admin$mylog(glue("Import and clean APS for population (denominator)"))
+  } else if (pop_denom == "APS" | pop_denom == "BJS"){
+    admin$mylog(glue("Import and clean BJS-APS for population (denominator)"))
     POP <- clean_APS$prep()
   } else {
     stop("Invalid population denom")

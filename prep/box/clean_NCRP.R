@@ -74,10 +74,10 @@ prep <- function(){
     refct() 
   
   admin$mylog("NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE")
-  cs_OR <- FILTERDF %>% count(STATE, RPTYEAR, OFFGENERAL, RACE) %>% rename("REVCNT" = n)
-  cs_O  <- FILTERDF %>% count(STATE, RPTYEAR, OFFGENERAL)       %>% rename("REVCNT" = n)
-  cs_R  <- FILTERDF %>% count(STATE, RPTYEAR, RACE)             %>% rename("REVCNT" = n)
-  cs_t  <- FILTERDF %>% count(STATE, RPTYEAR)                   %>% rename("REVCNT" = n)
+  cs_OR <- FILTERDF %>% count(STATE, RPTYEAR, OFFGENERAL, RACE) %>% rename("REVCNT" = n) %>% arrange(STATE, RPTYEAR, OFFGENERAL, RACE)
+  cs_O  <- FILTERDF %>% count(STATE, RPTYEAR, OFFGENERAL)       %>% rename("REVCNT" = n) %>% arrange(STATE, RPTYEAR, OFFGENERAL)
+  cs_R  <- FILTERDF %>% count(STATE, RPTYEAR, RACE)             %>% rename("REVCNT" = n) %>% arrange(STATE, RPTYEAR, RACE)
+  cs_t  <- FILTERDF %>% count(STATE, RPTYEAR)                   %>% rename("REVCNT" = n) %>% arrange(STATE, RPTYEAR)
   
   
   cs <- list(
@@ -87,7 +87,14 @@ prep <- function(){
     , "t"  = cs_t  #no cross section, total by STATE/RPTYEAR 
   )
   
-  out <- map(cs, addSTATEids)
+  out <- map(
+    cs
+    , ~addSTATEids(.) %>% 
+      mutate(
+          SUPPRESS = ifelse(REVCNT < 5, 1, 0)
+        , S_REVCNT = ifelse(REVCNT < 5, 5, REVCNT)
+      )
+  )
   
   admin$mylog("End   - NCRP prep")
   

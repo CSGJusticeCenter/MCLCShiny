@@ -18,7 +18,7 @@ box::use(
 #' @export
 #'
 #' @examples
-create_tabledf <- function(RRIDATA, whichPOP, whichSTATE, whichVAL, whichTABLE = "table_asis"){
+create_tabledf <- function(RRIDATA, whichPOP, whichSTATE, whichVAL, whichTABLE = "table_suppress"){
   
   
   table <- RRIDATA[[whichPOP]][[whichSTATE]][[whichVAL]][[whichTABLE]] 
@@ -146,14 +146,49 @@ pop_denom_text <- function(pop_denom){
   )
   
   outtext <- paste0(
-     "To highlight "
+      "<div class = 'retxt'>"
+     , "To highlight "
      , fill1
      , " for each racial and ethnic group in the "
      , fill2
      , ", rates are shown relative to White individuals to highlight higher or lower than expected representation.<br>"
-     , "<h3 class = 'reh3'>For every White Client that is revoked ...<h3>"
+     , "</div>"
   )
   
 }
+
+
+
+#' Text to display the pop_denom 
+#'
+#' @param pop_denom 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+infographic_header <- function(dataavail, note){
+  
+  char <- as.character(dataavail)
+  rlang::arg_match(char, c("1", "0"))
+  
+  
+  if (dataavail == 1){
+    outtext <- paste0("<h3 class = 'reh3'>For every White Client that is revoked ...<h3>")
+  }
+  
+  if (dataavail == 0){
+    outtext <- paste0("<h3 class='reh3'>No data</h3>"
+                      , "<div class = 'retxt'>"
+                      , "Data to calculate disparites in parole revocations is not available.<br>"
+                      , note
+                      , "</div>"
+                     )
+  }
+  
+  return(outtext)
+  
+}
+
 
 

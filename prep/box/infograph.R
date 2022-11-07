@@ -290,6 +290,7 @@ create_icons <- function(
 #' @examples
 create_infograph <- function(
     rri_raw 
+  , suppress = 0
   , race ="tst"
   , label = "tst"
   , rri_digits = 1 
@@ -342,9 +343,10 @@ create_infograph <- function(
   
   
   display_value <- case_when(
-      rri_raw > 0               & round(rri_raw, rri_digits) == 0 ~ "<0.1"
-    , race == admin$lev_RACE[1] & round(rri_raw, rri_digits) >  0 ~ sprintf(glue("%.0f"),            round(rri_raw, rri_digits))
-    , race != admin$lev_RACE[1] & round(rri_raw, rri_digits) >  0 ~ sprintf(glue("%.{rri_digits}f"), round(rri_raw, rri_digits))
+      rri_raw > 0               & round(rri_raw, rri_digits) == 0 & suppress == 0 ~ paste0("<", as.numeric(glue("1e-{rri_digits}")))
+    , race != admin$lev_RACE[1] & round(rri_raw, rri_digits) >  0 & suppress == 0 ~ sprintf(glue("%.{rri_digits}f"), round(rri_raw, rri_digits))
+    , rri_raw > 0               & round(rri_raw, rri_digits) == 0 & suppress == 1 ~ paste0("<", as.numeric(glue("1e-{rri_digits}")), "*")
+    , race != admin$lev_RACE[1] & round(rri_raw, rri_digits) >  0 & suppress == 1 ~ sprintf(glue("<%.{rri_digits}f*"), round(rri_raw, rri_digits))
   )
   
   value <- ggdraw() + 

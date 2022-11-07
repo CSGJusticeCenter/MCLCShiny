@@ -281,13 +281,15 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                    fluidRow(
                                                                      column(width = 2), 
                                                                      column(width = 8, align = "center", 
-                                                                                   div(h3("Tables", class = "reh3")), 
-                                                                                   div(htmlOutput(     "table_rri_header")), 
-                                                                                   div(reactableOutput("table_rri")), 
-                                                                                   div(htmlOutput(     "table_rate_header"),  style = "padding-top: 24px;"), 
-                                                                                   div(reactableOutput("table_rate")),
-                                                                                   div(htmlOutput(     "table_revcnt_header"), style = "padding-top: 24px;"), 
-                                                                                   div(reactableOutput("table_revcnt"))
+                                                                            div(h3("Tables", class = "reh3")), 
+                                                                            div(htmlOutput(     "table_rri_header")), 
+                                                                            div(reactableOutput("table_rri")), 
+                                                                            div(htmlOutput(     "table_rate_header"),  style = "padding-top: 24px;"), 
+                                                                            div(reactableOutput("table_rate")),
+                                                                            div(htmlOutput(     "table_revcnt_header"), style = "padding-top: 24px;"), 
+                                                                            div(reactableOutput("table_revcnt")),
+                                                                            br(), 
+                                                                            div(html("&#10033; Asterisk indicates situations where the parole revocation counts were less than 5."), class = "retxt", align = "left")
                                                                                    
                                                                      ),  #end column width = 10
                                                                      column(width = 2)

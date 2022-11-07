@@ -10,6 +10,8 @@ box::use(
   , scales[comma]
 )
 
+suppressed_vars <- c("RRI", "RATE", "REVCNT")
+
 
 
 #' Create a table for a state of a single metric 
@@ -24,7 +26,12 @@ box::use(
 #'
 state_table_single_metric <- function(DATA, whichYEARS, whichRACE, whichSTATE, whichMETRIC, mult = 1){
   
-  
+  if (whichMETRIC %in% suppressed_vars){
+    S_whichMETRIC <- as.character(glue("S_{whichMETRIC}"))
+    addlvars <- c(S_whichMETRIC, "SUPPRESS")
+  } else {
+    addlvars <- c()
+  }
   
   ex_grid <- expand.grid(
       OFFGENERAL = admin$lev_OFFGENERAL2[1:5]
@@ -40,7 +47,7 @@ state_table_single_metric <- function(DATA, whichYEARS, whichRACE, whichSTATE, w
         , STATE    ==  whichSTATE
       ) %>% 
       mutate(OFFGENERAL = admin$lev_OFFGENERAL2[1]) %>% 
-      select(OFFGENERAL, RACE, RPTYEAR, all_of(whichMETRIC)) 
+      select(OFFGENERAL, RACE, RPTYEAR, all_of(whichMETRIC), all_of(addlvars)) 
     , 
     DATA$OR %>% 
       filter(
@@ -49,11 +56,11 @@ state_table_single_metric <- function(DATA, whichYEARS, whichRACE, whichSTATE, w
         , STATE    ==  whichSTATE
         , OFFGENERAL %in% admin$lev_OFFGENERAL[1:4]
       ) %>% 
-      select(OFFGENERAL, RACE, RPTYEAR, all_of(whichMETRIC)) 
+      select(OFFGENERAL, RACE, RPTYEAR, all_of(whichMETRIC), all_of(addlvars)) 
   ) %>% 
     full_join(., ex_grid, by = c("OFFGENERAL", "RACE", "RPTYEAR")) %>% 
     mutate(OFFGENERAL = factor(OFFGENERAL, levels = admin$lev_OFFGENERAL2)) %>% 
-    mutate_at(vars(all_of(whichMETRIC)), ~ifelse(. == Inf, NA, .)) %>% 
+    mutate_at(vars(all_of(c(whichMETRIC, addlvars[1]))), ~ifelse(. == Inf, NA, .)) %>% 
     arrange(OFFGENERAL, RACE) 
   
   thisAccuracy <- case_when(
@@ -77,6 +84,20 @@ state_table_single_metric <- function(DATA, whichYEARS, whichRACE, whichSTATE, w
   )
   
   
+  if (whichMETRIC %in% suppressed_vars){
+    
+    suppress <- longdf %>% 
+      mutate_at(vars(all_of(S_whichMETRIC)), ~comma(.*mult, accuracy = thisAccuracy)) %>% 
+      mutate_at(vars(all_of(S_whichMETRIC)), ~ifelse(SUPPRESS == 1, paste0("<", ., "*"), .)) %>% 
+      select(OFFGENERAL, RACE, RPTYEAR, all_of(S_whichMETRIC)) %>% 
+      pivot_wider(names_from = RPTYEAR, values_from = all_of(S_whichMETRIC)) %>% 
+      select(OFFGENERAL, RACE, all_of(as.character(whichYEARS))) %>% 
+      arrange(OFFGENERAL, RACE)
+    
+    OUT <- c(OUT, list("table_suppress" = suppress))
+    
+  } 
+  
   return(OUT)
 
 }
@@ -95,7 +116,7 @@ data_for_info_graphic <- function(DATA, whichRACE, whichSTATE, whichPOP){
     filter(RACE %in% whichRACE) %>% 
     filter(RPTYEAR == RECENT_YR) %>% 
     filter(STATE == whichSTATE) %>% 
-    select(STATE, RPTYEAR, RACE, RRI) %>% 
+    select(STATE, RPTYEAR, RACE, RRI, S_RRI, SUPPRESS) %>% 
     filter(!is.na(RRI), RRI != Inf)
   
   
@@ -151,7 +172,12 @@ create_tables <- function(){
   #REV_BJS <- readRDS(file.path(admin$sp_data, "NCRP_REV_APS.RDS")) 
   #REV_SC  <- readRDS(file.path(admin$sp_data, "NCRP_REV_SC.RDS"))  
   
-  state_vec <- sort(levels(REV_SC$t$STATE)) %>% .[. != "District of Columbia"]
+  #what 'recent_yr' is the most likely 
+  yr_SC  <- REV_SC $OR %>% count(RECENT_YR) %>% filter(n == max(n)) %>% pull(RECENT_YR)
+  yr_BJS <- REV_BJS$OR %>% count(RECENT_YR) %>% filter(n == max(n)) %>% pull(RECENT_YR)
+  
+  
+  state_vec <- sort(levels(REV_SC$t$STATE)) %>% .[. != "District of Columbia"] 
   
   admin$mylog("Start creating tables, takes ~40-50 seconds")
   
@@ -159,21 +185,21 @@ create_tables <- function(){
       "BJS" = map(
       state_vec %>% set_names(),
       ~list(
-          "INFOGRAPH" = data_for_info_graphic(    REV_BJS,            admin$lev_RACE[2:3], .x, "BJS")
-        , "RRI"       = state_table_single_metric(REV_BJS, 2015:2018, admin$lev_RACE[2:3], .x, "RRI")
-        , "RATE"      = state_table_single_metric(REV_BJS, 2015:2018, admin$lev_RACE[1:3], .x, "RATE", mult = 1e+03)
-        , "REVCNT"    = state_table_single_metric(REV_BJS, 2015:2018, admin$lev_RACE[1:3], .x, "REVCNT")
-        , "POPEST"    = state_table_single_metric(REV_BJS, 2015:2018, admin$lev_RACE[1:3], .x, "POPEST")
+          "INFOGRAPH" = data_for_info_graphic(    REV_BJS,              admin$lev_RACE[2:3], .x, "BJS")
+        , "RRI"       = state_table_single_metric(REV_BJS, 2015:yr_BJS, admin$lev_RACE[2:3], .x, "RRI")
+        , "RATE"      = state_table_single_metric(REV_BJS, 2015:yr_BJS, admin$lev_RACE[1:3], .x, "RATE", mult = 1e+03)
+        , "REVCNT"    = state_table_single_metric(REV_BJS, 2015:yr_BJS, admin$lev_RACE[1:3], .x, "REVCNT")
+        , "POPEST"    = state_table_single_metric(REV_BJS, 2015:yr_BJS, admin$lev_RACE[1:3], .x, "POPEST")
       ) #end list 
     ) #end map BJS
     ,   "SC" = map(
       state_vec %>% set_names(),
       ~list(
-          "INFOGRAPH" = data_for_info_graphic(    REV_SC,             admin$lev_RACE[2:3], .x, "SC")
-        , "RRI"       = state_table_single_metric(REV_SC,  2015:2018, admin$lev_RACE[2:3], .x, "RRI")
-        , "RATE"      = state_table_single_metric(REV_SC,  2015:2018, admin$lev_RACE[1:3], .x, "RATE", mult = 1e+05)
-        , "REVCNT"    = state_table_single_metric(REV_SC,  2015:2018, admin$lev_RACE[1:3], .x, "REVCNT")
-        , "POPEST"    = state_table_single_metric(REV_SC,  2015:2018, admin$lev_RACE[1:3], .x, "POPEST")
+          "INFOGRAPH" = data_for_info_graphic(    REV_SC,               admin$lev_RACE[2:3], .x, "SC")
+        , "RRI"       = state_table_single_metric(REV_SC,  2015:yr_SC,  admin$lev_RACE[2:3], .x, "RRI")
+        , "RATE"      = state_table_single_metric(REV_SC,  2015:yr_SC,  admin$lev_RACE[1:3], .x, "RATE", mult = 1e+05)
+        , "REVCNT"    = state_table_single_metric(REV_SC,  2015:yr_SC,  admin$lev_RACE[1:3], .x, "REVCNT")
+        , "POPEST"    = state_table_single_metric(REV_SC,  2015:yr_SC,  admin$lev_RACE[1:3], .x, "POPEST")
       ) #end list 
     ) #end map SC
     , "STATEVEC" = state_vec
@@ -224,7 +250,8 @@ prep_for_shiny <- function(){
     if (dataavail == 1){
       pwalk(
         list(
-            rri_raw = df$RRI
+            rri_raw = df$S_RRI #do suppressed value (only 2 instances Idaho/West Virigina, both Hispanic)
+          , suppress = df$SUPPRESS
           , race = df$RACE
           , label   = paste0(whichPOP, "_", df$STATE, "_", df$RACE)
           , savefile= TRUE
