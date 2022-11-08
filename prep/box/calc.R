@@ -62,9 +62,9 @@ calcrate_total <- function(DF, POP_t){
 }
 
 
-pullrecentyr <- function(YR_VEC, POPEST_VEC){
+pullrecentyr <- function(YR_VEC, POPEST_VEC, REVCNT_VEC){
   
-  YR_NA  <- ifelse(is.na(POPEST_VEC), NA, YR_VEC)
+  YR_NA  <- ifelse(is.na(POPEST_VEC) | is.na(REVCNT_VEC), NA, YR_VEC)
   YR     <- YR_NA[!is.na(YR_NA)]
   cnt_NA <- sum(is.na(YR_NA))
   
@@ -87,7 +87,7 @@ combine_and_calcrates <- function(pop_denom){
   
   admin$mylog(glue("Import and clean NCRP revocations data"))
   
-  NCRP <- clean_NCRP$prep()
+  NCRP <- clean_NCRP$prep() 
   
   if (pop_denom == "SC"){
     admin$mylog(glue("Import and clean SC for population (denominator)"))
@@ -104,15 +104,14 @@ combine_and_calcrates <- function(pop_denom){
   CNTRT_DF <-c(
       map(NCRP[c("OR", "R")], calcrate_race,  POP_R = POP$R)
     , map(NCRP[c("O" , "t")], calcrate_total, POP_t = POP$t)
-    ) %>% 
-    map(., ~mutate(., RATE_100K = RATE*1E5)) 
+    ) 
 
   
   admin$mylog(glue("Calc - add most recent year of data (for a given STATE/RACE cross-section)"))
   FULL_DF <- map2(CNTRT_DF, names(CNTRT_DF), 
     ~.x %>% 
       group_by(across(admin$varcs(.y, combinelst = TRUE, includeYR = FALSE))) %>% 
-      mutate(RECENT_YR = pullrecentyr(RPTYEAR, POPEST)) %>% 
+      mutate(RECENT_YR = pullrecentyr(RPTYEAR, POPEST, REVCNT)) %>% 
       ungroup()
   )
   
