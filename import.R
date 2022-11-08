@@ -258,11 +258,11 @@ mclc_change <-
 
 # combine counts and change tables together
 mclc_explorer_table <- left_join(mclc_counts, mclc_change, by = c("state", "data")) %>%
-  mutate(`All (2018 - 2021)` = (`2021`-`2018`)/`2018`)
+  mutate(`2018 - 2021` = (`2021`-`2018`)/`2018`)
 
 # Get 4 year change
 mclc_explorer_table_4_yr <- mclc_explorer_table %>%
-  select(state, data, change = `All (2018 - 2021)`) %>%
+  select(state, data, change = `2018 - 2021`) %>%
   left_join(stateAbb, by = "state") %>%
   left_join(labels, by = "data") %>%
   rename(state_abb = code) %>%
@@ -290,7 +290,7 @@ mclc_explorer <- mclc_all %>%
   mutate(year = case_when(year == 2019 ~ "2018 - 2019",
                           year == 2020 ~ "2019 - 2020",
                           year == 2021 ~ "2020 - 2021",
-                          year == 2022 ~ "All (2018 - 2021)"),
+                          year == 2022 ~ "2018 - 2021"),
          change = round(change*100, 1),
          tooltip = paste0("<b>", state, "</b><br>","Change from ", year, "<br>",change, "%<br>"),
          datalabel = ifelse(is.na(change), paste0("", state_abb, ""),

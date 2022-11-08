@@ -42,24 +42,6 @@ server <- function(input, output, session) {
   # Download map button near dropdowns
   #######
 
-  # # Save map as png
-  # output$save_map <- downloadHandler(
-  #   filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""),
-  #   content = function(file) {
-  #     # temporarily switch to the temp dir, in case you do not have write
-  #     # permission to the current working directory
-  #     owd <- setwd(tempdir())
-  #     on.exit(setwd(owd))
-  #
-  #     saveWidget(foundational_map(), "temp.html")
-  #     # webshot2::webshot("temp.html", file = file, cliprect = "viewport")
-  #     webshot2::webshot("temp.html", file = file,
-  #                      delay = 2
-  #                      #cliprect = "viewport"
-  #                      )
-  #   }
-  # )
-
   # Save map as png
   output$save_map <- downloadHandler(
     filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""),
@@ -76,7 +58,6 @@ server <- function(input, output, session) {
   )
 
   # https://stackoverflow.com/questions/61347676/datalabels-in-r-highcharter-cannot-be-seen-after-print-as-png-or-jpg
-
 
   # This comes out blank
   # https://stackoverflow.com/questions/53927629/download-all-high-chart-output-from-r-shiny
@@ -107,17 +88,6 @@ server <- function(input, output, session) {
              metric     == input$data_map,
              year       == input$year_map)
   })
-
-  # # Was being used for datatable but now we're using reactable, save for now
-  # # Filter data depending on user input
-  # # Table under map data
-  # df_map_table <- reactive({
-  #   filter_by <- paste0(input$data_map, " ", input$adm_or_pop_map)
-  #   mclc_explorer_table %>%
-  #     filter(data == filter_by) %>%
-  #     arrange(state) %>%
-  #     rename(State = state)
-  # })
 
   # Data for table under map
   df_map_table <- reactive({
@@ -296,31 +266,12 @@ server <- function(input, output, session) {
   # Title of table under map based on user input
   output$selected_map_table <- renderText({paste(input$data_map, " ", input$adm_or_pop_map)})
 
-  # # Not using data table for now
-  # # table under hex map
-  # output$table_map = DT::renderDataTable({
-  #   datatable(df_map_table(),
-  #             # callback = JS("$('#DataTables_Table_0_filter input').css('background-color', 'yellow');"),
-  #             class = list(stripe = FALSE),
-  #             options = list(dom = 'ft',
-  #                            pageLength = 50,
-  #                            language = list(search = "", searchPlaceholder = "Find Your State"),
-  #                            columnDefs = list(list(visible=FALSE, targets=c(1)),
-  #                                              list(className = 'dt-right', targets = c(2:6)),
-  #                                              list(className = 'dt-left', targets = c(0))
-  #                                              )
-  #                            ),
-  #             rownames = FALSE) %>%
-  #             formatPercentage(c("2018 - 2019", "2019 - 2020", "2020 - 2021","All (2018 - 2021)"), 2) %>%
-  #             formatCurrency(c("2018", "2019", "2020",  "2021"), currency = " ", interval = 3, mark = ",") %>%
-  #             formatRound(columns=c("2018", "2019", "2020",  "2021"), digits = 0)
-  # })
-
   # Reactable table under hex map
   output$table_map <- renderReactable({
 
     filter_by <- paste0(input$data_map, " ", input$adm_or_pop_map)
     select_column = input$year_map
+    select_column_name = paste0(input$year_map, " Change")
     df <- mclc_explorer_table[, c('state', 'data', '2018', '2019', '2020', '2021', select_column, 'total_new')]
     df <- df %>%
       filter(data == filter_by) %>%
@@ -330,14 +281,16 @@ server <- function(input, output, session) {
 
     reactable(df,
               style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
-              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
+              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"), # was center
+                                     headerStyle = list(textAlign = "right")
+                                     ),
               defaultColDef = colDef(format = colFormat(separators = TRUE), align = "right"),
               compact = TRUE,
               fullWidth = FALSE,
               searchable = TRUE,
               pagination = FALSE,
               columns = list(
-                State           = colDef(name = "State", align = "left", minWidth = 140,
+                State           = colDef(name = "State", align = "left", minWidth = 120,
                                          style = list(fontWeight = "bold")),
                 data            = colDef(show = F,
                                          name = "Metric", align = "left", minWidth = 240,
@@ -348,7 +301,7 @@ server <- function(input, output, session) {
                 `2021`          = colDef(minWidth = 110),
 
                 change = colDef(minWidth = 110,
-                                name = select_column,
+                                name = select_column_name,
                                 style = list(fontWeight = "bold"),
                                 format = colFormat(percent = TRUE, digits = 1)),
                 # add 4 Year trend graphs to each row
@@ -561,7 +514,12 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        highcharter::hc_exporting(enabled = FALSE)
+        highcharter::hc_exporting(enabled = FALSE) %>%
+        hc_title(
+          text = paste0("Prison ", input$adm_pop_report),
+          align = "center",
+          style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
+        )
     }
   })
 
@@ -637,10 +595,14 @@ server <- function(input, output, session) {
     # Create table with 4 Year trend line in last column
     reactable(df,
               style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
-              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
-              defaultColDef = colDef(format = colFormat(separators = TRUE), align = "center"),
+              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"), # was center
+                                     headerStyle = list(textAlign = "right")
+              ),
+              defaultColDef = colDef(format = colFormat(separators = TRUE), align = "right"),
               compact = TRUE,
               fullWidth = FALSE,
+              searchable = FALSE,
+              pagination = FALSE,
               columns = list(
                 text            = colDef(name = "Metric",
                                        align = "left",
@@ -650,7 +612,7 @@ server <- function(input, output, session) {
                 `2019`          = colDef(minWidth = 95),
                 `2020`          = colDef(minWidth = 95),
                 four_yr_change = colDef(minWidth = 110,
-                                        name = "4 Year Change",
+                                        name = "2018-2021 Change",
                                         style = list(fontWeight = "bold"),
                                         format = colFormat(percent = TRUE, digits = 1)),
                 # Add 4 Year trend graphs to each row
@@ -778,10 +740,14 @@ server <- function(input, output, session) {
     # Create table with 4 Year trend line in last column
     reactable(df,
               style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
-              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
-              defaultColDef = colDef(format = colFormat(separators = TRUE), align = "center"),
+              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"), # was center
+                                     headerStyle = list(textAlign = "right")
+              ),
+              defaultColDef = colDef(format = colFormat(separators = TRUE), align = "right"),
               compact = TRUE,
               fullWidth = FALSE,
+              searchable = FALSE,
+              pagination = FALSE,
               columns = list(
                 text            = colDef(name = "Metric",
                                          align = "left",
@@ -791,7 +757,7 @@ server <- function(input, output, session) {
                 `2019`          = colDef(minWidth = 95),
                 `2020`          = colDef(minWidth = 95),
                 four_yr_change = colDef(minWidth = 110,
-                                        name = "4 Year Change",
+                                        name = "2018-2021 Change",
                                         style = list(fontWeight = "bold"),
                                         format = colFormat(percent = TRUE, digits = 1)),
                 # add 4 Year trend graphs to each row
@@ -834,8 +800,8 @@ server <- function(input, output, session) {
                                           dui_sparklineseries(
                                             curve = "linear",
                                             showArea = FALSE,
-                                            fill = colpal_fill[index],
-                                            stroke = colpal_stroke[index])))}))
+                                            fill = colpal_fill1[index],
+                                            stroke = colpal_stroke1[index])))}))
     )
   })
 
@@ -906,10 +872,14 @@ server <- function(input, output, session) {
     # Create table with 4 Year trend line in last column
     reactable(df,
               style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
-              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
-              defaultColDef = colDef(format = colFormat(separators = TRUE), align = "center"),
+              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"), # was center
+                                     headerStyle = list(textAlign = "right")
+              ),
+              defaultColDef = colDef(format = colFormat(separators = TRUE), align = "right"),
               compact = TRUE,
               fullWidth = FALSE,
+              searchable = FALSE,
+              pagination = FALSE,
               columns = list(
                 text            = colDef(name = "Metric",
                                          align = "left",
@@ -919,7 +889,7 @@ server <- function(input, output, session) {
                 `2019`          = colDef(minWidth = 95),
                 `2020`          = colDef(minWidth = 95),
                 four_yr_change = colDef(minWidth = 110,
-                                        name = "4 Year Change",
+                                        name = "2018-2021 Change",
                                         style = list(fontWeight = "bold"),
                                         format = colFormat(percent = TRUE, digits = 1)),
                 # add 4 Year trend graphs to each row
@@ -962,8 +932,8 @@ server <- function(input, output, session) {
                                           dui_sparklineseries(
                                             curve = "linear",
                                             showArea = FALSE,
-                                            fill = colpal_fill[index],
-                                            stroke = colpal_stroke[index])))}))
+                                            fill = colpal_fill1[index],
+                                            stroke = colpal_stroke1[index])))}))
     )
   })
 
@@ -977,15 +947,15 @@ server <- function(input, output, session) {
   #     probation_reactable_pop[[input$state_report]]
   #   }
   # })
-  
-  #### 
+
+  ####
   ## RACE/ETHNICITY DISPARITIES MYE HERE
   ###
-  
+
   output$infogblack <- renderImage({
-    
+
     png_file  <- glue("data/infogs/{input$pop_denom}_{input$state_report}_Black.png")
-    
+
     if (file.exists(png_file)){
       plot <- png_file
       list(
@@ -1006,11 +976,11 @@ server <- function(input, output, session) {
       )
     }
   }, deleteFile = FALSE)
-  
+
   output$infoghisp <- renderImage({
-    
+
     png_file  <- glue("data/infogs/{input$pop_denom}_{input$state_report}_Hispanic.png")
-    
+
     if (file.exists(png_file)){
       plot <- png_file
       list(
@@ -1031,23 +1001,23 @@ server <- function(input, output, session) {
       )
     }
   }, deleteFile = FALSE)
-  
-  
+
+
   output$infogheader <- renderUI({
-    
-    
+
+
     dataavail <- rridata[[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
-    
+
     out <- paste0(
         raceethnicity$pop_denom_text(input$pop_denom)
       , raceethnicity$infographic_header(dataavail, rridata[[input$pop_denom]][[input$state_report]]$INFOGRAPH$NOTE)
     )
-    
+
     HTML(out)
-    
+
   })
-  
-  
+
+
   output$table_rri_header <- renderUI({
     df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "RRI", whichTABLE = "table_suppress")
     main <- "<h4 class='reh4'> Relative Rate Index (White Reference Group)</h4>"
@@ -1063,17 +1033,17 @@ server <- function(input, output, session) {
     }
     HTML(out)
   })
-  
+
   output$table_rri <- renderUI({
     df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "RRI", whichTABLE = "table_suppress")
     dataavail <- rridata[[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
     if (dataavail == 1){
       raceethnicity$create_reactable(df)
     }
-    
+
   })
-  
-  
+
+
   output$table_rate_header <- renderUI({
     df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "RATE", whichTABLE = "table_suppress")
     mult <- scales::comma(rridata[[input$pop_denom]][[input$state_report]][["RATE"]]$mult)
@@ -1090,22 +1060,22 @@ server <- function(input, output, session) {
     }
     HTML(out)
   })
-  
+
   output$table_rate <- renderUI({
     df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "RATE", whichTABLE = "table_suppress")
     if (nrow(df) > 1){
       raceethnicity$create_reactable(df)
     }
   })
-  
-  
+
+
   output$table_revcnt_header <- renderUI({
     df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")
     main <- "<h4 class='reh4'>Parole Revocations Counts</h4>"
     if (nrow(df) > 0){
       out <- main
     } else {
-      out <- paste0(  main 
+      out <- paste0(  main
                     , "<div class = 'retxt'>"
                     , "Parole revocations data were not available for "
                     , input$state_report
@@ -1114,14 +1084,14 @@ server <- function(input, output, session) {
     }
     HTML(out)
   })
-  
+
   output$table_revcnt <- renderUI({
     df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")
     if (nrow(df) > 1){
       raceethnicity$create_reactable(df)
     }
   })
-  
+
   ##############################################################################################################################
   # Download
   ##############################################################################################################################

@@ -250,18 +250,14 @@ Table
   text-align: center;
   font-size: 30px;
   font-family: Graphik-Bold !important;
+  /* Align text with search bar */
+  /*position: relative; top: 30px;*/
 }
 
 /* Table under map settings */
 #table-map {
   text-align: center; /* not working */
-  white-space: nowrap;
-}
-
-/* Align text with search bar */
-#selected-map-table {
-  /*position: relative; top: 55px;*/
-  /*position: relative; top: 30px;*/
+  /*white-space: nowrap;*/
 }
 
 /* Change search bar appearance - need to figure out how to keep the style consistent when clicked*/
@@ -408,9 +404,9 @@ div.retxt {
 
 
 h3.reh3 {
-  font-family: Graphik-Bold !important; 
-  font-size: 30px !important;  /*same as selected-state-note-title */  
-  /*margin-top: 24px; */ 
+  font-family: Graphik-Bold !important;
+  font-size: 30px !important;  /*same as selected-state-note-title */
+  /*margin-top: 24px; */
   margin-bottom: 12px;
   /*text-transform: uppercase; */
   /*font-variant: small-caps; */
@@ -418,11 +414,11 @@ h3.reh3 {
 
 
 h4.reh4 {
-  font-family: Graphik-Bold !important; 
-  font-size: 24px; /* same as selected-state-note-title */  
-  margin-top: 18px; 
+  font-family: Graphik-Bold !important;
+  font-size: 24px; /* same as selected-state-note-title */
+  margin-top: 18px;
   margin-bottom: 12px;
-  color: #004270; 
+  color: #004270;
   /*text-transform: uppercase; */
   /*font-variant: small-caps; */
 }

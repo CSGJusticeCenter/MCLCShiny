@@ -54,8 +54,11 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                  # Select Year Change
                                                                  column(width = 3,
                                                                          labeled_input('year-map-btn', "",
-                                                                                       selectizeInput('year_map', div(style = "font-weight: bold", "Select Years"),
-                                                                                                      choices = c("2018 - 2019", "2019 - 2020", "2020 - 2021", "All (2018 - 2021)"),
+                                                                                       selectizeInput('year_map', div(style = "font-weight: bold", "Select Year Change"),
+                                                                                                      choices = c('2018 - 2019 Change' = "2018 - 2019",
+                                                                                                                  '2019 - 2020 Change' = "2019 - 2020",
+                                                                                                                  '2020 - 2021 Change' = "2020 - 2021",
+                                                                                                                  '2018 - 2021 Change' = "2018 - 2021"),
                                                                                                       multiple = FALSE))),
 
                                                                  # Download Map
@@ -131,7 +134,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                  column(width = 3,
                                                                         labeled_input('state-btn', "",
                                                                                       selectizeInput('state_report', div(style = "font-weight: bold", "Select State"),
-                                                                                                     choices = unique(adm_pop_long$state), 
+                                                                                                     choices = unique(adm_pop_long$state),
                                                                                                      multiple = FALSE))),
                                                                  # Select Adm or Pop
                                                                  column(width = 3,
@@ -185,7 +188,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                         fluidRow(column(width = 1),
                                                  column(width = 10,
 
-                                                        tabsetPanel(selected = "1", 
+                                                        tabsetPanel(selected = "1",
 
                                                           tabPanel(value="1","Overview",
 
@@ -251,50 +254,50 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                           ), # end tabPanel
 
-                                                          tabPanel(value="4","Race/Ethnicity", #MYE HERE 
-                                                                   
+                                                          tabPanel(value="4","Race/Ethnicity", #MYE HERE
+
                                                                    br(),
                                                                    fluidRow(
-                                                                     column(width = 2), 
-                                                                     column(width = 8, align = "center", 
-                                                                       div(class = "retxt", style = "margin-top: 7px !important;", 
-                                                                           radioButtons("pop_denom", 
+                                                                     column(width = 2),
+                                                                     column(width = 8, align = "center",
+                                                                       div(class = "retxt", style = "margin-top: 7px !important;",
+                                                                           radioButtons("pop_denom",
                                                                               div(h3("Racial and Ethnic Disparities", class = "reh3")), #style = "font-size: 16px;"),
                                                                               c(
-                                                                                "Disparities in Parole Revocations"                         = "BJS", 
+                                                                                "Disparities in Parole Revocations"                         = "BJS",
                                                                                 "Cumulative Disparities across the criminal justice system" = "SC"
-                                                                               ) 
-                                                                              , inline=T) #end radioButtons 
-                                                                       ), 
+                                                                               )
+                                                                              , inline=T) #end radioButtons
+                                                                       ),
                                                                        div(htmlOutput("infogheader")),
                                                                        div(imageOutput("infogblack", height = "100%", ), style = "margin-bottom: 0.5em;"),
                                                                        div(imageOutput("infoghisp", height = "100%")),
-                                                                       
+
                                                                      ), #end column width=8
                                                                      column(width = 2)
-                                                                                   
-                                                                   ), #end fluidRow 
-                                                                   
-                                                                   
-                                                                   br(), 
-                                                                   
+
+                                                                   ), #end fluidRow
+
+
+                                                                   br(),
+
                                                                    fluidRow(
-                                                                     column(width = 2), 
-                                                                     column(width = 8, align = "center", 
-                                                                            div(h3("Tables", class = "reh3")), 
-                                                                            div(htmlOutput(     "table_rri_header")), 
-                                                                            div(htmlOutput("table_rri")), 
-                                                                            div(htmlOutput(     "table_rate_header"),  style = "padding-top: 24px;"), 
+                                                                     column(width = 2),
+                                                                     column(width = 8, align = "center",
+                                                                            div(h3("Tables", class = "reh3")),
+                                                                            div(htmlOutput(     "table_rri_header")),
+                                                                            div(htmlOutput("table_rri")),
+                                                                            div(htmlOutput(     "table_rate_header"),  style = "padding-top: 24px;"),
                                                                             div(htmlOutput("table_rate")),
-                                                                            div(htmlOutput(     "table_revcnt_header"), style = "padding-top: 24px;"), 
+                                                                            div(htmlOutput(     "table_revcnt_header"), style = "padding-top: 24px;"),
                                                                             div(htmlOutput("table_revcnt")),
-                                                                            br(), 
+                                                                            br(),
                                                                             div(html("&#10033; Asterisk indicates situations where the parole revocation counts were less than 5."), class = "retxt", align = "left")
-                                                                                   
+
                                                                      ),  #end column width = 10
                                                                      column(width = 2)
                                                                    ), #end fluidRow
-                                                                   
+
                                                                    br(),
                                                                    br()
 
