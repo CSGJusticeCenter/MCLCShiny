@@ -1038,27 +1038,6 @@ server <- function(input, output, session) {
     
     dataavail <- rridata[[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
     
-    # if (dataavail == 1){
-    #   
-    #   out <- paste0(
-    #       "<div class = 'retxt'>"
-    #     , raceethnicity$pop_denom_text(input$pop_denom)
-    #     , raceethnicity$infographic_header(dataavial)
-    #     , "</div>"
-    #   )
-    #   
-    # } else { 
-    #   
-    #   out <- paste0(
-    #                   "<h3 class='reh3'>No data</h3>"
-    #                 , "<div class = 'retxt'>"
-    #                 , "Data to calculate disparites in parole revocations is not available.<br>"
-    #                 , rridata[[input$pop_denom]][[input$state_report]]$INFOGRAPH$NOTE
-    #                 , "</div>"
-    #   )
-    #   
-    # }
-    
     out <- paste0(
         raceethnicity$pop_denom_text(input$pop_denom)
       , raceethnicity$infographic_header(dataavail, rridata[[input$pop_denom]][[input$state_report]]$INFOGRAPH$NOTE)
@@ -1085,9 +1064,13 @@ server <- function(input, output, session) {
     HTML(out)
   })
   
-  output$table_rri <- renderReactable({
+  output$table_rri <- renderUI({
     df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "RRI", whichTABLE = "table_suppress")
-    raceethnicity$create_reactable(df)
+    dataavail <- rridata[[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
+    if (dataavail == 1){
+      raceethnicity$create_reactable(df)
+    }
+    
   })
   
   
@@ -1108,9 +1091,11 @@ server <- function(input, output, session) {
     HTML(out)
   })
   
-  output$table_rate <- renderReactable({
+  output$table_rate <- renderUI({
     df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "RATE", whichTABLE = "table_suppress")
-    raceethnicity$create_reactable(df)
+    if (nrow(df) > 1){
+      raceethnicity$create_reactable(df)
+    }
   })
   
   
@@ -1130,9 +1115,11 @@ server <- function(input, output, session) {
     HTML(out)
   })
   
-  output$table_revcnt <- renderReactable({
+  output$table_revcnt <- renderUI({
     df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")
-    raceethnicity$create_reactable(df)
+    if (nrow(df) > 1){
+      raceethnicity$create_reactable(df)
+    }
   })
   
   ##############################################################################################################################
