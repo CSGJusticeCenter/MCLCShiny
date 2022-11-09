@@ -1,0 +1,264 @@
+---
+title: "RRI Comparison BJS vs SC" 
+description: "Last User: `r stringr::str_sub(getwd(), 10, stringr::str_locate(stringr::str_sub(getwd(), 10, -1), '/')[1]+10-2)`"
+date: last-modified
+date-format: "YYYY-MM-DD HH:mm:ss"
+published-title: Last Modified
+doi: "`r Sys.time()`"
+doi-title: Last Ran
+execute:
+  echo: true
+format: 
+  html:
+    page-layout: full
+    fontsize: 0.9em
+    fig-width: 12
+    fig-height: 7
+    code-fold: true 
+editor: source
+self-contained: true
+editor_options: 
+  chunk_output_type: console
+---
+
+
+<style>
+
+.txt_h {
+  text-align: center;
+}
+
+
+</style>
+
+```{r}
+#| label: setup
+#| include: false  
+
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+
+#https://stackoverflow.com/questions/66974669/collapse-rows-is-not-collapsed-and-updating-packages-does-not-fix
+#devtools::install_github(repo="haozhu233/kableExtra", ref="a6af5c0") #to get collapse rows to work 
+
+box::use(
+    box/admin
+)
+```
+
+
+## Notes 
+
+The prefix `S_` indicates that the variables values has been suppressed if the `REVCNT` <5.  The `S_` version of a variable (e.g. `S_RRI`) will equal the original variable (`RRI`) when suppression did not occur.  The variable `SUPPRESS` is used as a flag, with 1 = suppression occurred and `S_REVCNT` = 5 instead of the original value.  
+
+## Math Stuffs 
+
+
+TLDR: The data with the largest proportion of White population to the Black or Hispanic population will have the larger RRI.  
+
+::: grid
+::: g-col-6
+Values:  
+$n$ revocation count  
+$N$ population estimate  
+$R$ rate  
+$I$ Relative rate index
+:::
+
+<!--end {.g-col-6} -->
+
+::: g-col-6
+Sub-text:\
+$r$ race/ethnicity  
+$r = W$ white  
+$BJS$ BJS data  
+$SC$ SC data
+:::
+
+<!--end {.g-col-6} -->
+:::
+
+<!-- end {.grid}-->
+
+
+
+$$
+\begin{aligned}
+I & = \frac{ R_r }{ R_W } = \frac{n_r / N_r }{n_W /N_W} = \frac{ n_r \cdot N_W}{N_r \cdot n_w} = \frac{n_r}{n_W} \cdot \frac{N_W}{N_r} \\[1em]
+I^{BJS} & = \frac{n_r}{n_W} \cdot \frac{N^{BJS}_W}{N^{BJS}_r} \\[1em]
+I^{SC} & = \frac{n_r}{n_W} \cdot \frac{N^{SC}_W}{N^{SC}_r} \\[1em] 
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+I^{BJS} & > I^{SC} \\[1em]
+\frac{n_r}{n_W} \cdot \frac{N^{BJS}_W}{N^{BJS}_r} & > \frac{n_r}{n_W} \cdot \frac{N^{SC}_W}{N^{SC}_r}  \\[1em]
+ \frac{N^{BJS}_W}{N^{BJS}_r} & > \frac{N^{SC}_W}{N^{SC}_r} 
+\end{aligned}
+$$
+
+
+$$
+\begin{aligned}
+p &= \frac{N_W}{N_r} \\[1em]
+p^{BJS} &> p^{SC} \implies I^{BJS} > I^{SC}
+\end{aligned}
+$$
+
+
+
+
+```{r}
+REV_BJS <- readRDS(file.path(admin$sp_data, "NCRP_REV_APS.RDS"))
+REV_SC  <- readRDS(file.path(admin$sp_data, "NCRP_REV_SC.RDS"))
+
+
+part1 <- full_join(
+    REV_BJS$R
+  , REV_SC$R
+  , by = c(admin$varcs("R", TRUE), "REVCNT", "SUPPRESS", "S_REVCNT")
+  , suffix = c(".BJS", ".SC")
+  ) %>% 
+  select(STATE, RPTYEAR, RACE, REVCNT, SUPPRESS, S_REVCNT, contains("POPEST"), contains("S_RATE"), contains("S_RRI")) %>% 
+  select(STATE, RPTYEAR, RACE, REVCNT, SUPPRESS, S_REVCNT, contains(".BJS"), contains(".SC")) %>% 
+ mutate(BJS_gt_SC = ifelse(S_RRI.BJS > S_RRI.SC, 1, 0)) %>% 
+  filter(RACE %in% admin$lev_RACE[1:3]) #%>% 
+
+part2 <- part1 %>% 
+  filter(RACE == "White") %>% 
+  select(STATE, RPTYEAR, WPOPEST.BJS = POPEST.BJS, WPOPEST.SC = POPEST.SC)
+
+
+S_comp_R <- full_join(part1, part2, by = c("STATE", "RPTYEAR")) %>% 
+  group_by(STATE, RPTYEAR) %>% 
+  mutate(p.BJS = WPOPEST.BJS/POPEST.BJS, .after = POPEST.BJS) %>% 
+  mutate(p.SC  = WPOPEST.SC /POPEST.SC,  .after = POPEST.SC) %>% 
+  ungroup() %>% 
+  mutate(
+      RRI_diff  =   S_RRI.SC -   S_RRI.BJS
+    , p_diff = p.SC - p.BJS
+  )
+rm(part1, part2)
+
+
+part1 <- full_join(
+    REV_BJS$OR
+  , REV_SC$OR
+  , by = c(admin$varcs("OR", TRUE), "REVCNT", "SUPPRESS", "S_REVCNT")
+  , suffix = c(".BJS", ".SC")
+  ) %>% 
+  select(STATE, RPTYEAR, OFFGENERAL, RACE, REVCNT, SUPPRESS, S_REVCNT, contains("POPEST"), contains("S_RATE"), contains("S_RRI")) %>% 
+  select(STATE, RPTYEAR, OFFGENERAL, RACE, REVCNT, SUPPRESS, S_REVCNT, contains(".BJS"), contains(".SC")) %>% 
+ mutate(BJS_gt_SC = ifelse(S_RRI.BJS > S_RRI.SC, 1, 0)) %>% 
+  filter(RACE %in% admin$lev_RACE[1:3]) 
+
+part2 <- part1 %>% 
+  filter(RACE == "White") %>% 
+  select(STATE, RPTYEAR, OFFGENERAL, WPOPEST.BJS = POPEST.BJS, WPOPEST.SC = POPEST.SC)
+
+
+S_comp_OR <- full_join(part1, part2, by = c("STATE", "RPTYEAR", "OFFGENERAL")) %>% 
+  group_by(STATE, RPTYEAR, OFFGENERAL) %>% 
+  mutate(p.BJS = WPOPEST.BJS/POPEST.BJS, .after = POPEST.BJS) %>% 
+  mutate(p.SC  = WPOPEST.SC /POPEST.SC,  .after = POPEST.SC) %>% 
+  ungroup() %>% 
+  mutate(
+      RRI_diff  =   S_RRI.SC -  S_RRI.BJS
+    , p_diff = p.SC - p.BJS
+  )
+rm(part1, part2)
+
+
+```
+
+
+## All OFFGENEARL Categories 
+
+```{r}
+
+S_comp_R %>% 
+  filter(RACE != "White") %>% 
+  drop_na(RRI_diff, p_diff) %>% 
+  ggplot() + 
+  annotate("rect"
+           , xmin = min(S_comp_R$RRI_diff, na.rm = T)
+           , xmax = 0
+           , ymin = min(S_comp_R$p_diff, na.rm = T)
+           , ymax = 0
+           , fill = "grey80"
+           , alpha = 0.5
+          ) + 
+  geom_point(aes(x = RRI_diff, y = p_diff, shape = RACE, color = as.character(BJS_gt_SC)), alpha = 0.5) +
+  labs(
+    title = "Comparing Differences in S_RRI and pPOP for Black/Hispanic (Any OFFGENEARL category) - INFOGRAPHICS"
+    , subtitle = "pPOPEST = WPOPEST (White Population) / POPEST (White, Black, or Hispanic)\nWhite is removed from Plot since S_RRI = 1 so all S_RRI difference = 0\n Grey box indicates where BJS RRI is larger and BJS p is larger"
+    , x = "S_RRI difference (S_RRI.SC - S_RRI.BJS)"
+    , y = "pPOPESTP Difference (pPOPESTP.SC - pPOPESTP.BJS)"
+  ) + 
+  scale_color_discrete(name = "S_RRI.BJS > S_RRI.SC") + 
+  theme_minimal()
+```
+
+
+```{r}
+DT::datatable(S_comp_R)
+```
+
+
+## OFFGENEARL Breakout 
+
+
+```{r}
+S_comp_OR %>% 
+  filter(RACE != "White") %>% 
+  drop_na(RRI_diff, p_diff) %>% 
+  ggplot() + 
+  annotate("rect"
+           , xmin = min(S_comp_OR$RRI_diff, na.rm = T)
+           , xmax = 0
+           , ymin = min(S_comp_OR$p_diff, na.rm = T)
+           , ymax = 0
+           , fill = "grey80"
+           , alpha = 0.5
+          ) + 
+  geom_point(aes(x = RRI_diff, y = p_diff, shape = RACE, color = as.character(BJS_gt_SC)), alpha = 0.5) +
+  labs(
+    title = "Comparing Differences in S_RRI and p for Black/Hispanic (OFFGENEARL Breakout)"
+    , subtitle = "p = WPOPEST (White Population) / POPEST (White, Black, or Hispanic)\nWhite is removed from Plot since S_RRI = 1 so all S_RRI difference = 0\n Grey box indicates where BJS RRI is larger and BJS p is larger"
+    , x = "S_RRI difference (S_RRI.SC - S_RRI.BJS)"
+    , y = "p Difference (p.SC - p.BJS)"
+  ) + 
+  scale_color_discrete(name = "S_RRI.BJS > S_RRI.SC") + 
+  theme_minimal()
+```
+
+```{r}
+DT::datatable(S_comp_OR)
+```
+
+
+## Example: Arkansas, 2015, Any OFFGENEARL category 
+
+```{r}
+S_comp_R %>% filter(STATE == "Arkansas", RPTYEAR == 2015) %>% 
+  DT::datatable()
+```
+
+$$
+\begin{aligned}
+n_W & = 3442 \\
+n_H & = 15 \\[1em]
+N^{BJS}_W & = 13377\\
+N^{BJS}_H & = 874 \\
+p^{BJS} & = N^{BJS}_H / N^{BJS}_H = 13377/874 = 15.3 \\[1em]
+N^{SC}_W & = 1726866\\
+N^{SC}_H & = 130073 \\
+p^{SC} & = N^{SC}_H / N^{SC}_H = 1726866/130073 = 13.3 \\[1em]
+I^{BJS}_H & = 0.067 \\
+I^{SC}_H & = 0.05796049
+\end{aligned}
+$$
+
+

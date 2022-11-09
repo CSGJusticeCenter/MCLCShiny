@@ -10,7 +10,7 @@ csg_render_ds("prep/NCRP_infographics.qmd", file.path(sp, "NCRP_infographics_qui
 csg_render_ds("prep/gen_documentation.qmd", file.path(sp, "General_Documentation.html"))
 csg_render_ds("prep/rate_comp.qmd"        , file.path(sp, "Rate_Comparison.html"))
 csg_render_ds("prep/NCRP_demo.Rmd"        , file.path(sp, "NCRP_Revocations_Demo.html"))
-
+csg_render_ds("prep/rri_comparison.qmd"   , file.path(sp, "RRI_Comparison.html"))
 
 
 
