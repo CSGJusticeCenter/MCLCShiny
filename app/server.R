@@ -42,8 +42,8 @@ server <- function(input, output, session) {
   # Hex map title
   #######
 
-  # # Title of map based on user input
-  # output$selected_map <- renderText({paste("Change in ", input$data_map, " ", input$adm_or_pop_map, "from ", input$year_map)})
+  # Title of map based on user input
+  output$selected_map <- renderText({paste("Change in ", input$data_map, " ", input$adm_or_pop_map, "from ", input$year_map)})
 
   #######
   # Hex map data
@@ -145,9 +145,9 @@ server <- function(input, output, session) {
         hc_title(
           text = paste0("Change in ", unique(df_map()$metric), " ", unique(df_map()$adm_or_pop), " from ", unique(df_map()$year)),
           align = "center",
-          style = list(fontWeight = "bold",
-                       #fontFamily = "Graphik-Bold",
-                       fontFamily = "Graphik", # works in view and export but is the wrong font
+          style = list(fontFamily = "Graphik-Bold", # works in view but not in export
+                       #fontWeight = "bold",
+                       #fontFamily = "Graphik", # works in view and export but is the wrong font
                        fontSize = "30px",
                        useHTML = TRUE)
         ) %>%
@@ -206,9 +206,9 @@ server <- function(input, output, session) {
         hc_title(
           text = paste0("Change in ", unique(df_map()$metric), " ", unique(df_map()$adm_or_pop), " from ", unique(df_map()$year)),
           align = "center",
-          style = list(fontWeight = "bold",
-                       # fontFamily = "Graphik-Bold",
-                       fontFamily = "Graphik",
+          style = list(fontFamily = "Graphik-Bold", # works in view but not in export
+                       #fontWeight = "bold",
+                       #fontFamily = "Graphik",
                        fontSize = "30px",
                        useHTML = TRUE)) %>%
 

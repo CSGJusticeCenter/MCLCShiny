@@ -46,7 +46,7 @@ position: relative;
 Font size and style
 ########################################*/
 
-/* Add fonts
+/* Add fonts*/
 @font-face {
     font-family: Graphik;
     src: url("fonts/Graphik.ttf") format('truetype');
@@ -54,13 +54,11 @@ Font size and style
 @font-face {
     font-family: Graphik-Bold;
     src: url("fonts/GraphikBold.ttf") format('truetype');
-}*/
-
-/*
+}
 @font-face {
     font-family: Graphik;
     src: url("fonts/Graphik.otf") format('opentype');
-}*/
+}
 @font-face {
     font-family: Graphik-Bold;
     src: url("fonts/GraphikBold.otf") format('opentype');
@@ -219,13 +217,12 @@ Hex map
   margin-bottom: 0;
 }
 
-/* Title of map settings
+/* Title of map settings*/
 #selected-map {
   text-align: center;
-  /*font-weight: bold;
   font-size: 30px;
   font-family: Graphik-Bold;
-}*/
+}
 
 /* Map settings*/
 #hex-map{
