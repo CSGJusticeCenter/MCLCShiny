@@ -47,7 +47,6 @@ df <- mclc_explorer %>%
          metric     == "Total",
          year       == "2018 - 2019")
 
-# ################ TO DO find min and max values and put in dataframe in import.R
 # Get minimum and maximum value
 min_map <- min(df$change, na.rm = TRUE)
 max_map <- max(df$change, na.rm = TRUE)
