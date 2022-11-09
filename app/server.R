@@ -176,7 +176,7 @@ server <- function(input, output, session) {
         hc_title(
           text = paste0("Change in ", unique(df_map()$metric), " ", unique(df_map()$adm_or_pop), " from ", unique(df_map()$year)),
           align = "center",
-          style = list(fontWeight = "bold",
+          style = list(#fontWeight = "bold",
                        fontFamily = "Graphik-Bold",
                        fontSize = "30px",
                        useHTML = TRUE)
@@ -237,7 +237,7 @@ server <- function(input, output, session) {
           text = paste0("Change in ", unique(df_map()$metric), " ", unique(df_map()$adm_or_pop), " from ", unique(df_map()$year)),
           align = "center",
           style = list(#fontWeight = "bold",
-                       fontFamily = "Graphik-Bold",
+                       fontFamily = "Graphik",
                        fontSize = "30px",
                        useHTML = TRUE)) %>%
 

@@ -39,7 +39,18 @@ states <- adm_pop_long$state %>%
   sort()
 
 ############
-# State area chart
+# MAP EXPLORER - Maps
+############
+
+df <- mclc_explorer %>%
+  filter(adm_or_pop == "Admissions",
+         metric     == "Total",
+         year       == "2018 - 2019")
+
+
+
+############
+# STATE REPORTS - State area chart
 ############
 
 # generate list of state highcharts to call in app (admissions)
@@ -55,7 +66,7 @@ all_state_area_adm <- map(.x = states,  .f = function(x) {
   return(highcharts)
 })
 
-all_state_area_adm <- setNames(all_state_area_adm, c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"))
+all_state_area_adm <- setNames(all_state_area_adm, states)
 
 # generate list of state highcharts to call in app (population)
 all_state_area_pop <- map(.x = states,  .f = function(x) {
@@ -71,10 +82,10 @@ all_state_area_pop <- map(.x = states,  .f = function(x) {
 })
 
 # set names of charts
-all_state_area_pop <- setNames(all_state_area_pop ,c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"))
+all_state_area_pop <- setNames(all_state_area_pop, states)
 
 ############
-# State bar chart
+# STATE REPORTS - State bar chart
 ############
 
 # generate list of state highcharts to call in app (admissions)
@@ -91,7 +102,7 @@ all_state_bar_adm <- map(.x = states,  .f = function(x) {
 })
 
 # set names of charts
-all_state_bar_adm <- setNames(all_state_bar_adm,c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"))
+all_state_bar_adm <- setNames(all_state_bar_adm, states)
 
 # generate list of state highcharts to call in app (population)
 all_state_bar_pop <- map(.x = states,  .f = function(x) {
@@ -107,10 +118,10 @@ all_state_bar_pop <- map(.x = states,  .f = function(x) {
 })
 
 # set names of charts
-all_state_bar_pop <- setNames(all_state_bar_pop,c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"))
+all_state_bar_pop <- setNames(all_state_bar_pop, states)
 
 ############
-# Parole bar chart
+# STATE REPORTS - Parole bar chart
 ############
 
 # generate list of state highcharts to call in app (admissions)
@@ -128,7 +139,7 @@ parole_bar_adm <- map(.x = states,  .f = function(x) {
 })
 
 # set names of charts
-parole_bar_adm <- setNames(parole_bar_adm,c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"))
+parole_bar_adm <- setNames(parole_bar_adm,states)
 
 # generate list of state highcharts to call in app (population)
 parole_bar_pop <- map(.x = states,  .f = function(x) {
@@ -145,10 +156,10 @@ parole_bar_pop <- map(.x = states,  .f = function(x) {
 })
 
 # set names of charts
-parole_bar_pop <- setNames(parole_bar_pop,c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"))
+parole_bar_pop <- setNames(parole_bar_pop,states)
 
 ############
-# Probation bar chart
+# STATE REPORTS - Probation bar chart
 ############
 
 # generate list of state highcharts to call in app (admissions)
@@ -166,7 +177,7 @@ probation_bar_adm <- map(.x = states,  .f = function(x) {
 })
 
 # set names of charts
-probation_bar_adm <- setNames(probation_bar_adm,c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"))
+probation_bar_adm <- setNames(probation_bar_adm, states)
 
 # generate list of state highcharts to call in app (population)
 probation_bar_pop <- map(.x = states,  .f = function(x) {
@@ -183,7 +194,7 @@ probation_bar_pop <- map(.x = states,  .f = function(x) {
 })
 
 # set names of charts
-probation_bar_pop <- setNames(probation_bar_pop,c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"))
+probation_bar_pop <- setNames(probation_bar_pop, states)
 
 ############
 # Save plots
