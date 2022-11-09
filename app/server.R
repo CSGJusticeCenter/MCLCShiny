@@ -288,6 +288,14 @@ server <- function(input, output, session) {
               compact = TRUE,
               fullWidth = FALSE,
               searchable = TRUE,
+
+              language = reactableLang(
+                searchPlaceholder = "Search for Your State"
+                # # Accessible labels for assistive technology, such as screen readers
+                # pagePreviousLabel = "Previous page",
+                # pageNextLabel = "Next page"
+              ),
+
               pagination = FALSE,
               columns = list(
                 State           = colDef(name = "State", align = "left", minWidth = 120,
