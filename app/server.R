@@ -146,14 +146,18 @@ server <- function(input, output, session) {
           text = paste0("Change in ", unique(df_map()$metric), " ", unique(df_map()$adm_or_pop), " from ", unique(df_map()$year)),
           align = "center",
           style = list(fontFamily = "Graphik-Bold", # works in view but not in export
-                       #fontWeight = "bold",
-                       #fontFamily = "Graphik", # works in view and export but is the wrong font
+                       # fontWeight = "bold",
+                       # fontFamily = "Graphik", # works in view and export but is the wrong font
                        fontSize = "30px",
                        useHTML = TRUE)
         ) %>%
 
         hc_setup() %>%
-        hc_exporting(enabled = FALSE) %>%
+        hc_exporting(enabled = TRUE,
+                     buttons = list(
+                       contextButton = list(
+                         menuItems = list('downloadPNG', 'downloadSVG')
+                       ))) %>%
 
         hc_plotOptions(series = list(animation = FALSE,
                                      dataLabels = list(enabled = TRUE),
@@ -207,13 +211,17 @@ server <- function(input, output, session) {
           text = paste0("Change in ", unique(df_map()$metric), " ", unique(df_map()$adm_or_pop), " from ", unique(df_map()$year)),
           align = "center",
           style = list(fontFamily = "Graphik-Bold", # works in view but not in export
-                       #fontWeight = "bold",
-                       #fontFamily = "Graphik",
+                       # fontWeight = "bold",
+                       # fontFamily = "Graphik",
                        fontSize = "30px",
                        useHTML = TRUE)) %>%
 
         hc_setup() %>%
-        hc_exporting(enabled = FALSE) %>%
+        hc_exporting(enabled = TRUE,
+                     buttons = list(
+                       contextButton = list(
+                         menuItems = list('downloadPNG', 'downloadSVG')
+                       ))) %>%
 
         hc_plotOptions(series = list(animation = FALSE, dataLabels = list(enabled = TRUE), cursor = "pointer", borderWidth = 3),
                        accessibility = list(enabled = TRUE,
@@ -513,7 +521,11 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        highcharter::hc_exporting(enabled = FALSE) %>%
+        hc_exporting(enabled = TRUE,
+                     buttons = list(
+                       contextButton = list(
+                         menuItems = list('downloadPNG', 'downloadSVG')
+                       ))) %>%
         hc_title(
           text = paste0("Prison ", input$adm_pop_report),
           align = "center",
@@ -525,7 +537,11 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        highcharter::hc_exporting(enabled = FALSE) %>%
+        hc_exporting(enabled = TRUE,
+                     buttons = list(
+                       contextButton = list(
+                         menuItems = list('downloadPNG', 'downloadSVG')
+                       ))) %>%
         hc_title(
           text = paste0("Prison ", input$adm_pop_report),
           align = "center",
@@ -548,7 +564,11 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        highcharter::hc_exporting(enabled = FALSE) %>%
+        hc_exporting(enabled = TRUE,
+                     buttons = list(
+                       contextButton = list(
+                         menuItems = list('downloadPNG', 'downloadSVG')
+                       ))) %>%
         hc_title(
           text = paste0("Supervision Violation ", input$adm_pop_report),
           align = "center",
@@ -560,7 +580,11 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        highcharter::hc_exporting(enabled = FALSE) %>%
+        hc_exporting(enabled = TRUE,
+                     buttons = list(
+                       contextButton = list(
+                         menuItems = list('downloadPNG', 'downloadSVG')
+                       ))) %>%
         hc_title(
           text = paste0("Supervision Violation ", input$adm_pop_report),
           align = "center",
@@ -709,7 +733,11 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        highcharter::hc_exporting(enabled = FALSE) %>%
+        hc_exporting(enabled = TRUE,
+                     buttons = list(
+                       contextButton = list(
+                         menuItems = list('downloadPNG', 'downloadSVG')
+                       ))) %>%
         hc_title(
           text = paste0("Parole Violation ", input$adm_pop_report),
           align = "center",
@@ -721,7 +749,11 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        highcharter::hc_exporting(enabled = FALSE) %>%
+        hc_exporting(enabled = TRUE,
+                     buttons = list(
+                       contextButton = list(
+                         menuItems = list('downloadPNG', 'downloadSVG')
+                       ))) %>%
         hc_title(
           text = paste0("Parole Violation ", input$adm_pop_report),
           align = "center",
@@ -841,7 +873,11 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        highcharter::hc_exporting(enabled = FALSE) %>%
+        hc_exporting(enabled = TRUE,
+                     buttons = list(
+                       contextButton = list(
+                         menuItems = list('downloadPNG', 'downloadSVG')
+                       ))) %>%
         hc_title(
           text = paste0("Probation Violation ", input$adm_pop_report),
           align = "center",
@@ -853,7 +889,11 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        highcharter::hc_exporting(enabled = FALSE) %>%
+        hc_exporting(enabled = TRUE,
+                     buttons = list(
+                       contextButton = list(
+                         menuItems = list('downloadPNG', 'downloadSVG')
+                       ))) %>%
         hc_title(
           text = paste0("Probation Violation ", input$adm_pop_report),
           align = "center",

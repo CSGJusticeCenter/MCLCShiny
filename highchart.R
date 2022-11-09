@@ -106,6 +106,7 @@ final_map <- if (min_map_type != max_map_type) {
     ) %>%
 
     hc_add_theme(hc_theme_map_jc) %>%
+    hc_exporting(enabled = TRUE) %>%
 
     hc_xAxis(title = "") %>%
     hc_yAxis(title = "") %>%
@@ -150,6 +151,7 @@ final_map <- if (min_map_type != max_map_type) {
               symbolWidth = 25) %>%
 
     hc_add_theme(hc_theme_map_jc) %>%
+    hc_exporting(enabled = TRUE) %>%
 
 
     hc_xAxis(title = "") %>%
