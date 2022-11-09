@@ -219,20 +219,20 @@ Hex map
   margin-bottom: 0;
 }
 
-/* Title of map settings */
+/* Title of map settings
 #selected-map {
-  text-align: center; /* not working */
-  font-weight: bold;
+  text-align: center;
+  /*font-weight: bold;
   font-size: 30px;
   font-family: Graphik-Bold;
-}
+}*/
 
-/* Map settings */
+/* Map settings*/
 #hex-map{
-  text-align: center; /* not working */
-  font-weight: bold;
+  text-align: center;
+  /*font-weight: bold;
   font-size: 30px;
-  font-family: Graphik-Bold;
+  font-family: Graphik;*/
 }
 
 /*######################################
