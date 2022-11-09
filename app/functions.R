@@ -42,7 +42,7 @@ hc_theme_map_jc <- hc_theme_merge(
 # Highcharts theme for plots
 hc_theme_jc <- hc_theme(colors = c("#D25E2D", "#EDB799", "#C7E8F5", "#236ca7", "#D6C246", "#dcdcdc"),
                         chart = list(style = list(fontFamily = "Graphik", color = "#666666")),
-                        #title = list(align = "center", style = list(fontFamily = "Graphik", fontSize = "24px")),
+                        title = list(align = "center", style = list(fontFamily = "Graphik", fontWeight = "bold", fontSize = "24px")),
                         #subtitle = list(align = "center", style = list(fontFamily = "Graphik", fontSize = "16px")),
                         legend = list(align = "center", verticalAlign = "top"),
                         xAxis = list(gridLineColor = "transparent", lineColor = "transparent", minorGridLineColor = "transparent", tickColor = "transparent"),
