@@ -39,37 +39,6 @@ server <- function(input, output, session) {
   ##############################################################################################################################
 
   #######
-  # Download map button near dropdowns
-  #######
-
-  # Save map as png
-  output$save_map <- downloadHandler(
-    filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""),
-    content = function(file) {
-
-      owd <- setwd(tempdir())
-      on.exit(setwd(owd))
-
-      saveWidget(foundational_map(), "temp.html")
-      webshot2::webshot("temp.html", file = file,
-                        delay = 1
-      )
-    }
-  )
-
-  # https://stackoverflow.com/questions/61347676/datalabels-in-r-highcharter-cannot-be-seen-after-print-as-png-or-jpg
-
-  # This comes out blank
-  # https://stackoverflow.com/questions/53927629/download-all-high-chart-output-from-r-shiny
-  # output$save_map <- downloadHandler(filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""),
-  #                                    content = function(file) {
-  #                                     png(file, width=1200, height=1200)
-  #                                     foundational_map()
-  #                                     dev.off()
-  #                                   },
-  #                                    contentType = "image/png")
-
-  #######
   # Hex map title
   #######
 
@@ -176,8 +145,8 @@ server <- function(input, output, session) {
         hc_title(
           text = paste0("Change in ", unique(df_map()$metric), " ", unique(df_map()$adm_or_pop), " from ", unique(df_map()$year)),
           align = "center",
-          style = list(#fontWeight = "bold",
-                       fontFamily = "Graphik-Bold",
+          style = list(fontWeight = "bold",
+                       fontFamily = "Graphik",
                        fontSize = "30px",
                        useHTML = TRUE)
         ) %>%
@@ -236,7 +205,7 @@ server <- function(input, output, session) {
         hc_title(
           text = paste0("Change in ", unique(df_map()$metric), " ", unique(df_map()$adm_or_pop), " from ", unique(df_map()$year)),
           align = "center",
-          style = list(#fontWeight = "bold",
+          style = list(fontWeight = "bold",
                        fontFamily = "Graphik",
                        fontSize = "30px",
                        useHTML = TRUE)) %>%
@@ -258,6 +227,38 @@ server <- function(input, output, session) {
   output$hex_map <- renderHighchart({
     foundational_map()
   })
+
+
+  #######
+  # Download map button near dropdowns
+  #######
+
+  # Save map as png
+  output$save_map <- downloadHandler(
+    filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""),
+    content = function(file) {
+
+      owd <- setwd(tempdir())
+      on.exit(setwd(owd))
+
+      saveWidget(foundational_map(), "temp.html")
+      webshot2::webshot("temp.html", file = file,
+                        delay = 1
+      )
+    }
+  )
+
+  # https://stackoverflow.com/questions/61347676/datalabels-in-r-highcharter-cannot-be-seen-after-print-as-png-or-jpg
+
+  # This comes out blank
+  # https://stackoverflow.com/questions/53927629/download-all-high-chart-output-from-r-shiny
+  # output$save_map <- downloadHandler(filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""),
+  #                                    content = function(file) {
+  #                                     png(file, width=1200, height=1200)
+  #                                     foundational_map()
+  #                                     dev.off()
+  #                                   },
+  #                                    contentType = "image/png")
 
   #######
   # Table under hex map

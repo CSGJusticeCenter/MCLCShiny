@@ -44,11 +44,21 @@ library(extrafont)
 
 # Add fonts required to run functions.R
 # Fonts are found in app folder
-font_add("Graphik",      regular = "app/www/fonts/GraphikRegular.otf")
-font_add("Graphik-Bold", regular = "app/www/fonts/GraphikBold.otf")
+font_add("Graphik",      regular = "app/www/fonts/GraphikRegular.otf",
+                         bold    = "app/www/fonts/GraphikBold.otf")
+# font_add("Graphik-Bold", bold    = "app/www/fonts/GraphikBold.otf")
+
+font_import(paths = "C:/Users/mroberts/AppData/Local/Microsoft/Windows/Fonts")
+extrafont::loadfonts()
+loadfonts(device="win")
 
 showtext_auto()
 default_fonts <- c("Graphik")
+
+ggplot(data.frame(x=1:5,y=1:5),aes(x,y))+
+  geom_point()+
+  geom_text(aes(label=y),nudge_x=0.5, family="Graphik",fontface = "bold", size = 10)+
+  theme_bw(base_family="Graphik")
 
 # Load custom functions
 source("app/functions.R")
