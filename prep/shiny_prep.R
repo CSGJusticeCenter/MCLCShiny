@@ -10,7 +10,7 @@ sink(my_log, append = FALSE, type = "message")
 
 # working directory should be the root of the repository ~MCLCShiny/
 box::use(box/rri_infographs_tables)
-rri_infographs_tables$prep_for_shiny("A") 
+rri_infographs_tables$prep_for_shiny("N") 
 
 warnings()
 

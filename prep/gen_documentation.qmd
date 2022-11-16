@@ -6,6 +6,8 @@ date-format: "YYYY-MM-DD HH:mm:ss"
 published-title: Last Modified
 doi: "`r Sys.time()`"
 doi-title: Last Ran
+params: 
+  NCRPLET: "N"
 format: 
   html:
     page-layout: full
@@ -36,12 +38,15 @@ box::use(
 +:--------------+:--------------------------------------------------------------------------------------------------------+
 | **Usage**     | Revocation Counts by state/year/race/offense general 
 +---------------+---------------+
-| **Source**    | [National Corrections Reporting Program 1991-2019 ICPSR 38048](https://www.icpsr.umich.edu/web/ICPSR/studies/38048) |
+| **Source**    | [National Corrections Reporting Program 1991-2019 ICPSR 38048](https://www.icpsr.umich.edu/web/ICPSR/studies/38048) 
 +---------------+---------------+
 | **SharePoint**| [JC Research - Documents/CC/data/raw/NCRP](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2FCC%2Fdata%2Fraw%2FNCRP&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98) |
 +---------------+---------------+
 
-- Admission individual records, `DS0002/38048-0002-Data.rda`
+
+- 2 options for data used: 
+    * A: Admission individual records, `DS0002/38048-0002-Data.rda`
+    * N: Year-end individual records, `DS0004/38048-0004-Data.rda`
 - filter to only include `ADMTYPE` == "(2) Parole return/revocation" and `RPTYEAR` >= 2015
 - recode `RACE` variable to shorter names 
 - Count based on different cross sections 
@@ -473,14 +478,16 @@ Relative Rate Index is compare the $r = 1$ (White) to the other race/ethnicity g
 ### Community Population (SC) 
 
 ```{r}
-calc$combine_and_calcrates(pop_denom = "SC")
+params$NCRPLET
+calc$combine_and_calcrates(pop_denom = "SC", NCRPLET = params$NCRPLET)
 ```
 
 
-### Parole Population (APS) 
+### Parole Population (BJS) 
 
 ```{r}
-calc$combine_and_calcrates(pop_denom = "APS")
+params$NCRPLET
+calc$combine_and_calcrates(pop_denom = "BJS", NCRPLET = params$NCRPLET)
 ```
 
 
