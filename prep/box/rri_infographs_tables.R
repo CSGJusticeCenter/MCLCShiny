@@ -164,13 +164,13 @@ data_for_info_graphic <- function(DATA, whichRACE, whichSTATE, whichPOP){
 #' @export
 #'
 #' @examples
-create_tables <- function(){
+create_tables <- function(NCRPLET){
   
   
-  REV_BJS <- calc$combine_and_calcrates("APS")
-  REV_SC  <- calc$combine_and_calcrates("SC")
-  #REV_BJS <- readRDS(file.path(admin$sp_data, "NCRP_REV_APS.RDS")) 
-  #REV_SC  <- readRDS(file.path(admin$sp_data, "NCRP_REV_SC.RDS"))  
+  REV_BJS <- calc$combine_and_calcrates("BJS", NCRPLET)
+  REV_SC  <- calc$combine_and_calcrates("SC" , NCRPLET)
+  #REV_BJS <- readRDS(file.path(admin$sp_data, "NCRP_A_REV_BJS.RDS")) 
+  #REV_SC  <- readRDS(file.path(admin$sp_data, "NCRP_A_REV_SC.RDS"))  
   
   #what 'recent_yr' is the most likely 
   yr_SC  <- REV_SC $OR %>% count(RECENT_YR) %>% filter(n == max(n)) %>% pull(RECENT_YR)
@@ -203,11 +203,12 @@ create_tables <- function(){
       ) #end list 
     ) #end map SC
     , "STATEVEC" = state_vec
+    , "NCRPLET"  = NCRPLET
   )
   
   admin$mylog("End creating tables")
   
-  admin$SPsaveRDS(tables, "NCRP_RRI_tables.RDS")
+  admin$SPsaveRDS(tables, glue("NCRP_{NCRPLET}_RRI_tables.RDS"))
   
   return(tables)
   
@@ -224,11 +225,17 @@ create_tables <- function(){
 #' @export
 #'
 #' @examples
-prep_for_shiny <- function(){
+prep_for_shiny <- function(NCRPLET){
   
   admin$mylog("!!START PREP FOR SHINY")
+  ncrpmessage <- case_when(
+      NCRPLET == "A" ~ "NCRP data is from ADMISSIONS"
+    , NCRPLET == "N" ~ "NCRP data is from YEAREND POPULATION"
+  )
+  admin$mylog(ncrpmessage)
   
-  tables <- create_tables()
+  
+  tables <- create_tables(NCRPLET)
   state_vec <- tables$STATEVEC
   
   
@@ -274,7 +281,7 @@ prep_for_shiny <- function(){
   
   
   file.copy(
-    from = file.path(admin$sp_data, "NCRP_RRI_tables.RDS")
+    from = file.path(admin$sp_data, glue("NCRP_{NCRPLET}_RRI_tables.RDS"))
     , to = "app/data/NCRP_RRI_tables.RDS"
     , overwrite = TRUE
   )

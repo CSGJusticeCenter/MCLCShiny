@@ -45,6 +45,10 @@ NCRP_ARN <- function(){
 } 
 
 
+
+
+
+
 #' Import NCRP data frame for A: Admissions 
 #'
 #' @return individual level DF of admissions 
@@ -62,6 +66,24 @@ NCRP_A <- function(){
   return(raw)
 } 
 
+
+
+#' Import NCRP data frame for N: year-end population  
+#'
+#' @return individual level DF of population  
+#' @export
+NCRP_N <- function(){
+  
+  admin$mylog("Start - NCRP import for year-end population ")
+  
+  #da38048.0004 -- year end population 
+  load(file.path(CC_path,"NCRP/ICPSR_38048-V1/ICPSR_38048", "DS0004/38048-0004-Data.rda"))
+  
+  raw <- da38048.0004
+  
+  admin$mylog("End   - NCRP import for year-end population")
+  return(raw)
+}
 
 
 #' State Characteristics Import 

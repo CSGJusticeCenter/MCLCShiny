@@ -83,16 +83,16 @@ pullrecentyr <- function(YR_VEC, POPEST_VEC, REVCNT_VEC){
 #'
 #' @return list of 4 df's with rates
 #' @export
-combine_and_calcrates <- function(pop_denom){
+combine_and_calcrates <- function(pop_denom, NCRPLET){
   
   admin$mylog(glue("Import and clean NCRP revocations data"))
   
-  NCRP <- clean_NCRP$prep() 
+  NCRP <- clean_NCRP$prep(data = NCRPLET) 
   
   if (pop_denom == "SC"){
     admin$mylog(glue("Import and clean SC for population (denominator)"))
     POP  <- clean_SC$prep()
-  } else if (pop_denom == "APS" | pop_denom == "BJS"){
+  } else if (pop_denom == "BJS"){
     admin$mylog(glue("Import and clean BJS-APS for population (denominator)"))
     POP <- clean_APS$prep()
   } else {
@@ -115,7 +115,7 @@ combine_and_calcrates <- function(pop_denom){
       ungroup()
   )
   
-  admin$SPsaveRDS(FULL_DF, glue("NCRP_REV_{pop_denom}.RDS"))
+  admin$SPsaveRDS(FULL_DF, glue("NCRP_{NCRPLET}_REV_{pop_denom}.RDS"))
   
   return(FULL_DF)
 }
