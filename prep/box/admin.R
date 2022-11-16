@@ -115,6 +115,37 @@ NCRPlev_RACE <- function(){
 }
 
 
+
+#' @export
+lev_ADMTYPE <- c(
+    "New"        #"(1) New court commitment" 
+  , "Revocation" #"(2) Parole return/revocation" 
+  , "Other"      #"(3) Other admission (including unsentenced, transfer, AWOL/escapee return)"
+  , "missing" 
+)
+
+
+#' NCRP levels with New levels as names 
+#' @export
+NCRPlev_ADMTYPE <- function(){
+  
+  org_lev<-  c(
+    c(
+        "(1) New court commitment" 
+      , "(2) Parole return/revocation" 
+      , "(3) Other admission (including unsentenced, transfer, AWOL/escapee return)"
+    )
+    
+  )
+  
+  #add new levels as names 
+  names(org_lev) <- lev_ADMTYPE[1:3]
+  
+  return(org_lev)
+  
+}
+
+
 #' Convert SC RACE/ORIGIN --> NCPR RACE
 #' @export
 SC_RE <- function(DF){
