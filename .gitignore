@@ -40,4 +40,4 @@
 *.geojson
 .Rproj.user
 
-!prep/shiny_prep_log.txt
+!shiny_prep_log.txt
