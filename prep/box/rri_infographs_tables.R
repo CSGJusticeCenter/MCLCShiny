@@ -184,10 +184,10 @@ data_for_info_graphic <- function(DATA, whichRACE, whichSTATE, whichPOP){
 create_tables <- function(NCRPLET){
   
   
-#  REV_BJS <- calc$combine_and_calcrates("BJS", NCRPLET)
-#  REV_SC  <- calc$combine_and_calcrates("SC" , NCRPLET)
-REV_BJS <- readRDS(file.path(admin$sp_data, glue("NCRP_{NCRPLET}_REV_BJS.RDS")))
-REV_SC  <- readRDS(file.path(admin$sp_data, glue("NCRP_{NCRPLET}_REV_SC.RDS")))  
+  REV_BJS <- calc$combine_and_calcrates("BJS", NCRPLET)
+  REV_SC  <- calc$combine_and_calcrates("SC" , NCRPLET)
+  # REV_BJS <- readRDS(file.path(admin$sp_data, glue("NCRP_{NCRPLET}_REV_BJS.RDS")))
+  # REV_SC  <- readRDS(file.path(admin$sp_data, glue("NCRP_{NCRPLET}_REV_SC.RDS")))  
   
   #what 'recent_yr' is the most likely 
   yr_SC  <- REV_SC $OR %>% count(RECENT_YR) %>% filter(n == max(n)) %>% pull(RECENT_YR)
@@ -198,7 +198,7 @@ REV_SC  <- readRDS(file.path(admin$sp_data, glue("NCRP_{NCRPLET}_REV_SC.RDS")))
   
   admin$mylog("Start creating tables, takes ~40-50 seconds")
   
-  tables <- list(
+  outtables <- list(
       "BJS" = map(
       state_vec %>% set_names(),
       ~list(
@@ -225,12 +225,12 @@ REV_SC  <- readRDS(file.path(admin$sp_data, glue("NCRP_{NCRPLET}_REV_SC.RDS")))
   
   admin$mylog("End creating tables")
   
-  admin$SPsaveRDS(tables, glue("NCRP_{NCRPLET}_RRI_tables.RDS"))
+  admin$SPsaveRDS(outtables, glue("NCRP_{NCRPLET}_RRI_tables.RDS"))
   
-  assignflags$export(tables, "BJS")
-  assignflags$export(tables, "SC")
+  assignflags$export(tables = outtables, popdenom = "BJS")
+  assignflags$export(tables = outtables, popdenom = "SC")
   
-  return(tables)
+  return(outtables)
   
 }
 
@@ -260,6 +260,14 @@ prep_for_shiny <- function(NCRPLET){
   
   
   admin$mylog("Start creating infographics")
+  
+  #remove old infographs 
+  #remove from sharepoint 
+  png_lst <- list.files(file.path(admin$sp_data, "infographs"), pattern = "*.png")
+  purrr::walk(png_lst, ~file.remove(file.path(file.path(admin$sp_data, "infographs", .x))))
+  #remove from clone  
+  png_lst <- list.files("app/data/infogs", pattern = "*.png")
+  purrr::walk(png_lst, ~file.remove(file.path(file.path("app/data/infogs", .x))))
   
   params_for_loop <- tidyr::expand_grid(POP = c("BJS", "SC"), STATE = state_vec)
   n_of_loops <- nrow(params_for_loop)

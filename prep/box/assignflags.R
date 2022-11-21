@@ -21,7 +21,7 @@ box::use(
 # 0 - no issues 
 
 
-autoflags <- function(state, data, var){
+autoflags <- function(tables, state, data, var){
   
   
   #NUMBER OF SUPPRESSED CELLS 
@@ -67,7 +67,7 @@ autoflags <- function(state, data, var){
 }
 
 
-pull_flag <- function(state, data){
+pull_flag <- function(tables, state, data){
   
   tibble(
       STATE = state
@@ -96,11 +96,11 @@ export <- function(tables, popdenom){
   admin$mylog(glue("Start - assign flags"))
   
   long <- bind_rows(
-      map(tables$STATEVEC, ~autoflags(.x, var = "REVCNT", data = popdenom))
-    , map(tables$STATEVEC, ~autoflags(.x, var = "POPEST", data = popdenom))
-    , map(tables$STATEVEC, ~autoflags(.x, var = "RATE"  , data = popdenom))
-    , map(tables$STATEVEC, ~autoflags(.x, var = "RRI"   , data = popdenom))
-    , map(tables$STATEVEC, ~pull_flag(.x,                 data = popdenom))
+      map(tables$STATEVEC, ~autoflags(tables, .x, var = "REVCNT", data = popdenom))
+    , map(tables$STATEVEC, ~autoflags(tables, .x, var = "POPEST", data = popdenom))
+    , map(tables$STATEVEC, ~autoflags(tables, .x, var = "RATE"  , data = popdenom))
+    , map(tables$STATEVEC, ~autoflags(tables, .x, var = "RRI"   , data = popdenom))
+    , map(tables$STATEVEC, ~pull_flag(tables, .x,                 data = popdenom))
   ) %>% 
     mutate(
       flag = case_when(
