@@ -32,10 +32,12 @@ load(file = "app/data/probation_table_wide.Rda")
 library(dplyr)
 library(reactable)
 library(stats)
-library(purr)
+library(purrr)
 
 # assign colors for visualizations
 source("app/colors.R")
+source("app/library.R")
+source("app/functions.R")
 
 # get state list
 states <- state_table$state %>%

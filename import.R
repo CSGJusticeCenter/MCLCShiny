@@ -13,7 +13,7 @@
 
 # Input:
 #    "Data for web team v13.xlsx" Notes are here for now
-#    "mclc_data_2022_v2.xlsx"     2022 survey data
+#    "mclc_data_2022_v3.xlsx"     2022 survey data
 #     Map files
 
 # Output:
@@ -55,15 +55,15 @@ loadfonts(device="win")
 showtext_auto()
 default_fonts <- c("Graphik")
 
-ggplot(data.frame(x=1:5,y=1:5),aes(x,y))+
-  geom_point()+
-  geom_text(aes(label=y),nudge_x=0.5, family="Graphik",fontface = "bold", size = 10)+
-  theme_bw(base_family="Graphik")
-
-ggplot(data.frame(x=1:5,y=1:5),aes(x,y))+
-  geom_point()+
-  geom_text(aes(label=y),nudge_x=0.5, family="Graphik-Bold", size = 10)+
-  theme_bw(base_family="Graphik-Bold")
+# ggplot(data.frame(x=1:5,y=1:5),aes(x,y))+
+#   geom_point()+
+#   geom_text(aes(label=y),nudge_x=0.5, family="Graphik",fontface = "bold", size = 10)+
+#   theme_bw(base_family="Graphik")
+# 
+# ggplot(data.frame(x=1:5,y=1:5),aes(x,y))+
+#   geom_point()+
+#   geom_text(aes(label=y),nudge_x=0.5, family="Graphik-Bold", size = 10)+
+#   theme_bw(base_family="Graphik-Bold")
 
 # Load custom functions
 source("app/functions.R")
@@ -94,16 +94,16 @@ hex <- read_sf(file.path(paste0(sp_data_path, "/Data/us_states_hexgrid.geojson",
 stateAbb <- read.csv(paste0(sp_data_path, "/Data/stateAbb.csv", sep = ""))
 
 # Load admissions data
-adm18 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v2.xlsx", sep = ""), sheet = "Admissions 2018")
-adm19 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v2.xlsx", sep = ""), sheet = "Admissions 2019")
-adm20 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v2.xlsx", sep = ""), sheet = "Admissions 2020")
-adm21 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v2.xlsx", sep = ""), sheet = "Admissions 2021")
+adm18 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v3.xlsx", sep = ""), sheet = "Admissions 2018")
+adm19 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v3.xlsx", sep = ""), sheet = "Admissions 2019")
+adm20 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v3.xlsx", sep = ""), sheet = "Admissions 2020")
+adm21 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v3.xlsx", sep = ""), sheet = "Admissions 2021")
 
 # Load population data
-pop18 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v2.xlsx", sep = ""), sheet = "Population 2018")
-pop19 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v2.xlsx", sep = ""), sheet = "Population 2019")
-pop20 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v2.xlsx", sep = ""), sheet = "Population 2020")
-pop21 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v2.xlsx", sep = ""), sheet = "Population 2021")
+pop18 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v3.xlsx", sep = ""), sheet = "Population 2018")
+pop19 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v3.xlsx", sep = ""), sheet = "Population 2019")
+pop20 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v3.xlsx", sep = ""), sheet = "Population 2020")
+pop21 <- read_excel(paste0(sp_data_path, "/Data/mclc_data_2022_v3.xlsx", sep = ""), sheet = "Population 2021")
 
 # Load states  - will change to new notes when ready ????????????????????????????????
 notes <- read_excel(paste0(sp_data_path, "/Data/Data for web team 2021 v13.xlsx", sep = ""), sheet = "Notes")
