@@ -1,16 +1,22 @@
 
 box::use(
-    glue[glue]
+    ./ROOT
+  , glue[glue]
   , dplyr[...]
   , tidyr[pivot_longer]
 )
 
 
-#' @export
-sp_data <- csgjcr::csg_sp_path("50 State Revocations Project/MCLC Shiny App/data_new/analysis")
 
 #' @export
-sp_data_raw <- csgjcr::csg_sp_path("50 State Revocations Project/MCLC Shiny App/data_new/raw")
+sp_data <- csgjcr::csg_sp_path(file.path(ROOT$sp, "data_new/analysis")) 
+
+
+#' @export
+sp_data_del <- csgjcr::csg_sp_path(file.path(ROOT$sp, "data_new/deliverables")) 
+
+#' @export
+sp_data_raw <- csgjcr::csg_sp_path(file.path(ROOT$sp, "data_new/raw")) 
 
 #' Log Message 
 #'
