@@ -12,16 +12,12 @@
 # https://csgorg.sharepoint.com/:f:/s/Team-JC-Research/EhdvImKN2rdPnmHQ2TrKlooBdYqnnWc0SUXBNuh9C7d41g?e=NCsh8I
 # in your Renviron (usethis::edit_r_environ()), set CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"
 
-FULL_JC_FOLDER <- FALSE
 
-if (FULL_JC_FOLDER == TRUE){
-  sp_data_path <- csgjcr::csg_sp_path(file.path("MCLC Shiny App"))
-} else {
-  sp_data_path <- csgjcr::csg_sp_path(file.path("JC Research - 50 State Revocations Project", "MCLC Shiny App"))
-}
+
+box::use( prep/box/admin)
 
 # load data
-load(file = "app/data/adm_pop_long.Rda")
+load(file = file.path(admin$sp_data, "adm_pop_long.Rda"))
 
 # load packages
 library(purrr)
@@ -29,6 +25,8 @@ library(dplyr)
 library(highcharter)
 library(scales)
 library(stats)
+
+
 
 # assign colors for visualizations
 source("app/colors.R")
@@ -318,25 +316,27 @@ probation_bar_pop <- setNames(probation_bar_pop, states)
 # Save plots
 ############
 
-# save to sharepoint
-save(all_state_area_adm,     file=paste0(sp_data_path, "/Data/all_state_area_adm.Rda", sep = ""))
-save(all_state_area_pop,     file=paste0(sp_data_path, "/Data/all_state_area_pop.Rda", sep = ""))
-save(all_state_bar_adm,      file=paste0(sp_data_path, "/Data/all_state_bar_adm.Rda", sep = ""))
-save(all_state_bar_pop,      file=paste0(sp_data_path, "/Data/all_state_bar_pop.Rda", sep = ""))
 
-save(parole_bar_adm,         file=paste0(sp_data_path, "/Data/parole_bar_adm.Rda", sep = ""))
-save(parole_bar_pop,         file=paste0(sp_data_path, "/Data/parole_bar_pop.Rda", sep = ""))
-save(probation_bar_adm,      file=paste0(sp_data_path, "/Data/probation_bar_adm.Rda", sep = ""))
-save(probation_bar_pop,      file=paste0(sp_data_path, "/Data/probation_bar_pop.Rda", sep = ""))
 
-# save to clone
-save(all_state_area_adm,     file="app/data/all_state_area_adm.Rda")
-save(all_state_area_pop,     file="app/data/all_state_area_pop.Rda")
-save(all_state_bar_adm,      file="app/data/all_state_bar_adm.Rda")
-save(all_state_bar_pop,      file="app/data/all_state_bar_pop.Rda")
+theseFOLDERS <- c( "sharepoint" = admin$sp_data, "app" = "app/data")
 
-save(parole_bar_adm,         file="app/data/parole_bar_adm.Rda")
-save(parole_bar_pop,         file="app/data/parole_bar_pop.Rda")
-save(probation_bar_adm,      file="app/data/probation_bar_adm.Rda")
-save(probation_bar_pop,      file="app/data/probation_bar_pop.Rda")
+for (folder in theseFOLDERS){
+  
+  save(all_state_area_adm,     file=file.path(folder, "all_state_area_adm.Rda"))
+  save(all_state_area_pop,     file=file.path(folder, "all_state_area_pop.Rda"))
+  save(all_state_bar_adm,      file=file.path(folder, "all_state_bar_adm.Rda"))
+  save(all_state_bar_pop,      file=file.path(folder, "all_state_bar_pop.Rda"))
+  
+  save(parole_bar_adm,         file=file.path(folder, "parole_bar_adm.Rda"))
+  save(parole_bar_pop,         file=file.path(folder, "parole_bar_pop.Rda"))
+  save(probation_bar_adm,      file=file.path(folder, "probation_bar_adm.Rda"))
+  save(probation_bar_pop,      file=file.path(folder, "probation_bar_pop.Rda"))
+  
+}
+
+
+
+
+
+
 
