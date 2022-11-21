@@ -3,6 +3,7 @@ box::use(
     ./admin
   , ./infograph 
   , ./calc
+  , ./assignflags
   , dplyr[...]
   , tidyr[pivot_wider, drop_na]
   , purrr[...]
@@ -138,6 +139,9 @@ data_for_info_graphic <- function(DATA, whichRACE, whichSTATE, whichPOP){
       , whichSTATE == "Vermont"                    ~ "Vermont did not report race/ethnicity category for paroles in the NCRP data."
       , 
     ) 
+    
+    flag <- "2"
+    
   } 
   
   if (nrow(DF) > 0){
@@ -145,13 +149,26 @@ data_for_info_graphic <- function(DATA, whichRACE, whichSTATE, whichPOP){
     dataavail <- 1
     note <- NA
     
+    suppress <- ifelse(1 %in% DF$SUPPRESS, 1, 0)
+    totrow      <- nrow(DF)
+    
+    flag <- case_when(
+        suppress == 1 & totrow == 1 ~ "1MS"
+      , suppress == 1 & totrow == 2 ~ "1S"
+      , suppress == 0 & totrow == 1 ~ "1M"
+      , suppress == 0 & totrow == 2 ~ "0"
+    )
+    
+    
   }
+  
   
   
   OUT <- list(
       "DF" = outDF
     , "DATAAVAIL" = dataavail
     , "NOTE" = note
+    , "FLAG" = flag
   )
   
   return(OUT)
@@ -167,10 +184,10 @@ data_for_info_graphic <- function(DATA, whichRACE, whichSTATE, whichPOP){
 create_tables <- function(NCRPLET){
   
   
-  REV_BJS <- calc$combine_and_calcrates("BJS", NCRPLET)
-  REV_SC  <- calc$combine_and_calcrates("SC" , NCRPLET)
-  #REV_BJS <- readRDS(file.path(admin$sp_data, "NCRP_A_REV_BJS.RDS")) 
-  #REV_SC  <- readRDS(file.path(admin$sp_data, "NCRP_A_REV_SC.RDS"))  
+#  REV_BJS <- calc$combine_and_calcrates("BJS", NCRPLET)
+#  REV_SC  <- calc$combine_and_calcrates("SC" , NCRPLET)
+REV_BJS <- readRDS(file.path(admin$sp_data, glue("NCRP_{NCRPLET}_REV_BJS.RDS")))
+REV_SC  <- readRDS(file.path(admin$sp_data, glue("NCRP_{NCRPLET}_REV_SC.RDS")))  
   
   #what 'recent_yr' is the most likely 
   yr_SC  <- REV_SC $OR %>% count(RECENT_YR) %>% filter(n == max(n)) %>% pull(RECENT_YR)
@@ -209,6 +226,9 @@ create_tables <- function(NCRPLET){
   admin$mylog("End creating tables")
   
   admin$SPsaveRDS(tables, glue("NCRP_{NCRPLET}_RRI_tables.RDS"))
+  
+  assignflags$export(tables, "BJS")
+  assignflags$export(tables, "SC")
   
   return(tables)
   
