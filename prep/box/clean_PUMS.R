@@ -1,0 +1,52 @@
+box::use(
+    ./admin
+  , dplyr[...]
+)
+
+
+
+
+prep <- function(){
+  
+  admin$mylog("Start - PUMS prep")
+  
+  
+  cs_R <- readRDS(file.path(admin$sp_data_raw, "PUMS/ncrp_race_by_state.RDS")) %>% 
+    select(
+        RPTYEAR = year
+      , RACE    = ncrp_race
+      , POPEST  = n
+      , STATE   = state
+    ) %>% 
+    mutate(
+        RACE = factor(RACE, levels = admin$lev_RACE)
+      , POPTYPE = "PUMS"
+    ) %>% 
+    mutate(
+        FIPS = csgjcr::csg_state_convert(STATE, "name", "fips")
+      , ABB  = csgjcr::csg_state_convert(STATE, "name", "abbr")
+      , FCT_NUM = as.numeric(FIPS)
+    ) %>% 
+    mutate_at(vars(STATE, ABB, FIPS), ~forcats::fct_reorder(factor(.), FCT_NUM)) %>% 
+    select(all_of(admin$idcols), RPTYEAR, RACE, POPEST, POPTYPE) 
+  
+  
+  cs_t <- cs_R %>% 
+    group_by(STATE, FIPS, ABB, RPTYEAR, POPTYPE) %>%
+    summarise(POPEST = sum(POPEST), .groups = "keep") %>% 
+    ungroup()
+  
+  
+  out <- list(
+      "R"  = cs_R  #cross section by RACE
+    , "t"  = cs_t  #no cross section, total by STATE/RPTYEAR 
+  )
+  
+  admin$mylog("End   - PUMS prep")
+  return(out)
+  
+  
+  
+}
+
+
