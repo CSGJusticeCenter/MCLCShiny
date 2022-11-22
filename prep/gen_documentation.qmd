@@ -32,7 +32,7 @@ box::use(
 
 ::: panel-tabset
 
-### NCRP 
+### NCRP (Revocation Counts)
 
 
 +:--------------+:--------------------------------------------------------------------------------------------------------+
@@ -51,19 +51,131 @@ box::use(
 - recode `RACE` variable to shorter names 
 - Count based on different cross sections 
 
+### Census (Community Population)
 
-### SC 
+::: {.panel-tabset}
+
+
+#### ACS - PUMMS 
+
+
+```{r}
+#| echo: false 
+link <- "https://www.census.gov/programs-surveys/acs/microdata/documentation.html"
+```
+
+
++:--------------+:-------------------------------------------------------------------------+
+| **Usage**     | Population Estimates by state/year/race, denominator to calculate rates  |
++---------------+--------------------------------------------------------------------------+
+| **Source**    | [Census American Community Survey Public Use Microdata Sample](`r link`)  |
++---------------+--------------------------------------------------------------------------+
+| **SharePoint**|  NA                                                                      |
++---------------+--------------------------------------------------------------------------+
+
+```{r}
+#| echo: false 
+rm(link)
+```
+
+
+Public Use Microdata Sample (PUMS).  Data is pulled from PUMS API using the `{tidycensus}` package.  The data is pulled and saved on SharePoint.  
+
+
+
+##### PUMMS --> NCRP 
+
+-   filter data to be 18+
+-   re-code Race/Ethnicity categories to match RACE NCRP categories
+-   sum across categories
+-   add state ids
+-   use population estimates for 2015-2019 (population estimate for a specific year is used for calculating rates for that NCRP rates for that year)
+
+
+
+##### Race/Ethnicity Re-code 
+
+SC has `ORIGIN`(Ethnicity) and `RACE` that need to be fit into the NCRP `RACE` categories.
+
+
+| PUMS variables | `RACE` Re-code | Description | 
+|:---------------|:----------|:--------------|
+| ` HISP %in% c("1", "01") & RAC1P  == "1"` | `r admin$lev_RACE[1]` | Not Hispanic and White alone | 
+| `!HISP %in% c("1", "01") & RACBLK == "0"` | `r admin$lev_RACE[3]` | Hispanic, not Black  | 
+| `RACBLK == 1`                             | `r admin$lev_RACE[2]` | Black alone, or in combination with any ethnicity | 
+| Everything else                           | `r admin$lev_RACE[4]` | All others | 
+
+
+#### ACS - B01001
+
+```{r}
+#| echo: false 
+link <- "https://data.census.gov/cedsci/table?q=B01001%3A%20SEX%20BY%20AGE&tid=ACSDT5Y2020.B01001"
+```
+
+
++:--------------+:-------------------------------------------------------------------------+
+| **Usage**     | Population Estimates by state/year/race, denominator to calculate rates  |
++---------------+--------------------------------------------------------------------------+
+| **Source**    | [American Community Survey - B01001 SEX BY AGE Tables](`r link`)         |
++---------------+--------------------------------------------------------------------------+
+| **SharePoint**|  NA                                                                      |
++---------------+--------------------------------------------------------------------------+
+
+```{r}
+#| echo: false 
+rm(link)
+```
+
+
+|Name | Table | Title | Source | 
+|:---|:----- |:------------|:-----|
+|Total   |B01001 |SEX BY AGE                                       | [data.census.gov](https://data.census.gov/cedsci/table?q=B01001&g=0100000US%240400000)  | 
+|White   |B01001H|SEX BY AGE (WHITE ALONE, NOT HISPANIC OR LATINO) | [data.census.gov](https://data.census.gov/cedsci/table?q=B01001h&g=0100000US%240400000) | 
+|Black_H |B01001B|SEX BY AGE (BLACK OR AFRICAN AMERICAN ALONE)     | [data.census.gov](https://data.census.gov/cedsci/table?q=B01001b&g=0100000US%240400000) | 
+|Hispanic|B01001I|SEX BY AGE (HISPANIC OR LATINO)                  | [data.census.gov](https://data.census.gov/cedsci/table?q=B01001i&g=0100000US%240400000) | 
+
+
+- different race breakdowns than NCRP 
+- age groups for ACS include a group for 18-19, so can create value of 18+ by suming the 18-19 category with all higher age categories 
+
+
+##### Race/Ethnicity 
+
+ACS does NOT provide the B01001 table for Black, NOT Hispanic or Latino.  
+This might not be the best data to use in calculating rates because:  
+
+(1) the Black population will be over-counted in comparison to the population from NCRP,  the NCRP Black population is Black only, not Hispanic/Latino and the ACS population is Black, including people who are Hispanic/Latino
+(2) Unable to calculate an accurate 'Other' category: 
+$$
+\begin{aligned}
+H & = \text{included Hispanic/Latino} \\
+\text{Total} & = \text{White} + \text{Black} + \text{Hispanic} + \text{Other} &\implies \text{Other} &= \text{Total} - \text{White} - \text{Black} - \text{Hispanic} \\
+\text{Total} & \neq \text{White} + \text{Black}_H+ \text{Hispanic} + \text{Other} &\implies \text{Other} &\neq \text{Total} - \text{White} - \text{Black}_H - \text{Hispanic} \\
+\end{aligned} 
+$$
+
+
+Using this data will: 
+
+- Black: over-count population estimate --> rates/RRI lower 
+- Other: under-count population estimate --> rates/RRI higher 
+  * theoretically, Other could be 0 or negative number if Black_H is significantly higher than Black (large portion of Black_H includes people who would also be in Hispanic)
+
+
+
+#### SC 
 
 +:--------------+:--------------------------------------------------------------------------------------------------------+
-| **Usage**     | Population Estimates by state/year/race, denominator to calculate rates  |
+| **Usage**     | Population Estimates by state/year/race, denominator to calculate rates  
 +---------------+---------------+
-| **Source**    | [Census State Population by Characteristics](https://www.census.gov/programs-surveys/popest/technical-documentation/research/evaluation-estimates/2020-evaluation-estimates/2010s-state-detail.html) |
+| **Source**    | [Census State Population by Characteristics](https://www.census.gov/programs-surveys/popest/technical-documentation/research/evaluation-estimates/2020-evaluation-estimates/2010s-state-detail.html) 
 +---------------+---------------+
 | **SharePoint**| [JC Research - Documents/CC/data/raw/SC_EST](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2FCC%2Fdata%2Fraw%2FSC%2DEST&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98) |
 +---------------+---------------+
 
 
-#### SC --> NCRP 
+##### SC --> NCRP 
 
 -   filter data to be 18+, combine sex, and combine ORIGIN
 -   re-code RACE/ORIGIN categories to match RACE NCRP categories
@@ -71,7 +183,7 @@ box::use(
 -   add state ids
 -   use population estimates for 2015-2019 (population estimate for a specific year is used for calculating rates for that NCRP rates for that year)
 
-#### Race/Ethnicity Re-code 
+##### Race/Ethnicity Re-code 
 
 SC has `ORIGIN`(Ethnicity) and `RACE` that need to be fit into the NCRP `RACE` categories.
 
@@ -91,7 +203,12 @@ SC has `ORIGIN`(Ethnicity) and `RACE` that need to be fit into the NCRP `RACE` c
 | 2 (Hispanic)     | 6 (Two or more races)                                | `r admin$NCRPlev_RACE()[3]`| `r admin$lev_RACE[3]` |
 
 
-### BJS 
+
+
+:::
+<!-- end census -->
+
+### BJS (Parole Population)
 
 ::: {.panel-tabset}
 
@@ -298,52 +415,6 @@ rm(bjslink, splink_ppus)
 ::: 
 <!--end {panel.tabset} BJS --> 
 
-### ACS  
-
-
-+:--------------+:--------------------------------------------------------------------------------------------------------+
-| **Usage**     | Population Estimates by state/year/race, denominator to calculate rates  |
-+---------------+---------------+
-| **Source**    | [American Community Survey - B01001 SEX BY AGE Tables](https://data.census.gov/cedsci/table?q=B01001%3A%20SEX%20BY%20AGE&tid=ACSDT5Y2020.B01001)   |
-+---------------+---------------+
-| **SharePoint**|  NA 
-+---------------+---------------+
-
-
-
-|Name | Table | Title | Source | 
-|:---|:----- |:------------|:-----|
-|Total   |B01001 |SEX BY AGE                                       | [data.census.gov](https://data.census.gov/cedsci/table?q=B01001&g=0100000US%240400000)  | 
-|White   |B01001H|SEX BY AGE (WHITE ALONE, NOT HISPANIC OR LATINO) | [data.census.gov](https://data.census.gov/cedsci/table?q=B01001h&g=0100000US%240400000) | 
-|Black_H |B01001B|SEX BY AGE (BLACK OR AFRICAN AMERICAN ALONE)     | [data.census.gov](https://data.census.gov/cedsci/table?q=B01001b&g=0100000US%240400000) | 
-|Hispanic|B01001I|SEX BY AGE (HISPANIC OR LATINO)                  | [data.census.gov](https://data.census.gov/cedsci/table?q=B01001i&g=0100000US%240400000) | 
-
-
-- different race breakdowns than NCRP 
-- age groups for ACS include a group for 18-19, so can create value of 18+ by suming the 18-19 category with all higher age categories 
-
-
-#### Race/Ethnicity 
-
-ACS does NOT provide the B01001 table for Black, NOT Hispanic or Latino.  
-This might not be the best data to use in calculating rates because:  
-
-(1) the Black population will be over-counted in comparison to the population from NCRP,  the NCRP Black population is Black only, not Hispanic/Latino and the ACS population is Black, including people who are Hispanic/Latino
-(2) Unable to calculate an accurate 'Other' category: 
-$$
-\begin{aligned}
-H & = \text{included Hispanic/Latino} \\
-\text{Total} & = \text{White} + \text{Black} + \text{Hispanic} + \text{Other} &\implies \text{Other} &= \text{Total} - \text{White} - \text{Black} - \text{Hispanic} \\
-\text{Total} & \neq \text{White} + \text{Black}_H+ \text{Hispanic} + \text{Other} &\implies \text{Other} &\neq \text{Total} - \text{White} - \text{Black}_H - \text{Hispanic} \\
-\end{aligned} 
-$$
-
-
-Using this data will: 
-
-- Black: over-count population estimate --> rates/RRI lower 
-- Other: under-count population estimate --> rates/RRI higher 
-  * theoretically, Other could be 0 or negative number if Black_H is significantly higher than Black (large portion of Black_H includes people who would also be in Hispanic)
 
 ::: 
 <!--end panel.tabset DATA SOURCES --> 
@@ -376,7 +447,6 @@ Using this data will:
 |`RATE`      |&#10003;|&#10003;|&#10003;|&#10003;|numeric| Rate of revocation count per population, `REVCNT`/`POPEST` <br>for a specific `RACE`, `STATE`, `RPTYEAR`, `OFFGENERAL` cross section |
 |`WHITERATE` |&#10003;|        |&#10003;|        |numeric| `REVCNT`/`POPEST` where `RACE` = white <br>for a specific `STATE`, `RPTYEAR`, `OFFGENERAL` cross section | 
 | `RRI`      |&#10003;|        |&#10003;|        |numeric| Relative Rate Index, `RATE`/`WHITERATE`<br> for a specific `STATE`, `RPTYEAR`, `OFFGENERAL` cross section | 
-|`RATE_100K` |&#10003;|&#10003;|&#10003;|&#10003;|numeric| `RATE` $\cdot$ 100,000, Rate of revocation per 100,000 people in the population  | 
 |`RECENT_YR` |&#10003;|&#10003;|&#10003;|&#10003;|numeric| Most recent year where `POPEST` is available  | 
 
 
@@ -437,15 +507,6 @@ Revocation counts for a specific cross section divided by the population estimat
 | `cs_t`  | $R^{sy} = \frac{n^{sy} }{N^{sy} }$               | Rate by STATE, RPTYEAR (total)                              |
 
 
-#### Rate per 
-
-| Variable | Equation | Meaning | 
-|:----|:------|:---------------|
-|`RATE` | $R$ | plain rate | 
-|`RATE_1K` | $R \cdot 1,000$ | Rate per 1,000 | 
-|`RATE_100K` | $R \cdot 100,000$ | Rate per 100,000 | 
-|`RATE_1MIL` | $R \cdot 1,000,000$ | Rate per 1,000,000 | 
-
 
 
 ### Relative Rate Index (RRI), $I$
@@ -475,15 +536,15 @@ Relative Rate Index is compare the $r = 1$ (White) to the other race/ethnicity g
 | admin.R<br>import.R| --> | calc_APS.R<br>clean_NCRP.R<br>clean_SC.R | --> | calc.R | 
 
 
-### Community Population (SC) 
+### Community Population  
 
 ```{r}
 params$NCRPLET
-calc$combine_and_calcrates(pop_denom = "SC", NCRPLET = params$NCRPLET)
+calc$combine_and_calcrates(pop_denom = "PUMS", NCRPLET = params$NCRPLET)
 ```
 
 
-### Parole Population (BJS) 
+### Parole Population 
 
 ```{r}
 params$NCRPLET
