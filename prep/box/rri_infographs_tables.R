@@ -184,17 +184,17 @@ data_for_info_graphic <- function(DATA, whichRACE, whichSTATE, whichPOP){
 create_tables <- function(NCRPLET){
   
   
-  REV_BJS <- calc$combine_and_calcrates("BJS", NCRPLET)
-  REV_SC  <- calc$combine_and_calcrates("SC" , NCRPLET)
-  # REV_BJS <- readRDS(file.path(admin$sp_data, glue("NCRP_{NCRPLET}_REV_BJS.RDS")))
-  # REV_SC  <- readRDS(file.path(admin$sp_data, glue("NCRP_{NCRPLET}_REV_SC.RDS")))  
+  # REV_BJS <- calc$combine_and_calcrates("BJS" , NCRPLET)
+  # REV_CEN <- calc$combine_and_calcrates("PUMS", NCRPLET)
+  REV_BJS <- readRDS(file.path(admin$sp_data, glue("NCRP_{NCRPLET}_REV_BJS.RDS")))
+  REV_CEN  <- readRDS(file.path(admin$sp_data, glue("NCRP_{NCRPLET}_REV_PUMS.RDS")))  
   
   #what 'recent_yr' is the most likely 
-  yr_SC  <- REV_SC $OR %>% count(RECENT_YR) %>% filter(n == max(n)) %>% pull(RECENT_YR)
+  yr_CEN <- REV_CEN$OR %>% count(RECENT_YR) %>% filter(n == max(n)) %>% pull(RECENT_YR)
   yr_BJS <- REV_BJS$OR %>% count(RECENT_YR) %>% filter(n == max(n)) %>% pull(RECENT_YR)
   
   
-  state_vec <- sort(levels(REV_SC$t$STATE)) %>% .[. != "District of Columbia"] 
+  state_vec <- sort(levels(REV_CEN$t$STATE)) %>% .[. != "District of Columbia"] 
   
   admin$mylog("Start creating tables, takes ~40-50 seconds")
   
@@ -209,14 +209,14 @@ create_tables <- function(NCRPLET){
         , "POPEST"    = state_table_single_metric(REV_BJS, 2015:yr_BJS, admin$lev_RACE[1:3], .x, "POPEST")
       ) #end list 
     ) #end map BJS
-    ,   "SC" = map(
+    ,   "CEN" = map(
       state_vec %>% set_names(),
       ~list(
-          "INFOGRAPH" = data_for_info_graphic(    REV_SC,               admin$lev_RACE[2:3], .x, "SC")
-        , "RRI"       = state_table_single_metric(REV_SC,  2015:yr_SC,  admin$lev_RACE[2:3], .x, "RRI")
-        , "RATE"      = state_table_single_metric(REV_SC,  2015:yr_SC,  admin$lev_RACE[1:3], .x, "RATE", mult = 1e+05)
-        , "REVCNT"    = state_table_single_metric(REV_SC,  2015:yr_SC,  admin$lev_RACE[1:3], .x, "REVCNT")
-        , "POPEST"    = state_table_single_metric(REV_SC,  2015:yr_SC,  admin$lev_RACE[1:3], .x, "POPEST")
+          "INFOGRAPH" = data_for_info_graphic(    REV_CEN,               admin$lev_RACE[2:3], .x, "SC")
+        , "RRI"       = state_table_single_metric(REV_CEN, 2015:yr_CEN,  admin$lev_RACE[2:3], .x, "RRI")
+        , "RATE"      = state_table_single_metric(REV_CEN, 2015:yr_CEN,  admin$lev_RACE[1:3], .x, "RATE", mult = 1e+05)
+        , "REVCNT"    = state_table_single_metric(REV_CEN, 2015:yr_CEN,  admin$lev_RACE[1:3], .x, "REVCNT")
+        , "POPEST"    = state_table_single_metric(REV_CEN, 2015:yr_CEN,  admin$lev_RACE[1:3], .x, "POPEST")
       ) #end list 
     ) #end map SC
     , "STATEVEC" = state_vec
@@ -228,7 +228,7 @@ create_tables <- function(NCRPLET){
   admin$SPsaveRDS(outtables, glue("NCRP_{NCRPLET}_RRI_tables.RDS"))
   
   assignflags$export(tables = outtables, popdenom = "BJS")
-  assignflags$export(tables = outtables, popdenom = "SC")
+  assignflags$export(tables = outtables, popdenom = "CEN")
   
   return(outtables)
   
@@ -269,7 +269,7 @@ prep_for_shiny <- function(NCRPLET){
   png_lst <- list.files("app/data/infogs", pattern = "*.png")
   purrr::walk(png_lst, ~file.remove(file.path(file.path("app/data/infogs", .x))))
   
-  params_for_loop <- tidyr::expand_grid(POP = c("BJS", "SC"), STATE = state_vec)
+  params_for_loop <- tidyr::expand_grid(POP = c("BJS", "CEN"), STATE = state_vec)
   n_of_loops <- nrow(params_for_loop)
   
   for (i in 1:n_of_loops){

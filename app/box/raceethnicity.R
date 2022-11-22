@@ -130,19 +130,19 @@ create_reactable <- function(DF){
 #' @examples
 pop_denom_text <- function(pop_denom){
   
-  rlang::arg_match(pop_denom, c("BJS", "SC"))
+  rlang::arg_match(pop_denom, c("BJS", "CEN"))
   
   prefix <- "<span style='font-family: Graphik-Bold !important;'>"
   suffix <- "</span>"
   
   fill1 <- case_when(
       pop_denom == "BJS" ~ paste0(prefix, "disparities in parole revocations"                        , suffix)
-    , pop_denom == "SC"  ~ paste0(prefix, "cumulative disparities across the criminal justice system", suffix)
+    , pop_denom == "CEN" ~ paste0(prefix, "cumulative disparities across the criminal justice system", suffix)
   )
   
   fill2 <- case_when(
       pop_denom == "BJS" ~ paste0(prefix, "parole population", suffix) 
-    , pop_denom == "SC"  ~ paste0(prefix, "community"        , suffix)
+    , pop_denom == "CEN" ~ paste0(prefix, "community"        , suffix)
   )
   
   outtext <- paste0(

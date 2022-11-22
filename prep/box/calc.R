@@ -4,6 +4,7 @@ box::use(
   , ./clean_NCRP
   , ./clean_SC
   , ./clean_APS
+  , ./clean_PUMS
   , dplyr[...]
   , purrr[...]
   , glue[glue]
@@ -90,11 +91,14 @@ combine_and_calcrates <- function(pop_denom, NCRPLET){
   NCRP <- clean_NCRP$prep(data = NCRPLET) 
   
   if (pop_denom == "SC"){
-    admin$mylog(glue("Import and clean SC for population (denominator)"))
+    admin$mylog(glue("Import and clean SC for COMMUNITY population (denominator)"))
     POP  <- clean_SC$prep()
   } else if (pop_denom == "BJS"){
-    admin$mylog(glue("Import and clean BJS-APS for population (denominator)"))
+    admin$mylog(glue("Import and clean BJS-APS for PAROLE population (denominator)"))
     POP <- clean_APS$prep()
+  } else if (pop_denom == "PUMS"){
+    admin$mylog(glue("Import and clean PUMS (ACS) for COMMUNITY population (denominator)"))
+    POP <- clean_PUMS$prep()
   } else {
     stop("Invalid population denom")
   }

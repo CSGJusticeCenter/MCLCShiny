@@ -269,7 +269,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                               div(h3("Racial and Ethnic Disparities", class = "reh3")), #style = "font-size: 16px;"),
                                                                               c(
                                                                                 "Disparities in Parole Revocations"                         = "BJS",
-                                                                                "Cumulative Disparities across the criminal justice system" = "SC"
+                                                                                "Cumulative Disparities across the criminal justice system" = "CEN"
                                                                                )
                                                                               , inline=T) #end radioButtons
                                                                        ),
