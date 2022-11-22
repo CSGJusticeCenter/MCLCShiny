@@ -1,9 +1,304 @@
 
 > sink(my_log, append = FALSE, type = "message")
 
+> ####### takes ~ 10min
+> # working directory should be the root of the repository ~MCLCShiny/
+> # need to do this one first otherwise fonts will get  .... [TRUNCATED] 
+[1] "2022-11-22 11:02:57 CST"
+
+> box::use(prep/box/rri_infographs_tables)
+
+> rri_infographs_tables$prep_for_shiny("N")
+2022-11-22 11:02:58 - !!START PREP FOR SHINY
+2022-11-22 11:02:58 - NCRP data is from YEAREND POPULATION
+2022-11-22 11:02:58 - Start creating tables, takes ~40-50 seconds
+2022-11-22 11:03:25 - End creating tables
+2022-11-22 11:03:25 - Saved outtables - NCRP_N_RRI_tables.RDS (included a date stamped version)
+2022-11-22 11:03:26 - Start - assign flags
+2022-11-22 11:03:31 - End - assign flags
+2022-11-22 11:03:31 - Start - assign flags
+2022-11-22 11:03:36 - End - assign flags
+2022-11-22 11:03:36 - Start creating infographics
+2022-11-22 11:03:36 - 1 out of 100
+2022-11-22 11:03:36 - BJS Alabama does NOT have data for infographics
+2022-11-22 11:03:36 - 2 out of 100
+2022-11-22 11:03:36 - BJS Alaska does NOT have data for infographics
+2022-11-22 11:03:36 - 3 out of 100
+2022-11-22 11:03:42 - Save image for BJS_Arizona_Black - 1.5, h=4.2, w=24.5393760563784
+2022-11-22 11:03:46 - Save image for BJS_Arizona_Hispanic - 1.4, h=4.2, w=24.5393760563784
+2022-11-22 11:03:46 - 4 out of 100
+2022-11-22 11:03:51 - Save image for BJS_Arkansas_Black - 1.5, h=4.2, w=24.5393760563784
+2022-11-22 11:03:55 - Save image for BJS_Arkansas_Hispanic - 0.1, h=4.2, w=24.5393760563784
+2022-11-22 11:03:55 - 5 out of 100
+2022-11-22 11:04:00 - Save image for BJS_California_Black - 1.7, h=4.2, w=24.5393760563784
+2022-11-22 11:04:04 - Save image for BJS_California_Hispanic - 1.1, h=4.2, w=24.5393760563784
+2022-11-22 11:04:04 - 6 out of 100
+2022-11-22 11:04:08 - Save image for BJS_Colorado_Black - 1.4, h=4.2, w=24.5393760563784
+2022-11-22 11:04:12 - Save image for BJS_Colorado_Hispanic - 1.3, h=4.2, w=24.5393760563784
+2022-11-22 11:04:12 - 7 out of 100
+2022-11-22 11:04:12 - BJS Connecticut does NOT have data for infographics
+2022-11-22 11:04:12 - 8 out of 100
+2022-11-22 11:04:16 - Save image for BJS_Delaware_Black - 1.0, h=4.2, w=24.5393760563784
+2022-11-22 11:04:20 - Save image for BJS_Delaware_Hispanic - 0.9, h=4.2, w=24.5393760563784
+2022-11-22 11:04:20 - 9 out of 100
+2022-11-22 11:04:24 - Save image for BJS_Florida_Black - 1.0, h=4.2, w=24.5393760563784
+2022-11-22 11:04:29 - Save image for BJS_Florida_Hispanic - 0.9, h=4.2, w=24.5393760563784
+2022-11-22 11:04:29 - 10 out of 100
+2022-11-22 11:04:32 - Save image for BJS_Georgia_Black - 1.0, h=4.2, w=24.5393760563784
+2022-11-22 11:04:37 - Save image for BJS_Georgia_Hispanic - 0.2, h=4.2, w=24.5393760563784
+2022-11-22 11:04:37 - 11 out of 100
+2022-11-22 11:04:37 - BJS Hawaii does NOT have data for infographics
+2022-11-22 11:04:37 - 12 out of 100
+2022-11-22 11:04:37 - BJS Idaho does NOT have data for infographics
+2022-11-22 11:04:37 - 13 out of 100
+2022-11-22 11:04:41 - Save image for BJS_Illinois_Black - 1.1, h=4.2, w=24.5393760563784
+2022-11-22 11:04:45 - Save image for BJS_Illinois_Hispanic - 0.6, h=4.2, w=24.5393760563784
+2022-11-22 11:04:45 - 14 out of 100
+2022-11-22 11:04:49 - Save image for BJS_Indiana_Black - 1.6, h=4.2, w=24.5393760563784
+2022-11-22 11:04:53 - Save image for BJS_Indiana_Hispanic - 0.4, h=4.2, w=24.5393760563784
+2022-11-22 11:04:53 - 15 out of 100
+2022-11-22 11:04:56 - Save image for BJS_Iowa_Black - 1.4, h=4.2, w=24.5393760563784
+2022-11-22 11:05:00 - Save image for BJS_Iowa_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-11-22 11:05:00 - 16 out of 100
+2022-11-22 11:05:04 - Save image for BJS_Kansas_Black - 1.4, h=4.2, w=24.5393760563784
+2022-11-22 11:05:08 - Save image for BJS_Kansas_Hispanic - 0.8, h=4.2, w=24.5393760563784
+2022-11-22 11:05:08 - 17 out of 100
+2022-11-22 11:05:12 - Save image for BJS_Kentucky_Black - 0.9, h=4.2, w=24.5393760563784
+2022-11-22 11:05:16 - Save image for BJS_Kentucky_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-11-22 11:05:16 - 18 out of 100
+2022-11-22 11:05:16 - BJS Louisiana does NOT have data for infographics
+2022-11-22 11:05:16 - 19 out of 100
+2022-11-22 11:05:16 - BJS Maine does NOT have data for infographics
+2022-11-22 11:05:16 - 20 out of 100
+2022-11-22 11:05:20 - Save image for BJS_Maryland_Black - 1.0, h=4.2, w=24.5393760563784
+2022-11-22 11:05:20 - 21 out of 100
+2022-11-22 11:05:24 - Save image for BJS_Massachusetts_Black - 1.5, h=4.2, w=24.5393760563784
+2022-11-22 11:05:28 - Save image for BJS_Massachusetts_Hispanic - 0.9, h=4.2, w=24.5393760563784
+2022-11-22 11:05:28 - 22 out of 100
+2022-11-22 11:05:28 - BJS Michigan does NOT have data for infographics
+2022-11-22 11:05:28 - 23 out of 100
+2022-11-22 11:05:32 - Save image for BJS_Minnesota_Black - 1.8, h=4.2, w=24.5393760563784
+2022-11-22 11:05:37 - Save image for BJS_Minnesota_Hispanic - 1.2, h=4.2, w=24.5393760563784
+2022-11-22 11:05:37 - 24 out of 100
+2022-11-22 11:05:41 - Save image for BJS_Mississippi_Black - 1.1, h=4.2, w=24.5393760563784
+2022-11-22 11:05:45 - Save image for BJS_Mississippi_Hispanic - <0.3*, h=4.2, w=24.5393760563784
+2022-11-22 11:05:45 - 25 out of 100
+2022-11-22 11:05:49 - Save image for BJS_Missouri_Black - 1.0, h=4.2, w=24.5393760563784
+2022-11-22 11:05:53 - Save image for BJS_Missouri_Hispanic - 0.8, h=4.2, w=24.5393760563784
+2022-11-22 11:05:53 - 26 out of 100
+2022-11-22 11:05:57 - Save image for BJS_Montana_Black - 1.3, h=4.2, w=24.5393760563784
+2022-11-22 11:06:01 - Save image for BJS_Montana_Hispanic - 1.7, h=4.2, w=24.5393760563784
+2022-11-22 11:06:01 - 27 out of 100
+2022-11-22 11:06:05 - Save image for BJS_Nebraska_Black - 1.8, h=4.2, w=24.5393760563784
+2022-11-22 11:06:09 - Save image for BJS_Nebraska_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-11-22 11:06:09 - 28 out of 100
+2022-11-22 11:06:09 - BJS Nevada does NOT have data for infographics
+2022-11-22 11:06:09 - 29 out of 100
+2022-11-22 11:06:13 - Save image for BJS_New Hampshire_Black - 1.5, h=4.2, w=24.5393760563784
+2022-11-22 11:06:17 - Save image for BJS_New Hampshire_Hispanic - 0.6, h=4.2, w=24.5393760563784
+2022-11-22 11:06:17 - 30 out of 100
+2022-11-22 11:06:22 - Save image for BJS_New Jersey_Black - 2.3, h=4.2, w=24.5393760563784
+2022-11-22 11:06:26 - Save image for BJS_New Jersey_Hispanic - 0.6, h=4.2, w=24.5393760563784
+2022-11-22 11:06:26 - 31 out of 100
+2022-11-22 11:06:30 - Save image for BJS_New Mexico_Black - 1.3, h=4.2, w=24.5393760563784
+2022-11-22 11:06:35 - Save image for BJS_New Mexico_Hispanic - 1.2, h=4.2, w=24.5393760563784
+2022-11-22 11:06:35 - 32 out of 100
+2022-11-22 11:06:39 - Save image for BJS_New York_Black - 1.1, h=4.2, w=24.5393760563784
+2022-11-22 11:06:44 - Save image for BJS_New York_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-11-22 11:06:44 - 33 out of 100
+2022-11-22 11:06:48 - Save image for BJS_North Carolina_Black - 1.0, h=4.2, w=24.5393760563784
+2022-11-22 11:06:52 - Save image for BJS_North Carolina_Hispanic - 0.4, h=4.2, w=24.5393760563784
+2022-11-22 11:06:52 - 34 out of 100
+2022-11-22 11:06:57 - Save image for BJS_North Dakota_Black - 1.0, h=4.2, w=24.5393760563784
+2022-11-22 11:07:01 - Save image for BJS_North Dakota_Hispanic - 1.3, h=4.2, w=24.5393760563784
+2022-11-22 11:07:01 - 35 out of 100
+2022-11-22 11:07:06 - Save image for BJS_Ohio_Black - 1.3, h=4.2, w=24.5393760563784
+2022-11-22 11:07:10 - Save image for BJS_Ohio_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-11-22 11:07:10 - 36 out of 100
+2022-11-22 11:07:15 - Save image for BJS_Oklahoma_Black - 0.6, h=4.2, w=24.5393760563784
+2022-11-22 11:07:20 - Save image for BJS_Oklahoma_Hispanic - 0.4, h=4.2, w=24.5393760563784
+2022-11-22 11:07:20 - 37 out of 100
+2022-11-22 11:07:20 - BJS Oregon does NOT have data for infographics
+2022-11-22 11:07:20 - 38 out of 100
+2022-11-22 11:07:25 - Save image for BJS_Pennsylvania_Black - 1.5, h=4.2, w=24.5393760563784
+2022-11-22 11:07:29 - Save image for BJS_Pennsylvania_Hispanic - 1.6, h=4.2, w=24.5393760563784
+2022-11-22 11:07:29 - 39 out of 100
+2022-11-22 11:07:34 - Save image for BJS_Rhode Island_Black - 1.5, h=4.2, w=24.5393760563784
+2022-11-22 11:07:39 - Save image for BJS_Rhode Island_Hispanic - 0.9, h=4.2, w=24.5393760563784
+2022-11-22 11:07:39 - 40 out of 100
+2022-11-22 11:07:43 - Save image for BJS_South Carolina_Black - 1.4, h=4.2, w=24.5393760563784
+2022-11-22 11:07:48 - Save image for BJS_South Carolina_Hispanic - <0.6*, h=4.2, w=24.5393760563784
+2022-11-22 11:07:48 - 41 out of 100
+2022-11-22 11:07:48 - BJS South Dakota does NOT have data for infographics
+2022-11-22 11:07:48 - 42 out of 100
+2022-11-22 11:07:53 - Save image for BJS_Tennessee_Black - 0.7, h=4.2, w=24.5393760563784
+2022-11-22 11:07:57 - Save image for BJS_Tennessee_Hispanic - 0.2, h=4.2, w=24.5393760563784
+2022-11-22 11:07:57 - 43 out of 100
+2022-11-22 11:08:02 - Save image for BJS_Texas_Black - 1.0, h=4.2, w=24.5393760563784
+2022-11-22 11:08:06 - Save image for BJS_Texas_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-11-22 11:08:06 - 44 out of 100
+2022-11-22 11:08:11 - Save image for BJS_Utah_Black - 1.1, h=4.2, w=24.5393760563784
+2022-11-22 11:08:15 - Save image for BJS_Utah_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-11-22 11:08:15 - 45 out of 100
+2022-11-22 11:08:15 - BJS Vermont does NOT have data for infographics
+2022-11-22 11:08:15 - 46 out of 100
+2022-11-22 11:08:15 - BJS Virginia does NOT have data for infographics
+2022-11-22 11:08:15 - 47 out of 100
+2022-11-22 11:08:20 - Save image for BJS_Washington_Black - 1.1, h=4.2, w=24.5393760563784
+2022-11-22 11:08:24 - Save image for BJS_Washington_Hispanic - 0.3, h=4.2, w=24.5393760563784
+2022-11-22 11:08:24 - 48 out of 100
+2022-11-22 11:08:29 - Save image for BJS_West Virginia_Black - <2.5*, h=4.2, w=24.5393760563784
+2022-11-22 11:08:29 - 49 out of 100
+2022-11-22 11:08:34 - Save image for BJS_Wisconsin_Black - 1.8, h=4.2, w=24.5393760563784
+2022-11-22 11:08:38 - Save image for BJS_Wisconsin_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-11-22 11:08:38 - 50 out of 100
+2022-11-22 11:08:43 - Save image for BJS_Wyoming_Black - 2.6, h=4.2, w=24.5393760563784
+2022-11-22 11:08:48 - Save image for BJS_Wyoming_Hispanic - 1.1, h=4.2, w=24.5393760563784
+2022-11-22 11:08:48 - 51 out of 100
+2022-11-22 11:08:48 - CEN Alabama does NOT have data for infographics
+2022-11-22 11:08:48 - 52 out of 100
+2022-11-22 11:08:48 - CEN Alaska does NOT have data for infographics
+2022-11-22 11:08:48 - 53 out of 100
+2022-11-22 11:08:52 - Save image for CEN_Arizona_Black - 5.0, h=4.2, w=24.5393760563784
+2022-11-22 11:08:57 - Save image for CEN_Arizona_Hispanic - 2.7, h=4.2, w=24.5393760563784
+2022-11-22 11:08:57 - 54 out of 100
+2022-11-22 11:09:01 - Save image for CEN_Arkansas_Black - 3.8, h=4.2, w=24.5393760563784
+2022-11-22 11:09:06 - Save image for CEN_Arkansas_Hispanic - 0.1, h=4.2, w=24.5393760563784
+2022-11-22 11:09:06 - 55 out of 100
+2022-11-22 11:09:15 - Save image for CEN_California_Black - 10.9, h=8.4, w=24.5393760563784
+2022-11-22 11:09:20 - Save image for CEN_California_Hispanic - 2.3, h=4.2, w=24.5393760563784
+2022-11-22 11:09:20 - 56 out of 100
+2022-11-22 11:09:24 - Save image for CEN_Colorado_Black - 5.8, h=4.2, w=24.5393760563784
+2022-11-22 11:09:29 - Save image for CEN_Colorado_Hispanic - 2.7, h=4.2, w=24.5393760563784
+2022-11-22 11:09:29 - 57 out of 100
+2022-11-22 11:09:29 - CEN Connecticut does NOT have data for infographics
+2022-11-22 11:09:29 - 58 out of 100
+2022-11-22 11:09:34 - Save image for CEN_Delaware_Black - 4.7, h=4.2, w=24.5393760563784
+2022-11-22 11:09:38 - Save image for CEN_Delaware_Hispanic - 0.9, h=4.2, w=24.5393760563784
+2022-11-22 11:09:38 - 59 out of 100
+2022-11-22 11:09:43 - Save image for CEN_Florida_Black - 5.3, h=4.2, w=24.5393760563784
+2022-11-22 11:09:47 - Save image for CEN_Florida_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-11-22 11:09:47 - 60 out of 100
+2022-11-22 11:09:52 - Save image for CEN_Georgia_Black - 2.4, h=4.2, w=24.5393760563784
+2022-11-22 11:09:56 - Save image for CEN_Georgia_Hispanic - 0.3, h=4.2, w=24.5393760563784
+2022-11-22 11:09:56 - 61 out of 100
+2022-11-22 11:09:56 - CEN Hawaii does NOT have data for infographics
+2022-11-22 11:09:56 - 62 out of 100
+2022-11-22 11:10:01 - Save image for CEN_Idaho_Black - 2.5, h=4.2, w=24.5393760563784
+2022-11-22 11:10:05 - Save image for CEN_Idaho_Hispanic - <0.1*, h=4.2, w=24.5393760563784
+2022-11-22 11:10:05 - 63 out of 100
+2022-11-22 11:10:10 - Save image for CEN_Illinois_Black - 8.9, h=4.2, w=24.5393760563784
+2022-11-22 11:10:14 - Save image for CEN_Illinois_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-11-22 11:10:14 - 64 out of 100
+2022-11-22 11:10:18 - Save image for CEN_Indiana_Black - 5.8, h=4.2, w=24.5393760563784
+2022-11-22 11:10:23 - Save image for CEN_Indiana_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-11-22 11:10:23 - 65 out of 100
+2022-11-22 11:10:27 - Save image for CEN_Iowa_Black - 7.6, h=4.2, w=24.5393760563784
+2022-11-22 11:10:32 - Save image for CEN_Iowa_Hispanic - 1.1, h=4.2, w=24.5393760563784
+2022-11-22 11:10:32 - 66 out of 100
+2022-11-22 11:10:36 - Save image for CEN_Kansas_Black - 6.3, h=4.2, w=24.5393760563784
+2022-11-22 11:10:40 - Save image for CEN_Kansas_Hispanic - 1.3, h=4.2, w=24.5393760563784
+2022-11-22 11:10:40 - 67 out of 100
+2022-11-22 11:10:45 - Save image for CEN_Kentucky_Black - 2.2, h=4.2, w=24.5393760563784
+2022-11-22 11:10:49 - Save image for CEN_Kentucky_Hispanic - 0.2, h=4.2, w=24.5393760563784
+2022-11-22 11:10:49 - 68 out of 100
+2022-11-22 11:10:49 - CEN Louisiana does NOT have data for infographics
+2022-11-22 11:10:49 - 69 out of 100
+2022-11-22 11:10:53 - Save image for CEN_Maine_Black - 9.4, h=4.2, w=24.5393760563784
+2022-11-22 11:10:53 - 70 out of 100
+2022-11-22 11:10:58 - Save image for CEN_Maryland_Black - 4.2, h=4.2, w=24.5393760563784
+2022-11-22 11:11:02 - Save image for CEN_Maryland_Hispanic - 0.2, h=4.2, w=24.5393760563784
+2022-11-22 11:11:02 - 71 out of 100
+2022-11-22 11:11:06 - Save image for CEN_Massachusetts_Black - 4.8, h=4.2, w=24.5393760563784
+2022-11-22 11:11:11 - Save image for CEN_Massachusetts_Hispanic - 4.3, h=4.2, w=24.5393760563784
+2022-11-22 11:11:11 - 72 out of 100
+2022-11-22 11:11:11 - CEN Michigan does NOT have data for infographics
+2022-11-22 11:11:11 - 73 out of 100
+2022-11-22 11:11:19 - Save image for CEN_Minnesota_Black - 10.3, h=8.4, w=24.5393760563784
+2022-11-22 11:11:23 - Save image for CEN_Minnesota_Hispanic - 2.5, h=4.2, w=24.5393760563784
+2022-11-22 11:11:23 - 74 out of 100
+2022-11-22 11:11:28 - Save image for CEN_Mississippi_Black - 2.3, h=4.2, w=24.5393760563784
+2022-11-22 11:11:32 - Save image for CEN_Mississippi_Hispanic - <0.1*, h=4.2, w=24.5393760563784
+2022-11-22 11:11:32 - 75 out of 100
+2022-11-22 11:11:37 - Save image for CEN_Missouri_Black - 2.8, h=4.2, w=24.5393760563784
+2022-11-22 11:11:41 - Save image for CEN_Missouri_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-11-22 11:11:41 - 76 out of 100
+2022-11-22 11:11:45 - Save image for CEN_Montana_Black - 4.6, h=4.2, w=24.5393760563784
+2022-11-22 11:11:50 - Save image for CEN_Montana_Hispanic - 0.6, h=4.2, w=24.5393760563784
+2022-11-22 11:11:50 - 77 out of 100
+2022-11-22 11:11:54 - Save image for CEN_Nebraska_Black - 8.9, h=4.2, w=24.5393760563784
+2022-11-22 11:11:59 - Save image for CEN_Nebraska_Hispanic - 2.0, h=4.2, w=24.5393760563784
+2022-11-22 11:11:59 - 78 out of 100
+2022-11-22 11:12:03 - Save image for CEN_Nevada_Black - 3.5, h=4.2, w=24.5393760563784
+2022-11-22 11:12:07 - Save image for CEN_Nevada_Hispanic - 0.6, h=4.2, w=24.5393760563784
+2022-11-22 11:12:07 - 79 out of 100
+2022-11-22 11:12:12 - Save image for CEN_New Hampshire_Black - 5.2, h=4.2, w=24.5393760563784
+2022-11-22 11:12:16 - Save image for CEN_New Hampshire_Hispanic - 1.5, h=4.2, w=24.5393760563784
+2022-11-22 11:12:16 - 80 out of 100
+2022-11-22 11:12:25 - Save image for CEN_New Jersey_Black - 11.4, h=8.4, w=24.5393760563784
+2022-11-22 11:12:29 - Save image for CEN_New Jersey_Hispanic - 1.7, h=4.2, w=24.5393760563784
+2022-11-22 11:12:29 - 81 out of 100
+2022-11-22 11:12:33 - Save image for CEN_New Mexico_Black - 4.3, h=4.2, w=24.5393760563784
+2022-11-22 11:12:36 - Save image for CEN_New Mexico_Hispanic - 2.8, h=4.2, w=24.5393760563784
+2022-11-22 11:12:36 - 82 out of 100
+2022-11-22 11:12:40 - Save image for CEN_New York_Black - 6.8, h=4.2, w=24.5393760563784
+2022-11-22 11:12:44 - Save image for CEN_New York_Hispanic - 2.7, h=4.2, w=24.5393760563784
+2022-11-22 11:12:44 - 83 out of 100
+2022-11-22 11:12:48 - Save image for CEN_North Carolina_Black - 2.9, h=4.2, w=24.5393760563784
+2022-11-22 11:12:52 - Save image for CEN_North Carolina_Hispanic - 0.4, h=4.2, w=24.5393760563784
+2022-11-22 11:12:52 - 84 out of 100
+2022-11-22 11:12:56 - Save image for CEN_North Dakota_Black - 3.4, h=4.2, w=24.5393760563784
+2022-11-22 11:13:00 - Save image for CEN_North Dakota_Hispanic - 2.5, h=4.2, w=24.5393760563784
+2022-11-22 11:13:00 - 85 out of 100
+2022-11-22 11:13:04 - Save image for CEN_Ohio_Black - 7.0, h=4.2, w=24.5393760563784
+2022-11-22 11:13:09 - Save image for CEN_Ohio_Hispanic - 0.9, h=4.2, w=24.5393760563784
+2022-11-22 11:13:09 - 86 out of 100
+2022-11-22 11:13:14 - Save image for CEN_Oklahoma_Black - 3.7, h=4.2, w=24.5393760563784
+2022-11-22 11:13:18 - Save image for CEN_Oklahoma_Hispanic - 1.9, h=4.2, w=24.5393760563784
+2022-11-22 11:13:18 - 87 out of 100
+2022-11-22 11:13:18 - CEN Oregon does NOT have data for infographics
+2022-11-22 11:13:18 - 88 out of 100
+2022-11-22 11:13:23 - Save image for CEN_Pennsylvania_Black - 7.1, h=4.2, w=24.5393760563784
+2022-11-22 11:13:28 - Save image for CEN_Pennsylvania_Hispanic - 3.0, h=4.2, w=24.5393760563784
+2022-11-22 11:13:28 - 89 out of 100
+2022-11-22 11:13:32 - Save image for CEN_Rhode Island_Black - 7.8, h=4.2, w=24.5393760563784
+2022-11-22 11:13:37 - Save image for CEN_Rhode Island_Hispanic - 4.1, h=4.2, w=24.5393760563784
+2022-11-22 11:13:37 - 90 out of 100
+2022-11-22 11:13:41 - Save image for CEN_South Carolina_Black - 5.0, h=4.2, w=24.5393760563784
+2022-11-22 11:13:46 - Save image for CEN_South Carolina_Hispanic - 0.3, h=4.2, w=24.5393760563784
+2022-11-22 11:13:46 - 91 out of 100
+2022-11-22 11:13:46 - CEN South Dakota does NOT have data for infographics
+2022-11-22 11:13:46 - 92 out of 100
+2022-11-22 11:13:50 - Save image for CEN_Tennessee_Black - 2.4, h=4.2, w=24.5393760563784
+2022-11-22 11:13:55 - Save image for CEN_Tennessee_Hispanic - 0.2, h=4.2, w=24.5393760563784
+2022-11-22 11:13:55 - 93 out of 100
+2022-11-22 11:13:59 - Save image for CEN_Texas_Black - 3.3, h=4.2, w=24.5393760563784
+2022-11-22 11:14:03 - Save image for CEN_Texas_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-11-22 11:14:03 - 94 out of 100
+2022-11-22 11:14:08 - Save image for CEN_Utah_Black - 5.6, h=4.2, w=24.5393760563784
+2022-11-22 11:14:12 - Save image for CEN_Utah_Hispanic - 2.3, h=4.2, w=24.5393760563784
+2022-11-22 11:14:12 - 95 out of 100
+2022-11-22 11:14:12 - CEN Vermont does NOT have data for infographics
+2022-11-22 11:14:12 - 96 out of 100
+2022-11-22 11:14:12 - CEN Virginia does NOT have data for infographics
+2022-11-22 11:14:12 - 97 out of 100
+2022-11-22 11:14:17 - Save image for CEN_Washington_Black - 5.5, h=4.2, w=24.5393760563784
+2022-11-22 11:14:21 - Save image for CEN_Washington_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-11-22 11:14:21 - 98 out of 100
+2022-11-22 11:14:28 - Save image for CEN_West Virginia_Black - <15.2*, h=8.4, w=24.5393760563784
+2022-11-22 11:14:28 - 99 out of 100
+2022-11-22 11:14:36 - Save image for CEN_Wisconsin_Black - 14.2, h=8.4, w=24.5393760563784
+2022-11-22 11:14:41 - Save image for CEN_Wisconsin_Hispanic - 2.3, h=4.2, w=24.5393760563784
+2022-11-22 11:14:41 - 100 out of 100
+2022-11-22 11:14:45 - Save image for CEN_Wyoming_Black - 4.9, h=4.2, w=24.5393760563784
+2022-11-22 11:14:50 - Save image for CEN_Wyoming_Hispanic - 1.6, h=4.2, w=24.5393760563784
+2022-11-22 11:14:50 - End   creating infographics
+2022-11-22 11:14:50 - Copy files exported to sharepoint to local app repo
+2022-11-22 11:14:50 - !!END   PREP FOR SHINY
+
 > ########## takes ~ 1min
 > Sys.time()
-[1] "2022-11-21 16:08:04 CST"
+[1] "2022-11-22 11:14:50 CST"
 
 > source("import.R", echo = TRUE)
 
@@ -545,7 +840,7 @@ Adding missing grouping variables: `metric`
 
 > ####### takes ~ 2min 
 > Sys.time()
-[1] "2022-11-21 16:08:09 CST"
+[1] "2022-11-22 11:14:54 CST"
 
 > source("highchart.R", echo = TRUE)
 
@@ -1107,7 +1402,7 @@ The following object is masked from ‘package:purrr’:
 
 > ####### takes ~ 1min 
 > Sys.time()
-[1] "2022-11-21 16:09:22 CST"
+[1] "2022-11-22 11:16:20 CST"
 
 > source("reactable.R", echo = TRUE)
 
@@ -1413,352 +1708,6 @@ Adding missing grouping variables: `state`, `adm_or_pop`
 +   save(state_reactable_adm,     file=file.path(folder, "state_reactable_adm.Rda"))
 +   save(state_reactable_pop .... [TRUNCATED] 
 
-> ####### takes ~ 10min
-> # working directory should be the root of the repository ~MCLCShiny/
-> Sys.time()
-[1] "2022-11-21 16:09:55 CST"
-
-> box::use(prep/box/rri_infographs_tables)
-
-> rri_infographs_tables$prep_for_shiny("N")
-2022-11-21 16:09:55 - !!START PREP FOR SHINY
-2022-11-21 16:09:55 - NCRP data is from YEAREND POPULATION
-2022-11-21 16:09:55 - Import and clean NCRP revocations data
-2022-11-21 16:09:55 - Start - NCRP import for year-end population 
-2022-11-21 16:09:59 - End   - NCRP import for year-end population
-2022-11-21 16:09:59 - Start - NCRP prep
-2022-11-21 16:09:59 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
-2022-11-21 16:10:00 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
-2022-11-21 16:10:01 - End   - NCRP prep
-2022-11-21 16:10:01 - Import and clean BJS-APS for population (denominator)
-[1mindexing[0m [34mapars_idyear.csv[0m [=============================================================================================================================================] [32m60.24MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                                                                2022-11-21 16:10:01 - Start - BJS APS (Parole) import for 2010-2018
-2022-11-21 16:10:02 - End   - BJS APS (Parole) import for 2010-2018
-2022-11-21 16:10:02 - STart - APS prep
-2022-11-21 16:10:02 - APS prep - 
--- Drop Federal total row
--- calculate other race category, pivot longer, recode into single race variable
--- make new race variable a factor 
--- drop rows where POPEST is NA (covered in UNKRACE)
--- add state id columns
-2022-11-21 16:10:02 - Sum accross state and year
-2022-11-21 16:10:02 - End   - APS prep
-2022-11-21 16:10:02 - Calc - rate/RRI calcuations
-Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR", "OFFGENERAL")
-Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR")
-2022-11-21 16:10:02 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
-2022-11-21 16:10:02 - Saved FULL_DF - NCRP_N_REV_BJS.RDS (included a date stamped version)
-2022-11-21 16:10:02 - Import and clean NCRP revocations data
-2022-11-21 16:10:02 - Start - NCRP import for year-end population 
-2022-11-21 16:10:05 - End   - NCRP import for year-end population
-2022-11-21 16:10:05 - Start - NCRP prep
-2022-11-21 16:10:05 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
-2022-11-21 16:10:06 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
-2022-11-21 16:10:07 - End   - NCRP prep
-2022-11-21 16:10:07 - Import and clean SC for population (denominator)
-2022-11-21 16:10:07 - Start - SC import
-[1mindexing[0m [34mSC-EST2020-ALLDATA6.csv[0m [================================================================================-------------------------------------------------------] [32m2.15GB/s[0m, eta: [36m 0s[0m[1mindexing[0m [34mSC-EST2020-ALLDATA6.csv[0m [=======================================================================================================================================] [32m1.42GB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                                                                2022-11-21 16:10:07 - End   - SC import
-2022-11-21 16:10:07 - STart - SC prep
-2022-11-21 16:10:07 - SC prep:
--- Filter data to be 18+, combined sex, and combine ORIGIN
--- recode RACE/ORIGIN categories
--- sum across categories
--- add state ids 
-2022-11-21 16:10:07 - SC prep - Sum accross state and year
-2022-11-21 16:10:07 - End   - SC prep
-2022-11-21 16:10:07 - Calc - rate/RRI calcuations
-Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR", "OFFGENERAL")
-Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR")
-2022-11-21 16:10:08 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
-2022-11-21 16:10:08 - Saved FULL_DF - NCRP_N_REV_SC.RDS (included a date stamped version)
-2022-11-21 16:10:08 - Start creating tables, takes ~40-50 seconds
-2022-11-21 16:10:33 - End creating tables
-2022-11-21 16:10:33 - Saved outtables - NCRP_N_RRI_tables.RDS (included a date stamped version)
-2022-11-21 16:10:33 - Start - assign flags
-[1mwrote[0m [32m642.00B[0m in [36m 0s[0m, [32m48.96MB/s[0m                                                                                                                                                                                           [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                                                           2022-11-21 16:10:38 - End - assign flags
-2022-11-21 16:10:38 - Start - assign flags
-[1mwrote[0m [32m707.00B[0m in [36m 0s[0m, [32m54.91MB/s[0m                                                                                                                                                                                           [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                                                           2022-11-21 16:10:43 - End - assign flags
-2022-11-21 16:10:43 - Start creating infographics
-2022-11-21 16:10:43 - 1 out of 100
-2022-11-21 16:10:43 - BJS Alabama does NOT have data for infographics
-2022-11-21 16:10:43 - 2 out of 100
-2022-11-21 16:10:43 - BJS Alaska does NOT have data for infographics
-2022-11-21 16:10:43 - 3 out of 100
-2022-11-21 16:10:46 - Save image for BJS_Arizona_Black - 1.5, h=4.2, w=24.5393760563784
-2022-11-21 16:10:50 - Save image for BJS_Arizona_Hispanic - 1.4, h=4.2, w=24.5393760563784
-2022-11-21 16:10:50 - 4 out of 100
-2022-11-21 16:10:54 - Save image for BJS_Arkansas_Black - 1.5, h=4.2, w=24.5393760563784
-2022-11-21 16:10:57 - Save image for BJS_Arkansas_Hispanic - 0.1, h=4.2, w=24.5393760563784
-2022-11-21 16:10:57 - 5 out of 100
-2022-11-21 16:11:01 - Save image for BJS_California_Black - 1.7, h=4.2, w=24.5393760563784
-2022-11-21 16:11:05 - Save image for BJS_California_Hispanic - 1.1, h=4.2, w=24.5393760563784
-2022-11-21 16:11:05 - 6 out of 100
-2022-11-21 16:11:09 - Save image for BJS_Colorado_Black - 1.4, h=4.2, w=24.5393760563784
-2022-11-21 16:11:12 - Save image for BJS_Colorado_Hispanic - 1.3, h=4.2, w=24.5393760563784
-2022-11-21 16:11:12 - 7 out of 100
-2022-11-21 16:11:12 - BJS Connecticut does NOT have data for infographics
-2022-11-21 16:11:12 - 8 out of 100
-2022-11-21 16:11:16 - Save image for BJS_Delaware_Black - 1.0, h=4.2, w=24.5393760563784
-2022-11-21 16:11:20 - Save image for BJS_Delaware_Hispanic - 0.9, h=4.2, w=24.5393760563784
-2022-11-21 16:11:20 - 9 out of 100
-2022-11-21 16:11:23 - Save image for BJS_Florida_Black - 1.0, h=4.2, w=24.5393760563784
-2022-11-21 16:11:27 - Save image for BJS_Florida_Hispanic - 0.9, h=4.2, w=24.5393760563784
-2022-11-21 16:11:27 - 10 out of 100
-2022-11-21 16:11:31 - Save image for BJS_Georgia_Black - 1.0, h=4.2, w=24.5393760563784
-2022-11-21 16:11:34 - Save image for BJS_Georgia_Hispanic - 0.2, h=4.2, w=24.5393760563784
-2022-11-21 16:11:34 - 11 out of 100
-2022-11-21 16:11:34 - BJS Hawaii does NOT have data for infographics
-2022-11-21 16:11:34 - 12 out of 100
-2022-11-21 16:11:34 - BJS Idaho does NOT have data for infographics
-2022-11-21 16:11:34 - 13 out of 100
-2022-11-21 16:11:38 - Save image for BJS_Illinois_Black - 1.1, h=4.2, w=24.5393760563784
-2022-11-21 16:11:42 - Save image for BJS_Illinois_Hispanic - 0.6, h=4.2, w=24.5393760563784
-2022-11-21 16:11:42 - 14 out of 100
-2022-11-21 16:11:45 - Save image for BJS_Indiana_Black - 1.6, h=4.2, w=24.5393760563784
-2022-11-21 16:11:49 - Save image for BJS_Indiana_Hispanic - 0.4, h=4.2, w=24.5393760563784
-2022-11-21 16:11:49 - 15 out of 100
-2022-11-21 16:11:52 - Save image for BJS_Iowa_Black - 1.4, h=4.2, w=24.5393760563784
-2022-11-21 16:11:56 - Save image for BJS_Iowa_Hispanic - 0.5, h=4.2, w=24.5393760563784
-2022-11-21 16:11:56 - 16 out of 100
-2022-11-21 16:11:59 - Save image for BJS_Kansas_Black - 1.4, h=4.2, w=24.5393760563784
-2022-11-21 16:12:03 - Save image for BJS_Kansas_Hispanic - 0.8, h=4.2, w=24.5393760563784
-2022-11-21 16:12:03 - 17 out of 100
-2022-11-21 16:12:06 - Save image for BJS_Kentucky_Black - 0.9, h=4.2, w=24.5393760563784
-2022-11-21 16:12:10 - Save image for BJS_Kentucky_Hispanic - 0.5, h=4.2, w=24.5393760563784
-2022-11-21 16:12:10 - 18 out of 100
-2022-11-21 16:12:10 - BJS Louisiana does NOT have data for infographics
-2022-11-21 16:12:10 - 19 out of 100
-2022-11-21 16:12:10 - BJS Maine does NOT have data for infographics
-2022-11-21 16:12:10 - 20 out of 100
-2022-11-21 16:12:14 - Save image for BJS_Maryland_Black - 1.0, h=4.2, w=24.5393760563784
-2022-11-21 16:12:14 - 21 out of 100
-2022-11-21 16:12:17 - Save image for BJS_Massachusetts_Black - 1.5, h=4.2, w=24.5393760563784
-2022-11-21 16:12:21 - Save image for BJS_Massachusetts_Hispanic - 0.9, h=4.2, w=24.5393760563784
-2022-11-21 16:12:21 - 22 out of 100
-2022-11-21 16:12:21 - BJS Michigan does NOT have data for infographics
-2022-11-21 16:12:21 - 23 out of 100
-2022-11-21 16:12:24 - Save image for BJS_Minnesota_Black - 1.8, h=4.2, w=24.5393760563784
-2022-11-21 16:12:28 - Save image for BJS_Minnesota_Hispanic - 1.2, h=4.2, w=24.5393760563784
-2022-11-21 16:12:28 - 24 out of 100
-2022-11-21 16:12:32 - Save image for BJS_Mississippi_Black - 1.1, h=4.2, w=24.5393760563784
-2022-11-21 16:12:35 - Save image for BJS_Mississippi_Hispanic - <0.3*, h=4.2, w=24.5393760563784
-2022-11-21 16:12:35 - 25 out of 100
-2022-11-21 16:12:39 - Save image for BJS_Missouri_Black - 1.0, h=4.2, w=24.5393760563784
-2022-11-21 16:12:43 - Save image for BJS_Missouri_Hispanic - 0.8, h=4.2, w=24.5393760563784
-2022-11-21 16:12:43 - 26 out of 100
-2022-11-21 16:12:47 - Save image for BJS_Montana_Black - 1.3, h=4.2, w=24.5393760563784
-2022-11-21 16:12:51 - Save image for BJS_Montana_Hispanic - 1.7, h=4.2, w=24.5393760563784
-2022-11-21 16:12:51 - 27 out of 100
-2022-11-21 16:12:54 - Save image for BJS_Nebraska_Black - 1.8, h=4.2, w=24.5393760563784
-2022-11-21 16:12:58 - Save image for BJS_Nebraska_Hispanic - 1.0, h=4.2, w=24.5393760563784
-2022-11-21 16:12:58 - 28 out of 100
-2022-11-21 16:12:58 - BJS Nevada does NOT have data for infographics
-2022-11-21 16:12:58 - 29 out of 100
-2022-11-21 16:13:01 - Save image for BJS_New Hampshire_Black - 1.5, h=4.2, w=24.5393760563784
-2022-11-21 16:13:05 - Save image for BJS_New Hampshire_Hispanic - 0.6, h=4.2, w=24.5393760563784
-2022-11-21 16:13:05 - 30 out of 100
-2022-11-21 16:13:08 - Save image for BJS_New Jersey_Black - 2.3, h=4.2, w=24.5393760563784
-2022-11-21 16:13:12 - Save image for BJS_New Jersey_Hispanic - 0.6, h=4.2, w=24.5393760563784
-2022-11-21 16:13:12 - 31 out of 100
-2022-11-21 16:13:15 - Save image for BJS_New Mexico_Black - 1.3, h=4.2, w=24.5393760563784
-2022-11-21 16:13:19 - Save image for BJS_New Mexico_Hispanic - 1.2, h=4.2, w=24.5393760563784
-2022-11-21 16:13:19 - 32 out of 100
-2022-11-21 16:13:22 - Save image for BJS_New York_Black - 1.1, h=4.2, w=24.5393760563784
-2022-11-21 16:13:26 - Save image for BJS_New York_Hispanic - 0.5, h=4.2, w=24.5393760563784
-2022-11-21 16:13:26 - 33 out of 100
-2022-11-21 16:13:29 - Save image for BJS_North Carolina_Black - 1.0, h=4.2, w=24.5393760563784
-2022-11-21 16:13:33 - Save image for BJS_North Carolina_Hispanic - 0.4, h=4.2, w=24.5393760563784
-2022-11-21 16:13:33 - 34 out of 100
-2022-11-21 16:13:36 - Save image for BJS_North Dakota_Black - 1.0, h=4.2, w=24.5393760563784
-2022-11-21 16:13:40 - Save image for BJS_North Dakota_Hispanic - 1.3, h=4.2, w=24.5393760563784
-2022-11-21 16:13:40 - 35 out of 100
-2022-11-21 16:13:43 - Save image for BJS_Ohio_Black - 1.3, h=4.2, w=24.5393760563784
-2022-11-21 16:13:47 - Save image for BJS_Ohio_Hispanic - 1.0, h=4.2, w=24.5393760563784
-2022-11-21 16:13:47 - 36 out of 100
-2022-11-21 16:13:50 - Save image for BJS_Oklahoma_Black - 0.6, h=4.2, w=24.5393760563784
-2022-11-21 16:13:53 - Save image for BJS_Oklahoma_Hispanic - 0.4, h=4.2, w=24.5393760563784
-2022-11-21 16:13:53 - 37 out of 100
-2022-11-21 16:13:53 - BJS Oregon does NOT have data for infographics
-2022-11-21 16:13:53 - 38 out of 100
-2022-11-21 16:13:57 - Save image for BJS_Pennsylvania_Black - 1.5, h=4.2, w=24.5393760563784
-2022-11-21 16:14:00 - Save image for BJS_Pennsylvania_Hispanic - 1.6, h=4.2, w=24.5393760563784
-2022-11-21 16:14:00 - 39 out of 100
-2022-11-21 16:14:04 - Save image for BJS_Rhode Island_Black - 1.5, h=4.2, w=24.5393760563784
-2022-11-21 16:14:07 - Save image for BJS_Rhode Island_Hispanic - 0.9, h=4.2, w=24.5393760563784
-2022-11-21 16:14:07 - 40 out of 100
-2022-11-21 16:14:10 - Save image for BJS_South Carolina_Black - 1.4, h=4.2, w=24.5393760563784
-2022-11-21 16:14:14 - Save image for BJS_South Carolina_Hispanic - <0.6*, h=4.2, w=24.5393760563784
-2022-11-21 16:14:14 - 41 out of 100
-2022-11-21 16:14:14 - BJS South Dakota does NOT have data for infographics
-2022-11-21 16:14:14 - 42 out of 100
-2022-11-21 16:14:17 - Save image for BJS_Tennessee_Black - 0.7, h=4.2, w=24.5393760563784
-2022-11-21 16:14:21 - Save image for BJS_Tennessee_Hispanic - 0.2, h=4.2, w=24.5393760563784
-2022-11-21 16:14:21 - 43 out of 100
-2022-11-21 16:14:24 - Save image for BJS_Texas_Black - 1.0, h=4.2, w=24.5393760563784
-2022-11-21 16:14:27 - Save image for BJS_Texas_Hispanic - 1.0, h=4.2, w=24.5393760563784
-2022-11-21 16:14:27 - 44 out of 100
-2022-11-21 16:14:31 - Save image for BJS_Utah_Black - 1.1, h=4.2, w=24.5393760563784
-2022-11-21 16:14:34 - Save image for BJS_Utah_Hispanic - 1.0, h=4.2, w=24.5393760563784
-2022-11-21 16:14:34 - 45 out of 100
-2022-11-21 16:14:34 - BJS Vermont does NOT have data for infographics
-2022-11-21 16:14:34 - 46 out of 100
-2022-11-21 16:14:34 - BJS Virginia does NOT have data for infographics
-2022-11-21 16:14:34 - 47 out of 100
-2022-11-21 16:14:38 - Save image for BJS_Washington_Black - 1.1, h=4.2, w=24.5393760563784
-2022-11-21 16:14:41 - Save image for BJS_Washington_Hispanic - 0.3, h=4.2, w=24.5393760563784
-2022-11-21 16:14:41 - 48 out of 100
-2022-11-21 16:14:45 - Save image for BJS_West Virginia_Black - <2.5*, h=4.2, w=24.5393760563784
-2022-11-21 16:14:45 - 49 out of 100
-2022-11-21 16:14:48 - Save image for BJS_Wisconsin_Black - 1.8, h=4.2, w=24.5393760563784
-2022-11-21 16:14:52 - Save image for BJS_Wisconsin_Hispanic - 1.0, h=4.2, w=24.5393760563784
-2022-11-21 16:14:52 - 50 out of 100
-2022-11-21 16:14:55 - Save image for BJS_Wyoming_Black - 2.6, h=4.2, w=24.5393760563784
-2022-11-21 16:14:59 - Save image for BJS_Wyoming_Hispanic - 1.1, h=4.2, w=24.5393760563784
-2022-11-21 16:14:59 - 51 out of 100
-2022-11-21 16:14:59 - SC Alabama does NOT have data for infographics
-2022-11-21 16:14:59 - 52 out of 100
-2022-11-21 16:14:59 - SC Alaska does NOT have data for infographics
-2022-11-21 16:14:59 - 53 out of 100
-2022-11-21 16:15:02 - Save image for SC_Arizona_Black - 6.3, h=4.2, w=24.5393760563784
-2022-11-21 16:15:07 - Save image for SC_Arizona_Hispanic - 2.7, h=4.2, w=24.5393760563784
-2022-11-21 16:15:07 - 54 out of 100
-2022-11-21 16:15:10 - Save image for SC_Arkansas_Black - 4.0, h=4.2, w=24.5393760563784
-2022-11-21 16:15:13 - Save image for SC_Arkansas_Hispanic - 0.1, h=4.2, w=24.5393760563784
-2022-11-21 16:15:13 - 55 out of 100
-2022-11-21 16:15:20 - Save image for SC_California_Black - 12.8, h=8.4, w=24.5393760563784
-2022-11-21 16:15:23 - Save image for SC_California_Hispanic - 2.2, h=4.2, w=24.5393760563784
-2022-11-21 16:15:23 - 56 out of 100
-2022-11-21 16:15:27 - Save image for SC_Colorado_Black - 7.0, h=4.2, w=24.5393760563784
-2022-11-21 16:15:30 - Save image for SC_Colorado_Hispanic - 2.7, h=4.2, w=24.5393760563784
-2022-11-21 16:15:30 - 57 out of 100
-2022-11-21 16:15:30 - SC Connecticut does NOT have data for infographics
-2022-11-21 16:15:30 - 58 out of 100
-2022-11-21 16:15:34 - Save image for SC_Delaware_Black - 5.0, h=4.2, w=24.5393760563784
-2022-11-21 16:15:37 - Save image for SC_Delaware_Hispanic - 0.9, h=4.2, w=24.5393760563784
-2022-11-21 16:15:37 - 59 out of 100
-2022-11-21 16:15:41 - Save image for SC_Florida_Black - 5.9, h=4.2, w=24.5393760563784
-2022-11-21 16:15:44 - Save image for SC_Florida_Hispanic - 0.5, h=4.2, w=24.5393760563784
-2022-11-21 16:15:44 - 60 out of 100
-2022-11-21 16:15:48 - Save image for SC_Georgia_Black - 2.5, h=4.2, w=24.5393760563784
-2022-11-21 16:15:51 - Save image for SC_Georgia_Hispanic - 0.3, h=4.2, w=24.5393760563784
-2022-11-21 16:15:51 - 61 out of 100
-2022-11-21 16:15:51 - SC Hawaii does NOT have data for infographics
-2022-11-21 16:15:51 - 62 out of 100
-2022-11-21 16:15:55 - Save image for SC_Idaho_Black - 3.4, h=4.2, w=24.5393760563784
-2022-11-21 16:15:59 - Save image for SC_Idaho_Hispanic - <0.1*, h=4.2, w=24.5393760563784
-2022-11-21 16:15:59 - 63 out of 100
-2022-11-21 16:16:03 - Save image for SC_Illinois_Black - 9.5, h=4.2, w=24.5393760563784
-2022-11-21 16:16:06 - Save image for SC_Illinois_Hispanic - 1.0, h=4.2, w=24.5393760563784
-2022-11-21 16:16:06 - 64 out of 100
-2022-11-21 16:16:10 - Save image for SC_Indiana_Black - 6.3, h=4.2, w=24.5393760563784
-2022-11-21 16:16:14 - Save image for SC_Indiana_Hispanic - 0.5, h=4.2, w=24.5393760563784
-2022-11-21 16:16:14 - 65 out of 100
-2022-11-21 16:16:18 - Save image for SC_Iowa_Black - 9.2, h=4.2, w=24.5393760563784
-2022-11-21 16:16:22 - Save image for SC_Iowa_Hispanic - 1.1, h=4.2, w=24.5393760563784
-2022-11-21 16:16:22 - 66 out of 100
-2022-11-21 16:16:26 - Save image for SC_Kansas_Black - 7.4, h=4.2, w=24.5393760563784
-2022-11-21 16:16:30 - Save image for SC_Kansas_Hispanic - 1.3, h=4.2, w=24.5393760563784
-2022-11-21 16:16:30 - 67 out of 100
-2022-11-21 16:16:34 - Save image for SC_Kentucky_Black - 2.4, h=4.2, w=24.5393760563784
-2022-11-21 16:16:38 - Save image for SC_Kentucky_Hispanic - 0.2, h=4.2, w=24.5393760563784
-2022-11-21 16:16:38 - 68 out of 100
-2022-11-21 16:16:38 - SC Louisiana does NOT have data for infographics
-2022-11-21 16:16:38 - 69 out of 100
-2022-11-21 16:16:46 - Save image for SC_Maine_Black - 13.3, h=8.4, w=24.5393760563784
-2022-11-21 16:16:46 - 70 out of 100
-2022-11-21 16:16:50 - Save image for SC_Maryland_Black - 4.4, h=4.2, w=24.5393760563784
-2022-11-21 16:16:54 - Save image for SC_Maryland_Hispanic - 0.1, h=4.2, w=24.5393760563784
-2022-11-21 16:16:54 - 71 out of 100
-2022-11-21 16:16:58 - Save image for SC_Massachusetts_Black - 6.2, h=4.2, w=24.5393760563784
-2022-11-21 16:17:01 - Save image for SC_Massachusetts_Hispanic - 3.8, h=4.2, w=24.5393760563784
-2022-11-21 16:17:01 - 72 out of 100
-2022-11-21 16:17:01 - SC Michigan does NOT have data for infographics
-2022-11-21 16:17:01 - 73 out of 100
-2022-11-21 16:17:09 - Save image for SC_Minnesota_Black - 11.6, h=8.4, w=24.5393760563784
-2022-11-21 16:17:14 - Save image for SC_Minnesota_Hispanic - 2.4, h=4.2, w=24.5393760563784
-2022-11-21 16:17:14 - 74 out of 100
-2022-11-21 16:17:18 - Save image for SC_Mississippi_Black - 2.4, h=4.2, w=24.5393760563784
-2022-11-21 16:17:22 - Save image for SC_Mississippi_Hispanic - <0.1*, h=4.2, w=24.5393760563784
-2022-11-21 16:17:22 - 75 out of 100
-2022-11-21 16:17:25 - Save image for SC_Missouri_Black - 3.0, h=4.2, w=24.5393760563784
-2022-11-21 16:17:29 - Save image for SC_Missouri_Hispanic - 0.4, h=4.2, w=24.5393760563784
-2022-11-21 16:17:29 - 76 out of 100
-2022-11-21 16:17:33 - Save image for SC_Montana_Black - 8.5, h=4.2, w=24.5393760563784
-2022-11-21 16:17:37 - Save image for SC_Montana_Hispanic - 0.6, h=4.2, w=24.5393760563784
-2022-11-21 16:17:37 - 77 out of 100
-2022-11-21 16:17:44 - Save image for SC_Nebraska_Black - 10.4, h=8.4, w=24.5393760563784
-2022-11-21 16:17:48 - Save image for SC_Nebraska_Hispanic - 2.0, h=4.2, w=24.5393760563784
-2022-11-21 16:17:48 - 78 out of 100
-2022-11-21 16:17:52 - Save image for SC_Nevada_Black - 4.0, h=4.2, w=24.5393760563784
-2022-11-21 16:17:56 - Save image for SC_Nevada_Hispanic - 0.6, h=4.2, w=24.5393760563784
-2022-11-21 16:17:56 - 79 out of 100
-2022-11-21 16:17:59 - Save image for SC_New Hampshire_Black - 7.9, h=4.2, w=24.5393760563784
-2022-11-21 16:18:03 - Save image for SC_New Hampshire_Hispanic - 1.6, h=4.2, w=24.5393760563784
-2022-11-21 16:18:03 - 80 out of 100
-2022-11-21 16:18:10 - Save image for SC_New Jersey_Black - 12.9, h=8.4, w=24.5393760563784
-2022-11-21 16:18:14 - Save image for SC_New Jersey_Hispanic - 1.7, h=4.2, w=24.5393760563784
-2022-11-21 16:18:14 - 81 out of 100
-2022-11-21 16:18:18 - Save image for SC_New Mexico_Black - 6.3, h=4.2, w=24.5393760563784
-2022-11-21 16:18:22 - Save image for SC_New Mexico_Hispanic - 2.7, h=4.2, w=24.5393760563784
-2022-11-21 16:18:22 - 82 out of 100
-2022-11-21 16:18:26 - Save image for SC_New York_Black - 8.1, h=4.2, w=24.5393760563784
-2022-11-21 16:18:29 - Save image for SC_New York_Hispanic - 2.4, h=4.2, w=24.5393760563784
-2022-11-21 16:18:29 - 83 out of 100
-2022-11-21 16:18:33 - Save image for SC_North Carolina_Black - 3.0, h=4.2, w=24.5393760563784
-2022-11-21 16:18:37 - Save image for SC_North Carolina_Hispanic - 0.3, h=4.2, w=24.5393760563784
-2022-11-21 16:18:37 - 84 out of 100
-2022-11-21 16:18:41 - Save image for SC_North Dakota_Black - 4.3, h=4.2, w=24.5393760563784
-2022-11-21 16:18:45 - Save image for SC_North Dakota_Hispanic - 2.2, h=4.2, w=24.5393760563784
-2022-11-21 16:18:45 - 85 out of 100
-2022-11-21 16:18:49 - Save image for SC_Ohio_Black - 7.6, h=4.2, w=24.5393760563784
-2022-11-21 16:18:52 - Save image for SC_Ohio_Hispanic - 0.9, h=4.2, w=24.5393760563784
-2022-11-21 16:18:52 - 86 out of 100
-2022-11-21 16:18:56 - Save image for SC_Oklahoma_Black - 4.3, h=4.2, w=24.5393760563784
-2022-11-21 16:19:00 - Save image for SC_Oklahoma_Hispanic - 1.9, h=4.2, w=24.5393760563784
-2022-11-21 16:19:00 - 87 out of 100
-2022-11-21 16:19:00 - SC Oregon does NOT have data for infographics
-2022-11-21 16:19:00 - 88 out of 100
-2022-11-21 16:19:04 - Save image for SC_Pennsylvania_Black - 8.0, h=4.2, w=24.5393760563784
-2022-11-21 16:19:07 - Save image for SC_Pennsylvania_Hispanic - 2.7, h=4.2, w=24.5393760563784
-2022-11-21 16:19:07 - 89 out of 100
-2022-11-21 16:19:15 - Save image for SC_Rhode Island_Black - 11.9, h=8.4, w=24.5393760563784
-2022-11-21 16:19:19 - Save image for SC_Rhode Island_Hispanic - 3.5, h=4.2, w=24.5393760563784
-2022-11-21 16:19:19 - 90 out of 100
-2022-11-21 16:19:23 - Save image for SC_South Carolina_Black - 5.3, h=4.2, w=24.5393760563784
-2022-11-21 16:19:27 - Save image for SC_South Carolina_Hispanic - 0.3, h=4.2, w=24.5393760563784
-2022-11-21 16:19:27 - 91 out of 100
-2022-11-21 16:19:27 - SC South Dakota does NOT have data for infographics
-2022-11-21 16:19:27 - 92 out of 100
-2022-11-21 16:19:31 - Save image for SC_Tennessee_Black - 2.5, h=4.2, w=24.5393760563784
-2022-11-21 16:19:34 - Save image for SC_Tennessee_Hispanic - 0.2, h=4.2, w=24.5393760563784
-2022-11-21 16:19:34 - 93 out of 100
-2022-11-21 16:19:38 - Save image for SC_Texas_Black - 3.5, h=4.2, w=24.5393760563784
-2022-11-21 16:19:42 - Save image for SC_Texas_Hispanic - 1.0, h=4.2, w=24.5393760563784
-2022-11-21 16:19:42 - 94 out of 100
-2022-11-21 16:19:46 - Save image for SC_Utah_Black - 7.6, h=4.2, w=24.5393760563784
-2022-11-21 16:19:50 - Save image for SC_Utah_Hispanic - 2.3, h=4.2, w=24.5393760563784
-2022-11-21 16:19:50 - 95 out of 100
-2022-11-21 16:19:50 - SC Vermont does NOT have data for infographics
-2022-11-21 16:19:50 - 96 out of 100
-2022-11-21 16:19:50 - SC Virginia does NOT have data for infographics
-2022-11-21 16:19:50 - 97 out of 100
-2022-11-21 16:19:54 - Save image for SC_Washington_Black - 7.0, h=4.2, w=24.5393760563784
-2022-11-21 16:19:58 - Save image for SC_Washington_Hispanic - 0.5, h=4.2, w=24.5393760563784
-2022-11-21 16:19:58 - 98 out of 100
-2022-11-21 16:20:06 - Save image for SC_West Virginia_Black - <19.0*, h=8.4, w=24.5393760563784
-2022-11-21 16:20:06 - 99 out of 100
-2022-11-21 16:20:13 - Save image for SC_Wisconsin_Black - 15.8, h=8.4, w=24.5393760563784
-2022-11-21 16:20:17 - Save image for SC_Wisconsin_Hispanic - 2.3, h=4.2, w=24.5393760563784
-2022-11-21 16:20:17 - 100 out of 100
-2022-11-21 16:20:22 - Save image for SC_Wyoming_Black - 6.4, h=4.2, w=24.5393760563784
-2022-11-21 16:20:26 - Save image for SC_Wyoming_Hispanic - 1.6, h=4.2, w=24.5393760563784
-2022-11-21 16:20:26 - End   creating infographics
-2022-11-21 16:20:26 - Copy files exported to sharepoint to local app repo
-2022-11-21 16:20:26 - !!END   PREP FOR SHINY
-
 > warnings()
 
-> #closeAllConnections() # Close connection to log file
-> 
-> Sys.time()
-[1] "2022-11-21 16:20:26 CST"
-There were 50 or more warnings (use warnings() to see the first 50)
+> closeAllConnections() # Close connection to log file
