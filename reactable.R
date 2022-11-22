@@ -12,31 +12,26 @@
 # https://csgorg.sharepoint.com/:f:/s/Team-JC-Research/EhdvImKN2rdPnmHQ2TrKlooBdYqnnWc0SUXBNuh9C7d41g?e=NCsh8I
 # in your Renviron (usethis::edit_r_environ()), set CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"
 
-FULL_JC_FOLDER <- FALSE
-
-if (FULL_JC_FOLDER == TRUE){
-  sp_data_path <- csgjcr::csg_sp_path(file.path("MCLC Shiny App"))
-} else {
-  sp_data_path <- csgjcr::csg_sp_path(file.path("JC Research - 50 State Revocations Project", "MCLC Shiny App"))
-}
+box::use( prep/box/admin)
 
 # load data
-load(file = "app/data/state_table.Rda")
-load(file = "app/data/state_table_wide.Rda")
-load(file = "app/data/parole_table.Rda")
-load(file = "app/data/parole_table_wide.Rda")
-load(file = "app/data/probation_table.Rda")
-load(file = "app/data/probation_table_wide.Rda")
+load(file = file.path(admin$sp_data, "state_table.Rda"))
+load(file = file.path(admin$sp_data, "state_table_wide.Rda"))
+load(file = file.path(admin$sp_data, "parole_table.Rda"))
+load(file = file.path(admin$sp_data, "parole_table_wide.Rda"))
+load(file = file.path(admin$sp_data, "probation_table.Rda"))
+load(file = file.path(admin$sp_data, "probation_table_wide.Rda"))
 
 # load packages
 library(dplyr)
 library(reactable)
 library(stats)
 library(purrr)
+library(highcharter)
+library(dataui)
 
 # assign colors for visualizations
 source("app/colors.R")
-source("app/library.R")
 source("app/functions.R")
 
 # get state list
@@ -210,18 +205,19 @@ probation_reactable_pop <- setNames(probation_reactable_pop, c("Alabama","Alaska
 # Save data
 ############
 
-# save to sharepoint
-save(state_reactable_adm,     file=paste0(sp_data_path, "/Data/state_reactable_adm.Rda", sep = ""))
-save(state_reactable_pop,     file=paste0(sp_data_path, "/Data/state_reactable_pop.Rda", sep = ""))
-save(parole_reactable_adm,    file=paste0(sp_data_path, "/Data/parole_reactable_adm.Rda", sep = ""))
-save(parole_reactable_pop,    file=paste0(sp_data_path, "/Data/parole_reactable_pop.Rda", sep = ""))
-save(probation_reactable_adm, file=paste0(sp_data_path, "/Data/probation_reactable_adm.Rda", sep = ""))
-save(probation_reactable_pop, file=paste0(sp_data_path, "/Data/probation_reactable_pop.Rda", sep = ""))
+theseFOLDERS <- c( "sharepoint" = admin$sp_data, "app" = "app/data")
 
-# save to clone
-save(state_reactable_adm,     file="app/data/state_reactable_adm.Rda")
-save(state_reactable_pop,     file="app/data/state_reactable_pop.Rda")
-save(parole_reactable_adm,    file="app/data/parole_reactable_adm.Rda")
-save(parole_reactable_pop,    file="app/data/parole_reactable_pop.Rda")
-save(probation_reactable_adm, file="app/data/probation_reactable_adm.Rda")
-save(probation_reactable_pop, file="app/data/probation_reactable_pop.Rda")
+for (folder in theseFOLDERS){
+  
+  save(state_reactable_adm,     file=file.path(folder, "state_reactable_adm.Rda"))
+  save(state_reactable_pop,     file=file.path(folder, "state_reactable_pop.Rda"))
+  save(parole_reactable_adm,    file=file.path(folder, "parole_reactable_adm.Rda"))
+  save(parole_reactable_pop,    file=file.path(folder, "parole_reactable_pop.Rda"))
+  save(probation_reactable_adm, file=file.path(folder, "probation_reactable_adm.Rda"))
+  save(probation_reactable_pop, file=file.path(folder, "probation_reactable_pop.Rda"))
+  
+}
+
+
+
+
