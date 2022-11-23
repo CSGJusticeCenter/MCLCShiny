@@ -4,301 +4,344 @@
 > ####### takes ~ 10min
 > # working directory should be the root of the repository ~MCLCShiny/
 > # need to do this one first otherwise fonts will get  .... [TRUNCATED] 
-[1] "2022-11-22 11:02:57 CST"
+[1] "2022-11-23 09:44:46 CST"
 
 > box::use(prep/box/rri_infographs_tables)
-
+[1mindexing[0m [34mrevcnt_notes.csv[0m [] [32m242.49MB/s[0m, eta: [36m 0s[0m                                                                                
 > rri_infographs_tables$prep_for_shiny("N")
-2022-11-22 11:02:58 - !!START PREP FOR SHINY
-2022-11-22 11:02:58 - NCRP data is from YEAREND POPULATION
-2022-11-22 11:02:58 - Start creating tables, takes ~40-50 seconds
-2022-11-22 11:03:25 - End creating tables
-2022-11-22 11:03:25 - Saved outtables - NCRP_N_RRI_tables.RDS (included a date stamped version)
-2022-11-22 11:03:26 - Start - assign flags
-2022-11-22 11:03:31 - End - assign flags
-2022-11-22 11:03:31 - Start - assign flags
-2022-11-22 11:03:36 - End - assign flags
-2022-11-22 11:03:36 - Start creating infographics
-2022-11-22 11:03:36 - 1 out of 100
-2022-11-22 11:03:36 - BJS Alabama does NOT have data for infographics
-2022-11-22 11:03:36 - 2 out of 100
-2022-11-22 11:03:36 - BJS Alaska does NOT have data for infographics
-2022-11-22 11:03:36 - 3 out of 100
-2022-11-22 11:03:42 - Save image for BJS_Arizona_Black - 1.5, h=4.2, w=24.5393760563784
-2022-11-22 11:03:46 - Save image for BJS_Arizona_Hispanic - 1.4, h=4.2, w=24.5393760563784
-2022-11-22 11:03:46 - 4 out of 100
-2022-11-22 11:03:51 - Save image for BJS_Arkansas_Black - 1.5, h=4.2, w=24.5393760563784
-2022-11-22 11:03:55 - Save image for BJS_Arkansas_Hispanic - 0.1, h=4.2, w=24.5393760563784
-2022-11-22 11:03:55 - 5 out of 100
-2022-11-22 11:04:00 - Save image for BJS_California_Black - 1.7, h=4.2, w=24.5393760563784
-2022-11-22 11:04:04 - Save image for BJS_California_Hispanic - 1.1, h=4.2, w=24.5393760563784
-2022-11-22 11:04:04 - 6 out of 100
-2022-11-22 11:04:08 - Save image for BJS_Colorado_Black - 1.4, h=4.2, w=24.5393760563784
-2022-11-22 11:04:12 - Save image for BJS_Colorado_Hispanic - 1.3, h=4.2, w=24.5393760563784
-2022-11-22 11:04:12 - 7 out of 100
-2022-11-22 11:04:12 - BJS Connecticut does NOT have data for infographics
-2022-11-22 11:04:12 - 8 out of 100
-2022-11-22 11:04:16 - Save image for BJS_Delaware_Black - 1.0, h=4.2, w=24.5393760563784
-2022-11-22 11:04:20 - Save image for BJS_Delaware_Hispanic - 0.9, h=4.2, w=24.5393760563784
-2022-11-22 11:04:20 - 9 out of 100
-2022-11-22 11:04:24 - Save image for BJS_Florida_Black - 1.0, h=4.2, w=24.5393760563784
-2022-11-22 11:04:29 - Save image for BJS_Florida_Hispanic - 0.9, h=4.2, w=24.5393760563784
-2022-11-22 11:04:29 - 10 out of 100
-2022-11-22 11:04:32 - Save image for BJS_Georgia_Black - 1.0, h=4.2, w=24.5393760563784
-2022-11-22 11:04:37 - Save image for BJS_Georgia_Hispanic - 0.2, h=4.2, w=24.5393760563784
-2022-11-22 11:04:37 - 11 out of 100
-2022-11-22 11:04:37 - BJS Hawaii does NOT have data for infographics
-2022-11-22 11:04:37 - 12 out of 100
-2022-11-22 11:04:37 - BJS Idaho does NOT have data for infographics
-2022-11-22 11:04:37 - 13 out of 100
-2022-11-22 11:04:41 - Save image for BJS_Illinois_Black - 1.1, h=4.2, w=24.5393760563784
-2022-11-22 11:04:45 - Save image for BJS_Illinois_Hispanic - 0.6, h=4.2, w=24.5393760563784
-2022-11-22 11:04:45 - 14 out of 100
-2022-11-22 11:04:49 - Save image for BJS_Indiana_Black - 1.6, h=4.2, w=24.5393760563784
-2022-11-22 11:04:53 - Save image for BJS_Indiana_Hispanic - 0.4, h=4.2, w=24.5393760563784
-2022-11-22 11:04:53 - 15 out of 100
-2022-11-22 11:04:56 - Save image for BJS_Iowa_Black - 1.4, h=4.2, w=24.5393760563784
-2022-11-22 11:05:00 - Save image for BJS_Iowa_Hispanic - 0.5, h=4.2, w=24.5393760563784
-2022-11-22 11:05:00 - 16 out of 100
-2022-11-22 11:05:04 - Save image for BJS_Kansas_Black - 1.4, h=4.2, w=24.5393760563784
-2022-11-22 11:05:08 - Save image for BJS_Kansas_Hispanic - 0.8, h=4.2, w=24.5393760563784
-2022-11-22 11:05:08 - 17 out of 100
-2022-11-22 11:05:12 - Save image for BJS_Kentucky_Black - 0.9, h=4.2, w=24.5393760563784
-2022-11-22 11:05:16 - Save image for BJS_Kentucky_Hispanic - 0.5, h=4.2, w=24.5393760563784
-2022-11-22 11:05:16 - 18 out of 100
-2022-11-22 11:05:16 - BJS Louisiana does NOT have data for infographics
-2022-11-22 11:05:16 - 19 out of 100
-2022-11-22 11:05:16 - BJS Maine does NOT have data for infographics
-2022-11-22 11:05:16 - 20 out of 100
-2022-11-22 11:05:20 - Save image for BJS_Maryland_Black - 1.0, h=4.2, w=24.5393760563784
-2022-11-22 11:05:20 - 21 out of 100
-2022-11-22 11:05:24 - Save image for BJS_Massachusetts_Black - 1.5, h=4.2, w=24.5393760563784
-2022-11-22 11:05:28 - Save image for BJS_Massachusetts_Hispanic - 0.9, h=4.2, w=24.5393760563784
-2022-11-22 11:05:28 - 22 out of 100
-2022-11-22 11:05:28 - BJS Michigan does NOT have data for infographics
-2022-11-22 11:05:28 - 23 out of 100
-2022-11-22 11:05:32 - Save image for BJS_Minnesota_Black - 1.8, h=4.2, w=24.5393760563784
-2022-11-22 11:05:37 - Save image for BJS_Minnesota_Hispanic - 1.2, h=4.2, w=24.5393760563784
-2022-11-22 11:05:37 - 24 out of 100
-2022-11-22 11:05:41 - Save image for BJS_Mississippi_Black - 1.1, h=4.2, w=24.5393760563784
-2022-11-22 11:05:45 - Save image for BJS_Mississippi_Hispanic - <0.3*, h=4.2, w=24.5393760563784
-2022-11-22 11:05:45 - 25 out of 100
-2022-11-22 11:05:49 - Save image for BJS_Missouri_Black - 1.0, h=4.2, w=24.5393760563784
-2022-11-22 11:05:53 - Save image for BJS_Missouri_Hispanic - 0.8, h=4.2, w=24.5393760563784
-2022-11-22 11:05:53 - 26 out of 100
-2022-11-22 11:05:57 - Save image for BJS_Montana_Black - 1.3, h=4.2, w=24.5393760563784
-2022-11-22 11:06:01 - Save image for BJS_Montana_Hispanic - 1.7, h=4.2, w=24.5393760563784
-2022-11-22 11:06:01 - 27 out of 100
-2022-11-22 11:06:05 - Save image for BJS_Nebraska_Black - 1.8, h=4.2, w=24.5393760563784
-2022-11-22 11:06:09 - Save image for BJS_Nebraska_Hispanic - 1.0, h=4.2, w=24.5393760563784
-2022-11-22 11:06:09 - 28 out of 100
-2022-11-22 11:06:09 - BJS Nevada does NOT have data for infographics
-2022-11-22 11:06:09 - 29 out of 100
-2022-11-22 11:06:13 - Save image for BJS_New Hampshire_Black - 1.5, h=4.2, w=24.5393760563784
-2022-11-22 11:06:17 - Save image for BJS_New Hampshire_Hispanic - 0.6, h=4.2, w=24.5393760563784
-2022-11-22 11:06:17 - 30 out of 100
-2022-11-22 11:06:22 - Save image for BJS_New Jersey_Black - 2.3, h=4.2, w=24.5393760563784
-2022-11-22 11:06:26 - Save image for BJS_New Jersey_Hispanic - 0.6, h=4.2, w=24.5393760563784
-2022-11-22 11:06:26 - 31 out of 100
-2022-11-22 11:06:30 - Save image for BJS_New Mexico_Black - 1.3, h=4.2, w=24.5393760563784
-2022-11-22 11:06:35 - Save image for BJS_New Mexico_Hispanic - 1.2, h=4.2, w=24.5393760563784
-2022-11-22 11:06:35 - 32 out of 100
-2022-11-22 11:06:39 - Save image for BJS_New York_Black - 1.1, h=4.2, w=24.5393760563784
-2022-11-22 11:06:44 - Save image for BJS_New York_Hispanic - 0.5, h=4.2, w=24.5393760563784
-2022-11-22 11:06:44 - 33 out of 100
-2022-11-22 11:06:48 - Save image for BJS_North Carolina_Black - 1.0, h=4.2, w=24.5393760563784
-2022-11-22 11:06:52 - Save image for BJS_North Carolina_Hispanic - 0.4, h=4.2, w=24.5393760563784
-2022-11-22 11:06:52 - 34 out of 100
-2022-11-22 11:06:57 - Save image for BJS_North Dakota_Black - 1.0, h=4.2, w=24.5393760563784
-2022-11-22 11:07:01 - Save image for BJS_North Dakota_Hispanic - 1.3, h=4.2, w=24.5393760563784
-2022-11-22 11:07:01 - 35 out of 100
-2022-11-22 11:07:06 - Save image for BJS_Ohio_Black - 1.3, h=4.2, w=24.5393760563784
-2022-11-22 11:07:10 - Save image for BJS_Ohio_Hispanic - 1.0, h=4.2, w=24.5393760563784
-2022-11-22 11:07:10 - 36 out of 100
-2022-11-22 11:07:15 - Save image for BJS_Oklahoma_Black - 0.6, h=4.2, w=24.5393760563784
-2022-11-22 11:07:20 - Save image for BJS_Oklahoma_Hispanic - 0.4, h=4.2, w=24.5393760563784
-2022-11-22 11:07:20 - 37 out of 100
-2022-11-22 11:07:20 - BJS Oregon does NOT have data for infographics
-2022-11-22 11:07:20 - 38 out of 100
-2022-11-22 11:07:25 - Save image for BJS_Pennsylvania_Black - 1.5, h=4.2, w=24.5393760563784
-2022-11-22 11:07:29 - Save image for BJS_Pennsylvania_Hispanic - 1.6, h=4.2, w=24.5393760563784
-2022-11-22 11:07:29 - 39 out of 100
-2022-11-22 11:07:34 - Save image for BJS_Rhode Island_Black - 1.5, h=4.2, w=24.5393760563784
-2022-11-22 11:07:39 - Save image for BJS_Rhode Island_Hispanic - 0.9, h=4.2, w=24.5393760563784
-2022-11-22 11:07:39 - 40 out of 100
-2022-11-22 11:07:43 - Save image for BJS_South Carolina_Black - 1.4, h=4.2, w=24.5393760563784
-2022-11-22 11:07:48 - Save image for BJS_South Carolina_Hispanic - <0.6*, h=4.2, w=24.5393760563784
-2022-11-22 11:07:48 - 41 out of 100
-2022-11-22 11:07:48 - BJS South Dakota does NOT have data for infographics
-2022-11-22 11:07:48 - 42 out of 100
-2022-11-22 11:07:53 - Save image for BJS_Tennessee_Black - 0.7, h=4.2, w=24.5393760563784
-2022-11-22 11:07:57 - Save image for BJS_Tennessee_Hispanic - 0.2, h=4.2, w=24.5393760563784
-2022-11-22 11:07:57 - 43 out of 100
-2022-11-22 11:08:02 - Save image for BJS_Texas_Black - 1.0, h=4.2, w=24.5393760563784
-2022-11-22 11:08:06 - Save image for BJS_Texas_Hispanic - 1.0, h=4.2, w=24.5393760563784
-2022-11-22 11:08:06 - 44 out of 100
-2022-11-22 11:08:11 - Save image for BJS_Utah_Black - 1.1, h=4.2, w=24.5393760563784
-2022-11-22 11:08:15 - Save image for BJS_Utah_Hispanic - 1.0, h=4.2, w=24.5393760563784
-2022-11-22 11:08:15 - 45 out of 100
-2022-11-22 11:08:15 - BJS Vermont does NOT have data for infographics
-2022-11-22 11:08:15 - 46 out of 100
-2022-11-22 11:08:15 - BJS Virginia does NOT have data for infographics
-2022-11-22 11:08:15 - 47 out of 100
-2022-11-22 11:08:20 - Save image for BJS_Washington_Black - 1.1, h=4.2, w=24.5393760563784
-2022-11-22 11:08:24 - Save image for BJS_Washington_Hispanic - 0.3, h=4.2, w=24.5393760563784
-2022-11-22 11:08:24 - 48 out of 100
-2022-11-22 11:08:29 - Save image for BJS_West Virginia_Black - <2.5*, h=4.2, w=24.5393760563784
-2022-11-22 11:08:29 - 49 out of 100
-2022-11-22 11:08:34 - Save image for BJS_Wisconsin_Black - 1.8, h=4.2, w=24.5393760563784
-2022-11-22 11:08:38 - Save image for BJS_Wisconsin_Hispanic - 1.0, h=4.2, w=24.5393760563784
-2022-11-22 11:08:38 - 50 out of 100
-2022-11-22 11:08:43 - Save image for BJS_Wyoming_Black - 2.6, h=4.2, w=24.5393760563784
-2022-11-22 11:08:48 - Save image for BJS_Wyoming_Hispanic - 1.1, h=4.2, w=24.5393760563784
-2022-11-22 11:08:48 - 51 out of 100
-2022-11-22 11:08:48 - CEN Alabama does NOT have data for infographics
-2022-11-22 11:08:48 - 52 out of 100
-2022-11-22 11:08:48 - CEN Alaska does NOT have data for infographics
-2022-11-22 11:08:48 - 53 out of 100
-2022-11-22 11:08:52 - Save image for CEN_Arizona_Black - 5.0, h=4.2, w=24.5393760563784
-2022-11-22 11:08:57 - Save image for CEN_Arizona_Hispanic - 2.7, h=4.2, w=24.5393760563784
-2022-11-22 11:08:57 - 54 out of 100
-2022-11-22 11:09:01 - Save image for CEN_Arkansas_Black - 3.8, h=4.2, w=24.5393760563784
-2022-11-22 11:09:06 - Save image for CEN_Arkansas_Hispanic - 0.1, h=4.2, w=24.5393760563784
-2022-11-22 11:09:06 - 55 out of 100
-2022-11-22 11:09:15 - Save image for CEN_California_Black - 10.9, h=8.4, w=24.5393760563784
-2022-11-22 11:09:20 - Save image for CEN_California_Hispanic - 2.3, h=4.2, w=24.5393760563784
-2022-11-22 11:09:20 - 56 out of 100
-2022-11-22 11:09:24 - Save image for CEN_Colorado_Black - 5.8, h=4.2, w=24.5393760563784
-2022-11-22 11:09:29 - Save image for CEN_Colorado_Hispanic - 2.7, h=4.2, w=24.5393760563784
-2022-11-22 11:09:29 - 57 out of 100
-2022-11-22 11:09:29 - CEN Connecticut does NOT have data for infographics
-2022-11-22 11:09:29 - 58 out of 100
-2022-11-22 11:09:34 - Save image for CEN_Delaware_Black - 4.7, h=4.2, w=24.5393760563784
-2022-11-22 11:09:38 - Save image for CEN_Delaware_Hispanic - 0.9, h=4.2, w=24.5393760563784
-2022-11-22 11:09:38 - 59 out of 100
-2022-11-22 11:09:43 - Save image for CEN_Florida_Black - 5.3, h=4.2, w=24.5393760563784
-2022-11-22 11:09:47 - Save image for CEN_Florida_Hispanic - 0.5, h=4.2, w=24.5393760563784
-2022-11-22 11:09:47 - 60 out of 100
-2022-11-22 11:09:52 - Save image for CEN_Georgia_Black - 2.4, h=4.2, w=24.5393760563784
-2022-11-22 11:09:56 - Save image for CEN_Georgia_Hispanic - 0.3, h=4.2, w=24.5393760563784
-2022-11-22 11:09:56 - 61 out of 100
-2022-11-22 11:09:56 - CEN Hawaii does NOT have data for infographics
-2022-11-22 11:09:56 - 62 out of 100
-2022-11-22 11:10:01 - Save image for CEN_Idaho_Black - 2.5, h=4.2, w=24.5393760563784
-2022-11-22 11:10:05 - Save image for CEN_Idaho_Hispanic - <0.1*, h=4.2, w=24.5393760563784
-2022-11-22 11:10:05 - 63 out of 100
-2022-11-22 11:10:10 - Save image for CEN_Illinois_Black - 8.9, h=4.2, w=24.5393760563784
-2022-11-22 11:10:14 - Save image for CEN_Illinois_Hispanic - 1.0, h=4.2, w=24.5393760563784
-2022-11-22 11:10:14 - 64 out of 100
-2022-11-22 11:10:18 - Save image for CEN_Indiana_Black - 5.8, h=4.2, w=24.5393760563784
-2022-11-22 11:10:23 - Save image for CEN_Indiana_Hispanic - 0.5, h=4.2, w=24.5393760563784
-2022-11-22 11:10:23 - 65 out of 100
-2022-11-22 11:10:27 - Save image for CEN_Iowa_Black - 7.6, h=4.2, w=24.5393760563784
-2022-11-22 11:10:32 - Save image for CEN_Iowa_Hispanic - 1.1, h=4.2, w=24.5393760563784
-2022-11-22 11:10:32 - 66 out of 100
-2022-11-22 11:10:36 - Save image for CEN_Kansas_Black - 6.3, h=4.2, w=24.5393760563784
-2022-11-22 11:10:40 - Save image for CEN_Kansas_Hispanic - 1.3, h=4.2, w=24.5393760563784
-2022-11-22 11:10:40 - 67 out of 100
-2022-11-22 11:10:45 - Save image for CEN_Kentucky_Black - 2.2, h=4.2, w=24.5393760563784
-2022-11-22 11:10:49 - Save image for CEN_Kentucky_Hispanic - 0.2, h=4.2, w=24.5393760563784
-2022-11-22 11:10:49 - 68 out of 100
-2022-11-22 11:10:49 - CEN Louisiana does NOT have data for infographics
-2022-11-22 11:10:49 - 69 out of 100
-2022-11-22 11:10:53 - Save image for CEN_Maine_Black - 9.4, h=4.2, w=24.5393760563784
-2022-11-22 11:10:53 - 70 out of 100
-2022-11-22 11:10:58 - Save image for CEN_Maryland_Black - 4.2, h=4.2, w=24.5393760563784
-2022-11-22 11:11:02 - Save image for CEN_Maryland_Hispanic - 0.2, h=4.2, w=24.5393760563784
-2022-11-22 11:11:02 - 71 out of 100
-2022-11-22 11:11:06 - Save image for CEN_Massachusetts_Black - 4.8, h=4.2, w=24.5393760563784
-2022-11-22 11:11:11 - Save image for CEN_Massachusetts_Hispanic - 4.3, h=4.2, w=24.5393760563784
-2022-11-22 11:11:11 - 72 out of 100
-2022-11-22 11:11:11 - CEN Michigan does NOT have data for infographics
-2022-11-22 11:11:11 - 73 out of 100
-2022-11-22 11:11:19 - Save image for CEN_Minnesota_Black - 10.3, h=8.4, w=24.5393760563784
-2022-11-22 11:11:23 - Save image for CEN_Minnesota_Hispanic - 2.5, h=4.2, w=24.5393760563784
-2022-11-22 11:11:23 - 74 out of 100
-2022-11-22 11:11:28 - Save image for CEN_Mississippi_Black - 2.3, h=4.2, w=24.5393760563784
-2022-11-22 11:11:32 - Save image for CEN_Mississippi_Hispanic - <0.1*, h=4.2, w=24.5393760563784
-2022-11-22 11:11:32 - 75 out of 100
-2022-11-22 11:11:37 - Save image for CEN_Missouri_Black - 2.8, h=4.2, w=24.5393760563784
-2022-11-22 11:11:41 - Save image for CEN_Missouri_Hispanic - 0.5, h=4.2, w=24.5393760563784
-2022-11-22 11:11:41 - 76 out of 100
-2022-11-22 11:11:45 - Save image for CEN_Montana_Black - 4.6, h=4.2, w=24.5393760563784
-2022-11-22 11:11:50 - Save image for CEN_Montana_Hispanic - 0.6, h=4.2, w=24.5393760563784
-2022-11-22 11:11:50 - 77 out of 100
-2022-11-22 11:11:54 - Save image for CEN_Nebraska_Black - 8.9, h=4.2, w=24.5393760563784
-2022-11-22 11:11:59 - Save image for CEN_Nebraska_Hispanic - 2.0, h=4.2, w=24.5393760563784
-2022-11-22 11:11:59 - 78 out of 100
-2022-11-22 11:12:03 - Save image for CEN_Nevada_Black - 3.5, h=4.2, w=24.5393760563784
-2022-11-22 11:12:07 - Save image for CEN_Nevada_Hispanic - 0.6, h=4.2, w=24.5393760563784
-2022-11-22 11:12:07 - 79 out of 100
-2022-11-22 11:12:12 - Save image for CEN_New Hampshire_Black - 5.2, h=4.2, w=24.5393760563784
-2022-11-22 11:12:16 - Save image for CEN_New Hampshire_Hispanic - 1.5, h=4.2, w=24.5393760563784
-2022-11-22 11:12:16 - 80 out of 100
-2022-11-22 11:12:25 - Save image for CEN_New Jersey_Black - 11.4, h=8.4, w=24.5393760563784
-2022-11-22 11:12:29 - Save image for CEN_New Jersey_Hispanic - 1.7, h=4.2, w=24.5393760563784
-2022-11-22 11:12:29 - 81 out of 100
-2022-11-22 11:12:33 - Save image for CEN_New Mexico_Black - 4.3, h=4.2, w=24.5393760563784
-2022-11-22 11:12:36 - Save image for CEN_New Mexico_Hispanic - 2.8, h=4.2, w=24.5393760563784
-2022-11-22 11:12:36 - 82 out of 100
-2022-11-22 11:12:40 - Save image for CEN_New York_Black - 6.8, h=4.2, w=24.5393760563784
-2022-11-22 11:12:44 - Save image for CEN_New York_Hispanic - 2.7, h=4.2, w=24.5393760563784
-2022-11-22 11:12:44 - 83 out of 100
-2022-11-22 11:12:48 - Save image for CEN_North Carolina_Black - 2.9, h=4.2, w=24.5393760563784
-2022-11-22 11:12:52 - Save image for CEN_North Carolina_Hispanic - 0.4, h=4.2, w=24.5393760563784
-2022-11-22 11:12:52 - 84 out of 100
-2022-11-22 11:12:56 - Save image for CEN_North Dakota_Black - 3.4, h=4.2, w=24.5393760563784
-2022-11-22 11:13:00 - Save image for CEN_North Dakota_Hispanic - 2.5, h=4.2, w=24.5393760563784
-2022-11-22 11:13:00 - 85 out of 100
-2022-11-22 11:13:04 - Save image for CEN_Ohio_Black - 7.0, h=4.2, w=24.5393760563784
-2022-11-22 11:13:09 - Save image for CEN_Ohio_Hispanic - 0.9, h=4.2, w=24.5393760563784
-2022-11-22 11:13:09 - 86 out of 100
-2022-11-22 11:13:14 - Save image for CEN_Oklahoma_Black - 3.7, h=4.2, w=24.5393760563784
-2022-11-22 11:13:18 - Save image for CEN_Oklahoma_Hispanic - 1.9, h=4.2, w=24.5393760563784
-2022-11-22 11:13:18 - 87 out of 100
-2022-11-22 11:13:18 - CEN Oregon does NOT have data for infographics
-2022-11-22 11:13:18 - 88 out of 100
-2022-11-22 11:13:23 - Save image for CEN_Pennsylvania_Black - 7.1, h=4.2, w=24.5393760563784
-2022-11-22 11:13:28 - Save image for CEN_Pennsylvania_Hispanic - 3.0, h=4.2, w=24.5393760563784
-2022-11-22 11:13:28 - 89 out of 100
-2022-11-22 11:13:32 - Save image for CEN_Rhode Island_Black - 7.8, h=4.2, w=24.5393760563784
-2022-11-22 11:13:37 - Save image for CEN_Rhode Island_Hispanic - 4.1, h=4.2, w=24.5393760563784
-2022-11-22 11:13:37 - 90 out of 100
-2022-11-22 11:13:41 - Save image for CEN_South Carolina_Black - 5.0, h=4.2, w=24.5393760563784
-2022-11-22 11:13:46 - Save image for CEN_South Carolina_Hispanic - 0.3, h=4.2, w=24.5393760563784
-2022-11-22 11:13:46 - 91 out of 100
-2022-11-22 11:13:46 - CEN South Dakota does NOT have data for infographics
-2022-11-22 11:13:46 - 92 out of 100
-2022-11-22 11:13:50 - Save image for CEN_Tennessee_Black - 2.4, h=4.2, w=24.5393760563784
-2022-11-22 11:13:55 - Save image for CEN_Tennessee_Hispanic - 0.2, h=4.2, w=24.5393760563784
-2022-11-22 11:13:55 - 93 out of 100
-2022-11-22 11:13:59 - Save image for CEN_Texas_Black - 3.3, h=4.2, w=24.5393760563784
-2022-11-22 11:14:03 - Save image for CEN_Texas_Hispanic - 1.0, h=4.2, w=24.5393760563784
-2022-11-22 11:14:03 - 94 out of 100
-2022-11-22 11:14:08 - Save image for CEN_Utah_Black - 5.6, h=4.2, w=24.5393760563784
-2022-11-22 11:14:12 - Save image for CEN_Utah_Hispanic - 2.3, h=4.2, w=24.5393760563784
-2022-11-22 11:14:12 - 95 out of 100
-2022-11-22 11:14:12 - CEN Vermont does NOT have data for infographics
-2022-11-22 11:14:12 - 96 out of 100
-2022-11-22 11:14:12 - CEN Virginia does NOT have data for infographics
-2022-11-22 11:14:12 - 97 out of 100
-2022-11-22 11:14:17 - Save image for CEN_Washington_Black - 5.5, h=4.2, w=24.5393760563784
-2022-11-22 11:14:21 - Save image for CEN_Washington_Hispanic - 0.5, h=4.2, w=24.5393760563784
-2022-11-22 11:14:21 - 98 out of 100
-2022-11-22 11:14:28 - Save image for CEN_West Virginia_Black - <15.2*, h=8.4, w=24.5393760563784
-2022-11-22 11:14:28 - 99 out of 100
-2022-11-22 11:14:36 - Save image for CEN_Wisconsin_Black - 14.2, h=8.4, w=24.5393760563784
-2022-11-22 11:14:41 - Save image for CEN_Wisconsin_Hispanic - 2.3, h=4.2, w=24.5393760563784
-2022-11-22 11:14:41 - 100 out of 100
-2022-11-22 11:14:45 - Save image for CEN_Wyoming_Black - 4.9, h=4.2, w=24.5393760563784
-2022-11-22 11:14:50 - Save image for CEN_Wyoming_Hispanic - 1.6, h=4.2, w=24.5393760563784
-2022-11-22 11:14:50 - End   creating infographics
-2022-11-22 11:14:50 - Copy files exported to sharepoint to local app repo
-2022-11-22 11:14:50 - !!END   PREP FOR SHINY
+2022-11-23 09:44:47 - !!START PREP FOR SHINY
+2022-11-23 09:44:47 - NCRP data is from YEAREND POPULATION
+2022-11-23 09:44:47 - Import and clean NCRP revocations data
+2022-11-23 09:44:47 - Start - NCRP import for year-end population 
+2022-11-23 09:44:51 - End   - NCRP import for year-end population
+2022-11-23 09:44:51 - Start - NCRP prep
+2022-11-23 09:44:51 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2022-11-23 09:44:52 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2022-11-23 09:44:53 - End   - NCRP prep
+2022-11-23 09:44:53 - Import and clean BJS-APS for PAROLE population (denominator)
+[1mindexing[0m [34mapars_idyear.csv[0m [] [32m162.08MB/s[0m, eta: [36m 0s[0m                                                                                2022-11-23 09:44:53 - Start - BJS APS (Parole) import for 2010-2018
+2022-11-23 09:44:53 - End   - BJS APS (Parole) import for 2010-2018
+2022-11-23 09:44:53 - STart - APS prep
+2022-11-23 09:44:53 - APS prep - 
+-- Drop Federal total row
+-- calculate other race category, pivot longer, recode into single race variable
+-- make new race variable a factor 
+-- drop rows where POPEST is NA (covered in UNKRACE)
+-- add state id columns
+2022-11-23 09:44:53 - Sum accross state and year
+2022-11-23 09:44:53 - End   - APS prep
+2022-11-23 09:44:53 - Calc - rate/RRI calcuations
+Joining, by = c("STATE", "FIPS", "ABB",
+"RPTYEAR", "OFFGENERAL")
+Joining, by = c("STATE", "FIPS", "ABB",
+"RPTYEAR")
+2022-11-23 09:44:53 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2022-11-23 09:44:54 - Saved FULL_DF - NCRP_N_REV_BJS.RDS (included a date stamped version)
+2022-11-23 09:44:54 - Import and clean NCRP revocations data
+2022-11-23 09:44:54 - Start - NCRP import for year-end population 
+2022-11-23 09:44:57 - End   - NCRP import for year-end population
+2022-11-23 09:44:57 - Start - NCRP prep
+2022-11-23 09:44:57 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2022-11-23 09:44:57 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2022-11-23 09:44:59 - End   - NCRP prep
+2022-11-23 09:44:59 - Import and clean PUMS (ACS) for COMMUNITY population (denominator)
+2022-11-23 09:44:59 - Start - PUMS prep
+2022-11-23 09:44:59 - End   - PUMS prep
+2022-11-23 09:44:59 - Calc - rate/RRI calcuations
+Joining, by = c("STATE", "FIPS", "ABB",
+"RPTYEAR", "OFFGENERAL")
+Joining, by = c("STATE", "FIPS", "ABB",
+"RPTYEAR")
+2022-11-23 09:44:59 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2022-11-23 09:44:59 - Saved FULL_DF - NCRP_N_REV_PUMS.RDS (included a date stamped version)
+2022-11-23 09:44:59 - Start creating tables, takes ~40-50 seconds
+2022-11-23 09:45:27 - End creating tables
+2022-11-23 09:45:27 - Saved outtables - NCRP_N_RRI_tables.RDS (included a date stamped version)
+2022-11-23 09:45:27 - Start - assign flags
+[1mwrote[0m [32m642.00B[0m in [36m 0s[0m, [32m13.14MB/s[0m                                           [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                           2022-11-23 09:45:33 - End - assign flags
+2022-11-23 09:45:33 - Start - assign flags
+[1mwrote[0m [32m723.00B[0m in [36m 0s[0m, [32m42.71MB/s[0m                                           [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                           2022-11-23 09:45:38 - End - assign flags
+2022-11-23 09:45:38 - Start creating infographics
+2022-11-23 09:45:38 - 1 out of 100
+2022-11-23 09:45:38 - BJS Alabama does NOT have data for infographics
+2022-11-23 09:45:38 - 2 out of 100
+2022-11-23 09:45:38 - BJS Alaska does NOT have data for infographics
+2022-11-23 09:45:38 - 3 out of 100
+2022-11-23 09:45:43 - Save image for BJS_Arizona_Black - 1.5, h=4.2, w=24.5393760563784
+2022-11-23 09:45:47 - Save image for BJS_Arizona_Hispanic - 1.4, h=4.2, w=24.5393760563784
+2022-11-23 09:45:47 - 4 out of 100
+2022-11-23 09:45:51 - Save image for BJS_Arkansas_Black - 1.5, h=4.2, w=24.5393760563784
+2022-11-23 09:45:55 - Save image for BJS_Arkansas_Hispanic - 0.1, h=4.2, w=24.5393760563784
+2022-11-23 09:45:55 - 5 out of 100
+2022-11-23 09:46:00 - Save image for BJS_California_Black - 1.7, h=4.2, w=24.5393760563784
+2022-11-23 09:46:04 - Save image for BJS_California_Hispanic - 1.1, h=4.2, w=24.5393760563784
+2022-11-23 09:46:04 - 6 out of 100
+2022-11-23 09:46:09 - Save image for BJS_Colorado_Black - 1.4, h=4.2, w=24.5393760563784
+2022-11-23 09:46:14 - Save image for BJS_Colorado_Hispanic - 1.3, h=4.2, w=24.5393760563784
+2022-11-23 09:46:14 - 7 out of 100
+2022-11-23 09:46:14 - BJS Connecticut does NOT have data for infographics
+2022-11-23 09:46:14 - 8 out of 100
+2022-11-23 09:46:24 - Save image for BJS_Delaware_Black - 1.0, h=4.2, w=24.5393760563784
+2022-11-23 09:46:32 - Save image for BJS_Delaware_Hispanic - 0.9, h=4.2, w=24.5393760563784
+2022-11-23 09:46:32 - 9 out of 100
+2022-11-23 09:46:37 - Save image for BJS_Florida_Black - 1.0, h=4.2, w=24.5393760563784
+2022-11-23 09:46:43 - Save image for BJS_Florida_Hispanic - 0.9, h=4.2, w=24.5393760563784
+2022-11-23 09:46:43 - 10 out of 100
+2022-11-23 09:46:56 - Save image for BJS_Georgia_Black - 1.0, h=4.2, w=24.5393760563784
+2022-11-23 09:47:08 - Save image for BJS_Georgia_Hispanic - 0.2, h=4.2, w=24.5393760563784
+2022-11-23 09:47:08 - 11 out of 100
+2022-11-23 09:47:08 - BJS Hawaii does NOT have data for infographics
+2022-11-23 09:47:08 - 12 out of 100
+2022-11-23 09:47:08 - BJS Idaho does NOT have data for infographics
+2022-11-23 09:47:08 - 13 out of 100
+2022-11-23 09:47:21 - Save image for BJS_Illinois_Black - 1.1, h=4.2, w=24.5393760563784
+2022-11-23 09:47:33 - Save image for BJS_Illinois_Hispanic - 0.6, h=4.2, w=24.5393760563784
+2022-11-23 09:47:33 - 14 out of 100
+2022-11-23 09:47:43 - Save image for BJS_Indiana_Black - 1.6, h=4.2, w=24.5393760563784
+2022-11-23 09:47:53 - Save image for BJS_Indiana_Hispanic - 0.4, h=4.2, w=24.5393760563784
+2022-11-23 09:47:53 - 15 out of 100
+2022-11-23 09:48:03 - Save image for BJS_Iowa_Black - 1.4, h=4.2, w=24.5393760563784
+2022-11-23 09:48:13 - Save image for BJS_Iowa_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-11-23 09:48:13 - 16 out of 100
+2022-11-23 09:48:23 - Save image for BJS_Kansas_Black - 1.4, h=4.2, w=24.5393760563784
+2022-11-23 09:48:34 - Save image for BJS_Kansas_Hispanic - 0.8, h=4.2, w=24.5393760563784
+2022-11-23 09:48:34 - 17 out of 100
+2022-11-23 09:48:44 - Save image for BJS_Kentucky_Black - 0.9, h=4.2, w=24.5393760563784
+2022-11-23 09:48:54 - Save image for BJS_Kentucky_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-11-23 09:48:54 - 18 out of 100
+2022-11-23 09:48:54 - BJS Louisiana does NOT have data for infographics
+2022-11-23 09:48:54 - 19 out of 100
+2022-11-23 09:48:54 - BJS Maine does NOT have data for infographics
+2022-11-23 09:48:54 - 20 out of 100
+2022-11-23 09:49:05 - Save image for BJS_Maryland_Black - 1.0, h=4.2, w=24.5393760563784
+2022-11-23 09:49:05 - 21 out of 100
+2022-11-23 09:49:15 - Save image for BJS_Massachusetts_Black - 1.5, h=4.2, w=24.5393760563784
+2022-11-23 09:49:25 - Save image for BJS_Massachusetts_Hispanic - 0.9, h=4.2, w=24.5393760563784
+2022-11-23 09:49:25 - 22 out of 100
+2022-11-23 09:49:25 - BJS Michigan does NOT have data for infographics
+2022-11-23 09:49:25 - 23 out of 100
+2022-11-23 09:49:35 - Save image for BJS_Minnesota_Black - 1.8, h=4.2, w=24.5393760563784
+2022-11-23 09:49:46 - Save image for BJS_Minnesota_Hispanic - 1.2, h=4.2, w=24.5393760563784
+2022-11-23 09:49:46 - 24 out of 100
+2022-11-23 09:49:59 - Save image for BJS_Mississippi_Black - 1.1, h=4.2, w=24.5393760563784
+2022-11-23 09:50:10 - Save image for BJS_Mississippi_Hispanic - <0.3*, h=4.2, w=24.5393760563784
+2022-11-23 09:50:10 - 25 out of 100
+2022-11-23 09:50:23 - Save image for BJS_Missouri_Black - 1.0, h=4.2, w=24.5393760563784
+2022-11-23 09:50:35 - Save image for BJS_Missouri_Hispanic - 0.8, h=4.2, w=24.5393760563784
+2022-11-23 09:50:35 - 26 out of 100
+2022-11-23 09:50:46 - Save image for BJS_Montana_Black - 1.3, h=4.2, w=24.5393760563784
+2022-11-23 09:50:57 - Save image for BJS_Montana_Hispanic - 1.7, h=4.2, w=24.5393760563784
+2022-11-23 09:50:57 - 27 out of 100
+2022-11-23 09:51:08 - Save image for BJS_Nebraska_Black - 1.8, h=4.2, w=24.5393760563784
+2022-11-23 09:51:20 - Save image for BJS_Nebraska_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-11-23 09:51:20 - 28 out of 100
+2022-11-23 09:51:20 - BJS Nevada does NOT have data for infographics
+2022-11-23 09:51:20 - 29 out of 100
+2022-11-23 09:51:32 - Save image for BJS_New Hampshire_Black - 1.5, h=4.2, w=24.5393760563784
+2022-11-23 09:51:44 - Save image for BJS_New Hampshire_Hispanic - 0.6, h=4.2, w=24.5393760563784
+2022-11-23 09:51:44 - 30 out of 100
+2022-11-23 09:51:56 - Save image for BJS_New Jersey_Black - 2.3, h=4.2, w=24.5393760563784
+2022-11-23 09:52:08 - Save image for BJS_New Jersey_Hispanic - 0.6, h=4.2, w=24.5393760563784
+2022-11-23 09:52:08 - 31 out of 100
+2022-11-23 09:52:18 - Save image for BJS_New Mexico_Black - 1.3, h=4.2, w=24.5393760563784
+2022-11-23 09:52:29 - Save image for BJS_New Mexico_Hispanic - 1.2, h=4.2, w=24.5393760563784
+2022-11-23 09:52:29 - 32 out of 100
+2022-11-23 09:52:38 - Save image for BJS_New York_Black - 1.1, h=4.2, w=24.5393760563784
+2022-11-23 09:52:46 - Save image for BJS_New York_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-11-23 09:52:46 - 33 out of 100
+2022-11-23 09:52:52 - Save image for BJS_North Carolina_Black - 1.0, h=4.2, w=24.5393760563784
+2022-11-23 09:52:57 - Save image for BJS_North Carolina_Hispanic - 0.4, h=4.2, w=24.5393760563784
+2022-11-23 09:52:57 - 34 out of 100
+2022-11-23 09:53:02 - Save image for BJS_North Dakota_Black - 1.0, h=4.2, w=24.5393760563784
+2022-11-23 09:53:07 - Save image for BJS_North Dakota_Hispanic - 1.3, h=4.2, w=24.5393760563784
+2022-11-23 09:53:07 - 35 out of 100
+2022-11-23 09:53:12 - Save image for BJS_Ohio_Black - 1.3, h=4.2, w=24.5393760563784
+2022-11-23 09:53:17 - Save image for BJS_Ohio_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-11-23 09:53:17 - 36 out of 100
+2022-11-23 09:53:22 - Save image for BJS_Oklahoma_Black - 0.6, h=4.2, w=24.5393760563784
+2022-11-23 09:53:27 - Save image for BJS_Oklahoma_Hispanic - 0.4, h=4.2, w=24.5393760563784
+2022-11-23 09:53:27 - 37 out of 100
+2022-11-23 09:53:27 - BJS Oregon does NOT have data for infographics
+2022-11-23 09:53:27 - 38 out of 100
+2022-11-23 09:53:32 - Save image for BJS_Pennsylvania_Black - 1.5, h=4.2, w=24.5393760563784
+2022-11-23 09:53:37 - Save image for BJS_Pennsylvania_Hispanic - 1.6, h=4.2, w=24.5393760563784
+2022-11-23 09:53:37 - 39 out of 100
+2022-11-23 09:53:42 - Save image for BJS_Rhode Island_Black - 1.5, h=4.2, w=24.5393760563784
+2022-11-23 09:53:46 - Save image for BJS_Rhode Island_Hispanic - 0.9, h=4.2, w=24.5393760563784
+2022-11-23 09:53:46 - 40 out of 100
+2022-11-23 09:53:51 - Save image for BJS_South Carolina_Black - 1.4, h=4.2, w=24.5393760563784
+2022-11-23 09:53:57 - Save image for BJS_South Carolina_Hispanic - <0.6*, h=4.2, w=24.5393760563784
+2022-11-23 09:53:57 - 41 out of 100
+2022-11-23 09:53:57 - BJS South Dakota does NOT have data for infographics
+2022-11-23 09:53:57 - 42 out of 100
+2022-11-23 09:54:02 - Save image for BJS_Tennessee_Black - 0.7, h=4.2, w=24.5393760563784
+2022-11-23 09:54:07 - Save image for BJS_Tennessee_Hispanic - 0.2, h=4.2, w=24.5393760563784
+2022-11-23 09:54:07 - 43 out of 100
+2022-11-23 09:54:12 - Save image for BJS_Texas_Black - 1.0, h=4.2, w=24.5393760563784
+2022-11-23 09:54:17 - Save image for BJS_Texas_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-11-23 09:54:17 - 44 out of 100
+2022-11-23 09:54:22 - Save image for BJS_Utah_Black - 1.1, h=4.2, w=24.5393760563784
+2022-11-23 09:54:27 - Save image for BJS_Utah_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-11-23 09:54:27 - 45 out of 100
+2022-11-23 09:54:27 - BJS Vermont does NOT have data for infographics
+2022-11-23 09:54:27 - 46 out of 100
+2022-11-23 09:54:27 - BJS Virginia does NOT have data for infographics
+2022-11-23 09:54:27 - 47 out of 100
+2022-11-23 09:54:32 - Save image for BJS_Washington_Black - 1.1, h=4.2, w=24.5393760563784
+2022-11-23 09:54:37 - Save image for BJS_Washington_Hispanic - 0.3, h=4.2, w=24.5393760563784
+2022-11-23 09:54:37 - 48 out of 100
+2022-11-23 09:54:42 - Save image for BJS_West Virginia_Black - <2.5*, h=4.2, w=24.5393760563784
+2022-11-23 09:54:42 - 49 out of 100
+2022-11-23 09:54:48 - Save image for BJS_Wisconsin_Black - 1.8, h=4.2, w=24.5393760563784
+2022-11-23 09:54:53 - Save image for BJS_Wisconsin_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-11-23 09:54:53 - 50 out of 100
+2022-11-23 09:54:58 - Save image for BJS_Wyoming_Black - 2.6, h=4.2, w=24.5393760563784
+2022-11-23 09:55:03 - Save image for BJS_Wyoming_Hispanic - 1.1, h=4.2, w=24.5393760563784
+2022-11-23 09:55:03 - 51 out of 100
+2022-11-23 09:55:03 - CEN Alabama does NOT have data for infographics
+2022-11-23 09:55:03 - 52 out of 100
+2022-11-23 09:55:03 - CEN Alaska does NOT have data for infographics
+2022-11-23 09:55:03 - 53 out of 100
+2022-11-23 09:55:08 - Save image for CEN_Arizona_Black - 5.0, h=4.2, w=24.5393760563784
+2022-11-23 09:55:14 - Save image for CEN_Arizona_Hispanic - 2.7, h=4.2, w=24.5393760563784
+2022-11-23 09:55:14 - 54 out of 100
+2022-11-23 09:55:19 - Save image for CEN_Arkansas_Black - 3.8, h=4.2, w=24.5393760563784
+2022-11-23 09:55:24 - Save image for CEN_Arkansas_Hispanic - 0.1, h=4.2, w=24.5393760563784
+2022-11-23 09:55:24 - 55 out of 100
+2022-11-23 09:55:35 - Save image for CEN_California_Black - 10.9, h=8.4, w=24.5393760563784
+2022-11-23 09:55:40 - Save image for CEN_California_Hispanic - 2.3, h=4.2, w=24.5393760563784
+2022-11-23 09:55:40 - 56 out of 100
+2022-11-23 09:55:46 - Save image for CEN_Colorado_Black - 5.8, h=4.2, w=24.5393760563784
+2022-11-23 09:55:51 - Save image for CEN_Colorado_Hispanic - 2.7, h=4.2, w=24.5393760563784
+2022-11-23 09:55:51 - 57 out of 100
+2022-11-23 09:55:51 - CEN Connecticut does NOT have data for infographics
+2022-11-23 09:55:51 - 58 out of 100
+2022-11-23 09:55:56 - Save image for CEN_Delaware_Black - 4.7, h=4.2, w=24.5393760563784
+2022-11-23 09:56:02 - Save image for CEN_Delaware_Hispanic - 0.9, h=4.2, w=24.5393760563784
+2022-11-23 09:56:02 - 59 out of 100
+2022-11-23 09:56:07 - Save image for CEN_Florida_Black - 5.3, h=4.2, w=24.5393760563784
+2022-11-23 09:56:12 - Save image for CEN_Florida_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-11-23 09:56:12 - 60 out of 100
+2022-11-23 09:56:17 - Save image for CEN_Georgia_Black - 2.4, h=4.2, w=24.5393760563784
+2022-11-23 09:56:23 - Save image for CEN_Georgia_Hispanic - 0.3, h=4.2, w=24.5393760563784
+2022-11-23 09:56:23 - 61 out of 100
+2022-11-23 09:56:23 - CEN Hawaii does NOT have data for infographics
+2022-11-23 09:56:23 - 62 out of 100
+2022-11-23 09:56:28 - Save image for CEN_Idaho_Black - 2.5, h=4.2, w=24.5393760563784
+2022-11-23 09:56:34 - Save image for CEN_Idaho_Hispanic - <0.1*, h=4.2, w=24.5393760563784
+2022-11-23 09:56:34 - 63 out of 100
+2022-11-23 09:56:39 - Save image for CEN_Illinois_Black - 8.9, h=4.2, w=24.5393760563784
+2022-11-23 09:56:45 - Save image for CEN_Illinois_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-11-23 09:56:45 - 64 out of 100
+2022-11-23 09:56:51 - Save image for CEN_Indiana_Black - 5.8, h=4.2, w=24.5393760563784
+2022-11-23 09:56:56 - Save image for CEN_Indiana_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-11-23 09:56:56 - 65 out of 100
+2022-11-23 09:57:02 - Save image for CEN_Iowa_Black - 7.6, h=4.2, w=24.5393760563784
+2022-11-23 09:57:07 - Save image for CEN_Iowa_Hispanic - 1.1, h=4.2, w=24.5393760563784
+2022-11-23 09:57:07 - 66 out of 100
+2022-11-23 09:57:13 - Save image for CEN_Kansas_Black - 6.3, h=4.2, w=24.5393760563784
+2022-11-23 09:57:18 - Save image for CEN_Kansas_Hispanic - 1.3, h=4.2, w=24.5393760563784
+2022-11-23 09:57:18 - 67 out of 100
+2022-11-23 09:57:23 - Save image for CEN_Kentucky_Black - 2.2, h=4.2, w=24.5393760563784
+2022-11-23 09:57:29 - Save image for CEN_Kentucky_Hispanic - 0.2, h=4.2, w=24.5393760563784
+2022-11-23 09:57:29 - 68 out of 100
+2022-11-23 09:57:29 - CEN Louisiana does NOT have data for infographics
+2022-11-23 09:57:29 - 69 out of 100
+2022-11-23 09:57:34 - Save image for CEN_Maine_Black - 9.4, h=4.2, w=24.5393760563784
+2022-11-23 09:57:34 - 70 out of 100
+2022-11-23 09:57:39 - Save image for CEN_Maryland_Black - 4.2, h=4.2, w=24.5393760563784
+2022-11-23 09:57:45 - Save image for CEN_Maryland_Hispanic - 0.2, h=4.2, w=24.5393760563784
+2022-11-23 09:57:45 - 71 out of 100
+2022-11-23 09:57:50 - Save image for CEN_Massachusetts_Black - 4.8, h=4.2, w=24.5393760563784
+2022-11-23 09:57:55 - Save image for CEN_Massachusetts_Hispanic - 4.3, h=4.2, w=24.5393760563784
+2022-11-23 09:57:55 - 72 out of 100
+2022-11-23 09:57:55 - CEN Michigan does NOT have data for infographics
+2022-11-23 09:57:55 - 73 out of 100
+2022-11-23 09:58:05 - Save image for CEN_Minnesota_Black - 10.3, h=8.4, w=24.5393760563784
+2022-11-23 09:58:11 - Save image for CEN_Minnesota_Hispanic - 2.5, h=4.2, w=24.5393760563784
+2022-11-23 09:58:11 - 74 out of 100
+2022-11-23 09:58:16 - Save image for CEN_Mississippi_Black - 2.3, h=4.2, w=24.5393760563784
+2022-11-23 09:58:21 - Save image for CEN_Mississippi_Hispanic - <0.1*, h=4.2, w=24.5393760563784
+2022-11-23 09:58:21 - 75 out of 100
+2022-11-23 09:58:26 - Save image for CEN_Missouri_Black - 2.8, h=4.2, w=24.5393760563784
+2022-11-23 09:58:31 - Save image for CEN_Missouri_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-11-23 09:58:31 - 76 out of 100
+2022-11-23 09:58:37 - Save image for CEN_Montana_Black - 4.6, h=4.2, w=24.5393760563784
+2022-11-23 09:58:42 - Save image for CEN_Montana_Hispanic - 0.6, h=4.2, w=24.5393760563784
+2022-11-23 09:58:42 - 77 out of 100
+2022-11-23 09:58:47 - Save image for CEN_Nebraska_Black - 8.9, h=4.2, w=24.5393760563784
+2022-11-23 09:58:54 - Save image for CEN_Nebraska_Hispanic - 2.0, h=4.2, w=24.5393760563784
+2022-11-23 09:58:54 - 78 out of 100
+2022-11-23 09:59:05 - Save image for CEN_Nevada_Black - 3.5, h=4.2, w=24.5393760563784
+2022-11-23 09:59:14 - Save image for CEN_Nevada_Hispanic - 0.6, h=4.2, w=24.5393760563784
+2022-11-23 09:59:14 - 79 out of 100
+2022-11-23 09:59:24 - Save image for CEN_New Hampshire_Black - 5.2, h=4.2, w=24.5393760563784
+2022-11-23 09:59:34 - Save image for CEN_New Hampshire_Hispanic - 1.5, h=4.2, w=24.5393760563784
+2022-11-23 09:59:34 - 80 out of 100
+2022-11-23 09:59:51 - Save image for CEN_New Jersey_Black - 11.4, h=8.4, w=24.5393760563784
+2022-11-23 09:59:56 - Save image for CEN_New Jersey_Hispanic - 1.7, h=4.2, w=24.5393760563784
+2022-11-23 09:59:56 - 81 out of 100
+2022-11-23 10:00:02 - Save image for CEN_New Mexico_Black - 4.3, h=4.2, w=24.5393760563784
+2022-11-23 10:00:11 - Save image for CEN_New Mexico_Hispanic - 2.8, h=4.2, w=24.5393760563784
+2022-11-23 10:00:11 - 82 out of 100
+2022-11-23 10:00:22 - Save image for CEN_New York_Black - 6.8, h=4.2, w=24.5393760563784
+2022-11-23 10:00:32 - Save image for CEN_New York_Hispanic - 2.7, h=4.2, w=24.5393760563784
+2022-11-23 10:00:32 - 83 out of 100
+2022-11-23 10:00:42 - Save image for CEN_North Carolina_Black - 2.9, h=4.2, w=24.5393760563784
+2022-11-23 10:00:52 - Save image for CEN_North Carolina_Hispanic - 0.4, h=4.2, w=24.5393760563784
+2022-11-23 10:00:52 - 84 out of 100
+2022-11-23 10:01:02 - Save image for CEN_North Dakota_Black - 3.4, h=4.2, w=24.5393760563784
+2022-11-23 10:01:13 - Save image for CEN_North Dakota_Hispanic - 2.5, h=4.2, w=24.5393760563784
+2022-11-23 10:01:13 - 85 out of 100
+2022-11-23 10:01:23 - Save image for CEN_Ohio_Black - 7.0, h=4.2, w=24.5393760563784
+2022-11-23 10:01:34 - Save image for CEN_Ohio_Hispanic - 0.9, h=4.2, w=24.5393760563784
+2022-11-23 10:01:34 - 86 out of 100
+2022-11-23 10:01:45 - Save image for CEN_Oklahoma_Black - 3.7, h=4.2, w=24.5393760563784
+2022-11-23 10:01:55 - Save image for CEN_Oklahoma_Hispanic - 1.9, h=4.2, w=24.5393760563784
+2022-11-23 10:01:55 - 87 out of 100
+2022-11-23 10:01:55 - CEN Oregon does NOT have data for infographics
+2022-11-23 10:01:55 - 88 out of 100
+2022-11-23 10:02:06 - Save image for CEN_Pennsylvania_Black - 7.1, h=4.2, w=24.5393760563784
+2022-11-23 10:02:17 - Save image for CEN_Pennsylvania_Hispanic - 3.0, h=4.2, w=24.5393760563784
+2022-11-23 10:02:17 - 89 out of 100
+2022-11-23 10:02:28 - Save image for CEN_Rhode Island_Black - 7.8, h=4.2, w=24.5393760563784
+2022-11-23 10:02:38 - Save image for CEN_Rhode Island_Hispanic - 4.1, h=4.2, w=24.5393760563784
+2022-11-23 10:02:38 - 90 out of 100
+2022-11-23 10:02:48 - Save image for CEN_South Carolina_Black - 5.0, h=4.2, w=24.5393760563784
+2022-11-23 10:02:59 - Save image for CEN_South Carolina_Hispanic - 0.3, h=4.2, w=24.5393760563784
+2022-11-23 10:02:59 - 91 out of 100
+2022-11-23 10:02:59 - CEN South Dakota does NOT have data for infographics
+2022-11-23 10:02:59 - 92 out of 100
+2022-11-23 10:03:09 - Save image for CEN_Tennessee_Black - 2.4, h=4.2, w=24.5393760563784
+2022-11-23 10:03:20 - Save image for CEN_Tennessee_Hispanic - 0.2, h=4.2, w=24.5393760563784
+2022-11-23 10:03:20 - 93 out of 100
+2022-11-23 10:03:26 - Save image for CEN_Texas_Black - 3.3, h=4.2, w=24.5393760563784
+2022-11-23 10:03:31 - Save image for CEN_Texas_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-11-23 10:03:31 - 94 out of 100
+2022-11-23 10:03:37 - Save image for CEN_Utah_Black - 5.6, h=4.2, w=24.5393760563784
+2022-11-23 10:03:42 - Save image for CEN_Utah_Hispanic - 2.3, h=4.2, w=24.5393760563784
+2022-11-23 10:03:42 - 95 out of 100
+2022-11-23 10:03:42 - CEN Vermont does NOT have data for infographics
+2022-11-23 10:03:42 - 96 out of 100
+2022-11-23 10:03:42 - CEN Virginia does NOT have data for infographics
+2022-11-23 10:03:42 - 97 out of 100
+2022-11-23 10:03:48 - Save image for CEN_Washington_Black - 5.5, h=4.2, w=24.5393760563784
+2022-11-23 10:03:53 - Save image for CEN_Washington_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-11-23 10:03:53 - 98 out of 100
+2022-11-23 10:04:02 - Save image for CEN_West Virginia_Black - <15.2*, h=8.4, w=24.5393760563784
+2022-11-23 10:04:02 - 99 out of 100
+2022-11-23 10:04:12 - Save image for CEN_Wisconsin_Black - 14.2, h=8.4, w=24.5393760563784
+2022-11-23 10:04:18 - Save image for CEN_Wisconsin_Hispanic - 2.3, h=4.2, w=24.5393760563784
+2022-11-23 10:04:18 - 100 out of 100
+2022-11-23 10:04:23 - Save image for CEN_Wyoming_Black - 4.9, h=4.2, w=24.5393760563784
+2022-11-23 10:04:29 - Save image for CEN_Wyoming_Hispanic - 1.6, h=4.2, w=24.5393760563784
+2022-11-23 10:04:29 - End   creating infographics
+2022-11-23 10:04:29 - Copy files exported to sharepoint to local app repo
+2022-11-23 10:04:30 - !!END   PREP FOR SHINY
 
 > ########## takes ~ 1min
 > Sys.time()
-[1] "2022-11-22 11:14:50 CST"
+[1] "2022-11-23 10:04:30 CST"
 
 > source("import.R", echo = TRUE)
 
@@ -600,25 +643,25 @@ Graphik Light already registered with windowsFonts().
 
 > # Load admissions data
 > adm18 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v3.xlsx"), sheet = "Admissions 2018")
-
+-/                                           /                                           -                                           
 > adm19 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v3.xlsx"), sheet = "Admissions 2019")
-
+-/                                           /                                           -                                           
 > adm20 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v3.xlsx"), sheet = "Admissions 2020")
-
+-/                                           /                                           -                                           
 > adm21 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v3.xlsx"), sheet = "Admissions 2021")
-
+-/                                           /                                           -                                           
 > # Load population data
 > pop18 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v3.xlsx"), sheet = "Population 2018")
-
+-/                                           /                                           -                                           
 > pop19 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v3.xlsx"), sheet = "Population 2019")
-
+-/                                           /                                           -                                           
 > pop20 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v3.xlsx"), sheet = "Population 2020")
-
+-/                                           /                                           -                                           
 > pop21 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v3.xlsx"), sheet = "Population 2021")
-
+-/                                           /                                           -                                           
 > # Load states  - will change to new notes when ready ????????????????????????????????
 > notes <- read_excel(file.path(admin$sp_data_raw, "mclc/Data  ..." ... [TRUNCATED] 
-
+-/                                           /                                           -                                           
 > ################################################################################
 > # Reformat shapefile for hex map
 > ############################## .... [TRUNCATED] 
@@ -684,7 +727,8 @@ Graphik Light already registered with windowsFonts().
 > # create label ready variable called metric
 > # create pop vs adm variable
 > # change da .... [TRUNCATED] 
-`mutate_if()` ignored the following grouping variables:
+`mutate_if()` ignored the following grouping
+variables:
 • Columns `state`, `data`
 
 > # save labels
@@ -723,7 +767,9 @@ Graphik Light already registered with windowsFonts().
 > # save reactable version of map explorer table
 > mclc_explorer_table_long <- mclc_explorer_table %>%
 +   select(state, data, `2018`, `2019`, `2020`, .... [TRUNCATED] 
-`summarise()` has grouped output by 'state'. You can override using the `.groups` argument.
+`summarise()` has grouped output by 'state'.
+You can override using the `.groups`
+argument.
 
 > mclc_explorer_table <- merge(mclc_explorer_table, mclc_explorer_table_long, by = c("state", "data"))
 
@@ -745,7 +791,9 @@ Graphik Light already registered with windowsFonts().
 > # select variables
 > # sum by type
 > # remove proba .... [TRUNCATED] 
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
 
 > # make wide form
 > state_table_wide <- spread(state_table, key = year, value = total)
@@ -770,7 +818,10 @@ Graphik Light already registered with windowsFonts().
 > prob_parole_tables <- fnc_create_data_metric(prob_parole_tables) %>%
 +   group_by(state, year, metric, adm_or_pop, prob_vs_parole, text) %>%
 +   sum .... [TRUNCATED] 
-`summarise()` has grouped output by 'state', 'year', 'metric', 'adm_or_pop', 'prob_vs_parole'. You can override using the `.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric', 'adm_or_pop',
+'prob_vs_parole'. You can override using the
+`.groups` argument.
 
 > # filter to parole
 > parole_table <- prob_parole_tables %>%
@@ -840,7 +891,7 @@ Adding missing grouping variables: `metric`
 
 > ####### takes ~ 2min 
 > Sys.time()
-[1] "2022-11-22 11:14:54 CST"
+[1] "2022-11-23 10:04:35 CST"
 
 > source("highchart.R", echo = TRUE)
 
@@ -865,7 +916,10 @@ The following object is masked from ‘package:jsonlite’:
 
 The following objects are masked from ‘package:rlang’:
 
-    %@%, as_function, flatten, flatten_chr, flatten_dbl, flatten_int, flatten_lgl, flatten_raw, invoke, splice
+    %@%, as_function, flatten,
+    flatten_chr, flatten_dbl,
+    flatten_int, flatten_lgl,
+    flatten_raw, invoke, splice
 
 
 > library(dplyr)
@@ -926,112 +980,312 @@ The following object is masked from ‘package:purrr’:
 > 
 > # generate list of state highcharts to call in app (admissions)
 > all_state_ar .... [TRUNCATED] 
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
 
 > all_state_area_adm <- setNames(all_state_area_adm, states)
 
 > # generate list of state highcharts to call in app (population)
 > all_state_area_pop <- map(.x = states,  .f = function(x) {
 +   df1 <- adm_pop_long .... [TRUNCATED] 
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
 
 > # set names of charts
 > all_state_area_pop <- setNames(all_state_area_pop, states)
@@ -1042,56 +1296,156 @@ The following object is masked from ‘package:purrr’:
 > 
 > # generate list of state highcharts to call in app (admissions)
 > all_state_bar .... [TRUNCATED] 
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
 
 > # set names of charts
 > all_state_bar_adm <- setNames(all_state_bar_adm, states)
@@ -1099,56 +1453,156 @@ The following object is masked from ‘package:purrr’:
 > # generate list of state highcharts to call in app (population)
 > all_state_bar_pop <- map(.x = states,  .f = function(x) {
 +   df1 <- adm_pop_long  .... [TRUNCATED] 
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
 
 > # set names of charts
 > all_state_bar_pop <- setNames(all_state_bar_pop, states)
@@ -1159,56 +1613,156 @@ The following object is masked from ‘package:purrr’:
 > 
 > # generate list of state highcharts to call in app (admissions)
 > parole_bar_a .... [TRUNCATED] 
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
 
 > # set names of charts
 > parole_bar_adm <- setNames(parole_bar_adm,states)
@@ -1216,56 +1770,156 @@ The following object is masked from ‘package:purrr’:
 > # generate list of state highcharts to call in app (population)
 > parole_bar_pop <- map(.x = states,  .f = function(x) {
 +   df1 <- adm_pop_long %>% .... [TRUNCATED] 
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
 
 > # set names of charts
 > parole_bar_pop <- setNames(parole_bar_pop,states)
@@ -1276,56 +1930,156 @@ The following object is masked from ‘package:purrr’:
 > 
 > # generate list of state highcharts to call in app (admissions)
 > probation .... [TRUNCATED] 
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
 
 > # set names of charts
 > probation_bar_adm <- setNames(probation_bar_adm, states)
@@ -1333,56 +2087,156 @@ The following object is masked from ‘package:purrr’:
 > # generate list of state highcharts to call in app (population)
 > probation_bar_pop <- map(.x = states,  .f = function(x) {
 +   df1 <- adm_pop_long  .... [TRUNCATED] 
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
+`summarise()` has grouped output by 'state',
+'year', 'metric'. You can override using the
+`.groups` argument.
 
 > # set names of charts
 > probation_bar_pop <- setNames(probation_bar_pop, states)
@@ -1402,7 +2256,7 @@ The following object is masked from ‘package:purrr’:
 
 > ####### takes ~ 1min 
 > Sys.time()
-[1] "2022-11-22 11:16:20 CST"
+[1] "2022-11-23 10:06:14 CST"
 
 > source("reactable.R", echo = TRUE)
 
@@ -1471,56 +2325,106 @@ The following object is masked from ‘package:purrr’:
 > 
 > # generate list of parole reactables to call in app (admissions)
 > parole_reactable_adm <- map(.x  .... [TRUNCATED] 
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
 
 > parole_reactable_adm <- setNames(parole_reactable_adm, c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","F ..." ... [TRUNCATED] 
 
@@ -1528,56 +2432,106 @@ Adding missing grouping variables: `state`, `adm_or_pop`
 > parole_reactable_pop <- map(.x = states,  .f = function(x) {
 + 
 +   # filter data .... [TRUNCATED] 
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
 
 > parole_reactable_pop <- setNames(parole_reactable_pop, c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","F ..." ... [TRUNCATED] 
 
@@ -1587,56 +2541,106 @@ Adding missing grouping variables: `state`, `adm_or_pop`
 > 
 > # generate list of probation reactables to call in app (admissions)
 > probation_reactable_adm < .... [TRUNCATED] 
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
 
 > probation_reactable_adm <- setNames(probation_reactable_adm, c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delawa ..." ... [TRUNCATED] 
 
@@ -1644,56 +2648,106 @@ Adding missing grouping variables: `state`, `adm_or_pop`
 > probation_reactable_pop <- map(.x = states,  .f = function(x) {
 + 
 +   # filte .... [TRUNCATED] 
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
+Adding missing grouping variables: `state`,
+`adm_or_pop`
 
 > probation_reactable_pop <- setNames(probation_reactable_pop, c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delawa ..." ... [TRUNCATED] 
 
