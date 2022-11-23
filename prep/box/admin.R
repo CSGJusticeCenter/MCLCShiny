@@ -9,14 +9,14 @@ box::use(
 
 
 #' @export
-sp_data <- csgjcr::csg_sp_path(file.path(ROOT$sp, "data_new/analysis")) 
+sp_data <- csgjcr::csg_sp_path(file.path(ROOT$sp, "data/analysis")) 
 
 
 #' @export
-sp_data_del <- csgjcr::csg_sp_path(file.path(ROOT$sp, "data_new/deliverables")) 
+sp_data_del <- csgjcr::csg_sp_path(file.path(ROOT$sp, "data/deliverables")) 
 
 #' @export
-sp_data_raw <- csgjcr::csg_sp_path(file.path(ROOT$sp, "data_new/raw")) 
+sp_data_raw <- csgjcr::csg_sp_path(file.path(ROOT$sp, "data/raw")) 
 
 #' Log Message 
 #'
