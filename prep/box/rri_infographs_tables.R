@@ -14,6 +14,8 @@ box::use(
 suppressed_vars <- c("RRI", "RATE", "REVCNT")
 
 
+revcnt_notes <- readr::read_csv(file.path(admin$sp_data_raw, "revcnt_notes.csv"), show_col_types = FALSE)
+
 
 #' Create a table for a state of a single metric 
 #' years are column names 
@@ -111,7 +113,7 @@ state_table_single_metric <- function(DATA, whichYEARS, whichRACE, whichSTATE, w
 #' @param whichSTATE 
 #'
 #' @examples
-data_for_info_graphic <- function(DATA, whichRACE, whichSTATE, whichPOP){
+data_for_info_graphic <- function(DATA, whichRACE, whichSTATE, whichPOP, NCRPLET){
 
   DF <- DATA$R %>% 
     filter(RACE %in% whichRACE) %>% 
@@ -124,21 +126,10 @@ data_for_info_graphic <- function(DATA, whichRACE, whichSTATE, whichPOP){
   if (nrow(DF) == 0){
     outDF <- "NODATA"
     dataavail <- 0
-    note <- case_when(
-        whichSTATE == "Alabama"                    ~ "Alabama did not report any person with Black or Hispanic race/ethnicity."
-      , whichSTATE == "Alaska"                     ~ "Alaska did not report any parole data in the NCRP data set."
-      , whichSTATE == "Connecticut"                ~ "Connecticut did not report any parole data in the NCRP data set."
-      , whichSTATE == "Hawaii" & whichPOP == "BJS" ~ "Hawaii does not have parole poulation data (BJS) broken out by race."
-      , whichSTATE == "Louisiana"                  ~ "Majority of NCRP parole data for Louisiana is missing race/ethnicity. All the obersvations that are not missing are for a single race/ethnicity category: Hispanic."
-      , whichSTATE == "Maine"  & whichPOP == "BJS" ~ "Maine has single digits counts of clients on parole who are listed as Black. The parole population (BJS) data lists the population estimate for Black clinets as 0, so rates based on this population cannot be calculated"
-      , whichSTATE == "Michigan"                   ~ "Majority of NCRP parole data for Michigan is missing race/ethnicity. All the obersvations that are not missing are for a single race/ethnicity category: Hispanic."
-      , whichSTATE == "Nevada" & whichPOP == "BJS" ~ "Nevada does not have parole poulation data (BJS) broken out by race"
-      , whichSTATE == "Oklahoma"                   ~ "Majority of NCRP parole data for Oklahoma is missing race/ethnicity. All the obersvations that are not missing are for a single race/ethnicity category: Hispanic."
-      , whichSTATE == "Oregon"                     ~ "Oregon did not report any parole data in the NCRP data set"
-      , whichSTATE == "South Dakota"               ~ "South Dakota did not report race/ethnicity category for paroles in the NCRP data."
-      , whichSTATE == "Vermont"                    ~ "Vermont did not report race/ethnicity category for paroles in the NCRP data."
-      , 
-    ) 
+    
+    note <- revcnt_notes %>% 
+      filter(STATE == whichSTATE, ncrp == NCRPLET, popdenom == whichPOP) %>% 
+      pull(note)
     
     flag <- "2"
     
@@ -183,11 +174,10 @@ data_for_info_graphic <- function(DATA, whichRACE, whichSTATE, whichPOP){
 #' @examples
 create_tables <- function(NCRPLET){
   
-  
-  # REV_BJS <- calc$combine_and_calcrates("BJS" , NCRPLET)
-  # REV_CEN <- calc$combine_and_calcrates("PUMS", NCRPLET)
-  REV_BJS <- readRDS(file.path(admin$sp_data, glue("NCRP_{NCRPLET}_REV_BJS.RDS")))
-  REV_CEN  <- readRDS(file.path(admin$sp_data, glue("NCRP_{NCRPLET}_REV_PUMS.RDS")))  
+  REV_BJS <- calc$combine_and_calcrates("BJS" , NCRPLET)
+  REV_CEN <- calc$combine_and_calcrates("PUMS", NCRPLET)
+  # REV_BJS <- readRDS(file.path(admin$sp_data, glue("NCRP_{NCRPLET}_REV_BJS.RDS")))
+  # REV_CEN <- readRDS(file.path(admin$sp_data, glue("NCRP_{NCRPLET}_REV_PUMS.RDS")))  
   
   #what 'recent_yr' is the most likely 
   yr_CEN <- REV_CEN$OR %>% count(RECENT_YR) %>% filter(n == max(n)) %>% pull(RECENT_YR)
@@ -202,7 +192,7 @@ create_tables <- function(NCRPLET){
       "BJS" = map(
       state_vec %>% set_names(),
       ~list(
-          "INFOGRAPH" = data_for_info_graphic(    REV_BJS,              admin$lev_RACE[2:3], .x, "BJS")
+          "INFOGRAPH" = data_for_info_graphic(    REV_BJS,              admin$lev_RACE[2:3], .x, "BJS", NCRPLET)
         , "RRI"       = state_table_single_metric(REV_BJS, 2015:yr_BJS, admin$lev_RACE[2:3], .x, "RRI")
         , "RATE"      = state_table_single_metric(REV_BJS, 2015:yr_BJS, admin$lev_RACE[1:3], .x, "RATE", mult = 1e+03)
         , "REVCNT"    = state_table_single_metric(REV_BJS, 2015:yr_BJS, admin$lev_RACE[1:3], .x, "REVCNT")
@@ -212,7 +202,7 @@ create_tables <- function(NCRPLET){
     ,   "CEN" = map(
       state_vec %>% set_names(),
       ~list(
-          "INFOGRAPH" = data_for_info_graphic(    REV_CEN,               admin$lev_RACE[2:3], .x, "SC")
+          "INFOGRAPH" = data_for_info_graphic(    REV_CEN,               admin$lev_RACE[2:3], .x, "CEN", NCRPLET)
         , "RRI"       = state_table_single_metric(REV_CEN, 2015:yr_CEN,  admin$lev_RACE[2:3], .x, "RRI")
         , "RATE"      = state_table_single_metric(REV_CEN, 2015:yr_CEN,  admin$lev_RACE[1:3], .x, "RATE", mult = 1e+05)
         , "REVCNT"    = state_table_single_metric(REV_CEN, 2015:yr_CEN,  admin$lev_RACE[1:3], .x, "REVCNT")
@@ -226,6 +216,7 @@ create_tables <- function(NCRPLET){
   admin$mylog("End creating tables")
   
   admin$SPsaveRDS(outtables, glue("NCRP_{NCRPLET}_RRI_tables.RDS"))
+  
   
   assignflags$export(tables = outtables, popdenom = "BJS")
   assignflags$export(tables = outtables, popdenom = "CEN")
