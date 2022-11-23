@@ -1,0 +1,165 @@
+---
+title: "RRI Comparison" 
+description: "Last User: `r stringr::str_sub(getwd(), 10, stringr::str_locate(stringr::str_sub(getwd(), 10, -1), '/')[1]+10-2)`"
+date: last-modified
+date-format: "YYYY-MM-DD HH:mm:ss"
+published-title: Last Modified
+doi: "`r Sys.time()`"
+doi-title: Last Ran
+execute:
+  echo: true
+format: 
+  html:
+    page-layout: full
+    fontsize: 0.9em
+    fig-width: 12
+    fig-height: 7
+    code-fold: true 
+editor: source
+self-contained: true
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r}
+#| label: setup
+#| include: false  
+
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+
+#https://stackoverflow.com/questions/66974669/collapse-rows-is-not-collapsed-and-updating-packages-does-not-fix
+#devtools::install_github(repo="haozhu233/kableExtra", ref="a6af5c0") #to get collapse rows to work 
+
+box::use(
+    box/admin
+)
+```
+
+
+## Notes 
+
+The prefix `S_` indicates that the variables values has been suppressed if the `REVCNT` <5.  The `S_` version of a variable (e.g. `S_RRI`) will equal the original variable (`RRI`) when suppression did not occur.  The variable `SUPPRESS` is used as a flag, with 1 = suppression occurred and `S_REVCNT` = 5 instead of the original value.  
+
+
+
+```{r}
+N_BJS  <- readRDS(file.path(admin$sp_data, "datestamp/20221122_NCRP_N_REV_BJS.RDS"))
+A_BJS  <- readRDS(file.path(admin$sp_data, "datestamp/20221123_NCRP_A_REV_BJS.RDS"))
+
+N_PUMS <- readRDS(file.path(admin$sp_data, "datestamp/20221122_NCRP_N_REV_PUMS.RDS"))
+A_PUMS <- readRDS(file.path(admin$sp_data, "datestamp/20221123_NCRP_A_REV_PUMS.RDS"))
+
+N_SC   <- readRDS(file.path(admin$sp_data, "datestamp/20221121_NCRP_N_REV_SC.RDS"))
+A_SC   <- readRDS(file.path(admin$sp_data, "datestamp/20221116_NCRP_A_REV_SC.RDS"))
+```
+
+
+
+
+```{r}
+
+longdf <- map2(
+    list(N_BJS,  N_PUMS,   N_SC,   A_BJS,   A_PUMS,   A_SC)
+  ,   c("N_BJS","N_PUMS", "N_SC", "A_BJS", "A_PUMS", "A_SC")
+  , ~bind_rows(
+      .x$R %>% mutate(OFFGENERAL = admin$lev_OFFGENERAL2[1])
+    , .x$OR
+    ) %>% 
+    mutate(
+        OFFGENERAL = factor(OFFGENERAL, levels = admin$lev_OFFGENERAL2)
+      , DATA = .y
+    ) 
+) %>% 
+  bind_rows() %>% 
+  mutate(
+      DATANCRP = str_sub(DATA, 1, 1)
+    , DATAPOP  = str_sub(DATA, 3, -1)
+  )
+
+
+
+```
+
+
+```{r}
+longdf %>% 
+  filter(OFFGENERAL == admin$lev_OFFGENERAL2[1]) %>% 
+  filter(RPTYEAR == RECENT_YR, RACE == "Black") %>% 
+  select(STATE, S_RRI, DATA) %>% 
+  pivot_wider(names_from = DATA, values_from = S_RRI) %>% 
+  select(STATE, contains("A_"), contains("N_"))
+
+
+longdf %>% 
+  filter(OFFGENERAL == admin$lev_OFFGENERAL2[1]) %>% 
+  filter(RPTYEAR == RECENT_YR, RACE == "Hispanic") %>% 
+  select(STATE, S_RRI, DATA) %>% 
+  pivot_wider(names_from = DATA, values_from = S_RRI) %>% 
+  select(STATE, A_BJS, N_BJS, A_SC, N_SC, N_PUMS)
+```
+
+```{r}
+set.seed(20221123)
+
+allOG_2r_rectyr <- longdf %>% 
+  filter(OFFGENERAL == admin$lev_OFFGENERAL2[1]) %>% 
+  filter(RPTYEAR == RECENT_YR, RACE %in% c("Black", "Hispanic"), STATE != "District of Columbia") 
+
+allOG_2r_rectyr %>%
+  ggplot(aes(x = S_RRI, y = 1)) + 
+  geom_jitter(aes(color = DATAPOP, shape = DATANCRP), alpha = 0.8) + 
+  facet_wrap(~RACE, scales = "free", nrow = 2)+ 
+  scale_shape_manual(values = c(17, 16)) + 
+  theme_bw() +
+  theme(
+      axis.text.y = element_blank()
+    , axis.ticks.y = element_blank()
+  ) 
+
+
+allOG_2r_rectyr %>%
+  ggplot(aes(x = S_RRI)) + 
+  geom_boxplot(aes(color = DATAPOP, fill = DATANCRP), alpha = 0.8) + 
+  facet_wrap(~RACE, scales = "free", nrow = 2)+ 
+  scale_fill_manual(values = c("white", "grey85")) + 
+  theme_bw() +
+  theme(
+      axis.text.y = element_blank()
+    , axis.ticks.y = element_blank()
+  ) 
+```
+
+
+```{r}
+
+
+allOG_2r_rectyr %>% 
+  arrange(desc(S_RRI))
+
+allOG_2r_rectyr %>% 
+  filter(DATA %in% c("A_BJS", "N_BJS")) %>% 
+  ggplot(aes(x = S_RRI)) + 
+  geom_boxplot() + 
+  labs("BJS - A vs N") + 
+  facet_grid(DATA~RACE)
+
+
+allOG_2r_rectyr %>% 
+  filter(DATA %in% c("A_PUMS", "N_PUMS")) %>% 
+  ggplot(aes(x = S_RRI)) + 
+  geom_boxplot() + 
+  labs("PUMS - A vs N") + 
+  facet_grid(DATA~RACE, scales = "free_x")
+```
+
+
+```{r}
+allOG_2r_rectyr %>% 
+  filter(DATA %in% c("N_BJS", "N_PUMS")) %>% 
+  arrange(desc(S_RRI))
+```
+
+
