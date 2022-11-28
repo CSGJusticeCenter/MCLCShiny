@@ -63,10 +63,10 @@ loadfonts(device="win")
 showtext_auto()
 default_fonts <- c("Graphik")
 
-ggplot(data.frame(x=1:5,y=1:5),aes(x,y))+
-  geom_point()+
-  geom_text(aes(label=y),nudge_x=0.5, family="Graphik",fontface = "bold", size = 10)+
-  theme_bw(base_family="Graphik")
+# ggplot(data.frame(x=1:5,y=1:5),aes(x,y))+
+#   geom_point()+
+#   geom_text(aes(label=y),nudge_x=0.5, family="Graphik",fontface = "bold", size = 10)+
+#   theme_bw(base_family="Graphik")
 
 # Load custom functions
 source("app/functions.R")
@@ -75,8 +75,6 @@ source("app/functions.R")
 # Make sure sharepoint folder is synced locally
 # https://csgorg.sharepoint.com/:f:/s/Team-JC-Research/EhdvImKN2rdPnmHQ2TrKlooBdYqnnWc0SUXBNuh9C7d41g?e=NCsh8I
 # In your Renviron (usethis::edit_r_environ()), set CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"
-
-
 
 ########
 # Import data
@@ -105,6 +103,10 @@ pop21 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"),
 # Load states  - will change to new notes when ready ????????????????????????????????
 notes <- read_excel(file.path(admin$sp_data_raw, "mclc/Data for web team 2021 v13.xlsx"), sheet = "Notes")
 
+# Load info on abolishment of parole or probation
+# abolish_prob_parole <- read_excel(file.path(admin$sp_survey, "MCLC 2022 Progress Tracking.xlsx")) - not working
+abolish_prob_parole <- read_excel(file.path("C:/Users/mroberts/The Council of State Governments/JC Research - 50 State Revocations Project/50 State Survey (2022)", "MCLC 2022 Progress Tracking.xlsx"))
+
 ################################################################################
 # Reformat shapefile for hex map
 ################################################################################
@@ -117,6 +119,18 @@ hex_gj <- hex %>%
 
 # clean state abbreviations file
 stateAbb <- clean_names(stateAbb)
+
+################################################################################
+# Reformat data about probation and parole being abolished
+################################################################################
+
+abolish_prob_parole <- abolish_prob_parole %>%
+  clean_names() %>%
+  select(state, abolished_probation, abolished_discretionary_parole) %>%
+  distinct()
+abolish_prob_parole$state <- gsub('Excel', "", abolish_prob_parole$state)
+abolish_prob_parole$state <- gsub('[()]', "", abolish_prob_parole$state)
+abolish_prob_parole$state <- trimws(abolish_prob_parole$state)
 
 ################################################################################
 # Admissions and populations dataset
@@ -461,8 +475,10 @@ adm_pop_long <- fnc_create_adm_pop(adm_pop_long)
 adm_pop_long <- fnc_create_prob_vs_parole(adm_pop_long)
 
 # add tooltip
+# add info on probation and parole being abolished
 adm_pop_long <- adm_pop_long %>%
   mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", formattable::comma(total, digits = 0), "<br>"))
+  # left_join(abolish_prob_parole, by = "state")
 
 # create new df
 csg <- adm_pop_long

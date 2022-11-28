@@ -386,44 +386,12 @@ Dropdowns
 
 /*.dropdown-menu span {text-align: left; width: 100%;}*/
 
-/* Format for selector input picking state(s)*/
-#download-state-btn {
-  margin: 17px 10px 17px 10px;
+/* Format for selector input for download page*/
+#download-btn {
+  width: 15em;
+  margin-top: 1em;
   color: #004270;
   font-family: Graphik;
-  width: 15em;
-}
-
-
-/* Format for selector input picking year(s)*/
-#download-metric-btn {
-  margin: 17px 10px 17px 10px;
-  color: #004270;
-  font-family: Graphik;
-  width: 15em;
-}
-
-
-/* Format for selector input picking year(s)*/
-#download-year-btn {
-  margin: 17px 10px 17px 10px;
-  color: #004270;
-  font-family: Graphik;
-  width: 15em;
-}
-
-/* Format for download data button */
-.download-data {
-  margin: 2.9em 1em 2.4em 1em;
-  border-radius:0px;
-  color: #004270;
-  text-align: left;
-  width: 15em;
-  /* width: 175px;*/
-  background-color:#004270;
-  color: #fff;
-  font-family: Graphik;
-  font-style: bold;
 }
 
 .picker-style {
@@ -432,6 +400,20 @@ Dropdowns
   font-family: Graphik;
   width: 15em;
   background-color:#FFFFFF;
+}
+
+/* Format for download data button */
+.download-data {
+  /*margin: 2.9em 1em 2.4em 1em;*/
+  width: 15em;
+  margin-top: 2.8em;
+  border-radius:0px;
+  color: #004270;
+  background-color:#004270;
+  text-align: left;
+  color: #fff;
+  font-family: Graphik;
+  font-style: bold;
 }
 
   /* Title of download page */

@@ -27,8 +27,6 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                            tabPanel("mapexplorer", id = "mapexplorer",
 
-                                    # div(id = "app-title", titlePanel("Map Explorer")),
-
                                     div(id = "header",
 
                                         #######
@@ -60,7 +58,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                                                                   '2020 - 2021 Change' = "2020 - 2021",
                                                                                                                   '2018 - 2021 Change' = "2018 - 2021"),
                                                                                                       multiple = FALSE)))
-                                                                 # # Download Map
+                                                                 # # Download Map - removed for now
                                                                  # column(width = 3,
                                                                  #         labeled_input('save-map-btn', "",
                                                                  #                       downloadButton(outputId = 'save_map', "Download Map",
@@ -79,10 +77,6 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                         #######
                                         # Hex map
                                         #######
-
-                                        # fluidRow(column(width = 1),
-                                        #          column(width = 10, align = "center", div(id = "selected-map", textOutput("selected_map"))),
-                                        #          column(width = 1)),
 
                                         fluidRow(column(width = 1),
                                                  #column(width = 10, align = "center", highchartOutput("hex_map", height = 550, width = "100%")),
@@ -199,6 +193,8 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                                    fluidRow(column(width = 6, align = "center", highchartOutput("state_area_chart", height = 400, width = 390)),
                                                                             column(width = 6, align = "center", highchartOutput("state_bar_chart", height = 400, width =390))),
+
+                                                                   # uiOutput("overview_charts"),
 
                                                                    br(),
                                                                    br(),
@@ -339,7 +335,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                         fluidRow(# Select State(s)
                                                                  column(width = 3,
 
-                                                                        labeled_input('download-state-btn', "", #"Select State(s)",
+                                                                        labeled_input('download-btn', "", #"Select State(s)",
                                                                                       pickerInput(inputId = 'download_state',
                                                                                                   width = "100%",
                                                                                                   choices = NULL,
@@ -357,11 +353,14 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                                                   # ), # choices style
                                                                                                   # choicesOpt = list(style = sprintf('background:%s;', 'green')),
                                                                                                   options = list(`actions-box` = TRUE,
-                                                                                                                 style = "picker-style")))),
+                                                                                                                 style = "picker-style")
+                                                                                                  )
+                                                                                      )
+                                                                        ),
 
                                                                  # Select Metric(s)
                                                                  column(width = 3,
-                                                                        labeled_input('download-metric-btn', "", #"Select Metric(s)",
+                                                                        labeled_input('download-btn', "", #"Select Metric(s)",
                                                                                       pickerInput(inputId = 'download_metric',
                                                                                                   width = "100%",
                                                                                                   choices = NULL,
@@ -372,7 +371,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                                                                  style = "picker-style")))),
                                                                  # Select Year(s)
                                                                  column(width = 3,
-                                                                        labeled_input('download-year-btn', "", #"Select Year(s)",
+                                                                        labeled_input('download-btn', "", #"Select Year(s)",
                                                                                       pickerInput(inputId = 'download_year',
                                                                                                   width = "100%",
                                                                                                   choices = NULL,
@@ -416,7 +415,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                         br(),
 
                                         fluidRow(column(width = 2),
-                                                 column(width = 8, div(id = "download-info", "To understand the impact of community supervision (i.e., probation, parole, post-release supervision) on state prison populations, The Council of State Governments (CSG) Justice Center surveyed corrections leaders in all 50 states. This project was supported by Arnold Ventures and produced in partnership with the Correctional Leaders Association (CLA). The resulting data span 4 years—from 2018 to 2021—and demonstrate how the number of people sent to prison for supervision violations changed.")),
+                                                 column(width = 8, div(id = "download-info", "To understand the impact of community supervision (i.e., probation, parole, post-release supervision) on state prison populations, The Council of State Governments (CSG) Justice Center surveyed corrections leaders in all 50 states. This project was supported by Arnold Ventures and produced in partnership with the Correctional Leaders Association (CLA). The resulting data spans 4 years—from 2018 to 2021—and demonstrate how the number of people sent to prison for supervision violations changed.")),
                                                  column(width = 2)),
                                         br(),
 

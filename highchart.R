@@ -46,6 +46,11 @@ states <- adm_pop_long$state %>%
 # STATE REPORTS - State area chart
 ############
 
+# set options so that y axis has comma separator
+hcoptslang <- getOption("highcharter.lang")
+hcoptslang$thousandsSep <- ","
+options(highcharter.lang = hcoptslang)
+
 # generate list of state highcharts to call in app (admissions)
 all_state_area_adm <- map(.x = states,  .f = function(x) {
   df1 <- adm_pop_long %>%

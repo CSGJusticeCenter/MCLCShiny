@@ -563,9 +563,29 @@ server <- function(input, output, session) {
 
   # Bar chart
   output$state_bar_chart <- renderHighchart({
+
+    df_pp <- abolish_prob_parole %>%
+      filter(state == input$state_report)
+
+    state_name <- input$state_report
+
     # Select highchart depending on selector input
     # Carts were saved in highchart.R
     if (input$adm_pop_report == "Admissions") {
+
+      year2018 = is.na(all_state_bar_adm$state_name$x$hc_opts$series[[2]]$data[[1]]$total)
+      year2019 = is.na(all_state_bar_adm$state_name$x$hc_opts$series[[2]]$data[[2]]$total)
+      year2020 = is.na(all_state_bar_adm$state_name$x$hc_opts$series[[2]]$data[[3]]$total)
+      year2021 = is.na(all_state_bar_adm$state_name$x$hc_opts$series[[2]]$data[[4]]$total)
+      all_nas <- ifelse(year2018 == TRUE & year2019 == TRUE & year2020 == TRUE & year2021 == TRUE, "Yes", "No")
+
+      # # If all data for a graph are NA
+      # if (all_nas == "Yes") {
+      #   "The state did not provide data on supervision violations."
+      # } else {
+      #   "The state did provide data on probation violations."
+      # }
+
       all_state_bar_adm[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
@@ -581,6 +601,7 @@ server <- function(input, output, session) {
           align = "center",
           style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
         )
+
     } else {
       all_state_bar_pop[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
@@ -1195,24 +1216,6 @@ server <- function(input, output, session) {
       filter(metric %in% input$download_metric) %>%
       arrange(state, year)
   })
-
-  # # Generate table depending on user input
-  # output$selected_download_table <- DT::renderDataTable({
-  #
-  #     df_download_table() %>%
-  #     datatable(#filter = c("top"),
-  #               #class = 'cell-border',
-  #               # Download options
-  #               extensions = 'Buttons',
-  #               options = list(dom = 'Blfrtip',
-  #                              buttons = c('csv', 'excel', 'pdf'),
-  #                              lengthMenu = list(c(25,50,100,-1),
-  #                                                c(25,50,100,"All")),
-  #                              info=F, searching=F
-  #                              )
-  #               )
-  #
-  # })
 
   # Save data as csv
   output$save_data <- downloadHandler(

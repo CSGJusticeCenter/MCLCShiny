@@ -12,6 +12,5 @@
 # MYE:
 # sp <- "50 State Revocations Project/MCLC Shiny App"
 
-# MARI:
+# MAR:
 sp <- "JC Research - 50 State Revocations Project/MCLC Shiny App"
-

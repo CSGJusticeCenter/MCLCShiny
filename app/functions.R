@@ -45,8 +45,16 @@ hc_theme_jc <- hc_theme(colors = c("#D25E2D", "#EDB799", "#C7E8F5", "#236ca7", "
                         title = list(align = "center", style = list(fontFamily = "Graphik", fontWeight = "bold", fontSize = "24px")),
                         #subtitle = list(align = "center", style = list(fontFamily = "Graphik", fontSize = "16px")),
                         legend = list(align = "center", verticalAlign = "top"),
-                        xAxis = list(gridLineColor = "transparent", lineColor = "transparent", minorGridLineColor = "transparent", tickColor = "transparent"),
-                        yAxis = list(labels = list(enabled = FALSE), gridLineColor = "transparent", lineColor = "transparent", minorGridLineColor = "transparent", tickColor = "transparent"),
+                        xAxis = list(gridLineColor = "transparent",
+                                     lineColor = "transparent",
+                                     minorGridLineColor = "transparent",
+                                     tickColor = "transparent"),
+                        yAxis = list(labels = list(enabled = TRUE),
+                                     gridLineColor = "transparent",
+                                     lineColor = "transparent",
+                                     majorGridLineColor = "transparent",
+                                     minorGridLineColor = "transparent",
+                                     tickColor = "transparent"),
                         plotOptions = list(line = list(marker = list(enabled = FALSE)),
                                            spline = list(marker = list(enabled = FALSE)),
                                            area = list(marker = list(enabled = FALSE)),
@@ -76,7 +84,7 @@ fnc_highchart_state_areachart <- function(df){
     hc_add_series(data = subset(df, metric == "New Offense"), name = "New Offense", type = "area", hcaes(x = year, y = total), color = new_o_co) %>%
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
-    hc_yAxis(title = "") %>%
+    hc_yAxis(title = "", labels=list(format="{value:,.0f}")) %>%
 
     hc_add_theme(hc_theme_jc) %>%
 
@@ -103,7 +111,7 @@ fnc_highchart_state_barchart <- function(df){
     hc_add_series(data = subset(df, metric == "New Offense"), name = "New Offense", type = "column", hcaes(x = year, y = total), color = new_o_co) %>%
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
-    hc_yAxis(title = "") %>%
+    hc_yAxis(title = "", labels=list(format="{value:,.0f}")) %>%
 
     hc_add_theme(hc_theme_jc) %>%
 
