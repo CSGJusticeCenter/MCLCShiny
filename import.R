@@ -13,7 +13,7 @@
 
 # Input:
 #    "Data for web team v13.xlsx" Notes are here for now
-#    "mclc_data_2022_v3.xlsx"     2022 survey data
+#    "mclc_data_2022_v4.xlsx"     2022 survey data
 #     Map files
 
 # Output:
@@ -46,9 +46,15 @@ box::use( prep/box/admin)
 
 # Add fonts required to run functions.R
 # Fonts are found in app folder
-font_add("Graphik",      regular = "app/www/fonts/GraphikRegular.otf",
-                         bold    = "app/www/fonts/GraphikBold.otf")
-font_add("Graphik-Bold", regular = "app/www/fonts/GraphikBold.otf")
+# font_add("Graphik",      regular = "app/www/fonts/GraphikRegular.ttf"
+#          ,
+#          bold    = "app/www/fonts/GraphikBold.ttf"
+# )
+font_add("Graphik",      regular = "app/www/fonts/Graphik.ttf"
+                         ,
+                         bold    = "app/www/fonts/GraphikBold.ttf"
+         )
+# font_add("Graphik-Bold", regular = "app/www/fonts/GraphikBold.otf")
 
 #font_import(paths = "C:/Users/mroberts/AppData/Local/Microsoft/Windows/Fonts", prompt = FALSE)
 extrafont::loadfonts(quiet = TRUE)
@@ -57,15 +63,10 @@ loadfonts(device="win")
 showtext_auto()
 default_fonts <- c("Graphik")
 
-# ggplot(data.frame(x=1:5,y=1:5),aes(x,y))+
-#   geom_point()+
-#   geom_text(aes(label=y),nudge_x=0.5, family="Graphik",fontface = "bold", size = 10)+
-#   theme_bw(base_family="Graphik")
-# 
-# ggplot(data.frame(x=1:5,y=1:5),aes(x,y))+
-#   geom_point()+
-#   geom_text(aes(label=y),nudge_x=0.5, family="Graphik-Bold", size = 10)+
-#   theme_bw(base_family="Graphik-Bold")
+ggplot(data.frame(x=1:5,y=1:5),aes(x,y))+
+  geom_point()+
+  geom_text(aes(label=y),nudge_x=0.5, family="Graphik",fontface = "bold", size = 10)+
+  theme_bw(base_family="Graphik")
 
 # Load custom functions
 source("app/functions.R")
@@ -90,16 +91,16 @@ hex <- read_sf(file.path(admin$sp_data_raw, "us_states_hexgrid.geojson")) %>%
 stateAbb <- read.csv(file.path(admin$sp_data_raw, "stateAbb.csv"))
 
 # Load admissions data
-adm18 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v3.xlsx"), sheet = "Admissions 2018")
-adm19 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v3.xlsx"), sheet = "Admissions 2019")
-adm20 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v3.xlsx"), sheet = "Admissions 2020")
-adm21 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v3.xlsx"), sheet = "Admissions 2021")
+adm18 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Admissions 2018")
+adm19 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Admissions 2019")
+adm20 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Admissions 2020")
+adm21 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Admissions 2021")
 
 # Load population data
-pop18 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v3.xlsx"), sheet = "Population 2018")
-pop19 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v3.xlsx"), sheet = "Population 2019")
-pop20 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v3.xlsx"), sheet = "Population 2020")
-pop21 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v3.xlsx"), sheet = "Population 2021")
+pop18 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Population 2018")
+pop19 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Population 2019")
+pop20 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Population 2020")
+pop21 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Population 2021")
 
 # Load states  - will change to new notes when ready ????????????????????????????????
 notes <- read_excel(file.path(admin$sp_data_raw, "mclc/Data for web team 2021 v13.xlsx"), sheet = "Notes")
@@ -485,7 +486,7 @@ csg <- csg %>% ungroup() %>%
 theseFOLDERS <- c( "sharepoint" = admin$sp_data, "app"  = "app/data")
 
 for (folder in theseFOLDERS){
-  
+
   save(adm_pop_long,            file=file.path(folder, "adm_pop_long.Rda"))
   save(mclc_explorer,           file=file.path(folder, "mclc_explorer.Rda"))
   save(mclc_explorer_table,     file=file.path(folder, "mclc_explorer_table.Rda"))
@@ -499,7 +500,7 @@ for (folder in theseFOLDERS){
   save(hex_gj,                  file=file.path(folder, "hex_gj.Rda"))
   save(notes,                   file=file.path(folder, "notes.Rda"))
   save(csg,                     file=file.path(folder, "csg.Rda"))
-  
+
 }
 
 

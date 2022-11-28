@@ -24,19 +24,7 @@ position: relative;
 
 /* Make body smaller width than header which spans the entire page */
 /* Center everything */
-#map-body {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-#state-body {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-#download-body {
+#app-body {
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
@@ -47,52 +35,24 @@ Font size and style
 ########################################*/
 
 /* Add fonts*/
+/* Add fonts*/
 @font-face {
-    font-family: Graphik;
-    src: url("fonts/Graphik.ttf") format('truetype');
-    font-weight: normal;
-    font-style: normal;
+    font-family: "Graphik";
+    src: url("fonts/Graphik.ttf");
 }
 @font-face {
-    font-family: Graphik-Bold;
-    src: url("fonts/GraphikBold.ttf") format('truetype');
-    font-weight: normal;
-    font-style: normal;
+    font-family: "Graphik";
+    src: url("fonts/Graphik-Bold.ttf");
+    font-weight: bold;
 }
-@font-face {
-    font-family: Graphik;
-    src: url("fonts/Graphik.otf") format('opentype');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: Graphik-Bold;
-    src: url("fonts/GraphikBold.otf") format('opentype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-/*
-@font-face {
-    font-family: Graphik;
-    src: url("fonts/Graphik.ttf") format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: Graphik-Bold;
-    src: url("fonts/GraphikBold.ttf") format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}*/
 
 /* Make some wordy sections smaller
 .small_text {
   font-size: small;
 }
 
-/* Change font family throughout The issue here is that it changes all the bold text back to regular
-*{font-family: "Graphik", sans-serif !important;}*/
+/* Change font family throughout The issue here is that it changes all the bold text back to regular*/
+*{font-family: "Graphik", sans-serif !important;}
 
 /*##################################################################################################################
 Navigation Bar
@@ -243,7 +203,8 @@ Hex map
 #selected-map {
   text-align: center;
   font-size: 30px;
-  font-family: Graphik-Bold;
+  font-family: Graphik;
+  font-weight: bold;
 }
 
 /* Map settings*/
@@ -263,7 +224,8 @@ Table
 #selected-map-table{
   text-align: center;
   font-size: 30px;
-  font-family: Graphik-Bold !important;
+  font-family: Graphik !important;
+  font-weight: bold;
   /* Align text with search bar */
   /*position: relative; top: 30px;*/
 }
@@ -328,7 +290,8 @@ Title and value boxes
   text-align: center;
   /*font-weight: bold;*/
   font-size: 30px;
-  font-family: Graphik-Bold;
+  font-family: Graphik;
+  font-weight: bold;
 }
 
 /*######################################
@@ -393,7 +356,8 @@ Tabset Panels
 #selected-state-note-title {
   text-align: center;
   font-size: 30px;
-  font-family: Graphik-Bold;
+  font-family: Graphik;
+  font-weight: bold;
 }
 
 /* State note setting */
@@ -418,7 +382,8 @@ div.retxt {
 
 
 h3.reh3 {
-  font-family: Graphik-Bold !important;
+  font-family: Graphik !important;
+  font-weight: bold !important;
   font-size: 30px !important;  /*same as selected-state-note-title */
   /*margin-top: 24px; */
   margin-bottom: 12px;
@@ -428,7 +393,8 @@ h3.reh3 {
 
 
 h4.reh4 {
-  font-family: Graphik-Bold !important;
+  font-family: Graphik !important;
+  font-weight: bold !important;
   font-size: 24px; /* same as selected-state-note-title */
   margin-top: 18px;
   margin-bottom: 12px;
@@ -501,13 +467,15 @@ Dropdowns
 #download-title {
   text-align: center;
   font-size: 30px;
-  font-family: Graphik-Bold;
+  font-family: Graphik;
+  font-weight: bold;
 }
 
 /* Title of data table selected for download */
 #download-data-title {
   text-align: left;
-  font-family: Graphik-Bold;
+  font-family: Graphik;
+  font-weight: bold;
   font-size: 24px;
 }
 

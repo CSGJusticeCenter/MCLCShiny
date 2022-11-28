@@ -75,7 +75,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                     ), # end div header
                                     br(),
 
-                                    div(id = "map-body",
+                                    div(id = "app-body",
 
                                         #######
                                         # Hex map
@@ -156,7 +156,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                     br(),
 
-                                    div(id = "state-body",
+                                    div(id = "app-body",
 
                                         #######
                                         # Value boxes
@@ -402,7 +402,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                     # Download table
                                     #######
 
-                                    div(id = "download-body",
+                                    div(id = "app-body",
 
                                         fluidRow(column(width = 2),
                                                  column(width = 8, div(id = "download-title", "Download Data")),
