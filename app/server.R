@@ -243,23 +243,30 @@ server <- function(input, output, session) {
   # Download map button near dropdowns
   #######
 
+  # library(webshot)
+  # install_phantomjs()
+  # library(shiny)
+  # library(plotly)
+
   # Save map as png
   output$save_map <- downloadHandler(
     filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""),
     content = function(file) {
 
-      owd <- setwd(tempdir())
-      on.exit(setwd(owd))
-
-      saveWidget(foundational_map(), "temp.html")
-      webshot2::webshot("temp.html", file = file,
-                        delay = 1
-      )
-    }
+      # owd <- setwd(tempdir())
+      # on.exit(setwd(owd))
+      # saveWidget(foundational_map(), "temp.html")
+      # webshot2::webshot("temp.html", file = file,
+      #                   delay = 3)
+        saveWidget(foundational_map(), "temp.html", selfcontained = TRUE)
+        webshot2::webshot(url = "temp.html", file = file)
+      }
+    # content = function(file) {
+    #   export(foundational_map(), file=file)
+    # }
   )
 
   # https://stackoverflow.com/questions/61347676/datalabels-in-r-highcharter-cannot-be-seen-after-print-as-png-or-jpg
-
   # This comes out blank
   # https://stackoverflow.com/questions/53927629/download-all-high-chart-output-from-r-shiny
   # output$save_map <- downloadHandler(filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""),

@@ -122,18 +122,8 @@ button > div {
   text-align: center;
 }
 
-/* Format state header, same as map explorer header */
-#state-header {
-  background-color:#DDE3E9 !important;
-  /*height: 100px;*/
-  min-height: 7.0em;
-  /*padding: 0 0px;*/
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Format download header, same as map explorer header */
-#download-header {
+/* Format state header, same as map explorer header and download data header */
+#app-header {
   background-color:#DDE3E9 !important;
   /*height: 100px;*/
   min-height: 7.0em;
@@ -147,35 +137,16 @@ MAP EXPLORER
 Dropdowns and buttons
 ####################################################################################################################*/
 
-/* Format for selector input data-map */
-#data-map-btn {
-  /*margin: 17px 0px 17px 0px;*/
-  margin: 1em 1em 1em 1em;
- width: 15em;
-  /* width: 175px;*/
-  color: #004270;
-  font-family: Graphik;
-}
-
-/* Format for selector input adm-pop-map */
-#adm-pop-map-btn {
-  margin: 1em 1em 1em 1em;
+/* Format for selector input */
+#input-btn {
   width: 15em;
-  /* width: 175px;*/
+  margin-left: 10em;
+  margin-top: 1em;
   color: #004270;
   font-family: Graphik;
 }
 
-/* Format for selector input year-map*/
-#year-map-btn {
-  margin: 1em 1em 1em 1em;
-  width: 15em;
-  /* width: 175px;*/
-  color: #004270;
-  font-family: Graphik;
-}
-
-/* Format for download map button */
+/* Format for download map button - removed download button for now */
 .download-map {
   margin: 2.75em 1em 2.75em 1em;
   border-radius:0px;

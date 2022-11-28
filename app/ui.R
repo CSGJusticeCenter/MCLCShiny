@@ -41,32 +41,31 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                         fluidRow(# Select Data
                                                                  column(width = 3,
-                                                                         labeled_input('data-map-btn', "",
+                                                                         labeled_input('input-btn', "",
                                                                                selectizeInput('data_map', div(style = "font-weight: bold", "Select Data"),
                                                                                               choices = c("Total", "New Offense", "Supervision Violation", "Probation Violation", "Parole Violation", "Technical Violation"),
                                                                                               multiple = FALSE))),
                                                                  # Select Adm or Pop
                                                                  column(width = 3,
-                                                                         labeled_input('adm-pop-map-btn', "",
+                                                                         labeled_input('input-btn', "",
                                                                                        selectizeInput('adm_or_pop_map', div(style = "font-weight: bold", "Select Type"),
                                                                                                       choices = c("Admissions", "Population"),
                                                                                                       multiple = FALSE))),
                                                                  # Select Year Change
                                                                  column(width = 3,
-                                                                         labeled_input('year-map-btn', "",
+                                                                         labeled_input('input-btn', "",
                                                                                        selectizeInput('year_map', div(style = "font-weight: bold", "Select Year Change"),
                                                                                                       choices = c('2018 - 2019 Change' = "2018 - 2019",
                                                                                                                   '2019 - 2020 Change' = "2019 - 2020",
                                                                                                                   '2020 - 2021 Change' = "2020 - 2021",
                                                                                                                   '2018 - 2021 Change' = "2018 - 2021"),
-                                                                                                      multiple = FALSE))),
-
-                                                                 # Download Map
-                                                                 column(width = 3,
-                                                                         labeled_input('save-map-btn', "",
-                                                                                       downloadButton(outputId = 'save_map', "Download Map",
-                                                                                                      #div(style = "font-weight: bold", "Download Data"), # this causes spacing issues within the button
-                                                                                                      class = "download-map")))
+                                                                                                      multiple = FALSE)))
+                                                                 # # Download Map
+                                                                 # column(width = 3,
+                                                                 #         labeled_input('save-map-btn', "",
+                                                                 #                       downloadButton(outputId = 'save_map', "Download Map",
+                                                                 #                                      #div(style = "font-weight: bold", "Download Data"), # this causes spacing issues within the button
+                                                                 #                                      class = "download-map")))
                                                         ) # end fluidRow
                                                   ),
                                                   column(width = 3)
@@ -127,7 +126,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                     # Dropdown and download buttons
                                     #######
 
-                                    div(id = "state-header",
+                                    div(id = "app-header",
                                         fluidRow(column(width = 3),
 
                                                  column(width = 6,
@@ -326,7 +325,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                     # Dropdowns
                                     #######
 
-                                    div(id = "download-header",
+                                    div(id = "app-header",
 
                                         fluidRow(column(width = 3),
 
