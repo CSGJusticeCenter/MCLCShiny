@@ -166,13 +166,13 @@ data_for_info_graphic <- function(DATA, whichRACE, whichSTATE, whichPOP, NCRPLET
 
 }
 
-#' Create and Save tables for the Racial and Ethnic Disparities Tab 
+#' Create and Save tables for the Racial and Ethnic Disparities Tab for specific NCPR data source 
 #'
 #' @return
 #' @export
 #'
 #' @examples
-create_tables <- function(NCRPLET){
+create_single_table <- function(NCRPLET){
   
   REV_BJS <- calc$combine_and_calcrates("BJS" , NCRPLET)
   REV_CEN <- calc$combine_and_calcrates("PUMS", NCRPLET)
@@ -184,13 +184,11 @@ create_tables <- function(NCRPLET){
   yr_BJS <- REV_BJS$OR %>% count(RECENT_YR) %>% filter(n == max(n)) %>% pull(RECENT_YR)
   
   
-  state_vec <- sort(levels(REV_CEN$t$STATE)) %>% .[. != "District of Columbia"] 
-  
-  admin$mylog("Start creating tables, takes ~40-50 seconds")
+  admin$mylog(glue("{NCRPLET} tables, takes ~40-50 seconds"))
   
   outtables <- list(
       "BJS" = map(
-      state_vec %>% set_names(),
+      state.name %>% set_names(),
       ~list(
           "INFOGRAPH" = data_for_info_graphic(    REV_BJS,              admin$lev_RACE[2:3], .x, "BJS", NCRPLET)
         , "RRI"       = state_table_single_metric(REV_BJS, 2015:yr_BJS, admin$lev_RACE[2:3], .x, "RRI")
@@ -200,7 +198,7 @@ create_tables <- function(NCRPLET){
       ) #end list 
     ) #end map BJS
     ,   "CEN" = map(
-      state_vec %>% set_names(),
+      state.name %>% set_names(),
       ~list(
           "INFOGRAPH" = data_for_info_graphic(    REV_CEN,               admin$lev_RACE[2:3], .x, "CEN", NCRPLET)
         , "RRI"       = state_table_single_metric(REV_CEN, 2015:yr_CEN,  admin$lev_RACE[2:3], .x, "RRI")
@@ -209,13 +207,11 @@ create_tables <- function(NCRPLET){
         , "POPEST"    = state_table_single_metric(REV_CEN, 2015:yr_CEN,  admin$lev_RACE[1:3], .x, "POPEST")
       ) #end list 
     ) #end map SC
-    , "STATEVEC" = state_vec
+    , "STATEVEC" = state.name 
     , "NCRPLET"  = NCRPLET
   )
   
-  admin$mylog("End creating tables")
-  
-  admin$SPsaveRDS(outtables, glue("NCRP_{NCRPLET}_RRI_tables.RDS"))
+  admin$mylog(glue("{NCRPLET} tables end"))
   
   
   assignflags$export(tables = outtables, popdenom = "BJS")
@@ -227,6 +223,28 @@ create_tables <- function(NCRPLET){
 
 
 
+#' Create tables 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+create_tables <- function(){
+  
+  
+  outtables <- list(
+      "Admissions" = create_single_table("A") #this should match option on shiny 
+    , "Population" = create_single_table("N") #this should match option on shiny 
+    , "STATEVEC"   = state.name 
+  )
+  
+  
+  admin$SPsaveRDS(outtables, glue("NCRP_RRI_tables.RDS"))
+  
+  return(outtables)
+  
+}
+
 #' Prep for Shiny App - create tables  and infogrpahics 
 #' tables: ~30-60 sec
 #' infogrpahics: ~10-11 min
@@ -236,31 +254,30 @@ create_tables <- function(NCRPLET){
 #' @export
 #'
 #' @examples
-prep_for_shiny <- function(NCRPLET){
+prep_for_shiny <- function(){
   
   admin$mylog("!!START PREP FOR SHINY")
-  ncrpmessage <- case_when(
-      NCRPLET == "A" ~ "NCRP data is from ADMISSIONS"
-    , NCRPLET == "N" ~ "NCRP data is from YEAREND POPULATION"
-  )
-  admin$mylog(ncrpmessage)
   
-  
-  tables <- create_tables(NCRPLET)
+  tables <- create_tables()
   state_vec <- tables$STATEVEC
   
   
-  admin$mylog("Start creating infographics")
+  admin$mylog("Infographics - Start, takes ~20 min to create")
   
   #remove old infographs 
   #remove from sharepoint 
   png_lst <- list.files(file.path(admin$sp_data, "infographs"), pattern = "*.png")
   purrr::walk(png_lst, ~file.remove(file.path(file.path(admin$sp_data, "infographs", .x))))
+  
   #remove from clone  
   png_lst <- list.files("app/data/infogs", pattern = "*.png")
   purrr::walk(png_lst, ~file.remove(file.path(file.path("app/data/infogs", .x))))
   
-  params_for_loop <- tidyr::expand_grid(POP = c("BJS", "CEN"), STATE = state_vec)
+  params_for_loop <- tidyr::expand_grid(
+      NCRP = names(tables)[1:2]
+    , STATE = state_vec
+    , POP = c("BJS", "CEN")
+  )
   n_of_loops <- nrow(params_for_loop)
   
   for (i in 1:n_of_loops){
@@ -268,10 +285,10 @@ prep_for_shiny <- function(NCRPLET){
     
     whichPOP   <- params_for_loop$POP[i]
     whichSTATE <- params_for_loop$STATE[i]
+    whichNCRP  <- params_for_loop$NCRP[i]
     
-    
-    df <- tables[[whichPOP]][[whichSTATE]]$INFOGRAPH$DF
-    dataavail <- tables[[whichPOP]][[whichSTATE]]$INFOGRAPH$DATAAVAIL
+    df        <- tables[[whichNCRP]][[whichPOP]][[whichSTATE]]$INFOGRAPH$DF
+    dataavail <- tables[[whichNCRP]][[whichPOP]][[whichSTATE]]$INFOGRAPH$DATAAVAIL
     
     if (dataavail == 1){
       pwalk(
@@ -279,28 +296,28 @@ prep_for_shiny <- function(NCRPLET){
             rri_raw = df$S_RRI #do suppressed value (only 2 instances Idaho/West Virigina, both Hispanic)
           , suppress = df$SUPPRESS
           , race = df$RACE
-          , label   = paste0(whichPOP, "_", df$STATE, "_", df$RACE)
+          , label   = paste0(whichNCRP, "_", whichSTATE, "_", whichPOP, "_", df$RACE)
           , savefile= TRUE
           , infogs  = ifelse(df$RRI <= 10, 10, 20)
         )
         , infograph$create_infograph 
       )
     } else if (dataavail == 0) {
-      admin$mylog(glue("{whichPOP} {whichSTATE} does NOT have data for infographics"))
+      admin$mylog(glue("{whichNCRP} {whichSTATE} {whichPOP} does NOT have data for infographics"))
     } else {
       stop("error with DF")
     }
     
   }
   
-  admin$mylog("End   creating infographics")
+  admin$mylog("Infographic - End")
   
   
   admin$mylog("Copy files exported to sharepoint to local app repo")
   
-  
+
   file.copy(
-    from = file.path(admin$sp_data, glue("NCRP_{NCRPLET}_RRI_tables.RDS"))
+    from = file.path(admin$sp_data, glue("NCRP_RRI_tables.RDS"))
     , to = "app/data/NCRP_RRI_tables.RDS"
     , overwrite = TRUE
   )

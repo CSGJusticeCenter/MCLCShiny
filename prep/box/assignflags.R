@@ -93,7 +93,7 @@ pull_flag <- function(tables, state, data){
 export <- function(tables, popdenom){
   
   
-  admin$mylog(glue("Start - assign flags"))
+  admin$mylog(glue("Flags {tables$NCRPLET} {popdenom} - Start"))
   
   long <- bind_rows(
       map(tables$STATEVEC, ~autoflags(tables, .x, var = "REVCNT", data = popdenom))
@@ -149,7 +149,7 @@ export <- function(tables, popdenom){
   
   
   
-  admin$mylog(glue("End - assign flags"))
+  admin$mylog(glue("Flags {tables$NCRPLET} {popdenom} - End"))
   
   
 }
