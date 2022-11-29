@@ -11,6 +11,8 @@ box::use(
   , scales[comma]
 )
 
+state_vec <- datasets::state.name
+
 suppressed_vars <- c("RRI", "RATE", "REVCNT")
 
 
@@ -188,7 +190,7 @@ create_single_table <- function(NCRPLET){
   
   outtables <- list(
       "BJS" = map(
-      state.name %>% set_names(),
+      state_vec %>% set_names(),
       ~list(
           "INFOGRAPH" = data_for_info_graphic(    REV_BJS,              admin$lev_RACE[2:3], .x, "BJS", NCRPLET)
         , "RRI"       = state_table_single_metric(REV_BJS, 2015:yr_BJS, admin$lev_RACE[2:3], .x, "RRI")
@@ -198,7 +200,7 @@ create_single_table <- function(NCRPLET){
       ) #end list 
     ) #end map BJS
     ,   "CEN" = map(
-      state.name %>% set_names(),
+      state_vec %>% set_names(),
       ~list(
           "INFOGRAPH" = data_for_info_graphic(    REV_CEN,               admin$lev_RACE[2:3], .x, "CEN", NCRPLET)
         , "RRI"       = state_table_single_metric(REV_CEN, 2015:yr_CEN,  admin$lev_RACE[2:3], .x, "RRI")
@@ -207,7 +209,7 @@ create_single_table <- function(NCRPLET){
         , "POPEST"    = state_table_single_metric(REV_CEN, 2015:yr_CEN,  admin$lev_RACE[1:3], .x, "POPEST")
       ) #end list 
     ) #end map SC
-    , "STATEVEC" = state.name 
+    , "STATEVEC" = state_vec 
     , "NCRPLET"  = NCRPLET
   )
   
@@ -235,7 +237,7 @@ create_tables <- function(){
   outtables <- list(
       "Admissions" = create_single_table("A") #this should match option on shiny 
     , "Population" = create_single_table("N") #this should match option on shiny 
-    , "STATEVEC"   = state.name 
+    , "STATEVEC"   = state_vec 
   )
   
   

@@ -1033,7 +1033,7 @@ server <- function(input, output, session) {
 
   output$infogblack <- renderImage({
 
-    png_file  <- glue("data/infogs/{input$pop_denom}_{input$state_report}_Black.png")
+    png_file  <- glue("data/infogs/{input$adm_pop_report}_{input$state_report}_{input$pop_denom}_Black.png")
 
     if (file.exists(png_file)){
       plot <- png_file
@@ -1058,7 +1058,7 @@ server <- function(input, output, session) {
 
   output$infoghisp <- renderImage({
 
-    png_file  <- glue("data/infogs/{input$pop_denom}_{input$state_report}_Hispanic.png")
+    png_file  <- glue("data/infogs/{input$adm_pop_report}_{input$state_report}_{input$pop_denom}_Hispanic.png")
 
     if (file.exists(png_file)){
       plot <- png_file
@@ -1084,12 +1084,11 @@ server <- function(input, output, session) {
 
   output$infogheader <- renderUI({
 
-
-    dataavail <- rridata[[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
+    dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
 
     out <- paste0(
         raceethnicity$pop_denom_text(input$pop_denom)
-      , raceethnicity$infographic_header(dataavail, rridata[[input$pop_denom]][[input$state_report]]$INFOGRAPH$NOTE)
+      , raceethnicity$infographic_header(dataavail, rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$NOTE)
     )
 
     HTML(out)
@@ -1098,7 +1097,7 @@ server <- function(input, output, session) {
 
 
   output$table_rri_header <- renderUI({
-    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "RRI", whichTABLE = "table_suppress")
+    df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "RRI", whichTABLE = "table_suppress")
     main <- "<h4 class='reh4'> Relative Rate Index (White Reference Group)</h4>"
     if (nrow(df) > 0){
       out <- main
@@ -1114,8 +1113,8 @@ server <- function(input, output, session) {
   })
 
   output$table_rri <- renderUI({
-    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "RRI", whichTABLE = "table_suppress")
-    dataavail <- rridata[[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
+    df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "RRI", whichTABLE = "table_suppress")
+    dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
     if (dataavail == 1){
       raceethnicity$create_reactable(df)
     }
@@ -1124,8 +1123,8 @@ server <- function(input, output, session) {
 
 
   output$table_rate_header <- renderUI({
-    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "RATE", whichTABLE = "table_suppress")
-    mult <- scales::comma(rridata[[input$pop_denom]][[input$state_report]][["RATE"]]$mult)
+    df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "RATE", whichTABLE = "table_suppress")
+    mult <- scales::comma(rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]][["RATE"]]$mult)
     main <- paste0("<h4 class='reh4'> Rate per ", mult, " persons in the Population</h4>")
     if (nrow(df) > 0){
       out <- main
@@ -1141,7 +1140,7 @@ server <- function(input, output, session) {
   })
 
   output$table_rate <- renderUI({
-    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "RATE", whichTABLE = "table_suppress")
+    df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "RATE", whichTABLE = "table_suppress")
     if (nrow(df) > 1){
       raceethnicity$create_reactable(df)
     }
@@ -1149,7 +1148,7 @@ server <- function(input, output, session) {
 
 
   output$table_revcnt_header <- renderUI({
-    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")
+    df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")
     main <- "<h4 class='reh4'>Parole Revocations Counts</h4>"
     if (nrow(df) > 0){
       out <- main
@@ -1165,7 +1164,7 @@ server <- function(input, output, session) {
   })
 
   output$table_revcnt <- renderUI({
-    df <- raceethnicity$create_tabledf(rridata, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")
+    df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")
     if (nrow(df) > 1){
       raceethnicity$create_reactable(df)
     }

@@ -18,10 +18,10 @@ box::use(
 #' @export
 #'
 #' @examples
-create_tabledf <- function(RRIDATA, whichPOP, whichSTATE, whichVAL, whichTABLE = "table_suppress"){
+create_tabledf <- function(RRIDATA, whichNCRP, whichPOP, whichSTATE, whichVAL, whichTABLE = "table_suppress"){
   
   
-  table <- RRIDATA[[whichPOP]][[whichSTATE]][[whichVAL]][[whichTABLE]] 
+  table <- RRIDATA[[whichNCRP]][[whichPOP]][[whichSTATE]][[whichVAL]][[whichTABLE]] 
   yrs <- colnames(table)[-c(1:2)]
   
   df <- table %>% 
