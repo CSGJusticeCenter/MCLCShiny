@@ -1,19 +1,21 @@
 
+#############################################################
+## HAVE YOU UPDATED THE ROOT FILE TO MATCH YOUR PATHWAY??? ##
+#############################################################
 
-
-Sys.time() #takes ~ 15 min 
+Sys.time() #takes ~ 25 min 
 
 my_log <- file("shiny_prep_log.txt") # File name of output log
 
 sink(my_log, append = FALSE, type = "output") # Writing console output to log file
 sink(my_log, append = FALSE, type = "message")
 
-####### takes ~ 10min
+####### takes ~ 20min
 # working directory should be the root of the repository ~MCLCShiny/
 # need to do this one first otherwise fonts will get messed up on pngs 
 Sys.time()
 box::use(prep/box/rri_infographs_tables)
-rri_infographs_tables$prep_for_shiny("N")
+rri_infographs_tables$prep_for_shiny()
 
 ########## takes ~ 1min
 Sys.time()
@@ -35,5 +37,6 @@ warnings()
 closeAllConnections() # Close connection to log file
 
 Sys.time()
+
 
 
