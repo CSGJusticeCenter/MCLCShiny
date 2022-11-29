@@ -504,6 +504,7 @@ theseFOLDERS <- c( "sharepoint" = admin$sp_data, "app"  = "app/data")
 for (folder in theseFOLDERS){
 
   save(adm_pop_long,            file=file.path(folder, "adm_pop_long.Rda"))
+  save(abolish_prob_parole,     file=file.path(folder, "abolish_prob_parole.Rda"))
   save(mclc_explorer,           file=file.path(folder, "mclc_explorer.Rda"))
   save(mclc_explorer_table,     file=file.path(folder, "mclc_explorer_table.Rda"))
   save(vb_adm_pop,              file=file.path(folder, "vb_adm_pop.Rda"))
