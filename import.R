@@ -104,8 +104,8 @@ pop21 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"),
 notes <- read_excel(file.path(admin$sp_data_raw, "mclc/Data for web team 2021 v13.xlsx"), sheet = "Notes")
 
 # Load info on abolishment of parole or probation
-# abolish_prob_parole <- read_excel(file.path(admin$sp_survey, "MCLC 2022 Progress Tracking.xlsx")) - not working
-abolish_prob_parole <- read_excel(file.path("C:/Users/mroberts/The Council of State Governments/JC Research - 50 State Revocations Project/50 State Survey (2022)", "MCLC 2022 Progress Tracking.xlsx"))
+abolish_prob_parole <- read_excel(file.path(admin$sp_survey, "MCLC 2022 Progress Tracking.xlsx")) 
+#abolish_prob_parole <- read_excel(file.path("C:/Users/mroberts/The Council of State Governments/JC Research - 50 State Revocations Project/50 State Survey (2022)", "MCLC 2022 Progress Tracking.xlsx"))
 
 ################################################################################
 # Reformat shapefile for hex map
