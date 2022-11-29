@@ -132,8 +132,8 @@ pop_denom_text <- function(pop_denom){
   
   rlang::arg_match(pop_denom, c("BJS", "CEN"))
   
-  prefix <- "<span style='font-family: Graphik-Bold !important;'>"
-  suffix <- "</span>"
+  prefix <- "<b>"
+  suffix <- "</b>"
   
   fill1 <- case_when(
       pop_denom == "BJS" ~ paste0(prefix, "disparities in parole revocations"                        , suffix)

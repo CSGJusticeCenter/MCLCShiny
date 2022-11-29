@@ -10,8 +10,8 @@
 # when on shinyapps.io (linux) -- not sure if its required, please test - look into this 10/4
 if (Sys.info()[['sysname']] == "Linux"){
   dir.create('~/.fonts')
-  file.copy("www/fonts/Graphik.otf", "~/.fonts")
-  file.copy("www/fonts/GraphikBold.otf", "~/.fonts")
+  file.copy("www/fonts/Graphik.ttf", "~/.fonts")
+  file.copy("www/fonts/GraphikBold.ttf", "~/.fonts")
   system('fc-cache -f ~/.fonts')
 }
 
