@@ -131,6 +131,9 @@ abolish_prob_parole <- abolish_prob_parole %>%
 abolish_prob_parole$state <- gsub('Excel', "", abolish_prob_parole$state)
 abolish_prob_parole$state <- gsub('[()]', "", abolish_prob_parole$state)
 abolish_prob_parole$state <- trimws(abolish_prob_parole$state)
+abolish_prob_parole <- abolish_prob_parole %>%
+  filter(abolished_discretionary_parole == "Yes")
+abolish_prob_parole <- abolish_prob_parole$state
 
 ################################################################################
 # Admissions and populations dataset
@@ -495,6 +498,90 @@ csg <- csg %>% ungroup() %>%
 
 
 ################################################################################
+# states that don't have graphs because of missing data
+################################################################################
+
+# states that are missing data and will not have a graph showing technical and new offense violations
+nt_na_adm1 <- mclc_all %>%
+  filter(data == "New Offense Admissions" | data == "Technical Violation Admissions") %>%
+  group_by(state, data) %>%
+  summarise(total = sum(total, na.rm = TRUE)) %>%
+  group_by(state) %>% filter(all(total == 0)) %>%
+  select(state) %>% distinct()
+nt_na_adm <- nt_na_adm1$state
+nt_na_pop1 <- mclc_all %>%
+  filter(data == "New Offense Population" | data == "Technical Violation Population") %>%
+  group_by(state, data) %>%
+  summarise(total = sum(total, na.rm = TRUE)) %>%
+  group_by(state) %>% filter(all(total == 0)) %>%
+  select(state) %>% distinct()
+nt_na_pop <- nt_na_pop1$state
+
+# states that are NOT missing data and will have a graph showing technical and new offense violations
+nt_not_na_adm <- mclc_all %>%   ungroup() %>% select(state) %>% distinct() %>%
+  anti_join(nt_na_adm1, by = "state")
+nt_not_na_adm <- nt_not_na_adm$state
+nt_not_na_pop <- mclc_all %>%   ungroup() %>% select(state) %>% distinct() %>%
+  anti_join(nt_na_pop1, by = "state")
+nt_not_na_pop <- nt_not_na_pop$state
+
+# states that are missing data and will not have a parole graph
+parole_na_adm1 <- adm_pop_long %>%
+  filter(data == "new_offense_parole_violation_admissions" | data == "technical_parole_violation_admissions") %>%
+  mutate(state = as.character(state)) %>%
+  group_by(state, data) %>%
+  summarise(total = sum(total, na.rm = TRUE)) %>%
+  group_by(state) %>%
+  filter(all(total == 0)) %>%
+  select(state) %>% distinct()
+parole_na_adm <- parole_na_adm1$state
+parole_na_pop1 <- adm_pop_long %>%
+  filter(data == "new_offense_parole_violation_population" | data == "technical_parole_violation_population") %>%
+  mutate(state = as.character(state)) %>%
+  group_by(state, data) %>%
+  summarise(total = sum(total, na.rm = TRUE)) %>%
+  group_by(state) %>%
+  filter(all(total == 0)) %>%
+  select(state) %>% distinct()
+parole_na_pop <- parole_na_pop1$state
+
+# states that are NOT missing data and will have a graph showing technical and new offense parole violations
+parole_not_na_adm <- adm_pop_long %>% mutate(state = as.character(state)) %>% ungroup() %>% select(state) %>% distinct() %>%
+  anti_join(parole_na_adm1, by = "state")
+parole_not_na_adm <- parole_not_na_adm$state
+parole_not_na_pop <- adm_pop_long %>% mutate(state = as.character(state)) %>% ungroup() %>% select(state) %>% distinct() %>%
+  anti_join(parole_na_pop1, by = "state")
+parole_not_na_pop <- parole_not_na_pop$state
+
+# states that are missing data and will not have a probation graph
+probation_na_adm1 <- adm_pop_long %>%
+  filter(data == "new_offense_probation_violation_admissions" | data == "technical_probation_violation_admissions") %>%
+  mutate(state = as.character(state)) %>%
+  group_by(state, data) %>%
+  summarise(total = sum(total, na.rm = TRUE)) %>%
+  group_by(state) %>%
+  filter(all(total == 0)) %>%
+  select(state) %>% distinct()
+probation_na_adm <- probation_na_adm1$state
+probation_na_pop1 <- adm_pop_long %>%
+  filter(data == "new_offense_probation_violation_population" | data == "technical_probation_violation_population") %>%
+  mutate(state = as.character(state)) %>%
+  group_by(state, data) %>%
+  summarise(total = sum(total, na.rm = TRUE)) %>%
+  group_by(state) %>%
+  filter(all(total == 0)) %>%
+  select(state) %>% distinct()
+probation_na_pop <- probation_na_pop1$state
+
+# states that are NOT missing data and will have a graph showing technical and new offense probation violations
+probation_not_na_adm <- adm_pop_long %>% mutate(state = as.character(state)) %>% ungroup() %>% select(state) %>% distinct() %>%
+  anti_join(probation_na_adm1, by = "state")
+probation_not_na_adm <- probation_not_na_adm$state
+probation_not_na_pop <- adm_pop_long %>% mutate(state = as.character(state)) %>% ungroup() %>% select(state) %>% distinct() %>%
+  anti_join(probation_na_pop1, by = "state")
+probation_not_na_pop <- probation_not_na_pop$state
+
+################################################################################
 # save Rdata
 ################################################################################
 
@@ -502,22 +589,33 @@ csg <- csg %>% ungroup() %>%
 theseFOLDERS <- c( "sharepoint" = admin$sp_data, "app"  = "app/data")
 
 for (folder in theseFOLDERS){
-
-  save(adm_pop_long,            file=file.path(folder, "adm_pop_long.Rda"))
-  save(abolish_prob_parole,     file=file.path(folder, "abolish_prob_parole.Rda"))
-  save(mclc_explorer,           file=file.path(folder, "mclc_explorer.Rda"))
-  save(mclc_explorer_table,     file=file.path(folder, "mclc_explorer_table.Rda"))
-  save(vb_adm_pop,              file=file.path(folder, "vb_adm_pop.Rda"))
-  save(state_table,             file=file.path(folder, "state_table.Rda"))
-  save(state_table_wide,        file=file.path(folder, "state_table_wide.Rda"))
-  save(parole_table,            file=file.path(folder, "parole_table.Rda"))
-  save(parole_table_wide,       file=file.path(folder, "parole_table_wide.Rda"))
-  save(probation_table,         file=file.path(folder, "probation_table.Rda"))
-  save(probation_table_wide,    file=file.path(folder, "probation_table_wide.Rda"))
-  save(hex_gj,                  file=file.path(folder, "hex_gj.Rda"))
-  save(notes,                   file=file.path(folder, "notes.Rda"))
-  save(csg,                     file=file.path(folder, "csg.Rda"))
-
+  
+  save(adm_pop_long,                file=file.path(folder, "adm_pop_long.Rda"))
+  save(mclc_explorer,               file=file.path(folder, "mclc_explorer.Rda"))
+  save(mclc_explorer_table,         file=file.path(folder, "mclc_explorer_table.Rda"))
+  save(vb_adm_pop,                  file=file.path(folder, "vb_adm_pop.Rda"))
+  save(state_table,                 file=file.path(folder, "state_table.Rda"))
+  save(state_table_wide,            file=file.path(folder, "state_table_wide.Rda"))
+  save(parole_table,                file=file.path(folder, "parole_table.Rda"))
+  save(parole_table_wide,           file=file.path(folder, "parole_table_wide.Rda"))
+  save(probation_table,             file=file.path(folder, "probation_table.Rda"))
+  save(probation_table_wide,        file=file.path(folder, "probation_table_wide.Rda"))
+  save(hex_gj,                      file=file.path(folder, "hex_gj.Rda"))
+  save(notes,                       file=file.path(folder, "notes.Rda"))
+  save(csg,                         file=file.path(folder, "csg.Rda"))
+  
+  save(nt_na_adm,                   file=file.path(folder, "nt_na_adm.Rda"))
+  save(nt_na_pop,                   file=file.path(folder, "nt_na_pop.Rda"))
+  save(nt_not_na_adm,               file=file.path(folder, "nt_not_na_adm.Rda"))
+  save(nt_not_na_pop,               file=file.path(folder, "nt_not_na_pop.Rda"))
+  save(abolish_prob_parole,         file=file.path(folder, "abolish_prob_parole.Rda"))
+  save(parole_na_adm,               file=file.path(folder, "parole_na_adm.Rda"))
+  save(parole_na_pop,               file=file.path(folder, "parole_na_pop.Rda"))
+  save(parole_not_na_adm,           file=file.path(folder, "parole_not_na_adm.Rda"))
+  save(parole_not_na_pop,           file=file.path(folder, "parole_not_na_pop.Rda"))
+  save(probation_na_adm,            file=file.path(folder, "probation_na_adm.Rda"))
+  save(probation_na_pop,            file=file.path(folder, "probation_na_pop.Rda"))
+  save(probation_not_na_adm,        file=file.path(folder, "probation_not_na_adm.Rda"))
+  save(probation_not_na_pop,        file=file.path(folder, "probation_not_na_pop.Rda"))
+  
 }
-
-

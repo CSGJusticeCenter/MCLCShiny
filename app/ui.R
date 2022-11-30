@@ -191,10 +191,11 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                                    br(),
 
-                                                                   fluidRow(column(width = 6, align = "center", highchartOutput("state_area_chart", height = 400, width = 390)),
-                                                                            column(width = 6, align = "center", highchartOutput("state_bar_chart", height = 400, width =390))),
+                                                                   # fluidRow(column(width = 6, align = "center", highchartOutput("state_area_chart", height = 400, width = 390)),
+                                                                   #          column(width = 6, align = "center", highchartOutput("state_bar_chart", height = 400, width =390))),
 
-                                                                   # uiOutput("overview_charts"),
+                                                                   fluidRow(column(width = 6, align = "center", highchartOutput("state_area_chart", height = 400, width = 390)),
+                                                                            column(width = 6, align = "center", uiOutput("state_nt"))),
 
                                                                    br(),
                                                                    br(),
@@ -223,8 +224,9 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                                    br(),
 
-                                                                   fluidRow(column(width = 12, align = "center", highchartOutput("parole_bar_chart", height = 400, width = 390))),
-
+                                                                   # fluidRow(column(width = 12, align = "center", highchartOutput("parole_bar_chart", height = 400, width = 390))),
+                                                                   fluidRow(column(width = 12, align = "center", uiOutput("parole_nt"))),
+                                                                   
                                                                    br(),
                                                                    br(),
                                                                    br(),
@@ -240,8 +242,9 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                                    br(),
 
-                                                                   fluidRow(column(width = 12, align = "center", highchartOutput("probation_bar_chart", height = 400, width = 390))),
-
+                                                                   # fluidRow(column(width = 12, align = "center", highchartOutput("probation_bar_chart", height = 400, width = 390))),
+                                                                   fluidRow(column(width = 12, align = "center", uiOutput("probation_nt"))),
+                                                                   
                                                                    br(),
                                                                    br(),
                                                                    br(),

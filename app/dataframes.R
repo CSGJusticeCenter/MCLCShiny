@@ -27,6 +27,21 @@ load(file = "data/hex_gj.Rda")
 load(file = "data/notes.Rda")
 load(file = "data/csg.Rda")
 
+load(file = "data/nt_na_adm.Rda")
+load(file = "data/nt_na_pop.Rda")
+load(file = "data/nt_not_na_adm.Rda")
+load(file = "data/nt_not_na_pop.Rda")
+
+load(file = "data/parole_na_adm.Rda")
+load(file = "data/parole_na_pop.Rda")
+load(file = "data/parole_not_na_adm.Rda")
+load(file = "data/parole_not_na_pop.Rda")
+
+load(file = "data/probation_na_adm.Rda")
+load(file = "data/probation_na_pop.Rda")
+load(file = "data/probation_not_na_adm.Rda")
+load(file = "data/probation_not_na_pop.Rda")
+
 rridata <- readRDS("data/NCRP_RRI_tables.RDS")
 
 # consistent state note on each state report

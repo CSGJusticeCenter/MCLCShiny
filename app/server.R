@@ -515,7 +515,7 @@ server <- function(input, output, session) {
     )
 
   })
-
+  
   #######
   # Area chart
   #######
@@ -563,11 +563,6 @@ server <- function(input, output, session) {
 
   # Bar chart
   output$state_bar_chart <- renderHighchart({
-
-    df_pp <- abolish_prob_parole %>%
-      filter(state == input$state_report)
-
-    state_name <- input$state_report
 
     # Select highchart depending on selector input
     # Carts were saved in highchart.R
@@ -619,6 +614,40 @@ server <- function(input, output, session) {
           style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
         )
     }
+  })
+  
+  #######
+  # Supervision Violations Graph - Dynamically change between sentence and graph depending on data availability
+  #######
+  
+  output$missing_data_nt_adm <- renderText({
+    "The state did not provide data on prison admissions due to technical and new offense violations."
+  })
+  
+  output$missing_data_nt_pop <- renderText({
+    "The state did not provide data on the number of people in prison due to technical and new offense violations."
+  })
+  
+  output$state_nt = renderUI({
+
+    # If state is missing new offense and technical violations (Admissions)
+    if(input$state_report %in% nt_na_adm & input$adm_pop_report == "Admissions"){
+      textOutput("missing_data_nt_adm")
+
+      # If state is missing new offense and technical violations (Population)
+    } else if(input$state_report %in% nt_na_pop & input$adm_pop_report == "Population"){
+      textOutput("missing_data_nt_pop")
+
+      # If state has data (Admissions)
+    } else if(input$state_report %in% nt_not_na_adm & input$adm_pop_report == "Admissions"){
+      highchartOutput("state_bar_chart", height = 400, width = 390)
+
+      # If state has data (Population)
+    } else if(input$state_report %in% nt_not_na_pop & input$adm_pop_report == "Population"){
+      highchartOutput("state_bar_chart", height = 400, width = 390)
+
+    }
+
   })
 
   #######
@@ -886,6 +915,56 @@ server <- function(input, output, session) {
   #     parole_reactable_pop[[input$state_report]]
   #   }
   # })
+  
+  #######
+  # Parole Graph - Dynamically change between sentence and graph depending on data availability
+  #######
+  
+  output$missing_data_parole_nt_adm <- renderText({
+    "The state did not provide data on prison admissions due to technical and new offense parole violations."
+  })
+  
+  output$missing_data_parole_nt_pop <- renderText({
+    "The state did not provide data on the number of people in prison due to technical and new offense parole violations."
+  })
+  
+  output$abolished_parole_adm <- renderText({
+    "The state abolished parole and therefore did not provide data on prison admissions due to technical and new offense parole violations."
+  })
+  
+  output$abolished_parole_pop <- renderText({
+    "The state abolished parole and therefore did not provide data on the number of people in prison due to technical and new offense parole violations."
+  })
+  
+  output$parole_nt = renderUI({
+    
+    # If state is missing new offense and technical violations (Admissions)
+    if(input$state_report %in% parole_na_adm & input$adm_pop_report == "Admissions" & !(input$state_report %in% abolish_prob_parole)){
+      textOutput("missing_data_parole_nt_adm")
+      
+      # If state is missing new offense and technical violations (Population)
+    } else if(input$state_report %in% parole_na_pop & input$adm_pop_report == "Population" & !(input$state_report %in% abolish_prob_parole)){
+      textOutput("missing_data_parole_nt_pop")
+      
+      # If state is missing new offense and technical violations (Admissions) AND abolished parole
+    } else if(input$state_report %in% parole_na_adm & input$adm_pop_report == "Admissions" & (input$state_report %in% abolish_prob_parole)){
+      textOutput("abolished_parole_adm")
+      
+      # If state is missing new offense and technical violations (Admissions) AND abolished parole
+    } else if(input$state_report %in% parole_na_pop & input$adm_pop_report == "Population" & (input$state_report %in% abolish_prob_parole)){
+      textOutput("abolished_parole_pop")
+      
+      # If state has data (Admissions)
+    } else if(input$state_report %in% parole_not_na_adm & input$adm_pop_report == "Admissions"){
+      highchartOutput("parole_bar_chart", height = 400, width = 390)
+      
+      # If state has data (Population)
+    } else if(input$state_report %in% parole_not_na_pop & input$adm_pop_report == "Population"){
+      highchartOutput("parole_bar_chart", height = 400, width = 390)
+      
+    }
+    
+  })
 
   #######
   # Probation Tab
@@ -1026,6 +1105,40 @@ server <- function(input, output, session) {
   #     probation_reactable_pop[[input$state_report]]
   #   }
   # })
+  
+  #######
+  # Probation Graph - Dynamically change between sentence and graph depending on data availability
+  #######
+  
+  output$missing_data_probation_nt_adm <- renderText({
+    "The state did not provide data on prison admissions due to technical and new offense probation violations."
+  })
+  
+  output$missing_data_probation_nt_pop <- renderText({
+    "The state did not provide data on the number of people in prison due to technical and new offense probation violations."
+  })
+  
+  output$probation_nt = renderUI({
+    
+    # If state is missing new offense and technical violations (Admissions)
+    if(input$state_report %in% probation_na_adm & input$adm_pop_report == "Admissions"){
+      textOutput("missing_data_probation_nt_adm")
+      
+      # If state is missing new offense and technical violations (Population)
+    } else if(input$state_report %in% probation_na_pop & input$adm_pop_report == "Population"){
+      textOutput("missing_data_probation_nt_pop")
+      
+      # If state has data (Admissions)
+    } else if(input$state_report %in% probation_not_na_adm & input$adm_pop_report == "Admissions"){
+      highchartOutput("probation_bar_chart", height = 400, width = 390)
+      
+      # If state has data (Population)
+    } else if(input$state_report %in% probation_not_na_pop & input$adm_pop_report == "Population"){
+      highchartOutput("probation_bar_chart", height = 400, width = 390)
+      
+    }
+    
+  })
 
   ####
   ## RACE/ETHNICITY DISPARITIES MYE HERE
