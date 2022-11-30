@@ -13,7 +13,6 @@
 #______________________________________________________
 
 load(file = "data/adm_pop_long.Rda")
-load(file = "data/abolish_prob_parole.Rda")
 load(file = "data/mclc_explorer.Rda")
 load(file = "data/mclc_explorer_table.Rda")
 load(file = "data/vb_adm_pop.Rda")
@@ -26,6 +25,8 @@ load(file = "data/probation_table_wide.Rda")
 load(file = "data/hex_gj.Rda")
 load(file = "data/notes.Rda")
 load(file = "data/csg.Rda")
+
+load(file = "data/abolish_prob_parole.Rda")
 
 load(file = "data/nt_na_adm.Rda")
 load(file = "data/nt_na_pop.Rda")

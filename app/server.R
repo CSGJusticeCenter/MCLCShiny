@@ -2,12 +2,10 @@
 # Project: MCLCShiny
 # File: server.R
 # Authors: Mari Roberts
-# Date last updated: October 26, 2022
+# Date last updated: November 30, 2022
 # Description:
 #    Server for shiny app
 #######################################
-
-################################## ADD LABELS TO CHARTS
 
 server <- function(input, output, session) {
 
@@ -68,6 +66,17 @@ server <- function(input, output, session) {
       arrange(state) %>%
       rename(State = state,
              change = 7)
+  })
+  
+  map_filename <- reactive({
+    temp <- mclc_explorer %>%
+      filter(adm_or_pop == input$adm_or_pop_map,
+             metric     == input$data_map,
+             year       == input$year_map) %>% 
+      select(data, year) %>% distinct()
+    temp$year <- gsub(" - ", " ", temp$year)
+    temp <- paste(temp$data, temp$year, sep = '_')
+    temp <- gsub(" ", "_", temp)
   })
 
 
@@ -154,6 +163,7 @@ server <- function(input, output, session) {
 
         hc_setup() %>%
         hc_exporting(enabled = TRUE,
+                     filename = map_filename(),
                      buttons = list(
                        contextButton = list(
                          menuItems = list('downloadPNG', 'downloadSVG')
@@ -218,6 +228,7 @@ server <- function(input, output, session) {
 
         hc_setup() %>%
         hc_exporting(enabled = TRUE,
+                     filename = map_filename(),
                      buttons = list(
                        contextButton = list(
                          menuItems = list('downloadPNG', 'downloadSVG')
@@ -529,6 +540,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
         hc_exporting(enabled = TRUE,
+                     filename = "Prison_Admissions_Overview",
                      buttons = list(
                        contextButton = list(
                          menuItems = list('downloadPNG', 'downloadSVG')
@@ -545,6 +557,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
         hc_exporting(enabled = TRUE,
+                     filename = "Prison_Population_Overview",
                      buttons = list(
                        contextButton = list(
                          menuItems = list('downloadPNG', 'downloadSVG')
@@ -568,25 +581,13 @@ server <- function(input, output, session) {
     # Carts were saved in highchart.R
     if (input$adm_pop_report == "Admissions") {
 
-      year2018 = is.na(all_state_bar_adm$state_name$x$hc_opts$series[[2]]$data[[1]]$total)
-      year2019 = is.na(all_state_bar_adm$state_name$x$hc_opts$series[[2]]$data[[2]]$total)
-      year2020 = is.na(all_state_bar_adm$state_name$x$hc_opts$series[[2]]$data[[3]]$total)
-      year2021 = is.na(all_state_bar_adm$state_name$x$hc_opts$series[[2]]$data[[4]]$total)
-      all_nas <- ifelse(year2018 == TRUE & year2019 == TRUE & year2020 == TRUE & year2021 == TRUE, "Yes", "No")
-
-      # # If all data for a graph are NA
-      # if (all_nas == "Yes") {
-      #   "The state did not provide data on supervision violations."
-      # } else {
-      #   "The state did provide data on probation violations."
-      # }
-
       all_state_bar_adm[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
         hc_exporting(enabled = TRUE,
+                     filename = "Supervision_Violation_Admissions_by_Type",
                      buttons = list(
                        contextButton = list(
                          menuItems = list('downloadPNG', 'downloadSVG')
@@ -604,6 +605,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
         hc_exporting(enabled = TRUE,
+                     filename = "Supervision_Violation_Population_by_Type",
                      buttons = list(
                        contextButton = list(
                          menuItems = list('downloadPNG', 'downloadSVG')
@@ -791,6 +793,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
         hc_exporting(enabled = TRUE,
+                     filename = "Parole_Violation_Admissions_by_Type",
                      buttons = list(
                        contextButton = list(
                          menuItems = list('downloadPNG', 'downloadSVG')
@@ -807,6 +810,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
         hc_exporting(enabled = TRUE,
+                     filename = "Parole_Violation_Population_by_Type",
                      buttons = list(
                        contextButton = list(
                          menuItems = list('downloadPNG', 'downloadSVG')
@@ -981,6 +985,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
         hc_exporting(enabled = TRUE,
+                     filename = "Probation_Violation_Admissions_by_Type",
                      buttons = list(
                        contextButton = list(
                          menuItems = list('downloadPNG', 'downloadSVG')
@@ -997,6 +1002,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
         hc_exporting(enabled = TRUE,
+                     filename = "Probation_Violation_Population_by_Type",
                      buttons = list(
                        contextButton = list(
                          menuItems = list('downloadPNG', 'downloadSVG')
