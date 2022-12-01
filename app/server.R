@@ -1159,7 +1159,7 @@ server <- function(input, output, session) {
       list(
           src =normalizePath(plot)
         , contentType = "image/png"
-        , alt = glue("alt text placeholder: {input$pop_denom} {input$state_report}")
+        , alt = raceethnicity$infograph_alt(rridata, input$adm_pop_report, input$pop_denom, "Black", input$state_report)
         , width = "100%"
       )
     } else {
@@ -1169,7 +1169,7 @@ server <- function(input, output, session) {
       list(
           src =normalizePath(file)
         , contentType = "image/png"
-        , alt = glue("alt text placeholder: {input$pop_denom} {input$state_report}")
+        , alt = raceethnicity$infograph_alt_noinfog(input$adm_pop_report, input$pop_denom, "Black", input$state_report)
         , width = "100%"
       )
     }
@@ -1184,7 +1184,7 @@ server <- function(input, output, session) {
       list(
           src =normalizePath(plot)
         , contentType = "image/png"
-        , alt = glue("alt text placeholder: {input$pop_denom} {input$state_report}")
+        , alt = raceethnicity$infograph_alt(rridata, input$adm_pop_report, input$pop_denom, "Hispanic", input$state_report)
         , width = "100%"
       )
     } else {
@@ -1194,7 +1194,7 @@ server <- function(input, output, session) {
       list(
           src =normalizePath(file)
         , contentType = "image/png"
-        , alt = glue("alt text placeholder: {input$pop_denom} {input$state_report}")
+        , alt = raceethnicity$infograph_alt_noinfog(input$adm_pop_report, input$pop_denom, "Hispanic", input$state_report)
         , width = "100%"
       )
     }

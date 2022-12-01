@@ -192,3 +192,100 @@ infographic_header <- function(dataavail, note){
 
 
 
+#' CReate alt text for infogrpahic
+#'
+#' @param RRIDATA 
+#' @param whichNCRP 
+#' @param whichPOP 
+#' @param whichRE 
+#' @param whichSTATE 
+#'
+#' @export
+infograph_alt <- function(RRIDATA, whichNCRP, whichPOP, whichRE, whichSTATE){
+  
+  
+  thisdata <- RRIDATA[[whichNCRP]][[whichPOP]][[whichSTATE]]$INFOGRAPH$DF |> filter(RACE == whichRE)
+  
+  suppress <- thisdata$SUPPRESS
+  rri_val <- thisdata$S_RRI
+  
+  pop_name <- case_when(
+      whichPOP == "BJS" ~ "parole"
+    , whichPOP == "CEN" ~ "community" 
+  )
+  
+  suppress_pre <- ifelse(suppress == 0, NA, "less than")
+  suppress_suf <- ifelse(suppress == 0, NA, "Note that revocation counts have been suppressed.")
+  
+  # The info-graphic for [state] shows that when looking at prison 
+  # [admissions/population] as part of the [parole/community] population, 
+  # for every White client revoked there are *less than* [RRI] [Black/Hispanic] 
+  # clients revoked.  *Note that the revocation counts have been suppressed.* 
+  
+  
+  string_vec <- c(
+    "The info-graphic for"
+    , whichSTATE
+    , "shows that when looking at prison"
+    , tolower(whichNCRP)
+    , "as part of the"
+    , pop_name 
+    , "population," 
+    , "for every White client revoked there are"
+    , suppress_pre
+    , sprintf("%.1f", round(rri_val, 1))
+    , whichRE
+    , "clients revoked."
+    , suppress_suf
+  )
+  
+  
+  alt_text <- paste(string_vec[!is.na(string_vec)], collapse = " ")
+  
+  return(alt_text)
+  
+}
+
+
+
+#' CReate alt text when there isn't an infographic 
+#'
+#' @param whichNCRP 
+#' @param whichPOP 
+#' @param whichRE 
+#' @param whichSTATE 
+#'
+#' @export
+infograph_alt_noinfog <- function( whichNCRP, whichPOP, whichRE, whichSTATE){
+  
+  pop_name <- case_when(
+      whichPOP == "BJS" ~ "parole"
+    , whichPOP == "CEN" ~ "community" 
+  )
+  
+  
+  #[state] does not have enough data to show disparities in prison 
+  # [admissions/population] as part of the [parole/community] population 
+  # for [Black/Hispanic] clients revoked. 
+
+  string_vec <- c(
+      whichSTATE
+    , "does not have enough data to show disparities in prison"
+    , tolower(whichNCRP)
+    , "as part of the"
+    , pop_name 
+    , "population for" 
+    , whichRE
+    , "clients revoked."
+  )
+  
+  
+  alt_text <- paste(string_vec[!is.na(string_vec)], collapse = " ")
+  
+  return(alt_text)
+  
+}
+
+
+
+
