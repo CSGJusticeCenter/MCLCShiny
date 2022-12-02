@@ -51,8 +51,11 @@ Font size and style
   font-size: small;
 }
 
-/* Change font family throughout The issue here is that it changes all the bold text back to regular*/
-*{font-family: "Graphik", sans-serif !important;}
+/* Change font family throughout - DO NOT USE WITH PICKERINPUT
+  when set the entire font to 'Graphik' the emojis used 
+  in the download data button and pickerinput selection (checkmarks)
+  will not render because they aren't in the correct font /* 
+/*{font-family: "Graphik", sans-serif !important;}
 
 /*##################################################################################################################
 Navigation Bar
