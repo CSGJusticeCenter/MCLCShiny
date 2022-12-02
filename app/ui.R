@@ -21,8 +21,9 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                            tags$style(type = "text/css", ".navbar {margin-bottom: .5px;}"),
                            tags$style(type = "text/css", ".container-fluid .navbar-header .navbar-brand {margin-left: 0px;}"),
 
-                           title = "",
-
+                           title = "MCLC Dashboard",
+                           tags$html(lang="en"),
+                           
                            ##############################################################################################################################
 
                            tabPanel("mapexplorer", id = "mapexplorer",
