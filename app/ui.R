@@ -126,17 +126,17 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                  column(width = 6,
 
-                                                        fluidRow( 
-                                                                 column(width = 2), 
+                                                        fluidRow(
+                                                                 column(width = 2),
 
                                                                  # Select State
-                                                                 column(width = 4, align = "center", 
+                                                                 column(width = 4, align = "center",
                                                                         labeled_input('input-btn', "",
                                                                                       selectizeInput('state_report', div(style = "font-weight: bold", "Select State"),
                                                                                                      choices = unique(adm_pop_long$state),
                                                                                                      multiple = FALSE))),
                                                                  # Select Adm or Pop
-                                                                 column(width = 4, align = "center", 
+                                                                 column(width = 4, align = "center",
                                                                         labeled_input('input-btn', "",
                                                                                       selectizeInput('adm_pop_report', div(style = "font-weight: bold", "Select Type"),
                                                                                                      choices = c("Admissions", "Population"),
@@ -228,7 +228,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                                    # fluidRow(column(width = 12, align = "center", highchartOutput("parole_bar_chart", height = 400, width = 390))),
                                                                    fluidRow(column(width = 12, align = "center", uiOutput("parole_nt"))),
-                                                                   
+
                                                                    br(),
                                                                    br(),
                                                                    br(),
@@ -246,7 +246,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                                    # fluidRow(column(width = 12, align = "center", highchartOutput("probation_bar_chart", height = 400, width = 390))),
                                                                    fluidRow(column(width = 12, align = "center", uiOutput("probation_nt"))),
-                                                                   
+
                                                                    br(),
                                                                    br(),
                                                                    br(),
@@ -338,9 +338,9 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                         # https://stackoverflow.com/questions/70222968/how-to-change-the-font-size-of-a-pickerinput-in-shiny
 
                                                         fluidRow(# Select State(s)
-                                                                 column(width = 3,
+                                                                 column(width = 3, align = "center", 
 
-                                                                        labeled_input('download-btn', "", #"Select State(s)",
+                                                                        labeled_input('input-btn', "", #"Select State(s)",
                                                                                       pickerInput(inputId = 'download_state',
                                                                                                   width = "100%",
                                                                                                   choices = NULL,
@@ -364,8 +364,8 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                         ),
 
                                                                  # Select Metric(s)
-                                                                 column(width = 3,
-                                                                        labeled_input('download-btn', "", #"Select Metric(s)",
+                                                                 column(width = 3, align = "center", 
+                                                                        labeled_input('input-btn', "", #"Select Metric(s)",
                                                                                       pickerInput(inputId = 'download_metric',
                                                                                                   width = "100%",
                                                                                                   choices = NULL,
@@ -375,8 +375,8 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                                                   options = list(`actions-box` = TRUE,
                                                                                                                  style = "picker-style")))),
                                                                  # Select Year(s)
-                                                                 column(width = 3,
-                                                                        labeled_input('download-btn', "", #"Select Year(s)",
+                                                                 column(width = 3, align = "center", 
+                                                                        labeled_input('input-btn', "", #"Select Year(s)",
                                                                                       pickerInput(inputId = 'download_year',
                                                                                                   width = "100%",
                                                                                                   choices = NULL,
@@ -387,11 +387,10 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                                                   options = list(`actions-box` = TRUE,
                                                                                                                  style = "picker-style")))),
                                                                  # Download Data
-                                                                 column(width = 3,
-                                                                        labeled_input('save-data-btn', "",
-                                                                                      downloadButton(outputId = 'save_data', "Download Data",
-                                                                                                     #div(style = "font-weight: bold", "Download Data"), # this causes spacing issues within the button
-                                                                                                     class = "download-data")))
+                                                                 column(width = 3, align = "center", 
+                                                                                      downloadButton(outputId = 'save_data', "Download Data", 
+                                                                                                     class = "download-data"
+                                                                                                     ))
                                                         )),
 
                                                  column(width = 3)
