@@ -182,11 +182,13 @@ fnc_highchart_map <- function(df, map_filename){
                                  style = list(fontSize = "14px"))
       ) %>%
 
-      hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical",
+      hc_legend(align = "right",
+                verticalAlign = "bottom",
+                layout = "vertical",
                 #padding = 10,
                 symbolHeight = 200,
                 symbolWidth = 25,
-                x = -3,
+                x = -25,
                 y = 0
 
       ) %>%
@@ -251,11 +253,13 @@ fnc_highchart_map <- function(df, map_filename){
                    labels = list(format = "{value}%",
                                  style = list(fontSize = "14px"))) %>%
 
-      hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical",
+      hc_legend(align = "right",
+                verticalAlign = "bottom",
+                layout = "vertical",
                 #padding = 10,
                 symbolHeight = 200,
                 symbolWidth = 25,
-                x = -3,
+                x = -25,
                 y = 0) %>%
 
       hc_add_theme(hc_theme_map_jc) %>%
