@@ -147,6 +147,10 @@ Dropdowns and buttons
   font-family: Graphik;
 }
 
+.input-col {
+  min-width: 10em;
+}
+
 /* Format for download map button - removed download button for now */
 .download-map {
   margin: 2.75em 1em 2.75em 1em;
@@ -372,12 +376,6 @@ Dropdowns
 /*.dropdown-menu span {text-align: left; width: 100%;}*/
 
 /* Format for selector input for download page*/
-#download-btn {
-  width: 15em;
-  margin-top: 1em;
-  color: #004270;
-  font-family: Graphik;
-}
 
 .picker-style {
   color: #004270;
@@ -391,6 +389,7 @@ Dropdowns
 .download-data {
   width: 90%;
   max-width: 20em;
+  min-width: 10em;
   margin-top: 2.8em; 
   border-radius:0px; 
   color: #fff; 
