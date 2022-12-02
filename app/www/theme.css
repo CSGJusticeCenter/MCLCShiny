@@ -139,9 +139,9 @@ Dropdowns and buttons
 
 /* Format for selector input */
 #input-btn {
-  width: 15em;
-  margin-left: 10em;
+  max-width: 90%;
   margin-top: 1em;
+  text-align: left;
   color: #004270;
   font-family: Graphik;
 }
@@ -234,22 +234,6 @@ STATE REPORTS
 Dropdowns
 ####################################################################################################################*/
 
-/* State selection button */
-#state-btn {
-  margin: 17px 10px 17px 10px;
-  width: 15em;
-  color: #004270;
-  font-family: Graphik;
-}
-
-/* Adm or pop selection button */
-#adm-pop-btn {
-  margin: 17px 10px 17px 10px;
-  /*width: 175px;*/
-  width: 15em;
-  color: #004270;
-  font-family: Graphik;
-}
 
 /*######################################
 STATE REPORTS

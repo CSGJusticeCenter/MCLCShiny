@@ -38,19 +38,19 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                  column(width = 6,
 
                                                         fluidRow(# Select Data
-                                                                 column(width = 3,
+                                                                 column(width = 4, align = "center",
                                                                          labeled_input('input-btn', "",
                                                                                selectizeInput('data_map', div(style = "font-weight: bold", "Select Data"),
                                                                                               choices = c("Total", "New Offense", "Supervision Violation", "Probation Violation", "Parole Violation", "Technical Violation"),
                                                                                               multiple = FALSE))),
                                                                  # Select Adm or Pop
-                                                                 column(width = 3,
+                                                                 column(width = 4, align = "center",
                                                                          labeled_input('input-btn', "",
                                                                                        selectizeInput('adm_or_pop_map', div(style = "font-weight: bold", "Select Type"),
                                                                                                       choices = c("Admissions", "Population"),
                                                                                                       multiple = FALSE))),
                                                                  # Select Year Change
-                                                                 column(width = 3,
+                                                                 column(width = 4, align = "center",
                                                                          labeled_input('input-btn', "",
                                                                                        selectizeInput('year_map', div(style = "font-weight: bold", "Select Year Change"),
                                                                                                       choices = c('2018 - 2019 Change' = "2018 - 2019",
@@ -125,21 +125,22 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                  column(width = 6,
 
-                                                        fluidRow(column(width = 3),
+                                                        fluidRow( 
+                                                                 column(width = 2), 
 
                                                                  # Select State
-                                                                 column(width = 3,
-                                                                        labeled_input('state-btn', "",
+                                                                 column(width = 4, align = "center", 
+                                                                        labeled_input('input-btn', "",
                                                                                       selectizeInput('state_report', div(style = "font-weight: bold", "Select State"),
                                                                                                      choices = unique(adm_pop_long$state),
                                                                                                      multiple = FALSE))),
                                                                  # Select Adm or Pop
-                                                                 column(width = 3,
-                                                                        labeled_input('adm-pop-btn', "",
+                                                                 column(width = 4, align = "center", 
+                                                                        labeled_input('input-btn', "",
                                                                                       selectizeInput('adm_pop_report', div(style = "font-weight: bold", "Select Type"),
                                                                                                      choices = c("Admissions", "Population"),
                                                                                                      multiple = FALSE))),
-                                                                 column(width = 3)
+                                                                 column(width = 2)
                                                                  )),
 
                                                  column(width = 3)
