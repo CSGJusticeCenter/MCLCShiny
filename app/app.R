@@ -2,16 +2,19 @@
 # Project: MCLCShiny
 # File: app.R
 # Authors: Mari Roberts
-# Date last updated: July 20, 2022
+# Date last updated: December 2, 2022
 # Description:
 #    Run ui and server
 #######################################
 
-# when on shinyapps.io (linux) -- not sure if its required, please test - look into this 10/4
-if (Sys.info()[['sysname']] == "Linux"){
+# Add fonts to shiny linux server
+if (Sys.info()[['sysname']] == 'Linux') {
   dir.create('~/.fonts')
-  file.copy("www/fonts/Graphik.ttf", "~/.fonts")
-  file.copy("www/fonts/GraphikBold.ttf", "~/.fonts")
+  fonts = c(
+    "www/Graphik.ttf",
+    "www/GraphikBold.ttf"
+  )
+  file.copy(fonts, "~/.fonts")
   system('fc-cache -f ~/.fonts')
 }
 

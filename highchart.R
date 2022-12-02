@@ -29,7 +29,9 @@ library(stats)
 
 
 # assign colors for visualizations
+source("app/library.R")
 source("app/colors.R")
+source("app/functions.R")
 
 # get state list
 states <- adm_pop_long$state %>%
@@ -39,6 +41,148 @@ states <- adm_pop_long$state %>%
 ############
 # MAP EXPLORER - Maps
 ############
+
+metrics <- c("New Offense",
+             "Parole Violation",
+             "Probation Violation",
+             "Supervision Violation",
+             "Technical Violation",
+             "Total")
+
+# generate list of state highcharts to call in app (admissions)
+adm_maps_2018_2019 <- map(.x = metrics,  .f = function(x) {
+  df1 <- mclc_explorer %>%
+    filter(adm_or_pop == "Admissions",
+           year       == "2018 - 2019",
+           metric     == x)
+  filename <- paste("Change_in_", x, "Admissions_from_2018_2019")
+  highcharts <- fnc_highchart_map(df1, filename)
+  return(highcharts)
+})
+
+# generate list of state highcharts to call in app (admissions)
+adm_maps_2018_2021 <- map(.x = metrics,  .f = function(x) {
+  df1 <- mclc_explorer %>%
+    filter(adm_or_pop == "Admissions",
+           year       == "2018 - 2021",
+           metric     == x)
+  filename <- paste("Change_in_", x, "Admissions_from_2018_2021")
+  highcharts <- fnc_highchart_map(df1, filename)
+  return(highcharts)
+})
+
+# generate list of state highcharts to call in app (admissions)
+adm_maps_2019_2020 <- map(.x = metrics,  .f = function(x) {
+  df1 <- mclc_explorer %>%
+    filter(adm_or_pop == "Admissions",
+           year       == "2019 - 2020",
+           metric     == x)
+  filename <- paste("Change_in_", x, "Admissions_from_2019_2020")
+  highcharts <- fnc_highchart_map(df1, filename)
+  return(highcharts)
+})
+
+# generate list of state highcharts to call in app (admissions)
+adm_maps_2020_2021 <- map(.x = metrics,  .f = function(x) {
+  df1 <- mclc_explorer %>%
+    filter(adm_or_pop == "Admissions",
+           year       == "2020 - 2021",
+           metric     == x)
+  filename <- paste("Change_in_", x, "Admissions_from_2020_2021")
+  highcharts <- fnc_highchart_map(df1, filename)
+  return(highcharts)
+})
+
+# generate list of state highcharts to call in app (Population)
+pop_maps_2018_2019 <- map(.x = metrics,  .f = function(x) {
+  df1 <- mclc_explorer %>%
+    filter(adm_or_pop == "Population",
+           year       == "2018 - 2019",
+           metric     == x)
+  filename <- paste("Change_in_", x, "Population_from_2018_2019")
+  highcharts <- fnc_highchart_map(df1, filename)
+  return(highcharts)
+})
+
+# generate list of state highcharts to call in app (Population)
+pop_maps_2018_2021 <- map(.x = metrics,  .f = function(x) {
+  df1 <- mclc_explorer %>%
+    filter(adm_or_pop == "Population",
+           year       == "2018 - 2021",
+           metric     == x)
+  filename <- paste("Change_in_", x, "Population_from_2018_2021")
+  highcharts <- fnc_highchart_map(df1, filename)
+  return(highcharts)
+})
+
+# generate list of state highcharts to call in app (Population)
+pop_maps_2019_2020 <- map(.x = metrics,  .f = function(x) {
+  df1 <- mclc_explorer %>%
+    filter(adm_or_pop == "Population",
+           year       == "2019 - 2020",
+           metric     == x)
+  filename <- paste("Change_in_", x, "Population_from_2019_2020")
+  highcharts <- fnc_highchart_map(df1, filename)
+  return(highcharts)
+})
+
+# generate list of state highcharts to call in app (Population)
+pop_maps_2020_2021 <- map(.x = metrics,  .f = function(x) {
+  df1 <- mclc_explorer %>%
+    filter(adm_or_pop == "Population",
+           year       == "2020 - 2021",
+           metric     == x)
+  filename <- paste("Change_in_", x, "Population_from_2020_2021")
+  highcharts <- fnc_highchart_map(df1, filename)
+  return(highcharts)
+})
+
+adm_maps_2018_2019 <- setNames(adm_maps_2018_2019, metrics)
+adm_maps_2018_2021 <- setNames(adm_maps_2018_2021, metrics)
+adm_maps_2019_2020 <- setNames(adm_maps_2019_2020, metrics)
+adm_maps_2020_2021 <- setNames(adm_maps_2020_2021, metrics)
+
+pop_maps_2018_2019 <- setNames(pop_maps_2018_2019, metrics)
+pop_maps_2018_2021 <- setNames(pop_maps_2018_2021, metrics)
+pop_maps_2019_2020 <- setNames(pop_maps_2019_2020, metrics)
+pop_maps_2020_2021 <- setNames(pop_maps_2020_2021, metrics)
+
+# New Offense Admissions
+saveWidget(adm_maps_2018_2019$`New Offense`, "temp.html")
+webshot2::webshot(url = "temp.html", file= "app/data/Change_New_Offense_Adm_2018_2019.png", delay = 5)
+saveWidget(adm_maps_2019_2020$`New Offense`, "temp.html")
+webshot2::webshot(url = "temp.html", file= "app/data/Change_New_Offense_Adm_2019_2020.png", delay = 5)
+saveWidget(adm_maps_2020_2021$`New Offense`, "temp.html")
+webshot2::webshot(url = "temp.html", file= "app/data/Change_New_Offense_Adm_2020_2021.png", delay = 5)
+saveWidget(adm_maps_2018_2021$`New Offense`, "temp.html")
+webshot2::webshot(url = "temp.html", file= "app/data/Change_New_Offense_Adm_2018_2021.png", delay = 5)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
