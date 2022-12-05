@@ -29,6 +29,7 @@ library(dplyr)
 
 # Maps
 library(sp)
+library(ggplot2)
 
 # Save highchart
 # Download this! webshot removes font styles when saving so webshot2 is better

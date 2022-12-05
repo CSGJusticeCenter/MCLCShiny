@@ -38,11 +38,11 @@ Font size and style
 /* Add fonts*/
 @font-face {
     font-family: "Graphik";
-    src: url("fonts/Graphik.ttf");
+    src: local('Graphik'), url("fonts/Graphik.ttf");
 }
 @font-face {
     font-family: "Graphik";
-    src: url("fonts/GraphikBold.ttf");
+    src: local('Graphik'), url("fonts/GraphikBold.ttf");
     font-weight: bold;
 }
 
@@ -52,9 +52,9 @@ Font size and style
 }
 
 /* Change font family throughout - DO NOT USE WITH PICKERINPUT
-  when set the entire font to 'Graphik' the emojis used 
+  when set the entire font to 'Graphik' the emojis used
   in the download data button and pickerinput selection (checkmarks)
-  will not render because they aren't in the correct font /* 
+  will not render because they aren't in the correct font /*
 /*{font-family: "Graphik", sans-serif !important;}
 
 /*##################################################################################################################
@@ -393,12 +393,12 @@ Dropdowns
   width: 90%;
   max-width: 20em;
   min-width: 10em;
-  margin-top: 2.8em; 
-  border-radius:0px; 
-  color: #fff; 
-  background-color:#004270; 
-  text-align: left; 
-  font-family: Graphik; 
+  margin-top: 2.8em;
+  border-radius:0px;
+  color: #fff;
+  background-color:#004270;
+  text-align: left;
+  font-family: Graphik;
   font-weight: bold;
 }
 

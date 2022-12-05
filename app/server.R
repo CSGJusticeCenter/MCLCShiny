@@ -67,12 +67,12 @@ server <- function(input, output, session) {
       rename(State = state,
              change = 7)
   })
-  
+
   map_filename <- reactive({
     temp <- mclc_explorer %>%
       filter(adm_or_pop == input$adm_or_pop_map,
              metric     == input$data_map,
-             year       == input$year_map) %>% 
+             year       == input$year_map) %>%
       select(data, year) %>% distinct()
     temp$year <- gsub(" - ", " ", temp$year)
     temp <- paste(temp$data, temp$year, sep = '_')
@@ -88,7 +88,6 @@ server <- function(input, output, session) {
   # This is necessary to download the map
   foundational_map <- reactive({
 
-    # ################ TO DO find min and max values and put in dataframe in import.R
     # Get minimum and maximum value
     min_map <- min(df_map()$change, na.rm = TRUE)
     max_map <- max(df_map()$change, na.rm = TRUE)
@@ -254,39 +253,229 @@ server <- function(input, output, session) {
   # Download map button near dropdowns
   #######
 
-  # library(webshot)
-  # install_phantomjs()
-  # library(shiny)
-  # library(plotly)
-
-  # Save map as png
-  output$save_map <- downloadHandler(
-    filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""),
-    content = function(file) {
-
-      # owd <- setwd(tempdir())
-      # on.exit(setwd(owd))
-      # saveWidget(foundational_map(), "temp.html")
-      # webshot2::webshot("temp.html", file = file,
-      #                   delay = 3)
-        saveWidget(foundational_map(), "temp.html", selfcontained = TRUE)
-        webshot2::webshot(url = "temp.html", file = file)
-      }
-    # content = function(file) {
-    #   export(foundational_map(), file=file)
-    # }
-  )
+  # Links attempting to fix downloadHandler issues and/or highchart export issues
 
   # https://stackoverflow.com/questions/61347676/datalabels-in-r-highcharter-cannot-be-seen-after-print-as-png-or-jpg
-  # This comes out blank
-  # https://stackoverflow.com/questions/53927629/download-all-high-chart-output-from-r-shiny
-  # output$save_map <- downloadHandler(filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""),
-  #                                    content = function(file) {
-  #                                     png(file, width=1200, height=1200)
-  #                                     foundational_map()
-  #                                     dev.off()
-  #                                   },
-  #                                    contentType = "image/png")
+  # https://stackoverflow.com/questions/26764481/downloading-png-from-shiny-r
+  # https://groups.google.com/g/shiny-discuss/c/u7gwXc8_vyY/m/IZK_o7b7I8gJ
+  # https://stackoverflow.com/questions/27008434/downloading-png-from-shiny-r-pt-2
+  # https://github.com/jbkunst/highcharter/issues/151
+  # https://stackoverflow.com/questions/48432042/r-shiny-downloadhandler-returns-app-html-rather-than-plots-or-data
+  # https://www.highcharts.com/forum/viewtopic.php?f=9&t=45571#p162507
+  # https://github.com/rstudio/shiny-server/issues/197
+
+  # Custom function that creates the hex map - need this to be called in downloadHandler
+  fnc_map_highchart <- function(data){
+    # Get minimum and maximum value
+    min_map <- min(data$change, na.rm = TRUE)
+    max_map <- max(data$change, na.rm = TRUE)
+
+    # Get absolute value for comparison
+    min_map_abs <- abs(min_map)
+    max_map_abs <- abs(max_map)
+
+    # Get neg or pos sign for min and max
+    min_map_type <- ifelse(min_map >= 0, "positive", "negative")
+    max_map_type <- ifelse(max_map >= 0, "positive", "negative")
+
+    # Generate tile map
+    # Has diverging scales when there are neg and pos values which centers the color gradient at zero
+    # Has a gradient scale when both the min and max are both negative or both positive
+
+    # Determine the new min and max so that zero is centered
+    # For example, If the highest positive value is 20 than the negative value is -20
+    if (min_map_type != max_map_type) {
+
+      NEW_MAX <- case_when(
+        max_map_abs > min_map_abs ~ max_map_abs,
+        max_map_abs < min_map_abs ~ min_map_abs,
+        max_map_abs == min_map_abs ~ max_map_abs)
+      NEW_MIN <- case_when(
+        min_map_abs > max_map_abs ~ min_map_abs,
+        min_map_abs < max_map_abs ~ max_map_abs,
+        min_map_abs == max_map_abs ~ min_map_abs)
+      NEW_MAX <- ifelse(max_map_type == "negative", -abs(NEW_MAX), abs(NEW_MAX))
+      NEW_MIN <- ifelse(min_map_type == "negative", -abs(NEW_MIN), abs(NEW_MIN))
+
+      highchart() %>%
+
+        hc_add_series_map(
+          map = hex_gj,
+          df = data,
+          joinBy = "state_abb",
+          value = "change",
+          dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
+                            style = list(fontSize = "14px",
+                                         fontWeight = "regular",
+                                         fontFamily = "Graphik",
+                                         textOutline = 0)),
+          nullColor = "#e8e8e8") %>%
+
+        hc_colorAxis(min = NEW_MIN,
+                     max = NEW_MAX,
+                     stops = color_stops(7, c(darkorange, orange, lightorange, white, lightblue, regblue, darkblue)),
+                     labels = list(format = "{value}%",
+                                   style = list(fontSize = "14px"))
+        ) %>%
+
+        hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical",
+                  #padding = 10,
+                  symbolHeight = 200,
+                  symbolWidth = 25
+        ) %>%
+
+        hc_add_theme(hc_theme_map_jc) %>%
+
+        hc_xAxis(title = "") %>%
+        hc_yAxis(title = "") %>%
+        hc_title(
+          text = paste0("Change in ", unique(data$metric), " ", unique(data$adm_or_pop), " from ", unique(data$year)),
+          align = "center",
+          style = list(#fontFamily = "Graphik-Bold", # works in view but not in export
+            fontWeight = "bold",
+            fontFamily = "Graphik", # works in view and export but is the wrong font
+            fontSize = "30px",
+            useHTML = TRUE)
+        ) %>%
+
+        hc_setup() %>%
+        hc_exporting(enabled = TRUE,
+                     filename = map_filename(),
+                     buttons = list(
+                       contextButton = list(
+                         menuItems = list('downloadPNG', 'downloadSVG')
+                       ))) %>%
+
+        hc_plotOptions(series = list(animation = FALSE,
+                                     dataLabels = list(enabled = TRUE),
+                                     cursor = "pointer",
+                                     borderWidth = 3),
+                       accessibility = list(enabled = TRUE,
+                                            keyboardNavigation = list(enabled = TRUE),
+                                            linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
+                                            landmarkVerbosity = "one"),
+                       area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
+        )
+
+    } else {
+
+
+      # Determine the new min and max where all values are negative
+      NEW_MAX <- max_map
+      NEW_MIN <- min_map
+
+      highchart() %>%
+
+        hc_add_series_map(
+          map = hex_gj,
+          df = data,
+          joinBy = "state_abb",
+          value = "change",
+          dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
+                            style = list(fontSize = "14px",
+                                         fontWeight = "regular",
+                                         fontFamily = "Graphik",
+                                         textOutline = 0)),
+          nullColor = "#e8e8e8") %>%
+
+        hc_colorAxis(min = NEW_MIN,
+                     max = NEW_MAX,
+                     stops = color_stops(4, c(darkorange, orange, lightorange, white)),
+                     labels = list(format = "{value}%",
+                                   style = list(fontSize = "14px"))) %>%
+
+        hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical",
+                  #padding = 10,
+                  symbolHeight = 200,
+                  symbolWidth = 25) %>%
+
+        hc_add_theme(hc_theme_map_jc) %>%
+
+
+        hc_xAxis(title = "") %>%
+        hc_yAxis(title = "") %>%
+        hc_title(
+          text = paste0("Change in ", unique(data$metric), " ", unique(data$adm_or_pop), " from ", unique(data$year)),
+          align = "center",
+          style = list(#fontFamily = "Graphik-Bold", # works in view but not in export
+            fontWeight = "bold",
+            fontFamily = "Graphik",
+            fontSize = "30px",
+            useHTML = TRUE)) %>%
+
+        hc_setup() %>%
+        hc_exporting(enabled = TRUE,
+                     filename = map_filename(),
+                     buttons = list(
+                       contextButton = list(
+                         menuItems = list('downloadPNG', 'downloadSVG')
+                       ))) %>%
+
+        hc_plotOptions(series = list(animation = FALSE, dataLabels = list(enabled = TRUE), cursor = "pointer", borderWidth = 3),
+                       accessibility = list(enabled = TRUE,
+                                            keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
+                                            landmarkVerbosity = "one"),
+                       area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
+        )
+    }
+  }
+
+  # output$save_map <- downloadHandler(
+  #   filename = function() {
+  #     paste0("temp.html")
+  #   },
+  #   content = function(file) {
+  #
+  #     owd <- setwd(tempdir())
+  #     on.exit(setwd(owd))
+  #
+  #     data <- df_map()
+  #     finalmap <- fnc_map_highchart(data = data)
+  #
+  #     htmlwidgets::saveWidget(finalmap, file = "temp.html", selfcontained = TRUE)
+  #     file.copy('temp.html', file, overwrite = TRUE)
+  #
+  #   })
+
+  # # Save map as png - doesn't work
+  # output$save_map <- downloadHandler(
+  #   filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""),
+  #   content = function(file) {
+  #
+  #     owd <- setwd(tempdir())
+  #     on.exit(setwd(owd))
+  #
+  #       saveWidget(foundational_map(), "temp.html", selfcontained = TRUE)
+  #       webshot2::webshot(url = "temp.html", file = "temp.png", delay = 2)
+  #     }
+  # )
+
+  ######### GGPLOT EXAMPLE TO SEE IF FONTS WORK - they do with ggplot #########
+  # Plot1 <- reactive({
+  #   ggplot(mtcars, aes(x = wt, y = mpg)) +
+  #     geom_point()+ ggtitle(label = "Effect of Vitamin C on Tooth Growth",
+  #                           subtitle = "Plot of length by dose") +
+  #     theme(plot.title = element_text(face = "bold",
+  #                                     size = 45,
+  #                                     family = "Graphik"),
+  #           plot.subtitle = element_text(family = "GraphikBold",
+  #                                        size = 40))
+  # })
+  # output$plot1 <- renderPlot({
+  #   p <- Plot1()
+  #   print(p)
+  # })
+  #
+  # output$save_map <-downloadHandler(
+  #   filename = function() {
+  #     paste('plot', '.png', sep='')
+  #   },
+  #   content=function(file){
+  #     png(file)
+  #     print(Plot1())
+  #     dev.off()
+  #   },
+  #   contentType='image/png')
 
   #######
   # Table under hex map
@@ -526,7 +715,7 @@ server <- function(input, output, session) {
     )
 
   })
-  
+
   #######
   # Area chart
   #######
@@ -617,19 +806,19 @@ server <- function(input, output, session) {
         )
     }
   })
-  
+
   #######
   # Supervision Violations Graph - Dynamically change between sentence and graph depending on data availability
   #######
-  
+
   output$missing_data_nt_adm <- renderText({
     "The state did not provide data on prison admissions due to technical and new offense violations."
   })
-  
+
   output$missing_data_nt_pop <- renderText({
     "The state did not provide data on the number of people in prison due to technical and new offense violations."
   })
-  
+
   output$state_nt = renderUI({
 
     # If state is missing new offense and technical violations (Admissions)
@@ -919,55 +1108,55 @@ server <- function(input, output, session) {
   #     parole_reactable_pop[[input$state_report]]
   #   }
   # })
-  
+
   #######
   # Parole Graph - Dynamically change between sentence and graph depending on data availability
   #######
-  
+
   output$missing_data_parole_nt_adm <- renderText({
     "The state did not provide data on prison admissions due to technical and new offense parole violations."
   })
-  
+
   output$missing_data_parole_nt_pop <- renderText({
     "The state did not provide data on the number of people in prison due to technical and new offense parole violations."
   })
-  
+
   output$abolished_parole_adm <- renderText({
     "The state abolished parole and therefore did not provide data on prison admissions due to technical and new offense parole violations."
   })
-  
+
   output$abolished_parole_pop <- renderText({
     "The state abolished parole and therefore did not provide data on the number of people in prison due to technical and new offense parole violations."
   })
-  
+
   output$parole_nt = renderUI({
-    
+
     # If state is missing new offense and technical violations (Admissions)
     if(input$state_report %in% parole_na_adm & input$adm_pop_report == "Admissions" & !(input$state_report %in% abolish_prob_parole)){
       textOutput("missing_data_parole_nt_adm")
-      
+
       # If state is missing new offense and technical violations (Population)
     } else if(input$state_report %in% parole_na_pop & input$adm_pop_report == "Population" & !(input$state_report %in% abolish_prob_parole)){
       textOutput("missing_data_parole_nt_pop")
-      
+
       # If state is missing new offense and technical violations (Admissions) AND abolished parole
     } else if(input$state_report %in% parole_na_adm & input$adm_pop_report == "Admissions" & (input$state_report %in% abolish_prob_parole)){
       textOutput("abolished_parole_adm")
-      
+
       # If state is missing new offense and technical violations (Admissions) AND abolished parole
     } else if(input$state_report %in% parole_na_pop & input$adm_pop_report == "Population" & (input$state_report %in% abolish_prob_parole)){
       textOutput("abolished_parole_pop")
-      
+
       # If state has data (Admissions)
     } else if(input$state_report %in% parole_not_na_adm & input$adm_pop_report == "Admissions"){
       highchartOutput("parole_bar_chart", height = 400, width = 390)
-      
+
       # If state has data (Population)
     } else if(input$state_report %in% parole_not_na_pop & input$adm_pop_report == "Population"){
       highchartOutput("parole_bar_chart", height = 400, width = 390)
-      
+
     }
-    
+
   })
 
   #######
@@ -1111,39 +1300,39 @@ server <- function(input, output, session) {
   #     probation_reactable_pop[[input$state_report]]
   #   }
   # })
-  
+
   #######
   # Probation Graph - Dynamically change between sentence and graph depending on data availability
   #######
-  
+
   output$missing_data_probation_nt_adm <- renderText({
     "The state did not provide data on prison admissions due to technical and new offense probation violations."
   })
-  
+
   output$missing_data_probation_nt_pop <- renderText({
     "The state did not provide data on the number of people in prison due to technical and new offense probation violations."
   })
-  
+
   output$probation_nt = renderUI({
-    
+
     # If state is missing new offense and technical violations (Admissions)
     if(input$state_report %in% probation_na_adm & input$adm_pop_report == "Admissions"){
       textOutput("missing_data_probation_nt_adm")
-      
+
       # If state is missing new offense and technical violations (Population)
     } else if(input$state_report %in% probation_na_pop & input$adm_pop_report == "Population"){
       textOutput("missing_data_probation_nt_pop")
-      
+
       # If state has data (Admissions)
     } else if(input$state_report %in% probation_not_na_adm & input$adm_pop_report == "Admissions"){
       highchartOutput("probation_bar_chart", height = 400, width = 390)
-      
+
       # If state has data (Population)
     } else if(input$state_report %in% probation_not_na_pop & input$adm_pop_report == "Population"){
       highchartOutput("probation_bar_chart", height = 400, width = 390)
-      
+
     }
-    
+
   })
 
   ####

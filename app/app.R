@@ -11,8 +11,8 @@
 if (Sys.info()[['sysname']] == 'Linux') {
   dir.create('~/.fonts')
   fonts = c(
-    "www/Graphik.ttf",
-    "www/GraphikBold.ttf"
+    "www/fonts/Graphik.ttf",
+    "www/fonts/GraphikBold.ttf"
   )
   file.copy(fonts, "~/.fonts")
   system('fc-cache -f ~/.fonts')
