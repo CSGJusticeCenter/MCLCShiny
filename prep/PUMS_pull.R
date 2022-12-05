@@ -5,30 +5,28 @@
 # run this script once to create the PUMS data that will be used 
 # save output to SharePoint 
 
-#takes ~12-16 minutes 
+Sys.time() #takes ~12-16 minutes 
+
+box::use(box/admin)
+
+my_log <- file(file.path(admin$sp_data_raw, "PUMS/PUMS_pull_log.txt"), open = "wt") # ?base::file()
+sink(my_log, append = FALSE, type = "message") #only look at messages
 
 ################
 ## PACKAGES 
 
-box::use(
-    tidycensus[...]
-  , dplyr[...]
-  , purrr[...]
-  , 
-)
-
-# library(tidycensus)
-# library(tidyverse)
-
+library(tidycensus)
+library(tidyverse)
+library(glue)
 
 ################
 ## SET YEARS  
+admin$mylog("Start PUMS Pull")
 
-admin$mylog("Start PUMS PUll\n\n")
+# 2020 data is NOT available due to covid
+theseYears <- c(2015:2019)
 
-theseYears <- c(2015)
-
-admin$mylog(glue("pull data for {paste(theseYears, collapse = ', ')}\n\n"))
+admin$mylog(glue("pull data for {paste(theseYears, collapse = ', ')}"))
 
 
 ################
@@ -44,6 +42,7 @@ st_recode <- tidycensus::pums_variables |>
 # define function to pull race and ethnicity variables from pums api
 
 get_pums_race_eth <- function(year, state = "all") {
+  print(year)
   get_pums(
     variables = c("AGEP", "HISP", "RACBLK", "RAC1P"),
     state = state,
@@ -100,7 +99,14 @@ ncrp_race_by_state <- pums |>
 
 # write to file
 
-#write_rds(ncrp_race_by_state, file.path(admin$sp_data_raw, "PUMS/ncrp_race_by_state.RDS"))
-admin$mylog("Save data in raw data folder: PUMS/ncrp_race_by_state.RDS")
+file_path <- glue("PUMS/PUMS_{min(theseYears)}to{max(theseYears)}.RDS")
+
+write_rds(ncrp_race_by_state, file.path(admin$sp_data_raw, file_path))
+
+admin$mylog(glue("Save data in raw data folder: {file_path}"))
 
 admin$mylog("End PUMS PUll")
+
+closeAllConnections() # Close connection to log file
+
+Sys.time()
