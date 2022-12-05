@@ -1548,7 +1548,7 @@ server <- function(input, output, session) {
               defaultColDef = colDef(format = colFormat(separators = TRUE), align = "left"),
               compact = TRUE,
               fullWidth = FALSE,
-              defaultPageSize = 10,
+              defaultPageSize = 50,
               #filterable = TRUE,
 
               columns = list(

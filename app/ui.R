@@ -83,7 +83,6 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                         #######
 
                                         fluidRow(column(width = 1),
-                                                 #column(width = 10, align = "center", highchartOutput("hex_map", height = 550, width = "100%")),
                                                  column(width = 10, align = "center", div(id = "hex-map", highchartOutput("hex_map", height = 550, width = "100%"))),
                                                  column(width = 1)),
 
@@ -429,7 +428,6 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                         fluidRow(column(width = 2),
                                                  column(width = 8,
                                                         align = "center",
-                                                        # div(id = "selected-download-table", DT::dataTableOutput("selected_download_table"))
                                                         div(id = "selected-download-table", reactableOutput("selected_download_table"))
                                                  ),
                                                  column(width = 2)),
