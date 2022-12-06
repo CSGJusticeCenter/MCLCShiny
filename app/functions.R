@@ -74,7 +74,7 @@ hc_setup <- function(x) {
 }
 
 # Highchart area chart for state page
-fnc_highchart_state_areachart <- function(df){
+fnc_highchart_state_areachart <- function(df, title_name){
   highchart() %>%
 
     hc_chart(type="area") %>%
@@ -85,6 +85,12 @@ fnc_highchart_state_areachart <- function(df){
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
     hc_yAxis(title = "", labels=list(format="{value:,.0f}")) %>%
+
+    hc_title(
+      text = title_name,
+      align = "center",
+      style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
+    ) %>%
 
     hc_add_theme(hc_theme_jc) %>%
 
@@ -103,7 +109,7 @@ fnc_highchart_state_areachart <- function(df){
 
 
 # Supervision violation highchart bar chart for state page
-fnc_highchart_state_barchart <- function(df){
+fnc_highchart_state_barchart <- function(df, title_name){
   highchart() %>%
     hc_chart(type = "column") %>%
     hc_xAxis(categories = df$metric) %>%
@@ -112,6 +118,12 @@ fnc_highchart_state_barchart <- function(df){
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
     hc_yAxis(title = "", labels=list(format="{value:,.0f}")) %>%
+
+    hc_title(
+      text = title_name,
+      align = "center",
+      style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
+    ) %>%
 
     hc_add_theme(hc_theme_jc) %>%
 

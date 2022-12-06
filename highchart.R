@@ -37,6 +37,62 @@ states <- adm_pop_long$state %>%
   unique() %>%
   sort()
 
+# states_list <- list('Alabama',
+#                     'Alaska',
+#                     'Arizona',
+#                     'Arkansas',
+#                     'California',
+#                     'Colorado',
+#                     'Connecticut',
+#                     'Delaware',
+#                     'Florida',
+#                     'Georgia',
+#                     'Hawaii',
+#                     'Idaho',
+#                     'Illinois',
+#                     'Indiana',
+#                     'Iowa',
+#                     'Kansas',
+#                     'Kentucky',
+#                     'Louisiana',
+#                     'Maine',
+#                     'Maryland',
+#                     'Massachusetts',
+#                     'Michigan',
+#                     'Minnesota',
+#                     'Mississippi',
+#                     'Missouri',
+#                     'Montana',
+#                     'Nebraska',
+#                     'Nevada',
+#                     'New Hampshire',
+#                     'New Jersey',
+#                     'New Mexico',
+#                     'New York',
+#                     'North Carolina',
+#                     'North Dakota',
+#                     'Ohio',
+#                     'Oklahoma',
+#                     'Oregon',
+#                     'Pennsylvania',
+#                     'Rhode Island',
+#                     'South Carolina',
+#                     'South Dakota',
+#                     'Tennessee',
+#                     'Texas',
+#                     'Utah',
+#                     'Vermont',
+#                     'Virginia',
+#                     'Washington',
+#                     'West Virginia',
+#                     'Wisconsin',
+#                     'Wyoming')
+
+# temp list of states that isnt as large for testing
+states_list <- list('Alabama',
+                    'Connecticut',
+                    'Delaware')
+
 # list of metrics for function
 metrics <- c("New Offense",
              "Parole Violation",
@@ -173,7 +229,7 @@ all_state_area_adm <- map(.x = states,  .f = function(x) {
     group_by(state, year, metric, adm_or_pop) %>%
     summarise(total = sum(total)) %>%
     mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
-  highcharts <- fnc_highchart_state_areachart(df1)
+  highcharts <- fnc_highchart_state_areachart(df1, "Prison Admissions")
   return(highcharts)
 })
 
@@ -188,7 +244,7 @@ all_state_area_pop <- map(.x = states,  .f = function(x) {
     group_by(state, year, metric, adm_or_pop) %>%
     summarise(total = sum(total)) %>%
     mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
-  highcharts <- fnc_highchart_state_areachart(df1)
+  highcharts <- fnc_highchart_state_areachart(df1, "Prison Population")
   return(highcharts)
 })
 
@@ -208,7 +264,7 @@ all_state_bar_adm <- map(.x = states,  .f = function(x) {
     summarise(total = sum(total)) %>%
     filter(metric == "New Offense" | metric == "Technical Violation") %>%
     mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
-  highcharts <- fnc_highchart_state_barchart(df1)
+  highcharts <- fnc_highchart_state_barchart(df1, "Supervision Violation Admissions by Type")
   return(highcharts)
 })
 
@@ -224,7 +280,7 @@ all_state_bar_pop <- map(.x = states,  .f = function(x) {
     summarise(total = sum(total)) %>%
     filter(metric == "New Offense" | metric == "Technical Violation") %>%
     mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
-  highcharts <- fnc_highchart_state_barchart(df1)
+  highcharts <- fnc_highchart_state_barchart(df1, "Supervision Violation Population by Type")
   return(highcharts)
 })
 
@@ -245,7 +301,7 @@ parole_bar_adm <- map(.x = states,  .f = function(x) {
     summarise(total = sum(total)) %>%
     filter(metric == "New Offense" | metric == "Technical Violation") %>%
     mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
-  highcharts <- fnc_highchart_state_barchart(df1)
+  highcharts <- fnc_highchart_state_barchart(df1, "Parole Violation Admissions by Type")
   return(highcharts)
 })
 
@@ -262,7 +318,7 @@ parole_bar_pop <- map(.x = states,  .f = function(x) {
     summarise(total = sum(total)) %>%
     filter(metric == "New Offense" | metric == "Technical Violation") %>%
     mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
-  highcharts <- fnc_highchart_state_barchart(df1)
+  highcharts <- fnc_highchart_state_barchart(df1, "Parole Violation Population by Type")
   return(highcharts)
 })
 
@@ -283,7 +339,7 @@ probation_bar_adm <- map(.x = states,  .f = function(x) {
     summarise(total = sum(total)) %>%
     filter(metric == "New Offense" | metric == "Technical Violation") %>%
     mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
-  highcharts <- fnc_highchart_state_barchart(df1)
+  highcharts <- fnc_highchart_state_barchart(df1, "Probation Violation Admissions by Type")
   return(highcharts)
 })
 
@@ -300,7 +356,7 @@ probation_bar_pop <- map(.x = states,  .f = function(x) {
     summarise(total = sum(total)) %>%
     filter(metric == "New Offense" | metric == "Technical Violation") %>%
     mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
-  highcharts <- fnc_highchart_state_barchart(df1)
+  highcharts <- fnc_highchart_state_barchart(df1, "Probation Violation Population by Type")
   return(highcharts)
 })
 
@@ -327,6 +383,78 @@ for (folder in theseFOLDERS){
   save(probation_bar_adm,      file=file.path(folder, "probation_bar_adm.Rda"))
   save(probation_bar_pop,      file=file.path(folder, "probation_bar_pop.Rda"))
 
+}
+
+##########
+# State Overview Area Chart
+##########
+
+for (folder in theseFOLDERS){
+  for (i in states_list){
+    htmlwidgets::saveWidget(all_state_area_adm[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/", i, "_Prison_Admissions.png", sep = ""), delay = 3)
+  }
+}
+
+for (folder in theseFOLDERS){
+  for (i in states_list){
+    htmlwidgets::saveWidget(all_state_area_pop[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/", i, "_Prison_Population.png", sep = ""), delay = 3)
+  }
+}
+
+##########
+# State Supervision Violation Bar Chart
+##########
+
+for (folder in theseFOLDERS){
+  for (i in states_list){
+    htmlwidgets::saveWidget(all_state_bar_adm[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/", i, "_Supervision_Violation_Admissions_by_Type.png", sep = ""), delay = 3)
+  }
+}
+
+for (folder in theseFOLDERS){
+  for (i in states_list){
+    htmlwidgets::saveWidget(all_state_bar_pop[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/", i, "_Supervision_Violation_Population_by_Type.png", sep = ""), delay = 3)
+  }
+}
+
+##########
+# Probation Bar Chart
+##########
+
+for (folder in theseFOLDERS){
+  for (i in states_list){
+    htmlwidgets::saveWidget(probation_bar_adm[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/", i, "_Probation_Violation_Admissions_by_Type.png", sep = ""), delay = 3)
+  }
+}
+
+for (folder in theseFOLDERS){
+  for (i in states_list){
+    htmlwidgets::saveWidget(probation_bar_pop[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/", i, "_Probation_Violation_Population_by_Type.png", sep = ""), delay = 3)
+  }
+}
+
+##########
+# Parole Bar Chart
+##########
+
+for (folder in theseFOLDERS){
+  for (i in states_list){
+    htmlwidgets::saveWidget(parole_bar_adm[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/", i, "_Parole_Violation_Admissions_by_Type.png", sep = ""), delay = 3)
+  }
+}
+
+for (folder in theseFOLDERS){
+  for (i in states_list){
+    htmlwidgets::saveWidget(parole_bar_pop[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/", i, "_Parole_Violation_Population_by_Type.png", sep = ""), delay = 3)
+  }
 }
 
 ##########

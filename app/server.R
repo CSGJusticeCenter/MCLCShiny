@@ -742,12 +742,7 @@ server <- function(input, output, session) {
                      buttons = list(
                        contextButton = list(
                          menuItems = list('downloadPNG', 'downloadSVG')
-                       ))) %>%
-        hc_title(
-          text = paste0("Prison ", input$adm_pop_report),
-          align = "center",
-          style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
-        )
+                       )))
     } else {
       all_state_area_pop[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
@@ -759,14 +754,21 @@ server <- function(input, output, session) {
                      buttons = list(
                        contextButton = list(
                          menuItems = list('downloadPNG', 'downloadSVG')
-                       ))) %>%
-        hc_title(
-          text = paste0("Prison ", input$adm_pop_report),
-          align = "center",
-          style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
-        )
+                       )))
     }
   })
+
+  # Download button
+  output$save_state_area_chart <- downloadHandler(
+    filename <- function() {
+      paste(input$state_report, "_Prison_", input$adm_pop_report, ".png", sep="")
+    },
+
+    content <- function(file) {
+      file.copy(paste("data/", input$state_report, "_Prison_", input$adm_pop_report, ".png", sep=""), file)
+    },
+    contentType = "image/png"
+  )
 
   #######
   # Bar chart
@@ -789,13 +791,7 @@ server <- function(input, output, session) {
                      buttons = list(
                        contextButton = list(
                          menuItems = list('downloadPNG', 'downloadSVG')
-                       ))) %>%
-        hc_title(
-          text = paste0("Supervision Violation ", input$adm_pop_report),
-          align = "center",
-          style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
-        )
-
+                       )))
     } else {
       all_state_bar_pop[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
@@ -807,14 +803,21 @@ server <- function(input, output, session) {
                      buttons = list(
                        contextButton = list(
                          menuItems = list('downloadPNG', 'downloadSVG')
-                       ))) %>%
-        hc_title(
-          text = paste0("Supervision Violation ", input$adm_pop_report),
-          align = "center",
-          style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
-        )
+                       )))
     }
   })
+
+  # Download button
+  output$save_state_bar_chart <- downloadHandler(
+    filename <- function() {
+      paste(input$state_report, "_Supervision_Violation_", input$adm_pop_report, "_by_Type.png", sep="")
+    },
+
+    content <- function(file) {
+      file.copy(paste("data/", input$state_report, "_Supervision_Violation_", input$adm_pop_report, "_by_Type.png", sep=""), file)
+    },
+    contentType = "image/png"
+  )
 
   #######
   # Supervision Violations Graph - Dynamically change between sentence and graph depending on data availability
@@ -842,6 +845,10 @@ server <- function(input, output, session) {
     HTML(out)
   })
 
+  output$missing_data_nt_button <- renderText({
+    ""
+  })
+
   output$state_nt = renderUI({
 
     # If state is missing new offense and technical violations (Admissions)
@@ -859,6 +866,28 @@ server <- function(input, output, session) {
       # If state has data (Population)
     } else if(input$state_report %in% nt_not_na_pop & input$adm_pop_report == "Population"){
       highchartOutput("state_bar_chart", height = 400, width = 390)
+
+    }
+
+  })
+
+  output$state_nt_button = renderUI({
+
+    # If state is missing new offense and technical violations (Admissions)
+    if(input$state_report %in% nt_na_adm & input$adm_pop_report == "Admissions"){
+      textOutput("missing_data_nt_button")
+
+      # If state is missing new offense and technical violations (Population)
+    } else if(input$state_report %in% nt_na_pop & input$adm_pop_report == "Population"){
+      textOutput("missing_data_nt_button")
+
+      # If state has data (Admissions)
+    } else if(input$state_report %in% nt_not_na_adm & input$adm_pop_report == "Admissions"){
+      downloadButton(outputId = 'save_state_bar_chart', "", class = "download-chart")
+
+      # If state has data (Population)
+    } else if(input$state_report %in% nt_not_na_pop & input$adm_pop_report == "Population"){
+      downloadButton(outputId = 'save_state_bar_chart', "", class = "download-chart")
 
     }
 
@@ -1009,12 +1038,7 @@ server <- function(input, output, session) {
                      buttons = list(
                        contextButton = list(
                          menuItems = list('downloadPNG', 'downloadSVG')
-                       ))) %>%
-        hc_title(
-          text = paste0("Parole Violation ", input$adm_pop_report),
-          align = "center",
-          style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
-        )
+                       )))
     } else {
       parole_bar_pop[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
@@ -1026,14 +1050,21 @@ server <- function(input, output, session) {
                      buttons = list(
                        contextButton = list(
                          menuItems = list('downloadPNG', 'downloadSVG')
-                       ))) %>%
-        hc_title(
-          text = paste0("Parole Violation ", input$adm_pop_report),
-          align = "center",
-          style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
-        )
+                       )))
     }
   })
+
+  # Download button
+  output$save_parole_bar_chart <- downloadHandler(
+    filename <- function() {
+      paste(input$state_report, "_Parole_Violation_", input$adm_pop_report, "_by_Type.png", sep="")
+    },
+
+    content <- function(file) {
+      file.copy(paste("data/", input$state_report, "_Parole_Violation_", input$adm_pop_report, "_by_Type.png", sep=""), file)
+    },
+    contentType = "image/png"
+  )
 
   # Parole table
   output$parole_table <- renderReactable({
@@ -1180,6 +1211,10 @@ server <- function(input, output, session) {
     HTML(out)
   })
 
+  output$missing_data_parole_nt_button <- renderText({
+    ""
+  })
+
   output$parole_nt = renderUI({
 
     # If state is missing new offense and technical violations (Admissions)
@@ -1210,6 +1245,28 @@ server <- function(input, output, session) {
 
   })
 
+  output$parole_nt_button = renderUI({
+
+    # If state is missing new offense and technical violations (Admissions)
+    if(input$state_report %in% parole_na_adm & input$adm_pop_report == "Admissions"){
+      textOutput("missing_data_parole_nt_button")
+
+      # If state is missing new offense and technical violations (Population)
+    } else if(input$state_report %in% parole_na_pop & input$adm_pop_report == "Population"){
+      textOutput("missing_data_parole_nt_button")
+
+      # If state has data (Admissions)
+    } else if(input$state_report %in% parole_not_na_adm & input$adm_pop_report == "Admissions"){
+      downloadButton(outputId = 'save_parole_bar_chart', "", class = "download-chart")
+
+      # If state has data (Population)
+    } else if(input$state_report %in% parole_not_na_pop & input$adm_pop_report == "Population"){
+      downloadButton(outputId = 'save_parole_bar_chart', "", class = "download-chart")
+
+    }
+
+  })
+
   #######
   # Probation Tab
   #######
@@ -1229,12 +1286,7 @@ server <- function(input, output, session) {
                      buttons = list(
                        contextButton = list(
                          menuItems = list('downloadPNG', 'downloadSVG')
-                       ))) %>%
-        hc_title(
-          text = paste0("Probation Violation ", input$adm_pop_report),
-          align = "center",
-          style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
-        )
+                       )))
     } else {
       probation_bar_pop[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
@@ -1246,14 +1298,21 @@ server <- function(input, output, session) {
                      buttons = list(
                        contextButton = list(
                          menuItems = list('downloadPNG', 'downloadSVG')
-                       ))) %>%
-        hc_title(
-          text = paste0("Probation Violation ", input$adm_pop_report),
-          align = "center",
-          style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
-        )
+                       )))
     }
   })
+
+  # Download button
+  output$save_probation_bar_chart <- downloadHandler(
+    filename <- function() {
+      paste(input$state_report, "_Probation_Violation_", input$adm_pop_report, "_by_Type.png", sep="")
+    },
+
+    content <- function(file) {
+      file.copy(paste("data/", input$state_report, "_Probation_Violation_", input$adm_pop_report, "_by_Type.png", sep=""), file)
+    },
+    contentType = "image/png"
+  )
 
   # Probation table
   output$probation_table <- renderReactable({
@@ -1364,6 +1423,10 @@ server <- function(input, output, session) {
     "The state did not provide data on the number of people in prison due to technical and new offense probation violations."
   })
 
+  output$missing_data_probation_nt_button <- renderText({
+    ""
+  })
+
   output$probation_nt = renderUI({
 
     # If state is missing new offense and technical violations (Admissions)
@@ -1381,6 +1444,28 @@ server <- function(input, output, session) {
       # If state has data (Population)
     } else if(input$state_report %in% probation_not_na_pop & input$adm_pop_report == "Population"){
       highchartOutput("probation_bar_chart", height = 400, width = 390)
+
+    }
+
+  })
+
+  output$probation_nt_button = renderUI({
+
+    # If state is missing new offense and technical violations (Admissions)
+    if(input$state_report %in% probation_na_adm & input$adm_pop_report == "Admissions"){
+      textOutput("missing_data_probation_nt_button")
+
+      # If state is missing new offense and technical violations (Population)
+    } else if(input$state_report %in% probation_na_pop & input$adm_pop_report == "Population"){
+      textOutput("missing_data_probation_nt_button")
+
+      # If state has data (Admissions)
+    } else if(input$state_report %in% probation_not_na_adm & input$adm_pop_report == "Admissions"){
+      downloadButton(outputId = 'save_probation_bar_chart', "", class = "download-chart")
+
+      # If state has data (Population)
+    } else if(input$state_report %in% probation_not_na_pop & input$adm_pop_report == "Population"){
+      downloadButton(outputId = 'save_probation_bar_chart', "", class = "download-chart")
 
     }
 
