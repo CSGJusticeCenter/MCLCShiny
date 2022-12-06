@@ -60,10 +60,10 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                                                                   '2018 - 2021 Change' = "2018 - 2021"),
                                                                                                       multiple = FALSE))),
                                                                  # Download Map
-                                                                 column(width = 3,
+                                                                 column(width = 3, align = "center", class = "input-col",
                                                                          labeled_input('save-map-btn', "",
                                                                                        downloadButton(outputId = 'save_map', "Download Map",
-                                                                                                      class = "download-map")))
+                                                                                                      class = "download-btn-lg")))
                                                         ) # end fluidRow
                                                   ),
                                                   column(width = 3)
@@ -397,7 +397,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                  # Download Data
                                                                  column(width = 3, align = "center", class = "input-col",
                                                                                       downloadButton(outputId = 'save_data', "Download Data",
-                                                                                                     class = "download-data"
+                                                                                                     class = "download-btn-lg"
                                                                                                      ))
                                                         )),
 
