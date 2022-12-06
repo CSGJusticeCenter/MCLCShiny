@@ -1415,12 +1415,26 @@ server <- function(input, output, session) {
   # Probation Graph - Dynamically change between sentence and graph depending on data availability
   #######
 
-  output$missing_data_probation_nt_adm <- renderText({
-    "The state did not provide data on prison admissions due to technical and new offense probation violations."
+  output$missing_data_probation_nt_adm <- renderUI({
+    out <- paste0(
+      "<h3 class = 'nodata'>No data</h3>"
+      , "<div class = 'notetxt'>"
+      , input$state_report
+      , " did not provide data on prison admissions due to technical and new offense probation violations."
+      , "</div>"
+    )
+    HTML(out)
   })
 
-  output$missing_data_probation_nt_pop <- renderText({
-    "The state did not provide data on the number of people in prison due to technical and new offense probation violations."
+  output$missing_data_probation_nt_pop <- renderUI({
+    out <- paste0(
+      "<h3 class = 'nodata'>No data</h3>"
+      , "<div class = 'notetxt'>"
+      , input$state_report
+      , " state did not provide data on the number of people in prison due to technical and new offense probation violations."
+      , "</div>"
+    )
+    HTML(out)
   })
 
   output$missing_data_probation_nt_button <- renderText({
@@ -1431,11 +1445,11 @@ server <- function(input, output, session) {
 
     # If state is missing new offense and technical violations (Admissions)
     if(input$state_report %in% probation_na_adm & input$adm_pop_report == "Admissions"){
-      textOutput("missing_data_probation_nt_adm")
+      htmlOutput("missing_data_probation_nt_adm")
 
       # If state is missing new offense and technical violations (Population)
     } else if(input$state_report %in% probation_na_pop & input$adm_pop_report == "Population"){
-      textOutput("missing_data_probation_nt_pop")
+      htmlOutput("missing_data_probation_nt_pop")
 
       # If state has data (Admissions)
     } else if(input$state_report %in% probation_not_na_adm & input$adm_pop_report == "Admissions"){
