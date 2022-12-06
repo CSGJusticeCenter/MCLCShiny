@@ -63,7 +63,6 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                  column(width = 3,
                                                                          labeled_input('save-map-btn', "",
                                                                                        downloadButton(outputId = 'save_map', "Download Map",
-                                                                                                      #div(style = "font-weight: bold", "Download Data"), # this causes spacing issues within the button
                                                                                                       class = "download-map")))
                                                         ) # end fluidRow
                                                   ),

@@ -249,10 +249,20 @@ server <- function(input, output, session) {
     foundational_map()
   })
 
-
   #######
   # Download map button near dropdowns
   #######
+
+  output$save_map <- downloadHandler(
+    filename <- function() {
+      paste("Change_", input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep="")
+    },
+
+    content <- function(file) {
+      file.copy(paste("data/Change_", input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""), file)
+    },
+    contentType = "image/png"
+  )
 
   # Links attempting to fix downloadHandler issues and/or highchart export issues
 
@@ -265,162 +275,161 @@ server <- function(input, output, session) {
   # https://www.highcharts.com/forum/viewtopic.php?f=9&t=45571#p162507
   # https://github.com/rstudio/shiny-server/issues/197
 
-  # Custom function that creates the hex map - need this to be called in downloadHandler
-  fnc_map_highchart <- function(data){
-    # Get minimum and maximum value
-    min_map <- min(data$change, na.rm = TRUE)
-    max_map <- max(data$change, na.rm = TRUE)
-
-    # Get absolute value for comparison
-    min_map_abs <- abs(min_map)
-    max_map_abs <- abs(max_map)
-
-    # Get neg or pos sign for min and max
-    min_map_type <- ifelse(min_map >= 0, "positive", "negative")
-    max_map_type <- ifelse(max_map >= 0, "positive", "negative")
-
-    # Generate tile map
-    # Has diverging scales when there are neg and pos values which centers the color gradient at zero
-    # Has a gradient scale when both the min and max are both negative or both positive
-
-    # Determine the new min and max so that zero is centered
-    # For example, If the highest positive value is 20 than the negative value is -20
-    if (min_map_type != max_map_type) {
-
-      NEW_MAX <- case_when(
-        max_map_abs > min_map_abs ~ max_map_abs,
-        max_map_abs < min_map_abs ~ min_map_abs,
-        max_map_abs == min_map_abs ~ max_map_abs)
-      NEW_MIN <- case_when(
-        min_map_abs > max_map_abs ~ min_map_abs,
-        min_map_abs < max_map_abs ~ max_map_abs,
-        min_map_abs == max_map_abs ~ min_map_abs)
-      NEW_MAX <- ifelse(max_map_type == "negative", -abs(NEW_MAX), abs(NEW_MAX))
-      NEW_MIN <- ifelse(min_map_type == "negative", -abs(NEW_MIN), abs(NEW_MIN))
-
-      highchart() %>%
-
-        hc_add_series_map(
-          map = hex_gj,
-          df = data,
-          joinBy = "state_abb",
-          value = "change",
-          dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
-                            style = list(fontSize = "14px",
-                                         fontWeight = "regular",
-                                         fontFamily = "Graphik",
-                                         textOutline = 0)),
-          nullColor = "#e8e8e8") %>%
-
-        hc_colorAxis(min = NEW_MIN,
-                     max = NEW_MAX,
-                     stops = color_stops(7, c(darkorange, orange, lightorange, white, lightblue, regblue, darkblue)),
-                     labels = list(format = "{value}%",
-                                   style = list(fontSize = "14px"))
-        ) %>%
-
-        hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical",
-                  #padding = 10,
-                  symbolHeight = 200,
-                  symbolWidth = 25
-        ) %>%
-
-        hc_add_theme(hc_theme_map_jc) %>%
-
-        hc_xAxis(title = "") %>%
-        hc_yAxis(title = "") %>%
-        hc_title(
-          text = paste0("Change in ", unique(data$metric), " ", unique(data$adm_or_pop), " from ", unique(data$year)),
-          align = "center",
-          style = list(#fontFamily = "Graphik-Bold", # works in view but not in export
-            fontWeight = "bold",
-            fontFamily = "Graphik", # works in view and export but is the wrong font
-            fontSize = "30px",
-            useHTML = TRUE)
-        ) %>%
-
-        hc_setup() %>%
-        hc_exporting(enabled = FALSE,
-                     filename = map_filename(),
-                     buttons = list(
-                       contextButton = list(
-                         menuItems = list('downloadPNG', 'downloadSVG')
-                       ))) %>%
-
-        hc_plotOptions(series = list(animation = FALSE,
-                                     dataLabels = list(enabled = TRUE),
-                                     cursor = "pointer",
-                                     borderWidth = 3),
-                       accessibility = list(enabled = TRUE,
-                                            keyboardNavigation = list(enabled = TRUE),
-                                            linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
-                                            landmarkVerbosity = "one"),
-                       area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
-        )
-
-    } else {
-
-
-      # Determine the new min and max where all values are negative
-      NEW_MAX <- max_map
-      NEW_MIN <- min_map
-
-      highchart() %>%
-
-        hc_add_series_map(
-          map = hex_gj,
-          df = data,
-          joinBy = "state_abb",
-          value = "change",
-          dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
-                            style = list(fontSize = "14px",
-                                         fontWeight = "regular",
-                                         fontFamily = "Graphik",
-                                         textOutline = 0)),
-          nullColor = "#e8e8e8") %>%
-
-        hc_colorAxis(min = NEW_MIN,
-                     max = NEW_MAX,
-                     stops = color_stops(4, c(darkorange, orange, lightorange, white)),
-                     labels = list(format = "{value}%",
-                                   style = list(fontSize = "14px"))) %>%
-
-        hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical",
-                  #padding = 10,
-                  symbolHeight = 200,
-                  symbolWidth = 25) %>%
-
-        hc_add_theme(hc_theme_map_jc) %>%
-
-
-        hc_xAxis(title = "") %>%
-        hc_yAxis(title = "") %>%
-        hc_title(
-          text = paste0("Change in ", unique(data$metric), " ", unique(data$adm_or_pop), " from ", unique(data$year)),
-          align = "center",
-          style = list(#fontFamily = "Graphik-Bold", # works in view but not in export
-            fontWeight = "bold",
-            fontFamily = "Graphik",
-            fontSize = "30px",
-            useHTML = TRUE)) %>%
-
-        hc_setup() %>%
-        hc_exporting(enabled = FALSE,
-                     filename = map_filename(),
-                     buttons = list(
-                       contextButton = list(
-                         menuItems = list('downloadPNG', 'downloadSVG')
-                       ))) %>%
-
-        hc_plotOptions(series = list(animation = FALSE, dataLabels = list(enabled = TRUE), cursor = "pointer", borderWidth = 3),
-                       accessibility = list(enabled = TRUE,
-                                            keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
-                                            landmarkVerbosity = "one"),
-                       area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
-        )
-    }
-  }
-
+  # # Custom function that creates the hex map - need this to be called in downloadHandler
+  # fnc_map_highchart <- function(data){
+  #   # Get minimum and maximum value
+  #   min_map <- min(data$change, na.rm = TRUE)
+  #   max_map <- max(data$change, na.rm = TRUE)
+  #
+  #   # Get absolute value for comparison
+  #   min_map_abs <- abs(min_map)
+  #   max_map_abs <- abs(max_map)
+  #
+  #   # Get neg or pos sign for min and max
+  #   min_map_type <- ifelse(min_map >= 0, "positive", "negative")
+  #   max_map_type <- ifelse(max_map >= 0, "positive", "negative")
+  #
+  #   # Generate tile map
+  #   # Has diverging scales when there are neg and pos values which centers the color gradient at zero
+  #   # Has a gradient scale when both the min and max are both negative or both positive
+  #
+  #   # Determine the new min and max so that zero is centered
+  #   # For example, If the highest positive value is 20 than the negative value is -20
+  #   if (min_map_type != max_map_type) {
+  #
+  #     NEW_MAX <- case_when(
+  #       max_map_abs > min_map_abs ~ max_map_abs,
+  #       max_map_abs < min_map_abs ~ min_map_abs,
+  #       max_map_abs == min_map_abs ~ max_map_abs)
+  #     NEW_MIN <- case_when(
+  #       min_map_abs > max_map_abs ~ min_map_abs,
+  #       min_map_abs < max_map_abs ~ max_map_abs,
+  #       min_map_abs == max_map_abs ~ min_map_abs)
+  #     NEW_MAX <- ifelse(max_map_type == "negative", -abs(NEW_MAX), abs(NEW_MAX))
+  #     NEW_MIN <- ifelse(min_map_type == "negative", -abs(NEW_MIN), abs(NEW_MIN))
+  #
+  #     highchart() %>%
+  #
+  #       hc_add_series_map(
+  #         map = hex_gj,
+  #         df = data,
+  #         joinBy = "state_abb",
+  #         value = "change",
+  #         dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
+  #                           style = list(fontSize = "14px",
+  #                                        fontWeight = "regular",
+  #                                        fontFamily = "Graphik",
+  #                                        textOutline = 0)),
+  #         nullColor = "#e8e8e8") %>%
+  #
+  #       hc_colorAxis(min = NEW_MIN,
+  #                    max = NEW_MAX,
+  #                    stops = color_stops(7, c(darkorange, orange, lightorange, white, lightblue, regblue, darkblue)),
+  #                    labels = list(format = "{value}%",
+  #                                  style = list(fontSize = "14px"))
+  #       ) %>%
+  #
+  #       hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical",
+  #                 #padding = 10,
+  #                 symbolHeight = 200,
+  #                 symbolWidth = 25
+  #       ) %>%
+  #
+  #       hc_add_theme(hc_theme_map_jc) %>%
+  #
+  #       hc_xAxis(title = "") %>%
+  #       hc_yAxis(title = "") %>%
+  #       hc_title(
+  #         text = paste0("Change in ", unique(data$metric), " ", unique(data$adm_or_pop), " from ", unique(data$year)),
+  #         align = "center",
+  #         style = list(#fontFamily = "Graphik-Bold", # works in view but not in export
+  #           fontWeight = "bold",
+  #           fontFamily = "Graphik", # works in view and export but is the wrong font
+  #           fontSize = "30px",
+  #           useHTML = TRUE)
+  #       ) %>%
+  #
+  #       hc_setup() %>%
+  #       hc_exporting(enabled = FALSE,
+  #                    filename = map_filename(),
+  #                    buttons = list(
+  #                      contextButton = list(
+  #                        menuItems = list('downloadPNG', 'downloadSVG')
+  #                      ))) %>%
+  #
+  #       hc_plotOptions(series = list(animation = FALSE,
+  #                                    dataLabels = list(enabled = TRUE),
+  #                                    cursor = "pointer",
+  #                                    borderWidth = 3),
+  #                      accessibility = list(enabled = TRUE,
+  #                                           keyboardNavigation = list(enabled = TRUE),
+  #                                           linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
+  #                                           landmarkVerbosity = "one"),
+  #                      area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
+  #       )
+  #
+  #   } else {
+  #
+  #
+  #     # Determine the new min and max where all values are negative
+  #     NEW_MAX <- max_map
+  #     NEW_MIN <- min_map
+  #
+  #     highchart() %>%
+  #
+  #       hc_add_series_map(
+  #         map = hex_gj,
+  #         df = data,
+  #         joinBy = "state_abb",
+  #         value = "change",
+  #         dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
+  #                           style = list(fontSize = "14px",
+  #                                        fontWeight = "regular",
+  #                                        fontFamily = "Graphik",
+  #                                        textOutline = 0)),
+  #         nullColor = "#e8e8e8") %>%
+  #
+  #       hc_colorAxis(min = NEW_MIN,
+  #                    max = NEW_MAX,
+  #                    stops = color_stops(4, c(darkorange, orange, lightorange, white)),
+  #                    labels = list(format = "{value}%",
+  #                                  style = list(fontSize = "14px"))) %>%
+  #
+  #       hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical",
+  #                 #padding = 10,
+  #                 symbolHeight = 200,
+  #                 symbolWidth = 25) %>%
+  #
+  #       hc_add_theme(hc_theme_map_jc) %>%
+  #
+  #
+  #       hc_xAxis(title = "") %>%
+  #       hc_yAxis(title = "") %>%
+  #       hc_title(
+  #         text = paste0("Change in ", unique(data$metric), " ", unique(data$adm_or_pop), " from ", unique(data$year)),
+  #         align = "center",
+  #         style = list(#fontFamily = "Graphik-Bold", # works in view but not in export
+  #           fontWeight = "bold",
+  #           fontFamily = "Graphik",
+  #           fontSize = "30px",
+  #           useHTML = TRUE)) %>%
+  #
+  #       hc_setup() %>%
+  #       hc_exporting(enabled = FALSE,
+  #                    filename = map_filename(),
+  #                    buttons = list(
+  #                      contextButton = list(
+  #                        menuItems = list('downloadPNG', 'downloadSVG')
+  #                      ))) %>%
+  #
+  #       hc_plotOptions(series = list(animation = FALSE, dataLabels = list(enabled = TRUE), cursor = "pointer", borderWidth = 3),
+  #                      accessibility = list(enabled = TRUE,
+  #                                           keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
+  #                                           landmarkVerbosity = "one"),
+  #                      area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
+  #       )
+  #   }
+  # }
   # output$save_map <- downloadHandler(
   #   filename = function() {
   #     paste0("temp.html")
@@ -437,7 +446,6 @@ server <- function(input, output, session) {
   #     file.copy('temp.html', file, overwrite = TRUE)
   #
   #   })
-
   # # Save map as png - doesn't work
   # output$save_map <- downloadHandler(
   #   filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""),
@@ -768,7 +776,7 @@ server <- function(input, output, session) {
   output$state_bar_chart <- renderHighchart({
 
     # Select highchart depending on selector input
-    # Carts were saved in highchart.R
+    # Charts were saved in highchart.R
     if (input$adm_pop_report == "Admissions") {
 
       all_state_bar_adm[[input$state_report]] %>%

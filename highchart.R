@@ -32,21 +32,30 @@ library(stats)
 source("app/colors.R")
 source("app/functions.R")
 
-# get state list
+# list of states for function
 states <- adm_pop_long$state %>%
   unique() %>%
   sort()
 
-############
-# MAP EXPLORER - Maps
-############
-
+# list of metrics for function
 metrics <- c("New Offense",
              "Parole Violation",
              "Probation Violation",
              "Supervision Violation",
              "Technical Violation",
              "Total")
+
+# metrics list for loop
+metrics_list <- list("New Offense",
+                     "Parole Violation",
+                     "Probation Violation",
+                     "Supervision Violation",
+                     "Technical Violation",
+                     "Total")
+
+############
+# MAP EXPLORER - Maps
+############
 
 # generate list of state highcharts to call in app (admissions)
 adm_maps_2018_2019 <- map(.x = metrics,  .f = function(x) {
@@ -320,75 +329,75 @@ for (folder in theseFOLDERS){
 
 }
 
-metrics_list <- list("New Offense",
-                     "Parole Violation",
-                     "Probation Violation",
-                     "Supervision Violation",
-                     "Technical Violation",
-                     "Total")
+##########
+# MAPS Admissions - loops are separate for now because of timeout issues
+##########
 
 for (folder in theseFOLDERS){
-
-  ##########
-  # ADMISSIONS
-  ##########
-
   # 2018-2019
   for (i in metrics_list){
-    saveWidget(adm_maps_2018_2019[[i]], "temp.html")
-    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Adm_2018 - 2019.png", sep = ""), delay = 3)
+    htmlwidgets::saveWidget(adm_maps_2018_2019[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Admissions_2018 - 2019.png", sep = ""), delay = 3)
   }
+}
 
+for (folder in theseFOLDERS){
   # 2018-2021
   for (i in metrics_list){
-    saveWidget(adm_maps_2018_2021[[i]], "temp.html")
-    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Adm_2018 - 2021.png", sep = ""), delay = 3)
+    htmlwidgets::saveWidget(adm_maps_2018_2021[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Admissions_2018 - 2021.png", sep = ""), delay = 3)
   }
+}
 
+for (folder in theseFOLDERS){
   # 2019-2020
   for (i in metrics_list){
-    saveWidget(adm_maps_2019_2020[[i]], "temp.html")
-    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Adm_2019 - 2020.png", sep = ""), delay = 3)
+    htmlwidgets::saveWidget(adm_maps_2019_2020[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Admissions_2019 - 2020.png", sep = ""), delay = 3)
   }
+}
 
+for (folder in theseFOLDERS){
   # 2020-2021
   for (i in metrics_list){
-    saveWidget(adm_maps_2020_2021[[i]], "temp.html")
-    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Adm_2020 - 2021.png", sep = ""), delay = 3)
+    htmlwidgets::saveWidget(adm_maps_2020_2021[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Admissions_2020 - 2021.png", sep = ""), delay = 3)
   }
+}
 
-  ##########
-  # POPULATION
-  ##########
+##########
+# MAPS POPULATION
+##########
 
+for (folder in theseFOLDERS){
   # 2018-2019
   for (i in metrics_list){
-    saveWidget(pop_maps_2018_2019[[i]], "temp.html")
-    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Pop_2018 - 2019.png", sep = ""), delay = 3)
+    htmlwidgets::saveWidget(pop_maps_2018_2019[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Population_2018 - 2019.png", sep = ""), delay = 3)
   }
+}
 
+for (folder in theseFOLDERS){
   # 2018-2021
   for (i in metrics_list){
-    saveWidget(pop_maps_2018_2021[[i]], "temp.html")
-    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Pop_2018 - 2021.png", sep = ""), delay = 3)
+    htmlwidgets::saveWidget(pop_maps_2018_2021[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Population_2018 - 2021.png", sep = ""), delay = 3)
   }
+}
 
+for (folder in theseFOLDERS){
   # 2019-2020
   for (i in metrics_list){
-    saveWidget(pop_maps_2019_2020[[i]], "temp.html")
-    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Pop_2019 - 2020.png", sep = ""), delay = 3)
+    htmlwidgets::saveWidget(pop_maps_2019_2020[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Population_2019 - 2020.png", sep = ""), delay = 3)
   }
+}
 
+for (folder in theseFOLDERS){
   # 2020-2021
   for (i in metrics_list){
-    saveWidget(pop_maps_2020_2021[[i]], "temp.html")
-    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Pop_2020 - 2021.png", sep = ""), delay = 3)
+    htmlwidgets::saveWidget(pop_maps_2020_2021[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Population_2020 - 2021.png", sep = ""), delay = 3)
   }
 
 }
-
-
-
-
-
-
