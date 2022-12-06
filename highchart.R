@@ -37,61 +37,61 @@ states <- adm_pop_long$state %>%
   unique() %>%
   sort()
 
-# states_list <- list('Alabama',
-#                     'Alaska',
-#                     'Arizona',
-#                     'Arkansas',
-#                     'California',
-#                     'Colorado',
-#                     'Connecticut',
-#                     'Delaware',
-#                     'Florida',
-#                     'Georgia',
-#                     'Hawaii',
-#                     'Idaho',
-#                     'Illinois',
-#                     'Indiana',
-#                     'Iowa',
-#                     'Kansas',
-#                     'Kentucky',
-#                     'Louisiana',
-#                     'Maine',
-#                     'Maryland',
-#                     'Massachusetts',
-#                     'Michigan',
-#                     'Minnesota',
-#                     'Mississippi',
-#                     'Missouri',
-#                     'Montana',
-#                     'Nebraska',
-#                     'Nevada',
-#                     'New Hampshire',
-#                     'New Jersey',
-#                     'New Mexico',
-#                     'New York',
-#                     'North Carolina',
-#                     'North Dakota',
-#                     'Ohio',
-#                     'Oklahoma',
-#                     'Oregon',
-#                     'Pennsylvania',
-#                     'Rhode Island',
-#                     'South Carolina',
-#                     'South Dakota',
-#                     'Tennessee',
-#                     'Texas',
-#                     'Utah',
-#                     'Vermont',
-#                     'Virginia',
-#                     'Washington',
-#                     'West Virginia',
-#                     'Wisconsin',
-#                     'Wyoming')
-
-# temp list of states that isnt as large for testing
 states_list <- list('Alabama',
+                    'Alaska',
+                    'Arizona',
+                    'Arkansas',
+                    'California',
+                    'Colorado',
                     'Connecticut',
-                    'Delaware')
+                    'Delaware',
+                    'Florida',
+                    'Georgia',
+                    'Hawaii',
+                    'Idaho',
+                    'Illinois',
+                    'Indiana',
+                    'Iowa',
+                    'Kansas',
+                    'Kentucky',
+                    'Louisiana',
+                    'Maine',
+                    'Maryland',
+                    'Massachusetts',
+                    'Michigan',
+                    'Minnesota',
+                    'Mississippi',
+                    'Missouri',
+                    'Montana',
+                    'Nebraska',
+                    'Nevada',
+                    'New Hampshire',
+                    'New Jersey',
+                    'New Mexico',
+                    'New York',
+                    'North Carolina',
+                    'North Dakota',
+                    'Ohio',
+                    'Oklahoma',
+                    'Oregon',
+                    'Pennsylvania',
+                    'Rhode Island',
+                    'South Carolina',
+                    'South Dakota',
+                    'Tennessee',
+                    'Texas',
+                    'Utah',
+                    'Vermont',
+                    'Virginia',
+                    'Washington',
+                    'West Virginia',
+                    'Wisconsin',
+                    'Wyoming')
+
+# # temp list of states that isnt as large for testing
+# states_list <- list('Alabama',
+#                     'Connecticut',
+#                     'Delaware')
 
 # list of metrics for function
 metrics <- c("New Offense",
@@ -295,7 +295,7 @@ all_state_bar_pop <- setNames(all_state_bar_pop, states)
 parole_bar_adm <- map(.x = states,  .f = function(x) {
   df1 <- adm_pop_long %>%
     filter(state == x &
-           adm_or_pop == "Admissions",
+             adm_or_pop == "Admissions",
            prob_vs_parole == "Parole") %>%
     group_by(state, year, metric, adm_or_pop) %>%
     summarise(total = sum(total)) %>%
@@ -312,7 +312,7 @@ parole_bar_adm <- setNames(parole_bar_adm,states)
 parole_bar_pop <- map(.x = states,  .f = function(x) {
   df1 <- adm_pop_long %>%
     filter(state == x &
-           adm_or_pop == "Population",
+             adm_or_pop == "Population",
            prob_vs_parole == "Probation") %>%
     group_by(state, year, metric, adm_or_pop) %>%
     summarise(total = sum(total)) %>%
@@ -333,7 +333,7 @@ parole_bar_pop <- setNames(parole_bar_pop,states)
 probation_bar_adm <- map(.x = states,  .f = function(x) {
   df1 <- adm_pop_long %>%
     filter(state == x &
-           adm_or_pop == "Admissions",
+             adm_or_pop == "Admissions",
            prob_vs_parole == "Probation") %>%
     group_by(state, year, metric, adm_or_pop) %>%
     summarise(total = sum(total)) %>%
@@ -350,7 +350,7 @@ probation_bar_adm <- setNames(probation_bar_adm, states)
 probation_bar_pop <- map(.x = states,  .f = function(x) {
   df1 <- adm_pop_long %>%
     filter(state == x &
-           adm_or_pop == "Population",
+             adm_or_pop == "Population",
            prob_vs_parole == "Probation") %>%
     group_by(state, year, metric, adm_or_pop) %>%
     summarise(total = sum(total)) %>%
@@ -372,17 +372,17 @@ probation_bar_pop <- setNames(probation_bar_pop, states)
 theseFOLDERS <- c("sharepoint" = admin$sp_data, "app" = "app/data")
 
 for (folder in theseFOLDERS){
-
+  
   save(all_state_area_adm,     file=file.path(folder, "all_state_area_adm.Rda"))
   save(all_state_area_pop,     file=file.path(folder, "all_state_area_pop.Rda"))
   save(all_state_bar_adm,      file=file.path(folder, "all_state_bar_adm.Rda"))
   save(all_state_bar_pop,      file=file.path(folder, "all_state_bar_pop.Rda"))
-
+  
   save(parole_bar_adm,         file=file.path(folder, "parole_bar_adm.Rda"))
   save(parole_bar_pop,         file=file.path(folder, "parole_bar_pop.Rda"))
   save(probation_bar_adm,      file=file.path(folder, "probation_bar_adm.Rda"))
   save(probation_bar_pop,      file=file.path(folder, "probation_bar_pop.Rda"))
-
+  
 }
 
 ##########
@@ -501,7 +501,7 @@ for (folder in theseFOLDERS){
   # 2018-2019
   for (i in metrics_list){
     htmlwidgets::saveWidget(pop_maps_2018_2019[[i]], "temp.html")
-    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Population_2018 - 2019.png", sep = ""), delay = 3)
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Population_2018 - 2019.png", sep = ""),delay = 3)
   }
 }
 
@@ -527,5 +527,5 @@ for (folder in theseFOLDERS){
     htmlwidgets::saveWidget(pop_maps_2020_2021[[i]], "temp.html")
     webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Population_2020 - 2021.png", sep = ""), delay = 3)
   }
-
+  
 }
