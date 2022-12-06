@@ -151,7 +151,9 @@ Dropdowns and buttons
 }
 
 .input-col {
-  min-width: 10em;
+  min-width: 12em;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 /* Format for download map button */
@@ -405,6 +407,7 @@ Dropdowns
   max-width: 20em;
   min-width: 10em;
   margin-top: 2.8em;
+  margin-bottom: 0.4em;
   border-radius:0px;
   color: #fff;
   background-color:#004270;
