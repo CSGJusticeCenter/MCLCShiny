@@ -148,7 +148,6 @@ export <- function(tables, popdenom){
   )
   
   
-  
   admin$mylog(glue("Flags {tables$NCRPLET} {popdenom} - End"))
   
   
@@ -156,6 +155,22 @@ export <- function(tables, popdenom){
 
 
 
-
+#' Text on Flag meanings 
+#'
+#' @param flag 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+flag_meaning <- function(flag){
+  case_when(
+      flag == "0" ~ "no issues"
+    , flag == "1M" ~ "missing data (year, race, or cells in a table)"
+    , flag == "1S" ~ "suppressed data"
+    , flag == "1MS"~ "missing data (year, race, or cells in a table) and suppressed data"
+    , flag == "2"  ~ "completely missing, can't create table/infographic"
+  )
+}
 
 
