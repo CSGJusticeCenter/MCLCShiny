@@ -44,29 +44,17 @@ library(extrafont)
 
 box::use( prep/box/admin)
 
-# Add fonts required to run functions.R
-# Fonts are found in app folder
-# font_add("Graphik",      regular = "app/www/fonts/GraphikRegular.ttf"
-#          ,
-#          bold    = "app/www/fonts/GraphikBold.ttf"
-# )
-font_add("Graphik",      regular = "app/www/fonts/Graphik.ttf"
-                         ,
-                         bold    = "app/www/fonts/GraphikBold.ttf"
-         )
-# font_add("Graphik-Bold", regular = "app/www/fonts/GraphikBold.otf")
-
-#font_import(paths = "C:/Users/mroberts/AppData/Local/Microsoft/Windows/Fonts", prompt = FALSE)
+# Load fonts
+font_add("Graphik",     regular = "app/www/fonts/Graphik.ttf")
+font_add("GraphikBold", regular = "app/www/fonts/GraphikBold.ttf")
+# font_add("Graphik",      regular = "app/www/fonts/Graphik.ttf"
+#                          ,
+#                          bold    = "app/www/fonts/GraphikBold.ttf"
+#          )
+#
 extrafont::loadfonts(quiet = TRUE)
 loadfonts(device="win")
-
 showtext_auto()
-default_fonts <- c("Graphik")
-
-# ggplot(data.frame(x=1:5,y=1:5),aes(x,y))+
-#   geom_point()+
-#   geom_text(aes(label=y),nudge_x=0.5, family="Graphik",fontface = "bold", size = 10)+
-#   theme_bw(base_family="Graphik")
 
 # Load custom functions
 source("app/functions.R")
@@ -104,7 +92,7 @@ pop21 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"),
 notes <- read_excel(file.path(admin$sp_data_raw, "mclc/Data for web team 2021 v13.xlsx"), sheet = "Notes")
 
 # Load info on abolishment of parole or probation
-abolish_prob_parole <- read_excel(file.path(admin$sp_survey, "MCLC 2022 Progress Tracking.xlsx")) 
+abolish_prob_parole <- read_excel(file.path(admin$sp_survey, "MCLC 2022 Progress Tracking.xlsx"))
 #abolish_prob_parole <- read_excel(file.path("C:/Users/mroberts/The Council of State Governments/JC Research - 50 State Revocations Project/50 State Survey (2022)", "MCLC 2022 Progress Tracking.xlsx"))
 
 ################################################################################
@@ -589,7 +577,7 @@ probation_not_na_pop <- probation_not_na_pop$state
 theseFOLDERS <- c( "sharepoint" = admin$sp_data, "app"  = "app/data")
 
 for (folder in theseFOLDERS){
-  
+
   save(adm_pop_long,                file=file.path(folder, "adm_pop_long.Rda"))
   save(mclc_explorer,               file=file.path(folder, "mclc_explorer.Rda"))
   save(mclc_explorer_table,         file=file.path(folder, "mclc_explorer_table.Rda"))
@@ -603,7 +591,7 @@ for (folder in theseFOLDERS){
   save(hex_gj,                      file=file.path(folder, "hex_gj.Rda"))
   save(notes,                       file=file.path(folder, "notes.Rda"))
   save(csg,                         file=file.path(folder, "csg.Rda"))
-  
+
   save(nt_na_adm,                   file=file.path(folder, "nt_na_adm.Rda"))
   save(nt_na_pop,                   file=file.path(folder, "nt_na_pop.Rda"))
   save(nt_not_na_adm,               file=file.path(folder, "nt_not_na_adm.Rda"))
@@ -617,5 +605,5 @@ for (folder in theseFOLDERS){
   save(probation_na_pop,            file=file.path(folder, "probation_na_pop.Rda"))
   save(probation_not_na_adm,        file=file.path(folder, "probation_not_na_adm.Rda"))
   save(probation_not_na_pop,        file=file.path(folder, "probation_not_na_pop.Rda"))
-  
+
 }
