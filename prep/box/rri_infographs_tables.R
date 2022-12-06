@@ -300,7 +300,7 @@ prep_for_shiny <- function(){
           , race = df$RACE
           , label   = paste0(whichNCRP, "_", whichSTATE, "_", whichPOP, "_", df$RACE)
           , savefile= TRUE
-          , infogs  = ifelse(df$RRI <= 10, 10, 20)
+          , infogs  = ifelse(df$S_RRI <= 11, 11, 22)
         )
         , infograph$create_infograph 
       )
