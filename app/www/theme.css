@@ -356,15 +356,25 @@ div.retxt {
   margin-top: 10px;
 }
 
+div.notetxt {
+  font-family: Graphik;
+  font-size: 1em;
+  margin-top: 10px;
+}
+
+h3.nodata {
+  font-family: Graphik !important;
+  font-weight: bold !important;
+  font-size: 30px !important;  /*same as selected-state-note-title */
+  margin-bottom: 12px;
+}
+
 
 h3.reh3 {
   font-family: Graphik !important;
   font-weight: bold !important;
   font-size: 30px !important;  /*same as selected-state-note-title */
-  /*margin-top: 24px; */
   margin-bottom: 12px;
-  /*text-transform: uppercase; */
-  /*font-variant: small-caps; */
 }
 
 

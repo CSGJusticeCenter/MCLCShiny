@@ -820,23 +820,37 @@ server <- function(input, output, session) {
   # Supervision Violations Graph - Dynamically change between sentence and graph depending on data availability
   #######
 
-  output$missing_data_nt_adm <- renderText({
-    "The state did not provide data on prison admissions due to technical and new offense violations."
+  output$missing_data_nt_adm <- renderUI({
+    out <- paste0(
+        "<h3 class = 'nodata'>No data</h3>"
+      , "<div class = 'notetxt'>"
+      , input$state_report
+      , " did not provide data on prison admissions due to technical and new offense violations."
+      , "</div>"
+    )
+    HTML(out)
   })
 
-  output$missing_data_nt_pop <- renderText({
-    "The state did not provide data on the number of people in prison due to technical and new offense violations."
+  output$missing_data_nt_pop <- renderUI({
+    out <- paste0(
+        "<h3 class = 'nodata'>No data</h3>"
+      , "<div class = 'notetxt'>"
+      , input$state_report
+      , " did not provide data on the number of people in prison due to technical and new offense violations."
+      , "</div>"
+    )
+    HTML(out)
   })
 
   output$state_nt = renderUI({
 
     # If state is missing new offense and technical violations (Admissions)
     if(input$state_report %in% nt_na_adm & input$adm_pop_report == "Admissions"){
-      textOutput("missing_data_nt_adm")
+      htmlOutput("missing_data_nt_adm")
 
       # If state is missing new offense and technical violations (Population)
     } else if(input$state_report %in% nt_na_pop & input$adm_pop_report == "Population"){
-      textOutput("missing_data_nt_pop")
+      htmlOutput("missing_data_nt_pop")
 
       # If state has data (Admissions)
     } else if(input$state_report %in% nt_not_na_adm & input$adm_pop_report == "Admissions"){
@@ -1122,39 +1136,67 @@ server <- function(input, output, session) {
   # Parole Graph - Dynamically change between sentence and graph depending on data availability
   #######
 
-  output$missing_data_parole_nt_adm <- renderText({
-    "The state did not provide data on prison admissions due to technical and new offense parole violations."
+  output$missing_data_parole_nt_adm <- renderUI({
+    out <- paste0(
+        "<h3 class = 'nodata'>No data</h3>"
+      , "<div class = 'notetxt'>"
+      , input$state_report
+      , " did not provide data on prison admissions due to technical and new offense parole violations."
+      , "</div>"
+    )
+    HTML(out)
   })
 
-  output$missing_data_parole_nt_pop <- renderText({
-    "The state did not provide data on the number of people in prison due to technical and new offense parole violations."
+  output$missing_data_parole_nt_pop <- renderUI({
+    out <- paste0(
+        "<h3 class = 'nodata'>No data</h3>"
+      , "<div class = 'notetxt'>"
+      , input$state_report
+      , " did not provide data on the number of people in prison due to technical and new offense parole violations."
+      , "</div>"
+    )
+    HTML(out)
   })
 
-  output$abolished_parole_adm <- renderText({
-    "The state abolished parole and therefore did not provide data on prison admissions due to technical and new offense parole violations."
+  output$abolished_parole_adm <- renderUI({
+    out <- paste0(
+        "<h3 class = 'nodata'>No data</h3>"
+      , "<div class = 'notetxt'>"
+      , input$state_report
+      , " abolished parole and therefore did not provide data on prison admissions due to technical and new offense parole violations."
+      , "</div>"
+    )
+    HTML(out)
   })
 
-  output$abolished_parole_pop <- renderText({
-    "The state abolished parole and therefore did not provide data on the number of people in prison due to technical and new offense parole violations."
+  output$abolished_parole_pop <- renderUI({
+    out <- paste0(
+        "<h3 class = 'nodata'>No data</h3>"
+      , "<div class = 'notetxt'>"
+      , input$state_report
+      , " abolished parole and therefore did not provide data on the number of people in prison due to technical and new offense parole violations."
+      , "</div>"
+    )
+    HTML(out)
   })
 
   output$parole_nt = renderUI({
 
     # If state is missing new offense and technical violations (Admissions)
     if(input$state_report %in% parole_na_adm & input$adm_pop_report == "Admissions" & !(input$state_report %in% abolish_prob_parole)){
-      textOutput("missing_data_parole_nt_adm")
+      htmlOutput("missing_data_parole_nt_adm")
 
       # If state is missing new offense and technical violations (Population)
     } else if(input$state_report %in% parole_na_pop & input$adm_pop_report == "Population" & !(input$state_report %in% abolish_prob_parole)){
-      textOutput("missing_data_parole_nt_pop")
+      htmlOutput("missing_data_parole_nt_pop")
 
       # If state is missing new offense and technical violations (Admissions) AND abolished parole
     } else if(input$state_report %in% parole_na_adm & input$adm_pop_report == "Admissions" & (input$state_report %in% abolish_prob_parole)){
-      textOutput("abolished_parole_adm")
+      htmlOutput("abolished_parole_adm")
 
       # If state is missing new offense and technical violations (Admissions) AND abolished parole
     } else if(input$state_report %in% parole_na_pop & input$adm_pop_report == "Population" & (input$state_report %in% abolish_prob_parole)){
-      textOutput("abolished_parole_pop")
+      htmlOutput("abolished_parole_pop")
 
       # If state has data (Admissions)
     } else if(input$state_report %in% parole_not_na_adm & input$adm_pop_report == "Admissions"){

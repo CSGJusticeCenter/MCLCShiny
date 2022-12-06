@@ -146,7 +146,7 @@ pop_denom_text <- function(pop_denom){
   )
   
   outtext <- paste0(
-      "<div class = 'retxt'>"
+      "<div class = 'notetxt'>"
      , "To highlight "
      , fill1
      , " for each racial and ethnic group in the "
@@ -178,9 +178,9 @@ infographic_header <- function(dataavail, note){
   }
   
   if (dataavail == 0){
-    outtext <- paste0("<h3 class='reh3'>No data</h3>"
-                      , "<div class = 'retxt'>"
-                      , "Data to calculate disparites in parole revocations is not available.<br>"
+    outtext <- paste0("<h3 class='nodata'>No data</h3>"
+                      , "<div class = 'notetxt'>"
+                      , "Data to calculate disparites in parole revocations are not available.<br>"
                       , note
                       , "</div>"
                      )
