@@ -1,0 +1,270 @@
+---
+title: "RRI Overview" 
+description: "Last User: `r stringr::str_sub(getwd(), 10, stringr::str_locate(stringr::str_sub(getwd(), 10, -1), '/')[1]+10-2)`"
+date: last-modified
+date-format: "YYYY-MM-DD HH:mm:ss"
+published-title: Last Modified
+doi: "`r Sys.time()`"
+doi-title: Last Ran
+execute:
+  echo: true
+format: 
+  html:
+    page-layout: full
+    fontsize: 0.9em
+    fig-width: 12
+    fig-height: 7
+    code-fold: true 
+editor: source
+self-contained: true
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r}
+#| label: setup
+#| include: false  
+
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+
+#https://stackoverflow.com/questions/66974669/collapse-rows-is-not-collapsed-and-updating-packages-does-not-fix
+#devtools::install_github(repo="haozhu233/kableExtra", ref="a6af5c0") #to get collapse rows to work 
+
+box::use(
+    box/admin
+  , box/assignflags
+)
+```
+
+
+::: {.panel-tabset} 
+
+## Notes 
+
+The prefix `S_` indicates that the variables values has been suppressed if the `REVCNT` <5.  The `S_` version of a variable (e.g. `S_RRI`) will equal the original variable (`RRI`) when suppression did not occur.  The variable `SUPPRESS` is used as a flag, with 1 = suppression occurred and `S_REVCNT` = 5 instead of the original value.  
+
+
+
+```{r}
+N_BJS  <- readRDS(file.path(admin$sp_data, "NCRP_N_REV_BJS.RDS"))
+A_BJS  <- readRDS(file.path(admin$sp_data, "NCRP_A_REV_BJS.RDS"))
+
+N_PUMS <- readRDS(file.path(admin$sp_data, "NCRP_N_REV_PUMS.RDS"))
+A_PUMS <- readRDS(file.path(admin$sp_data, "NCRP_A_REV_PUMS.RDS"))
+```
+
+
+
+
+```{r}
+
+longdf <- map2(
+    list(N_BJS,  N_PUMS,   A_BJS,   A_PUMS)
+  ,   c("N_BJS","N_PUMS", "A_BJS", "A_PUMS")
+  , ~bind_rows(
+      .x$R %>% mutate(OFFGENERAL = admin$lev_OFFGENERAL2[1])
+    , .x$OR
+    ) %>% 
+    mutate(
+        OFFGENERAL = factor(OFFGENERAL, levels = admin$lev_OFFGENERAL2)
+      , DATA = .y
+    ) 
+) %>% 
+  bind_rows() %>% 
+  mutate(
+      DATANCRP = str_sub(DATA, 1, 1)
+    , DATAPOP  = str_sub(DATA, 3, -1)
+  )
+
+
+
+```
+
+## Infographic RRI's
+
+Most recent year for all offense categories, looking at Hispanic and Black only. 
+
+```{r}
+
+allOG_2r_rectyr <- longdf %>% 
+  filter(OFFGENERAL == admin$lev_OFFGENERAL2[1]) %>% 
+  filter(RPTYEAR == RECENT_YR, RACE %in% c("Black", "Hispanic"), STATE != "District of Columbia") 
+
+
+allOG_2r_rectyr %>%
+  filter(!is.na(S_RRI), S_RRI != Inf) %>% 
+  ggplot(aes(x = S_RRI, y = RACE)) + 
+  geom_vline(xintercept = 1, color = "grey35", linetype = "dashed") + 
+  geom_boxplot(aes(color = RACE), alpha = 0) + 
+  facet_wrap(~RACE, scales = "free", nrow = 2)+ 
+  scale_shape_manual(values = c(17, 16)) + 
+  facet_wrap(DATAPOP~DATANCRP, scales = "free") + 
+  labs(title = "RRI values for Most Recent Year") + 
+  theme_bw() +
+  theme(
+      axis.text.y = element_blank()
+    , axis.ticks.y = element_blank()
+  ) 
+
+
+# allOG_2r_rectyr %>%
+#   filter(!is.na(S_RRI), S_RRI != Inf) %>% 
+#   ggplot(aes(x = S_RRI)) + 
+#   geom_vline(xintercept = 1, color = "grey35", linetype = "dashed") + 
+#   geom_boxplot(aes(color = DATAPOP, fill = DATANCRP), alpha = 0.5) + 
+#   facet_wrap(~RACE, scales = "free", nrow = 2)+ 
+#   scale_fill_manual(values = c("white", "grey85")) + 
+#   labs(title = "RRI values for Most Recent Year") + 
+#   theme_bw() +
+#   theme(
+#       axis.text.y = element_blank()
+#     , axis.ticks.y = element_blank()
+#   ) 
+
+
+allOG_2r_rectyr %>% 
+  group_by(RACE, DATAPOP, DATANCRP) %>% 
+  filter(!is.na(S_RRI), S_RRI != Inf) %>% 
+  summarize(
+      q000 = quantile(S_RRI, probs = 0)
+    , q025 = quantile(S_RRI, probs = 0.25)
+    , q050 = quantile(S_RRI, probs = 0.50)
+    , q075 = quantile(S_RRI, probs = 0.75)
+    , q100 = quantile(S_RRI, probs = 1)
+    , mean = mean(S_RRI)
+    , .groups = "keep"
+  ) %>% 
+  ungroup() %>% 
+  add_row(
+      RACE = "Black/Hispanic"
+    , DATAPOP = "BJS/PUMS"
+    , DATANCRP = "A/N"
+    , q000 = quantile(filter(allOG_2r_rectyr, !is.na(S_RRI), S_RRI != Inf)$S_RRI, probs = 0)
+    , q025 = quantile(filter(allOG_2r_rectyr, !is.na(S_RRI), S_RRI != Inf)$S_RRI, probs = 0.25)
+    , q050 = quantile(filter(allOG_2r_rectyr, !is.na(S_RRI), S_RRI != Inf)$S_RRI, probs = 0.50)
+    , q075 = quantile(filter(allOG_2r_rectyr, !is.na(S_RRI), S_RRI != Inf)$S_RRI, probs = 0.75)
+    , q100 = quantile(filter(allOG_2r_rectyr, !is.na(S_RRI), S_RRI != Inf)$S_RRI, probs = 1)
+    , mean = mean(filter(allOG_2r_rectyr, !is.na(S_RRI), S_RRI != Inf)$S_RRI)
+  ) %>% 
+  kable() %>% 
+  kable_styling() %>% 
+  row_spec(9, bold = TRUE) %>% 
+  collapse_rows(1:2, valign = "top")
+
+
+
+allOG_2r_rectyr %>% 
+  select(ABB, RPTYEAR, RACE, DATANCRP, DATAPOP, S_REVCNT, POPEST, S_RRI) %>% 
+  mutate_at(vars(S_RRI), ~round(., digits = 2)) %>% 
+  mutate_at(vars(ABB, RPTYEAR, RACE, DATANCRP, DATAPOP), as.factor) %>% 
+  DT::datatable(
+    filter = c("top") 
+  )
+```
+
+
+## Flags 
+
+
+```{r}
+#| fig-height: 4
+FLAGS_A_BJS <- read_csv(file.path(admin$sp_data, "FLAGS_A_BJS.csv"), show_col_types = FALSE) %>% 
+  select(-c(ncrp, data, note_RATE)) %>% 
+  pivot_longer(cols = -STATE) %>% 
+  rename(A_BJS = value)
+FLAGS_N_BJS <- read_csv(file.path(admin$sp_data, "FLAGS_N_BJS.csv"), show_col_types = FALSE) %>% 
+  select(-c(ncrp, data, note_RATE)) %>% 
+  pivot_longer(cols = -STATE) %>% 
+  rename(N_BJS = value)
+
+FLAGS_A_CEN <- read_csv(file.path(admin$sp_data, "FLAGS_A_CEN.csv"), show_col_types = FALSE) %>% 
+  select(-c(ncrp, data, note_RATE)) %>% 
+  mutate_all(as.character)%>% 
+  pivot_longer(cols = -STATE) %>% 
+  rename(A_CEN = value)
+FLAGS_N_CEN <- read_csv(file.path(admin$sp_data, "FLAGS_N_CEN.csv"), show_col_types = FALSE) %>% 
+  select(-c(ncrp, data, note_RATE)) %>% 
+  mutate_all(as.character)%>% 
+  pivot_longer(cols = -STATE) %>% 
+  rename(N_CEN = value)
+
+ALL_FLAGS <- Reduce(function(x, y) full_join(x, y, by = c("STATE", "name"))
+       , list(FLAGS_A_BJS, FLAGS_N_BJS, FLAGS_A_CEN, FLAGS_N_CEN)
+      ) %>% 
+  pivot_longer(cols = -c("STATE", "name"), names_to = "DATA", values_to = "FLAG") %>% 
+    mutate(
+      DATANCRP = str_sub(DATA, 1, 1)
+    , DATAPOP  = str_sub(DATA, 3, -1)
+  ) %>% 
+  mutate(flag_meaning = assignflags$flag_meaning(FLAG)) 
+
+
+for (thisname in unique(ALL_FLAGS$name)){
+  
+  p <- ALL_FLAGS %>% 
+    filter(name == thisname) %>% 
+    group_by(DATANCRP, DATAPOP) %>% 
+    count(FLAG, flag_meaning) %>% 
+    mutate(prop = n/sum(n)) %>% 
+  ggplot(aes(x = FLAG, y = prop)) + 
+    geom_col(color = "grey50", alpha = 0.5)+ 
+    geom_text(
+        aes(label = scales::percent(prop, accuracy = 1))
+      , vjust = -0.5
+    ) + 
+    scale_y_continuous(expand = c(0.08, 0)) + 
+    facet_wrap(DATAPOP~DATANCRP, nrow = 1) +
+    labs(title = thisname, x = NULL, y = NULL) + 
+    theme_bw() + 
+    theme(
+        axis.text.y = element_blank()
+      , axis.ticks.y = element_blank()
+    ) 
+  
+  print(p)
+}
+
+
+
+
+ALL_FLAGS %>% 
+  mutate_all(as.factor) %>% 
+  DT::datatable(
+    filter = c("top") 
+  )
+
+```
+
+
+
+## Infographic Notes Check
+
+
+```{r}
+noinfog_notes <- read_csv(file.path(admin$sp_data_raw, "revcnt_notes.csv"), show_col_types = FALSE) %>% 
+  select(STATE, DATANCRP = ncrp, DATAPOP = popdenom) %>% 
+  mutate(in_notes = TRUE)
+
+noinfog_flags <- ALL_FLAGS %>% 
+  filter(name == "flag_INFOGRAPH", FLAG == 2) %>% 
+  select(STATE, DATANCRP, DATAPOP) %>% 
+  mutate(in_flags = TRUE) 
+
+diffdf <- full_join(noinfog_flags, noinfog_notes, by = c("STATE", "DATANCRP", "DATAPOP")) %>% 
+  filter(is.na(in_flags) | is.na(in_notes))
+
+
+if (nrow(diffdf) > 0){ 
+  warning("Notes for no infograph and infographic flags = 2 are NOT consistent!!\nCHECK AND UPDATED AS NEEDED")
+  diffdf
+} else {
+  message("Notes for no infograph and infographic flags = 2 have the same set of states and data")
+}
+```
+
+
+::: 
+<!-- end {.panel-tabset} ALLL --> 

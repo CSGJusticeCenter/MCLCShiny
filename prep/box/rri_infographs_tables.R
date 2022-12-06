@@ -182,8 +182,8 @@ create_single_table <- function(NCRPLET){
   # REV_CEN <- readRDS(file.path(admin$sp_data, glue("NCRP_{NCRPLET}_REV_PUMS.RDS")))  
   
   #what 'recent_yr' is the most likely 
-  yr_CEN <- REV_CEN$OR %>% count(RECENT_YR) %>% filter(n == max(n)) %>% pull(RECENT_YR)
-  yr_BJS <- REV_BJS$OR %>% count(RECENT_YR) %>% filter(n == max(n)) %>% pull(RECENT_YR)
+  yr_CEN <- 2020#REV_CEN$OR %>% count(RECENT_YR) %>% filter(n == max(n)) %>% pull(RECENT_YR)
+  yr_BJS <- 2018#REV_BJS$OR %>% count(RECENT_YR) %>% filter(n == max(n)) %>% pull(RECENT_YR)
   
   
   admin$mylog(glue("{NCRPLET} tables, takes ~40-50 seconds"))
@@ -300,7 +300,7 @@ prep_for_shiny <- function(){
           , race = df$RACE
           , label   = paste0(whichNCRP, "_", whichSTATE, "_", whichPOP, "_", df$RACE)
           , savefile= TRUE
-          , infogs  = ifelse(df$RRI <= 10, 10, 20)
+          , infogs  = ifelse(df$S_RRI <= 11, 11, 22)
         )
         , infograph$create_infograph 
       )

@@ -76,7 +76,7 @@ create_reactable <- function(DF){
     , style = list(fontFamily = "Graphik, sans-serfit", fontsize = "1.4rem")
     , theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"))
     , defaultColDef = colDef(
-        minWidth = 70
+        minWidth = 55
       , align = "right"
       , headerVAlign = "bottom"
     )
@@ -89,7 +89,7 @@ create_reactable <- function(DF){
         OFFGENERAL = colDef(
             name = "Offense Category"
           , align = "left"
-          , minWidth = 130
+          , minWidth = 105
           #no border when witin offense category 
           , style = JS( 
             "function(rowInfo) {
@@ -100,7 +100,7 @@ create_reactable <- function(DF){
               return {borderTop: borderTop}
               }")
         )
-      , RACE       = colDef(name = "Race/Ethnicity", align = "left", minWidth = 130)
+      , RACE       = colDef(name = "Race/Ethnicity", align = "left", minWidth = 105)
       , OFFGENERALB = colDef(show = FALSE)
       
     ) #end columns list

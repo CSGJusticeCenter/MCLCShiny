@@ -400,7 +400,7 @@ Dropdowns
 }
 
 /* Format for download data button */
-.download-data {
+.download-btn-lg {
   width: 90%;
   max-width: 20em;
   min-width: 10em;

@@ -23,21 +23,21 @@ NCRP_ARN <- function(){
   admin$mylog("Start NCRP import, 3 data sets")
   
   #da38048.0002 -- prison admissions
-  load(file.path(CC_path,"NCRP/ICPSR_38048-V1/ICPSR_38048", "DS0002/38048-0002-Data.rda"))
+  load(file.path(CC_path,"NCRP/ICPSR_38492-V1/ICPSR_38492", "DS0002/38492-0002-Data.rda"))
   admin$mylog("Complete NCRP import: admissions")
   
   #da38048.0003 -- prison releases 
-  load(file.path(CC_path,"NCRP/ICPSR_38048-V1/ICPSR_38048", "DS0003/38048-0003-Data.rda"))
+  load(file.path(CC_path,"NCRP/ICPSR_38492-V1/ICPSR_38492", "DS0003/38492-0003-Data.rda"))
   admin$mylog("Complete NCRP import: releases")
   
   #da38048.0004 -- yearend population 
-  load(file.path(CC_path,"NCRP/ICPSR_38048-V1/ICPSR_38048", "DS0004/38048-0004-Data.rda"))
+  load(file.path(CC_path,"NCRP/ICPSR_38492-V1/ICPSR_38492", "DS0004/38492-0004-Data.rda"))
   admin$mylog("Complete NCRP import: population")
   
   raw <- list(
-      "ADMISSIONS" = da38048.0002
-    , "RELEASES"   = da38048.0003
-    , "N_YEAREND"  = da38048.0004
+      "ADMISSIONS" = da38492.0002
+    , "RELEASES"   = da38492.0003
+    , "N_YEAREND"  = da38492.0004
   )
 
   admin$mylog("Complete NCRP import, 3 data sets")
@@ -57,10 +57,10 @@ NCRP_A <- function(){
   
   admin$mylog("Start - NCRP import for admissions")
   
-  #da38048.0002 -- prison admissions
-  load(file.path(CC_path,"NCRP/ICPSR_38048-V1/ICPSR_38048", "DS0002/38048-0002-Data.rda"))
+  #da38492.0002 -- prison admissions
+  load(file.path(CC_path,"NCRP/ICPSR_38492-V1/ICPSR_38492", "DS0002/38492-0002-Data.rda"))
   
-  raw <- da38048.0002
+  raw <- da38492.0002
   
   admin$mylog("End   - NCRP import for admissions")
   return(raw)
@@ -76,10 +76,10 @@ NCRP_N <- function(){
   
   admin$mylog("Start - NCRP import for year-end population ")
   
-  #da38048.0004 -- year end population 
-  load(file.path(CC_path,"NCRP/ICPSR_38048-V1/ICPSR_38048", "DS0004/38048-0004-Data.rda"))
+  #da38492.0004 -- year end population 
+  load(file.path(CC_path,"NCRP/ICPSR_38492-V1/ICPSR_38492", "DS0004/38492-0004-Data.rda"))
   
-  raw <- da38048.0004
+  raw <- da38492.0004
   
   admin$mylog("End   - NCRP import for year-end population")
   return(raw)

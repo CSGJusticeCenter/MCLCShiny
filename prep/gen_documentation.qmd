@@ -81,6 +81,8 @@ rm(link)
 
 Public Use Microdata Sample (PUMS).  Data is pulled from PUMS API using the `{tidycensus}` package.  The data is pulled and saved on SharePoint.  
 
+PUMS data is unavailable for 2020 due to covid19.  For 2020 revocations counts, rates per population will use 2019 PUMS data.  
+
 
 
 ##### PUMMS --> NCRP 
