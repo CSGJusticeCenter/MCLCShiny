@@ -29,7 +29,6 @@ library(stats)
 
 
 # assign colors for visualizations
-source("app/library.R")
 source("app/colors.R")
 source("app/functions.R")
 
@@ -146,45 +145,6 @@ pop_maps_2018_2019 <- setNames(pop_maps_2018_2019, metrics)
 pop_maps_2018_2021 <- setNames(pop_maps_2018_2021, metrics)
 pop_maps_2019_2020 <- setNames(pop_maps_2019_2020, metrics)
 pop_maps_2020_2021 <- setNames(pop_maps_2020_2021, metrics)
-
-# New Offense Admissions
-saveWidget(adm_maps_2018_2019$`New Offense`, "temp.html")
-webshot2::webshot(url = "temp.html", file= "app/data/Change_New_Offense_Adm_2018_2019.png", delay = 5)
-saveWidget(adm_maps_2019_2020$`New Offense`, "temp.html")
-webshot2::webshot(url = "temp.html", file= "app/data/Change_New_Offense_Adm_2019_2020.png", delay = 5)
-saveWidget(adm_maps_2020_2021$`New Offense`, "temp.html")
-webshot2::webshot(url = "temp.html", file= "app/data/Change_New_Offense_Adm_2020_2021.png", delay = 5)
-saveWidget(adm_maps_2018_2021$`New Offense`, "temp.html")
-webshot2::webshot(url = "temp.html", file= "app/data/Change_New_Offense_Adm_2018_2021.png", delay = 5)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ############
 # STATE REPORTS - State area chart
@@ -344,7 +304,7 @@ probation_bar_pop <- setNames(probation_bar_pop, states)
 
 
 
-theseFOLDERS <- c( "sharepoint" = admin$sp_data, "app" = "app/data")
+theseFOLDERS <- c("sharepoint" = admin$sp_data, "app" = "app/data")
 
 for (folder in theseFOLDERS){
 
@@ -360,6 +320,72 @@ for (folder in theseFOLDERS){
 
 }
 
+metrics_list <- list("New Offense",
+                     "Parole Violation",
+                     "Probation Violation",
+                     "Supervision Violation",
+                     "Technical Violation",
+                     "Total")
+
+for (folder in theseFOLDERS){
+
+  ##########
+  # ADMISSIONS
+  ##########
+
+  # 2018-2019
+  for (i in metrics_list){
+    saveWidget(adm_maps_2018_2019[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Adm_2018 - 2019.png", sep = ""), delay = 3)
+  }
+
+  # 2018-2021
+  for (i in metrics_list){
+    saveWidget(adm_maps_2018_2021[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Adm_2018 - 2021.png", sep = ""), delay = 3)
+  }
+
+  # 2019-2020
+  for (i in metrics_list){
+    saveWidget(adm_maps_2019_2020[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Adm_2019 - 2020.png", sep = ""), delay = 3)
+  }
+
+  # 2020-2021
+  for (i in metrics_list){
+    saveWidget(adm_maps_2020_2021[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Adm_2020 - 2021.png", sep = ""), delay = 3)
+  }
+
+  ##########
+  # POPULATION
+  ##########
+
+  # 2018-2019
+  for (i in metrics_list){
+    saveWidget(pop_maps_2018_2019[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Pop_2018 - 2019.png", sep = ""), delay = 3)
+  }
+
+  # 2018-2021
+  for (i in metrics_list){
+    saveWidget(pop_maps_2018_2021[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Pop_2018 - 2021.png", sep = ""), delay = 3)
+  }
+
+  # 2019-2020
+  for (i in metrics_list){
+    saveWidget(pop_maps_2019_2020[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Pop_2019 - 2020.png", sep = ""), delay = 3)
+  }
+
+  # 2020-2021
+  for (i in metrics_list){
+    saveWidget(pop_maps_2020_2021[[i]], "temp.html")
+    webshot2::webshot(url = "temp.html", file = paste(folder, "/Change_", i, "_Pop_2020 - 2021.png", sep = ""), delay = 3)
+  }
+
+}
 
 
 

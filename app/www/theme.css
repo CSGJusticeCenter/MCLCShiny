@@ -154,7 +154,7 @@ Dropdowns and buttons
   min-width: 10em;
 }
 
-/* Format for download map button - removed download button for now */
+/* Format for download map button */
 .download-map {
   margin: 2.75em 1em 2.75em 1em;
   border-radius:0px;
@@ -242,6 +242,17 @@ STATE REPORTS
 Dropdowns
 ####################################################################################################################*/
 
+/* Format download chart button */
+.download-chart {
+  border-radius:0px;
+  color: #fff;
+  border-color: #fff;
+  text-align: left;
+  width: 3em;
+  background-color:#fff;
+  color: #000000;
+  font-family: Graphik;
+}
 
 /*######################################
 STATE REPORTS

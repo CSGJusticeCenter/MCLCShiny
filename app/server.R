@@ -9,7 +9,7 @@
 
 server <- function(input, output, session) {
 
-  # Cange URL depending on tab selection in navbar
+  # Change URL depending on tab selection in navbar
   observeEvent(input$navbarID, {
 
     newURL <- paste0(
@@ -68,6 +68,7 @@ server <- function(input, output, session) {
              change = 7)
   })
 
+  # Dynamically change name of map
   map_filename <- reactive({
     temp <- mclc_explorer %>%
       filter(adm_or_pop == input$adm_or_pop_map,
@@ -161,7 +162,7 @@ server <- function(input, output, session) {
         ) %>%
 
         hc_setup() %>%
-        hc_exporting(enabled = TRUE,
+        hc_exporting(enabled = FALSE,
                      filename = map_filename(),
                      buttons = list(
                        contextButton = list(
@@ -226,7 +227,7 @@ server <- function(input, output, session) {
                        useHTML = TRUE)) %>%
 
         hc_setup() %>%
-        hc_exporting(enabled = TRUE,
+        hc_exporting(enabled = FALSE,
                      filename = map_filename(),
                      buttons = list(
                        contextButton = list(
@@ -339,7 +340,7 @@ server <- function(input, output, session) {
         ) %>%
 
         hc_setup() %>%
-        hc_exporting(enabled = TRUE,
+        hc_exporting(enabled = FALSE,
                      filename = map_filename(),
                      buttons = list(
                        contextButton = list(
@@ -404,7 +405,7 @@ server <- function(input, output, session) {
             useHTML = TRUE)) %>%
 
         hc_setup() %>%
-        hc_exporting(enabled = TRUE,
+        hc_exporting(enabled = FALSE,
                      filename = map_filename(),
                      buttons = list(
                        contextButton = list(
@@ -728,7 +729,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_exporting(enabled = TRUE,
+        hc_exporting(enabled = FALSE,
                      filename = "Prison_Admissions_Overview",
                      buttons = list(
                        contextButton = list(
@@ -745,7 +746,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_exporting(enabled = TRUE,
+        hc_exporting(enabled = FALSE,
                      filename = "Prison_Population_Overview",
                      buttons = list(
                        contextButton = list(
@@ -775,7 +776,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_exporting(enabled = TRUE,
+        hc_exporting(enabled = FALSE,
                      filename = "Supervision_Violation_Admissions_by_Type",
                      buttons = list(
                        contextButton = list(
@@ -793,7 +794,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_exporting(enabled = TRUE,
+        hc_exporting(enabled = FALSE,
                      filename = "Supervision_Violation_Population_by_Type",
                      buttons = list(
                        contextButton = list(
@@ -981,7 +982,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_exporting(enabled = TRUE,
+        hc_exporting(enabled = FALSE,
                      filename = "Parole_Violation_Admissions_by_Type",
                      buttons = list(
                        contextButton = list(
@@ -998,7 +999,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_exporting(enabled = TRUE,
+        hc_exporting(enabled = FALSE,
                      filename = "Parole_Violation_Population_by_Type",
                      buttons = list(
                        contextButton = list(
@@ -1173,7 +1174,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_exporting(enabled = TRUE,
+        hc_exporting(enabled = FALSE,
                      filename = "Probation_Violation_Admissions_by_Type",
                      buttons = list(
                        contextButton = list(
@@ -1190,7 +1191,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_exporting(enabled = TRUE,
+        hc_exporting(enabled = FALSE,
                      filename = "Probation_Violation_Population_by_Type",
                      buttons = list(
                        contextButton = list(
