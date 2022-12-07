@@ -1267,57 +1267,6 @@ server <- function(input, output, session) {
     
   })
 
-  # output$parole_nt = renderUI({
-  # 
-  #   # If state is missing new offense and technical violations (Admissions)
-  #   if(input$state_report %in% parole_na_adm & input$adm_pop_report == "Admissions" & !(input$state_report %in% abolish_prob_parole)){
-  #     htmlOutput("missing_data_parole_nt_adm")
-  # 
-  #     # If state is missing new offense and technical violations (Population)
-  #   } else if(input$state_report %in% parole_na_pop & input$adm_pop_report == "Population" & !(input$state_report %in% abolish_prob_parole)){
-  #     htmlOutput("missing_data_parole_nt_pop")
-  # 
-  #     # If state is missing new offense and technical violations (Admissions) AND abolished parole
-  #   } else if(input$state_report %in% parole_na_adm & input$adm_pop_report == "Admissions" & (input$state_report %in% abolish_prob_parole)){
-  #     htmlOutput("abolished_parole_adm")
-  # 
-  #     # If state is missing new offense and technical violations (Admissions) AND abolished parole
-  #   } else if(input$state_report %in% parole_na_pop & input$adm_pop_report == "Population" & (input$state_report %in% abolish_prob_parole)){
-  #     htmlOutput("abolished_parole_pop")
-  # 
-  #     # If state has data (Admissions)
-  #   } else if(input$state_report %in% parole_not_na_adm & input$adm_pop_report == "Admissions"){
-  #     highchartOutput("parole_bar_chart", height = 400, width = 390)
-  # 
-  #     # If state has data (Population)
-  #   } else if(input$state_report %in% parole_not_na_pop & input$adm_pop_report == "Population"){
-  #     highchartOutput("parole_bar_chart", height = 400, width = 390)
-  # 
-  #   }
-  # 
-  # })
-  # output$parole_nt_button = renderUI({
-  # 
-  #   # If state is missing new offense and technical violations (Admissions)
-  #   if(input$state_report %in% parole_na_adm & input$adm_pop_report == "Admissions"){
-  #     textOutput("missing_data_parole_nt_button")
-  # 
-  #     # If state is missing new offense and technical violations (Population)
-  #   } else if(input$state_report %in% parole_na_pop & input$adm_pop_report == "Population"){
-  #     textOutput("missing_data_parole_nt_button")
-  # 
-  #     # If state has data (Admissions)
-  #   } else if(input$state_report %in% parole_not_na_adm & input$adm_pop_report == "Admissions"){
-  #     downloadButton(outputId = 'save_parole_bar_chart', "", class = "download-chart")
-  # 
-  #     # If state has data (Population)
-  #   } else if(input$state_report %in% parole_not_na_pop & input$adm_pop_report == "Population"){
-  #     downloadButton(outputId = 'save_parole_bar_chart', "", class = "download-chart")
-  # 
-  #   }
-  # 
-  # })
-
   #######
   # Probation Tab
   #######
@@ -1492,48 +1441,88 @@ server <- function(input, output, session) {
     ""
   })
 
-  output$probation_nt = renderUI({
-
+  # output$probation_nt = renderUI({
+  # 
+  #   # If state is missing new offense and technical violations (Admissions)
+  #   if(input$state_report %in% probation_na_adm & input$adm_pop_report == "Admissions"){
+  #     htmlOutput("missing_data_probation_nt_adm")
+  # 
+  #     # If state is missing new offense and technical violations (Population)
+  #   } else if(input$state_report %in% probation_na_pop & input$adm_pop_report == "Population"){
+  #     htmlOutput("missing_data_probation_nt_pop")
+  # 
+  #     # If state has data (Admissions)
+  #   } else if(input$state_report %in% probation_not_na_adm & input$adm_pop_report == "Admissions"){
+  #     highchartOutput("probation_bar_chart", height = 400, width = 390)
+  # 
+  #     # If state has data (Population)
+  #   } else if(input$state_report %in% probation_not_na_pop & input$adm_pop_report == "Population"){
+  #     highchartOutput("probation_bar_chart", height = 400, width = 390)
+  # 
+  #   }
+  # 
+  # })
+  # 
+  # output$probation_nt_button = renderUI({
+  # 
+  #   # If state is missing new offense and technical violations (Admissions)
+  #   if(input$state_report %in% probation_na_adm & input$adm_pop_report == "Admissions"){
+  #     textOutput("missing_data_probation_nt_button")
+  # 
+  #     # If state is missing new offense and technical violations (Population)
+  #   } else if(input$state_report %in% probation_na_pop & input$adm_pop_report == "Population"){
+  #     textOutput("missing_data_probation_nt_button")
+  # 
+  #     # If state has data (Admissions)
+  #   } else if(input$state_report %in% probation_not_na_adm & input$adm_pop_report == "Admissions"){
+  #     downloadButton(outputId = 'save_probation_bar_chart', "", class = "download-chart")
+  # 
+  #     # If state has data (Population)
+  #   } else if(input$state_report %in% probation_not_na_pop & input$adm_pop_report == "Population"){
+  #     downloadButton(outputId = 'save_probation_bar_chart', "", class = "download-chart")
+  # 
+  #   }
+  # 
+  # })
+  
+  output$probation_nt <- renderUI({
+    
     # If state is missing new offense and technical violations (Admissions)
     if(input$state_report %in% probation_na_adm & input$adm_pop_report == "Admissions"){
-      htmlOutput("missing_data_probation_nt_adm")
-
+      
+      fluidRow(column(width = 3),
+               column(width = 6, align = "center", htmlOutput("missing_data_probation_nt_adm")),
+               column(width = 3)
+      )
+      
       # If state is missing new offense and technical violations (Population)
     } else if(input$state_report %in% probation_na_pop & input$adm_pop_report == "Population"){
-      htmlOutput("missing_data_probation_nt_pop")
-
+      
+      fluidRow(column(width = 3),
+               column(width = 6, align = "center", htmlOutput("missing_data_probation_nt_pop")),
+               column(width = 3)
+      )
+      
       # If state has data (Admissions)
     } else if(input$state_report %in% probation_not_na_adm & input$adm_pop_report == "Admissions"){
-      highchartOutput("probation_bar_chart", height = 400, width = 390)
-
+      
+      fluidRow(column(width = 3),
+               column(width = 5, align = "center", highchartOutput("probation_bar_chart", height = 400, width = 390)),
+               column(width = 1, align = "left",   downloadButton(outputId = 'save_probation_bar_chart', "", class = "download-chart")),
+               column(width = 3)
+      )
+      
       # If state has data (Population)
     } else if(input$state_report %in% probation_not_na_pop & input$adm_pop_report == "Population"){
-      highchartOutput("probation_bar_chart", height = 400, width = 390)
-
+      
+      fluidRow(column(width = 3),
+               column(width = 5, align = "center", highchartOutput("probation_bar_chart", height = 400, width = 390)),
+               column(width = 1, align = "left",   downloadButton(outputId = 'save_probation_bar_chart', "", class = "download-chart")),
+               column(width = 3)
+      )
+      
     }
-
-  })
-
-  output$probation_nt_button = renderUI({
-
-    # If state is missing new offense and technical violations (Admissions)
-    if(input$state_report %in% probation_na_adm & input$adm_pop_report == "Admissions"){
-      textOutput("missing_data_probation_nt_button")
-
-      # If state is missing new offense and technical violations (Population)
-    } else if(input$state_report %in% probation_na_pop & input$adm_pop_report == "Population"){
-      textOutput("missing_data_probation_nt_button")
-
-      # If state has data (Admissions)
-    } else if(input$state_report %in% probation_not_na_adm & input$adm_pop_report == "Admissions"){
-      downloadButton(outputId = 'save_probation_bar_chart', "", class = "download-chart")
-
-      # If state has data (Population)
-    } else if(input$state_report %in% probation_not_na_pop & input$adm_pop_report == "Population"){
-      downloadButton(outputId = 'save_probation_bar_chart', "", class = "download-chart")
-
-    }
-
+    
   })
 
   ####
