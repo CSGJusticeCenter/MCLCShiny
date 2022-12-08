@@ -1,0 +1,720 @@
+[1] "2022-12-08 09:37:08 CST"
+[1mindexing[0m [34mrevcnt_notes.csv[0m [============================================================================] [32m258.24MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                2022-12-08 09:37:09 - !!START PREP FOR SHINY
+2022-12-08 09:37:09 - Import and clean NCRP revocations data
+2022-12-08 09:37:09 - Start - NCRP import for admissions
+2022-12-08 09:37:11 - End   - NCRP import for admissions
+2022-12-08 09:37:11 - Start - NCRP prep
+2022-12-08 09:37:11 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2022-12-08 09:37:11 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2022-12-08 09:37:13 - End   - NCRP prep
+2022-12-08 09:37:13 - Import and clean BJS-APS for PAROLE population (denominator)
+[1mindexing[0m [34mapars_idyear.csv[0m [============================================================================] [32m162.08MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                2022-12-08 09:37:13 - Start - BJS APS (Parole) import for 2010-2018
+2022-12-08 09:37:13 - End   - BJS APS (Parole) import for 2010-2018
+2022-12-08 09:37:13 - STart - APS prep
+2022-12-08 09:37:13 - APS prep - 
+-- Drop Federal total row
+-- calculate other race category, pivot longer, recode into single race variable
+-- make new race variable a factor 
+-- drop rows where POPEST is NA (covered in UNKRACE)
+-- add state id columns
+2022-12-08 09:37:13 - Sum accross state and year
+2022-12-08 09:37:13 - End   - APS prep
+2022-12-08 09:37:13 - Calc - rate/RRI calcuations
+Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR", "OFFGENERAL")
+Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR")
+2022-12-08 09:37:13 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2022-12-08 09:37:13 - Saved FULL_DF - NCRP_A_REV_BJS.RDS (included a date stamped version)
+2022-12-08 09:37:13 - Import and clean NCRP revocations data
+2022-12-08 09:37:13 - Start - NCRP import for admissions
+2022-12-08 09:37:15 - End   - NCRP import for admissions
+2022-12-08 09:37:15 - Start - NCRP prep
+2022-12-08 09:37:15 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2022-12-08 09:37:15 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2022-12-08 09:37:17 - End   - NCRP prep
+2022-12-08 09:37:17 - Import and clean PUMS (ACS) for COMMUNITY population (denominator)
+2022-12-08 09:37:17 - Start - PUMS prep
+2022-12-08 09:37:17 - End   - PUMS prep
+2022-12-08 09:37:17 - Calc - rate/RRI calcuations
+Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR", "OFFGENERAL")
+Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR")
+2022-12-08 09:37:17 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2022-12-08 09:37:17 - Saved FULL_DF - NCRP_A_REV_PUMS.RDS (included a date stamped version)
+2022-12-08 09:37:17 - A tables, takes ~40-50 seconds
+2022-12-08 09:37:43 - A tables end
+2022-12-08 09:37:43 - Flags A BJS - Start
+[1mwrote[0m [32m832.00B[0m in [36m 0s[0m, [32m51.32MB/s[0m                                                                                                                           [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                           2022-12-08 09:37:47 - Flags A BJS - End
+2022-12-08 09:37:47 - Flags A CEN - Start
+[1mwrote[0m [32m899.00B[0m in [36m 0s[0m, [32m63.91MB/s[0m                                                                                                                           [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                           2022-12-08 09:37:52 - Flags A CEN - End
+2022-12-08 09:37:52 - Import and clean NCRP revocations data
+2022-12-08 09:37:52 - Start - NCRP import for year-end population 
+2022-12-08 09:37:56 - End   - NCRP import for year-end population
+2022-12-08 09:37:56 - Start - NCRP prep
+2022-12-08 09:37:56 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2022-12-08 09:37:56 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2022-12-08 09:37:58 - End   - NCRP prep
+2022-12-08 09:37:58 - Import and clean BJS-APS for PAROLE population (denominator)
+[1mindexing[0m [34mapars_idyear.csv[0m [============================================================================] [32m144.84MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                2022-12-08 09:37:58 - Start - BJS APS (Parole) import for 2010-2018
+2022-12-08 09:37:58 - End   - BJS APS (Parole) import for 2010-2018
+2022-12-08 09:37:58 - STart - APS prep
+2022-12-08 09:37:58 - APS prep - 
+-- Drop Federal total row
+-- calculate other race category, pivot longer, recode into single race variable
+-- make new race variable a factor 
+-- drop rows where POPEST is NA (covered in UNKRACE)
+-- add state id columns
+2022-12-08 09:37:58 - Sum accross state and year
+2022-12-08 09:37:58 - End   - APS prep
+2022-12-08 09:37:58 - Calc - rate/RRI calcuations
+Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR", "OFFGENERAL")
+Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR")
+2022-12-08 09:37:58 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2022-12-08 09:37:58 - Saved FULL_DF - NCRP_N_REV_BJS.RDS (included a date stamped version)
+2022-12-08 09:37:58 - Import and clean NCRP revocations data
+2022-12-08 09:37:58 - Start - NCRP import for year-end population 
+2022-12-08 09:38:01 - End   - NCRP import for year-end population
+2022-12-08 09:38:02 - Start - NCRP prep
+2022-12-08 09:38:02 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2022-12-08 09:38:02 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2022-12-08 09:38:04 - End   - NCRP prep
+2022-12-08 09:38:04 - Import and clean PUMS (ACS) for COMMUNITY population (denominator)
+2022-12-08 09:38:04 - Start - PUMS prep
+2022-12-08 09:38:04 - End   - PUMS prep
+2022-12-08 09:38:04 - Calc - rate/RRI calcuations
+Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR", "OFFGENERAL")
+Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR")
+2022-12-08 09:38:04 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2022-12-08 09:38:04 - Saved FULL_DF - NCRP_N_REV_PUMS.RDS (included a date stamped version)
+2022-12-08 09:38:04 - N tables, takes ~40-50 seconds
+2022-12-08 09:38:32 - N tables end
+2022-12-08 09:38:32 - Flags N BJS - Start
+[1mwrote[0m [32m642.00B[0m in [36m 0s[0m, [32m25.65MB/s[0m                                                                                                                           [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                           2022-12-08 09:38:39 - Flags N BJS - End
+2022-12-08 09:38:39 - Flags N CEN - Start
+[1mwrote[0m [32m759.00B[0m in [36m 0s[0m, [32m50.53MB/s[0m                                                                                                                           [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                           2022-12-08 09:38:45 - Flags N CEN - End
+2022-12-08 09:38:45 - Saved outtables - NCRP_RRI_tables.RDS (included a date stamped version)
+2022-12-08 09:38:45 - Infographics - Start, takes ~20 min to create
+2022-12-08 09:38:46 - 1 out of 200
+2022-12-08 09:38:46 - Admissions Alabama BJS does NOT have data for infographics
+2022-12-08 09:38:46 - 2 out of 200
+2022-12-08 09:38:46 - Admissions Alabama CEN does NOT have data for infographics
+2022-12-08 09:38:46 - 3 out of 200
+2022-12-08 09:38:46 - Admissions Alaska BJS does NOT have data for infographics
+2022-12-08 09:38:46 - 4 out of 200
+2022-12-08 09:38:46 - Admissions Alaska CEN does NOT have data for infographics
+2022-12-08 09:38:46 - 5 out of 200
+2022-12-08 09:38:52 - Save image for Admissions_Arizona_BJS_Black - 1.2, h=4.2, w=24.5393760563784
+2022-12-08 09:38:58 - Save image for Admissions_Arizona_BJS_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 09:38:58 - 6 out of 200
+2022-12-08 09:39:04 - Save image for Admissions_Arizona_CEN_Black - 3.9, h=4.2, w=24.5393760563784
+2022-12-08 09:39:11 - Save image for Admissions_Arizona_CEN_Hispanic - 2.0, h=4.2, w=24.5393760563784
+2022-12-08 09:39:11 - 7 out of 200
+2022-12-08 09:39:17 - Save image for Admissions_Arkansas_BJS_Black - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 09:39:22 - Save image for Admissions_Arkansas_BJS_Hispanic - 0.1, h=4.2, w=24.5393760563784
+2022-12-08 09:39:22 - 8 out of 200
+2022-12-08 09:39:27 - Save image for Admissions_Arkansas_CEN_Black - 2.3, h=4.2, w=24.5393760563784
+2022-12-08 09:39:32 - Save image for Admissions_Arkansas_CEN_Hispanic - 0.1, h=4.2, w=24.5393760563784
+2022-12-08 09:39:32 - 9 out of 200
+2022-12-08 09:39:37 - Save image for Admissions_California_BJS_Black - 1.1, h=4.2, w=24.5393760563784
+2022-12-08 09:39:41 - Save image for Admissions_California_BJS_Hispanic - 1.1, h=4.2, w=24.5393760563784
+2022-12-08 09:39:41 - 10 out of 200
+2022-12-08 09:39:46 - Save image for Admissions_California_CEN_Black - 6.7, h=4.2, w=24.5393760563784
+2022-12-08 09:39:51 - Save image for Admissions_California_CEN_Hispanic - 2.1, h=4.2, w=24.5393760563784
+2022-12-08 09:39:51 - 11 out of 200
+2022-12-08 09:39:57 - Save image for Admissions_Colorado_BJS_Black - 1.2, h=4.2, w=24.5393760563784
+2022-12-08 09:40:03 - Save image for Admissions_Colorado_BJS_Hispanic - 1.2, h=4.2, w=24.5393760563784
+2022-12-08 09:40:03 - 12 out of 200
+2022-12-08 09:40:08 - Save image for Admissions_Colorado_CEN_Black - 4.4, h=4.2, w=24.5393760563784
+2022-12-08 09:40:13 - Save image for Admissions_Colorado_CEN_Hispanic - 2.6, h=4.2, w=24.5393760563784
+2022-12-08 09:40:13 - 13 out of 200
+2022-12-08 09:40:13 - Admissions Connecticut BJS does NOT have data for infographics
+2022-12-08 09:40:13 - 14 out of 200
+2022-12-08 09:40:13 - Admissions Connecticut CEN does NOT have data for infographics
+2022-12-08 09:40:13 - 15 out of 200
+2022-12-08 09:40:19 - Save image for Admissions_Delaware_BJS_Black - 0.7, h=4.2, w=24.5393760563784
+2022-12-08 09:40:24 - Save image for Admissions_Delaware_BJS_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 09:40:24 - 16 out of 200
+2022-12-08 09:40:29 - Save image for Admissions_Delaware_CEN_Black - 3.4, h=4.2, w=24.5393760563784
+2022-12-08 09:40:33 - Save image for Admissions_Delaware_CEN_Hispanic - 1.1, h=4.2, w=24.5393760563784
+2022-12-08 09:40:33 - 17 out of 200
+2022-12-08 09:40:38 - Save image for Admissions_Florida_BJS_Black - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 09:40:43 - Save image for Admissions_Florida_BJS_Hispanic - 0.8, h=4.2, w=24.5393760563784
+2022-12-08 09:40:43 - 18 out of 200
+2022-12-08 09:40:48 - Save image for Admissions_Florida_CEN_Black - 4.6, h=4.2, w=24.5393760563784
+2022-12-08 09:40:52 - Save image for Admissions_Florida_CEN_Hispanic - 0.3, h=4.2, w=24.5393760563784
+2022-12-08 09:40:52 - 19 out of 200
+2022-12-08 09:40:57 - Save image for Admissions_Georgia_BJS_Black - 0.8, h=4.2, w=24.5393760563784
+2022-12-08 09:41:01 - Save image for Admissions_Georgia_BJS_Hispanic - 0.3, h=4.2, w=24.5393760563784
+2022-12-08 09:41:01 - 20 out of 200
+2022-12-08 09:41:06 - Save image for Admissions_Georgia_CEN_Black - 1.7, h=4.2, w=24.5393760563784
+2022-12-08 09:41:10 - Save image for Admissions_Georgia_CEN_Hispanic - 0.2, h=4.2, w=24.5393760563784
+2022-12-08 09:41:10 - 21 out of 200
+2022-12-08 09:41:10 - Admissions Hawaii BJS does NOT have data for infographics
+2022-12-08 09:41:10 - 22 out of 200
+2022-12-08 09:41:15 - Save image for Admissions_Hawaii_CEN_Black - 1.3, h=4.2, w=24.5393760563784
+2022-12-08 09:41:20 - Save image for Admissions_Hawaii_CEN_Hispanic - 0.4, h=4.2, w=24.5393760563784
+2022-12-08 09:41:20 - 23 out of 200
+2022-12-08 09:41:24 - Save image for Admissions_Idaho_BJS_Black - 1.2, h=4.2, w=24.5393760563784
+2022-12-08 09:41:29 - Save image for Admissions_Idaho_BJS_Hispanic - <0.1*, h=4.2, w=24.5393760563784
+2022-12-08 09:41:29 - 24 out of 200
+2022-12-08 09:41:33 - Save image for Admissions_Idaho_CEN_Black - 3.7, h=4.2, w=24.5393760563784
+2022-12-08 09:41:38 - Save image for Admissions_Idaho_CEN_Hispanic - 0.1, h=4.2, w=24.5393760563784
+2022-12-08 09:41:38 - 25 out of 200
+2022-12-08 09:41:42 - Save image for Admissions_Illinois_BJS_Black - 1.3, h=4.2, w=24.5393760563784
+2022-12-08 09:41:46 - Save image for Admissions_Illinois_BJS_Hispanic - 0.8, h=4.2, w=24.5393760563784
+2022-12-08 09:41:46 - 26 out of 200
+2022-12-08 09:41:51 - Save image for Admissions_Illinois_CEN_Black - 10.0, h=4.2, w=24.5393760563784
+2022-12-08 09:41:56 - Save image for Admissions_Illinois_CEN_Hispanic - 1.4, h=4.2, w=24.5393760563784
+2022-12-08 09:41:56 - 27 out of 200
+2022-12-08 09:42:00 - Save image for Admissions_Indiana_BJS_Black - 1.3, h=4.2, w=24.5393760563784
+2022-12-08 09:42:05 - Save image for Admissions_Indiana_BJS_Hispanic - 0.3, h=4.2, w=24.5393760563784
+2022-12-08 09:42:05 - 28 out of 200
+2022-12-08 09:42:10 - Save image for Admissions_Indiana_CEN_Black - 4.2, h=4.2, w=24.5393760563784
+2022-12-08 09:42:15 - Save image for Admissions_Indiana_CEN_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-12-08 09:42:15 - 29 out of 200
+2022-12-08 09:42:20 - Save image for Admissions_Iowa_BJS_Black - 1.3, h=4.2, w=24.5393760563784
+2022-12-08 09:42:25 - Save image for Admissions_Iowa_BJS_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-12-08 09:42:25 - 30 out of 200
+2022-12-08 09:42:29 - Save image for Admissions_Iowa_CEN_Black - 6.4, h=4.2, w=24.5393760563784
+2022-12-08 09:42:34 - Save image for Admissions_Iowa_CEN_Hispanic - 1.3, h=4.2, w=24.5393760563784
+2022-12-08 09:42:34 - 31 out of 200
+2022-12-08 09:42:39 - Save image for Admissions_Kansas_BJS_Black - 1.1, h=4.2, w=24.5393760563784
+2022-12-08 09:42:44 - Save image for Admissions_Kansas_BJS_Hispanic - 0.8, h=4.2, w=24.5393760563784
+2022-12-08 09:42:44 - 32 out of 200
+2022-12-08 09:42:49 - Save image for Admissions_Kansas_CEN_Black - 5.5, h=4.2, w=24.5393760563784
+2022-12-08 09:42:54 - Save image for Admissions_Kansas_CEN_Hispanic - 1.9, h=4.2, w=24.5393760563784
+2022-12-08 09:42:54 - 33 out of 200
+2022-12-08 09:42:59 - Save image for Admissions_Kentucky_BJS_Black - 0.7, h=4.2, w=24.5393760563784
+2022-12-08 09:43:04 - Save image for Admissions_Kentucky_BJS_Hispanic - 0.4, h=4.2, w=24.5393760563784
+2022-12-08 09:43:04 - 34 out of 200
+2022-12-08 09:43:09 - Save image for Admissions_Kentucky_CEN_Black - 1.5, h=4.2, w=24.5393760563784
+2022-12-08 09:43:14 - Save image for Admissions_Kentucky_CEN_Hispanic - 0.1, h=4.2, w=24.5393760563784
+2022-12-08 09:43:14 - 35 out of 200
+2022-12-08 09:43:14 - Admissions Louisiana BJS does NOT have data for infographics
+2022-12-08 09:43:14 - 36 out of 200
+2022-12-08 09:43:14 - Admissions Louisiana CEN does NOT have data for infographics
+2022-12-08 09:43:14 - 37 out of 200
+2022-12-08 09:43:14 - Admissions Maine BJS does NOT have data for infographics
+2022-12-08 09:43:14 - 38 out of 200
+2022-12-08 09:43:19 - Save image for Admissions_Maine_CEN_Black - <7.9*, h=4.2, w=24.5393760563784
+2022-12-08 09:43:19 - 39 out of 200
+2022-12-08 09:43:24 - Save image for Admissions_Maryland_BJS_Black - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 09:43:24 - 40 out of 200
+2022-12-08 09:43:29 - Save image for Admissions_Maryland_CEN_Black - 3.9, h=4.2, w=24.5393760563784
+2022-12-08 09:43:34 - Save image for Admissions_Maryland_CEN_Hispanic - 0.1, h=4.2, w=24.5393760563784
+2022-12-08 09:43:34 - 41 out of 200
+2022-12-08 09:43:39 - Save image for Admissions_Massachusetts_BJS_Black - 0.9, h=4.2, w=24.5393760563784
+2022-12-08 09:43:44 - Save image for Admissions_Massachusetts_BJS_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-12-08 09:43:44 - 42 out of 200
+2022-12-08 09:43:49 - Save image for Admissions_Massachusetts_CEN_Black - 5.3, h=4.2, w=24.5393760563784
+2022-12-08 09:43:54 - Save image for Admissions_Massachusetts_CEN_Hispanic - 3.4, h=4.2, w=24.5393760563784
+2022-12-08 09:43:54 - 43 out of 200
+2022-12-08 09:43:54 - Admissions Michigan BJS does NOT have data for infographics
+2022-12-08 09:43:54 - 44 out of 200
+2022-12-08 09:43:54 - Admissions Michigan CEN does NOT have data for infographics
+2022-12-08 09:43:54 - 45 out of 200
+2022-12-08 09:43:59 - Save image for Admissions_Minnesota_BJS_Black - 1.7, h=4.2, w=24.5393760563784
+2022-12-08 09:44:04 - Save image for Admissions_Minnesota_BJS_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 09:44:04 - 46 out of 200
+2022-12-08 09:44:14 - Save image for Admissions_Minnesota_CEN_Black - 13.2, h=8.4, w=24.5393760563784
+2022-12-08 09:44:19 - Save image for Admissions_Minnesota_CEN_Hispanic - 1.8, h=4.2, w=24.5393760563784
+2022-12-08 09:44:19 - 47 out of 200
+2022-12-08 09:44:23 - Save image for Admissions_Mississippi_BJS_Black - 0.7, h=4.2, w=24.5393760563784
+2022-12-08 09:44:28 - Save image for Admissions_Mississippi_BJS_Hispanic - 0.2, h=4.2, w=24.5393760563784
+2022-12-08 09:44:28 - 48 out of 200
+2022-12-08 09:44:33 - Save image for Admissions_Mississippi_CEN_Black - 1.4, h=4.2, w=24.5393760563784
+2022-12-08 09:44:38 - Save image for Admissions_Mississippi_CEN_Hispanic - <0.1*, h=4.2, w=24.5393760563784
+2022-12-08 09:44:38 - 49 out of 200
+2022-12-08 09:44:42 - Save image for Admissions_Missouri_BJS_Black - 0.5, h=4.2, w=24.5393760563784
+2022-12-08 09:44:46 - Save image for Admissions_Missouri_BJS_Hispanic - 0.8, h=4.2, w=24.5393760563784
+2022-12-08 09:44:46 - 50 out of 200
+2022-12-08 09:44:50 - Save image for Admissions_Missouri_CEN_Black - 1.6, h=4.2, w=24.5393760563784
+2022-12-08 09:44:55 - Save image for Admissions_Missouri_CEN_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-12-08 09:44:55 - 51 out of 200
+2022-12-08 09:44:59 - Save image for Admissions_Montana_BJS_Black - 1.2, h=4.2, w=24.5393760563784
+2022-12-08 09:45:03 - Save image for Admissions_Montana_BJS_Hispanic - 1.6, h=4.2, w=24.5393760563784
+2022-12-08 09:45:03 - 52 out of 200
+2022-12-08 09:45:07 - Save image for Admissions_Montana_CEN_Black - 2.7, h=4.2, w=24.5393760563784
+2022-12-08 09:45:11 - Save image for Admissions_Montana_CEN_Hispanic - 0.8, h=4.2, w=24.5393760563784
+2022-12-08 09:45:11 - 53 out of 200
+2022-12-08 09:45:15 - Save image for Admissions_Nebraska_BJS_Black - 1.6, h=4.2, w=24.5393760563784
+2022-12-08 09:45:19 - Save image for Admissions_Nebraska_BJS_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 09:45:19 - 54 out of 200
+2022-12-08 09:45:23 - Save image for Admissions_Nebraska_CEN_Black - 8.2, h=4.2, w=24.5393760563784
+2022-12-08 09:45:27 - Save image for Admissions_Nebraska_CEN_Hispanic - 2.2, h=4.2, w=24.5393760563784
+2022-12-08 09:45:27 - 55 out of 200
+2022-12-08 09:45:27 - Admissions Nevada BJS does NOT have data for infographics
+2022-12-08 09:45:27 - 56 out of 200
+2022-12-08 09:45:31 - Save image for Admissions_Nevada_CEN_Black - 3.9, h=4.2, w=24.5393760563784
+2022-12-08 09:45:36 - Save image for Admissions_Nevada_CEN_Hispanic - 0.6, h=4.2, w=24.5393760563784
+2022-12-08 09:45:36 - 57 out of 200
+2022-12-08 09:45:40 - Save image for Admissions_New Hampshire_BJS_Black - 0.8, h=4.2, w=24.5393760563784
+2022-12-08 09:45:44 - Save image for Admissions_New Hampshire_BJS_Hispanic - 0.8, h=4.2, w=24.5393760563784
+2022-12-08 09:45:44 - 58 out of 200
+2022-12-08 09:45:48 - Save image for Admissions_New Hampshire_CEN_Black - 3.3, h=4.2, w=24.5393760563784
+2022-12-08 09:45:53 - Save image for Admissions_New Hampshire_CEN_Hispanic - 2.2, h=4.2, w=24.5393760563784
+2022-12-08 09:45:53 - 59 out of 200
+2022-12-08 09:45:57 - Save image for Admissions_New Jersey_BJS_Black - 1.7, h=4.2, w=24.5393760563784
+2022-12-08 09:46:01 - Save image for Admissions_New Jersey_BJS_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-12-08 09:46:01 - 60 out of 200
+2022-12-08 09:46:06 - Save image for Admissions_New Jersey_CEN_Black - 8.6, h=4.2, w=24.5393760563784
+2022-12-08 09:46:11 - Save image for Admissions_New Jersey_CEN_Hispanic - 1.3, h=4.2, w=24.5393760563784
+2022-12-08 09:46:11 - 61 out of 200
+2022-12-08 09:46:16 - Save image for Admissions_New Mexico_BJS_Black - 1.4, h=4.2, w=24.5393760563784
+2022-12-08 09:46:21 - Save image for Admissions_New Mexico_BJS_Hispanic - 1.1, h=4.2, w=24.5393760563784
+2022-12-08 09:46:21 - 62 out of 200
+2022-12-08 09:46:26 - Save image for Admissions_New Mexico_CEN_Black - 4.7, h=4.2, w=24.5393760563784
+2022-12-08 09:46:31 - Save image for Admissions_New Mexico_CEN_Hispanic - 2.5, h=4.2, w=24.5393760563784
+2022-12-08 09:46:31 - 63 out of 200
+2022-12-08 09:46:36 - Save image for Admissions_New York_BJS_Black - 0.8, h=4.2, w=24.5393760563784
+2022-12-08 09:46:40 - Save image for Admissions_New York_BJS_Hispanic - 0.4, h=4.2, w=24.5393760563784
+2022-12-08 09:46:40 - 64 out of 200
+2022-12-08 09:46:45 - Save image for Admissions_New York_CEN_Black - 5.0, h=4.2, w=24.5393760563784
+2022-12-08 09:46:50 - Save image for Admissions_New York_CEN_Hispanic - 1.9, h=4.2, w=24.5393760563784
+2022-12-08 09:46:50 - 65 out of 200
+2022-12-08 09:46:55 - Save image for Admissions_North Carolina_BJS_Black - 0.9, h=4.2, w=24.5393760563784
+2022-12-08 09:46:59 - Save image for Admissions_North Carolina_BJS_Hispanic - 0.3, h=4.2, w=24.5393760563784
+2022-12-08 09:46:59 - 66 out of 200
+2022-12-08 09:47:04 - Save image for Admissions_North Carolina_CEN_Black - 2.2, h=4.2, w=24.5393760563784
+2022-12-08 09:47:08 - Save image for Admissions_North Carolina_CEN_Hispanic - 0.3, h=4.2, w=24.5393760563784
+2022-12-08 09:47:08 - 67 out of 200
+2022-12-08 09:47:13 - Save image for Admissions_North Dakota_BJS_Black - 0.7, h=4.2, w=24.5393760563784
+2022-12-08 09:47:17 - Save image for Admissions_North Dakota_BJS_Hispanic - 1.4, h=4.2, w=24.5393760563784
+2022-12-08 09:47:17 - 68 out of 200
+2022-12-08 09:47:22 - Save image for Admissions_North Dakota_CEN_Black - 2.9, h=4.2, w=24.5393760563784
+2022-12-08 09:47:26 - Save image for Admissions_North Dakota_CEN_Hispanic - 1.6, h=4.2, w=24.5393760563784
+2022-12-08 09:47:26 - 69 out of 200
+2022-12-08 09:47:31 - Save image for Admissions_Ohio_BJS_Black - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 09:47:35 - Save image for Admissions_Ohio_BJS_Hispanic - 0.9, h=4.2, w=24.5393760563784
+2022-12-08 09:47:35 - 70 out of 200
+2022-12-08 09:47:40 - Save image for Admissions_Ohio_CEN_Black - 5.6, h=4.2, w=24.5393760563784
+2022-12-08 09:47:44 - Save image for Admissions_Ohio_CEN_Hispanic - 0.8, h=4.2, w=24.5393760563784
+2022-12-08 09:47:44 - 71 out of 200
+2022-12-08 09:47:44 - Admissions Oklahoma BJS does NOT have data for infographics
+2022-12-08 09:47:44 - 72 out of 200
+2022-12-08 09:47:44 - Admissions Oklahoma CEN does NOT have data for infographics
+2022-12-08 09:47:44 - 73 out of 200
+2022-12-08 09:47:44 - Admissions Oregon BJS does NOT have data for infographics
+2022-12-08 09:47:44 - 74 out of 200
+2022-12-08 09:47:44 - Admissions Oregon CEN does NOT have data for infographics
+2022-12-08 09:47:44 - 75 out of 200
+2022-12-08 09:47:49 - Save image for Admissions_Pennsylvania_BJS_Black - 1.2, h=4.2, w=24.5393760563784
+2022-12-08 09:47:53 - Save image for Admissions_Pennsylvania_BJS_Hispanic - 1.4, h=4.2, w=24.5393760563784
+2022-12-08 09:47:53 - 76 out of 200
+2022-12-08 09:47:58 - Save image for Admissions_Pennsylvania_CEN_Black - 5.2, h=4.2, w=24.5393760563784
+2022-12-08 09:48:02 - Save image for Admissions_Pennsylvania_CEN_Hispanic - 2.1, h=4.2, w=24.5393760563784
+2022-12-08 09:48:02 - 77 out of 200
+2022-12-08 09:48:07 - Save image for Admissions_Rhode Island_BJS_Black - 2.0, h=4.2, w=24.5393760563784
+2022-12-08 09:48:11 - Save image for Admissions_Rhode Island_BJS_Hispanic - 1.3, h=4.2, w=24.5393760563784
+2022-12-08 09:48:11 - 78 out of 200
+2022-12-08 09:48:20 - Save image for Admissions_Rhode Island_CEN_Black - 11.9, h=8.4, w=24.5393760563784
+2022-12-08 09:48:25 - Save image for Admissions_Rhode Island_CEN_Hispanic - 5.4, h=4.2, w=24.5393760563784
+2022-12-08 09:48:25 - 79 out of 200
+2022-12-08 09:48:30 - Save image for Admissions_South Carolina_BJS_Black - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 09:48:34 - Save image for Admissions_South Carolina_BJS_Hispanic - 1.1, h=4.2, w=24.5393760563784
+2022-12-08 09:48:34 - 80 out of 200
+2022-12-08 09:48:39 - Save image for Admissions_South Carolina_CEN_Black - 4.1, h=4.2, w=24.5393760563784
+2022-12-08 09:48:43 - Save image for Admissions_South Carolina_CEN_Hispanic - <0.5*, h=4.2, w=24.5393760563784
+2022-12-08 09:48:43 - 81 out of 200
+2022-12-08 09:48:43 - Admissions South Dakota BJS does NOT have data for infographics
+2022-12-08 09:48:43 - 82 out of 200
+2022-12-08 09:48:43 - Admissions South Dakota CEN does NOT have data for infographics
+2022-12-08 09:48:43 - 83 out of 200
+2022-12-08 09:48:47 - Save image for Admissions_Tennessee_BJS_Black - 0.6, h=4.2, w=24.5393760563784
+2022-12-08 09:48:51 - Save image for Admissions_Tennessee_BJS_Hispanic - 0.2, h=4.2, w=24.5393760563784
+2022-12-08 09:48:51 - 84 out of 200
+2022-12-08 09:48:55 - Save image for Admissions_Tennessee_CEN_Black - 1.7, h=4.2, w=24.5393760563784
+2022-12-08 09:48:59 - Save image for Admissions_Tennessee_CEN_Hispanic - 0.2, h=4.2, w=24.5393760563784
+2022-12-08 09:48:59 - 85 out of 200
+2022-12-08 09:49:03 - Save image for Admissions_Texas_BJS_Black - 0.7, h=4.2, w=24.5393760563784
+2022-12-08 09:49:07 - Save image for Admissions_Texas_BJS_Hispanic - 0.9, h=4.2, w=24.5393760563784
+2022-12-08 09:49:07 - 86 out of 200
+2022-12-08 09:49:11 - Save image for Admissions_Texas_CEN_Black - 2.2, h=4.2, w=24.5393760563784
+2022-12-08 09:49:15 - Save image for Admissions_Texas_CEN_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 09:49:15 - 87 out of 200
+2022-12-08 09:49:19 - Save image for Admissions_Utah_BJS_Black - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 09:49:23 - Save image for Admissions_Utah_BJS_Hispanic - 0.9, h=4.2, w=24.5393760563784
+2022-12-08 09:49:23 - 88 out of 200
+2022-12-08 09:49:27 - Save image for Admissions_Utah_CEN_Black - 6.2, h=4.2, w=24.5393760563784
+2022-12-08 09:49:31 - Save image for Admissions_Utah_CEN_Hispanic - 2.4, h=4.2, w=24.5393760563784
+2022-12-08 09:49:31 - 89 out of 200
+2022-12-08 09:49:31 - Admissions Vermont BJS does NOT have data for infographics
+2022-12-08 09:49:31 - 90 out of 200
+2022-12-08 09:49:31 - Admissions Vermont CEN does NOT have data for infographics
+2022-12-08 09:49:31 - 91 out of 200
+2022-12-08 09:49:35 - Save image for Admissions_Virginia_BJS_Black - 0.9, h=4.2, w=24.5393760563784
+2022-12-08 09:49:35 - 92 out of 200
+2022-12-08 09:49:39 - Save image for Admissions_Virginia_CEN_Black - 4.7, h=4.2, w=24.5393760563784
+2022-12-08 09:49:39 - 93 out of 200
+2022-12-08 09:49:43 - Save image for Admissions_Washington_BJS_Black - 1.1, h=4.2, w=24.5393760563784
+2022-12-08 09:49:47 - Save image for Admissions_Washington_BJS_Hispanic - 0.7, h=4.2, w=24.5393760563784
+2022-12-08 09:49:47 - 94 out of 200
+2022-12-08 09:49:51 - Save image for Admissions_Washington_CEN_Black - 3.6, h=4.2, w=24.5393760563784
+2022-12-08 09:49:55 - Save image for Admissions_Washington_CEN_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-12-08 09:49:55 - 95 out of 200
+2022-12-08 09:49:58 - Save image for Admissions_West Virginia_BJS_Black - 0.8, h=4.2, w=24.5393760563784
+2022-12-08 09:50:02 - Save image for Admissions_West Virginia_BJS_Hispanic - <1.6*, h=4.2, w=24.5393760563784
+2022-12-08 09:50:02 - 96 out of 200
+2022-12-08 09:50:06 - Save image for Admissions_West Virginia_CEN_Hispanic - <0.8*, h=4.2, w=24.5393760563784
+2022-12-08 09:50:14 - Save image for Admissions_West Virginia_CEN_Black - <21.3*, h=12.6, w=24.5393760563784
+2022-12-08 09:50:14 - 97 out of 200
+2022-12-08 09:50:19 - Save image for Admissions_Wisconsin_BJS_Black - 1.3, h=4.2, w=24.5393760563784
+2022-12-08 09:50:23 - Save image for Admissions_Wisconsin_BJS_Hispanic - 0.8, h=4.2, w=24.5393760563784
+2022-12-08 09:50:23 - 98 out of 200
+2022-12-08 09:50:27 - Save image for Admissions_Wisconsin_CEN_Black - 10.8, h=8.4, w=24.5393760563784
+2022-12-08 09:50:32 - Save image for Admissions_Wisconsin_CEN_Hispanic - 2.4, h=4.2, w=24.5393760563784
+2022-12-08 09:50:32 - 99 out of 200
+2022-12-08 09:50:36 - Save image for Admissions_Wyoming_BJS_Black - 2.3, h=4.2, w=24.5393760563784
+2022-12-08 09:50:42 - Save image for Admissions_Wyoming_BJS_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 09:50:42 - 100 out of 200
+2022-12-08 09:50:47 - Save image for Admissions_Wyoming_CEN_Black - 6.1, h=4.2, w=24.5393760563784
+2022-12-08 09:50:52 - Save image for Admissions_Wyoming_CEN_Hispanic - 2.2, h=4.2, w=24.5393760563784
+2022-12-08 09:50:52 - 101 out of 200
+2022-12-08 09:50:52 - Population Alabama BJS does NOT have data for infographics
+2022-12-08 09:50:52 - 102 out of 200
+2022-12-08 09:50:52 - Population Alabama CEN does NOT have data for infographics
+2022-12-08 09:50:52 - 103 out of 200
+2022-12-08 09:50:52 - Population Alaska BJS does NOT have data for infographics
+2022-12-08 09:50:52 - 104 out of 200
+2022-12-08 09:50:52 - Population Alaska CEN does NOT have data for infographics
+2022-12-08 09:50:52 - 105 out of 200
+2022-12-08 09:50:57 - Save image for Population_Arizona_BJS_Black - 1.5, h=4.2, w=24.5393760563784
+2022-12-08 09:51:03 - Save image for Population_Arizona_BJS_Hispanic - 1.4, h=4.2, w=24.5393760563784
+2022-12-08 09:51:03 - 106 out of 200
+2022-12-08 09:51:08 - Save image for Population_Arizona_CEN_Black - 5.0, h=4.2, w=24.5393760563784
+2022-12-08 09:51:14 - Save image for Population_Arizona_CEN_Hispanic - 2.7, h=4.2, w=24.5393760563784
+2022-12-08 09:51:14 - 107 out of 200
+2022-12-08 09:51:18 - Save image for Population_Arkansas_BJS_Black - 1.5, h=4.2, w=24.5393760563784
+2022-12-08 09:51:22 - Save image for Population_Arkansas_BJS_Hispanic - 0.1, h=4.2, w=24.5393760563784
+2022-12-08 09:51:22 - 108 out of 200
+2022-12-08 09:51:26 - Save image for Population_Arkansas_CEN_Black - 4.1, h=4.2, w=24.5393760563784
+2022-12-08 09:51:31 - Save image for Population_Arkansas_CEN_Hispanic - 0.1, h=4.2, w=24.5393760563784
+2022-12-08 09:51:31 - 109 out of 200
+2022-12-08 09:51:35 - Save image for Population_California_BJS_Black - 1.7, h=4.2, w=24.5393760563784
+2022-12-08 09:51:39 - Save image for Population_California_BJS_Hispanic - 1.1, h=4.2, w=24.5393760563784
+2022-12-08 09:51:39 - 110 out of 200
+2022-12-08 09:51:48 - Save image for Population_California_CEN_Black - 12.2, h=8.4, w=24.5393760563784
+2022-12-08 09:51:52 - Save image for Population_California_CEN_Hispanic - 2.3, h=4.2, w=24.5393760563784
+2022-12-08 09:51:52 - 111 out of 200
+2022-12-08 09:51:57 - Save image for Population_Colorado_BJS_Black - 1.4, h=4.2, w=24.5393760563784
+2022-12-08 09:52:01 - Save image for Population_Colorado_BJS_Hispanic - 1.3, h=4.2, w=24.5393760563784
+2022-12-08 09:52:01 - 112 out of 200
+2022-12-08 09:52:05 - Save image for Population_Colorado_CEN_Black - 6.2, h=4.2, w=24.5393760563784
+2022-12-08 09:52:09 - Save image for Population_Colorado_CEN_Hispanic - 2.9, h=4.2, w=24.5393760563784
+2022-12-08 09:52:09 - 113 out of 200
+2022-12-08 09:52:09 - Population Connecticut BJS does NOT have data for infographics
+2022-12-08 09:52:09 - 114 out of 200
+2022-12-08 09:52:09 - Population Connecticut CEN does NOT have data for infographics
+2022-12-08 09:52:09 - 115 out of 200
+2022-12-08 09:52:14 - Save image for Population_Delaware_BJS_Black - 1.1, h=4.2, w=24.5393760563784
+2022-12-08 09:52:18 - Save image for Population_Delaware_BJS_Hispanic - 0.9, h=4.2, w=24.5393760563784
+2022-12-08 09:52:18 - 116 out of 200
+2022-12-08 09:52:22 - Save image for Population_Delaware_CEN_Black - 4.5, h=4.2, w=24.5393760563784
+2022-12-08 09:52:26 - Save image for Population_Delaware_CEN_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 09:52:26 - 117 out of 200
+2022-12-08 09:52:30 - Save image for Population_Florida_BJS_Black - 1.2, h=4.2, w=24.5393760563784
+2022-12-08 09:52:34 - Save image for Population_Florida_BJS_Hispanic - 0.8, h=4.2, w=24.5393760563784
+2022-12-08 09:52:34 - 118 out of 200
+2022-12-08 09:52:38 - Save image for Population_Florida_CEN_Black - 6.1, h=4.2, w=24.5393760563784
+2022-12-08 09:52:42 - Save image for Population_Florida_CEN_Hispanic - 0.4, h=4.2, w=24.5393760563784
+2022-12-08 09:52:42 - 119 out of 200
+2022-12-08 09:52:47 - Save image for Population_Georgia_BJS_Black - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 09:52:51 - Save image for Population_Georgia_BJS_Hispanic - 0.2, h=4.2, w=24.5393760563784
+2022-12-08 09:52:51 - 120 out of 200
+2022-12-08 09:52:55 - Save image for Population_Georgia_CEN_Black - 2.3, h=4.2, w=24.5393760563784
+2022-12-08 09:52:59 - Save image for Population_Georgia_CEN_Hispanic - 0.3, h=4.2, w=24.5393760563784
+2022-12-08 09:52:59 - 121 out of 200
+2022-12-08 09:52:59 - Population Hawaii BJS does NOT have data for infographics
+2022-12-08 09:52:59 - 122 out of 200
+2022-12-08 09:52:59 - Population Hawaii CEN does NOT have data for infographics
+2022-12-08 09:52:59 - 123 out of 200
+2022-12-08 09:52:59 - Population Idaho BJS does NOT have data for infographics
+2022-12-08 09:52:59 - 124 out of 200
+2022-12-08 09:53:03 - Save image for Population_Idaho_CEN_Black - 3.6, h=4.2, w=24.5393760563784
+2022-12-08 09:53:07 - Save image for Population_Idaho_CEN_Hispanic - 0.1, h=4.2, w=24.5393760563784
+2022-12-08 09:53:07 - 125 out of 200
+2022-12-08 09:53:11 - Save image for Population_Illinois_BJS_Black - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 09:53:15 - Save image for Population_Illinois_BJS_Hispanic - 0.6, h=4.2, w=24.5393760563784
+2022-12-08 09:53:15 - 126 out of 200
+2022-12-08 09:53:18 - Save image for Population_Illinois_CEN_Black - 8.4, h=4.2, w=24.5393760563784
+2022-12-08 09:53:22 - Save image for Population_Illinois_CEN_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 09:53:22 - 127 out of 200
+2022-12-08 09:53:26 - Save image for Population_Indiana_BJS_Black - 1.6, h=4.2, w=24.5393760563784
+2022-12-08 09:53:30 - Save image for Population_Indiana_BJS_Hispanic - 0.4, h=4.2, w=24.5393760563784
+2022-12-08 09:53:30 - 128 out of 200
+2022-12-08 09:53:35 - Save image for Population_Indiana_CEN_Black - 6.2, h=4.2, w=24.5393760563784
+2022-12-08 09:53:39 - Save image for Population_Indiana_CEN_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-12-08 09:53:39 - 129 out of 200
+2022-12-08 09:53:43 - Save image for Population_Iowa_BJS_Black - 1.4, h=4.2, w=24.5393760563784
+2022-12-08 09:53:47 - Save image for Population_Iowa_BJS_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-12-08 09:53:47 - 130 out of 200
+2022-12-08 09:53:51 - Save image for Population_Iowa_CEN_Black - 7.3, h=4.2, w=24.5393760563784
+2022-12-08 09:53:55 - Save image for Population_Iowa_CEN_Hispanic - 1.4, h=4.2, w=24.5393760563784
+2022-12-08 09:53:55 - 131 out of 200
+2022-12-08 09:54:00 - Save image for Population_Kansas_BJS_Black - 1.4, h=4.2, w=24.5393760563784
+2022-12-08 09:54:04 - Save image for Population_Kansas_BJS_Hispanic - 0.8, h=4.2, w=24.5393760563784
+2022-12-08 09:54:04 - 132 out of 200
+2022-12-08 09:54:08 - Save image for Population_Kansas_CEN_Black - 7.5, h=4.2, w=24.5393760563784
+2022-12-08 09:54:12 - Save image for Population_Kansas_CEN_Hispanic - 1.3, h=4.2, w=24.5393760563784
+2022-12-08 09:54:12 - 133 out of 200
+2022-12-08 09:54:16 - Save image for Population_Kentucky_BJS_Black - 0.9, h=4.2, w=24.5393760563784
+2022-12-08 09:54:20 - Save image for Population_Kentucky_BJS_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-12-08 09:54:20 - 134 out of 200
+2022-12-08 09:54:24 - Save image for Population_Kentucky_CEN_Black - 2.3, h=4.2, w=24.5393760563784
+2022-12-08 09:54:28 - Save image for Population_Kentucky_CEN_Hispanic - 0.2, h=4.2, w=24.5393760563784
+2022-12-08 09:54:28 - 135 out of 200
+2022-12-08 09:54:28 - Population Louisiana BJS does NOT have data for infographics
+2022-12-08 09:54:28 - 136 out of 200
+2022-12-08 09:54:28 - Population Louisiana CEN does NOT have data for infographics
+2022-12-08 09:54:28 - 137 out of 200
+2022-12-08 09:54:28 - Population Maine BJS does NOT have data for infographics
+2022-12-08 09:54:28 - 138 out of 200
+2022-12-08 09:54:32 - Save image for Population_Maine_CEN_Black - 10.8, h=8.4, w=24.5393760563784
+2022-12-08 09:54:32 - 139 out of 200
+2022-12-08 09:54:36 - Save image for Population_Maryland_BJS_Black - 1.1, h=4.2, w=24.5393760563784
+2022-12-08 09:54:36 - 140 out of 200
+2022-12-08 09:54:40 - Save image for Population_Maryland_CEN_Black - 4.8, h=4.2, w=24.5393760563784
+2022-12-08 09:54:44 - Save image for Population_Maryland_CEN_Hispanic - 0.2, h=4.2, w=24.5393760563784
+2022-12-08 09:54:44 - 141 out of 200
+2022-12-08 09:54:48 - Save image for Population_Massachusetts_BJS_Black - 1.5, h=4.2, w=24.5393760563784
+2022-12-08 09:54:52 - Save image for Population_Massachusetts_BJS_Hispanic - 0.9, h=4.2, w=24.5393760563784
+2022-12-08 09:54:52 - 142 out of 200
+2022-12-08 09:54:56 - Save image for Population_Massachusetts_CEN_Black - 5.0, h=4.2, w=24.5393760563784
+2022-12-08 09:55:00 - Save image for Population_Massachusetts_CEN_Hispanic - 3.6, h=4.2, w=24.5393760563784
+2022-12-08 09:55:00 - 143 out of 200
+2022-12-08 09:55:00 - Population Michigan BJS does NOT have data for infographics
+2022-12-08 09:55:00 - 144 out of 200
+2022-12-08 09:55:00 - Population Michigan CEN does NOT have data for infographics
+2022-12-08 09:55:00 - 145 out of 200
+2022-12-08 09:55:04 - Save image for Population_Minnesota_BJS_Black - 1.8, h=4.2, w=24.5393760563784
+2022-12-08 09:55:09 - Save image for Population_Minnesota_BJS_Hispanic - 1.2, h=4.2, w=24.5393760563784
+2022-12-08 09:55:09 - 146 out of 200
+2022-12-08 09:55:17 - Save image for Population_Minnesota_CEN_Black - 11.6, h=8.4, w=24.5393760563784
+2022-12-08 09:55:21 - Save image for Population_Minnesota_CEN_Hispanic - 2.5, h=4.2, w=24.5393760563784
+2022-12-08 09:55:21 - 147 out of 200
+2022-12-08 09:55:25 - Save image for Population_Mississippi_BJS_Black - 1.1, h=4.2, w=24.5393760563784
+2022-12-08 09:55:29 - Save image for Population_Mississippi_BJS_Hispanic - <0.2*, h=4.2, w=24.5393760563784
+2022-12-08 09:55:29 - 148 out of 200
+2022-12-08 09:55:33 - Save image for Population_Mississippi_CEN_Black - 2.1, h=4.2, w=24.5393760563784
+2022-12-08 09:55:38 - Save image for Population_Mississippi_CEN_Hispanic - <0.2*, h=4.2, w=24.5393760563784
+2022-12-08 09:55:38 - 149 out of 200
+2022-12-08 09:55:42 - Save image for Population_Missouri_BJS_Black - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 09:55:46 - Save image for Population_Missouri_BJS_Hispanic - 0.8, h=4.2, w=24.5393760563784
+2022-12-08 09:55:46 - 150 out of 200
+2022-12-08 09:55:50 - Save image for Population_Missouri_CEN_Black - 2.7, h=4.2, w=24.5393760563784
+2022-12-08 09:55:54 - Save image for Population_Missouri_CEN_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-12-08 09:55:54 - 151 out of 200
+2022-12-08 09:55:58 - Save image for Population_Montana_BJS_Black - 1.3, h=4.2, w=24.5393760563784
+2022-12-08 09:56:02 - Save image for Population_Montana_BJS_Hispanic - 2.0, h=4.2, w=24.5393760563784
+2022-12-08 09:56:02 - 152 out of 200
+2022-12-08 09:56:06 - Save image for Population_Montana_CEN_Black - 3.6, h=4.2, w=24.5393760563784
+2022-12-08 09:56:10 - Save image for Population_Montana_CEN_Hispanic - 0.7, h=4.2, w=24.5393760563784
+2022-12-08 09:56:10 - 153 out of 200
+2022-12-08 09:56:14 - Save image for Population_Nebraska_BJS_Black - 1.9, h=4.2, w=24.5393760563784
+2022-12-08 09:56:18 - Save image for Population_Nebraska_BJS_Hispanic - 1.1, h=4.2, w=24.5393760563784
+2022-12-08 09:56:18 - 154 out of 200
+2022-12-08 09:56:22 - Save image for Population_Nebraska_CEN_Black - 9.7, h=4.2, w=24.5393760563784
+2022-12-08 09:56:26 - Save image for Population_Nebraska_CEN_Hispanic - 2.1, h=4.2, w=24.5393760563784
+2022-12-08 09:56:26 - 155 out of 200
+2022-12-08 09:56:26 - Population Nevada BJS does NOT have data for infographics
+2022-12-08 09:56:26 - 156 out of 200
+2022-12-08 09:56:30 - Save image for Population_Nevada_CEN_Black - 3.8, h=4.2, w=24.5393760563784
+2022-12-08 09:56:34 - Save image for Population_Nevada_CEN_Hispanic - 0.7, h=4.2, w=24.5393760563784
+2022-12-08 09:56:34 - 157 out of 200
+2022-12-08 09:56:38 - Save image for Population_New Hampshire_BJS_Black - 0.9, h=4.2, w=24.5393760563784
+2022-12-08 09:56:42 - Save image for Population_New Hampshire_BJS_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 09:56:42 - 158 out of 200
+2022-12-08 09:56:46 - Save image for Population_New Hampshire_CEN_Black - 4.5, h=4.2, w=24.5393760563784
+2022-12-08 09:56:50 - Save image for Population_New Hampshire_CEN_Hispanic - 2.3, h=4.2, w=24.5393760563784
+2022-12-08 09:56:50 - 159 out of 200
+2022-12-08 09:56:54 - Save image for Population_New Jersey_BJS_Black - 2.3, h=4.2, w=24.5393760563784
+2022-12-08 09:56:58 - Save image for Population_New Jersey_BJS_Hispanic - 0.6, h=4.2, w=24.5393760563784
+2022-12-08 09:56:58 - 160 out of 200
+2022-12-08 09:57:06 - Save image for Population_New Jersey_CEN_Black - 11.4, h=8.4, w=24.5393760563784
+2022-12-08 09:57:10 - Save image for Population_New Jersey_CEN_Hispanic - 1.7, h=4.2, w=24.5393760563784
+2022-12-08 09:57:10 - 161 out of 200
+2022-12-08 09:57:14 - Save image for Population_New Mexico_BJS_Black - 1.3, h=4.2, w=24.5393760563784
+2022-12-08 09:57:17 - Save image for Population_New Mexico_BJS_Hispanic - 1.2, h=4.2, w=24.5393760563784
+2022-12-08 09:57:17 - 162 out of 200
+2022-12-08 09:57:22 - Save image for Population_New Mexico_CEN_Black - 4.3, h=4.2, w=24.5393760563784
+2022-12-08 09:57:26 - Save image for Population_New Mexico_CEN_Hispanic - 2.8, h=4.2, w=24.5393760563784
+2022-12-08 09:57:26 - 163 out of 200
+2022-12-08 09:57:30 - Save image for Population_New York_BJS_Black - 1.1, h=4.2, w=24.5393760563784
+2022-12-08 09:57:35 - Save image for Population_New York_BJS_Hispanic - 0.5, h=4.2, w=24.5393760563784
+2022-12-08 09:57:35 - 164 out of 200
+2022-12-08 09:57:40 - Save image for Population_New York_CEN_Black - 7.9, h=4.2, w=24.5393760563784
+2022-12-08 09:57:45 - Save image for Population_New York_CEN_Hispanic - 3.1, h=4.2, w=24.5393760563784
+2022-12-08 09:57:45 - 165 out of 200
+2022-12-08 09:57:49 - Save image for Population_North Carolina_BJS_Black - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 09:57:54 - Save image for Population_North Carolina_BJS_Hispanic - 0.4, h=4.2, w=24.5393760563784
+2022-12-08 09:57:54 - 166 out of 200
+2022-12-08 09:57:59 - Save image for Population_North Carolina_CEN_Black - 2.9, h=4.2, w=24.5393760563784
+2022-12-08 09:58:03 - Save image for Population_North Carolina_CEN_Hispanic - 0.3, h=4.2, w=24.5393760563784
+2022-12-08 09:58:03 - 167 out of 200
+2022-12-08 09:58:08 - Save image for Population_North Dakota_BJS_Black - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 09:58:13 - Save image for Population_North Dakota_BJS_Hispanic - 1.3, h=4.2, w=24.5393760563784
+2022-12-08 09:58:13 - 168 out of 200
+2022-12-08 09:58:18 - Save image for Population_North Dakota_CEN_Black - 4.3, h=4.2, w=24.5393760563784
+2022-12-08 09:58:23 - Save image for Population_North Dakota_CEN_Hispanic - <1.8*, h=4.2, w=24.5393760563784
+2022-12-08 09:58:23 - 169 out of 200
+2022-12-08 09:58:28 - Save image for Population_Ohio_BJS_Black - 1.3, h=4.2, w=24.5393760563784
+2022-12-08 09:58:32 - Save image for Population_Ohio_BJS_Hispanic - 0.9, h=4.2, w=24.5393760563784
+2022-12-08 09:58:32 - 170 out of 200
+2022-12-08 09:58:37 - Save image for Population_Ohio_CEN_Black - 7.1, h=4.2, w=24.5393760563784
+2022-12-08 09:58:42 - Save image for Population_Ohio_CEN_Hispanic - 0.9, h=4.2, w=24.5393760563784
+2022-12-08 09:58:42 - 171 out of 200
+2022-12-08 09:58:47 - Save image for Population_Oklahoma_BJS_Black - 0.7, h=4.2, w=24.5393760563784
+2022-12-08 09:58:52 - Save image for Population_Oklahoma_BJS_Hispanic - 0.4, h=4.2, w=24.5393760563784
+2022-12-08 09:58:52 - 172 out of 200
+2022-12-08 09:58:57 - Save image for Population_Oklahoma_CEN_Black - 4.0, h=4.2, w=24.5393760563784
+2022-12-08 09:59:01 - Save image for Population_Oklahoma_CEN_Hispanic - 3.2, h=4.2, w=24.5393760563784
+2022-12-08 09:59:01 - 173 out of 200
+2022-12-08 09:59:01 - Population Oregon BJS does NOT have data for infographics
+2022-12-08 09:59:01 - 174 out of 200
+2022-12-08 09:59:01 - Population Oregon CEN does NOT have data for infographics
+2022-12-08 09:59:01 - 175 out of 200
+2022-12-08 09:59:06 - Save image for Population_Pennsylvania_BJS_Black - 1.5, h=4.2, w=24.5393760563784
+2022-12-08 09:59:11 - Save image for Population_Pennsylvania_BJS_Hispanic - 1.6, h=4.2, w=24.5393760563784
+2022-12-08 09:59:11 - 176 out of 200
+2022-12-08 09:59:16 - Save image for Population_Pennsylvania_CEN_Black - 7.4, h=4.2, w=24.5393760563784
+2022-12-08 09:59:21 - Save image for Population_Pennsylvania_CEN_Hispanic - 2.8, h=4.2, w=24.5393760563784
+2022-12-08 09:59:21 - 177 out of 200
+2022-12-08 09:59:26 - Save image for Population_Rhode Island_BJS_Black - 1.4, h=4.2, w=24.5393760563784
+2022-12-08 09:59:31 - Save image for Population_Rhode Island_BJS_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 09:59:31 - 178 out of 200
+2022-12-08 09:59:36 - Save image for Population_Rhode Island_CEN_Black - 8.5, h=4.2, w=24.5393760563784
+2022-12-08 09:59:40 - Save image for Population_Rhode Island_CEN_Hispanic - 4.7, h=4.2, w=24.5393760563784
+2022-12-08 09:59:40 - 179 out of 200
+2022-12-08 09:59:45 - Save image for Population_South Carolina_BJS_Black - 1.4, h=4.2, w=24.5393760563784
+2022-12-08 09:59:50 - Save image for Population_South Carolina_BJS_Hispanic - <0.6*, h=4.2, w=24.5393760563784
+2022-12-08 09:59:50 - 180 out of 200
+2022-12-08 09:59:55 - Save image for Population_South Carolina_CEN_Black - 5.4, h=4.2, w=24.5393760563784
+2022-12-08 10:00:00 - Save image for Population_South Carolina_CEN_Hispanic - 0.2, h=4.2, w=24.5393760563784
+2022-12-08 10:00:00 - 181 out of 200
+2022-12-08 10:00:00 - Population South Dakota BJS does NOT have data for infographics
+2022-12-08 10:00:00 - 182 out of 200
+2022-12-08 10:00:00 - Population South Dakota CEN does NOT have data for infographics
+2022-12-08 10:00:00 - 183 out of 200
+2022-12-08 10:00:04 - Save image for Population_Tennessee_BJS_Black - 0.7, h=4.2, w=24.5393760563784
+2022-12-08 10:00:09 - Save image for Population_Tennessee_BJS_Hispanic - 0.2, h=4.2, w=24.5393760563784
+2022-12-08 10:00:09 - 184 out of 200
+2022-12-08 10:00:14 - Save image for Population_Tennessee_CEN_Black - 2.5, h=4.2, w=24.5393760563784
+2022-12-08 10:00:18 - Save image for Population_Tennessee_CEN_Hispanic - 0.2, h=4.2, w=24.5393760563784
+2022-12-08 10:00:18 - 185 out of 200
+2022-12-08 10:00:23 - Save image for Population_Texas_BJS_Black - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 10:00:28 - Save image for Population_Texas_BJS_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 10:00:28 - 186 out of 200
+2022-12-08 10:00:33 - Save image for Population_Texas_CEN_Black - 3.4, h=4.2, w=24.5393760563784
+2022-12-08 10:00:38 - Save image for Population_Texas_CEN_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 10:00:38 - 187 out of 200
+2022-12-08 10:00:43 - Save image for Population_Utah_BJS_Black - 1.1, h=4.2, w=24.5393760563784
+2022-12-08 10:00:48 - Save image for Population_Utah_BJS_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 10:00:48 - 188 out of 200
+2022-12-08 10:00:53 - Save image for Population_Utah_CEN_Black - 6.5, h=4.2, w=24.5393760563784
+2022-12-08 10:00:58 - Save image for Population_Utah_CEN_Hispanic - 2.7, h=4.2, w=24.5393760563784
+2022-12-08 10:00:58 - 189 out of 200
+2022-12-08 10:00:58 - Population Vermont BJS does NOT have data for infographics
+2022-12-08 10:00:58 - 190 out of 200
+2022-12-08 10:00:58 - Population Vermont CEN does NOT have data for infographics
+2022-12-08 10:00:58 - 191 out of 200
+2022-12-08 10:00:58 - Population Virginia BJS does NOT have data for infographics
+2022-12-08 10:00:58 - 192 out of 200
+2022-12-08 10:00:58 - Population Virginia CEN does NOT have data for infographics
+2022-12-08 10:00:58 - 193 out of 200
+2022-12-08 10:01:03 - Save image for Population_Washington_BJS_Black - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 10:01:08 - Save image for Population_Washington_BJS_Hispanic - 0.3, h=4.2, w=24.5393760563784
+2022-12-08 10:01:08 - 194 out of 200
+2022-12-08 10:01:13 - Save image for Population_Washington_CEN_Black - 6.3, h=4.2, w=24.5393760563784
+2022-12-08 10:01:18 - Save image for Population_Washington_CEN_Hispanic - <0.6*, h=4.2, w=24.5393760563784
+2022-12-08 10:01:18 - 195 out of 200
+2022-12-08 10:01:23 - Save image for Population_West Virginia_BJS_Black - <2.5*, h=4.2, w=24.5393760563784
+2022-12-08 10:01:23 - 196 out of 200
+2022-12-08 10:01:33 - Save image for Population_West Virginia_CEN_Black - <11.9*, h=8.4, w=24.5393760563784
+2022-12-08 10:01:33 - 197 out of 200
+2022-12-08 10:01:39 - Save image for Population_Wisconsin_BJS_Black - 1.8, h=4.2, w=24.5393760563784
+2022-12-08 10:01:44 - Save image for Population_Wisconsin_BJS_Hispanic - 1.0, h=4.2, w=24.5393760563784
+2022-12-08 10:01:44 - 198 out of 200
+2022-12-08 10:01:54 - Save image for Population_Wisconsin_CEN_Black - 15.4, h=8.4, w=24.5393760563784
+2022-12-08 10:01:59 - Save image for Population_Wisconsin_CEN_Hispanic - 2.7, h=4.2, w=24.5393760563784
+2022-12-08 10:01:59 - 199 out of 200
+2022-12-08 10:02:03 - Save image for Population_Wyoming_BJS_Black - 2.6, h=4.2, w=24.5393760563784
+2022-12-08 10:02:07 - Save image for Population_Wyoming_BJS_Hispanic - 1.1, h=4.2, w=24.5393760563784
+2022-12-08 10:02:07 - 200 out of 200
+2022-12-08 10:02:12 - Save image for Population_Wyoming_CEN_Black - 7.9, h=4.2, w=24.5393760563784
+2022-12-08 10:02:16 - Save image for Population_Wyoming_CEN_Hispanic - 1.8, h=4.2, w=24.5393760563784
+2022-12-08 10:02:16 - Infographic - End
+2022-12-08 10:02:16 - Copy files exported to sharepoint to local app repo
+2022-12-08 10:02:16 - !!END   PREP FOR SHINY
+
+
+processing file: rri_overview.qmd
+  |                                                                              |                                                                      |   0%  |                                                                              |.....                                                                 |   8%
+   inline R code fragments
+
+  |                                                                              |...........                                                           |  15%
+label: setup (with options) 
+List of 1
+ $ include: logi FALSE
+
+  |                                                                              |................                                                      |  23%
+  ordinary text without R code
+
+  |                                                                              |......................                                                |  31%
+label: unnamed-chunk-2
+  |                                                                              |...........................                                           |  38%
+  ordinary text without R code
+
+  |                                                                              |................................                                      |  46%
+label: unnamed-chunk-3
+  |                                                                              |......................................                                |  54%
+  ordinary text without R code
+
+  |                                                                              |...........................................                           |  62%
+label: unnamed-chunk-4
+  |                                                                              |................................................                      |  69%
+  ordinary text without R code
+
+  |                                                                              |......................................................                |  77%
+label: unnamed-chunk-5 (with options) 
+List of 1
+ $ fig.height: int 4
+
+  |                                                                              |...........................................................           |  85%
+  ordinary text without R code
+
+  |                                                                              |.................................................................     |  92%
+label: unnamed-chunk-6
+  |                                                                              |......................................................................| 100%
+  ordinary text without R code
+
+
+output file: rri_overview.knit.md
+
+pandoc 
+  to: html
+  output-file: rri_overview.html
+  standalone: true
+  self-contained: true
+  section-divs: true
+  html-math-method: mathjax
+  wrap: none
+  default-image-extension: png
+  
+metadata
+  document-css: false
+  link-citations: true
+  lang: en
+  title: RRI Overview
+  description: 'Last User: `r stringr::str_sub(getwd(), 10, stringr::str_locate(stringr::str_sub(getwd(), 10, -1), ''/'')[1]+10-2)`'
+  date: last-modified
+  date-format: 'YYYY-MM-DD HH:mm:ss'
+  published-title: Last Modified
+  doi: '`r Sys.time()`'
+  doi-title: Last Ran
+  editor: source
+  editor_options:
+    chunk_output_type: console
+  page-layout: full
+  fontsize: 0.9em
+  
+[WARNING] Deprecated: --self-contained. use --embed-resources --standalone
+Output created: rri_overview.html
+
