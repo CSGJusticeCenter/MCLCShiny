@@ -3,12 +3,18 @@
 ## HAVE YOU UPDATED THE ROOT FILE TO MATCH YOUR PATHWAY??? ##
 #############################################################
 
+
+#############################################################
+## Revocation Counts and Race and Ethnicity 
+
 Sys.time() #takes ~ 25 min 
 
-my_log <- file("shiny_prep_log.txt") # File name of output log
+my_log <- file("shiny_prep_log_REVRE.txt") # File name of output log
 
 sink(my_log, append = FALSE, type = "output") # Writing console output to log file
 sink(my_log, append = FALSE, type = "message")
+
+print("Revocation Counts and Race and Ethnicity")
 
 ####### takes ~ 20min
 # working directory should be the root of the repository ~MCLCShiny/
@@ -17,20 +23,14 @@ Sys.time()
 box::use(prep/box/rri_infographs_tables)
 rri_infographs_tables$prep_for_shiny()
 
-########## takes ~ 1min
-Sys.time()
-source("import.R", echo = TRUE)
-
-
-####### takes ~ 2min 
-Sys.time()
-source("highchart.R", echo = TRUE)
-
-
-####### takes ~ 1min 
-Sys.time()
-source("reactable.R", echo = TRUE)
-
+# overview html and check 
+csgjcr::csg_render_ds(
+    "prep/rri_overview.qmd"
+  , file.path(
+       csgjcr::csg_sp_path("50 State Revocations Project/MCLC Shiny App/products")
+      , "REVCNT_RRI_Overview.html"
+    )
+)
 
 warnings()
 
@@ -40,3 +40,45 @@ Sys.time()
 
 
 
+#############################################################
+## MCLC Data Prep  
+
+Sys.time() #takes ~ 2-4 min 
+
+my_log <- file("shiny_prep_log_MCLCdata.txt") # File name of output log
+
+sink(my_log, append = FALSE, type = "output") # Writing console output to log file
+sink(my_log, append = FALSE, type = "message")
+
+print("MCLC Data Prep")
+
+source("import.R", echo = TRUE)
+
+source("reactable.R", echo = TRUE)
+
+warnings()
+
+closeAllConnections() # Close connection to log file
+
+Sys.time()
+
+
+#############################################################
+## MCLC Plot Prep, Creation, and PNGs  
+
+Sys.time() #takes ~2 hours 
+
+my_log <- file("shiny_prep_log_MCLCplot.txt") # File name of output log
+
+sink(my_log, append = FALSE, type = "output") # Writing console output to log file
+sink(my_log, append = FALSE, type = "message")
+
+print("MCLC Plot Prep, Creation, and PNGs")
+
+source("highchart.R", echo = TRUE)
+
+warnings()
+
+closeAllConnections() # Close connection to log file
+
+Sys.time()
