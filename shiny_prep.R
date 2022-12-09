@@ -66,7 +66,7 @@ Sys.time()
 #############################################################
 ## MCLC Plot Prep, Creation, and PNGs  
 
-Sys.time() #takes ~2 hours 
+Sys.time() #takes ~2 min 
 
 my_log <- file("shiny_prep_log_MCLCplot.txt") # File name of output log
 
@@ -76,6 +76,28 @@ sink(my_log, append = FALSE, type = "message")
 print("MCLC Plot Prep, Creation, and PNGs")
 
 source("highchart.R", echo = TRUE)
+
+warnings()
+
+closeAllConnections() # Close connection to log file
+
+Sys.time()
+
+
+
+#############################################################
+## MCLC Plot Prep, Creation, and PNGs  
+
+Sys.time() #takes multiple hours 
+
+my_log <- file("shiny_prep_log_MCLCplotpngs.txt") # File name of output log
+
+sink(my_log, append = FALSE, type = "output") # Writing console output to log file
+sink(my_log, append = FALSE, type = "message")
+
+print("MCLC Plot Prep, Creation, and PNGs")
+
+source("highchart_pngs.R", echo = TRUE)
 
 warnings()
 
