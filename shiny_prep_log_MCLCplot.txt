@@ -1,0 +1,1006 @@
+[1] "MCLC Plot Prep, Creation, and PNGs"
+
+> #######################################
+> # Project: MCLCShiny
+> # File: highchart.R
+> # Authors: Mari Roberts
+> # Date last updated: July 20, 2022
+ .... [TRUNCATED] 
+
+> # load data
+> load(file = file.path(admin$sp_data, "adm_pop_long.Rda"))
+
+> # load packages
+> library(purrr)
+
+> library(dplyr)
+
+> library(highcharter)
+
+> library(scales)
+
+Attaching package: ‘scales’
+
+The following object is masked from ‘package:purrr’:
+
+    discard
+
+
+> library(stats)
+
+> # assign colors for visualizations
+> source("app/colors.R")
+
+> source("app/functions.R")
+
+> # list of states for function
+> states <- adm_pop_long$state %>%
++   unique() %>%
++   sort()
+
+> states_list <- list('Alabama',
++                     'Alaska',
++                     'Arizona',
++                     'Arkansas',
++                  .... [TRUNCATED] 
+
+> # # temp list of states that isnt as large for testing
+> # states_list <- list('Alabama',
+> #                     'Connecticut',
+> #                 .... [TRUNCATED] 
+
+> # metrics list for loop
+> metrics_list <- list("New Offense",
++                      "Parole Violation",
++                      "Probation Violation ..." ... [TRUNCATED] 
+
+> ############
+> # MAP EXPLORER - Maps
+> ############
+> 
+> # generate list of state highcharts to call in app (admissions)
+> adm_maps_2018_2019 <- map .... [TRUNCATED] 
+
+> # generate list of state highcharts to call in app (admissions)
+> adm_maps_2018_2021 <- map(.x = metrics,  .f = function(x) {
++   df1 <- mclc_explor .... [TRUNCATED] 
+
+> # generate list of state highcharts to call in app (admissions)
+> adm_maps_2019_2020 <- map(.x = metrics,  .f = function(x) {
++   df1 <- mclc_explor .... [TRUNCATED] 
+
+> # generate list of state highcharts to call in app (admissions)
+> adm_maps_2020_2021 <- map(.x = metrics,  .f = function(x) {
++   df1 <- mclc_explor .... [TRUNCATED] 
+
+> # generate list of state highcharts to call in app (Population)
+> pop_maps_2018_2019 <- map(.x = metrics,  .f = function(x) {
++   df1 <- mclc_explor .... [TRUNCATED] 
+
+> # generate list of state highcharts to call in app (Population)
+> pop_maps_2018_2021 <- map(.x = metrics,  .f = function(x) {
++   df1 <- mclc_explor .... [TRUNCATED] 
+
+> # generate list of state highcharts to call in app (Population)
+> pop_maps_2019_2020 <- map(.x = metrics,  .f = function(x) {
++   df1 <- mclc_explor .... [TRUNCATED] 
+
+> # generate list of state highcharts to call in app (Population)
+> pop_maps_2020_2021 <- map(.x = metrics,  .f = function(x) {
++   df1 <- mclc_explor .... [TRUNCATED] 
+
+> adm_maps_2018_2019 <- setNames(adm_maps_2018_2019, metrics)
+
+> adm_maps_2018_2021 <- setNames(adm_maps_2018_2021, metrics)
+
+> adm_maps_2019_2020 <- setNames(adm_maps_2019_2020, metrics)
+
+> adm_maps_2020_2021 <- setNames(adm_maps_2020_2021, metrics)
+
+> pop_maps_2018_2019 <- setNames(pop_maps_2018_2019, metrics)
+
+> pop_maps_2018_2021 <- setNames(pop_maps_2018_2021, metrics)
+
+> pop_maps_2019_2020 <- setNames(pop_maps_2019_2020, metrics)
+
+> pop_maps_2020_2021 <- setNames(pop_maps_2020_2021, metrics)
+
+> ############
+> # STATE REPORTS - State area chart
+> ############
+> 
+> # set options so that y axis has comma separator
+> hcoptslang <- getOption("hi ..." ... [TRUNCATED] 
+
+> hcoptslang$thousandsSep <- ","
+
+> options(highcharter.lang = hcoptslang)
+
+> # generate list of state highcharts to call in app (admissions)
+> all_state_area_adm <- map(.x = states,  .f = function(x) {
++   df1 <- adm_pop_long .... [TRUNCATED] 
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+
+> all_state_area_adm <- setNames(all_state_area_adm, states)
+
+> # generate list of state highcharts to call in app (population)
+> all_state_area_pop <- map(.x = states,  .f = function(x) {
++   df1 <- adm_pop_long .... [TRUNCATED] 
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+
+> # set names of charts
+> all_state_area_pop <- setNames(all_state_area_pop, states)
+
+> ############
+> # STATE REPORTS - State bar chart
+> ############
+> 
+> # generate list of state highcharts to call in app (admissions)
+> all_state_bar .... [TRUNCATED] 
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+
+> # set names of charts
+> all_state_bar_adm <- setNames(all_state_bar_adm, states)
+
+> # generate list of state highcharts to call in app (population)
+> all_state_bar_pop <- map(.x = states,  .f = function(x) {
++   df1 <- adm_pop_long  .... [TRUNCATED] 
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+
+> # set names of charts
+> all_state_bar_pop <- setNames(all_state_bar_pop, states)
+
+> ############
+> # STATE REPORTS - Parole bar chart
+> ############
+> 
+> # generate list of state highcharts to call in app (admissions)
+> parole_bar_a .... [TRUNCATED] 
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+
+> # set names of charts
+> parole_bar_adm <- setNames(parole_bar_adm,states)
+
+> # generate list of state highcharts to call in app (population)
+> parole_bar_pop <- map(.x = states,  .f = function(x) {
++   df1 <- adm_pop_long %>% .... [TRUNCATED] 
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+
+> # set names of charts
+> parole_bar_pop <- setNames(parole_bar_pop,states)
+
+> ############
+> # STATE REPORTS - Probation bar chart
+> ############
+> 
+> # generate list of state highcharts to call in app (admissions)
+> probation .... [TRUNCATED] 
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+
+> # set names of charts
+> probation_bar_adm <- setNames(probation_bar_adm, states)
+
+> # generate list of state highcharts to call in app (population)
+> probation_bar_pop <- map(.x = states,  .f = function(x) {
++   df1 <- adm_pop_long  .... [TRUNCATED] 
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You
+can override using the `.groups` argument.
+
+> # set names of charts
+> probation_bar_pop <- setNames(probation_bar_pop, states)
+
+> ############
+> # Save plots
+> ############
+> 
+> 
+> 
+> theseFOLDERS <- c("sharepoint" = admin$sp_data, "app" = "app/data")
+
+> for (folder in theseFOLDERS){
++   
++   save(all_state_area_adm,     file=file.path(folder, "all_state_area_adm.Rda"))
++   save(all_state_area_pop,   .... [TRUNCATED] 
+Warning message:
+Problem while computing `tooltip = paste0(...)`.
+The `digits` argument of `comma()` is deprecated as of scales 1.0.0.
+Please use the `accuracy` argument instead.
+ℹ The warning occurred in group 1: state = Alabama, year = 2018,
+  metric = "New Offense". 
+Warning message:
+Problem while computing `tooltip = paste0(...)`.
+The `digits` argument of `comma()` is deprecated as of scales 1.0.0.
+Please use the `accuracy` argument instead.
+ℹ The warning occurred in group 1: state = Alabama, year = 2018,
+  metric = "New Offense".
