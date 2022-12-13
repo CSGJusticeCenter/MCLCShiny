@@ -19,6 +19,35 @@ suppressed_vars <- c("RRI", "RATE", "REVCNT")
 revcnt_notes <- readr::read_csv(file.path(admin$sp_data_raw, "revcnt_notes.csv"), show_col_types = FALSE)
 
 
+
+
+roundedval <- function(val, accuracy){
+  
+  ndigits <- log(accuracy, base = 10)
+  
+  ifelse(
+      val < accuracy & round(val, digits = ndigits) == 0 & val > 0 
+    , paste0("<", accuracy)
+    , comma(val, accuracy = accuracy)
+  )
+  
+  
+}
+
+
+addsuppressasterick <- function(char){
+  
+  ifelse(
+      substr(char, 1, 1) == "<"
+    , paste0(char, "*")
+    , paste0("<", char, "*")
+  )
+  
+  
+  
+}
+
+
 #' Create a table for a state of a single metric 
 #' years are column names 
 #' single metric are values 
@@ -75,7 +104,7 @@ state_table_single_metric <- function(DATA, whichYEARS, whichRACE, whichSTATE, w
   
   
   asis <- longdf %>% 
-    mutate_at(vars(all_of(whichMETRIC)), ~comma(.*mult, accuracy = thisAccuracy)) %>% 
+    mutate_at(vars(all_of(whichMETRIC)), ~roundedval(.*mult, accuracy = thisAccuracy)) %>% 
     select(OFFGENERAL, RACE, RPTYEAR, all_of(whichMETRIC)) %>% 
     pivot_wider(names_from = RPTYEAR, values_from = all_of(whichMETRIC)) %>% 
     select(OFFGENERAL, RACE, all_of(as.character(whichYEARS))) %>% 
@@ -92,8 +121,8 @@ state_table_single_metric <- function(DATA, whichYEARS, whichRACE, whichSTATE, w
   if (whichMETRIC %in% suppressed_vars){
     
     suppress <- longdf %>% 
-      mutate_at(vars(all_of(S_whichMETRIC)), ~comma(.*mult, accuracy = thisAccuracy)) %>% 
-      mutate_at(vars(all_of(S_whichMETRIC)), ~ifelse(SUPPRESS == 1 & !is.na(.), paste0("<", ., "*"), .)) %>% 
+      mutate_at(vars(all_of(S_whichMETRIC)), ~roundedval(.*mult, accuracy = thisAccuracy)) %>% 
+      mutate_at(vars(all_of(S_whichMETRIC)), ~ifelse(SUPPRESS == 1 & !is.na(.), addsuppressasterick(.), .)) %>% 
       select(OFFGENERAL, RACE, RPTYEAR, all_of(S_whichMETRIC)) %>% 
       pivot_wider(names_from = RPTYEAR, values_from = all_of(S_whichMETRIC)) %>% 
       select(OFFGENERAL, RACE, all_of(as.character(whichYEARS))) %>% 
