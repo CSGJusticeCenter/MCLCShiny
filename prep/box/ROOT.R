@@ -2,15 +2,8 @@
 
 #' Root folder for SharePoint
 #'
-#' @return
 #' @export
-#'
-#' @examples
-#sp <- "50 State Revocations Project/MCLC Shiny App"
+sp <- "50 State Revocations Project" # MYE 
+# sp <- "JC Research - 50 State Revocations Project" #Mari 
 
 
-# MYE:
-# sp <- "50 State Revocations Project/MCLC Shiny App"
-
-# MAR:
-sp <- "JC Research - 50 State Revocations Project/MCLC Shiny App"

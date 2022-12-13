@@ -7,19 +7,17 @@ box::use(
 )
 
 
-sp_survey <- csgjcr::csg_sp_path(file.path(ROOT$sp))
+#' @export
+sp_survey <- csgjcr::csg_sp_path(file.path(ROOT$sp, "50 State Survey (2022)"))
 
 #' @export
-sp_survey <- gsub("/MCLC Shiny App", "/50 State Survey (2022)", sp_survey)
+sp_data <- csgjcr::csg_sp_path(file.path(ROOT$sp, "MCLC Shiny App/data/analysis"))
 
 #' @export
-sp_data <- csgjcr::csg_sp_path(file.path(ROOT$sp, "data/analysis"))
+sp_data_del <- csgjcr::csg_sp_path(file.path(ROOT$sp, "MCLC Shiny App/data/deliverables"))
 
 #' @export
-sp_data_del <- csgjcr::csg_sp_path(file.path(ROOT$sp, "data/deliverables"))
-
-#' @export
-sp_data_raw <- csgjcr::csg_sp_path(file.path(ROOT$sp, "data/raw"))
+sp_data_raw <- csgjcr::csg_sp_path(file.path(ROOT$sp, "MCLC Shiny App/data/raw"))
 
 #' Log Message
 #'
