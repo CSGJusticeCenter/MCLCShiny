@@ -61,6 +61,8 @@ Loading required package: showtextdb
 Registered S3 method overwritten by 'quantmod':
   method            from
   as.zoo.data.frame zoo 
+Highcharts (www.highcharts.com) is a Highsoft software product which is
+not free for commercial and Governmental use
 
 > library(extrafont)
 Registering fonts with R
@@ -316,14 +318,14 @@ Graphik Light already registered with windowsFonts().
 > # Load info on abolishment of parole or probation
 > abolish_prob_parole <- read_excel(file.path(admin$sp_survey, "MCLC 2022 Progress Tracking.xlsx") .... [TRUNCATED] 
 New names:
-• `CY/FY [ask at a later date]` -> `CY/FY [ask at a later
-  date]...14`
-• `CY/FY [ask at a later date]` -> `CY/FY [ask at a later
-  date]...15`
+• `CY/FY [ask at a later date]` -> `CY/FY [ask at a later date]...14`
+• `CY/FY [ask at a later date]` -> `CY/FY [ask at a later date]...15`
 • `` -> `...19`
 • `` -> `...22`
 
-> #abolish_prob_parole <- read_excel(file.path("C:/Users/mroberts/The Council of State Governments/JC Research - 50 State Revocations Project/50 State ..." ... [TRUNCATED] 
+> ################################################################################
+> # Reformat shapefile for hex map
+> ############################## .... [TRUNCATED] 
 
 > # clean state abbreviations file
 > stateAbb <- clean_names(stateAbb)
@@ -440,8 +442,7 @@ New names:
 > # save reactable version of map explorer table
 > mclc_explorer_table_long <- mclc_explorer_table %>%
 +   select(state, data, `2018`, `2019`, `2020`, .... [TRUNCATED] 
-`summarise()` has grouped output by 'state'. You can override using
-the `.groups` argument.
+`summarise()` has grouped output by 'state'. You can override using the `.groups` argument.
 
 > mclc_explorer_table <- merge(mclc_explorer_table, mclc_explorer_table_long, by = c("state", "data"))
 
@@ -463,8 +464,7 @@ the `.groups` argument.
 > # select variables
 > # sum by type
 > # remove proba .... [TRUNCATED] 
-`summarise()` has grouped output by 'state', 'year', 'metric'. You
-can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
 
 > # make wide form
 > state_table_wide <- spread(state_table, key = year, value = total)
@@ -489,9 +489,7 @@ can override using the `.groups` argument.
 > prob_parole_tables <- fnc_create_data_metric(prob_parole_tables) %>%
 +   group_by(state, year, metric, adm_or_pop, prob_vs_parole, text) %>%
 +   sum .... [TRUNCATED] 
-`summarise()` has grouped output by 'state', 'year', 'metric',
-'adm_or_pop', 'prob_vs_parole'. You can override using the `.groups`
-argument.
+`summarise()` has grouped output by 'state', 'year', 'metric', 'adm_or_pop', 'prob_vs_parole'. You can override using the `.groups` argument.
 
 > # filter to parole
 > parole_table <- prob_parole_tables %>%
@@ -556,16 +554,14 @@ Adding missing grouping variables: `metric`
 > ################################################################################
 > # states that don't have graphs because of missing data
 > ####### .... [TRUNCATED] 
-`summarise()` has grouped output by 'state'. You can override using
-the `.groups` argument.
+`summarise()` has grouped output by 'state'. You can override using the `.groups` argument.
 
 > nt_na_adm <- nt_na_adm1$state
 
 > nt_na_pop1 <- mclc_all %>%
 +   filter(data == "New Offense Population" | data == "Technical Violation Population") %>%
 +   group_by(state, data) %>% .... [TRUNCATED] 
-`summarise()` has grouped output by 'state'. You can override using
-the `.groups` argument.
+`summarise()` has grouped output by 'state'. You can override using the `.groups` argument.
 
 > nt_na_pop <- nt_na_pop1$state
 
@@ -582,15 +578,13 @@ the `.groups` argument.
 > # states that are missing data and will not have a parole graph
 > parole_na_adm1 <- adm_pop_long %>%
 +   filter(data == "new_offense_parole_violatio ..." ... [TRUNCATED] 
-`summarise()` has grouped output by 'state'. You can override using
-the `.groups` argument.
+`summarise()` has grouped output by 'state'. You can override using the `.groups` argument.
 
 > parole_na_adm <- parole_na_adm1$state
 
 > parole_na_pop1 <- adm_pop_long %>%
 +   filter(data == "new_offense_parole_violation_population" | data == "technical_parole_violation_population") % .... [TRUNCATED] 
-`summarise()` has grouped output by 'state'. You can override using
-the `.groups` argument.
+`summarise()` has grouped output by 'state'. You can override using the `.groups` argument.
 
 > parole_na_pop <- parole_na_pop1$state
 
@@ -607,15 +601,13 @@ the `.groups` argument.
 > # states that are missing data and will not have a probation graph
 > probation_na_adm1 <- adm_pop_long %>%
 +   filter(data == "new_offense_probation ..." ... [TRUNCATED] 
-`summarise()` has grouped output by 'state'. You can override using
-the `.groups` argument.
+`summarise()` has grouped output by 'state'. You can override using the `.groups` argument.
 
 > probation_na_adm <- probation_na_adm1$state
 
 > probation_na_pop1 <- adm_pop_long %>%
 +   filter(data == "new_offense_probation_violation_population" | data == "technical_probation_violation_popul ..." ... [TRUNCATED] 
-`summarise()` has grouped output by 'state'. You can override using
-the `.groups` argument.
+`summarise()` has grouped output by 'state'. You can override using the `.groups` argument.
 
 > probation_na_pop <- probation_na_pop1$state
 
@@ -675,8 +667,7 @@ The following object is masked from ‘package:jsonlite’:
 
 The following objects are masked from ‘package:rlang’:
 
-    %@%, as_function, flatten, flatten_chr, flatten_dbl,
-    flatten_int, flatten_lgl, flatten_raw, invoke, splice
+    %@%, as_function, flatten, flatten_chr, flatten_dbl, flatten_int, flatten_lgl, flatten_raw, invoke, splice
 
 
 > library(highcharter)

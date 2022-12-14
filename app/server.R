@@ -498,13 +498,21 @@ server <- function(input, output, session) {
 
     filter_by <- paste0(input$data_map, " ", input$adm_or_pop_map)
     select_column = input$year_map
-    select_column_name = paste0(input$year_map, " Change")
-    df <- mclc_explorer_table[, c('state', 'data', '2018', '2019', '2020', '2021', select_column, 'total_new')]
-    df <- df %>%
-      filter(data == filter_by) %>%
-      arrange(state) %>%
-      rename(State = state,
-             change = 7)
+    select_column_name = paste0(select_column, " Change")
+    
+    df <- mclc_explorer_table %>% 
+      select(state, data, `2018`, `2019`, `2020`, `2021`, all_of(select_column), total_new, trend) %>% 
+      filter(data == filter_by) %>% 
+      arrange(state) %>% 
+      rename(State = state, change = all_of(select_column)) %>% 
+      mutate(
+        trend = case_when(
+            trend == "negative" ~ orange
+          , trend == "positive" ~ regblue
+          , trend == "same"     ~ "#585858" #grey 35
+        )
+      ) 
+    
 
     reactable(df,
               style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
@@ -554,15 +562,21 @@ server <- function(input, output, session) {
                                  id = "total",
                                  height = 4,
                                  width = 4,
-                                 stroke = orange,
+                                 stroke = df$trend[index],
                                  strokeWidth = 2.5,
                                  orientation = "diagonal"),
 
                                dui_sparklineseries(
                                  curve = "linear",
                                  showArea = FALSE,
-                                 fill = orange,
-                                 stroke = orange)))})))
+                                  fill = df$trend[index],
+                                 stroke = df$trend[index]
+                                 )
+                               )
+                             )}), 
+                #trend, don't show, used in determing
+                trend = colDef(show = FALSE)
+                ))
 
   })
 

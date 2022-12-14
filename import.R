@@ -292,7 +292,21 @@ mclc_explorer_table_long <- mclc_explorer_table %>%
                names_to='year',
                values_to='total') %>%
   group_by(state, data) %>%
-  summarise(total_new = list(list(total)))
+  summarise(total_new = list(list(total))) %>% 
+  ungroup() %>% 
+  rowwise() %>% 
+  mutate(
+    vec_nona = list(total_new[[1]][!is.na(total_new[[1]])])
+    , length_nona = length(vec_nona)
+    , first  = ifelse(length_nona == 0, NA, vec_nona[1])
+    , last   = ifelse(length_nona == 0, NA, vec_nona[length_nona])
+    , trend = case_when(
+        first == last ~ "same" 
+      , first >  last ~ "negative" #trend is negative, decreasing 
+      , first <  last ~ "positive" #trend is positive, increasing 
+    )
+  ) %>% 
+  select(state, data, total_new, trend)
 
 mclc_explorer_table <- merge(mclc_explorer_table, mclc_explorer_table_long, by = c("state", "data"))
 
