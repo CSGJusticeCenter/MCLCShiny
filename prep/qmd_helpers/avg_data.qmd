@@ -1,0 +1,157 @@
+---
+title: "avg_helper"
+format: html
+editor: source
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r}
+thisdata <- data_list[i]
+logger::log_info("thisdata: {i} of {length(data_list)} - {thisdata}")
+```
+
+
+```{r}
+all3race <- longdf %>%
+  filter(
+      DATA == thisdata 
+    , OFFGENERAL == admin$lev_OFFGENERAL2[1]
+    #, RPTYEAR == RECENT_YR
+    , RACE %in% c("White", "Black", "Hispanic")
+    , STATE != "District of Columbia"
+  )  %>% 
+  group_by(STATE) %>% 
+  mutate(n_race_state = length(STATE)) %>% 
+  ungroup() %>% 
+  filter(n_race_state == 3) %>% 
+  filter(S_RATE != Inf) 
+
+
+plotdf <- all3race %>% 
+  select(STATE, RACE, S_REVCNT, POPEST, S_RATE, S_RRI) %>% 
+  pivot_longer(cols = c(S_REVCNT, POPEST, S_RATE, S_RRI)) 
+
+sumstatdf <- plotdf %>% 
+  group_by(RACE, name) %>% 
+  summarize(
+      p25 = quantile(value, probs = 0.25)
+    , p50 = quantile(value, probs = 0.50)
+    , p75 = quantile(value, probs = 0.75)
+    , mean= mean(value)
+    , .groups = "keep"
+  ) %>% 
+  ungroup() %>% 
+  pivot_longer(cols = -c(RACE, name), names_to = "sum") 
+
+
+```
+
+
+## `r thisdata`
+
+
+```{r}
+whiteval <- sumstatdf %>% filter(sum == "p50", name == "S_RATE", RACE == "White") %>% pull(value)
+
+sumstatdf %>% filter(sum == "p50") %>% 
+  pivot_wider(names_from = name, values_from = value) %>% 
+  mutate(RRI_from_sumrate = S_RATE/whiteval) %>% 
+  select(RACE, S_RATE, RRI_from_sumrate, S_RRI) %>% 
+  select(RACE, S_RATE, RRI_from_sumrate, S_RRI) %>% 
+  mutate(perc_diff = scales::percent((RRI_from_sumrate- S_RRI)/S_RRI)) %>%
+  kable(caption = "Compare Median Rates calculating RRI vs Median RRI", align = "lrrrr") %>% 
+  kable_styling()
+
+
+whiteval <- sumstatdf %>% filter(sum == "mean", name == "S_RATE", RACE == "White") %>% pull(value)
+
+sumstatdf %>% filter(sum == "mean") %>% 
+  pivot_wider(names_from = name, values_from = value) %>% 
+  mutate(RRI_from_sumrate = S_RATE/whiteval) %>% 
+  select(RACE, S_RATE, RRI_from_sumrate, S_RRI) %>% 
+  mutate(perc_diff = scales::percent((RRI_from_sumrate- S_RRI)/S_RRI)) %>% 
+  kable(caption = "Compare Mean Rates calculating RRI vs Mean RRI", align = "lrrrr") %>% 
+  kable_styling()
+```
+
+
+
+
+```{r}
+
+
+plot1 <- plotdf %>% 
+  filter(name == "S_RATE") %>% 
+  ggplot(aes(x = value)) + 
+  geom_violin(alpha = 0.5, aes(y = 1)) + 
+  geom_point(data = filter(sumstatdf, name == "S_RATE"), aes(x = value, y = 1, color = sum, size = sum, shape = sum), alpha = 0.6)+ 
+  facet_wrap(RACE~., ncol = 1) + 
+  scale_size_manual(values = c(3, 1, 3, 1)) + 
+  scale_color_manual(values = c("blue", "red", "darkgreen", "red")) + 
+  labs(title = "S_RATE") + 
+  theme_bw() + 
+  theme(legend.position = "top", axis.text.y = element_blank())
+
+
+
+plot2 <- plotdf %>% 
+  filter(name == "S_RRI") %>% 
+  ggplot(aes(x = value)) + 
+  geom_violin(alpha = 0.5, aes(y = 1)) + 
+  geom_point(data = filter(sumstatdf, name == "S_RRI"), aes(x = value, y = 1, color = sum, size = sum, shape = sum), alpha = 0.6)+ 
+  facet_wrap(RACE~., ncol = 1) + 
+  scale_size_manual(values = c(3, 1, 3, 1)) + 
+  scale_color_manual(values = c("blue", "red", "darkgreen", "red")) + 
+  labs(title = "S_RRI") + 
+  theme_bw() + 
+  theme(legend.position = "top", axis.text.y = element_blank())
+
+
+plot1 + plot2
+```
+
+
+
+```{r}
+# plot3 <- all3race %>% 
+#   select(STATE, RACE, value = S_RATE) %>% 
+#   left_join(., filter(all3race, RACE == "White") %>% select(STATE, white_val = S_RATE), by = "STATE") %>% 
+#   group_by(STATE) %>% 
+#   mutate(
+#     mag = ifelse(abs(max(white_val-1)) >= abs(min(white_val - 1)),  max(white_val),  min(white_val-1))
+#   ) %>% 
+#   ungroup() %>% 
+#   mutate(STATE = fct_reorder(STATE, mag)) %>% 
+#   ggplot(aes(x = value, y = STATE)) + 
+#   geom_line() +
+#   geom_point(aes(color = RACE)) + 
+#   labs("Each state S_RRI for all offense categories (most recent year)") +
+#   theme_bw() + 
+#   theme(
+#     legend.position = "top"
+#   )
+  
+  
+all3race %>% 
+  group_by(STATE) %>% 
+  select(STATE, RACE, value = S_RRI) %>% 
+  mutate(
+    mag = ifelse(abs(max(value-1)) >= abs(min(value - 1)),  max(value),  min(value-1))
+  ) %>% 
+  ungroup() %>% 
+  mutate(STATE = fct_reorder(STATE, mag)) %>% 
+  ggplot(aes(x = value, y = STATE)) + 
+  geom_line() +
+  geom_point(aes(color = RACE)) + 
+  labs("Each state S_RRI for all offense categories (most recent year)") +
+  theme_bw() + 
+  theme(
+    legend.position = "top"
+  )
+```
+
+
+
+

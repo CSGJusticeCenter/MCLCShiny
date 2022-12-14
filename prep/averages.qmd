@@ -1,0 +1,83 @@
+---
+title: "Averages" 
+description: "Last User: `r stringr::str_sub(getwd(), 10, stringr::str_locate(stringr::str_sub(getwd(), 10, -1), '/')[1]+10-2)`"
+date: last-modified
+date-format: "YYYY-MM-DD HH:mm:ss"
+published-title: Last Modified
+doi: "`r Sys.time()`"
+doi-title: Last Ran
+execute:
+  echo: true
+format: 
+  html:
+    page-layout: full
+    fontsize: 0.9em
+    fig-width: 12
+    fig-height: 7
+    code-fold: true 
+editor: source
+self-contained: true
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r}
+#| label: setup
+#| include: false  
+
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(patchwork) 
+
+#https://stackoverflow.com/questions/66974669/collapse-rows-is-not-collapsed-and-updating-packages-does-not-fix
+#devtools::install_github(repo="haozhu233/kableExtra", ref="a6af5c0") #to get collapse rows to work 
+
+box::use(
+    box/admin
+  , box/assignflags
+)
+```
+
+
+```{r}
+csv_list <- c("tablesbystate_A_BJS.csv", "tablesbystate_A_CEN.csv", "tablesbystate_N_BJS.csv", "tablesbystate_N_CEN.csv")
+
+
+longdf <- map(
+  csv_list
+  , ~read_csv(file.path(admin$sp_data, .x), show_col_types = FALSE)
+) %>% bind_rows() %>% 
+  rename(DATA = data)
+```
+
+::: {.panel-tabset} 
+
+## Notes 
+
+- Look at suppressed values (`S_`)
+- remove instances where S_RATE/S_RRI == Inf 
+- only look at all offense categories 
+- Only look at states where ALL 3 race/ethnicity groups have data 
+
+
+
+```{r}
+#| results: asis
+#| eval: TRUE
+#| warning: FALSE
+data_list <- unique(longdf$DATA)
+lev2_data <- vector(mode = "list", length = length(data_list))
+for (i in 1:(length(data_list))){ 
+  lev2_data[[i]] <- knitr::knit_child("./qmd_helpers/avg_data.qmd", quiet = TRUE, envir = environment())
+}
+cat(unlist(lev2_data), sep = '\n')
+```
+
+
+
+
+
+::: 
+<!-- end {.panel-tabset} ALLL --> 
