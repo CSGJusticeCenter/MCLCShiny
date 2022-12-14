@@ -326,7 +326,7 @@ create_infograph <- function(
   
   title <- ggdraw() + 
     draw_label(
-      glue("{str_to_title(race)} clients are revoked")
+      glue("{str_to_title(race)} individuals are revoked")
       , x = 0
       , hjust = 0
       , vjust = 0.25
