@@ -1599,7 +1599,7 @@ server <- function(input, output, session) {
     dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
 
     out <- paste0(
-        raceethnicity$pop_denom_text(input$pop_denom)
+        raceethnicity$pop_denom_text(input$pop_denom, input$adm_pop_report)
       , raceethnicity$infographic_header(dataavail, rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$NOTE)
     )
 

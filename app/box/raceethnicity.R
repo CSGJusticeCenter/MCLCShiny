@@ -128,30 +128,27 @@ create_reactable <- function(DF){
 #' @export
 #'
 #' @examples
-pop_denom_text <- function(pop_denom){
+pop_denom_text <- function(pop_denom, pop_or_adm_data){
   
   rlang::arg_match(pop_denom, c("BJS", "CEN"))
+  rlang::arg_match(pop_or_adm_data, c("Admissions", "Population"))
   
   prefix <- "<b>"
   suffix <- "</b>"
   
-  fill1 <- case_when(
-      pop_denom == "BJS" ~ paste0(prefix, "disparities in parole revocations"                        , suffix)
-    , pop_denom == "CEN" ~ paste0(prefix, "cumulative disparities across the criminal justice system", suffix)
+  fill <- case_when(
+      pop_denom == "BJS" & pop_or_adm_data == "Admissions" ~ paste0(        prefix, "disparities in prison admissions for parole revocations,"           , suffix,                  " rates")
+    , pop_denom == "CEN" & pop_or_adm_data == "Admissions" ~ paste0("the ", prefix, "cumulative disparities accrued through the criminal justice system,", suffix,     " re-admission rates")
+    , pop_denom == "BJS" & pop_or_adm_data == "Population" ~ paste0(        prefix, "disparities in people serving time for parole revocations,"         , suffix,                  " rates")
+    , pop_denom == "CEN" & pop_or_adm_data == "Population" ~ paste0("the ", prefix, "cumulative disparities accrued through the criminal justice system,", suffix, " re-incarceration rates")
   )
   
-  fill2 <- case_when(
-      pop_denom == "BJS" ~ paste0(prefix, "parole population", suffix) 
-    , pop_denom == "CEN" ~ paste0(prefix, "community"        , suffix)
-  )
   
   outtext <- paste0(
       "<div class = 'notetxt'>"
      , "To highlight "
-     , fill1
-     , " for each racial and ethnic group in the "
-     , fill2
-     , ", rates are shown relative to White individuals to highlight higher or lower than expected representation.<br>"
+     , fill
+     , " are shown relative to White individuals to highlight higher or lower than expected representation."
      , "</div>"
   )
   
