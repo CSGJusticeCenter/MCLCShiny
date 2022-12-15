@@ -206,30 +206,29 @@ infograph_alt <- function(RRIDATA, whichNCRP, whichPOP, whichRE, whichSTATE){
   suppress <- thisdata$SUPPRESS
   rri_val <- thisdata$S_RRI
   
-  pop_name <- case_when(
-      whichPOP == "BJS" ~ "parole"
-    , whichPOP == "CEN" ~ "community" 
-  )
-  
   suppress_pre <- ifelse(suppress == 0, NA, "less than")
   suppress_suf <- ifelse(suppress == 0, NA, "Note that revocation counts have been suppressed.")
   
-  # The info-graphic for [state] shows that when looking at prison
-  # [admissions/population] as part of the [parole/community] population, for
-  # every White individual revoked there are *less than* [RRI] [Black/Hispanic]
-  # individuals revoked.  *Note that the revocation counts have been
-  # suppressed.*
+  thistxt <- case_when(
+      whichPOP == "BJS" & whichNCRP == "Admissions" ~ "disparities in prison admissions for parole revocations"
+    , whichPOP == "CEN" & whichNCRP == "Admissions" ~ "the cumulative disparities accrued through the criminal justice system for re-admissions rates"
+    , whichPOP == "BJS" & whichNCRP == "Population" ~ "disparities in people serving time for parole revocations"
+    , whichPOP == "CEN" & whichNCRP == "Population" ~ "the cumulative disparities accrued through the criminal justice system for re-incarceration rates"
+  )
+  
+  
+  # The info-graphic for [state] highlights [text].  For every White individual
+  # revoked there are *less than* [RRI] [Black/Hispanic] individual revoked.
+  # *Note that the revocation counts have been suppressed.*
   
   
   string_vec <- c(
     "The info-graphic for"
     , whichSTATE
-    , "shows that when looking at prison"
-    , tolower(whichNCRP)
-    , "as part of the"
-    , pop_name 
-    , "population," 
-    , "for every White individual revoked there are"
+    , "highlights"
+    , thistxt
+    , "."
+    , "For every White individual revoked there are"
     , suppress_pre
     , sprintf("%.1f", round(rri_val, 1))
     , whichRE
@@ -256,23 +255,23 @@ infograph_alt <- function(RRIDATA, whichNCRP, whichPOP, whichRE, whichSTATE){
 #' @export
 infograph_alt_noinfog <- function( whichNCRP, whichPOP, whichRE, whichSTATE){
   
-  pop_name <- case_when(
-      whichPOP == "BJS" ~ "parole"
-    , whichPOP == "CEN" ~ "community" 
+  
+  # [state] does not have enough data to show [text] for [Black/Hispanic]
+  # individuals revoked.
+  
+  thistxt <- case_when(
+      whichPOP == "BJS" & whichNCRP == "Admissions" ~ "disparities in prison admissions for parole revocations"
+    , whichPOP == "CEN" & whichNCRP == "Admissions" ~ "the cumulative disparities accrued through the criminal justice system for re-admissions rates"
+    , whichPOP == "BJS" & whichNCRP == "Population" ~ "disparities in people serving time for parole revocations"
+    , whichPOP == "CEN" & whichNCRP == "Population" ~ "the cumulative disparities accrued through the criminal justice system for re-incarceration rates"
   )
   
-  
-  #[state] does not have enough data to show disparities in prison 
-  # [admissions/population] as part of the [parole/community] population 
-  # for [Black/Hispanic] individuals revoked. 
 
   string_vec <- c(
       whichSTATE
-    , "does not have enough data to show disparities in prison"
-    , tolower(whichNCRP)
-    , "as part of the"
-    , pop_name 
-    , "population for" 
+    , "does not have enough data to show"
+    , thistxt
+    , "for" 
     , whichRE
     , "individuals revoked."
   )
