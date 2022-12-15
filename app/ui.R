@@ -214,7 +214,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                                    br(),
 
-                                                                   fluidRow(column(width = 12, align = "left", div(id = "selected-state-note", textOutput("selected_state_note")))),
+                                                                   fluidRow(column(width = 12, align = "left", div(id = "selected-state-note", htmlOutput("selected_state_note")))),
 
                                                                    br(),
 

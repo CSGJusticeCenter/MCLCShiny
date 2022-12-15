@@ -1029,8 +1029,8 @@ server <- function(input, output, session) {
   })
 
   # Title of state based on user input
-  output$selected_state_note <- renderText({
-    paste(df_notes()$notes)
+  output$selected_state_note <- renderUI({
+    HTML(df_notes()$notes)
   })
 
   #######

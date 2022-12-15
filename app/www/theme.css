@@ -342,6 +342,11 @@ Tabset Panels
   font-family: Graphik;
 }
 
+/* place holder for state notes on overview tab */
+/* can add additional styling using this */ 
+p.statetxt {
+}
+
 /* State note setting */
 #consistent-state-note {
   text-align: left;

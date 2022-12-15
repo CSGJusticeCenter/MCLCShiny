@@ -4,8 +4,8 @@
 > # Project: MCLCShiny
 > # File: import.R
 > # Authors: Mari Roberts
-> # Date last updated: October 25, 2022
- .... [TRUNCATED] 
+> # Sub-Author: Martha Eichlersmith 
+> # .... [TRUNCATED] 
 
 > library(dplyr)
 
@@ -61,8 +61,6 @@ Loading required package: showtextdb
 Registered S3 method overwritten by 'quantmod':
   method            from
   as.zoo.data.frame zoo 
-Highcharts (www.highcharts.com) is a Highsoft software product which is
-not free for commercial and Governmental use
 
 > library(extrafont)
 Registering fonts with R
@@ -73,6 +71,8 @@ The following object is masked from ‘package:showtextdb’:
 
     font_install
 
+
+> library(readr)
 
 > box::use( prep/box/admin)
 
@@ -312,12 +312,12 @@ Graphik Light already registered with windowsFonts().
 
 > pop21 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Population 2021")
 
-> # Load states  - will change to new notes when ready ????????????????????????????????
-> notes <- read_excel(file.path(admin$sp_data_raw, "mclc/Data  ..." ... [TRUNCATED] 
-
+> # Load states  - will change to new notes when ready 
+> notes_raw <- read_csv(file.path(admin$sp_data_raw, "notes/state_notes_overview.csv"), show_c .... [TRUNCATED] 
+[1mindexing[0m [34mstate_notes_overview.csv[0m [=================================================================================] [32m1.62GB/s[0m, eta: [36m 0s[0m                                                                                                                                                                           
 > # Load info on abolishment of parole or probation
 > abolish_prob_parole <- read_excel(file.path(admin$sp_survey, "MCLC 2022 Progress Tracking.xlsx") .... [TRUNCATED] 
-New names:
+-/                                                                                                                                      /                                                                                                                                      -                                                                                                                                      New names:
 • `CY/FY [ask at a later date]` -> `CY/FY [ask at a later date]...14`
 • `CY/FY [ask at a later date]` -> `CY/FY [ask at a later date]...15`
 • `` -> `...19`
@@ -489,7 +489,8 @@ New names:
 > prob_parole_tables <- fnc_create_data_metric(prob_parole_tables) %>%
 +   group_by(state, year, metric, adm_or_pop, prob_vs_parole, text) %>%
 +   sum .... [TRUNCATED] 
-`summarise()` has grouped output by 'state', 'year', 'metric', 'adm_or_pop', 'prob_vs_parole'. You can override using the `.groups` argument.
+`summarise()` has grouped output by 'state', 'year', 'metric', 'adm_or_pop', 'prob_vs_parole'. You can override using the `.groups`
+argument.
 
 > # filter to parole
 > parole_table <- prob_parole_tables %>%

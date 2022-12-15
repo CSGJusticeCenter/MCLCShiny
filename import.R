@@ -2,7 +2,8 @@
 # Project: MCLCShiny
 # File: import.R
 # Authors: Mari Roberts
-# Date last updated: October 25, 2022
+# Sub-Author: Martha Eichlersmith 
+# Date last updated: December 15, 2022 (MYE)
 
 # Description:
 #    Loads packages
@@ -12,8 +13,8 @@
 #    Creates data files for app
 
 # Input:
-#    "Data for web team v13.xlsx" Notes are here for now
-#    "mclc_data_2022_v4.xlsx"     2022 survey data
+#    "data/raw/notes/state_notes_overview.csv" state notes 
+#    "data/raw/mclc/mclc_data_2022_v4.xlsx"     2022 survey data
 #     Map files
 
 # Output:
@@ -41,6 +42,7 @@ library(sysfonts)
 library(utils)
 library(highcharter)
 library(extrafont)
+library(readr)
 
 box::use( prep/box/admin)
 
@@ -88,8 +90,8 @@ pop19 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"),
 pop20 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Population 2020")
 pop21 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Population 2021")
 
-# Load states  - will change to new notes when ready ????????????????????????????????
-notes <- read_excel(file.path(admin$sp_data_raw, "mclc/Data for web team 2021 v13.xlsx"), sheet = "Notes")
+# Load states  - will change to new notes when ready 
+notes_raw <- read_csv(file.path(admin$sp_data_raw, "notes/state_notes_overview.csv"), show_col_types = FALSE)
 
 # Load info on abolishment of parole or probation
 abolish_prob_parole <- read_excel(file.path(admin$sp_survey, "MCLC 2022 Progress Tracking.xlsx"))
@@ -128,7 +130,25 @@ abolish_prob_parole <- abolish_prob_parole$state
 ################################################################################
 
 # clean notes file
-notes <- clean_names(notes)
+
+# weird special space character in Word, retained when copied over 
+# In word, it's not a space, it's shown as the last character within a cell
+# can't be removed with trimws default 
+# note that special_space_char == " " returns false 
+# when into csv and just manually removed spaces at end of note
+
+notes <- notes_raw %>% 
+  group_by(state) %>% 
+  summarize(note_lst = list(notes)) %>% 
+  ungroup() %>% 
+  rowwise() %>% 
+  mutate(
+      notes = paste(note_lst, collapse = "</p><p class = 'statetxt'>")
+    , notes = paste0("<p class = 'statetxt'>", notes, "</p>")
+  ) %>% 
+  ungroup() %>% 
+  select(state, notes)
+
 
 # add year variable
 adm18$year <- "2018"
