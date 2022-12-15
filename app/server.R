@@ -551,7 +551,8 @@ server <- function(input, output, session) {
                 total_new  =
                   colDef(minWidth = 140,
                          align = "center",
-                         name = "4 Year Trend",
+                         name = "Trend Line",
+                         sortable = FALSE, 
                          cell = function(value, index) {
                            dui_sparkline(
                              data = value[[1]],

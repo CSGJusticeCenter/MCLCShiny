@@ -58,6 +58,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                                                                   '2019 - 2020, 1 year' = "2019 - 2020",
                                                                                                                   '2020 - 2021, 1 year' = "2020 - 2021",
                                                                                                                   '2018 - 2021, 3 years' = "2018 - 2021"),
+                                                                                                      selected = "2018 - 2021", 
                                                                                                       multiple = FALSE))),
                                                                  # Download Map
                                                                  column(width = 3, align = "center", class = "input-col",
