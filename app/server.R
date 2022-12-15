@@ -1636,8 +1636,7 @@ server <- function(input, output, session) {
 
   output$table_rate_header <- renderUI({
     df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "RATE", whichTABLE = "table_suppress")
-    mult <- scales::comma(rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]][["RATE"]]$mult)
-    main <- paste0("<h4 class='reh4'> Rate per ", mult, " persons in the Population</h4>")
+    main <- raceethnicity$rate_table_header(input$pop_denom, input$adm_pop_report, rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]][["RATE"]]$mult)
     if (nrow(df) > 0){
       out <- main
     } else {

@@ -123,6 +123,7 @@ create_reactable <- function(DF){
 #' Text to display the pop_denom 
 #'
 #' @param pop_denom 
+#' @param pop_or_adm_data 
 #'
 #' @return
 #' @export
@@ -158,7 +159,8 @@ pop_denom_text <- function(pop_denom, pop_or_adm_data){
 
 #' Text to display the pop_denom 
 #'
-#' @param pop_denom 
+#' @param dataavail 
+#' @param note 
 #'
 #' @return
 #' @export
@@ -284,5 +286,34 @@ infograph_alt_noinfog <- function( whichNCRP, whichPOP, whichRE, whichSTATE){
 }
 
 
+#' Text to display the pop_denom 
+#'
+#' @param pop_denom 
+#' @param pop_or_adm_data 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+rate_table_header <- function(pop_denom, pop_or_adm_data, mult){
+  
+  rlang::arg_match(pop_denom, c("BJS", "CEN"))
+  rlang::arg_match(pop_or_adm_data, c("Admissions", "Population"))
+  
+  mult_txt <- scales::comma(mult)
+  
 
+  
+  out <- case_when(
+      pop_denom == "BJS" & pop_or_adm_data == "Admissions" ~ paste("Rate of Parole Revocations per", mult_txt, "Individuals Serving Parole Sentences")
+    , pop_denom == "CEN" & pop_or_adm_data == "Admissions" ~ paste("Rate of Parole Revocations per", mult_txt, "Individuals from the Community")
+    , pop_denom == "BJS" & pop_or_adm_data == "Population" ~ paste("Rate of Parole Revocations per", mult_txt, "Individuals Serving Parole Sentences")
+    , pop_denom == "CEN" & pop_or_adm_data == "Population" ~ paste("Rate of Parole Revocations per", mult_txt, "Individuals from the Community")
+  )
+  
+  
+  paste0("<h4 class='reh4'>", out, "</h4>")
+
+  
+}
 
