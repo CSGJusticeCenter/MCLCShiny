@@ -259,7 +259,7 @@ server <- function(input, output, session) {
     },
 
     content <- function(file) {
-      file.copy(paste("data/Change_", input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""), file)
+      file.copy(paste("data/plots/Change_", input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""), file)
     },
     contentType = "image/png"
   )
@@ -779,7 +779,7 @@ server <- function(input, output, session) {
     },
 
     content <- function(file) {
-      file.copy(paste("data/", input$state_report, "_Prison_", input$adm_pop_report, ".png", sep=""), file)
+      file.copy(paste("data/plots/", input$state_report, "_Prison_", input$adm_pop_report, ".png", sep=""), file)
     },
     contentType = "image/png"
   )
@@ -828,7 +828,7 @@ server <- function(input, output, session) {
     },
 
     content <- function(file) {
-      file.copy(paste("data/", input$state_report, "_Supervision_Violation_", input$adm_pop_report, "_by_Type.png", sep=""), file)
+      file.copy(paste("data/plots/", input$state_report, "_Supervision_Violation_", input$adm_pop_report, "_by_Type.png", sep=""), file)
     },
     contentType = "image/png"
   )
@@ -1075,7 +1075,7 @@ server <- function(input, output, session) {
     },
 
     content <- function(file) {
-      file.copy(paste("data/", input$state_report, "_Parole_Violation_", input$adm_pop_report, "_by_Type.png", sep=""), file)
+      file.copy(paste("data/plots/", input$state_report, "_Parole_Violation_", input$adm_pop_report, "_by_Type.png", sep=""), file)
     },
     contentType = "image/png"
   )
@@ -1323,7 +1323,7 @@ server <- function(input, output, session) {
     },
 
     content <- function(file) {
-      file.copy(paste("data/", input$state_report, "_Probation_Violation_", input$adm_pop_report, "_by_Type.png", sep=""), file)
+      file.copy(paste("data/plots/", input$state_report, "_Probation_Violation_", input$adm_pop_report, "_by_Type.png", sep=""), file)
     },
     contentType = "image/png"
   )

@@ -1,6 +1,7 @@
 
 # need to run highchart.R before hand to create charts and pathways 
 
+theseFOLDERS <- c("sharepoint" = file.path(admin$sp_data, "plots"), "app" = "app/data/plots")
 
 ##########
 # State Overview Area Chart
