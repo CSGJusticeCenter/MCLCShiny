@@ -1,0 +1,1160 @@
+[1] "MCLC Plot Prep, Creation, and PNGs"
+
+> # need to run highchart.R before hand to create charts and pathways 
+> 
+> 
+> box::use(
++     prep/box/admin
++   , glue[glue]
++   , purrr[...]
++   ,  .... [TRUNCATED] 
+
+> admin$mylog("!!START SAVING HIGHCHARTS AS PNGS")
+2022-12-16 14:37:01 - !!START SAVING HIGHCHARTS AS PNGS
+
+> ## functions 
+> 
+> add_st_name <- function(hc_obj, state = NA){
++   
++   org_title <- hc_obj$x$hc_opts$title$text
++   thisstate <- ifelse(!is.na(sta .... [TRUNCATED] 
+
+> save_state_png <- function(hc_obj, folderpath, id, title){
++   
++   admin$mylog(glue("Save plot: {title} for {id}"))
++   
++   temp <- tempfile(filee .... [TRUNCATED] 
+
+> save_map_png <- function(hc_obj, folderpath, id, title){
++   
++   admin$mylog(glue("Save plot: {title} for {id}"))
++   
++   temp <- tempfile(fileext .... [TRUNCATED] 
+
+> ## folders 
+> 
+> theseFOLDERS <- c("sharepoint" = file.path(admin$sp_data, "plots"), "app" = "app/data/plots")
+
+> savefolder <- theseFOLDERS[1]
+
+> copyfolder <- theseFOLDERS[2]
+
+> ## remove pngs from sharepoint and app  
+> for (folder in theseFOLDERS){
++   
++   walk(list.files(folder, pattern = "*.png"), ~file.remove(file.path .... [TRUNCATED] 
+
+> ##########
+> # State Overview Area Chart
+> ##########
+> 
+> admin$mylog("PRISON ADMISSIONS")
+2022-12-16 14:37:01 - PRISON ADMISSIONS
+
+> walk(
++   states_list, 
++   ~save_state_png(
++       add_st_name(all_state_area_adm[[.x]], .x)
++     , folderpath = savefolder
++     , id = .x
++     .... [TRUNCATED] 
+2022-12-16 14:37:01 - Save plot: Prison_Admissions for Alabama
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc65bc5cbe.html screenshot completed
+2022-12-16 14:37:07 - Save plot: Prison_Admissions for Alaska
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc693e10f5.html screenshot completed
+2022-12-16 14:37:09 - Save plot: Prison_Admissions for Arizona
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2087591.html screenshot completed
+2022-12-16 14:37:11 - Save plot: Prison_Admissions for Arkansas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc20f56b9f.html screenshot completed
+2022-12-16 14:37:13 - Save plot: Prison_Admissions for California
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc39d253cb.html screenshot completed
+2022-12-16 14:37:15 - Save plot: Prison_Admissions for Colorado
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fcc2d107f.html screenshot completed
+2022-12-16 14:37:18 - Save plot: Prison_Admissions for Connecticut
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc531865fd.html screenshot completed
+2022-12-16 14:37:20 - Save plot: Prison_Admissions for Delaware
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc222920ab.html screenshot completed
+2022-12-16 14:37:22 - Save plot: Prison_Admissions for Florida
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc13c575ad.html screenshot completed
+2022-12-16 14:37:24 - Save plot: Prison_Admissions for Georgia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2c9e51b9.html screenshot completed
+2022-12-16 14:37:26 - Save plot: Prison_Admissions for Hawaii
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc187ba27.html screenshot completed
+2022-12-16 14:37:29 - Save plot: Prison_Admissions for Idaho
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc24382448.html screenshot completed
+2022-12-16 14:37:31 - Save plot: Prison_Admissions for Illinois
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc190d26f9.html screenshot completed
+2022-12-16 14:37:33 - Save plot: Prison_Admissions for Indiana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5d132a78.html screenshot completed
+2022-12-16 14:37:35 - Save plot: Prison_Admissions for Iowa
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc7d031a76.html screenshot completed
+2022-12-16 14:37:37 - Save plot: Prison_Admissions for Kansas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3415e6d.html screenshot completed
+2022-12-16 14:37:39 - Save plot: Prison_Admissions for Kentucky
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc401a5c33.html screenshot completed
+2022-12-16 14:37:42 - Save plot: Prison_Admissions for Louisiana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc674a8d0.html screenshot completed
+2022-12-16 14:37:44 - Save plot: Prison_Admissions for Maine
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc26c27b8d.html screenshot completed
+2022-12-16 14:37:46 - Save plot: Prison_Admissions for Maryland
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1aa8374d.html screenshot completed
+2022-12-16 14:37:48 - Save plot: Prison_Admissions for Massachusetts
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc429e1e20.html screenshot completed
+2022-12-16 14:37:50 - Save plot: Prison_Admissions for Michigan
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5c474316.html screenshot completed
+2022-12-16 14:37:52 - Save plot: Prison_Admissions for Minnesota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4707e51.html screenshot completed
+2022-12-16 14:37:55 - Save plot: Prison_Admissions for Mississippi
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc550b675e.html screenshot completed
+2022-12-16 14:37:57 - Save plot: Prison_Admissions for Missouri
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2d8a59c6.html screenshot completed
+2022-12-16 14:37:59 - Save plot: Prison_Admissions for Montana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc244a67df.html screenshot completed
+2022-12-16 14:38:01 - Save plot: Prison_Admissions for Nebraska
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2a657fe8.html screenshot completed
+2022-12-16 14:38:03 - Save plot: Prison_Admissions for Nevada
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3c4d4755.html screenshot completed
+2022-12-16 14:38:05 - Save plot: Prison_Admissions for New Hampshire
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc710e3068.html screenshot completed
+2022-12-16 14:38:08 - Save plot: Prison_Admissions for New Jersey
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fced3e01.html screenshot completed
+2022-12-16 14:38:10 - Save plot: Prison_Admissions for New Mexico
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc48ac19b7.html screenshot completed
+2022-12-16 14:38:12 - Save plot: Prison_Admissions for New York
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc98e2027.html screenshot completed
+2022-12-16 14:38:14 - Save plot: Prison_Admissions for North Carolina
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc709c478c.html screenshot completed
+2022-12-16 14:38:16 - Save plot: Prison_Admissions for North Dakota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc62a42491.html screenshot completed
+2022-12-16 14:38:18 - Save plot: Prison_Admissions for Ohio
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc54ed1163.html screenshot completed
+2022-12-16 14:38:21 - Save plot: Prison_Admissions for Oklahoma
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc35307b09.html screenshot completed
+2022-12-16 14:38:23 - Save plot: Prison_Admissions for Oregon
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc12e418f8.html screenshot completed
+2022-12-16 14:38:25 - Save plot: Prison_Admissions for Pennsylvania
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6dbe42e2.html screenshot completed
+2022-12-16 14:38:27 - Save plot: Prison_Admissions for Rhode Island
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4d7958d0.html screenshot completed
+2022-12-16 14:38:29 - Save plot: Prison_Admissions for South Carolina
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6d37170.html screenshot completed
+2022-12-16 14:38:32 - Save plot: Prison_Admissions for South Dakota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc51d842b0.html screenshot completed
+2022-12-16 14:38:34 - Save plot: Prison_Admissions for Tennessee
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1562788b.html screenshot completed
+2022-12-16 14:38:36 - Save plot: Prison_Admissions for Texas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fcbe16e23.html screenshot completed
+2022-12-16 14:38:38 - Save plot: Prison_Admissions for Utah
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc25587d11.html screenshot completed
+2022-12-16 14:38:40 - Save plot: Prison_Admissions for Vermont
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4aa856f9.html screenshot completed
+2022-12-16 14:38:43 - Save plot: Prison_Admissions for Virginia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc66111d61.html screenshot completed
+2022-12-16 14:38:45 - Save plot: Prison_Admissions for Washington
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc54f62bc3.html screenshot completed
+2022-12-16 14:38:47 - Save plot: Prison_Admissions for West Virginia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc26e047e0.html screenshot completed
+2022-12-16 14:38:49 - Save plot: Prison_Admissions for Wisconsin
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4dc62c58.html screenshot completed
+2022-12-16 14:38:51 - Save plot: Prison_Admissions for Wyoming
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc238c2178.html screenshot completed
+
+> admin$mylog("PRISON POPULATION")
+2022-12-16 14:38:53 - PRISON POPULATION
+
+> walk(
++   states_list, 
++   ~save_state_png(
++       add_st_name(all_state_area_pop[[.x]], .x)
++     , folderpath = savefolder
++     , id = .x
++     .... [TRUNCATED] 
+2022-12-16 14:38:53 - Save plot: Prison_Population for Alabama
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc68c91853.html screenshot completed
+2022-12-16 14:38:56 - Save plot: Prison_Population for Alaska
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc20cd7c14.html screenshot completed
+2022-12-16 14:38:58 - Save plot: Prison_Population for Arizona
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6ee32d92.html screenshot completed
+2022-12-16 14:39:00 - Save plot: Prison_Population for Arkansas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc58d35d25.html screenshot completed
+2022-12-16 14:39:02 - Save plot: Prison_Population for California
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc12ab36b9.html screenshot completed
+2022-12-16 14:39:04 - Save plot: Prison_Population for Colorado
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc37bf1420.html screenshot completed
+2022-12-16 14:39:06 - Save plot: Prison_Population for Connecticut
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc14ef29ad.html screenshot completed
+2022-12-16 14:39:09 - Save plot: Prison_Population for Delaware
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc682860fe.html screenshot completed
+2022-12-16 14:39:11 - Save plot: Prison_Population for Florida
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc392e5619.html screenshot completed
+2022-12-16 14:39:13 - Save plot: Prison_Population for Georgia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2f982abb.html screenshot completed
+2022-12-16 14:39:15 - Save plot: Prison_Population for Hawaii
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fca1c23ec.html screenshot completed
+2022-12-16 14:39:18 - Save plot: Prison_Population for Idaho
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1b0c45d7.html screenshot completed
+2022-12-16 14:39:20 - Save plot: Prison_Population for Illinois
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6e2161d9.html screenshot completed
+2022-12-16 14:39:22 - Save plot: Prison_Population for Indiana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc7b784ad8.html screenshot completed
+2022-12-16 14:39:24 - Save plot: Prison_Population for Iowa
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fcbda23d6.html screenshot completed
+2022-12-16 14:39:27 - Save plot: Prison_Population for Kansas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc32407cc5.html screenshot completed
+2022-12-16 14:39:29 - Save plot: Prison_Population for Kentucky
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc7e96319d.html screenshot completed
+2022-12-16 14:39:31 - Save plot: Prison_Population for Louisiana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4dc03fad.html screenshot completed
+2022-12-16 14:39:33 - Save plot: Prison_Population for Maine
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5adb52e.html screenshot completed
+2022-12-16 14:39:36 - Save plot: Prison_Population for Maryland
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc75c51f1e.html screenshot completed
+2022-12-16 14:39:38 - Save plot: Prison_Population for Massachusetts
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2df594c.html screenshot completed
+2022-12-16 14:39:40 - Save plot: Prison_Population for Michigan
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc281164af.html screenshot completed
+2022-12-16 14:39:42 - Save plot: Prison_Population for Minnesota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4b0f47fb.html screenshot completed
+2022-12-16 14:39:45 - Save plot: Prison_Population for Mississippi
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc44db3e76.html screenshot completed
+2022-12-16 14:39:47 - Save plot: Prison_Population for Missouri
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6e8c7908.html screenshot completed
+2022-12-16 14:39:49 - Save plot: Prison_Population for Montana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6b4d7592.html screenshot completed
+2022-12-16 14:39:51 - Save plot: Prison_Population for Nebraska
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc53a86081.html screenshot completed
+2022-12-16 14:39:54 - Save plot: Prison_Population for Nevada
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc260534a3.html screenshot completed
+2022-12-16 14:39:56 - Save plot: Prison_Population for New Hampshire
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc206dd39.html screenshot completed
+2022-12-16 14:39:58 - Save plot: Prison_Population for New Jersey
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc67945e4d.html screenshot completed
+2022-12-16 14:40:00 - Save plot: Prison_Population for New Mexico
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1f17746.html screenshot completed
+2022-12-16 14:40:03 - Save plot: Prison_Population for New York
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc570273b9.html screenshot completed
+2022-12-16 14:40:05 - Save plot: Prison_Population for North Carolina
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc72953e82.html screenshot completed
+2022-12-16 14:40:07 - Save plot: Prison_Population for North Dakota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6c48b14.html screenshot completed
+2022-12-16 14:40:09 - Save plot: Prison_Population for Ohio
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1b0c90d.html screenshot completed
+2022-12-16 14:40:12 - Save plot: Prison_Population for Oklahoma
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5cd4560e.html screenshot completed
+2022-12-16 14:40:14 - Save plot: Prison_Population for Oregon
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4a5431c9.html screenshot completed
+2022-12-16 14:40:16 - Save plot: Prison_Population for Pennsylvania
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5808385b.html screenshot completed
+2022-12-16 14:40:18 - Save plot: Prison_Population for Rhode Island
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc87916dd.html screenshot completed
+2022-12-16 14:40:20 - Save plot: Prison_Population for South Carolina
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc13bc6e35.html screenshot completed
+2022-12-16 14:40:23 - Save plot: Prison_Population for South Dakota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc283b5832.html screenshot completed
+2022-12-16 14:40:25 - Save plot: Prison_Population for Tennessee
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc28b842d9.html screenshot completed
+2022-12-16 14:40:27 - Save plot: Prison_Population for Texas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fcb8e15f9.html screenshot completed
+2022-12-16 14:40:29 - Save plot: Prison_Population for Utah
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3f3a5706.html screenshot completed
+2022-12-16 14:40:32 - Save plot: Prison_Population for Vermont
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc381b3f23.html screenshot completed
+2022-12-16 14:40:34 - Save plot: Prison_Population for Virginia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fcb767781.html screenshot completed
+2022-12-16 14:40:36 - Save plot: Prison_Population for Washington
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3bbd6fe8.html screenshot completed
+2022-12-16 14:40:39 - Save plot: Prison_Population for West Virginia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1a11393.html screenshot completed
+2022-12-16 14:40:41 - Save plot: Prison_Population for Wisconsin
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc61056041.html screenshot completed
+2022-12-16 14:40:43 - Save plot: Prison_Population for Wyoming
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6ca56389.html screenshot completed
+
+> ##########
+> # State Supervision Violation Bar Chart
+> ##########
+> 
+> admin$mylog("SUPERVISION VIOLATION ADMISSIONS")
+2022-12-16 14:40:45 - SUPERVISION VIOLATION ADMISSIONS
+
+> walk(
++    states_list, 
++   ~save_state_png(
++       add_st_name(all_state_bar_adm[[.x]], .x)
++     , folderpath = savefolder
++     , id = .x
++     .... [TRUNCATED] 
+2022-12-16 14:40:45 - Save plot: Supervision_Violation_Admissions_by_Type for Alabama
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc33b7626e.html screenshot completed
+2022-12-16 14:40:48 - Save plot: Supervision_Violation_Admissions_by_Type for Alaska
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6640f33.html screenshot completed
+2022-12-16 14:40:50 - Save plot: Supervision_Violation_Admissions_by_Type for Arizona
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc554a7171.html screenshot completed
+2022-12-16 14:40:52 - Save plot: Supervision_Violation_Admissions_by_Type for Arkansas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc7e52466.html screenshot completed
+2022-12-16 14:40:54 - Save plot: Supervision_Violation_Admissions_by_Type for California
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc216c4f90.html screenshot completed
+2022-12-16 14:40:57 - Save plot: Supervision_Violation_Admissions_by_Type for Colorado
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc7d09d7a.html screenshot completed
+2022-12-16 14:40:59 - Save plot: Supervision_Violation_Admissions_by_Type for Connecticut
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc227b34d7.html screenshot completed
+2022-12-16 14:41:01 - Save plot: Supervision_Violation_Admissions_by_Type for Delaware
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc781737cd.html screenshot completed
+2022-12-16 14:41:03 - Save plot: Supervision_Violation_Admissions_by_Type for Florida
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc560dd93.html screenshot completed
+2022-12-16 14:41:06 - Save plot: Supervision_Violation_Admissions_by_Type for Georgia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5eed5a3e.html screenshot completed
+2022-12-16 14:41:08 - Save plot: Supervision_Violation_Admissions_by_Type for Hawaii
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc416a48d8.html screenshot completed
+2022-12-16 14:41:10 - Save plot: Supervision_Violation_Admissions_by_Type for Idaho
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc475d4bb3.html screenshot completed
+2022-12-16 14:41:12 - Save plot: Supervision_Violation_Admissions_by_Type for Illinois
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc560d36fc.html screenshot completed
+2022-12-16 14:41:15 - Save plot: Supervision_Violation_Admissions_by_Type for Indiana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc43ad6993.html screenshot completed
+2022-12-16 14:41:17 - Save plot: Supervision_Violation_Admissions_by_Type for Iowa
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2626781a.html screenshot completed
+2022-12-16 14:41:19 - Save plot: Supervision_Violation_Admissions_by_Type for Kansas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc7f17e4d.html screenshot completed
+2022-12-16 14:41:21 - Save plot: Supervision_Violation_Admissions_by_Type for Kentucky
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc691a7a91.html screenshot completed
+2022-12-16 14:41:24 - Save plot: Supervision_Violation_Admissions_by_Type for Louisiana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2a4a17cf.html screenshot completed
+2022-12-16 14:41:26 - Save plot: Supervision_Violation_Admissions_by_Type for Maine
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5002982.html screenshot completed
+2022-12-16 14:41:28 - Save plot: Supervision_Violation_Admissions_by_Type for Maryland
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc37e77e0f.html screenshot completed
+2022-12-16 14:41:30 - Save plot: Supervision_Violation_Admissions_by_Type for Massachusetts
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2a286b56.html screenshot completed
+2022-12-16 14:41:33 - Save plot: Supervision_Violation_Admissions_by_Type for Michigan
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc69047986.html screenshot completed
+2022-12-16 14:41:35 - Save plot: Supervision_Violation_Admissions_by_Type for Minnesota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc598d1035.html screenshot completed
+2022-12-16 14:41:37 - Save plot: Supervision_Violation_Admissions_by_Type for Mississippi
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc29ac39b0.html screenshot completed
+2022-12-16 14:41:39 - Save plot: Supervision_Violation_Admissions_by_Type for Missouri
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1766508f.html screenshot completed
+2022-12-16 14:41:41 - Save plot: Supervision_Violation_Admissions_by_Type for Montana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3d5d2b8d.html screenshot completed
+2022-12-16 14:41:44 - Save plot: Supervision_Violation_Admissions_by_Type for Nebraska
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc89a3b97.html screenshot completed
+2022-12-16 14:41:46 - Save plot: Supervision_Violation_Admissions_by_Type for Nevada
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3b895023.html screenshot completed
+2022-12-16 14:41:48 - Save plot: Supervision_Violation_Admissions_by_Type for New Hampshire
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc224575c3.html screenshot completed
+2022-12-16 14:41:50 - Save plot: Supervision_Violation_Admissions_by_Type for New Jersey
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5c1622fa.html screenshot completed
+2022-12-16 14:41:53 - Save plot: Supervision_Violation_Admissions_by_Type for New Mexico
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5e39274e.html screenshot completed
+2022-12-16 14:41:55 - Save plot: Supervision_Violation_Admissions_by_Type for New York
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc13df109e.html screenshot completed
+2022-12-16 14:41:57 - Save plot: Supervision_Violation_Admissions_by_Type for North Carolina
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3f777ab6.html screenshot completed
+2022-12-16 14:42:00 - Save plot: Supervision_Violation_Admissions_by_Type for North Dakota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1307d21.html screenshot completed
+2022-12-16 14:42:02 - Save plot: Supervision_Violation_Admissions_by_Type for Ohio
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc26ba2b3e.html screenshot completed
+2022-12-16 14:42:04 - Save plot: Supervision_Violation_Admissions_by_Type for Oklahoma
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc284d5a97.html screenshot completed
+2022-12-16 14:42:06 - Save plot: Supervision_Violation_Admissions_by_Type for Oregon
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc76ed236d.html screenshot completed
+2022-12-16 14:42:09 - Save plot: Supervision_Violation_Admissions_by_Type for Pennsylvania
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc7fec4f98.html screenshot completed
+2022-12-16 14:42:11 - Save plot: Supervision_Violation_Admissions_by_Type for Rhode Island
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc9b02b8e.html screenshot completed
+2022-12-16 14:42:13 - Save plot: Supervision_Violation_Admissions_by_Type for South Carolina
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4db76dc1.html screenshot completed
+2022-12-16 14:42:15 - Save plot: Supervision_Violation_Admissions_by_Type for South Dakota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc73d7282e.html screenshot completed
+2022-12-16 14:42:18 - Save plot: Supervision_Violation_Admissions_by_Type for Tennessee
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc52cb7832.html screenshot completed
+2022-12-16 14:42:20 - Save plot: Supervision_Violation_Admissions_by_Type for Texas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc19eb68a0.html screenshot completed
+2022-12-16 14:42:22 - Save plot: Supervision_Violation_Admissions_by_Type for Utah
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc483b3a12.html screenshot completed
+2022-12-16 14:42:24 - Save plot: Supervision_Violation_Admissions_by_Type for Vermont
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc14a757c.html screenshot completed
+2022-12-16 14:42:26 - Save plot: Supervision_Violation_Admissions_by_Type for Virginia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2b8d6d07.html screenshot completed
+2022-12-16 14:42:29 - Save plot: Supervision_Violation_Admissions_by_Type for Washington
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc657c4f1c.html screenshot completed
+2022-12-16 14:42:31 - Save plot: Supervision_Violation_Admissions_by_Type for West Virginia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5b3c2fbe.html screenshot completed
+2022-12-16 14:42:33 - Save plot: Supervision_Violation_Admissions_by_Type for Wisconsin
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc7b0e4c1e.html screenshot completed
+2022-12-16 14:42:35 - Save plot: Supervision_Violation_Admissions_by_Type for Wyoming
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc334c69.html screenshot completed
+
+> admin$mylog("SUPERVISION VIOLATION POPULATION")
+2022-12-16 14:42:38 - SUPERVISION VIOLATION POPULATION
+
+> walk(
++   states_list, 
++   ~save_state_png(
++       add_st_name(all_state_bar_pop[[.x]], .x)
++     , folderpath = savefolder
++     , id = .x
++      .... [TRUNCATED] 
+2022-12-16 14:42:38 - Save plot: Supervision_Violation_Population_by_Type for Alabama
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5b447e5.html screenshot completed
+2022-12-16 14:42:40 - Save plot: Supervision_Violation_Population_by_Type for Alaska
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc595af3c.html screenshot completed
+2022-12-16 14:42:42 - Save plot: Supervision_Violation_Population_by_Type for Arizona
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1bfc7118.html screenshot completed
+2022-12-16 14:42:44 - Save plot: Supervision_Violation_Population_by_Type for Arkansas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2a016cef.html screenshot completed
+2022-12-16 14:42:47 - Save plot: Supervision_Violation_Population_by_Type for California
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2f24821.html screenshot completed
+2022-12-16 14:42:49 - Save plot: Supervision_Violation_Population_by_Type for Colorado
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc34763940.html screenshot completed
+2022-12-16 14:42:51 - Save plot: Supervision_Violation_Population_by_Type for Connecticut
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4fa21dae.html screenshot completed
+2022-12-16 14:42:54 - Save plot: Supervision_Violation_Population_by_Type for Delaware
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc57752d6e.html screenshot completed
+2022-12-16 14:42:56 - Save plot: Supervision_Violation_Population_by_Type for Florida
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc419e6134.html screenshot completed
+2022-12-16 14:42:58 - Save plot: Supervision_Violation_Population_by_Type for Georgia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fcdb27ebe.html screenshot completed
+2022-12-16 14:43:00 - Save plot: Supervision_Violation_Population_by_Type for Hawaii
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc61737f67.html screenshot completed
+2022-12-16 14:43:03 - Save plot: Supervision_Violation_Population_by_Type for Idaho
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3a5144fa.html screenshot completed
+2022-12-16 14:43:05 - Save plot: Supervision_Violation_Population_by_Type for Illinois
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc583110c4.html screenshot completed
+2022-12-16 14:43:07 - Save plot: Supervision_Violation_Population_by_Type for Indiana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc456e70ed.html screenshot completed
+2022-12-16 14:43:09 - Save plot: Supervision_Violation_Population_by_Type for Iowa
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc201d1808.html screenshot completed
+2022-12-16 14:43:12 - Save plot: Supervision_Violation_Population_by_Type for Kansas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc89652e8.html screenshot completed
+2022-12-16 14:43:14 - Save plot: Supervision_Violation_Population_by_Type for Kentucky
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc593010b5.html screenshot completed
+2022-12-16 14:43:16 - Save plot: Supervision_Violation_Population_by_Type for Louisiana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fcb4b3140.html screenshot completed
+2022-12-16 14:43:18 - Save plot: Supervision_Violation_Population_by_Type for Maine
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6d94d94.html screenshot completed
+2022-12-16 14:43:21 - Save plot: Supervision_Violation_Population_by_Type for Maryland
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fcf846ece.html screenshot completed
+2022-12-16 14:43:23 - Save plot: Supervision_Violation_Population_by_Type for Massachusetts
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc62a672e.html screenshot completed
+2022-12-16 14:43:25 - Save plot: Supervision_Violation_Population_by_Type for Michigan
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6e2b416d.html screenshot completed
+2022-12-16 14:43:27 - Save plot: Supervision_Violation_Population_by_Type for Minnesota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4f077a51.html screenshot completed
+2022-12-16 14:43:30 - Save plot: Supervision_Violation_Population_by_Type for Mississippi
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc439d7880.html screenshot completed
+2022-12-16 14:43:32 - Save plot: Supervision_Violation_Population_by_Type for Missouri
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fcbf27692.html screenshot completed
+2022-12-16 14:43:34 - Save plot: Supervision_Violation_Population_by_Type for Montana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6c2e5369.html screenshot completed
+2022-12-16 14:43:36 - Save plot: Supervision_Violation_Population_by_Type for Nebraska
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc7ce73cc5.html screenshot completed
+2022-12-16 14:43:39 - Save plot: Supervision_Violation_Population_by_Type for Nevada
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc50a26813.html screenshot completed
+2022-12-16 14:43:41 - Save plot: Supervision_Violation_Population_by_Type for New Hampshire
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc12974d86.html screenshot completed
+2022-12-16 14:43:43 - Save plot: Supervision_Violation_Population_by_Type for New Jersey
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2b51969.html screenshot completed
+2022-12-16 14:43:45 - Save plot: Supervision_Violation_Population_by_Type for New Mexico
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc72e647b4.html screenshot completed
+2022-12-16 14:43:48 - Save plot: Supervision_Violation_Population_by_Type for New York
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc29941ddd.html screenshot completed
+2022-12-16 14:43:50 - Save plot: Supervision_Violation_Population_by_Type for North Carolina
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4d6c76f0.html screenshot completed
+2022-12-16 14:43:52 - Save plot: Supervision_Violation_Population_by_Type for North Dakota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3e6215e2.html screenshot completed
+2022-12-16 14:43:54 - Save plot: Supervision_Violation_Population_by_Type for Ohio
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc7ff57223.html screenshot completed
+2022-12-16 14:43:57 - Save plot: Supervision_Violation_Population_by_Type for Oklahoma
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc18b43272.html screenshot completed
+2022-12-16 14:43:59 - Save plot: Supervision_Violation_Population_by_Type for Oregon
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fcb0149f5.html screenshot completed
+2022-12-16 14:44:01 - Save plot: Supervision_Violation_Population_by_Type for Pennsylvania
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4b156b89.html screenshot completed
+2022-12-16 14:44:04 - Save plot: Supervision_Violation_Population_by_Type for Rhode Island
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc56444757.html screenshot completed
+2022-12-16 14:44:06 - Save plot: Supervision_Violation_Population_by_Type for South Carolina
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4f8246a8.html screenshot completed
+2022-12-16 14:44:08 - Save plot: Supervision_Violation_Population_by_Type for South Dakota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc452739fa.html screenshot completed
+2022-12-16 14:44:10 - Save plot: Supervision_Violation_Population_by_Type for Tennessee
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3ef2d52.html screenshot completed
+2022-12-16 14:44:13 - Save plot: Supervision_Violation_Population_by_Type for Texas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1b4556d5.html screenshot completed
+2022-12-16 14:44:15 - Save plot: Supervision_Violation_Population_by_Type for Utah
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc76c15392.html screenshot completed
+2022-12-16 14:44:17 - Save plot: Supervision_Violation_Population_by_Type for Vermont
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc30ef26a3.html screenshot completed
+2022-12-16 14:44:19 - Save plot: Supervision_Violation_Population_by_Type for Virginia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3522e74.html screenshot completed
+2022-12-16 14:44:22 - Save plot: Supervision_Violation_Population_by_Type for Washington
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc77a8462.html screenshot completed
+2022-12-16 14:44:24 - Save plot: Supervision_Violation_Population_by_Type for West Virginia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3e707a88.html screenshot completed
+2022-12-16 14:44:26 - Save plot: Supervision_Violation_Population_by_Type for Wisconsin
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4eaa2bd5.html screenshot completed
+2022-12-16 14:44:28 - Save plot: Supervision_Violation_Population_by_Type for Wyoming
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc32de5262.html screenshot completed
+
+> ##########
+> # Probation Bar Chart
+> ##########
+> 
+> 
+> admin$mylog("PROBATION VIOLATION ADMISSIONS")
+2022-12-16 14:44:31 - PROBATION VIOLATION ADMISSIONS
+
+> walk(
++   states_list, 
++   ~save_state_png(
++       add_st_name(probation_bar_adm[[.x]], .x)
++     , folderpath = savefolder
++     , id = .x
++      .... [TRUNCATED] 
+2022-12-16 14:44:31 - Save plot: Probation_Violation_Admissions_by_Type for Alabama
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc275f5803.html screenshot completed
+2022-12-16 14:44:33 - Save plot: Probation_Violation_Admissions_by_Type for Alaska
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6dd1551d.html screenshot completed
+2022-12-16 14:44:35 - Save plot: Probation_Violation_Admissions_by_Type for Arizona
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc79e971b7.html screenshot completed
+2022-12-16 14:44:37 - Save plot: Probation_Violation_Admissions_by_Type for Arkansas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5b745cd3.html screenshot completed
+2022-12-16 14:44:40 - Save plot: Probation_Violation_Admissions_by_Type for California
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc99b4dfe.html screenshot completed
+2022-12-16 14:44:42 - Save plot: Probation_Violation_Admissions_by_Type for Colorado
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc73654526.html screenshot completed
+2022-12-16 14:44:44 - Save plot: Probation_Violation_Admissions_by_Type for Connecticut
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc797d7cac.html screenshot completed
+2022-12-16 14:44:46 - Save plot: Probation_Violation_Admissions_by_Type for Delaware
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc353641ba.html screenshot completed
+2022-12-16 14:44:49 - Save plot: Probation_Violation_Admissions_by_Type for Florida
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc30cc26d7.html screenshot completed
+2022-12-16 14:44:51 - Save plot: Probation_Violation_Admissions_by_Type for Georgia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc74ed44b8.html screenshot completed
+2022-12-16 14:44:53 - Save plot: Probation_Violation_Admissions_by_Type for Hawaii
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fcf777d59.html screenshot completed
+2022-12-16 14:44:55 - Save plot: Probation_Violation_Admissions_by_Type for Idaho
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc7784754d.html screenshot completed
+2022-12-16 14:44:58 - Save plot: Probation_Violation_Admissions_by_Type for Illinois
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc72a43753.html screenshot completed
+2022-12-16 14:45:00 - Save plot: Probation_Violation_Admissions_by_Type for Indiana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5f693629.html screenshot completed
+2022-12-16 14:45:02 - Save plot: Probation_Violation_Admissions_by_Type for Iowa
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc92920a5.html screenshot completed
+2022-12-16 14:45:04 - Save plot: Probation_Violation_Admissions_by_Type for Kansas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc68ff3c01.html screenshot completed
+2022-12-16 14:45:07 - Save plot: Probation_Violation_Admissions_by_Type for Kentucky
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc78133877.html screenshot completed
+2022-12-16 14:45:09 - Save plot: Probation_Violation_Admissions_by_Type for Louisiana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc771b340d.html screenshot completed
+2022-12-16 14:45:11 - Save plot: Probation_Violation_Admissions_by_Type for Maine
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4f225fb3.html screenshot completed
+2022-12-16 14:45:13 - Save plot: Probation_Violation_Admissions_by_Type for Maryland
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6f887a8b.html screenshot completed
+2022-12-16 14:45:16 - Save plot: Probation_Violation_Admissions_by_Type for Massachusetts
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4d4b1788.html screenshot completed
+2022-12-16 14:45:18 - Save plot: Probation_Violation_Admissions_by_Type for Michigan
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6784613a.html screenshot completed
+2022-12-16 14:45:20 - Save plot: Probation_Violation_Admissions_by_Type for Minnesota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc75354fe8.html screenshot completed
+2022-12-16 14:45:22 - Save plot: Probation_Violation_Admissions_by_Type for Mississippi
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc20415e0.html screenshot completed
+2022-12-16 14:45:25 - Save plot: Probation_Violation_Admissions_by_Type for Missouri
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc71bc460b.html screenshot completed
+2022-12-16 14:45:27 - Save plot: Probation_Violation_Admissions_by_Type for Montana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc536538c4.html screenshot completed
+2022-12-16 14:45:29 - Save plot: Probation_Violation_Admissions_by_Type for Nebraska
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4a7172ea.html screenshot completed
+2022-12-16 14:45:31 - Save plot: Probation_Violation_Admissions_by_Type for Nevada
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4f8b7334.html screenshot completed
+2022-12-16 14:45:33 - Save plot: Probation_Violation_Admissions_by_Type for New Hampshire
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc68189c5.html screenshot completed
+2022-12-16 14:45:36 - Save plot: Probation_Violation_Admissions_by_Type for New Jersey
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc64bf5e01.html screenshot completed
+2022-12-16 14:45:38 - Save plot: Probation_Violation_Admissions_by_Type for New Mexico
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc692969e.html screenshot completed
+2022-12-16 14:45:40 - Save plot: Probation_Violation_Admissions_by_Type for New York
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc210567fe.html screenshot completed
+2022-12-16 14:45:42 - Save plot: Probation_Violation_Admissions_by_Type for North Carolina
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc46504cbc.html screenshot completed
+2022-12-16 14:45:45 - Save plot: Probation_Violation_Admissions_by_Type for North Dakota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5cd36c85.html screenshot completed
+2022-12-16 14:45:47 - Save plot: Probation_Violation_Admissions_by_Type for Ohio
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc46ed5529.html screenshot completed
+2022-12-16 14:45:49 - Save plot: Probation_Violation_Admissions_by_Type for Oklahoma
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc179269f1.html screenshot completed
+2022-12-16 14:45:51 - Save plot: Probation_Violation_Admissions_by_Type for Oregon
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc45946d34.html screenshot completed
+2022-12-16 14:45:54 - Save plot: Probation_Violation_Admissions_by_Type for Pennsylvania
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc24214825.html screenshot completed
+2022-12-16 14:45:56 - Save plot: Probation_Violation_Admissions_by_Type for Rhode Island
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc448e4ef.html screenshot completed
+2022-12-16 14:45:58 - Save plot: Probation_Violation_Admissions_by_Type for South Carolina
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc25522f04.html screenshot completed
+2022-12-16 14:46:00 - Save plot: Probation_Violation_Admissions_by_Type for South Dakota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5256db1.html screenshot completed
+2022-12-16 14:46:03 - Save plot: Probation_Violation_Admissions_by_Type for Tennessee
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5a6c6cf7.html screenshot completed
+2022-12-16 14:46:05 - Save plot: Probation_Violation_Admissions_by_Type for Texas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3e1c6896.html screenshot completed
+2022-12-16 14:46:07 - Save plot: Probation_Violation_Admissions_by_Type for Utah
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3ba76d6a.html screenshot completed
+2022-12-16 14:46:09 - Save plot: Probation_Violation_Admissions_by_Type for Vermont
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1c4664fa.html screenshot completed
+2022-12-16 14:46:12 - Save plot: Probation_Violation_Admissions_by_Type for Virginia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc66b33f4f.html screenshot completed
+2022-12-16 14:46:14 - Save plot: Probation_Violation_Admissions_by_Type for Washington
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1aea4f02.html screenshot completed
+2022-12-16 14:46:16 - Save plot: Probation_Violation_Admissions_by_Type for West Virginia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5b312b99.html screenshot completed
+2022-12-16 14:46:18 - Save plot: Probation_Violation_Admissions_by_Type for Wisconsin
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2656e14.html screenshot completed
+2022-12-16 14:46:21 - Save plot: Probation_Violation_Admissions_by_Type for Wyoming
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc7385bc2.html screenshot completed
+
+> admin$mylog("PROBATION VIOLATION POPULATIONS")
+2022-12-16 14:46:23 - PROBATION VIOLATION POPULATIONS
+
+> walk(
++   states_list, 
++   ~save_state_png(
++       add_st_name(probation_bar_pop[[.x]], .x)
++     , folderpath = savefolder
++     , id = .x
++      .... [TRUNCATED] 
+2022-12-16 14:46:23 - Save plot: Probation_Violation_Population_by_Type for Alabama
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5d885359.html screenshot completed
+2022-12-16 14:46:25 - Save plot: Probation_Violation_Population_by_Type for Alaska
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc23d11046.html screenshot completed
+2022-12-16 14:46:28 - Save plot: Probation_Violation_Population_by_Type for Arizona
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc56b65842.html screenshot completed
+2022-12-16 14:46:30 - Save plot: Probation_Violation_Population_by_Type for Arkansas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc617c6726.html screenshot completed
+2022-12-16 14:46:32 - Save plot: Probation_Violation_Population_by_Type for California
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc33c82d00.html screenshot completed
+2022-12-16 14:46:34 - Save plot: Probation_Violation_Population_by_Type for Colorado
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc64a93266.html screenshot completed
+2022-12-16 14:46:37 - Save plot: Probation_Violation_Population_by_Type for Connecticut
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6d8170a.html screenshot completed
+2022-12-16 14:46:39 - Save plot: Probation_Violation_Population_by_Type for Delaware
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc123f5e8f.html screenshot completed
+2022-12-16 14:46:41 - Save plot: Probation_Violation_Population_by_Type for Florida
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6b97f9b.html screenshot completed
+2022-12-16 14:46:44 - Save plot: Probation_Violation_Population_by_Type for Georgia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2c19692e.html screenshot completed
+2022-12-16 14:46:46 - Save plot: Probation_Violation_Population_by_Type for Hawaii
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc136d7232.html screenshot completed
+2022-12-16 14:46:48 - Save plot: Probation_Violation_Population_by_Type for Idaho
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3d846753.html screenshot completed
+2022-12-16 14:46:50 - Save plot: Probation_Violation_Population_by_Type for Illinois
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fcaad2b10.html screenshot completed
+2022-12-16 14:46:53 - Save plot: Probation_Violation_Population_by_Type for Indiana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc57c21c12.html screenshot completed
+2022-12-16 14:46:55 - Save plot: Probation_Violation_Population_by_Type for Iowa
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6c6535bd.html screenshot completed
+2022-12-16 14:46:57 - Save plot: Probation_Violation_Population_by_Type for Kansas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1e8a1f06.html screenshot completed
+2022-12-16 14:46:59 - Save plot: Probation_Violation_Population_by_Type for Kentucky
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4f361b84.html screenshot completed
+2022-12-16 14:47:02 - Save plot: Probation_Violation_Population_by_Type for Louisiana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc248512c9.html screenshot completed
+2022-12-16 14:47:04 - Save plot: Probation_Violation_Population_by_Type for Maine
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc24f221f2.html screenshot completed
+2022-12-16 14:47:06 - Save plot: Probation_Violation_Population_by_Type for Maryland
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc17d36b7d.html screenshot completed
+2022-12-16 14:47:09 - Save plot: Probation_Violation_Population_by_Type for Massachusetts
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4f23195b.html screenshot completed
+2022-12-16 14:47:11 - Save plot: Probation_Violation_Population_by_Type for Michigan
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3e844546.html screenshot completed
+2022-12-16 14:47:13 - Save plot: Probation_Violation_Population_by_Type for Minnesota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3843b55.html screenshot completed
+2022-12-16 14:47:15 - Save plot: Probation_Violation_Population_by_Type for Mississippi
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc43204ace.html screenshot completed
+2022-12-16 14:47:18 - Save plot: Probation_Violation_Population_by_Type for Missouri
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc87193b.html screenshot completed
+2022-12-16 14:47:20 - Save plot: Probation_Violation_Population_by_Type for Montana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc51202bc0.html screenshot completed
+2022-12-16 14:47:22 - Save plot: Probation_Violation_Population_by_Type for Nebraska
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc11cd1aab.html screenshot completed
+2022-12-16 14:47:24 - Save plot: Probation_Violation_Population_by_Type for Nevada
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc172234d.html screenshot completed
+2022-12-16 14:47:27 - Save plot: Probation_Violation_Population_by_Type for New Hampshire
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc64b1c09.html screenshot completed
+2022-12-16 14:47:29 - Save plot: Probation_Violation_Population_by_Type for New Jersey
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc16f8eaa.html screenshot completed
+2022-12-16 14:47:31 - Save plot: Probation_Violation_Population_by_Type for New Mexico
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2cbe3cf9.html screenshot completed
+2022-12-16 14:47:33 - Save plot: Probation_Violation_Population_by_Type for New York
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fcb091390.html screenshot completed
+2022-12-16 14:47:36 - Save plot: Probation_Violation_Population_by_Type for North Carolina
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc18342ee9.html screenshot completed
+2022-12-16 14:47:38 - Save plot: Probation_Violation_Population_by_Type for North Dakota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc69ef56ba.html screenshot completed
+2022-12-16 14:47:40 - Save plot: Probation_Violation_Population_by_Type for Ohio
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc14875385.html screenshot completed
+2022-12-16 14:47:43 - Save plot: Probation_Violation_Population_by_Type for Oklahoma
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc7f68426a.html screenshot completed
+2022-12-16 14:47:45 - Save plot: Probation_Violation_Population_by_Type for Oregon
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc62e05b41.html screenshot completed
+2022-12-16 14:47:47 - Save plot: Probation_Violation_Population_by_Type for Pennsylvania
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc53255ce5.html screenshot completed
+2022-12-16 14:47:50 - Save plot: Probation_Violation_Population_by_Type for Rhode Island
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc7c9a13d2.html screenshot completed
+2022-12-16 14:47:52 - Save plot: Probation_Violation_Population_by_Type for South Carolina
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc754e2ef3.html screenshot completed
+2022-12-16 14:47:54 - Save plot: Probation_Violation_Population_by_Type for South Dakota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc47c556b5.html screenshot completed
+2022-12-16 14:47:56 - Save plot: Probation_Violation_Population_by_Type for Tennessee
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1afc3a60.html screenshot completed
+2022-12-16 14:47:59 - Save plot: Probation_Violation_Population_by_Type for Texas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1ba77a7.html screenshot completed
+2022-12-16 14:48:01 - Save plot: Probation_Violation_Population_by_Type for Utah
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fcabd7e.html screenshot completed
+2022-12-16 14:48:03 - Save plot: Probation_Violation_Population_by_Type for Vermont
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1536232b.html screenshot completed
+2022-12-16 14:48:05 - Save plot: Probation_Violation_Population_by_Type for Virginia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc591418a0.html screenshot completed
+2022-12-16 14:48:08 - Save plot: Probation_Violation_Population_by_Type for Washington
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3ba05d08.html screenshot completed
+2022-12-16 14:48:10 - Save plot: Probation_Violation_Population_by_Type for West Virginia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc74f656a0.html screenshot completed
+2022-12-16 14:48:12 - Save plot: Probation_Violation_Population_by_Type for Wisconsin
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc74c34ec8.html screenshot completed
+2022-12-16 14:48:15 - Save plot: Probation_Violation_Population_by_Type for Wyoming
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc44e15a.html screenshot completed
+
+> ##########
+> # Parole Bar Chart
+> ##########
+> 
+> admin$mylog("PAROLE VIOLATION ADMISSIONS")
+2022-12-16 14:48:17 - PAROLE VIOLATION ADMISSIONS
+
+> walk(
++   states_list, 
++   ~save_state_png(
++       add_st_name(parole_bar_adm[[.x]], .x)
++     , folderpath = savefolder
++     , id = .x
++     , t .... [TRUNCATED] 
+2022-12-16 14:48:17 - Save plot: Parole_Violation_Admissions_by_Type for Alabama
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc49b5363a.html screenshot completed
+2022-12-16 14:48:19 - Save plot: Parole_Violation_Admissions_by_Type for Alaska
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1079192e.html screenshot completed
+2022-12-16 14:48:21 - Save plot: Parole_Violation_Admissions_by_Type for Arizona
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc7b3d43f0.html screenshot completed
+2022-12-16 14:48:24 - Save plot: Parole_Violation_Admissions_by_Type for Arkansas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2cb2e82.html screenshot completed
+2022-12-16 14:48:26 - Save plot: Parole_Violation_Admissions_by_Type for California
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc665879c2.html screenshot completed
+2022-12-16 14:48:28 - Save plot: Parole_Violation_Admissions_by_Type for Colorado
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc7109483e.html screenshot completed
+2022-12-16 14:48:30 - Save plot: Parole_Violation_Admissions_by_Type for Connecticut
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc38b61949.html screenshot completed
+2022-12-16 14:48:33 - Save plot: Parole_Violation_Admissions_by_Type for Delaware
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc39ed5a4f.html screenshot completed
+2022-12-16 14:48:35 - Save plot: Parole_Violation_Admissions_by_Type for Florida
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc753a2265.html screenshot completed
+2022-12-16 14:48:37 - Save plot: Parole_Violation_Admissions_by_Type for Georgia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc71a54c24.html screenshot completed
+2022-12-16 14:48:40 - Save plot: Parole_Violation_Admissions_by_Type for Hawaii
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc487d61b8.html screenshot completed
+2022-12-16 14:48:42 - Save plot: Parole_Violation_Admissions_by_Type for Idaho
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1e54f34.html screenshot completed
+2022-12-16 14:48:44 - Save plot: Parole_Violation_Admissions_by_Type for Illinois
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2d4bf28.html screenshot completed
+2022-12-16 14:48:47 - Save plot: Parole_Violation_Admissions_by_Type for Indiana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc44904576.html screenshot completed
+2022-12-16 14:48:49 - Save plot: Parole_Violation_Admissions_by_Type for Iowa
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc61247c61.html screenshot completed
+2022-12-16 14:48:51 - Save plot: Parole_Violation_Admissions_by_Type for Kansas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc43e277e7.html screenshot completed
+2022-12-16 14:48:53 - Save plot: Parole_Violation_Admissions_by_Type for Kentucky
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc28bd5351.html screenshot completed
+2022-12-16 14:48:56 - Save plot: Parole_Violation_Admissions_by_Type for Louisiana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3495d08.html screenshot completed
+2022-12-16 14:48:58 - Save plot: Parole_Violation_Admissions_by_Type for Maine
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc647d64aa.html screenshot completed
+2022-12-16 14:49:00 - Save plot: Parole_Violation_Admissions_by_Type for Maryland
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6db72f5d.html screenshot completed
+2022-12-16 14:49:02 - Save plot: Parole_Violation_Admissions_by_Type for Massachusetts
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc7500664.html screenshot completed
+2022-12-16 14:49:05 - Save plot: Parole_Violation_Admissions_by_Type for Michigan
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3e9113f0.html screenshot completed
+2022-12-16 14:49:07 - Save plot: Parole_Violation_Admissions_by_Type for Minnesota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6f97238.html screenshot completed
+2022-12-16 14:49:09 - Save plot: Parole_Violation_Admissions_by_Type for Mississippi
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1e3410cb.html screenshot completed
+2022-12-16 14:49:12 - Save plot: Parole_Violation_Admissions_by_Type for Missouri
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc22c61425.html screenshot completed
+2022-12-16 14:49:14 - Save plot: Parole_Violation_Admissions_by_Type for Montana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fce6b1381.html screenshot completed
+2022-12-16 14:49:16 - Save plot: Parole_Violation_Admissions_by_Type for Nebraska
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6ac578ef.html screenshot completed
+2022-12-16 14:49:18 - Save plot: Parole_Violation_Admissions_by_Type for Nevada
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc26fa7a6.html screenshot completed
+2022-12-16 14:49:21 - Save plot: Parole_Violation_Admissions_by_Type for New Hampshire
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc55ffc9b.html screenshot completed
+2022-12-16 14:49:23 - Save plot: Parole_Violation_Admissions_by_Type for New Jersey
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc22177d53.html screenshot completed
+2022-12-16 14:49:25 - Save plot: Parole_Violation_Admissions_by_Type for New Mexico
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc199678f5.html screenshot completed
+2022-12-16 14:49:27 - Save plot: Parole_Violation_Admissions_by_Type for New York
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc38eb5fa3.html screenshot completed
+2022-12-16 14:49:30 - Save plot: Parole_Violation_Admissions_by_Type for North Carolina
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc55dd740a.html screenshot completed
+2022-12-16 14:49:32 - Save plot: Parole_Violation_Admissions_by_Type for North Dakota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc50153b38.html screenshot completed
+2022-12-16 14:49:34 - Save plot: Parole_Violation_Admissions_by_Type for Ohio
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2addeae.html screenshot completed
+2022-12-16 14:49:36 - Save plot: Parole_Violation_Admissions_by_Type for Oklahoma
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc742714b7.html screenshot completed
+2022-12-16 14:49:39 - Save plot: Parole_Violation_Admissions_by_Type for Oregon
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1cd112f8.html screenshot completed
+2022-12-16 14:49:41 - Save plot: Parole_Violation_Admissions_by_Type for Pennsylvania
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc26274f47.html screenshot completed
+2022-12-16 14:49:43 - Save plot: Parole_Violation_Admissions_by_Type for Rhode Island
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc48aa72c1.html screenshot completed
+2022-12-16 14:49:45 - Save plot: Parole_Violation_Admissions_by_Type for South Carolina
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc78102316.html screenshot completed
+2022-12-16 14:49:48 - Save plot: Parole_Violation_Admissions_by_Type for South Dakota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc688b4628.html screenshot completed
+2022-12-16 14:49:50 - Save plot: Parole_Violation_Admissions_by_Type for Tennessee
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc794e23d5.html screenshot completed
+2022-12-16 14:49:52 - Save plot: Parole_Violation_Admissions_by_Type for Texas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc284e5a10.html screenshot completed
+2022-12-16 14:49:54 - Save plot: Parole_Violation_Admissions_by_Type for Utah
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc73455737.html screenshot completed
+2022-12-16 14:49:57 - Save plot: Parole_Violation_Admissions_by_Type for Vermont
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc49fd4ea0.html screenshot completed
+2022-12-16 14:49:59 - Save plot: Parole_Violation_Admissions_by_Type for Virginia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc75cb5b76.html screenshot completed
+2022-12-16 14:50:01 - Save plot: Parole_Violation_Admissions_by_Type for Washington
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1a5945c3.html screenshot completed
+2022-12-16 14:50:04 - Save plot: Parole_Violation_Admissions_by_Type for West Virginia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc33a91dcd.html screenshot completed
+2022-12-16 14:50:06 - Save plot: Parole_Violation_Admissions_by_Type for Wisconsin
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc355721a6.html screenshot completed
+2022-12-16 14:50:08 - Save plot: Parole_Violation_Admissions_by_Type for Wyoming
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2f1f20ff.html screenshot completed
+
+> admin$mylog("PAROLE VIOLATION POPULATIONS")
+2022-12-16 14:50:10 - PAROLE VIOLATION POPULATIONS
+
+> walk(
++   states_list, 
++   ~save_state_png(
++       add_st_name(parole_bar_pop[[.x]], .x)
++     , folderpath = savefolder
++     , id = .x
++     , t .... [TRUNCATED] 
+2022-12-16 14:50:10 - Save plot: Parole_Violation_Population_by_Type for Alabama
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1a9e533d.html screenshot completed
+2022-12-16 14:50:13 - Save plot: Parole_Violation_Population_by_Type for Alaska
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc365d53cf.html screenshot completed
+2022-12-16 14:50:15 - Save plot: Parole_Violation_Population_by_Type for Arizona
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc120b38be.html screenshot completed
+2022-12-16 14:50:17 - Save plot: Parole_Violation_Population_by_Type for Arkansas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc300a7785.html screenshot completed
+2022-12-16 14:50:20 - Save plot: Parole_Violation_Population_by_Type for California
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc602ec24.html screenshot completed
+2022-12-16 14:50:22 - Save plot: Parole_Violation_Population_by_Type for Colorado
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc37c11670.html screenshot completed
+2022-12-16 14:50:24 - Save plot: Parole_Violation_Population_by_Type for Connecticut
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4aca61ad.html screenshot completed
+2022-12-16 14:50:26 - Save plot: Parole_Violation_Population_by_Type for Delaware
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fca8ea5e.html screenshot completed
+2022-12-16 14:50:29 - Save plot: Parole_Violation_Population_by_Type for Florida
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6d58365c.html screenshot completed
+2022-12-16 14:50:31 - Save plot: Parole_Violation_Population_by_Type for Georgia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc43761326.html screenshot completed
+2022-12-16 14:50:33 - Save plot: Parole_Violation_Population_by_Type for Hawaii
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5d84e78.html screenshot completed
+2022-12-16 14:50:35 - Save plot: Parole_Violation_Population_by_Type for Idaho
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc67ed7d1f.html screenshot completed
+2022-12-16 14:50:38 - Save plot: Parole_Violation_Population_by_Type for Illinois
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1fae240b.html screenshot completed
+2022-12-16 14:50:40 - Save plot: Parole_Violation_Population_by_Type for Indiana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc445d57a6.html screenshot completed
+2022-12-16 14:50:42 - Save plot: Parole_Violation_Population_by_Type for Iowa
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6b6a2564.html screenshot completed
+2022-12-16 14:50:44 - Save plot: Parole_Violation_Population_by_Type for Kansas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc18a63b9b.html screenshot completed
+2022-12-16 14:50:47 - Save plot: Parole_Violation_Population_by_Type for Kentucky
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4001396.html screenshot completed
+2022-12-16 14:50:49 - Save plot: Parole_Violation_Population_by_Type for Louisiana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc149821e5.html screenshot completed
+2022-12-16 14:50:51 - Save plot: Parole_Violation_Population_by_Type for Maine
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc48ef50f6.html screenshot completed
+2022-12-16 14:50:53 - Save plot: Parole_Violation_Population_by_Type for Maryland
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc247a49ea.html screenshot completed
+2022-12-16 14:50:56 - Save plot: Parole_Violation_Population_by_Type for Massachusetts
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc12632fa1.html screenshot completed
+2022-12-16 14:50:58 - Save plot: Parole_Violation_Population_by_Type for Michigan
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fcd873017.html screenshot completed
+2022-12-16 14:51:00 - Save plot: Parole_Violation_Population_by_Type for Minnesota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fcdc24ff4.html screenshot completed
+2022-12-16 14:51:02 - Save plot: Parole_Violation_Population_by_Type for Mississippi
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5a6c145e.html screenshot completed
+2022-12-16 14:51:05 - Save plot: Parole_Violation_Population_by_Type for Missouri
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc66237f12.html screenshot completed
+2022-12-16 14:51:07 - Save plot: Parole_Violation_Population_by_Type for Montana
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc17cb10b3.html screenshot completed
+2022-12-16 14:51:09 - Save plot: Parole_Violation_Population_by_Type for Nebraska
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc24d44561.html screenshot completed
+2022-12-16 14:51:11 - Save plot: Parole_Violation_Population_by_Type for Nevada
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc60bb3f8e.html screenshot completed
+2022-12-16 14:51:14 - Save plot: Parole_Violation_Population_by_Type for New Hampshire
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc25d4150d.html screenshot completed
+2022-12-16 14:51:16 - Save plot: Parole_Violation_Population_by_Type for New Jersey
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3b46726c.html screenshot completed
+2022-12-16 14:51:18 - Save plot: Parole_Violation_Population_by_Type for New Mexico
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5c57884.html screenshot completed
+2022-12-16 14:51:20 - Save plot: Parole_Violation_Population_by_Type for New York
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc44ea784e.html screenshot completed
+2022-12-16 14:51:22 - Save plot: Parole_Violation_Population_by_Type for North Carolina
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc674530f9.html screenshot completed
+2022-12-16 14:51:25 - Save plot: Parole_Violation_Population_by_Type for North Dakota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2f187439.html screenshot completed
+2022-12-16 14:51:27 - Save plot: Parole_Violation_Population_by_Type for Ohio
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc75bb74e1.html screenshot completed
+2022-12-16 14:51:29 - Save plot: Parole_Violation_Population_by_Type for Oklahoma
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fcbb843b4.html screenshot completed
+2022-12-16 14:51:31 - Save plot: Parole_Violation_Population_by_Type for Oregon
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc7b897e78.html screenshot completed
+2022-12-16 14:51:34 - Save plot: Parole_Violation_Population_by_Type for Pennsylvania
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc69a3754d.html screenshot completed
+2022-12-16 14:51:36 - Save plot: Parole_Violation_Population_by_Type for Rhode Island
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc35b33a3d.html screenshot completed
+2022-12-16 14:51:38 - Save plot: Parole_Violation_Population_by_Type for South Carolina
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc41274f14.html screenshot completed
+2022-12-16 14:51:40 - Save plot: Parole_Violation_Population_by_Type for South Dakota
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc7ef06572.html screenshot completed
+2022-12-16 14:51:43 - Save plot: Parole_Violation_Population_by_Type for Tennessee
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3086651e.html screenshot completed
+2022-12-16 14:51:45 - Save plot: Parole_Violation_Population_by_Type for Texas
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc742d2c9d.html screenshot completed
+2022-12-16 14:51:47 - Save plot: Parole_Violation_Population_by_Type for Utah
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc8784004.html screenshot completed
+2022-12-16 14:51:49 - Save plot: Parole_Violation_Population_by_Type for Vermont
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc690b5a0a.html screenshot completed
+2022-12-16 14:51:52 - Save plot: Parole_Violation_Population_by_Type for Virginia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc28a41361.html screenshot completed
+2022-12-16 14:51:54 - Save plot: Parole_Violation_Population_by_Type for Washington
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2c5d1447.html screenshot completed
+2022-12-16 14:51:56 - Save plot: Parole_Violation_Population_by_Type for West Virginia
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2c2b458.html screenshot completed
+2022-12-16 14:51:58 - Save plot: Parole_Violation_Population_by_Type for Wisconsin
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1cab2ca6.html screenshot completed
+2022-12-16 14:52:01 - Save plot: Parole_Violation_Population_by_Type for Wyoming
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc661eb.html screenshot completed
+
+> ##########
+> # MAPS Admissions - loops are separate for now because of timeout issues
+> ##########
+> 
+> admin$mylog("ADMISSIONS MAP 2018-2019")
+2022-12-16 14:52:03 - ADMISSIONS MAP 2018-2019
+
+> # 2018-2019
+> walk(
++    metrics_list, 
++   ~save_map_png(
++       adm_maps_2018_2019[[.x]]
++     , folderpath = savefolder
++     , id = .x
++     ,  .... [TRUNCATED] 
+2022-12-16 14:52:03 - Save plot: Admissions_2018 - 2019 for New Offense
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fccb17dbe.html screenshot completed
+2022-12-16 14:52:05 - Save plot: Admissions_2018 - 2019 for Parole Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2e032225.html screenshot completed
+2022-12-16 14:52:07 - Save plot: Admissions_2018 - 2019 for Probation Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc77e159ea.html screenshot completed
+2022-12-16 14:52:10 - Save plot: Admissions_2018 - 2019 for Supervision Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc7c542b51.html screenshot completed
+2022-12-16 14:52:12 - Save plot: Admissions_2018 - 2019 for Technical Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6dd9c9.html screenshot completed
+2022-12-16 14:52:14 - Save plot: Admissions_2018 - 2019 for Total
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc56ff7c1.html screenshot completed
+
+> admin$mylog("ADMISSIONS MAP 2018-2021")
+2022-12-16 14:52:17 - ADMISSIONS MAP 2018-2021
+
+> # 2018-2021
+> walk(
++   metrics_list, 
++   ~save_map_png(
++       adm_maps_2018_2021[[.x]]
++     , folderpath = savefolder
++     , id = .x
++     , t .... [TRUNCATED] 
+2022-12-16 14:52:17 - Save plot: Admissions_2018 - 2021 for New Offense
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc63fe5abc.html screenshot completed
+2022-12-16 14:52:19 - Save plot: Admissions_2018 - 2021 for Parole Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fcde765a8.html screenshot completed
+2022-12-16 14:52:21 - Save plot: Admissions_2018 - 2021 for Probation Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5fd03d6b.html screenshot completed
+2022-12-16 14:52:24 - Save plot: Admissions_2018 - 2021 for Supervision Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc47615bc0.html screenshot completed
+2022-12-16 14:52:26 - Save plot: Admissions_2018 - 2021 for Technical Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc65937441.html screenshot completed
+2022-12-16 14:52:28 - Save plot: Admissions_2018 - 2021 for Total
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5cb81fc4.html screenshot completed
+
+> admin$mylog("ADMISSIONS MAP 2019-2020")
+2022-12-16 14:52:30 - ADMISSIONS MAP 2019-2020
+
+> # 2019-2020
+> walk(
++   metrics_list, 
++   ~save_map_png(
++       adm_maps_2019_2020[[.x]]
++     , folderpath = savefolder
++     , id = .x
++     , t .... [TRUNCATED] 
+2022-12-16 14:52:30 - Save plot: Admissions_2019 - 2020 for New Offense
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3fbc51eb.html screenshot completed
+2022-12-16 14:52:33 - Save plot: Admissions_2019 - 2020 for Parole Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6aa4cf7.html screenshot completed
+2022-12-16 14:52:35 - Save plot: Admissions_2019 - 2020 for Probation Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc2c717dd.html screenshot completed
+2022-12-16 14:52:37 - Save plot: Admissions_2019 - 2020 for Supervision Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc59e93a9c.html screenshot completed
+2022-12-16 14:52:40 - Save plot: Admissions_2019 - 2020 for Technical Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc42114cd.html screenshot completed
+2022-12-16 14:52:42 - Save plot: Admissions_2019 - 2020 for Total
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc139b627c.html screenshot completed
+
+> admin$mylog("ADMISSIONS MAP 2020-2021")
+2022-12-16 14:52:44 - ADMISSIONS MAP 2020-2021
+
+> # 2020-2021
+> walk(
++   metrics_list, 
++   ~save_map_png(
++       adm_maps_2020_2021[[.x]]
++     , folderpath = savefolder
++     , id = .x
++     , t .... [TRUNCATED] 
+2022-12-16 14:52:44 - Save plot: Admissions_2020 - 2021 for New Offense
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc23aa6336.html screenshot completed
+2022-12-16 14:52:47 - Save plot: Admissions_2020 - 2021 for Parole Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc35da5763.html screenshot completed
+2022-12-16 14:52:49 - Save plot: Admissions_2020 - 2021 for Probation Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc58167d7.html screenshot completed
+2022-12-16 14:52:51 - Save plot: Admissions_2020 - 2021 for Supervision Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc74344ba3.html screenshot completed
+2022-12-16 14:52:54 - Save plot: Admissions_2020 - 2021 for Technical Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc18d1031.html screenshot completed
+2022-12-16 14:52:56 - Save plot: Admissions_2020 - 2021 for Total
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc702c2790.html screenshot completed
+
+> ##########
+> # MAPS POPULATION
+> ##########
+> 
+> admin$mylog("POPULATIONS MAP 2018-2019")
+2022-12-16 14:52:58 - POPULATIONS MAP 2018-2019
+
+> # 2018-2019
+> walk(
++   metrics_list, 
++   ~save_map_png(
++       pop_maps_2018_2019[[.x]]
++     , folderpath = savefolder
++     , id = .x
++     , t .... [TRUNCATED] 
+2022-12-16 14:52:58 - Save plot: Population_2018 - 2019 for New Offense
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3bfc310c.html screenshot completed
+2022-12-16 14:53:01 - Save plot: Population_2018 - 2019 for Parole Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc45b73002.html screenshot completed
+2022-12-16 14:53:03 - Save plot: Population_2018 - 2019 for Probation Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc57ad24f2.html screenshot completed
+2022-12-16 14:53:05 - Save plot: Population_2018 - 2019 for Supervision Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc67c13cd6.html screenshot completed
+2022-12-16 14:53:08 - Save plot: Population_2018 - 2019 for Technical Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3ab4ab2.html screenshot completed
+2022-12-16 14:53:10 - Save plot: Population_2018 - 2019 for Total
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4ca67f6d.html screenshot completed
+
+> admin$mylog("POPULATIONS MAP 2018-2021")
+2022-12-16 14:53:12 - POPULATIONS MAP 2018-2021
+
+> # 2018-2021
+> walk(
++   metrics_list, 
++   ~save_map_png(
++       pop_maps_2018_2021[[.x]]
++     , folderpath = savefolder
++     , id = .x
++     , t .... [TRUNCATED] 
+2022-12-16 14:53:12 - Save plot: Population_2018 - 2021 for New Offense
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc22d913df.html screenshot completed
+2022-12-16 14:53:15 - Save plot: Population_2018 - 2021 for Parole Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6ab9592b.html screenshot completed
+2022-12-16 14:53:17 - Save plot: Population_2018 - 2021 for Probation Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fca19634f.html screenshot completed
+2022-12-16 14:53:19 - Save plot: Population_2018 - 2021 for Supervision Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4c041f9.html screenshot completed
+2022-12-16 14:53:22 - Save plot: Population_2018 - 2021 for Technical Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc5b247b9d.html screenshot completed
+2022-12-16 14:53:24 - Save plot: Population_2018 - 2021 for Total
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc46753ec4.html screenshot completed
+
+> admin$mylog("POPULATIONS MAP 2019-2020")
+2022-12-16 14:53:26 - POPULATIONS MAP 2019-2020
+
+> # 2019-2020
+> walk(
++   metrics_list, 
++   ~save_map_png(
++       pop_maps_2019_2020[[.x]]
++     , folderpath = savefolder
++     , id = .x
++     , t .... [TRUNCATED] 
+2022-12-16 14:53:26 - Save plot: Population_2019 - 2020 for New Offense
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc75dd3da7.html screenshot completed
+2022-12-16 14:53:28 - Save plot: Population_2019 - 2020 for Parole Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc310767fc.html screenshot completed
+2022-12-16 14:53:31 - Save plot: Population_2019 - 2020 for Probation Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3de7710.html screenshot completed
+2022-12-16 14:53:33 - Save plot: Population_2019 - 2020 for Supervision Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc579716.html screenshot completed
+2022-12-16 14:53:35 - Save plot: Population_2019 - 2020 for Technical Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc1cf1be.html screenshot completed
+2022-12-16 14:53:38 - Save plot: Population_2019 - 2020 for Total
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc6bbb1a0a.html screenshot completed
+
+> admin$mylog("POPULATIONS MAP 2020-2021")
+2022-12-16 14:53:40 - POPULATIONS MAP 2020-2021
+
+> # 2020-2021
+> walk(
++   metrics_list, 
++   ~save_map_png(
++       pop_maps_2020_2021[[.x]]
++     , folderpath = savefolder
++     , id = .x
++     , t .... [TRUNCATED] 
+2022-12-16 14:53:40 - Save plot: Population_2020 - 2021 for New Offense
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc3b976d5e.html screenshot completed
+2022-12-16 14:53:42 - Save plot: Population_2020 - 2021 for Parole Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc19ff4fd6.html screenshot completed
+2022-12-16 14:53:45 - Save plot: Population_2020 - 2021 for Probation Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc18547db.html screenshot completed
+2022-12-16 14:53:47 - Save plot: Population_2020 - 2021 for Supervision Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc365f8f9.html screenshot completed
+2022-12-16 14:53:49 - Save plot: Population_2020 - 2021 for Technical Violation
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc4c2261eb.html screenshot completed
+2022-12-16 14:53:52 - Save plot: Population_2020 - 2021 for Total
+file://C:\Users\meichlersmith\AppData\Local\Temp\RtmpgPAAJE\file31fc38ce50f8.html screenshot completed
+
+> #########################
+> ## copy over pngs from sharepoint to app 
+> walk(
++   list.files(savefolder, pattern = "*.png")
++   , ~file.copy(
++      .... [TRUNCATED] 
+
+> admin$mylog("!!END SAVING HIGHCHARTS AS PNGS")
+2022-12-16 14:53:57 - !!END SAVING HIGHCHARTS AS PNGS

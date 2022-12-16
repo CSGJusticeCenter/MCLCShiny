@@ -11,30 +11,9 @@
 
 > library(dplyr)
 
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-
-
 > library(highcharter)
-Registered S3 method overwritten by 'quantmod':
-  method            from
-  as.zoo.data.frame zoo 
 
 > library(scales)
-
-Attaching package: ‘scales’
-
-The following object is masked from ‘package:purrr’:
-
-    discard
-
 
 > library(stats)
 
@@ -78,82 +57,82 @@ The following object is masked from ‘package:purrr’:
 > 
 > # generate list of state highcharts to call in app (admissions)
 > adm_maps_2018_2019 <- map .... [TRUNCATED] 
-2022-12-16 10:54:48 - hc: Change_in_ New Offense Admissions_from_2018_2019
-2022-12-16 10:54:48 - hc: Change_in_ Parole Violation Admissions_from_2018_2019
-2022-12-16 10:54:48 - hc: Change_in_ Probation Violation Admissions_from_2018_2019
-2022-12-16 10:54:48 - hc: Change_in_ Supervision Violation Admissions_from_2018_2019
-2022-12-16 10:54:48 - hc: Change_in_ Technical Violation Admissions_from_2018_2019
-2022-12-16 10:54:48 - hc: Change_in_ Total Admissions_from_2018_2019
+2022-12-16 14:36:19 - hc: Change_in_ New Offense Admissions_from_2018_2019
+2022-12-16 14:36:19 - hc: Change_in_ Parole Violation Admissions_from_2018_2019
+2022-12-16 14:36:19 - hc: Change_in_ Probation Violation Admissions_from_2018_2019
+2022-12-16 14:36:19 - hc: Change_in_ Supervision Violation Admissions_from_2018_2019
+2022-12-16 14:36:19 - hc: Change_in_ Technical Violation Admissions_from_2018_2019
+2022-12-16 14:36:19 - hc: Change_in_ Total Admissions_from_2018_2019
 
 > # generate list of state highcharts to call in app (admissions)
 > adm_maps_2018_2021 <- map(.x = metrics,  .f = function(x) {
 +   df1 <- mclc_explor .... [TRUNCATED] 
-2022-12-16 10:54:48 - hc: Change_in_ New Offense Admissions_from_2018_2021
-2022-12-16 10:54:48 - hc: Change_in_ Parole Violation Admissions_from_2018_2021
-2022-12-16 10:54:48 - hc: Change_in_ Probation Violation Admissions_from_2018_2021
-2022-12-16 10:54:48 - hc: Change_in_ Supervision Violation Admissions_from_2018_2021
-2022-12-16 10:54:48 - hc: Change_in_ Technical Violation Admissions_from_2018_2021
-2022-12-16 10:54:48 - hc: Change_in_ Total Admissions_from_2018_2021
+2022-12-16 14:36:19 - hc: Change_in_ New Offense Admissions_from_2018_2021
+2022-12-16 14:36:19 - hc: Change_in_ Parole Violation Admissions_from_2018_2021
+2022-12-16 14:36:19 - hc: Change_in_ Probation Violation Admissions_from_2018_2021
+2022-12-16 14:36:20 - hc: Change_in_ Supervision Violation Admissions_from_2018_2021
+2022-12-16 14:36:20 - hc: Change_in_ Technical Violation Admissions_from_2018_2021
+2022-12-16 14:36:20 - hc: Change_in_ Total Admissions_from_2018_2021
 
 > # generate list of state highcharts to call in app (admissions)
 > adm_maps_2019_2020 <- map(.x = metrics,  .f = function(x) {
 +   df1 <- mclc_explor .... [TRUNCATED] 
-2022-12-16 10:54:48 - hc: Change_in_ New Offense Admissions_from_2019_2020
-2022-12-16 10:54:48 - hc: Change_in_ Parole Violation Admissions_from_2019_2020
-2022-12-16 10:54:48 - hc: Change_in_ Probation Violation Admissions_from_2019_2020
-2022-12-16 10:54:48 - hc: Change_in_ Supervision Violation Admissions_from_2019_2020
-2022-12-16 10:54:48 - hc: Change_in_ Technical Violation Admissions_from_2019_2020
-2022-12-16 10:54:49 - hc: Change_in_ Total Admissions_from_2019_2020
+2022-12-16 14:36:20 - hc: Change_in_ New Offense Admissions_from_2019_2020
+2022-12-16 14:36:20 - hc: Change_in_ Parole Violation Admissions_from_2019_2020
+2022-12-16 14:36:20 - hc: Change_in_ Probation Violation Admissions_from_2019_2020
+2022-12-16 14:36:20 - hc: Change_in_ Supervision Violation Admissions_from_2019_2020
+2022-12-16 14:36:20 - hc: Change_in_ Technical Violation Admissions_from_2019_2020
+2022-12-16 14:36:20 - hc: Change_in_ Total Admissions_from_2019_2020
 
 > # generate list of state highcharts to call in app (admissions)
 > adm_maps_2020_2021 <- map(.x = metrics,  .f = function(x) {
 +   df1 <- mclc_explor .... [TRUNCATED] 
-2022-12-16 10:54:49 - hc: Change_in_ New Offense Admissions_from_2020_2021
-2022-12-16 10:54:49 - hc: Change_in_ Parole Violation Admissions_from_2020_2021
-2022-12-16 10:54:49 - hc: Change_in_ Probation Violation Admissions_from_2020_2021
-2022-12-16 10:54:49 - hc: Change_in_ Supervision Violation Admissions_from_2020_2021
-2022-12-16 10:54:49 - hc: Change_in_ Technical Violation Admissions_from_2020_2021
-2022-12-16 10:54:49 - hc: Change_in_ Total Admissions_from_2020_2021
+2022-12-16 14:36:20 - hc: Change_in_ New Offense Admissions_from_2020_2021
+2022-12-16 14:36:20 - hc: Change_in_ Parole Violation Admissions_from_2020_2021
+2022-12-16 14:36:20 - hc: Change_in_ Probation Violation Admissions_from_2020_2021
+2022-12-16 14:36:20 - hc: Change_in_ Supervision Violation Admissions_from_2020_2021
+2022-12-16 14:36:20 - hc: Change_in_ Technical Violation Admissions_from_2020_2021
+2022-12-16 14:36:20 - hc: Change_in_ Total Admissions_from_2020_2021
 
 > # generate list of state highcharts to call in app (Population)
 > pop_maps_2018_2019 <- map(.x = metrics,  .f = function(x) {
 +   df1 <- mclc_explor .... [TRUNCATED] 
-2022-12-16 10:54:49 - hc: Change_in_ New Offense Population_from_2018_2019
-2022-12-16 10:54:49 - hc: Change_in_ Parole Violation Population_from_2018_2019
-2022-12-16 10:54:49 - hc: Change_in_ Probation Violation Population_from_2018_2019
-2022-12-16 10:54:49 - hc: Change_in_ Supervision Violation Population_from_2018_2019
-2022-12-16 10:54:49 - hc: Change_in_ Technical Violation Population_from_2018_2019
-2022-12-16 10:54:49 - hc: Change_in_ Total Population_from_2018_2019
+2022-12-16 14:36:20 - hc: Change_in_ New Offense Population_from_2018_2019
+2022-12-16 14:36:20 - hc: Change_in_ Parole Violation Population_from_2018_2019
+2022-12-16 14:36:20 - hc: Change_in_ Probation Violation Population_from_2018_2019
+2022-12-16 14:36:20 - hc: Change_in_ Supervision Violation Population_from_2018_2019
+2022-12-16 14:36:21 - hc: Change_in_ Technical Violation Population_from_2018_2019
+2022-12-16 14:36:21 - hc: Change_in_ Total Population_from_2018_2019
 
 > # generate list of state highcharts to call in app (Population)
 > pop_maps_2018_2021 <- map(.x = metrics,  .f = function(x) {
 +   df1 <- mclc_explor .... [TRUNCATED] 
-2022-12-16 10:54:49 - hc: Change_in_ New Offense Population_from_2018_2021
-2022-12-16 10:54:49 - hc: Change_in_ Parole Violation Population_from_2018_2021
-2022-12-16 10:54:49 - hc: Change_in_ Probation Violation Population_from_2018_2021
-2022-12-16 10:54:49 - hc: Change_in_ Supervision Violation Population_from_2018_2021
-2022-12-16 10:54:49 - hc: Change_in_ Technical Violation Population_from_2018_2021
-2022-12-16 10:54:49 - hc: Change_in_ Total Population_from_2018_2021
+2022-12-16 14:36:21 - hc: Change_in_ New Offense Population_from_2018_2021
+2022-12-16 14:36:21 - hc: Change_in_ Parole Violation Population_from_2018_2021
+2022-12-16 14:36:21 - hc: Change_in_ Probation Violation Population_from_2018_2021
+2022-12-16 14:36:21 - hc: Change_in_ Supervision Violation Population_from_2018_2021
+2022-12-16 14:36:21 - hc: Change_in_ Technical Violation Population_from_2018_2021
+2022-12-16 14:36:21 - hc: Change_in_ Total Population_from_2018_2021
 
 > # generate list of state highcharts to call in app (Population)
 > pop_maps_2019_2020 <- map(.x = metrics,  .f = function(x) {
 +   df1 <- mclc_explor .... [TRUNCATED] 
-2022-12-16 10:54:50 - hc: Change_in_ New Offense Population_from_2019_2020
-2022-12-16 10:54:50 - hc: Change_in_ Parole Violation Population_from_2019_2020
-2022-12-16 10:54:50 - hc: Change_in_ Probation Violation Population_from_2019_2020
-2022-12-16 10:54:50 - hc: Change_in_ Supervision Violation Population_from_2019_2020
-2022-12-16 10:54:50 - hc: Change_in_ Technical Violation Population_from_2019_2020
-2022-12-16 10:54:50 - hc: Change_in_ Total Population_from_2019_2020
+2022-12-16 14:36:21 - hc: Change_in_ New Offense Population_from_2019_2020
+2022-12-16 14:36:21 - hc: Change_in_ Parole Violation Population_from_2019_2020
+2022-12-16 14:36:21 - hc: Change_in_ Probation Violation Population_from_2019_2020
+2022-12-16 14:36:21 - hc: Change_in_ Supervision Violation Population_from_2019_2020
+2022-12-16 14:36:21 - hc: Change_in_ Technical Violation Population_from_2019_2020
+2022-12-16 14:36:21 - hc: Change_in_ Total Population_from_2019_2020
 
 > # generate list of state highcharts to call in app (Population)
 > pop_maps_2020_2021 <- map(.x = metrics,  .f = function(x) {
 +   df1 <- mclc_explor .... [TRUNCATED] 
-2022-12-16 10:54:50 - hc: Change_in_ New Offense Population_from_2020_2021
-2022-12-16 10:54:50 - hc: Change_in_ Parole Violation Population_from_2020_2021
-2022-12-16 10:54:50 - hc: Change_in_ Probation Violation Population_from_2020_2021
-2022-12-16 10:54:50 - hc: Change_in_ Supervision Violation Population_from_2020_2021
-2022-12-16 10:54:50 - hc: Change_in_ Technical Violation Population_from_2020_2021
-2022-12-16 10:54:50 - hc: Change_in_ Total Population_from_2020_2021
+2022-12-16 14:36:21 - hc: Change_in_ New Offense Population_from_2020_2021
+2022-12-16 14:36:21 - hc: Change_in_ Parole Violation Population_from_2020_2021
+2022-12-16 14:36:21 - hc: Change_in_ Probation Violation Population_from_2020_2021
+2022-12-16 14:36:21 - hc: Change_in_ Supervision Violation Population_from_2020_2021
+2022-12-16 14:36:21 - hc: Change_in_ Technical Violation Population_from_2020_2021
+2022-12-16 14:36:21 - hc: Change_in_ Total Population_from_2020_2021
 
 > adm_maps_2018_2019 <- setNames(adm_maps_2018_2019, metrics)
 
@@ -185,112 +164,112 @@ The following object is masked from ‘package:purrr’:
 > # generate list of state highcharts to call in app (admissions)
 > all_state_area_adm <- map(.x = states,  .f = function(x) {
 +   df1 <- adm_pop_long .... [TRUNCATED] 
-2022-12-16 10:54:50 - hc: Prison Admissions, Alabama
-2022-12-16 10:54:50 - hc: Prison Admissions, Alaska
-2022-12-16 10:54:50 - hc: Prison Admissions, Arizona
-2022-12-16 10:54:51 - hc: Prison Admissions, Arkansas
-2022-12-16 10:54:51 - hc: Prison Admissions, California
-2022-12-16 10:54:51 - hc: Prison Admissions, Colorado
-2022-12-16 10:54:51 - hc: Prison Admissions, Connecticut
-2022-12-16 10:54:51 - hc: Prison Admissions, Delaware
-2022-12-16 10:54:51 - hc: Prison Admissions, Florida
-2022-12-16 10:54:51 - hc: Prison Admissions, Georgia
-2022-12-16 10:54:51 - hc: Prison Admissions, Hawaii
-2022-12-16 10:54:51 - hc: Prison Admissions, Idaho
-2022-12-16 10:54:52 - hc: Prison Admissions, Illinois
-2022-12-16 10:54:52 - hc: Prison Admissions, Indiana
-2022-12-16 10:54:52 - hc: Prison Admissions, Iowa
-2022-12-16 10:54:52 - hc: Prison Admissions, Kansas
-2022-12-16 10:54:52 - hc: Prison Admissions, Kentucky
-2022-12-16 10:54:52 - hc: Prison Admissions, Louisiana
-2022-12-16 10:54:52 - hc: Prison Admissions, Maine
-2022-12-16 10:54:52 - hc: Prison Admissions, Maryland
-2022-12-16 10:54:53 - hc: Prison Admissions, Massachusetts
-2022-12-16 10:54:53 - hc: Prison Admissions, Michigan
-2022-12-16 10:54:53 - hc: Prison Admissions, Minnesota
-2022-12-16 10:54:53 - hc: Prison Admissions, Mississippi
-2022-12-16 10:54:53 - hc: Prison Admissions, Missouri
-2022-12-16 10:54:53 - hc: Prison Admissions, Montana
-2022-12-16 10:54:53 - hc: Prison Admissions, Nebraska
-2022-12-16 10:54:53 - hc: Prison Admissions, Nevada
-2022-12-16 10:54:54 - hc: Prison Admissions, New Hampshire
-2022-12-16 10:54:54 - hc: Prison Admissions, New Jersey
-2022-12-16 10:54:54 - hc: Prison Admissions, New Mexico
-2022-12-16 10:54:54 - hc: Prison Admissions, New York
-2022-12-16 10:54:54 - hc: Prison Admissions, North Carolina
-2022-12-16 10:54:54 - hc: Prison Admissions, North Dakota
-2022-12-16 10:54:54 - hc: Prison Admissions, Ohio
-2022-12-16 10:54:54 - hc: Prison Admissions, Oklahoma
-2022-12-16 10:54:55 - hc: Prison Admissions, Oregon
-2022-12-16 10:54:55 - hc: Prison Admissions, Pennsylvania
-2022-12-16 10:54:55 - hc: Prison Admissions, Rhode Island
-2022-12-16 10:54:55 - hc: Prison Admissions, South Carolina
-2022-12-16 10:54:55 - hc: Prison Admissions, South Dakota
-2022-12-16 10:54:55 - hc: Prison Admissions, Tennessee
-2022-12-16 10:54:55 - hc: Prison Admissions, Texas
-2022-12-16 10:54:55 - hc: Prison Admissions, Utah
-2022-12-16 10:54:56 - hc: Prison Admissions, Vermont
-2022-12-16 10:54:56 - hc: Prison Admissions, Virginia
-2022-12-16 10:54:56 - hc: Prison Admissions, Washington
-2022-12-16 10:54:56 - hc: Prison Admissions, West Virginia
-2022-12-16 10:54:56 - hc: Prison Admissions, Wisconsin
-2022-12-16 10:54:56 - hc: Prison Admissions, Wyoming
+2022-12-16 14:36:22 - hc: Prison Admissions, Alabama
+2022-12-16 14:36:22 - hc: Prison Admissions, Alaska
+2022-12-16 14:36:22 - hc: Prison Admissions, Arizona
+2022-12-16 14:36:22 - hc: Prison Admissions, Arkansas
+2022-12-16 14:36:22 - hc: Prison Admissions, California
+2022-12-16 14:36:22 - hc: Prison Admissions, Colorado
+2022-12-16 14:36:22 - hc: Prison Admissions, Connecticut
+2022-12-16 14:36:22 - hc: Prison Admissions, Delaware
+2022-12-16 14:36:22 - hc: Prison Admissions, Florida
+2022-12-16 14:36:23 - hc: Prison Admissions, Georgia
+2022-12-16 14:36:23 - hc: Prison Admissions, Hawaii
+2022-12-16 14:36:23 - hc: Prison Admissions, Idaho
+2022-12-16 14:36:23 - hc: Prison Admissions, Illinois
+2022-12-16 14:36:23 - hc: Prison Admissions, Indiana
+2022-12-16 14:36:23 - hc: Prison Admissions, Iowa
+2022-12-16 14:36:23 - hc: Prison Admissions, Kansas
+2022-12-16 14:36:23 - hc: Prison Admissions, Kentucky
+2022-12-16 14:36:24 - hc: Prison Admissions, Louisiana
+2022-12-16 14:36:24 - hc: Prison Admissions, Maine
+2022-12-16 14:36:24 - hc: Prison Admissions, Maryland
+2022-12-16 14:36:24 - hc: Prison Admissions, Massachusetts
+2022-12-16 14:36:24 - hc: Prison Admissions, Michigan
+2022-12-16 14:36:24 - hc: Prison Admissions, Minnesota
+2022-12-16 14:36:24 - hc: Prison Admissions, Mississippi
+2022-12-16 14:36:24 - hc: Prison Admissions, Missouri
+2022-12-16 14:36:25 - hc: Prison Admissions, Montana
+2022-12-16 14:36:25 - hc: Prison Admissions, Nebraska
+2022-12-16 14:36:25 - hc: Prison Admissions, Nevada
+2022-12-16 14:36:25 - hc: Prison Admissions, New Hampshire
+2022-12-16 14:36:25 - hc: Prison Admissions, New Jersey
+2022-12-16 14:36:25 - hc: Prison Admissions, New Mexico
+2022-12-16 14:36:25 - hc: Prison Admissions, New York
+2022-12-16 14:36:25 - hc: Prison Admissions, North Carolina
+2022-12-16 14:36:25 - hc: Prison Admissions, North Dakota
+2022-12-16 14:36:26 - hc: Prison Admissions, Ohio
+2022-12-16 14:36:26 - hc: Prison Admissions, Oklahoma
+2022-12-16 14:36:26 - hc: Prison Admissions, Oregon
+2022-12-16 14:36:26 - hc: Prison Admissions, Pennsylvania
+2022-12-16 14:36:26 - hc: Prison Admissions, Rhode Island
+2022-12-16 14:36:26 - hc: Prison Admissions, South Carolina
+2022-12-16 14:36:26 - hc: Prison Admissions, South Dakota
+2022-12-16 14:36:26 - hc: Prison Admissions, Tennessee
+2022-12-16 14:36:27 - hc: Prison Admissions, Texas
+2022-12-16 14:36:27 - hc: Prison Admissions, Utah
+2022-12-16 14:36:27 - hc: Prison Admissions, Vermont
+2022-12-16 14:36:27 - hc: Prison Admissions, Virginia
+2022-12-16 14:36:27 - hc: Prison Admissions, Washington
+2022-12-16 14:36:27 - hc: Prison Admissions, West Virginia
+2022-12-16 14:36:27 - hc: Prison Admissions, Wisconsin
+2022-12-16 14:36:28 - hc: Prison Admissions, Wyoming
 
 > all_state_area_adm <- setNames(all_state_area_adm, states)
 
 > # generate list of state highcharts to call in app (population)
 > all_state_area_pop <- map(.x = states,  .f = function(x) {
 +   df1 <- adm_pop_long .... [TRUNCATED] 
-2022-12-16 10:54:56 - hc: Prison Population, Alabama
-2022-12-16 10:54:56 - hc: Prison Population, Alaska
-2022-12-16 10:54:56 - hc: Prison Population, Arizona
-2022-12-16 10:54:57 - hc: Prison Population, Arkansas
-2022-12-16 10:54:57 - hc: Prison Population, California
-2022-12-16 10:54:57 - hc: Prison Population, Colorado
-2022-12-16 10:54:57 - hc: Prison Population, Connecticut
-2022-12-16 10:54:57 - hc: Prison Population, Delaware
-2022-12-16 10:54:57 - hc: Prison Population, Florida
-2022-12-16 10:54:57 - hc: Prison Population, Georgia
-2022-12-16 10:54:57 - hc: Prison Population, Hawaii
-2022-12-16 10:54:58 - hc: Prison Population, Idaho
-2022-12-16 10:54:58 - hc: Prison Population, Illinois
-2022-12-16 10:54:58 - hc: Prison Population, Indiana
-2022-12-16 10:54:58 - hc: Prison Population, Iowa
-2022-12-16 10:54:58 - hc: Prison Population, Kansas
-2022-12-16 10:54:58 - hc: Prison Population, Kentucky
-2022-12-16 10:54:58 - hc: Prison Population, Louisiana
-2022-12-16 10:54:58 - hc: Prison Population, Maine
-2022-12-16 10:54:58 - hc: Prison Population, Maryland
-2022-12-16 10:54:59 - hc: Prison Population, Massachusetts
-2022-12-16 10:54:59 - hc: Prison Population, Michigan
-2022-12-16 10:54:59 - hc: Prison Population, Minnesota
-2022-12-16 10:54:59 - hc: Prison Population, Mississippi
-2022-12-16 10:54:59 - hc: Prison Population, Missouri
-2022-12-16 10:54:59 - hc: Prison Population, Montana
-2022-12-16 10:54:59 - hc: Prison Population, Nebraska
-2022-12-16 10:54:59 - hc: Prison Population, Nevada
-2022-12-16 10:55:00 - hc: Prison Population, New Hampshire
-2022-12-16 10:55:00 - hc: Prison Population, New Jersey
-2022-12-16 10:55:00 - hc: Prison Population, New Mexico
-2022-12-16 10:55:00 - hc: Prison Population, New York
-2022-12-16 10:55:00 - hc: Prison Population, North Carolina
-2022-12-16 10:55:00 - hc: Prison Population, North Dakota
-2022-12-16 10:55:00 - hc: Prison Population, Ohio
-2022-12-16 10:55:00 - hc: Prison Population, Oklahoma
-2022-12-16 10:55:00 - hc: Prison Population, Oregon
-2022-12-16 10:55:01 - hc: Prison Population, Pennsylvania
-2022-12-16 10:55:01 - hc: Prison Population, Rhode Island
-2022-12-16 10:55:01 - hc: Prison Population, South Carolina
-2022-12-16 10:55:01 - hc: Prison Population, South Dakota
-2022-12-16 10:55:01 - hc: Prison Population, Tennessee
-2022-12-16 10:55:01 - hc: Prison Population, Texas
-2022-12-16 10:55:01 - hc: Prison Population, Utah
-2022-12-16 10:55:01 - hc: Prison Population, Vermont
-2022-12-16 10:55:02 - hc: Prison Population, Virginia
-2022-12-16 10:55:02 - hc: Prison Population, Washington
-2022-12-16 10:55:02 - hc: Prison Population, West Virginia
-2022-12-16 10:55:02 - hc: Prison Population, Wisconsin
-2022-12-16 10:55:02 - hc: Prison Population, Wyoming
+2022-12-16 14:36:28 - hc: Prison Population, Alabama
+2022-12-16 14:36:28 - hc: Prison Population, Alaska
+2022-12-16 14:36:28 - hc: Prison Population, Arizona
+2022-12-16 14:36:28 - hc: Prison Population, Arkansas
+2022-12-16 14:36:28 - hc: Prison Population, California
+2022-12-16 14:36:28 - hc: Prison Population, Colorado
+2022-12-16 14:36:28 - hc: Prison Population, Connecticut
+2022-12-16 14:36:29 - hc: Prison Population, Delaware
+2022-12-16 14:36:29 - hc: Prison Population, Florida
+2022-12-16 14:36:29 - hc: Prison Population, Georgia
+2022-12-16 14:36:29 - hc: Prison Population, Hawaii
+2022-12-16 14:36:29 - hc: Prison Population, Idaho
+2022-12-16 14:36:29 - hc: Prison Population, Illinois
+2022-12-16 14:36:29 - hc: Prison Population, Indiana
+2022-12-16 14:36:29 - hc: Prison Population, Iowa
+2022-12-16 14:36:29 - hc: Prison Population, Kansas
+2022-12-16 14:36:30 - hc: Prison Population, Kentucky
+2022-12-16 14:36:30 - hc: Prison Population, Louisiana
+2022-12-16 14:36:30 - hc: Prison Population, Maine
+2022-12-16 14:36:30 - hc: Prison Population, Maryland
+2022-12-16 14:36:30 - hc: Prison Population, Massachusetts
+2022-12-16 14:36:30 - hc: Prison Population, Michigan
+2022-12-16 14:36:30 - hc: Prison Population, Minnesota
+2022-12-16 14:36:30 - hc: Prison Population, Mississippi
+2022-12-16 14:36:31 - hc: Prison Population, Missouri
+2022-12-16 14:36:31 - hc: Prison Population, Montana
+2022-12-16 14:36:31 - hc: Prison Population, Nebraska
+2022-12-16 14:36:31 - hc: Prison Population, Nevada
+2022-12-16 14:36:31 - hc: Prison Population, New Hampshire
+2022-12-16 14:36:31 - hc: Prison Population, New Jersey
+2022-12-16 14:36:31 - hc: Prison Population, New Mexico
+2022-12-16 14:36:31 - hc: Prison Population, New York
+2022-12-16 14:36:31 - hc: Prison Population, North Carolina
+2022-12-16 14:36:32 - hc: Prison Population, North Dakota
+2022-12-16 14:36:32 - hc: Prison Population, Ohio
+2022-12-16 14:36:32 - hc: Prison Population, Oklahoma
+2022-12-16 14:36:32 - hc: Prison Population, Oregon
+2022-12-16 14:36:32 - hc: Prison Population, Pennsylvania
+2022-12-16 14:36:32 - hc: Prison Population, Rhode Island
+2022-12-16 14:36:32 - hc: Prison Population, South Carolina
+2022-12-16 14:36:32 - hc: Prison Population, South Dakota
+2022-12-16 14:36:33 - hc: Prison Population, Tennessee
+2022-12-16 14:36:33 - hc: Prison Population, Texas
+2022-12-16 14:36:33 - hc: Prison Population, Utah
+2022-12-16 14:36:33 - hc: Prison Population, Vermont
+2022-12-16 14:36:33 - hc: Prison Population, Virginia
+2022-12-16 14:36:33 - hc: Prison Population, Washington
+2022-12-16 14:36:33 - hc: Prison Population, West Virginia
+2022-12-16 14:36:33 - hc: Prison Population, Wisconsin
+2022-12-16 14:36:33 - hc: Prison Population, Wyoming
 
 > # set names of charts
 > all_state_area_pop <- setNames(all_state_area_pop, states)
@@ -301,56 +280,56 @@ The following object is masked from ‘package:purrr’:
 > 
 > # generate list of state highcharts to call in app (admissions)
 > all_state_bar .... [TRUNCATED] 
-2022-12-16 10:55:02 - hc: Supervision Violation Admissions by Type, Alabama
-2022-12-16 10:55:02 - hc: Supervision Violation Admissions by Type, Alaska
-2022-12-16 10:55:02 - hc: Supervision Violation Admissions by Type, Arizona
-2022-12-16 10:55:02 - hc: Supervision Violation Admissions by Type, Arkansas
-2022-12-16 10:55:02 - hc: Supervision Violation Admissions by Type, California
-2022-12-16 10:55:02 - hc: Supervision Violation Admissions by Type, Colorado
-2022-12-16 10:55:03 - hc: Supervision Violation Admissions by Type, Connecticut
-2022-12-16 10:55:03 - hc: Supervision Violation Admissions by Type, Delaware
-2022-12-16 10:55:03 - hc: Supervision Violation Admissions by Type, Florida
-2022-12-16 10:55:03 - hc: Supervision Violation Admissions by Type, Georgia
-2022-12-16 10:55:03 - hc: Supervision Violation Admissions by Type, Hawaii
-2022-12-16 10:55:03 - hc: Supervision Violation Admissions by Type, Idaho
-2022-12-16 10:55:03 - hc: Supervision Violation Admissions by Type, Illinois
-2022-12-16 10:55:03 - hc: Supervision Violation Admissions by Type, Indiana
-2022-12-16 10:55:03 - hc: Supervision Violation Admissions by Type, Iowa
-2022-12-16 10:55:03 - hc: Supervision Violation Admissions by Type, Kansas
-2022-12-16 10:55:03 - hc: Supervision Violation Admissions by Type, Kentucky
-2022-12-16 10:55:03 - hc: Supervision Violation Admissions by Type, Louisiana
-2022-12-16 10:55:03 - hc: Supervision Violation Admissions by Type, Maine
-2022-12-16 10:55:03 - hc: Supervision Violation Admissions by Type, Maryland
-2022-12-16 10:55:03 - hc: Supervision Violation Admissions by Type, Massachusetts
-2022-12-16 10:55:03 - hc: Supervision Violation Admissions by Type, Michigan
-2022-12-16 10:55:03 - hc: Supervision Violation Admissions by Type, Minnesota
-2022-12-16 10:55:04 - hc: Supervision Violation Admissions by Type, Mississippi
-2022-12-16 10:55:04 - hc: Supervision Violation Admissions by Type, Missouri
-2022-12-16 10:55:04 - hc: Supervision Violation Admissions by Type, Montana
-2022-12-16 10:55:04 - hc: Supervision Violation Admissions by Type, Nebraska
-2022-12-16 10:55:04 - hc: Supervision Violation Admissions by Type, Nevada
-2022-12-16 10:55:04 - hc: Supervision Violation Admissions by Type, New Hampshire
-2022-12-16 10:55:04 - hc: Supervision Violation Admissions by Type, New Jersey
-2022-12-16 10:55:04 - hc: Supervision Violation Admissions by Type, New Mexico
-2022-12-16 10:55:04 - hc: Supervision Violation Admissions by Type, New York
-2022-12-16 10:55:04 - hc: Supervision Violation Admissions by Type, North Carolina
-2022-12-16 10:55:04 - hc: Supervision Violation Admissions by Type, North Dakota
-2022-12-16 10:55:04 - hc: Supervision Violation Admissions by Type, Ohio
-2022-12-16 10:55:04 - hc: Supervision Violation Admissions by Type, Oklahoma
-2022-12-16 10:55:04 - hc: Supervision Violation Admissions by Type, Oregon
-2022-12-16 10:55:04 - hc: Supervision Violation Admissions by Type, Pennsylvania
-2022-12-16 10:55:04 - hc: Supervision Violation Admissions by Type, Rhode Island
-2022-12-16 10:55:04 - hc: Supervision Violation Admissions by Type, South Carolina
-2022-12-16 10:55:05 - hc: Supervision Violation Admissions by Type, South Dakota
-2022-12-16 10:55:05 - hc: Supervision Violation Admissions by Type, Tennessee
-2022-12-16 10:55:05 - hc: Supervision Violation Admissions by Type, Texas
-2022-12-16 10:55:05 - hc: Supervision Violation Admissions by Type, Utah
-2022-12-16 10:55:05 - hc: Supervision Violation Admissions by Type, Vermont
-2022-12-16 10:55:05 - hc: Supervision Violation Admissions by Type, Virginia
-2022-12-16 10:55:05 - hc: Supervision Violation Admissions by Type, Washington
-2022-12-16 10:55:05 - hc: Supervision Violation Admissions by Type, West Virginia
-2022-12-16 10:55:05 - hc: Supervision Violation Admissions by Type, Wisconsin
-2022-12-16 10:55:05 - hc: Supervision Violation Admissions by Type, Wyoming
+2022-12-16 14:36:34 - hc: Supervision Violation Admissions by Type, Alabama
+2022-12-16 14:36:34 - hc: Supervision Violation Admissions by Type, Alaska
+2022-12-16 14:36:34 - hc: Supervision Violation Admissions by Type, Arizona
+2022-12-16 14:36:34 - hc: Supervision Violation Admissions by Type, Arkansas
+2022-12-16 14:36:34 - hc: Supervision Violation Admissions by Type, California
+2022-12-16 14:36:34 - hc: Supervision Violation Admissions by Type, Colorado
+2022-12-16 14:36:34 - hc: Supervision Violation Admissions by Type, Connecticut
+2022-12-16 14:36:34 - hc: Supervision Violation Admissions by Type, Delaware
+2022-12-16 14:36:34 - hc: Supervision Violation Admissions by Type, Florida
+2022-12-16 14:36:34 - hc: Supervision Violation Admissions by Type, Georgia
+2022-12-16 14:36:34 - hc: Supervision Violation Admissions by Type, Hawaii
+2022-12-16 14:36:34 - hc: Supervision Violation Admissions by Type, Idaho
+2022-12-16 14:36:34 - hc: Supervision Violation Admissions by Type, Illinois
+2022-12-16 14:36:34 - hc: Supervision Violation Admissions by Type, Indiana
+2022-12-16 14:36:34 - hc: Supervision Violation Admissions by Type, Iowa
+2022-12-16 14:36:34 - hc: Supervision Violation Admissions by Type, Kansas
+2022-12-16 14:36:34 - hc: Supervision Violation Admissions by Type, Kentucky
+2022-12-16 14:36:35 - hc: Supervision Violation Admissions by Type, Louisiana
+2022-12-16 14:36:35 - hc: Supervision Violation Admissions by Type, Maine
+2022-12-16 14:36:35 - hc: Supervision Violation Admissions by Type, Maryland
+2022-12-16 14:36:35 - hc: Supervision Violation Admissions by Type, Massachusetts
+2022-12-16 14:36:35 - hc: Supervision Violation Admissions by Type, Michigan
+2022-12-16 14:36:35 - hc: Supervision Violation Admissions by Type, Minnesota
+2022-12-16 14:36:35 - hc: Supervision Violation Admissions by Type, Mississippi
+2022-12-16 14:36:35 - hc: Supervision Violation Admissions by Type, Missouri
+2022-12-16 14:36:35 - hc: Supervision Violation Admissions by Type, Montana
+2022-12-16 14:36:35 - hc: Supervision Violation Admissions by Type, Nebraska
+2022-12-16 14:36:35 - hc: Supervision Violation Admissions by Type, Nevada
+2022-12-16 14:36:35 - hc: Supervision Violation Admissions by Type, New Hampshire
+2022-12-16 14:36:35 - hc: Supervision Violation Admissions by Type, New Jersey
+2022-12-16 14:36:35 - hc: Supervision Violation Admissions by Type, New Mexico
+2022-12-16 14:36:35 - hc: Supervision Violation Admissions by Type, New York
+2022-12-16 14:36:35 - hc: Supervision Violation Admissions by Type, North Carolina
+2022-12-16 14:36:35 - hc: Supervision Violation Admissions by Type, North Dakota
+2022-12-16 14:36:36 - hc: Supervision Violation Admissions by Type, Ohio
+2022-12-16 14:36:36 - hc: Supervision Violation Admissions by Type, Oklahoma
+2022-12-16 14:36:36 - hc: Supervision Violation Admissions by Type, Oregon
+2022-12-16 14:36:36 - hc: Supervision Violation Admissions by Type, Pennsylvania
+2022-12-16 14:36:36 - hc: Supervision Violation Admissions by Type, Rhode Island
+2022-12-16 14:36:36 - hc: Supervision Violation Admissions by Type, South Carolina
+2022-12-16 14:36:36 - hc: Supervision Violation Admissions by Type, South Dakota
+2022-12-16 14:36:36 - hc: Supervision Violation Admissions by Type, Tennessee
+2022-12-16 14:36:36 - hc: Supervision Violation Admissions by Type, Texas
+2022-12-16 14:36:36 - hc: Supervision Violation Admissions by Type, Utah
+2022-12-16 14:36:36 - hc: Supervision Violation Admissions by Type, Vermont
+2022-12-16 14:36:36 - hc: Supervision Violation Admissions by Type, Virginia
+2022-12-16 14:36:36 - hc: Supervision Violation Admissions by Type, Washington
+2022-12-16 14:36:36 - hc: Supervision Violation Admissions by Type, West Virginia
+2022-12-16 14:36:36 - hc: Supervision Violation Admissions by Type, Wisconsin
+2022-12-16 14:36:36 - hc: Supervision Violation Admissions by Type, Wyoming
 
 > # set names of charts
 > all_state_bar_adm <- setNames(all_state_bar_adm, states)
@@ -358,56 +337,56 @@ The following object is masked from ‘package:purrr’:
 > # generate list of state highcharts to call in app (population)
 > all_state_bar_pop <- map(.x = states,  .f = function(x) {
 +   df1 <- adm_pop_long  .... [TRUNCATED] 
-2022-12-16 10:55:05 - hc: Supervision Violation Population by Type, Alabama
-2022-12-16 10:55:05 - hc: Supervision Violation Population by Type, Alaska
-2022-12-16 10:55:05 - hc: Supervision Violation Population by Type, Arizona
-2022-12-16 10:55:05 - hc: Supervision Violation Population by Type, Arkansas
-2022-12-16 10:55:05 - hc: Supervision Violation Population by Type, California
-2022-12-16 10:55:06 - hc: Supervision Violation Population by Type, Colorado
-2022-12-16 10:55:06 - hc: Supervision Violation Population by Type, Connecticut
-2022-12-16 10:55:06 - hc: Supervision Violation Population by Type, Delaware
-2022-12-16 10:55:06 - hc: Supervision Violation Population by Type, Florida
-2022-12-16 10:55:06 - hc: Supervision Violation Population by Type, Georgia
-2022-12-16 10:55:06 - hc: Supervision Violation Population by Type, Hawaii
-2022-12-16 10:55:06 - hc: Supervision Violation Population by Type, Idaho
-2022-12-16 10:55:06 - hc: Supervision Violation Population by Type, Illinois
-2022-12-16 10:55:06 - hc: Supervision Violation Population by Type, Indiana
-2022-12-16 10:55:06 - hc: Supervision Violation Population by Type, Iowa
-2022-12-16 10:55:06 - hc: Supervision Violation Population by Type, Kansas
-2022-12-16 10:55:06 - hc: Supervision Violation Population by Type, Kentucky
-2022-12-16 10:55:06 - hc: Supervision Violation Population by Type, Louisiana
-2022-12-16 10:55:06 - hc: Supervision Violation Population by Type, Maine
-2022-12-16 10:55:06 - hc: Supervision Violation Population by Type, Maryland
-2022-12-16 10:55:06 - hc: Supervision Violation Population by Type, Massachusetts
-2022-12-16 10:55:06 - hc: Supervision Violation Population by Type, Michigan
-2022-12-16 10:55:06 - hc: Supervision Violation Population by Type, Minnesota
-2022-12-16 10:55:07 - hc: Supervision Violation Population by Type, Mississippi
-2022-12-16 10:55:07 - hc: Supervision Violation Population by Type, Missouri
-2022-12-16 10:55:07 - hc: Supervision Violation Population by Type, Montana
-2022-12-16 10:55:07 - hc: Supervision Violation Population by Type, Nebraska
-2022-12-16 10:55:07 - hc: Supervision Violation Population by Type, Nevada
-2022-12-16 10:55:07 - hc: Supervision Violation Population by Type, New Hampshire
-2022-12-16 10:55:07 - hc: Supervision Violation Population by Type, New Jersey
-2022-12-16 10:55:07 - hc: Supervision Violation Population by Type, New Mexico
-2022-12-16 10:55:07 - hc: Supervision Violation Population by Type, New York
-2022-12-16 10:55:07 - hc: Supervision Violation Population by Type, North Carolina
-2022-12-16 10:55:07 - hc: Supervision Violation Population by Type, North Dakota
-2022-12-16 10:55:07 - hc: Supervision Violation Population by Type, Ohio
-2022-12-16 10:55:07 - hc: Supervision Violation Population by Type, Oklahoma
-2022-12-16 10:55:07 - hc: Supervision Violation Population by Type, Oregon
-2022-12-16 10:55:07 - hc: Supervision Violation Population by Type, Pennsylvania
-2022-12-16 10:55:07 - hc: Supervision Violation Population by Type, Rhode Island
-2022-12-16 10:55:07 - hc: Supervision Violation Population by Type, South Carolina
-2022-12-16 10:55:08 - hc: Supervision Violation Population by Type, South Dakota
-2022-12-16 10:55:08 - hc: Supervision Violation Population by Type, Tennessee
-2022-12-16 10:55:08 - hc: Supervision Violation Population by Type, Texas
-2022-12-16 10:55:08 - hc: Supervision Violation Population by Type, Utah
-2022-12-16 10:55:08 - hc: Supervision Violation Population by Type, Vermont
-2022-12-16 10:55:08 - hc: Supervision Violation Population by Type, Virginia
-2022-12-16 10:55:08 - hc: Supervision Violation Population by Type, Washington
-2022-12-16 10:55:08 - hc: Supervision Violation Population by Type, West Virginia
-2022-12-16 10:55:08 - hc: Supervision Violation Population by Type, Wisconsin
-2022-12-16 10:55:08 - hc: Supervision Violation Population by Type, Wyoming
+2022-12-16 14:36:36 - hc: Supervision Violation Population by Type, Alabama
+2022-12-16 14:36:36 - hc: Supervision Violation Population by Type, Alaska
+2022-12-16 14:36:37 - hc: Supervision Violation Population by Type, Arizona
+2022-12-16 14:36:37 - hc: Supervision Violation Population by Type, Arkansas
+2022-12-16 14:36:37 - hc: Supervision Violation Population by Type, California
+2022-12-16 14:36:37 - hc: Supervision Violation Population by Type, Colorado
+2022-12-16 14:36:37 - hc: Supervision Violation Population by Type, Connecticut
+2022-12-16 14:36:37 - hc: Supervision Violation Population by Type, Delaware
+2022-12-16 14:36:37 - hc: Supervision Violation Population by Type, Florida
+2022-12-16 14:36:37 - hc: Supervision Violation Population by Type, Georgia
+2022-12-16 14:36:37 - hc: Supervision Violation Population by Type, Hawaii
+2022-12-16 14:36:37 - hc: Supervision Violation Population by Type, Idaho
+2022-12-16 14:36:37 - hc: Supervision Violation Population by Type, Illinois
+2022-12-16 14:36:37 - hc: Supervision Violation Population by Type, Indiana
+2022-12-16 14:36:37 - hc: Supervision Violation Population by Type, Iowa
+2022-12-16 14:36:37 - hc: Supervision Violation Population by Type, Kansas
+2022-12-16 14:36:37 - hc: Supervision Violation Population by Type, Kentucky
+2022-12-16 14:36:38 - hc: Supervision Violation Population by Type, Louisiana
+2022-12-16 14:36:38 - hc: Supervision Violation Population by Type, Maine
+2022-12-16 14:36:38 - hc: Supervision Violation Population by Type, Maryland
+2022-12-16 14:36:38 - hc: Supervision Violation Population by Type, Massachusetts
+2022-12-16 14:36:38 - hc: Supervision Violation Population by Type, Michigan
+2022-12-16 14:36:38 - hc: Supervision Violation Population by Type, Minnesota
+2022-12-16 14:36:38 - hc: Supervision Violation Population by Type, Mississippi
+2022-12-16 14:36:38 - hc: Supervision Violation Population by Type, Missouri
+2022-12-16 14:36:38 - hc: Supervision Violation Population by Type, Montana
+2022-12-16 14:36:38 - hc: Supervision Violation Population by Type, Nebraska
+2022-12-16 14:36:38 - hc: Supervision Violation Population by Type, Nevada
+2022-12-16 14:36:38 - hc: Supervision Violation Population by Type, New Hampshire
+2022-12-16 14:36:38 - hc: Supervision Violation Population by Type, New Jersey
+2022-12-16 14:36:38 - hc: Supervision Violation Population by Type, New Mexico
+2022-12-16 14:36:38 - hc: Supervision Violation Population by Type, New York
+2022-12-16 14:36:39 - hc: Supervision Violation Population by Type, North Carolina
+2022-12-16 14:36:39 - hc: Supervision Violation Population by Type, North Dakota
+2022-12-16 14:36:39 - hc: Supervision Violation Population by Type, Ohio
+2022-12-16 14:36:39 - hc: Supervision Violation Population by Type, Oklahoma
+2022-12-16 14:36:39 - hc: Supervision Violation Population by Type, Oregon
+2022-12-16 14:36:39 - hc: Supervision Violation Population by Type, Pennsylvania
+2022-12-16 14:36:39 - hc: Supervision Violation Population by Type, Rhode Island
+2022-12-16 14:36:39 - hc: Supervision Violation Population by Type, South Carolina
+2022-12-16 14:36:39 - hc: Supervision Violation Population by Type, South Dakota
+2022-12-16 14:36:39 - hc: Supervision Violation Population by Type, Tennessee
+2022-12-16 14:36:39 - hc: Supervision Violation Population by Type, Texas
+2022-12-16 14:36:39 - hc: Supervision Violation Population by Type, Utah
+2022-12-16 14:36:39 - hc: Supervision Violation Population by Type, Vermont
+2022-12-16 14:36:39 - hc: Supervision Violation Population by Type, Virginia
+2022-12-16 14:36:39 - hc: Supervision Violation Population by Type, Washington
+2022-12-16 14:36:39 - hc: Supervision Violation Population by Type, West Virginia
+2022-12-16 14:36:39 - hc: Supervision Violation Population by Type, Wisconsin
+2022-12-16 14:36:39 - hc: Supervision Violation Population by Type, Wyoming
 
 > # set names of charts
 > all_state_bar_pop <- setNames(all_state_bar_pop, states)
@@ -418,56 +397,56 @@ The following object is masked from ‘package:purrr’:
 > 
 > # generate list of state highcharts to call in app (admissions)
 > parole_bar_a .... [TRUNCATED] 
-2022-12-16 10:55:08 - hc: Parole Violation Admissions by Type, Alabama
-2022-12-16 10:55:08 - hc: Parole Violation Admissions by Type, Alaska
-2022-12-16 10:55:08 - hc: Parole Violation Admissions by Type, Arizona
-2022-12-16 10:55:08 - hc: Parole Violation Admissions by Type, Arkansas
-2022-12-16 10:55:08 - hc: Parole Violation Admissions by Type, California
-2022-12-16 10:55:08 - hc: Parole Violation Admissions by Type, Colorado
-2022-12-16 10:55:08 - hc: Parole Violation Admissions by Type, Connecticut
-2022-12-16 10:55:09 - hc: Parole Violation Admissions by Type, Delaware
-2022-12-16 10:55:09 - hc: Parole Violation Admissions by Type, Florida
-2022-12-16 10:55:09 - hc: Parole Violation Admissions by Type, Georgia
-2022-12-16 10:55:09 - hc: Parole Violation Admissions by Type, Hawaii
-2022-12-16 10:55:09 - hc: Parole Violation Admissions by Type, Idaho
-2022-12-16 10:55:09 - hc: Parole Violation Admissions by Type, Illinois
-2022-12-16 10:55:09 - hc: Parole Violation Admissions by Type, Indiana
-2022-12-16 10:55:09 - hc: Parole Violation Admissions by Type, Iowa
-2022-12-16 10:55:09 - hc: Parole Violation Admissions by Type, Kansas
-2022-12-16 10:55:09 - hc: Parole Violation Admissions by Type, Kentucky
-2022-12-16 10:55:09 - hc: Parole Violation Admissions by Type, Louisiana
-2022-12-16 10:55:09 - hc: Parole Violation Admissions by Type, Maine
-2022-12-16 10:55:09 - hc: Parole Violation Admissions by Type, Maryland
-2022-12-16 10:55:09 - hc: Parole Violation Admissions by Type, Massachusetts
-2022-12-16 10:55:09 - hc: Parole Violation Admissions by Type, Michigan
-2022-12-16 10:55:09 - hc: Parole Violation Admissions by Type, Minnesota
-2022-12-16 10:55:10 - hc: Parole Violation Admissions by Type, Mississippi
-2022-12-16 10:55:10 - hc: Parole Violation Admissions by Type, Missouri
-2022-12-16 10:55:10 - hc: Parole Violation Admissions by Type, Montana
-2022-12-16 10:55:10 - hc: Parole Violation Admissions by Type, Nebraska
-2022-12-16 10:55:10 - hc: Parole Violation Admissions by Type, Nevada
-2022-12-16 10:55:10 - hc: Parole Violation Admissions by Type, New Hampshire
-2022-12-16 10:55:10 - hc: Parole Violation Admissions by Type, New Jersey
-2022-12-16 10:55:10 - hc: Parole Violation Admissions by Type, New Mexico
-2022-12-16 10:55:10 - hc: Parole Violation Admissions by Type, New York
-2022-12-16 10:55:10 - hc: Parole Violation Admissions by Type, North Carolina
-2022-12-16 10:55:10 - hc: Parole Violation Admissions by Type, North Dakota
-2022-12-16 10:55:10 - hc: Parole Violation Admissions by Type, Ohio
-2022-12-16 10:55:10 - hc: Parole Violation Admissions by Type, Oklahoma
-2022-12-16 10:55:10 - hc: Parole Violation Admissions by Type, Oregon
-2022-12-16 10:55:10 - hc: Parole Violation Admissions by Type, Pennsylvania
-2022-12-16 10:55:10 - hc: Parole Violation Admissions by Type, Rhode Island
-2022-12-16 10:55:10 - hc: Parole Violation Admissions by Type, South Carolina
-2022-12-16 10:55:11 - hc: Parole Violation Admissions by Type, South Dakota
-2022-12-16 10:55:11 - hc: Parole Violation Admissions by Type, Tennessee
-2022-12-16 10:55:11 - hc: Parole Violation Admissions by Type, Texas
-2022-12-16 10:55:11 - hc: Parole Violation Admissions by Type, Utah
-2022-12-16 10:55:11 - hc: Parole Violation Admissions by Type, Vermont
-2022-12-16 10:55:11 - hc: Parole Violation Admissions by Type, Virginia
-2022-12-16 10:55:11 - hc: Parole Violation Admissions by Type, Washington
-2022-12-16 10:55:11 - hc: Parole Violation Admissions by Type, West Virginia
-2022-12-16 10:55:11 - hc: Parole Violation Admissions by Type, Wisconsin
-2022-12-16 10:55:11 - hc: Parole Violation Admissions by Type, Wyoming
+2022-12-16 14:36:40 - hc: Parole Violation Admissions by Type, Alabama
+2022-12-16 14:36:40 - hc: Parole Violation Admissions by Type, Alaska
+2022-12-16 14:36:40 - hc: Parole Violation Admissions by Type, Arizona
+2022-12-16 14:36:40 - hc: Parole Violation Admissions by Type, Arkansas
+2022-12-16 14:36:40 - hc: Parole Violation Admissions by Type, California
+2022-12-16 14:36:40 - hc: Parole Violation Admissions by Type, Colorado
+2022-12-16 14:36:40 - hc: Parole Violation Admissions by Type, Connecticut
+2022-12-16 14:36:40 - hc: Parole Violation Admissions by Type, Delaware
+2022-12-16 14:36:40 - hc: Parole Violation Admissions by Type, Florida
+2022-12-16 14:36:40 - hc: Parole Violation Admissions by Type, Georgia
+2022-12-16 14:36:40 - hc: Parole Violation Admissions by Type, Hawaii
+2022-12-16 14:36:40 - hc: Parole Violation Admissions by Type, Idaho
+2022-12-16 14:36:40 - hc: Parole Violation Admissions by Type, Illinois
+2022-12-16 14:36:40 - hc: Parole Violation Admissions by Type, Indiana
+2022-12-16 14:36:40 - hc: Parole Violation Admissions by Type, Iowa
+2022-12-16 14:36:40 - hc: Parole Violation Admissions by Type, Kansas
+2022-12-16 14:36:40 - hc: Parole Violation Admissions by Type, Kentucky
+2022-12-16 14:36:41 - hc: Parole Violation Admissions by Type, Louisiana
+2022-12-16 14:36:41 - hc: Parole Violation Admissions by Type, Maine
+2022-12-16 14:36:41 - hc: Parole Violation Admissions by Type, Maryland
+2022-12-16 14:36:41 - hc: Parole Violation Admissions by Type, Massachusetts
+2022-12-16 14:36:41 - hc: Parole Violation Admissions by Type, Michigan
+2022-12-16 14:36:41 - hc: Parole Violation Admissions by Type, Minnesota
+2022-12-16 14:36:41 - hc: Parole Violation Admissions by Type, Mississippi
+2022-12-16 14:36:41 - hc: Parole Violation Admissions by Type, Missouri
+2022-12-16 14:36:41 - hc: Parole Violation Admissions by Type, Montana
+2022-12-16 14:36:41 - hc: Parole Violation Admissions by Type, Nebraska
+2022-12-16 14:36:41 - hc: Parole Violation Admissions by Type, Nevada
+2022-12-16 14:36:41 - hc: Parole Violation Admissions by Type, New Hampshire
+2022-12-16 14:36:41 - hc: Parole Violation Admissions by Type, New Jersey
+2022-12-16 14:36:41 - hc: Parole Violation Admissions by Type, New Mexico
+2022-12-16 14:36:41 - hc: Parole Violation Admissions by Type, New York
+2022-12-16 14:36:41 - hc: Parole Violation Admissions by Type, North Carolina
+2022-12-16 14:36:41 - hc: Parole Violation Admissions by Type, North Dakota
+2022-12-16 14:36:42 - hc: Parole Violation Admissions by Type, Ohio
+2022-12-16 14:36:42 - hc: Parole Violation Admissions by Type, Oklahoma
+2022-12-16 14:36:42 - hc: Parole Violation Admissions by Type, Oregon
+2022-12-16 14:36:42 - hc: Parole Violation Admissions by Type, Pennsylvania
+2022-12-16 14:36:42 - hc: Parole Violation Admissions by Type, Rhode Island
+2022-12-16 14:36:42 - hc: Parole Violation Admissions by Type, South Carolina
+2022-12-16 14:36:42 - hc: Parole Violation Admissions by Type, South Dakota
+2022-12-16 14:36:42 - hc: Parole Violation Admissions by Type, Tennessee
+2022-12-16 14:36:42 - hc: Parole Violation Admissions by Type, Texas
+2022-12-16 14:36:42 - hc: Parole Violation Admissions by Type, Utah
+2022-12-16 14:36:42 - hc: Parole Violation Admissions by Type, Vermont
+2022-12-16 14:36:42 - hc: Parole Violation Admissions by Type, Virginia
+2022-12-16 14:36:42 - hc: Parole Violation Admissions by Type, Washington
+2022-12-16 14:36:42 - hc: Parole Violation Admissions by Type, West Virginia
+2022-12-16 14:36:42 - hc: Parole Violation Admissions by Type, Wisconsin
+2022-12-16 14:36:42 - hc: Parole Violation Admissions by Type, Wyoming
 
 > # set names of charts
 > parole_bar_adm <- setNames(parole_bar_adm,states)
@@ -475,56 +454,56 @@ The following object is masked from ‘package:purrr’:
 > # generate list of state highcharts to call in app (population)
 > parole_bar_pop <- map(.x = states,  .f = function(x) {
 +   df1 <- adm_pop_long %>% .... [TRUNCATED] 
-2022-12-16 10:55:11 - hc: Parole Violations Population by Type, Alabama
-2022-12-16 10:55:11 - hc: Parole Violations Population by Type, Alaska
-2022-12-16 10:55:11 - hc: Parole Violations Population by Type, Arizona
-2022-12-16 10:55:11 - hc: Parole Violations Population by Type, Arkansas
-2022-12-16 10:55:11 - hc: Parole Violations Population by Type, California
-2022-12-16 10:55:11 - hc: Parole Violations Population by Type, Colorado
-2022-12-16 10:55:11 - hc: Parole Violations Population by Type, Connecticut
-2022-12-16 10:55:12 - hc: Parole Violations Population by Type, Delaware
-2022-12-16 10:55:12 - hc: Parole Violations Population by Type, Florida
-2022-12-16 10:55:12 - hc: Parole Violations Population by Type, Georgia
-2022-12-16 10:55:12 - hc: Parole Violations Population by Type, Hawaii
-2022-12-16 10:55:12 - hc: Parole Violations Population by Type, Idaho
-2022-12-16 10:55:12 - hc: Parole Violations Population by Type, Illinois
-2022-12-16 10:55:12 - hc: Parole Violations Population by Type, Indiana
-2022-12-16 10:55:12 - hc: Parole Violations Population by Type, Iowa
-2022-12-16 10:55:12 - hc: Parole Violations Population by Type, Kansas
-2022-12-16 10:55:12 - hc: Parole Violations Population by Type, Kentucky
-2022-12-16 10:55:12 - hc: Parole Violations Population by Type, Louisiana
-2022-12-16 10:55:12 - hc: Parole Violations Population by Type, Maine
-2022-12-16 10:55:12 - hc: Parole Violations Population by Type, Maryland
-2022-12-16 10:55:12 - hc: Parole Violations Population by Type, Massachusetts
-2022-12-16 10:55:12 - hc: Parole Violations Population by Type, Michigan
-2022-12-16 10:55:12 - hc: Parole Violations Population by Type, Minnesota
-2022-12-16 10:55:13 - hc: Parole Violations Population by Type, Mississippi
-2022-12-16 10:55:13 - hc: Parole Violations Population by Type, Missouri
-2022-12-16 10:55:13 - hc: Parole Violations Population by Type, Montana
-2022-12-16 10:55:13 - hc: Parole Violations Population by Type, Nebraska
-2022-12-16 10:55:13 - hc: Parole Violations Population by Type, Nevada
-2022-12-16 10:55:13 - hc: Parole Violations Population by Type, New Hampshire
-2022-12-16 10:55:13 - hc: Parole Violations Population by Type, New Jersey
-2022-12-16 10:55:13 - hc: Parole Violations Population by Type, New Mexico
-2022-12-16 10:55:13 - hc: Parole Violations Population by Type, New York
-2022-12-16 10:55:13 - hc: Parole Violations Population by Type, North Carolina
-2022-12-16 10:55:13 - hc: Parole Violations Population by Type, North Dakota
-2022-12-16 10:55:13 - hc: Parole Violations Population by Type, Ohio
-2022-12-16 10:55:13 - hc: Parole Violations Population by Type, Oklahoma
-2022-12-16 10:55:13 - hc: Parole Violations Population by Type, Oregon
-2022-12-16 10:55:13 - hc: Parole Violations Population by Type, Pennsylvania
-2022-12-16 10:55:13 - hc: Parole Violations Population by Type, Rhode Island
-2022-12-16 10:55:13 - hc: Parole Violations Population by Type, South Carolina
-2022-12-16 10:55:14 - hc: Parole Violations Population by Type, South Dakota
-2022-12-16 10:55:14 - hc: Parole Violations Population by Type, Tennessee
-2022-12-16 10:55:14 - hc: Parole Violations Population by Type, Texas
-2022-12-16 10:55:14 - hc: Parole Violations Population by Type, Utah
-2022-12-16 10:55:14 - hc: Parole Violations Population by Type, Vermont
-2022-12-16 10:55:14 - hc: Parole Violations Population by Type, Virginia
-2022-12-16 10:55:14 - hc: Parole Violations Population by Type, Washington
-2022-12-16 10:55:14 - hc: Parole Violations Population by Type, West Virginia
-2022-12-16 10:55:14 - hc: Parole Violations Population by Type, Wisconsin
-2022-12-16 10:55:14 - hc: Parole Violations Population by Type, Wyoming
+2022-12-16 14:36:42 - hc: Parole Violations Population by Type, Alabama
+2022-12-16 14:36:43 - hc: Parole Violations Population by Type, Alaska
+2022-12-16 14:36:43 - hc: Parole Violations Population by Type, Arizona
+2022-12-16 14:36:43 - hc: Parole Violations Population by Type, Arkansas
+2022-12-16 14:36:43 - hc: Parole Violations Population by Type, California
+2022-12-16 14:36:43 - hc: Parole Violations Population by Type, Colorado
+2022-12-16 14:36:43 - hc: Parole Violations Population by Type, Connecticut
+2022-12-16 14:36:43 - hc: Parole Violations Population by Type, Delaware
+2022-12-16 14:36:43 - hc: Parole Violations Population by Type, Florida
+2022-12-16 14:36:43 - hc: Parole Violations Population by Type, Georgia
+2022-12-16 14:36:43 - hc: Parole Violations Population by Type, Hawaii
+2022-12-16 14:36:43 - hc: Parole Violations Population by Type, Idaho
+2022-12-16 14:36:43 - hc: Parole Violations Population by Type, Illinois
+2022-12-16 14:36:43 - hc: Parole Violations Population by Type, Indiana
+2022-12-16 14:36:43 - hc: Parole Violations Population by Type, Iowa
+2022-12-16 14:36:43 - hc: Parole Violations Population by Type, Kansas
+2022-12-16 14:36:43 - hc: Parole Violations Population by Type, Kentucky
+2022-12-16 14:36:43 - hc: Parole Violations Population by Type, Louisiana
+2022-12-16 14:36:44 - hc: Parole Violations Population by Type, Maine
+2022-12-16 14:36:44 - hc: Parole Violations Population by Type, Maryland
+2022-12-16 14:36:44 - hc: Parole Violations Population by Type, Massachusetts
+2022-12-16 14:36:44 - hc: Parole Violations Population by Type, Michigan
+2022-12-16 14:36:44 - hc: Parole Violations Population by Type, Minnesota
+2022-12-16 14:36:44 - hc: Parole Violations Population by Type, Mississippi
+2022-12-16 14:36:44 - hc: Parole Violations Population by Type, Missouri
+2022-12-16 14:36:44 - hc: Parole Violations Population by Type, Montana
+2022-12-16 14:36:44 - hc: Parole Violations Population by Type, Nebraska
+2022-12-16 14:36:44 - hc: Parole Violations Population by Type, Nevada
+2022-12-16 14:36:44 - hc: Parole Violations Population by Type, New Hampshire
+2022-12-16 14:36:44 - hc: Parole Violations Population by Type, New Jersey
+2022-12-16 14:36:44 - hc: Parole Violations Population by Type, New Mexico
+2022-12-16 14:36:44 - hc: Parole Violations Population by Type, New York
+2022-12-16 14:36:44 - hc: Parole Violations Population by Type, North Carolina
+2022-12-16 14:36:44 - hc: Parole Violations Population by Type, North Dakota
+2022-12-16 14:36:44 - hc: Parole Violations Population by Type, Ohio
+2022-12-16 14:36:45 - hc: Parole Violations Population by Type, Oklahoma
+2022-12-16 14:36:45 - hc: Parole Violations Population by Type, Oregon
+2022-12-16 14:36:45 - hc: Parole Violations Population by Type, Pennsylvania
+2022-12-16 14:36:45 - hc: Parole Violations Population by Type, Rhode Island
+2022-12-16 14:36:45 - hc: Parole Violations Population by Type, South Carolina
+2022-12-16 14:36:45 - hc: Parole Violations Population by Type, South Dakota
+2022-12-16 14:36:45 - hc: Parole Violations Population by Type, Tennessee
+2022-12-16 14:36:45 - hc: Parole Violations Population by Type, Texas
+2022-12-16 14:36:45 - hc: Parole Violations Population by Type, Utah
+2022-12-16 14:36:45 - hc: Parole Violations Population by Type, Vermont
+2022-12-16 14:36:45 - hc: Parole Violations Population by Type, Virginia
+2022-12-16 14:36:45 - hc: Parole Violations Population by Type, Washington
+2022-12-16 14:36:45 - hc: Parole Violations Population by Type, West Virginia
+2022-12-16 14:36:45 - hc: Parole Violations Population by Type, Wisconsin
+2022-12-16 14:36:46 - hc: Parole Violations Population by Type, Wyoming
 
 > # set names of charts
 > parole_bar_pop <- setNames(parole_bar_pop,states)
@@ -535,56 +514,56 @@ The following object is masked from ‘package:purrr’:
 > 
 > # generate list of state highcharts to call in app (admissions)
 > probation .... [TRUNCATED] 
-2022-12-16 10:55:14 - hc: Probation Violation Admissions by Type, Alabama
-2022-12-16 10:55:14 - hc: Probation Violation Admissions by Type, Alaska
-2022-12-16 10:55:14 - hc: Probation Violation Admissions by Type, Arizona
-2022-12-16 10:55:14 - hc: Probation Violation Admissions by Type, Arkansas
-2022-12-16 10:55:14 - hc: Probation Violation Admissions by Type, California
-2022-12-16 10:55:14 - hc: Probation Violation Admissions by Type, Colorado
-2022-12-16 10:55:15 - hc: Probation Violation Admissions by Type, Connecticut
-2022-12-16 10:55:15 - hc: Probation Violation Admissions by Type, Delaware
-2022-12-16 10:55:15 - hc: Probation Violation Admissions by Type, Florida
-2022-12-16 10:55:15 - hc: Probation Violation Admissions by Type, Georgia
-2022-12-16 10:55:15 - hc: Probation Violation Admissions by Type, Hawaii
-2022-12-16 10:55:15 - hc: Probation Violation Admissions by Type, Idaho
-2022-12-16 10:55:15 - hc: Probation Violation Admissions by Type, Illinois
-2022-12-16 10:55:15 - hc: Probation Violation Admissions by Type, Indiana
-2022-12-16 10:55:15 - hc: Probation Violation Admissions by Type, Iowa
-2022-12-16 10:55:15 - hc: Probation Violation Admissions by Type, Kansas
-2022-12-16 10:55:15 - hc: Probation Violation Admissions by Type, Kentucky
-2022-12-16 10:55:15 - hc: Probation Violation Admissions by Type, Louisiana
-2022-12-16 10:55:15 - hc: Probation Violation Admissions by Type, Maine
-2022-12-16 10:55:15 - hc: Probation Violation Admissions by Type, Maryland
-2022-12-16 10:55:15 - hc: Probation Violation Admissions by Type, Massachusetts
-2022-12-16 10:55:15 - hc: Probation Violation Admissions by Type, Michigan
-2022-12-16 10:55:16 - hc: Probation Violation Admissions by Type, Minnesota
-2022-12-16 10:55:16 - hc: Probation Violation Admissions by Type, Mississippi
-2022-12-16 10:55:16 - hc: Probation Violation Admissions by Type, Missouri
-2022-12-16 10:55:16 - hc: Probation Violation Admissions by Type, Montana
-2022-12-16 10:55:16 - hc: Probation Violation Admissions by Type, Nebraska
-2022-12-16 10:55:16 - hc: Probation Violation Admissions by Type, Nevada
-2022-12-16 10:55:16 - hc: Probation Violation Admissions by Type, New Hampshire
-2022-12-16 10:55:16 - hc: Probation Violation Admissions by Type, New Jersey
-2022-12-16 10:55:16 - hc: Probation Violation Admissions by Type, New Mexico
-2022-12-16 10:55:16 - hc: Probation Violation Admissions by Type, New York
-2022-12-16 10:55:16 - hc: Probation Violation Admissions by Type, North Carolina
-2022-12-16 10:55:16 - hc: Probation Violation Admissions by Type, North Dakota
-2022-12-16 10:55:16 - hc: Probation Violation Admissions by Type, Ohio
-2022-12-16 10:55:16 - hc: Probation Violation Admissions by Type, Oklahoma
-2022-12-16 10:55:16 - hc: Probation Violation Admissions by Type, Oregon
-2022-12-16 10:55:16 - hc: Probation Violation Admissions by Type, Pennsylvania
-2022-12-16 10:55:17 - hc: Probation Violation Admissions by Type, Rhode Island
-2022-12-16 10:55:17 - hc: Probation Violation Admissions by Type, South Carolina
-2022-12-16 10:55:17 - hc: Probation Violation Admissions by Type, South Dakota
-2022-12-16 10:55:17 - hc: Probation Violation Admissions by Type, Tennessee
-2022-12-16 10:55:17 - hc: Probation Violation Admissions by Type, Texas
-2022-12-16 10:55:17 - hc: Probation Violation Admissions by Type, Utah
-2022-12-16 10:55:17 - hc: Probation Violation Admissions by Type, Vermont
-2022-12-16 10:55:17 - hc: Probation Violation Admissions by Type, Virginia
-2022-12-16 10:55:17 - hc: Probation Violation Admissions by Type, Washington
-2022-12-16 10:55:17 - hc: Probation Violation Admissions by Type, West Virginia
-2022-12-16 10:55:17 - hc: Probation Violation Admissions by Type, Wisconsin
-2022-12-16 10:55:17 - hc: Probation Violation Admissions by Type, Wyoming
+2022-12-16 14:36:46 - hc: Probation Violation Admissions by Type, Alabama
+2022-12-16 14:36:46 - hc: Probation Violation Admissions by Type, Alaska
+2022-12-16 14:36:46 - hc: Probation Violation Admissions by Type, Arizona
+2022-12-16 14:36:46 - hc: Probation Violation Admissions by Type, Arkansas
+2022-12-16 14:36:46 - hc: Probation Violation Admissions by Type, California
+2022-12-16 14:36:46 - hc: Probation Violation Admissions by Type, Colorado
+2022-12-16 14:36:46 - hc: Probation Violation Admissions by Type, Connecticut
+2022-12-16 14:36:46 - hc: Probation Violation Admissions by Type, Delaware
+2022-12-16 14:36:46 - hc: Probation Violation Admissions by Type, Florida
+2022-12-16 14:36:46 - hc: Probation Violation Admissions by Type, Georgia
+2022-12-16 14:36:46 - hc: Probation Violation Admissions by Type, Hawaii
+2022-12-16 14:36:46 - hc: Probation Violation Admissions by Type, Idaho
+2022-12-16 14:36:46 - hc: Probation Violation Admissions by Type, Illinois
+2022-12-16 14:36:46 - hc: Probation Violation Admissions by Type, Indiana
+2022-12-16 14:36:47 - hc: Probation Violation Admissions by Type, Iowa
+2022-12-16 14:36:47 - hc: Probation Violation Admissions by Type, Kansas
+2022-12-16 14:36:47 - hc: Probation Violation Admissions by Type, Kentucky
+2022-12-16 14:36:47 - hc: Probation Violation Admissions by Type, Louisiana
+2022-12-16 14:36:47 - hc: Probation Violation Admissions by Type, Maine
+2022-12-16 14:36:47 - hc: Probation Violation Admissions by Type, Maryland
+2022-12-16 14:36:47 - hc: Probation Violation Admissions by Type, Massachusetts
+2022-12-16 14:36:47 - hc: Probation Violation Admissions by Type, Michigan
+2022-12-16 14:36:47 - hc: Probation Violation Admissions by Type, Minnesota
+2022-12-16 14:36:47 - hc: Probation Violation Admissions by Type, Mississippi
+2022-12-16 14:36:47 - hc: Probation Violation Admissions by Type, Missouri
+2022-12-16 14:36:47 - hc: Probation Violation Admissions by Type, Montana
+2022-12-16 14:36:47 - hc: Probation Violation Admissions by Type, Nebraska
+2022-12-16 14:36:47 - hc: Probation Violation Admissions by Type, Nevada
+2022-12-16 14:36:47 - hc: Probation Violation Admissions by Type, New Hampshire
+2022-12-16 14:36:48 - hc: Probation Violation Admissions by Type, New Jersey
+2022-12-16 14:36:48 - hc: Probation Violation Admissions by Type, New Mexico
+2022-12-16 14:36:48 - hc: Probation Violation Admissions by Type, New York
+2022-12-16 14:36:48 - hc: Probation Violation Admissions by Type, North Carolina
+2022-12-16 14:36:48 - hc: Probation Violation Admissions by Type, North Dakota
+2022-12-16 14:36:48 - hc: Probation Violation Admissions by Type, Ohio
+2022-12-16 14:36:48 - hc: Probation Violation Admissions by Type, Oklahoma
+2022-12-16 14:36:48 - hc: Probation Violation Admissions by Type, Oregon
+2022-12-16 14:36:48 - hc: Probation Violation Admissions by Type, Pennsylvania
+2022-12-16 14:36:48 - hc: Probation Violation Admissions by Type, Rhode Island
+2022-12-16 14:36:48 - hc: Probation Violation Admissions by Type, South Carolina
+2022-12-16 14:36:48 - hc: Probation Violation Admissions by Type, South Dakota
+2022-12-16 14:36:48 - hc: Probation Violation Admissions by Type, Tennessee
+2022-12-16 14:36:48 - hc: Probation Violation Admissions by Type, Texas
+2022-12-16 14:36:48 - hc: Probation Violation Admissions by Type, Utah
+2022-12-16 14:36:48 - hc: Probation Violation Admissions by Type, Vermont
+2022-12-16 14:36:48 - hc: Probation Violation Admissions by Type, Virginia
+2022-12-16 14:36:49 - hc: Probation Violation Admissions by Type, Washington
+2022-12-16 14:36:49 - hc: Probation Violation Admissions by Type, West Virginia
+2022-12-16 14:36:49 - hc: Probation Violation Admissions by Type, Wisconsin
+2022-12-16 14:36:49 - hc: Probation Violation Admissions by Type, Wyoming
 
 > # set names of charts
 > probation_bar_adm <- setNames(probation_bar_adm, states)
@@ -592,56 +571,56 @@ The following object is masked from ‘package:purrr’:
 > # generate list of state highcharts to call in app (population)
 > probation_bar_pop <- map(.x = states,  .f = function(x) {
 +   df1 <- adm_pop_long  .... [TRUNCATED] 
-2022-12-16 10:55:17 - hc: Probation Violation Population by Type, Alabama
-2022-12-16 10:55:17 - hc: Probation Violation Population by Type, Alaska
-2022-12-16 10:55:17 - hc: Probation Violation Population by Type, Arizona
-2022-12-16 10:55:17 - hc: Probation Violation Population by Type, Arkansas
-2022-12-16 10:55:17 - hc: Probation Violation Population by Type, California
-2022-12-16 10:55:18 - hc: Probation Violation Population by Type, Colorado
-2022-12-16 10:55:18 - hc: Probation Violation Population by Type, Connecticut
-2022-12-16 10:55:18 - hc: Probation Violation Population by Type, Delaware
-2022-12-16 10:55:18 - hc: Probation Violation Population by Type, Florida
-2022-12-16 10:55:18 - hc: Probation Violation Population by Type, Georgia
-2022-12-16 10:55:18 - hc: Probation Violation Population by Type, Hawaii
-2022-12-16 10:55:18 - hc: Probation Violation Population by Type, Idaho
-2022-12-16 10:55:18 - hc: Probation Violation Population by Type, Illinois
-2022-12-16 10:55:18 - hc: Probation Violation Population by Type, Indiana
-2022-12-16 10:55:18 - hc: Probation Violation Population by Type, Iowa
-2022-12-16 10:55:18 - hc: Probation Violation Population by Type, Kansas
-2022-12-16 10:55:18 - hc: Probation Violation Population by Type, Kentucky
-2022-12-16 10:55:18 - hc: Probation Violation Population by Type, Louisiana
-2022-12-16 10:55:18 - hc: Probation Violation Population by Type, Maine
-2022-12-16 10:55:18 - hc: Probation Violation Population by Type, Maryland
-2022-12-16 10:55:18 - hc: Probation Violation Population by Type, Massachusetts
-2022-12-16 10:55:18 - hc: Probation Violation Population by Type, Michigan
-2022-12-16 10:55:19 - hc: Probation Violation Population by Type, Minnesota
-2022-12-16 10:55:19 - hc: Probation Violation Population by Type, Mississippi
-2022-12-16 10:55:19 - hc: Probation Violation Population by Type, Missouri
-2022-12-16 10:55:19 - hc: Probation Violation Population by Type, Montana
-2022-12-16 10:55:19 - hc: Probation Violation Population by Type, Nebraska
-2022-12-16 10:55:19 - hc: Probation Violation Population by Type, Nevada
-2022-12-16 10:55:19 - hc: Probation Violation Population by Type, New Hampshire
-2022-12-16 10:55:19 - hc: Probation Violation Population by Type, New Jersey
-2022-12-16 10:55:19 - hc: Probation Violation Population by Type, New Mexico
-2022-12-16 10:55:19 - hc: Probation Violation Population by Type, New York
-2022-12-16 10:55:19 - hc: Probation Violation Population by Type, North Carolina
-2022-12-16 10:55:19 - hc: Probation Violation Population by Type, North Dakota
-2022-12-16 10:55:19 - hc: Probation Violation Population by Type, Ohio
-2022-12-16 10:55:19 - hc: Probation Violation Population by Type, Oklahoma
-2022-12-16 10:55:19 - hc: Probation Violation Population by Type, Oregon
-2022-12-16 10:55:19 - hc: Probation Violation Population by Type, Pennsylvania
-2022-12-16 10:55:20 - hc: Probation Violation Population by Type, Rhode Island
-2022-12-16 10:55:20 - hc: Probation Violation Population by Type, South Carolina
-2022-12-16 10:55:20 - hc: Probation Violation Population by Type, South Dakota
-2022-12-16 10:55:20 - hc: Probation Violation Population by Type, Tennessee
-2022-12-16 10:55:20 - hc: Probation Violation Population by Type, Texas
-2022-12-16 10:55:20 - hc: Probation Violation Population by Type, Utah
-2022-12-16 10:55:20 - hc: Probation Violation Population by Type, Vermont
-2022-12-16 10:55:20 - hc: Probation Violation Population by Type, Virginia
-2022-12-16 10:55:20 - hc: Probation Violation Population by Type, Washington
-2022-12-16 10:55:20 - hc: Probation Violation Population by Type, West Virginia
-2022-12-16 10:55:20 - hc: Probation Violation Population by Type, Wisconsin
-2022-12-16 10:55:20 - hc: Probation Violation Population by Type, Wyoming
+2022-12-16 14:36:49 - hc: Probation Violation Population by Type, Alabama
+2022-12-16 14:36:49 - hc: Probation Violation Population by Type, Alaska
+2022-12-16 14:36:49 - hc: Probation Violation Population by Type, Arizona
+2022-12-16 14:36:49 - hc: Probation Violation Population by Type, Arkansas
+2022-12-16 14:36:49 - hc: Probation Violation Population by Type, California
+2022-12-16 14:36:49 - hc: Probation Violation Population by Type, Colorado
+2022-12-16 14:36:49 - hc: Probation Violation Population by Type, Connecticut
+2022-12-16 14:36:49 - hc: Probation Violation Population by Type, Delaware
+2022-12-16 14:36:49 - hc: Probation Violation Population by Type, Florida
+2022-12-16 14:36:49 - hc: Probation Violation Population by Type, Georgia
+2022-12-16 14:36:49 - hc: Probation Violation Population by Type, Hawaii
+2022-12-16 14:36:49 - hc: Probation Violation Population by Type, Idaho
+2022-12-16 14:36:49 - hc: Probation Violation Population by Type, Illinois
+2022-12-16 14:36:50 - hc: Probation Violation Population by Type, Indiana
+2022-12-16 14:36:50 - hc: Probation Violation Population by Type, Iowa
+2022-12-16 14:36:50 - hc: Probation Violation Population by Type, Kansas
+2022-12-16 14:36:50 - hc: Probation Violation Population by Type, Kentucky
+2022-12-16 14:36:50 - hc: Probation Violation Population by Type, Louisiana
+2022-12-16 14:36:50 - hc: Probation Violation Population by Type, Maine
+2022-12-16 14:36:50 - hc: Probation Violation Population by Type, Maryland
+2022-12-16 14:36:50 - hc: Probation Violation Population by Type, Massachusetts
+2022-12-16 14:36:50 - hc: Probation Violation Population by Type, Michigan
+2022-12-16 14:36:50 - hc: Probation Violation Population by Type, Minnesota
+2022-12-16 14:36:50 - hc: Probation Violation Population by Type, Mississippi
+2022-12-16 14:36:50 - hc: Probation Violation Population by Type, Missouri
+2022-12-16 14:36:50 - hc: Probation Violation Population by Type, Montana
+2022-12-16 14:36:50 - hc: Probation Violation Population by Type, Nebraska
+2022-12-16 14:36:50 - hc: Probation Violation Population by Type, Nevada
+2022-12-16 14:36:50 - hc: Probation Violation Population by Type, New Hampshire
+2022-12-16 14:36:50 - hc: Probation Violation Population by Type, New Jersey
+2022-12-16 14:36:50 - hc: Probation Violation Population by Type, New Mexico
+2022-12-16 14:36:51 - hc: Probation Violation Population by Type, New York
+2022-12-16 14:36:51 - hc: Probation Violation Population by Type, North Carolina
+2022-12-16 14:36:51 - hc: Probation Violation Population by Type, North Dakota
+2022-12-16 14:36:51 - hc: Probation Violation Population by Type, Ohio
+2022-12-16 14:36:51 - hc: Probation Violation Population by Type, Oklahoma
+2022-12-16 14:36:51 - hc: Probation Violation Population by Type, Oregon
+2022-12-16 14:36:51 - hc: Probation Violation Population by Type, Pennsylvania
+2022-12-16 14:36:51 - hc: Probation Violation Population by Type, Rhode Island
+2022-12-16 14:36:51 - hc: Probation Violation Population by Type, South Carolina
+2022-12-16 14:36:51 - hc: Probation Violation Population by Type, South Dakota
+2022-12-16 14:36:51 - hc: Probation Violation Population by Type, Tennessee
+2022-12-16 14:36:51 - hc: Probation Violation Population by Type, Texas
+2022-12-16 14:36:51 - hc: Probation Violation Population by Type, Utah
+2022-12-16 14:36:51 - hc: Probation Violation Population by Type, Vermont
+2022-12-16 14:36:51 - hc: Probation Violation Population by Type, Virginia
+2022-12-16 14:36:51 - hc: Probation Violation Population by Type, Washington
+2022-12-16 14:36:51 - hc: Probation Violation Population by Type, West Virginia
+2022-12-16 14:36:52 - hc: Probation Violation Population by Type, Wisconsin
+2022-12-16 14:36:52 - hc: Probation Violation Population by Type, Wyoming
 
 > # set names of charts
 > probation_bar_pop <- setNames(probation_bar_pop, states)

@@ -3,6 +3,7 @@
 ## HAVE YOU UPDATED THE ROOT FILE TO MATCH YOUR PATHWAY??? ##
 #############################################################
 
+# run start to finish takes ~1-1.5 hours 
 
 #############################################################
 ## Revocation Counts and Race and Ethnicity 

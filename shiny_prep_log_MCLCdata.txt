@@ -7,18 +7,14 @@
 > # Sub-Author: Martha Eichlersmith 
 > # .... [TRUNCATED] 
 
+Attaching package: ‘rlang’
+
+The following objects are masked from ‘package:purrr’:
+
+    %@%, as_function, flatten, flatten_chr, flatten_dbl, flatten_int, flatten_lgl, flatten_raw, invoke, splice
+
+
 > library(dplyr)
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-
 
 > library(tidyr)
 
@@ -43,6 +39,10 @@ The following objects are masked from ‘package:rlang’:
 
     flatten, unbox
 
+The following object is masked from ‘package:purrr’:
+
+    flatten
+
 
 > library(readxl)
 
@@ -58,9 +58,6 @@ Loading required package: showtextdb
 > library(utils)
 
 > library(highcharter)
-Registered S3 method overwritten by 'quantmod':
-  method            from
-  as.zoo.data.frame zoo 
 
 > library(extrafont)
 Registering fonts with R
@@ -73,6 +70,13 @@ The following object is masked from ‘package:showtextdb’:
 
 
 > library(readr)
+
+Attaching package: ‘readr’
+
+The following object is masked from ‘package:scales’:
+
+    col_factor
+
 
 > box::use( prep/box/admin)
 
@@ -314,10 +318,10 @@ Graphik Light already registered with windowsFonts().
 
 > # Load states  - will change to new notes when ready 
 > notes_raw <- read_csv(file.path(admin$sp_data_raw, "notes/state_notes_overview.csv"), show_c .... [TRUNCATED] 
-[1mindexing[0m [34mstate_notes_overview.csv[0m [=================================================================================] [32m1.62GB/s[0m, eta: [36m 0s[0m                                                                                                                                                                           
+[1mindexing[0m [34mstate_notes_overview.csv[0m [===============================================================================] [32m1.86GB/s[0m, eta: [36m 0s[0m                                                                                                                                                                         
 > # Load info on abolishment of parole or probation
 > abolish_prob_parole <- read_excel(file.path(admin$sp_survey, "MCLC 2022 Progress Tracking.xlsx") .... [TRUNCATED] 
--/                                                                                                                                      /                                                                                                                                      -                                                                                                                                      New names:
+-/                                                                                                                                    /                                                                                                                                    -                                                                                                                                    New names:
 • `CY/FY [ask at a later date]` -> `CY/FY [ask at a later date]...14`
 • `CY/FY [ask at a later date]` -> `CY/FY [ask at a later date]...15`
 • `` -> `...19`
@@ -659,17 +663,6 @@ Adding missing grouping variables: `metric`
 > library(stats)
 
 > library(purrr)
-
-Attaching package: ‘purrr’
-
-The following object is masked from ‘package:jsonlite’:
-
-    flatten
-
-The following objects are masked from ‘package:rlang’:
-
-    %@%, as_function, flatten, flatten_chr, flatten_dbl, flatten_int, flatten_lgl, flatten_raw, invoke, splice
-
 
 > library(highcharter)
 
