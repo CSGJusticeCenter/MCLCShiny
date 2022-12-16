@@ -88,7 +88,7 @@ Sys.time()
 #############################################################
 ## MCLC Plot Prep, Creation, and PNGs  
 
-Sys.time() #takes multiple hours 
+Sys.time() #takes ~15-20 min
 
 my_log <- file("shiny_prep_log_MCLCplotpngs.txt") # File name of output log
 
