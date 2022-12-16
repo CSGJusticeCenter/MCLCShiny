@@ -1,8 +1,8 @@
 #######################################
 # Project: MCLCShiny
 # File: highchart.R
-# Authors: Mari Roberts
-# Date last updated: July 20, 2022
+# Authors: Mari Roberts, Martha Eichlersmith 
+# Date last updated: December 15, 2022
 # Description:
 #    Create and save highcharts so the app loads faster
 #######################################
@@ -14,10 +14,11 @@
 
 
 
-box::use( prep/box/admin)
+box::use(
+    prep/box/admin
+  , glue[glue]
+)
 
-# load data
-load(file = file.path(admin$sp_data, "adm_pop_long.Rda"))
 
 # load packages
 library(purrr)
@@ -25,6 +26,14 @@ library(dplyr)
 library(highcharter)
 library(scales)
 library(stats)
+
+obj_list <- c(
+    "adm_pop_long.Rda"
+  , "mclc_explorer.Rda"
+  , "hex_gj.Rda"
+)
+
+walk(obj_list, ~load(file = file.path(admin$sp_data, .x), envir = .GlobalEnv))
 
 
 
@@ -120,6 +129,7 @@ adm_maps_2018_2019 <- map(.x = metrics,  .f = function(x) {
            year       == "2018 - 2019",
            metric     == x)
   filename <- paste("Change_in_", x, "Admissions_from_2018_2019")
+  admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
   return(highcharts)
 })
@@ -131,6 +141,7 @@ adm_maps_2018_2021 <- map(.x = metrics,  .f = function(x) {
            year       == "2018 - 2021",
            metric     == x)
   filename <- paste("Change_in_", x, "Admissions_from_2018_2021")
+  admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
   return(highcharts)
 })
@@ -142,6 +153,7 @@ adm_maps_2019_2020 <- map(.x = metrics,  .f = function(x) {
            year       == "2019 - 2020",
            metric     == x)
   filename <- paste("Change_in_", x, "Admissions_from_2019_2020")
+  admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
   return(highcharts)
 })
@@ -153,6 +165,7 @@ adm_maps_2020_2021 <- map(.x = metrics,  .f = function(x) {
            year       == "2020 - 2021",
            metric     == x)
   filename <- paste("Change_in_", x, "Admissions_from_2020_2021")
+  admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
   return(highcharts)
 })
@@ -164,6 +177,7 @@ pop_maps_2018_2019 <- map(.x = metrics,  .f = function(x) {
            year       == "2018 - 2019",
            metric     == x)
   filename <- paste("Change_in_", x, "Population_from_2018_2019")
+  admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
   return(highcharts)
 })
@@ -175,6 +189,7 @@ pop_maps_2018_2021 <- map(.x = metrics,  .f = function(x) {
            year       == "2018 - 2021",
            metric     == x)
   filename <- paste("Change_in_", x, "Population_from_2018_2021")
+  admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
   return(highcharts)
 })
@@ -186,6 +201,7 @@ pop_maps_2019_2020 <- map(.x = metrics,  .f = function(x) {
            year       == "2019 - 2020",
            metric     == x)
   filename <- paste("Change_in_", x, "Population_from_2019_2020")
+  admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
   return(highcharts)
 })
@@ -197,6 +213,7 @@ pop_maps_2020_2021 <- map(.x = metrics,  .f = function(x) {
            year       == "2020 - 2021",
            metric     == x)
   filename <- paste("Change_in_", x, "Population_from_2020_2021")
+  admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
   return(highcharts)
 })
@@ -227,8 +244,9 @@ all_state_area_adm <- map(.x = states,  .f = function(x) {
              adm_or_pop == "Admissions" &
              (metric == "Total" | metric == "Supervision Violation" | metric == "New Offense" | metric == "Technical Violation")) %>%
     group_by(state, year, metric, adm_or_pop) %>%
-    summarise(total = sum(total)) %>%
-    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
+    summarise(total = sum(total), .groups = "keep") %>%
+    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, accuracy = 1), "<br>"))
+  admin$mylog(glue("hc: Prison Admissions, {x}"))
   highcharts <- fnc_highchart_state_areachart(df1, "Prison Admissions")
   return(highcharts)
 })
@@ -242,8 +260,9 @@ all_state_area_pop <- map(.x = states,  .f = function(x) {
              adm_or_pop == "Population" &
              (metric == "Total" | metric == "Supervision Violation" | metric == "New Offense" | metric == "Technical Violation")) %>%
     group_by(state, year, metric, adm_or_pop) %>%
-    summarise(total = sum(total)) %>%
-    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
+    summarise(total = sum(total), .groups = "keep") %>%
+    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, accuracy = 1), "<br>"))
+  admin$mylog(glue("hc: Prison Population, {x}"))
   highcharts <- fnc_highchart_state_areachart(df1, "Prison Population")
   return(highcharts)
 })
@@ -261,9 +280,10 @@ all_state_bar_adm <- map(.x = states,  .f = function(x) {
     filter(state == x &
              adm_or_pop == "Admissions") %>%
     group_by(state, year, metric, adm_or_pop) %>%
-    summarise(total = sum(total)) %>%
+    summarise(total = sum(total), .groups = "keep") %>%
     filter(metric == "New Offense" | metric == "Technical Violation") %>%
-    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
+    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, accuracy = 1), "<br>"))
+  admin$mylog(glue("hc: Supervision Violation Admissions by Type, {x}"))
   highcharts <- fnc_highchart_state_barchart(df1, "Supervision Violation Admissions by Type")
   return(highcharts)
 })
@@ -277,9 +297,10 @@ all_state_bar_pop <- map(.x = states,  .f = function(x) {
     filter(state == x &
              adm_or_pop == "Population") %>%
     group_by(state, year, metric, adm_or_pop) %>%
-    summarise(total = sum(total)) %>%
+    summarise(total = sum(total), .groups = "keep") %>%
     filter(metric == "New Offense" | metric == "Technical Violation") %>%
-    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
+    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, accuracy = 1), "<br>"))
+  admin$mylog(glue("hc: Supervision Violation Population by Type, {x}"))
   highcharts <- fnc_highchart_state_barchart(df1, "Supervision Violation Population by Type")
   return(highcharts)
 })
@@ -298,9 +319,10 @@ parole_bar_adm <- map(.x = states,  .f = function(x) {
              adm_or_pop == "Admissions",
            prob_vs_parole == "Parole") %>%
     group_by(state, year, metric, adm_or_pop) %>%
-    summarise(total = sum(total)) %>%
+    summarise(total = sum(total), .groups = "keep") %>%
     filter(metric == "New Offense" | metric == "Technical Violation") %>%
-    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
+    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, accuracy = 1), "<br>"))
+  admin$mylog(glue("hc: Parole Violation Admissions by Type, {x}"))
   highcharts <- fnc_highchart_state_barchart(df1, "Parole Violation Admissions by Type")
   return(highcharts)
 })
@@ -315,9 +337,10 @@ parole_bar_pop <- map(.x = states,  .f = function(x) {
              adm_or_pop == "Population",
            prob_vs_parole == "Probation") %>%
     group_by(state, year, metric, adm_or_pop) %>%
-    summarise(total = sum(total)) %>%
+    summarise(total = sum(total), .groups = "keep") %>%
     filter(metric == "New Offense" | metric == "Technical Violation") %>%
-    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
+    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, accuracy = 1), "<br>"))
+  admin$mylog(glue("hc: Parole Violations Population by Type, {x}"))
   highcharts <- fnc_highchart_state_barchart(df1, "Parole Violation Population by Type")
   return(highcharts)
 })
@@ -336,9 +359,10 @@ probation_bar_adm <- map(.x = states,  .f = function(x) {
              adm_or_pop == "Admissions",
            prob_vs_parole == "Probation") %>%
     group_by(state, year, metric, adm_or_pop) %>%
-    summarise(total = sum(total)) %>%
+    summarise(total = sum(total), .groups = "keep") %>%
     filter(metric == "New Offense" | metric == "Technical Violation") %>%
-    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
+    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, accuracy = 1), "<br>"))
+  admin$mylog(glue("hc: Probation Violation Admissions by Type, {x}"))
   highcharts <- fnc_highchart_state_barchart(df1, "Probation Violation Admissions by Type")
   return(highcharts)
 })
@@ -353,9 +377,10 @@ probation_bar_pop <- map(.x = states,  .f = function(x) {
              adm_or_pop == "Population",
            prob_vs_parole == "Probation") %>%
     group_by(state, year, metric, adm_or_pop) %>%
-    summarise(total = sum(total)) %>%
+    summarise(total = sum(total), .groups = "keep") %>%
     filter(metric == "New Offense" | metric == "Technical Violation") %>%
-    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, digits = 0), "<br>"))
+    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, accuracy = 1), "<br>"))
+  admin$mylog(glue("hc: Probation Violation Population by Type, {x}"))
   highcharts <- fnc_highchart_state_barchart(df1, "Probation Violation Population by Type")
   return(highcharts)
 })
