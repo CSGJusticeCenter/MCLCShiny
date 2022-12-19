@@ -71,22 +71,35 @@ Header and global drop down options
 ####################################################################################################################*/
 
 /* Remove rounded edges from drop downs and make blue */
-.selectize-input {
+.selectize-input, .selectize-input.dropdown-active, .selectize-dropdown, .selectize-dropdown-content .active {
   border-radius:0px;
   color: #004270;
 }
-.selectize-input.dropdown-active {
-  border-radius:0px;
-  color: #004270;
+
+
+
+/* picker input styling */ 
+
+
+/* color drop-down menu items (specifically, non-selected items) */ 
+.dropdown-menu ul li a {
+  color: #004270 !important; 
+  font-family: Graphik; 
 }
-.selectize-dropdown {
-  border-radius:0px;
-  color: #004270;
+
+
+/* color of selected item in drop down */ 
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus {
+  color: #004270 !important; 
+  background-color: #fff;
 }
-.selectize-dropdown-content .active {
-  border-radius:0px;
-  color: #004270;
+
+/* color background of selected item when hover over it */ 
+.dropdown-menu>.active>a:hover {
+  background-color: #f5f5f5; 
 }
+
+
 
 /* Top of page is a small grid of controls and info*/
 /* Can change background of header here background-color:#DEF0F6; */
@@ -149,6 +162,7 @@ Dropdowns and buttons
   color: #004270;
   font-family: Graphik;
 }
+
 
 .input-col {
   min-width: 12em;
@@ -383,6 +397,7 @@ h3.reh3 {
 }
 
 
+
 h4.reh4 {
   font-family: Graphik !important;
   font-weight: bold !important;
@@ -408,12 +423,18 @@ Dropdowns
 
 /* Format for selector input for download page*/
 
-.picker-style {
+
+
+.picker-style, .picker-style:hover, .picker-style:active, .picker-style:focus {
   color: #004270;
   border-radius:0px;
   font-family: Graphik;
-  width: 15em;
   background-color:#FFFFFF;
+}
+
+.picker-style {
+  width: 90%;
+  max-width: 20em;
 }
 
 /* Format for download data button */
