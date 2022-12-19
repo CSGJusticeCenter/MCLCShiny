@@ -58,7 +58,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                                                                   '2019 - 2020, 1 year' = "2019 - 2020",
                                                                                                                   '2020 - 2021, 1 year' = "2020 - 2021",
                                                                                                                   '2018 - 2021, 3 years' = "2018 - 2021"),
-                                                                                                      selected = "2018 - 2021", 
+                                                                                                      selected = "2018 - 2021",
                                                                                                       multiple = FALSE))),
                                                                  # Download Map
                                                                  column(width = 3, align = "center", class = "input-col",
@@ -266,18 +266,23 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                    fluidRow(
                                                                      column(width = 2),
                                                                      column(width = 8, align = "center",
-                                                                       div(class = "retxt", style = "margin-top: 7px !important;",
-                                                                           radioButtons("pop_denom",
-                                                                              div(h3("Racial and Ethnic Disparities", class = "reh3")), #style = "font-size: 16px;"),
-                                                                              c(
-                                                                                "Disparities in Parole Revocations"                         = "BJS",
-                                                                                "Cumulative Disparities across the criminal justice system" = "CEN"
-                                                                               )
-                                                                              , inline=T) #end radioButtons
-                                                                       ),
-                                                                       div(htmlOutput("infogheader")),
-                                                                       div(imageOutput("infogblack", height = "100%", ), style = "margin-bottom: 0.5em;"),
-                                                                       div(imageOutput("infoghisp", height = "100%")),
+                                                                            
+                                                                     pickerInput(
+                                                                       'pop_denom', 
+                                                                       label = h3("Racial and Ethnic", class = "reh3"), 
+                                                                       width = "fit", 
+                                                                       choices = c(
+                                                                          "Disparities" = "BJS", 
+                                                                          "Cumulative Disparities" = "CEN"
+                                                                       ), 
+                                                                       options = list(style = "re-picker"), 
+                                                                       inline = TRUE
+                                                                     ), 
+                                                                    
+                                                                    
+                                                                    div(htmlOutput("infogheader")),
+                                                                    div(imageOutput("infogblack", height = "100%", ), style = "margin-bottom: 0.5em;"),
+                                                                    div(imageOutput("infoghisp", height = "100%")),
 
                                                                      ), #end column width=8
                                                                      column(width = 2)

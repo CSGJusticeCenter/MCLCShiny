@@ -146,7 +146,7 @@ pop_denom_text <- function(pop_denom, pop_or_adm_data){
   
   
   outtext <- paste0(
-      "<div class = 'notetxt'>"
+      "<div class = 'resubtitle'>"
      , "To highlight "
      , fill
      , " are shown relative to White individuals to highlight higher or lower than expected representation."

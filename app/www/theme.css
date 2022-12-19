@@ -410,6 +410,23 @@ h4.reh4 {
 }
 
 
+.resubtitle{ 
+  font-family: Graphik; 
+  font-size: 18px;
+}
+
+.re-picker, .re-picker:hover, .re-picker:active, .re-picker:focus {
+  color: #004270; 
+  border-radius:0px;
+  font-size: 30px; 
+  font-family: Graphik; 
+  font-weight: bold; 
+  font-family: Graphik !important;
+  margin-bottom: 12px; 
+  text-decoration-line: underline;
+  background-color: #fff; 
+  padding: 0px 0.1em; 
+}
 
 
 
