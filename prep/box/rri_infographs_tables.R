@@ -342,27 +342,7 @@ create_single_table <- function(NCRPLET){
 
 
 
-#' Create tables 
-#'
-#' @return
-#' @export
-#'
-#' @examples
-create_tables <- function(){
-  
-  
-  outtables <- list(
-      "Admissions" = create_single_table("A") #this should match option on shiny 
-    , "Population" = create_single_table("N") #this should match option on shiny 
-    , "STATEVEC"   = state_vec 
-  )
-  
-  
-  admin$SPsaveRDS(outtables, glue("NCRP_RRI_tables.RDS"))
-  
-  return(outtables)
-  
-}
+
 
 #' Prep for Shiny App - create tables  and infogrpahics 
 #' total time: ~5 min
@@ -375,11 +355,17 @@ prep_for_shiny_DATA <- function(){
   
   admin$mylog("!!START PREP FOR SHINY - DATA")
   
-  tables <- create_tables()
-  state_vec <- tables$STATEVEC
-
+  outtables <- list(
+      "Admissions" = create_single_table("A") #this should match option on shiny 
+    , "Population" = create_single_table("N") #this should match option on shiny 
+    , "STATEVEC"   = state_vec 
+  )
+  
+  
+  admin$SPsaveRDS(outtables, glue("NCRP_RRI_tables.RDS"))
+  
   file.copy(
-    from = file.path(admin$sp_data, glue("NCRP_RRI_tables.RDS"))
+      from = file.path(admin$sp_data, glue("NCRP_RRI_tables.RDS"))
     , to = "app/data/NCRP_RRI_tables.RDS"
     , overwrite = TRUE
   )
@@ -401,7 +387,8 @@ prep_for_shiny_PNG <- function(){
   
   admin$mylog("!!START PREP FOR SHINY - PNG")
   
-  tables <- file.path(admin$sp_data, glue("NCRP_RRI_tables.RDS"))
+  tables <- readRDS(file.path(admin$sp_data, glue("NCRP_RRI_tables.RDS")))
+  state_vec <- tables$STATEVEC
   
   admin$mylog("Infographics - Start, takes ~20 min to create")
   
@@ -415,7 +402,7 @@ prep_for_shiny_PNG <- function(){
   purrr::walk(png_lst, ~file.remove(file.path(file.path("app/data/infogs", .x))))
   
   params_for_loop <- tidyr::expand_grid(
-    NCRP = names(tables)[1:2]
+      NCRP = names(tables)[1:2]
     , STATE = state_vec
     , POP = c("BJS", "CEN")
   )

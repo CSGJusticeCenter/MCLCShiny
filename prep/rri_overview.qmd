@@ -244,13 +244,16 @@ ALL_FLAGS %>%
 
 
 ```{r}
-noinfog_notes <- read_csv(file.path(admin$sp_data_raw, "revcnt_notes.csv"), show_col_types = FALSE) %>% 
+
+notes <- read_csv(file.path(admin$sp_data_raw, "notes/revcnt_notes.csv"), show_col_types = FALSE)
+
+noinfog_notes <- notes %>% 
   select(STATE, DATANCRP = ncrp, DATAPOP = popdenom) %>% 
   mutate(in_notes = TRUE)
 
 noinfog_flags <- ALL_FLAGS %>% 
-  filter(name == "flag_INFOGRAPH", FLAG == 2) %>% 
-  select(STATE, DATANCRP, DATAPOP) %>% 
+  filter(name == "flag_INFOGRAPH", FLAG %in% c("1M", "1MS", "2")) %>% 
+  select(STATE, DATANCRP, FLAG, DATAPOP) %>% 
   mutate(in_flags = TRUE) 
 
 diffdf <- full_join(noinfog_flags, noinfog_notes, by = c("STATE", "DATANCRP", "DATAPOP")) %>% 
@@ -263,6 +266,10 @@ if (nrow(diffdf) > 0){
 } else {
   message("Notes for no infograph and infographic flags = 2 have the same set of states and data")
 }
+
+
+
+DT::datatable(notes, filter = c("top"))
 ```
 
 
