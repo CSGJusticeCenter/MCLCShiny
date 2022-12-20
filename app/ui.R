@@ -283,6 +283,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                     div(htmlOutput("infogheader")),
                                                                     div(imageOutput("infogblack", height = "100%", ), style = "margin-bottom: 0.5em;"),
                                                                     div(imageOutput("infoghisp", height = "100%")),
+                                                                    div(htmlOutput("howitscalculated")),
 
                                                                      ), #end column width=8
                                                                      column(width = 2)

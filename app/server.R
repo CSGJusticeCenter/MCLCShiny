@@ -1608,6 +1608,10 @@ server <- function(input, output, session) {
 
   })
 
+  output$howitscalculated <- renderUI({
+    out <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$CALCTXT
+    HTML(out)
+  })
 
   output$table_rri_header <- renderUI({
     df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "RRI", whichTABLE = "table_suppress")
