@@ -8,6 +8,7 @@ box::use(
   , tidyr[pivot_wider, drop_na]
   , purrr[...]
   , glue[glue]
+  , glue[glue]
   , scales[comma]
 )
 
@@ -15,37 +16,9 @@ state_vec <- datasets::state.name
 
 suppressed_vars <- c("RRI", "RATE", "REVCNT")
 
-
-revcnt_notes <- readr::read_csv(file.path(admin$sp_data_raw, "revcnt_notes.csv"), show_col_types = FALSE)
-
+revcnt_notes <- readr::read_csv(file.path(admin$sp_data_raw, "notes/revcnt_notes.csv"), show_col_types = FALSE)
 
 
-
-roundedval <- function(val, accuracy){
-  
-  ndigits <- log(accuracy, base = 10)
-  
-  ifelse(
-      val < accuracy & round(val, digits = ndigits) == 0 & val > 0 
-    , paste0("<", accuracy)
-    , comma(val, accuracy = accuracy)
-  )
-  
-  
-}
-
-
-addsuppressasterick <- function(char){
-  
-  ifelse(
-      substr(char, 1, 1) == "<"
-    , paste0(char, "*")
-    , paste0("<", char, "*")
-  )
-  
-  
-  
-}
 
 
 #' Create a table for a state of a single metric 
@@ -98,13 +71,13 @@ state_table_single_metric <- function(DATA, whichYEARS, whichRACE, whichSTATE, w
     arrange(OFFGENERAL, RACE) 
   
   thisAccuracy <- case_when(
-    whichMETRIC == "RRI" ~ 0.01
+    whichMETRIC == "RRI" ~ 0.1
     , TRUE               ~ 1
   )
   
   
   asis <- longdf %>% 
-    mutate_at(vars(all_of(whichMETRIC)), ~roundedval(.*mult, accuracy = thisAccuracy)) %>% 
+    mutate_at(vars(all_of(whichMETRIC)), ~admin$roundedval(.*mult, accuracy = thisAccuracy)) %>% 
     select(OFFGENERAL, RACE, RPTYEAR, all_of(whichMETRIC)) %>% 
     pivot_wider(names_from = RPTYEAR, values_from = all_of(whichMETRIC)) %>% 
     select(OFFGENERAL, RACE, all_of(as.character(whichYEARS))) %>% 
@@ -121,8 +94,8 @@ state_table_single_metric <- function(DATA, whichYEARS, whichRACE, whichSTATE, w
   if (whichMETRIC %in% suppressed_vars){
     
     suppress <- longdf %>% 
-      mutate_at(vars(all_of(S_whichMETRIC)), ~roundedval(.*mult, accuracy = thisAccuracy)) %>% 
-      mutate_at(vars(all_of(S_whichMETRIC)), ~ifelse(SUPPRESS == 1 & !is.na(.), addsuppressasterick(.), .)) %>% 
+      mutate_at(vars(all_of(S_whichMETRIC)), ~admin$roundedval(.*mult, accuracy = thisAccuracy)) %>% 
+      mutate_at(vars(all_of(S_whichMETRIC)), ~ifelse(SUPPRESS == 1 & !is.na(.), admin$addsuppressasterick(.), .)) %>% 
       select(OFFGENERAL, RACE, RPTYEAR, all_of(S_whichMETRIC)) %>% 
       pivot_wider(names_from = RPTYEAR, values_from = all_of(S_whichMETRIC)) %>% 
       select(OFFGENERAL, RACE, all_of(as.character(whichYEARS))) %>% 
@@ -175,10 +148,10 @@ data_for_info_graphic <- function(DATA, whichRACE, whichSTATE, whichPOP, NCRPLET
     totrow      <- nrow(DF)
     
     flag <- case_when(
-        suppress == 1 & totrow == 1 ~ "1MS"
-      , suppress == 1 & totrow == 2 ~ "1S"
-      , suppress == 0 & totrow == 1 ~ "1M"
-      , suppress == 0 & totrow == 2 ~ "0"
+        suppress == 1 & totrow == 1 ~ "1MS" #missing cells and suppressed cells
+      , suppress == 1 & totrow == 2 ~ "1S"  #suppressed cells
+      , suppress == 0 & totrow == 1 ~ "1M"  #missing cells
+      , suppress == 0 & totrow == 2 ~ "0"   
     )
     
     
@@ -195,6 +168,116 @@ data_for_info_graphic <- function(DATA, whichRACE, whichSTATE, whichPOP, NCRPLET
   
   return(OUT)
 
+}
+
+
+how_its_calc_txt <- function(DATA, whichRACE, whichSTATE, whichPOP, mult, NCRPLET){
+
+  
+  DF <- DATA$R %>% 
+    #filter for specific state and races, pick most recent year 
+    filter(STATE == whichSTATE, RACE %in% whichRACE, RPTYEAR == RECENT_YR) %>% 
+    #format RATE/RRI 
+    mutate(
+        shownRRI  = admin$roundedval(S_RRI,       accuracy = 0.1)
+      , shownRATE = admin$roundedval(S_RATE*mult, accuracy = 1)
+    ) %>% 
+    # add asterik if suppressed 
+    mutate_at(vars(shownRRI, shownRATE), ~ifelse(SUPPRESS == 1 & !is.na(.), admin$addsuppressasterick(.), .)) %>% 
+    # remove any NA or Inf RRI rows 
+    filter(!is.na(S_RRI), S_RRI != Inf)
+  
+  
+  if (nrow(DF) < 2){
+    out <- ""
+    dataavail <- 0
+    
+  } 
+  
+  
+  if (nrow(DF) >= 2){
+    
+    pre_txt <- case_when(
+        NCRPLET == "A" ~ ""
+      , NCRPLET == "N" ~ "On any given day, "
+    )
+    
+    suf_txt <- case_when(
+        NCRPLET == "A" & whichPOP == "BJS" ~ "serving parole sentences are re-admitted to prison each year"
+      , NCRPLET == "A" & whichPOP == "CEN" ~ "from the community are re-admitted to prison after being revoked from parole each year"
+      , NCRPLET == "N" & whichPOP == "BJS" ~ "who were revoked from parole sentences remain incarcerated"
+      , NCRPLET == "N" & whichPOP == "CEN" ~ "from the community are in prison after being revoked from parole"
+    )
+    
+    multshow <- scales::comma(mult, accuracy = 1)
+    
+    rate_lst <- map2(
+        DF$shownRATE
+      , DF$RACE
+      , ~ifelse(
+          .x == "No Data"
+        , ""
+        , glue("<li>{pre_txt}{.x} in {multshow} {.y} individuals {suf_txt}</li>")
+      )
+    ) %>% paste(., collapse = "")
+    
+    
+    
+    whiterate <- filter(DF, RACE == "White")$shownRATE
+    
+    
+    rri_lst <- pmap(
+      list(
+          rate = filter(DF, RACE != admin$lev_RACE[1])$shownRATE
+        , race = filter(DF, RACE != admin$lev_RACE[1])$RACE
+        , rri  = filter(DF, RACE != admin$lev_RACE[1])$shownRRI
+      )
+      , function( rate, race, rri){
+          glue("<li>The relative rate index for {race} individuals is {rate}/{whiterate} = {rri}</li>")
+      }
+    )  %>% 
+      paste(., collapse = "")
+    
+    
+    anysuppress <- ifelse(sum(DF$SUPPRESS) == 0, "", "<br>&#10033; Asterisk indicates situations where the parole revocation counts were less than 5.") 
+    
+    
+    if (nrow(DF) == 2){
+      
+      note <- revcnt_notes %>% 
+        filter(STATE == whichSTATE, ncrp == NCRPLET, popdenom == whichPOP) %>% 
+        pull(note) %>% 
+        paste("<br>", .)
+      
+      
+    } else {
+      note <- "" 
+    }
+    
+
+    
+    
+    
+    out <- paste0(
+        "<div class = 'notetxt' style = 'text-align: left;'>"
+      ,   "<p><b>How it's calculated:</b><br></p>"
+      ,   "First, calculate the rate of parole revocations within each Racial/Ethnic group:<br>"
+      ,   "<ul class = 'calctxt'>"
+      ,     rate_lst
+      ,   "</ul>"
+      ,   "The Relative Rate Index (RRI) is calculated by dividing the rate for Black individuals or Hispanic individuals by the rate for White individuals. In this case:<br>"
+      ,   "<ul class = 'calctxt'>"
+      ,     rri_lst
+      ,   "</ul>"
+      ,   note
+      ,   anysuppress
+      , "</div>"
+    )
+    
+  }
+
+  
+  return(out) 
 }
 
 #' Create and Save tables for the Racial and Ethnic Disparities Tab for specific NCPR data source 
@@ -215,6 +298,9 @@ create_single_table <- function(NCRPLET){
   yr_BJS <- 2018#REV_BJS$OR %>% count(RECENT_YR) %>% filter(n == max(n)) %>% pull(RECENT_YR)
   
   
+  bjs_mult <- 1e+03
+  cen_mult <- 1e+05
+  
   admin$mylog(glue("{NCRPLET} tables, takes ~40-50 seconds"))
   
   outtables <- list(
@@ -222,8 +308,9 @@ create_single_table <- function(NCRPLET){
       state_vec %>% set_names(),
       ~list(
           "INFOGRAPH" = data_for_info_graphic(    REV_BJS,              admin$lev_RACE[2:3], .x, "BJS", NCRPLET)
+        , "CALCTXT"   = how_its_calc_txt(         REV_BJS,              admin$lev_RACE[1:3], .x, "BJS" , mult = bjs_mult, NCRPLET = NCRPLET)
         , "RRI"       = state_table_single_metric(REV_BJS, 2015:yr_BJS, admin$lev_RACE[2:3], .x, "RRI")
-        , "RATE"      = state_table_single_metric(REV_BJS, 2015:yr_BJS, admin$lev_RACE[1:3], .x, "RATE", mult = 1e+03)
+        , "RATE"      = state_table_single_metric(REV_BJS, 2015:yr_BJS, admin$lev_RACE[1:3], .x, "RATE", mult = bjs_mult)
         , "REVCNT"    = state_table_single_metric(REV_BJS, 2015:yr_BJS, admin$lev_RACE[1:3], .x, "REVCNT")
         , "POPEST"    = state_table_single_metric(REV_BJS, 2015:yr_BJS, admin$lev_RACE[1:3], .x, "POPEST")
       ) #end list 
@@ -232,8 +319,9 @@ create_single_table <- function(NCRPLET){
       state_vec %>% set_names(),
       ~list(
           "INFOGRAPH" = data_for_info_graphic(    REV_CEN,               admin$lev_RACE[2:3], .x, "CEN", NCRPLET)
+        , "CALCTXT"   = how_its_calc_txt(         REV_CEN,               admin$lev_RACE[1:3], .x, "CEN" , mult = cen_mult, NCRPLET = NCRPLET)
         , "RRI"       = state_table_single_metric(REV_CEN, 2015:yr_CEN,  admin$lev_RACE[2:3], .x, "RRI")
-        , "RATE"      = state_table_single_metric(REV_CEN, 2015:yr_CEN,  admin$lev_RACE[1:3], .x, "RATE", mult = 1e+05)
+        , "RATE"      = state_table_single_metric(REV_CEN, 2015:yr_CEN,  admin$lev_RACE[1:3], .x, "RATE", mult = cen_mult)
         , "REVCNT"    = state_table_single_metric(REV_CEN, 2015:yr_CEN,  admin$lev_RACE[1:3], .x, "REVCNT")
         , "POPEST"    = state_table_single_metric(REV_CEN, 2015:yr_CEN,  admin$lev_RACE[1:3], .x, "POPEST")
       ) #end list 
@@ -277,21 +365,43 @@ create_tables <- function(){
 }
 
 #' Prep for Shiny App - create tables  and infogrpahics 
-#' tables: ~30-60 sec
-#' infogrpahics: ~10-11 min
-#' total time: ~12 min
+#' total time: ~5 min
 #'
 #' @return
 #' @export
 #'
 #' @examples
-prep_for_shiny <- function(){
+prep_for_shiny_DATA <- function(){
   
-  admin$mylog("!!START PREP FOR SHINY")
+  admin$mylog("!!START PREP FOR SHINY - DATA")
   
   tables <- create_tables()
   state_vec <- tables$STATEVEC
+
+  file.copy(
+    from = file.path(admin$sp_data, glue("NCRP_RRI_tables.RDS"))
+    , to = "app/data/NCRP_RRI_tables.RDS"
+    , overwrite = TRUE
+  )
   
+  admin$mylog("!!END   PREP FOR SHINY - DATA")
+  
+}
+
+
+
+#' pREP FOR SHINY - CREATE INFOGRAPHIC PNGS 
+#' total time: ~20 min 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+prep_for_shiny_PNG <- function(){
+  
+  admin$mylog("!!START PREP FOR SHINY - PNG")
+  
+  tables <- file.path(admin$sp_data, glue("NCRP_RRI_tables.RDS"))
   
   admin$mylog("Infographics - Start, takes ~20 min to create")
   
@@ -305,7 +415,7 @@ prep_for_shiny <- function(){
   purrr::walk(png_lst, ~file.remove(file.path(file.path("app/data/infogs", .x))))
   
   params_for_loop <- tidyr::expand_grid(
-      NCRP = names(tables)[1:2]
+    NCRP = names(tables)[1:2]
     , STATE = state_vec
     , POP = c("BJS", "CEN")
   )
@@ -324,7 +434,7 @@ prep_for_shiny <- function(){
     if (dataavail == 1){
       pwalk(
         list(
-            rri_raw = df$S_RRI #do suppressed value (only 2 instances Idaho/West Virigina, both Hispanic)
+          rri_raw = df$S_RRI #do suppressed value (only 2 instances Idaho/West Virigina, both Hispanic)
           , suppress = df$SUPPRESS
           , race = df$RACE
           , label   = paste0(whichNCRP, "_", whichSTATE, "_", whichPOP, "_", df$RACE)
@@ -346,13 +456,6 @@ prep_for_shiny <- function(){
   
   admin$mylog("Copy files exported to sharepoint to local app repo")
   
-
-  file.copy(
-    from = file.path(admin$sp_data, glue("NCRP_RRI_tables.RDS"))
-    , to = "app/data/NCRP_RRI_tables.RDS"
-    , overwrite = TRUE
-  )
-  
   png_lst <- list.files(file.path(admin$sp_data, "infographs"), pattern = "*.png")
   
   walk(
@@ -365,8 +468,21 @@ prep_for_shiny <- function(){
   )
   
   
-  admin$mylog("!!END   PREP FOR SHINY")
+  admin$mylog("!!END   PREP FOR SHINY - PNG")
   
 }
 
+
+#' Combine data + pngs prep 
+#' total time: ~25 min
+#'
+#' @return
+#' @export
+#'
+#' @examples
+prep_for_shiny <- function(){
+  
+  prep_for_shiny_DATA() 
+  prep_for_shiny_PNG()
+}
 

@@ -4,6 +4,7 @@ box::use(
   , glue[glue]
   , dplyr[...]
   , tidyr[pivot_longer]
+  , scales[comma]
 )
 
 
@@ -270,4 +271,49 @@ SPsaveRDS <- function(IN, OUT){
   mylog(glue("Saved {deparse(substitute(IN))} - {OUT} (included a date stamped version)"))
 
 
+}
+
+
+
+
+
+#' Rounded Value 
+#'
+#' @param val 
+#' @param accuracy 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+roundedval <- function(val, accuracy){
+  
+  ndigits <- -log(accuracy, base = 10)
+  
+  ifelse(
+    val < accuracy & round(val, digits = ndigits) == 0 & val > 0 
+    , paste0("<", accuracy)
+    , comma(val, accuracy = accuracy)
+  )
+  
+  
+}
+
+
+#' Add asterick 
+#'
+#' @param char 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+addsuppressasterick <- function(char){
+  
+  ifelse(
+    substr(char, 1, 1) == "<"
+    , paste0(char, "*")
+    , paste0("<", char, "*")
+  )
+  
 }
