@@ -208,8 +208,8 @@ infograph_alt <- function(RRIDATA, whichNCRP, whichPOP, whichRE, whichSTATE){
   suppress <- thisdata$SUPPRESS
   rri_val <- thisdata$S_RRI
   
-  suppress_pre <- ifelse(suppress == 0, NA, "less than")
-  suppress_suf <- ifelse(suppress == 0, NA, "Note that revocation counts have been suppressed.")
+  suppress_pre <- ifelse(suppress == 0, "", "less than ")
+  suppress_suf <- ifelse(suppress == 0, "", " Note that revocation counts have been suppressed.")
   
   thistxt <- case_when(
       whichPOP == "BJS" & whichNCRP == "Admissions" ~ "disparities in prison admissions for parole revocations"
@@ -225,21 +225,22 @@ infograph_alt <- function(RRIDATA, whichNCRP, whichPOP, whichRE, whichSTATE){
   
   
   string_vec <- c(
-    "The info-graphic for"
+    "The info-graphic for "
     , whichSTATE
-    , "highlights"
+    , " highlights "
     , thistxt
     , "."
-    , "For every White individual revoked there are"
+    , " For every White individual revoked there are "
     , suppress_pre
     , sprintf("%.1f", round(rri_val, 1))
+    , " "
     , whichRE
-    , "individuals revoked."
+    , " individuals revoked."
     , suppress_suf
   )
   
   
-  alt_text <- paste(string_vec[!is.na(string_vec)], collapse = " ")
+  alt_text <- paste(string_vec[!is.na(string_vec)], collapse = "")
   
   return(alt_text)
   
