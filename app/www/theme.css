@@ -405,6 +405,7 @@ h4.reh4 {
   margin-top: 18px;
   margin-bottom: 12px;
   color: #004270;
+  padding-top: 24px;
   /*text-transform: uppercase; */
   /*font-variant: small-caps; */
 }
@@ -434,6 +435,25 @@ ul.calctxt {
   padding-top: 0.25em;
 }
 
+
+
+.checkbox {
+  font-family: Graphik;
+} 
+
+/* color of checked box */ 
+input[type=checkbox] { 
+  accent-color: #004270; 
+}
+
+
+
+/* Blue background when checked */
+.custom-control-input:checked~.custom-control-label::before {
+    color: #fff;
+    border-color: red !important;
+    background-color: red !important; 
+}
 
 
 /*##################################################################################################################

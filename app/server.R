@@ -1685,6 +1685,12 @@ server <- function(input, output, session) {
       raceethnicity$create_reactable(df)
     }
   })
+  
+  
+  # conditional panel for tables 
+  
+  output$showtablepanel <- reactive({ input$showtables })
+  outputOptions(output, 'showtablepanel', suspendWhenHidden = FALSE)
 
   ##############################################################################################################################
   # Download

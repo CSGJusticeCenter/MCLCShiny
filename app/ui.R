@@ -267,49 +267,37 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                      column(width = 2),
                                                                      column(width = 8, align = "center",
                                                                             
-                                                                     pickerInput(
-                                                                       'pop_denom', 
-                                                                       label = h3("Racial and Ethnic", class = "reh3"), 
-                                                                       width = "fit", 
-                                                                       choices = c(
-                                                                          "Disparities" = "BJS", 
-                                                                          "Cumulative Disparities" = "CEN"
+                                                                       pickerInput(
+                                                                         'pop_denom', 
+                                                                         label = h3("Racial and Ethnic", class = "reh3"), 
+                                                                         width = "fit", 
+                                                                         choices = c(
+                                                                            "Disparities" = "BJS", 
+                                                                            "Cumulative Disparities" = "CEN"
+                                                                         ), 
+                                                                         options = list(style = "re-picker"), 
+                                                                         inline = TRUE
                                                                        ), 
-                                                                       options = list(style = "re-picker"), 
-                                                                       inline = TRUE
-                                                                     ), 
-                                                                    
-                                                                    
-                                                                    div(htmlOutput("infogheader")),
-                                                                    div(imageOutput("infogblack", height = "100%", ), style = "margin-bottom: 0.5em;"),
-                                                                    div(imageOutput("infoghisp", height = "100%")),
-                                                                    div(htmlOutput("howitscalculated")),
-
+                                                                       
+                                                                       
+                                                                       div(htmlOutput("infogheader")),
+                                                                       div(imageOutput("infogblack", height = "100%", ), style = "margin-bottom: 0.5em;"),
+                                                                       div(imageOutput("infoghisp", height = "100%")),
+                                                                       div(htmlOutput("howitscalculated")),
+                                                                       div(checkboxInput("showtables", "Show Additional Data Tables", value = FALSE), align = "left"), 
+                                                                       conditionalPanel(condition = "output.showtablepanel",
+                                                                          htmlOutput("table_rri_header")   ,
+                                                                          htmlOutput("table_rri")          ,
+                                                                          htmlOutput("table_rate_header")  ,
+                                                                          htmlOutput("table_rate")         ,
+                                                                          htmlOutput("table_revcnt_header"),
+                                                                          htmlOutput("table_revcnt")       ,
+                                                                          br(),
+                                                                          div(html("&#10033; Asterisk indicates situations where the parole revocation counts were less than 5."), class = "retxt", align = "left")
+                                                                       ), #end conditional Panel 
                                                                      ), #end column width=8
                                                                      column(width = 2)
-
                                                                    ), #end fluidRow
-
-
-                                                                   br(),
-
-                                                                   fluidRow(
-                                                                     column(width = 2),
-                                                                     column(width = 8, align = "center",
-                                                                            div(h3("Tables", class = "reh3")),
-                                                                            div(htmlOutput(     "table_rri_header")),
-                                                                            div(htmlOutput("table_rri")),
-                                                                            div(htmlOutput(     "table_rate_header"),  style = "padding-top: 24px;"),
-                                                                            div(htmlOutput("table_rate")),
-                                                                            div(htmlOutput(     "table_revcnt_header"), style = "padding-top: 24px;"),
-                                                                            div(htmlOutput("table_revcnt")),
-                                                                            br(),
-                                                                            div(html("&#10033; Asterisk indicates situations where the parole revocation counts were less than 5."), class = "retxt", align = "left")
-
-                                                                     ),  #end column width = 10
-                                                                     column(width = 2)
-                                                                   ), #end fluidRow
-
                                                                    br(),
                                                                    br()
 
