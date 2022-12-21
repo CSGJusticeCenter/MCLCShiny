@@ -272,7 +272,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                          label = h3("Racial and Ethnic", class = "reh3"), 
                                                                          width = "fit", 
                                                                          choices = c(
-                                                                            "Disparities" = "BJS", 
+                                                                            "Disparities"            = "BJS", 
                                                                             "Cumulative Disparities" = "CEN"
                                                                          ), 
                                                                          options = list(style = "re-picker"), 
@@ -280,10 +280,13 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                        ), 
                                                                        
                                                                        
-                                                                       div(htmlOutput("infogheader")),
-                                                                       div(imageOutput("infogblack", height = "100%", ), style = "margin-bottom: 0.5em;"),
-                                                                       div(imageOutput("infoghisp", height = "100%")),
-                                                                       div(htmlOutput("howitscalculated")),
+                                                                       htmlOutput("infogheader"),
+                                                                       conditionalPanel(condition = "output.showinfogpanel", 
+                                                                          div(imageOutput("infogblack", height = "100%", ), style = "margin-bottom: 0.5em;"),
+                                                                          imageOutput("infoghisp", height = "100%"),
+                                                                          htmlOutput("howitscalculated"),
+                                                                       ), # end conditional panel 
+                                                                       
                                                                        div(checkboxInput("showtables", "Show Additional Data Tables", value = FALSE), align = "left"), 
                                                                        conditionalPanel(condition = "output.showtablepanel",
                                                                           htmlOutput("table_rri_header")   ,

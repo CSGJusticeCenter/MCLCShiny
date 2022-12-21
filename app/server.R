@@ -1556,7 +1556,7 @@ server <- function(input, output, session) {
         , alt = raceethnicity$infograph_alt(rridata, input$adm_pop_report, input$pop_denom, "Black", input$state_report)
         , width = "100%"
       )
-    } else {
+    } else { #should not be needed - used as back-up 
       plot <- ggplot2::ggplot() + ggplot2::theme_void()
       file <- tempfile(fileext = ".png")
       ggplot2::ggsave(filename = file, plot = plot, width = 24, height = 0.5)
@@ -1581,7 +1581,7 @@ server <- function(input, output, session) {
         , alt = raceethnicity$infograph_alt(rridata, input$adm_pop_report, input$pop_denom, "Hispanic", input$state_report)
         , width = "100%"
       )
-    } else {
+    } else { #should not be needed - used as back-up 
       plot <- ggplot2::ggplot() + ggplot2::theme_void()
       file <- tempfile(fileext = ".png")
       ggplot2::ggsave(filename = file, plot = plot, width = 24, height = 0.5)
@@ -1691,6 +1691,15 @@ server <- function(input, output, session) {
   
   output$showtablepanel <- reactive({ input$showtables })
   outputOptions(output, 'showtablepanel', suspendWhenHidden = FALSE)
+  
+  
+  # conditional panel for infographics 
+  
+  output$showinfogpanel <- reactive({ 
+    dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
+    ifelse(dataavail == 1, TRUE, FALSE) 
+  })
+  outputOptions(output, 'showinfogpanel', suspendWhenHidden = FALSE)
 
   ##############################################################################################################################
   # Download
