@@ -45,7 +45,7 @@ Sys.time()
 
 Sys.time() #takes ~ 25 min 
 
-my_log <- file("logs/shiny_prep_log_REVRE_data.txt") # File name of output log
+my_log <- file("logs/shiny_prep_log_REVRE_pngs.txt") # File name of output log
 
 sink(my_log, append = FALSE, type = "output") # Writing console output to log file
 sink(my_log, append = FALSE, type = "message")
