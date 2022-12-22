@@ -269,7 +269,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                             
                                                                        pickerInput(
                                                                          'pop_denom', 
-                                                                         label = h3("Racial and Ethnic", class = "reh3"), 
+                                                                         label = h3("Racial and Ethnic", class = "reh3", style = "margin-bottom: 0px;"),  
                                                                          width = "fit", 
                                                                          choices = c(
                                                                             "Disparities"            = "BJS", 
