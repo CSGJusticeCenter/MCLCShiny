@@ -6,23 +6,22 @@
 # run start to finish takes ~1-1.5 hours 
 
 #############################################################
-## Revocation Counts and Race and Ethnicity 
+## Revocation Counts and Race and Ethnicity - DATA 
 
-Sys.time() #takes ~ 25 min 
+Sys.time() #takes ~ 5 min 
 
-my_log <- file("shiny_prep_log_REVRE.txt") # File name of output log
+my_log <- file("logs/shiny_prep_log_REVRE_data.txt") # File name of output log
 
 sink(my_log, append = FALSE, type = "output") # Writing console output to log file
 sink(my_log, append = FALSE, type = "message")
 
 print("Revocation Counts and Race and Ethnicity")
 
-####### takes ~ 20min
+####### takes ~ 5min
 # working directory should be the root of the repository ~MCLCShiny/
-# need to do this one first otherwise fonts will get messed up on pngs 
 Sys.time()
 box::use(prep/box/rri_infographs_tables)
-rri_infographs_tables$prep_for_shiny()
+rri_infographs_tables$prep_for_shiny_DATA()
 
 # overview html and check 
 csgjcr::csg_render_ds(
@@ -42,11 +41,38 @@ Sys.time()
 
 
 #############################################################
+## Revocation Counts and Race and Ethnicity - PNGS 
+
+Sys.time() #takes ~ 25 min 
+
+my_log <- file("logs/shiny_prep_log_REVRE_data.txt") # File name of output log
+
+sink(my_log, append = FALSE, type = "output") # Writing console output to log file
+sink(my_log, append = FALSE, type = "message")
+
+print("Revocation Counts and Race and Ethnicity")
+
+####### takes ~ 25min
+# working directory should be the root of the repository ~MCLCShiny/
+# need to do this one first (before MCLC survey data prep) otherwise fonts will get messed up on pngs 
+Sys.time()
+box::use(prep/box/rri_infographs_tables)
+rri_infographs_tables$prep_for_shiny_PNG()
+
+warnings()
+
+closeAllConnections() # Close connection to log file
+
+Sys.time()
+
+
+
+#############################################################
 ## MCLC Data Prep  
 
 Sys.time() #takes ~ 2-4 min 
 
-my_log <- file("shiny_prep_log_MCLCdata.txt") # File name of output log
+my_log <- file("logs/shiny_prep_log_MCLCdata.txt") # File name of output log
 
 sink(my_log, append = FALSE, type = "output") # Writing console output to log file
 sink(my_log, append = FALSE, type = "message")
@@ -69,7 +95,7 @@ Sys.time()
 
 Sys.time() #takes ~2 min 
 
-my_log <- file("shiny_prep_log_MCLCplot.txt") # File name of output log
+my_log <- file("logs/shiny_prep_log_MCLCplot.txt") # File name of output log
 
 sink(my_log, append = FALSE, type = "output") # Writing console output to log file
 sink(my_log, append = FALSE, type = "message")
@@ -91,7 +117,7 @@ Sys.time()
 
 Sys.time() #takes ~15-20 min
 
-my_log <- file("shiny_prep_log_MCLCplotpngs.txt") # File name of output log
+my_log <- file("logs/shiny_prep_log_MCLCplotpngs.txt") # File name of output log
 
 sink(my_log, append = FALSE, type = "output") # Writing console output to log file
 sink(my_log, append = FALSE, type = "message")
