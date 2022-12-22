@@ -239,7 +239,7 @@ how_its_calc_txt <- function(DATA, whichRACE, whichSTATE, whichPOP, mult, NCRPLE
       paste(., collapse = "")
     
     
-    anysuppress <- ifelse(sum(DF$SUPPRESS) == 0, "", "<br>&#10033; Asterisk indicates situations where the parole revocation counts were less than 5.") 
+    anysuppress <- ifelse(sum(DF$SUPPRESS) == 0, "", "<p>&#10033; Asterisk indicates situations where the parole revocation counts were less than 5.</p>") 
     
     
     if (nrow(DF) == 2){
@@ -247,7 +247,7 @@ how_its_calc_txt <- function(DATA, whichRACE, whichSTATE, whichPOP, mult, NCRPLE
       note <- revcnt_notes %>% 
         filter(STATE == whichSTATE, ncrp == NCRPLET, popdenom == whichPOP) %>% 
         pull(note) %>% 
-        paste("<br>", .)
+        paste("<p>", ., "</p>")
       
       
     } else {

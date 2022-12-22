@@ -1,0 +1,170 @@
+[1] "Revocation Counts and Race and Ethnicity"
+[1] "2022-12-22 10:53:06 CST"
+[1mindexing[0m [34mrevcnt_notes.csv[0m [=============================================================================================================================] [32m286.31MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                                                 2022-12-22 10:53:07 - !!START PREP FOR SHINY - DATA
+2022-12-22 10:53:07 - Import and clean NCRP revocations data
+2022-12-22 10:53:07 - Start - NCRP import for admissions
+2022-12-22 10:53:10 - End   - NCRP import for admissions
+2022-12-22 10:53:10 - Start - NCRP prep
+2022-12-22 10:53:10 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2022-12-22 10:53:11 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2022-12-22 10:53:12 - End   - NCRP prep
+2022-12-22 10:53:12 - Import and clean BJS-APS for PAROLE population (denominator)
+[1mindexing[0m [34mapars_idyear.csv[0m [=============================================================================================================================] [32m162.08MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                                                 2022-12-22 10:53:12 - Start - BJS APS (Parole) import for 2010-2018
+2022-12-22 10:53:12 - End   - BJS APS (Parole) import for 2010-2018
+2022-12-22 10:53:12 - STart - APS prep
+2022-12-22 10:53:12 - APS prep - 
+-- Drop Federal total row
+-- calculate other race category, pivot longer, recode into single race variable
+-- make new race variable a factor 
+-- drop rows where POPEST is NA (covered in UNKRACE)
+-- add state id columns
+2022-12-22 10:53:13 - Sum accross state and year
+2022-12-22 10:53:13 - End   - APS prep
+2022-12-22 10:53:13 - Calc - rate/RRI calcuations
+Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR", "OFFGENERAL")
+Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR")
+2022-12-22 10:53:13 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2022-12-22 10:53:13 - Saved FULL_DF - NCRP_A_REV_BJS.RDS (included a date stamped version)
+2022-12-22 10:53:13 - Import and clean NCRP revocations data
+2022-12-22 10:53:13 - Start - NCRP import for admissions
+2022-12-22 10:53:15 - End   - NCRP import for admissions
+2022-12-22 10:53:15 - Start - NCRP prep
+2022-12-22 10:53:15 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2022-12-22 10:53:15 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2022-12-22 10:53:16 - End   - NCRP prep
+2022-12-22 10:53:16 - Import and clean PUMS (ACS) for COMMUNITY population (denominator)
+2022-12-22 10:53:16 - Start - PUMS prep
+2022-12-22 10:53:16 - End   - PUMS prep
+2022-12-22 10:53:16 - Calc - rate/RRI calcuations
+Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR", "OFFGENERAL")
+Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR")
+2022-12-22 10:53:16 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2022-12-22 10:53:17 - Saved FULL_DF - NCRP_A_REV_PUMS.RDS (included a date stamped version)
+2022-12-22 10:53:17 - A tables, takes ~40-50 seconds
+2022-12-22 10:53:45 - A tables end
+2022-12-22 10:53:45 - Flags A BJS - Start
+[1mwrote[0m [32m832.00B[0m in [36m 0s[0m, [32m43.62MB/s[0m                                                                                                                                                                            [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                                            2022-12-22 10:53:50 - Flags A BJS - End
+2022-12-22 10:53:50 - Flags A CEN - Start
+[1mwrote[0m [32m899.00B[0m in [36m 0s[0m, [32m63.91MB/s[0m                                                                                                                                                                            [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                                            2022-12-22 10:53:55 - Flags A CEN - End
+2022-12-22 10:53:55 - Import and clean NCRP revocations data
+2022-12-22 10:53:55 - Start - NCRP import for year-end population 
+2022-12-22 10:53:59 - End   - NCRP import for year-end population
+2022-12-22 10:53:59 - Start - NCRP prep
+2022-12-22 10:53:59 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2022-12-22 10:53:59 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2022-12-22 10:54:01 - End   - NCRP prep
+2022-12-22 10:54:01 - Import and clean BJS-APS for PAROLE population (denominator)
+[1mindexing[0m [34mapars_idyear.csv[0m [=============================================================================================================================] [32m147.99MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                                                 2022-12-22 10:54:01 - Start - BJS APS (Parole) import for 2010-2018
+2022-12-22 10:54:01 - End   - BJS APS (Parole) import for 2010-2018
+2022-12-22 10:54:01 - STart - APS prep
+2022-12-22 10:54:01 - APS prep - 
+-- Drop Federal total row
+-- calculate other race category, pivot longer, recode into single race variable
+-- make new race variable a factor 
+-- drop rows where POPEST is NA (covered in UNKRACE)
+-- add state id columns
+2022-12-22 10:54:01 - Sum accross state and year
+2022-12-22 10:54:01 - End   - APS prep
+2022-12-22 10:54:01 - Calc - rate/RRI calcuations
+Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR", "OFFGENERAL")
+Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR")
+2022-12-22 10:54:01 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2022-12-22 10:54:01 - Saved FULL_DF - NCRP_N_REV_BJS.RDS (included a date stamped version)
+2022-12-22 10:54:01 - Import and clean NCRP revocations data
+2022-12-22 10:54:01 - Start - NCRP import for year-end population 
+2022-12-22 10:54:05 - End   - NCRP import for year-end population
+2022-12-22 10:54:05 - Start - NCRP prep
+2022-12-22 10:54:05 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2022-12-22 10:54:05 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2022-12-22 10:54:06 - End   - NCRP prep
+2022-12-22 10:54:06 - Import and clean PUMS (ACS) for COMMUNITY population (denominator)
+2022-12-22 10:54:06 - Start - PUMS prep
+2022-12-22 10:54:07 - End   - PUMS prep
+2022-12-22 10:54:07 - Calc - rate/RRI calcuations
+Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR", "OFFGENERAL")
+Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR")
+2022-12-22 10:54:07 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2022-12-22 10:54:07 - Saved FULL_DF - NCRP_N_REV_PUMS.RDS (included a date stamped version)
+2022-12-22 10:54:07 - N tables, takes ~40-50 seconds
+2022-12-22 10:54:35 - N tables end
+2022-12-22 10:54:35 - Flags N BJS - Start
+[1mwrote[0m [32m642.00B[0m in [36m 0s[0m, [32m32.06MB/s[0m                                                                                                                                                                            [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                                            2022-12-22 10:54:40 - Flags N BJS - End
+2022-12-22 10:54:40 - Flags N CEN - Start
+[1mwrote[0m [32m759.00B[0m in [36m 0s[0m, [32m58.95MB/s[0m                                                                                                                                                                            [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                                            2022-12-22 10:54:45 - Flags N CEN - End
+2022-12-22 10:54:45 - Saved outtables - NCRP_RRI_tables.RDS (included a date stamped version)
+2022-12-22 10:54:45 - !!END   PREP FOR SHINY - DATA
+
+
+processing file: rri_overview.qmd
+  |                                                                              |                                                                      |   0%  |                                                                              |.....                                                                 |   8%
+   inline R code fragments
+
+  |                                                                              |...........                                                           |  15%
+label: setup (with options) 
+List of 1
+ $ include: logi FALSE
+
+  |                                                                              |................                                                      |  23%
+  ordinary text without R code
+
+  |                                                                              |......................                                                |  31%
+label: unnamed-chunk-2
+  |                                                                              |...........................                                           |  38%
+  ordinary text without R code
+
+  |                                                                              |................................                                      |  46%
+label: unnamed-chunk-3
+  |                                                                              |......................................                                |  54%
+  ordinary text without R code
+
+  |                                                                              |...........................................                           |  62%
+label: unnamed-chunk-4
+  |                                                                              |................................................                      |  69%
+  ordinary text without R code
+
+  |                                                                              |......................................................                |  77%
+label: unnamed-chunk-5 (with options) 
+List of 1
+ $ fig.height: int 4
+
+  |                                                                              |...........................................................           |  85%
+  ordinary text without R code
+
+  |                                                                              |.................................................................     |  92%
+label: unnamed-chunk-6
+  |                                                                              |......................................................................| 100%
+  ordinary text without R code
+
+
+output file: rri_overview.knit.md
+
+pandoc 
+  to: html
+  output-file: rri_overview.html
+  standalone: true
+  self-contained: true
+  section-divs: true
+  html-math-method: mathjax
+  wrap: none
+  default-image-extension: png
+  
+metadata
+  document-css: false
+  link-citations: true
+  lang: en
+  title: RRI Overview
+  description: 'Last User: `r stringr::str_sub(getwd(), 10, stringr::str_locate(stringr::str_sub(getwd(), 10, -1), ''/'')[1]+10-2)`'
+  date: last-modified
+  date-format: 'YYYY-MM-DD HH:mm:ss'
+  published-title: Last Modified
+  doi: '`r Sys.time()`'
+  doi-title: Last Ran
+  editor: source
+  editor_options:
+    chunk_output_type: console
+  page-layout: full
+  fontsize: 0.9em
+  
+[WARNING] Deprecated: --self-contained. use --embed-resources --standalone
+Output created: rri_overview.html
+
