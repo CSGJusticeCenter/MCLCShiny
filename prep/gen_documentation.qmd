@@ -63,6 +63,7 @@ box::use(
 ```{r}
 #| echo: false 
 link <- "https://www.census.gov/programs-surveys/acs/microdata/documentation.html"
+sp_link <- "https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2FMCLC%20Shiny%20App%2Fdata%2Fraw%2FPUMS&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98"
 ```
 
 
@@ -71,14 +72,15 @@ link <- "https://www.census.gov/programs-surveys/acs/microdata/documentation.htm
 +---------------+--------------------------------------------------------------------------+
 | **Source**    | [Census American Community Survey Public Use Microdata Sample](`r link`)  |
 +---------------+--------------------------------------------------------------------------+
-| **SharePoint**|  NA                                                                      |
+| **SharePoint**|  [JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/raw/PUMS](`r sp_link`) |
 +---------------+--------------------------------------------------------------------------+
-| **Years**     | 2015-2019, use 2019 for 2020 calculations 
+| **Years**     | 2015-2019, 2021 (2020 missing due to covid)
 +---------------+---------------+
 
 ```{r}
 #| echo: false 
 rm(link)
+rm(sp_link)
 ```
 
 
@@ -99,8 +101,6 @@ Public Use Microdata Sample (PUMS).  Data is pulled from PUMS API using the `{ti
 
 
 ##### Race/Ethnicity Re-code 
-
-SC has `ORIGIN`(Ethnicity) and `RACE` that need to be fit into the NCRP `RACE` categories.
 
 
 | PUMS variables | `RACE` Re-code | Description | 

@@ -103,44 +103,57 @@ Additional documention can be found here: [~/50 State Revocations Project/MCLC S
 |   |    |
 |:--------------|:-------------------------------------------------------------|
 | **Usage**     | Revocation Counts by state/year/race/offense general |
-| **Source**    | [National Corrections Reporting Program 1991-2019 ICPSR 38048](https://www.icpsr.umich.edu/web/ICPSR/studies/38048) |
+| **Source**    | [National Corrections Reporting Program 1991-2020 ICPSR 38492](https://www.icpsr.umich.edu/web/ICPSR/studies/38492)  |
 | **SharePoint**| [JC Research - Documents/CC/data/raw/NCRP](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2FCC%2Fdata%2Fraw%2FNCRP&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98) |
 
 
-- Admission individual records, `DS0002/38048-0002-Data.rda`
-- Year-end population individual records, `DS0004/38048-0004-Data.rda`
+- 2 options for data used: 
+    * A: Prison Admissions, individual records, `DS0002/38492-0002-Data.rda`
+    * N: Year-end population, individual records, `DS0004/38492-0004-Data.rda`
 - filter to only include `ADMTYPE` == "(2) Parole return/revocation" and `RPTYEAR` >= 2015
 - recode `RACE` variable to shorter names 
 - Count based on different cross sections 
 
-### SC (Census State Population by Charactersitics) 
+### PUMS American Community Survey Data (Community Population)
 
 |   |    |
-|:--------------|:--------------------------------------------------------------------------------------------------------|
+|:--------------|:-------------------------------------------------------------|
 | **Usage**     | Population Estimates by state/year/race, denominator to calculate rates  |
-| **Source**    | [Census State Population by Characteristics](https://www.census.gov/programs-surveys/popest/technical-documentation/research/evaluation-estimates/2020-evaluation-estimates/2010s-state-detail.html) |
-| **SharePoint**| [JC Research - Documents/CC/data/raw/SC_EST](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2FCC%2Fdata%2Fraw%2FSC%2DEST&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98) |
+| **Source**    | [Census American Community Survey Public Use Microdata Sample](https://www.census.gov/programs-surveys/acs/microdata/documentation.html)  |
+| **SharePoint**| [JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/raw/PUMS](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2FMCLC%20Shiny%20App%2Fdata%2Fraw%2FPUMS&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98)
+| **Years**     | 2015-2019, 2021 (2020 missing due to covid) | 
 
 
-#### SC --> NCRP 
+Public Use Microdata Sample (PUMS).  Data is pulled from PUMS API using the `{tidycensus}` package.  The data is pulled and saved on SharePoint.  
 
--   filter data to be 18+, combine sex, and combine ORIGIN
--   re-code RACE/ORIGIN categories to match RACE NCRP categories
+**PUMS data is unavailable for 2020 due to covid19.  For 2020 revocations counts, rates per population will use 2019 PUMS data.**  
+
+-   filter data to be 18+
+-   re-code Race/Ethnicity categories to match RACE NCRP categories
 -   sum across categories
 -   add state ids
 -   use population estimates for 2015-2019 (population estimate for a specific year is used for calculating rates for that NCRP rates for that year)
 
 
-### BJS (Bureau of Justice Statistics)
+#### Race/Ethnicity Re-code 
 
-#### APS (Annual Parole/Probation Survey)
 
+| PUMS variables | `RACE` Re-code | Description | 
+|:---------------|:----------|:--------------|
+| ` HISP %in% c("1", "01") & RAC1P  == "1"` | White | Not Hispanic and White alone | 
+| `!HISP %in% c("1", "01") & RACBLK == "0"` | Hispanic | Hispanic, not Black  | 
+| `RACBLK == 1`                             | Black | Black alone, or in combination with any ethnicity | 
+| Everything else                           | Other | All others | 
+
+
+### BJS APS Data (Parole Data) 
 
 |   |    |
 |:--------------|:--------------------------------------------------------------------------------------------------------|
 | **Usage**     | Projection of population on parole or probation                                                                 |
-| **Source**    | [BJS Annual Probation Survey and Annual Parole Survey -> Documentation -> Codebooks and datasets](lection/annual-probation-survey-and-annual-parole-survey#documentation-0)<br>Parole: [Annual Parole Survey series](https://www.icpsr.umich.edu/web/NACJD/series/328)<br>Probation: [Annual Probation Survey series](https://www.icpsr.umich.edu/web/NACJD/series/327) | 
-| **SharePoint**| Parole: [JC Research - Documents/CC/data/raw/BJS/AParS](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2FCC%2Fdata%2Fraw%2FBJS%2FAParS&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98)<br>Probation: [JC Research - Documents/CC/data/raw/BJS/AProbS](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2FCC%2Fdata%2Fraw%2FBJS%2FAProbS&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98) | 
+| **Source**    | [BJS Annual Probation Survey and Annual Parole Survey -> Documentation -> Codebooks and datasets](lection/annual-probation-survey-and-annual-parole-survey#documentation-0)<br>Parole: [Annual Parole Survey series](https://www.icpsr.umich.edu/web/NACJD/series/328) | 
+| **SharePoint**| Parole: [JC Research - Documents/CC/data/raw/BJS/AParS](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2FCC%2Fdata%2Fraw%2FBJS%2FAParS&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98) | 
+| **Years** | 2015-2018
 
 
 
@@ -158,22 +171,6 @@ Additional documention can be found here: [~/50 State Revocations Project/MCLC S
   * Note that `TOTRACE` == `TOTEND` (total at year end) in all instances for Parole/Probation 2013-2018
   * `RPTYEAR` year of survey (added variable during import)
   
-  
-#### PPUS (Probation and Parole in the United States)
-
-
-|        |                      |
-|:--------------|:------------------------------------------------------------------------|
-| **Usage**     | Projection of population on parole or probation    |
-| **Source**    | [BJS: Probation and Parole Populations series](https://bjs.ojp.gov/library/publications/list?series_filter=Probation%20and%20Parole%20Populations)<br>[2020](https://bjs.ojp.gov/library/publications/probation-and-parole-united-states-2020)<br>[2019](https://bjs.ojp.gov/library/publications/probation-and-parole-united-states-2019)<br>[2017-2018](https://bjs.ojp.gov/library/publications/probation-and-parole-united-states-2017-2018)   |
-| **SharePoint**| [JC Research - Documents/CC/data/raw/BJS/PPUS](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2FCC%2Fdata%2Fraw%2FBJS%2FPPUS&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98)                                                 |
-
-
-
-- for a specific year, go to Downloads > Data tables 
-- report pdf and folder with tables (in csv form) are downloaded
-- special import instructions for each year and probation/parole table in `ppus_table.csv` specify which table and columns to use for specific variables 
-- THIS DOES NOT HAVE VALUES BROKEN OUT BY STATE AND RACE --> CANNOT BE USED TO CALCULATE RATES (AND THUS CANNOT BE USED TO CALCULATED RRI)
 
 
 ## Proposed Layout
