@@ -335,7 +335,7 @@ parole_bar_pop <- map(.x = states,  .f = function(x) {
   df1 <- adm_pop_long %>%
     filter(state == x &
              adm_or_pop == "Population",
-           prob_vs_parole == "Probation") %>%
+           prob_vs_parole == "Parole") %>%
     group_by(state, year, metric, adm_or_pop) %>%
     summarise(total = sum(total), .groups = "keep") %>%
     filter(metric == "New Offense" | metric == "Technical Violation") %>%
