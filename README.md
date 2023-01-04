@@ -12,7 +12,7 @@ Links current live version (vNA): **add after create first production version, v
 ## Branches (proposed)
 
 ```
-main                     # production branch 
+trunk                     # production branch 
 |
 |-- develop              # development branch 
     |
