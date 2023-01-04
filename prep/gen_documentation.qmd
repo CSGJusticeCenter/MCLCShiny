@@ -1,5 +1,5 @@
 ---
-title: "General Documentation: MCLC NCRP Revocations 2015-2019" 
+title: "General Documentation: MCLC NCRP Revocations" 
 description: "Last User: `r stringr::str_sub(getwd(), 10, stringr::str_locate(stringr::str_sub(getwd(), 10, -1), '/')[1]+10-2)`"
 date: last-modified
 date-format: "YYYY-MM-DD HH:mm:ss"
@@ -20,7 +20,6 @@ self-contained: true
 box::use(
     box/admin
   , box/calc
-  , box/clean_SC
 )
 ```
 
@@ -38,15 +37,17 @@ box::use(
 +:--------------+:--------------------------------------------------------------------------------------------------------+
 | **Usage**     | Revocation Counts by state/year/race/offense general 
 +---------------+---------------+
-| **Source**    | [National Corrections Reporting Program 1991-2019 ICPSR 38048](https://www.icpsr.umich.edu/web/ICPSR/studies/38048) 
+| **Source**    | [National Corrections Reporting Program 1991-2020 ICPSR 38492](https://www.icpsr.umich.edu/web/ICPSR/studies/38492) 
 +---------------+---------------+
 | **SharePoint**| [JC Research - Documents/CC/data/raw/NCRP](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2FCC%2Fdata%2Fraw%2FNCRP&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98) |
++---------------+---------------+
+| **Years**     | 2015-2020 
 +---------------+---------------+
 
 
 - 2 options for data used: 
-    * A: Admission individual records, `DS0002/38048-0002-Data.rda`
-    * N: Year-end individual records, `DS0004/38048-0004-Data.rda`
+    * A: Prison Admissions, individual records, `DS0002/38492-0002-Data.rda`
+    * N: Year-end population, individual records, `DS0004/38492-0004-Data.rda`
 - filter to only include `ADMTYPE` == "(2) Parole return/revocation" and `RPTYEAR` >= 2015
 - recode `RACE` variable to shorter names 
 - Count based on different cross sections 
@@ -72,6 +73,8 @@ link <- "https://www.census.gov/programs-surveys/acs/microdata/documentation.htm
 +---------------+--------------------------------------------------------------------------+
 | **SharePoint**|  NA                                                                      |
 +---------------+--------------------------------------------------------------------------+
+| **Years**     | 2015-2019, use 2019 for 2020 calculations 
++---------------+---------------+
 
 ```{r}
 #| echo: false 
@@ -81,7 +84,7 @@ rm(link)
 
 Public Use Microdata Sample (PUMS).  Data is pulled from PUMS API using the `{tidycensus}` package.  The data is pulled and saved on SharePoint.  
 
-PUMS data is unavailable for 2020 due to covid19.  For 2020 revocations counts, rates per population will use 2019 PUMS data.  
+**PUMS data is unavailable for 2020 due to covid19.  For 2020 revocations counts, rates per population will use 2019 PUMS data.**  
 
 
 
@@ -175,6 +178,8 @@ Using this data will:
 +---------------+---------------+
 | **SharePoint**| [JC Research - Documents/CC/data/raw/SC_EST](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2FCC%2Fdata%2Fraw%2FSC%2DEST&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98) |
 +---------------+---------------+
+| **Years**     | 2015-2019
++---------------+---------------+
 
 
 ##### SC --> NCRP 
@@ -235,6 +240,8 @@ splink_prob <- "https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Do
 | **SharePoint**| - Parole: [JC Research - Documents/CC/data/raw/BJS/AParS](`r splink_par`)                                       |
 |               | - Probation: [JC Research - Documents/CC/data/raw/BJS/AProbS](`r splink_prob`)                                  | 
 +---------------+-----------------------------------------------------------------------------------------------------------------+
+| **Years**     | 2015-2018
++---------------+---------------+
 
 
 - only available to 2018
@@ -349,62 +356,14 @@ splink_ppus <- "https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Do
 +---------------+-----------------------------------------------------------------------------------------------------------------+
 | **SharePoint**| [JC Research - Documents/CC/data/raw/BJS/PPUS](`r splink_ppus`)                                                 |
 +---------------+-----------------------------------------------------------------------------------------------------------------+
+| **Years**     | 2017-2020
++---------------+---------------+
 
 
 - for a specific year, go to Downloads > Data tables 
 - report pdf and folder with tables (in csv form) are downloaded
 - special import instructions for each year and probation/parole table in `ppus_table.csv` specify which table and columns to use for specific variables 
-- THIS DOES NOT HAVE VALUES BROKEN OUT BY RACE --> CANNOT BE USED TO CALCULATE RATES (AND THUS CANNOT BE USED TO CALCULATED RRI)
-
-
-##### Variables 
-
-::: {.grid style="font-size: 0.9em;"} 
-
-::: {.g-col-4}
-
-| Variable | Description | 
-|:--|:-------------------|
-|`STATEID` | state name, includes footnote tags |
-|`TOTEN`   | total entries to parole/probation | 
-|`TOTEX`   | total exits (discharges) from parole/probation |
-|`TOTEND`  | parole/probation population end of year |
-
-:Variables Directly from PPUS Table
-  
-::: 
-<!-- end {.g-col-4} --> 
-
-::: {.g-col-8}
-
-| Variable | Description | 
-|:--|:-------------------|
-|`FIPS`   | created from `STATEID`, **use this variable to id state, consistent format** |
-|`RPTYEAR`| year of survey  | 
-|`SOURCE` | table csv file where data came from | 
-|`ESTOTEN` | `TOTEN` value type, whether based on estimated/actual data by reporting agencies  | 
-|`ESTOTEX` | `TOTEX` value type, whether based on estimated/actual data by reporting agencies | 
-
-
-:Variables Created at Import 
-  
-::: 
-<!-- end {.g-col-8} --> 
-
-
-::: 
-<!-- end {.grid} --> 
-
-
-##### Creating `ES###` Columns 
-
-Tables are set up with 2 side by side columns, one for Reported and one for Estimated.  
-
-**When reported is not missing:** use the value from the reported column and assign `(2) Actual` for the `ES####` variable  
-**When reported is missing (`NA`):** use the value form the estimated column and assign `(1) Estimated` for the `ES####` variable 
-
-*NOTE:* `ESTOTEND` is not created because within the tables available, there is only one column with data (it is not split into reported/estimated like the entries and exits) 
-  
+- **THIS DOES NOT HAVE VALUES BROKEN OUT BY RACE --> CANNOT BE USED TO CALCULATE RATES (AND THUS CANNOT BE USED TO CALCULATED RRI)**
 
 
 ```{r}
@@ -422,34 +381,40 @@ rm(bjslink, splink_ppus)
 <!--end panel.tabset DATA SOURCES --> 
 
 
-## Analytical File
+## Analytic Files
 
-`calc$combine_and_calcrates()` imports data, cleans, combines and calculates metrics.  Output is a list of 4 data sets: 
+`calc$combine_and_calcrates(pop_denom, NCRPLET)` imports data, cleans, combines and calculates metrics.  Output is a list of 4 data sets, each a difference cross-section (cs): 
 
 
-- `OR`:  Cross Section by STATE, RPTYEAR, OFFGENERAL, RACE (offense and race) 
-- `O`: Cross Section by STATE, RPTYEAR, OFFGENERAL (offense) 
-- `R`: Cross Section by STATE, RPTYEAR, RACE (race) 
-- `t`: Cross Section by STATE, RPTYEAR (total)  
+- `cs_OR`:  Cross Section by STATE, RPTYEAR, OFFGENERAL, RACE (offense and race) 
+- `cs_O`: Cross Section by STATE, RPTYEAR, OFFGENERAL (offense) 
+- `cs_R`: Cross Section by STATE, RPTYEAR, RACE (race) 
+- `cs_t`: Cross Section by STATE, RPTYEAR (total)  
 
 
 ::: {style="line-height: 1em;"}
 
-| Variable   |`OR`    |`O`     |`R`     |`t`     | Type  |  Description | 
-|:-----      |:---    |:---    |:---    |:---    |:---   |:--------------------------|
-|`STATE`     |&#10003;|&#10003;|&#10003;|&#10003;|factor | State name |
-|`FIPS`      |&#10003;|&#10003;|&#10003;|&#10003;|factor | 2-character FIPS code | 
-|`ABB`       |&#10003;|&#10003;|&#10003;|&#10003;|factor | 2-character USPS abbreviation | 
-|`RPTYEAR`   |&#10003;|&#10003;|&#10003;|&#10003;|numeric| year data was reported, 2015-2019 | 
-|`OFFGENERAL`|&#10003;|&#10003;|        |        |factor | Categorization of most serious sentenced offense, shorten names to: `r paste(admin$lev_OFFGENERAL, collapse = ", ")` | 
-|`RACE`      |&#10003;|        |&#10003;|        |factor | Race/Ethnicity of inmate, shorten names to: `r paste(admin$lev_RACE, collapse = ", ")` | 
-|`REVCNT`    |&#10003;|&#10003;|&#10003;|&#10003;|numeric| Count of revocations | 
-|`POPEST`    |&#10003;|&#10003;|&#10003;|&#10003;|numeric| Population (estimate) based on `pop_denom` input | 
-|`POPTYPE`   |&#10003;|&#10003;|&#10003;|&#10003;|character| Source of population data | 
-|`RATE`      |&#10003;|&#10003;|&#10003;|&#10003;|numeric| Rate of revocation count per population, `REVCNT`/`POPEST` <br>for a specific `RACE`, `STATE`, `RPTYEAR`, `OFFGENERAL` cross section |
-|`WHITERATE` |&#10003;|        |&#10003;|        |numeric| `REVCNT`/`POPEST` where `RACE` = white <br>for a specific `STATE`, `RPTYEAR`, `OFFGENERAL` cross section | 
-| `RRI`      |&#10003;|        |&#10003;|        |numeric| Relative Rate Index, `RATE`/`WHITERATE`<br> for a specific `STATE`, `RPTYEAR`, `OFFGENERAL` cross section | 
-|`RECENT_YR` |&#10003;|&#10003;|&#10003;|&#10003;|numeric| Most recent year where `POPEST` is available  | 
+| Variable    |`cs_OR` |`cs_O`   |`cs_R` |`cs_t`  | Type  |  Description | 
+|:-----       |:---    |:---    |:---    |:---    |:---   |:--------------------------|
+|`STATE`      |&#10003;|&#10003;|&#10003;|&#10003;|factor | State name |
+|`FIPS`       |&#10003;|&#10003;|&#10003;|&#10003;|factor | 2-character FIPS code | 
+|`ABB`        |&#10003;|&#10003;|&#10003;|&#10003;|factor | 2-character USPS abbreviation | 
+|`RPTYEAR`    |&#10003;|&#10003;|&#10003;|&#10003;|numeric| year data was reported, 2015-2019 | 
+|`OFFGENERAL` |&#10003;|&#10003;|        |        |factor | Categorization of most serious sentenced offense, shorten names to: `r paste(admin$lev_OFFGENERAL, collapse = ", ")` | 
+|`RACE`       |&#10003;|        |&#10003;|        |factor | Race/Ethnicity of inmate, shorten names to: `r paste(admin$lev_RACE, collapse = ", ")` | 
+|`REVCNT`     |&#10003;|&#10003;|&#10003;|&#10003;|numeric| Count of revocations | 
+|`SUPPRESS`   |&#10003;|&#10003;|&#10003;|&#10003;|numeric| 1 = `REVCNT` < 5 and suppression is required, 0 = `REVCNT` &#8805; 5 and suppression is not required | 
+|`S_REVCNT`   |&#10003;|&#10003;|&#10003;|&#10003;|numeric| Count of revocations that includes suppression, `S_REVCNT = ifelse(REVCNT < 5, 5, REVCNT)` | 
+|`POPTYPE`    |&#10003;|&#10003;|&#10003;|&#10003;|character| Source of population data (BJS, PUMS, SC) | 
+|`POPEST`     |&#10003;|&#10003;|&#10003;|&#10003;|numeric| Population (estimate) based on `pop_denom` input | 
+|`RATE`       |&#10003;|&#10003;|&#10003;|&#10003;|numeric| Rate of revocation count per population, `REVCNT`/`POPEST` <br>for a specific cross section |
+|`S_RATE`     |&#10003;|&#10003;|&#10003;|&#10003;|numeric| Rate of revocation count per population, `S_REVCNT`/`POPEST` <br>for a specific cross section |
+|`WHITERATE`  |&#10003;|        |&#10003;|        |numeric| `REVCNT`/`POPEST` where `RACE` = white <br>for a specific cross section | 
+|`S_WHITERATE`|&#10003;|        |&#10003;|        |numeric| `S_REVCNT`/`POPEST` where `RACE` = white <br>for a specific cross section | 
+|`RRI`        |&#10003;|        |&#10003;|        |numeric| Relative Rate Index, `RATE`/`WHITERATE`<br> for a specific cross section | 
+|`S_RRI`      |&#10003;|        |&#10003;|        |numeric| Relative Rate Index, `S_RATE`/`WHITERATE`<br> for a specific cross section | 
+|`RECENT_YR`  |&#10003;|&#10003;|&#10003;|&#10003;|numeric| Most recent year where `POPEST` and `REVCNT` is available (most recent year that rates and RRI can be calculated) for a specific cross section| 
+| **No. of Vars**| 18  | 13     | 17     | 12     |       |  |
 
 
 : Variable Included in Output Data and Variable Descriptions
@@ -457,88 +422,16 @@ rm(bjslink, splink_ppus)
 <!--end STYLE for table --> 
 
 
+Always display the `S_` version of variables in the application so low counts are not displayed.  
 
 
-## Metrics
+List of data frames are saved as: `~JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/`**`NCRP_{NCRPLET}_REV_{POPTYPE}.RDS`**
 
-::: grid
-::: g-col-6
-Values:\
-$n$ revocation count\
-$N$ population estimate\
-$R$ rate\
-$I$ Relative rate index
-:::
-
-<!--end {.g-col-6} -->
-
-::: g-col-6
-Sub-text:\
-$s$ State\
-$o$ offense general category\
-$r$ race/ethnicity\
-$y$ year
-:::
-
-<!--end {.g-col-6} -->
-:::
-
-<!-- end {.grid}-->
-
-::: panel-tabset
-### Revocation Counts, $n$
-
-Count the individual level data from NCRP by specific metrics.
-
-| DF      | Equation for `REVCNT`      | Meaning                                                                 |
-|:---------------|:-----------------|:-------------------------------------|
-| `cs_OR` | $n^{sy}_{or}$ | Revocation count by STATE, RPTYEAR, OFFGENERAL, RACE (offense and race) |
-| `cs_O`  | $n^{sy}_{o}$  | Revocation count by STATE, RPTYEAR, OFFGENERAL (offense)                |
-| `cs_R`  | $n^{sy}_{r}$  | Revocation count by STATE, RPTYEAR, RACE (race)                         |
-| `cs_t`  | $n^{sy}$      | Revocation count by STATE, RPTYEAR (total)                              |
-
-### Rate, $R$
-
-Revocation counts for a specific cross section divided by the population estimate for that specific cross section. Population is available by state, year, and race/ethnicity.
-
-| DF      | Equation for `RATE` | Meaning                                                     |
-|:---------------|:-----------------|:-------------------------------------|
-| `cs_OR` | $R^{sy}_{or} = \frac{n^{sy}_{or} }{N^{sy}_{r} }$ | Rate by STATE, RPTYEAR, OFFGENERAL, RACE (offense and race) |
-| `cs_O`  | $R^{sy}_{o} = \frac{n^{sy}_{o} }{N^{sy} }$       | Rate by STATE, RPTYEAR, OFFGENERAL (offense)                |
-| `cs_R`  | $R^{sy}_{r} = \frac{n^{sy}_{r} }{N^{sy}_{r} }$   | Rate by STATE, RPTYEAR, RACE (race)                         |
-| `cs_t`  | $R^{sy} = \frac{n^{sy} }{N^{sy} }$               | Rate by STATE, RPTYEAR (total)                              |
+NCRPLET: A (Admissions) or N (year-end population)  
+POPTYPE: BJS (parole population), PUMS (community popualtion from PUMS census data), SC (community population from state characteristics data)
 
 
-
-
-### Relative Rate Index (RRI), $I$
-
-Relative Rate Index is compare the $r = 1$ (White) to the other race/ethnicity groups.
-
-*Note:* The RRI is calculated for all four race groups but will only be shown for $r = 2$ (Black) and $r = 3$ (Hispanic). When $r = 1$ (White) $\implies I = 1$. The last category, $r = 4$ (Other) is removed due to small counts and difficultly gather meaning from 'Other' category.
-
-| DF      | Equation for `RRI` | Meaning                                                    |
-|:---------------|:-----------------|:-------------------------------------|
-| `cs_OR` | $I^{sy}_{or} = \frac{R^{sy}_{or} }{R^{sy}_{o1} }$ | RRI by STATE, RPTYEAR, OFFGENERAL, RACE (offense and race) |
-| `cs_O`  | N/A                                               | N/A                                                        |
-| `cs_R`  | $I^{sy}_{r} = \frac{R^{sy}_{r} }{R^{sy}_{1} }$    | RRI by STATE, RPTYEAR, RACE (race)                         |
-| `cs_t`  | N/A                                               | N/A                                                        |
-:::
-
-<!-- end {.panel-tabset} METRICS-->
-
-## Data Steps 
-
-::: {.panel-tabset} 
-
-### Box Modules 
-
-|            |     |            |     |            |
-|:----------:|:-:|:----------:|:-:|:----------:|
-| admin.R<br>import.R| --> | calc_APS.R<br>clean_NCRP.R<br>clean_SC.R | --> | calc.R | 
-
-
-### Community Population  
+### Example 
 
 ```{r}
 params$NCRPLET
@@ -546,17 +439,142 @@ calc$combine_and_calcrates(pop_denom = "PUMS", NCRPLET = params$NCRPLET)
 ```
 
 
-### Parole Population 
 
-```{r}
-params$NCRPLET
-calc$combine_and_calcrates(pop_denom = "BJS", NCRPLET = params$NCRPLET)
+
+
+## Metrics 
+
+
+::: grid
+::: g-col-4
+Values:\
+$n$ revocation count\
+$N$ population estimate\
+$R$ rate\
+$I$ Relative rate index
+:::
+
+<!--end {.g-col-4} -->
+
+::: g-col-4
+Sub-text:\
+$s$ State\
+$o$ offense general category\
+$r$ race/ethnicity\
+$y$ year
+:::
+
+<!--end {.g-col-4} -->
+
+::: g-col-4
+$r$ = `RACE`\
+$r$ = 1: White\
+$r$ = 2: Black\
+$r$ = 3: Hispanic\
+$r$ = 4: Other
+:::
+
+<!--end {.g-col-4} -->
+
+:::
+
+<!-- end {.grid}-->
+
+
+
+| Variable | Notation | `cs_OR` | `cs_O` | `cs_R` | `cs_t` | Description | 
+|:--     |:--   |:----    |:----   |:----   |:----   | :-------------| 
+| `REVCNT`<br>`S_REVCNT` | $n$      |$n^{sy}_{or}$| $n^{sy}_{o}$| $n^{sy}_{r}$ | $n^{sy}$ | Count of revocations for a specific cross section| 
+|`RATE`<br>`S_RATE` | $R$      |$R^{sy}_{or} = \frac{n^{sy}_{or} }{N^{sy}_{r} }$ | $R^{sy}_{o} = \frac{n^{sy}_{o} }{N^{sy} }$      | $R^{sy}_{r} = \frac{n^{sy}_{r} }{N^{sy}_{r} }$   | $R^{sy} = \frac{n^{sy} }{N^{sy} }$ | Revocation counts for a specific cross section divided by the population estimate for that specific cross section. Population is available by state, year, and race/ethnicity. | 
+| `RRI`<br>`S_RRI`| $I$      |  $I^{sy}_{or} = \frac{R^{sy}_{or} }{R^{sy}_{o1} }$ | N/A  | $I^{sy}_{r} = \frac{R^{sy}_{r} }{R^{sy}_{1} }$ | N/A | Relative Rate Index looking at disparity between `RACE` categories when compared to  $r = 1$ (White). | 
+
+
+: Notation and Calculation for Metrics 
+
+
+
+### Displayed 
+
+`S_RRI` for `cs_R` are used to create infographics for each state.  Only `RACE` = 'Black' or 'Hispanic' info-graphics are shown.  White RRI is always equal to 1 (since it is the reference group).  `RACE` = 'Other' is removed due to small counts and difficultly gather meaning from 'Other' category.
+
+`S_REVCNT`, `S_RATE`, and `S_RRI` for `cs_OR` are displayed in tables.  
+
+
+## Shiny Prep 
+
+
+### `rri_infographs_tables$prep_for_shiny_DATA()`
+
+`calc$combine_and_calcrates(pop_denom, NCRPLET)`: create analytic files (view **Analytic Files** tab for more info) and save:  
+
+- `NCRP_A_REV_BJS.RDS`
+- `NCRP_A_REV_CEN.RDS`
+- `NCRP_N_REV_BJS.RDS`
+- `NCRP_N_REV_CEN.RDS`
+
+
+After create data cross-section, create list of lists of data that will be used in application.  Save data file as `NCRP_RRI_tables.RDS`. 
+
+```
+NCRP_RRI_tables 
+|
+|-- Admissions  
+|   |-- BJS 
+|   |   |-- {state_name}  # one of the 50 states full name 
+|   |   |   |-- INFOGRAPH # data used to create infographics (if available) 
+|   |   |   |-- CLACTXT   # how RRI's in infogrpahic are calculated, paragraph text to be displayed 
+|   |   |   |-- RRI       # table for displaying S_RRI by RACE/OFFGENERAL and RPTYEAR
+|   |   |   |-- RATE      # table for displaying S_RATE by RACE/OFFGENERAL and RPTYEAR
+|   |   |   |-- REVCNT    # table for displaying S_REVCNT by RACE/OFFGENERAL and RPTYEAR
+|   |   |   |-- POPEST    # table of population numbers, not displayed, used in QA 
+|   |
+|   |-- CEN 
+|   |   |-- {state_name} # one of the 50 states full name 
+|   |   |   |-- {same 6 items as above} 
+|   |
+|   |-- STATEVEC # vector of the 50 state names  
+|   |-- NCRPLET  # A = Admissions 
+|
+|-- Population    
+|   |-- BJS 
+|   |   |-- {state_name} # one of the 50 states full name 
+|   |   |   |-- {same 6 items as above} 
+|   |
+|   |-- CEN 
+|   |   |-- {state_name} # one of the 50 states full name 
+|   |   |   |-- {same 6 items as above} 
+|   |
+|   |-- STATEVEC # vector of the 50 state names 
+|   |-- NCRPLET  # N = Year-end Population 
+|
+|-- STATEVEC # another vector of the 50 state names 
+
 ```
 
 
+### `rri_infographs_tables$prep_for_shiny_PNG()`
 
-:::
-<!-- end {.panel-tabset} DATA STEPS -->
+*takes ~20 minutes to create all png's* 
+
+- import tables (`NCRP_RRI_tables.RDS`) from sharepoint 
+- remove old info-graphic png's in sharepoint folder, `~data/analysis/infogrpahic`
+- remove old info-graphic png's in the local clone folder, `~app/data/infogs` 
+- create data frame of all options: 
+  * NCRP: which NCRP data, A or N
+  * STATE: each of the 50 states
+  * POP: population type, BJS or CEN
+- run through all options and create info-graphics, if data is available, and save on sharepoint 
+- copy over png's on sharepoint to the local clone folder 
+
+
+## Box Models Structure 
+
+
+
+![](`r file.path(admin$sp_data, 'flowchart/boxmoduleflowchart.drawio.png')`)
+
+
+
 
 :::
 <!-- end {.panel-tabset} -->
