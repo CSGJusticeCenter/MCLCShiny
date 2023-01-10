@@ -423,7 +423,7 @@ h4.reh4 {
   font-family: Graphik; 
   font-weight: bold; 
   font-family: Graphik !important;
-  margin-bottom: 12px; 
+  /* margin-bottom: 12px; */ 
   text-decoration-line: underline;
   background-color: #fff; 
   padding: 0px 0.1em; 
