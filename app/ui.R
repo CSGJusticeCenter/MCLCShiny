@@ -264,12 +264,21 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                                    br(),
                                                                    fluidRow(
-                                                                     column(width = 2),
-                                                                     column(width = 8, align = "center",
-                                                                            
+                                                                     column(width = 12, align = "center",
+                                                                     
+                                                                     div(
+                                                                       style = "
+                                                                          font-family: Graphik; 
+                                                                          font-weight: bold; 
+                                                                          font-size: 30px; 
+                                                                          line-height: 1.05em; 
+                                                                          margin-bottom: 12px;
+                                                                          display: inline-block; 
+                                                                       ", 
+                                                                       "Racial and Ethnicity", 
                                                                        pickerInput(
                                                                          'pop_denom', 
-                                                                         label = h3("Racial and Ethnic", class = "reh3", style = "margin-bottom: 0px;"),  
+                                                                         label = NULL, #h3("Racial and Ethnicity", class = "reh3", style = "margin-bottom: 0px;"),  
                                                                          width = "fit", 
                                                                          choices = c(
                                                                             "Disparities"            = "BJS", 
@@ -277,9 +286,17 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                          ), 
                                                                          options = list(style = "re-picker"), 
                                                                          inline = TRUE
-                                                                       ), 
+                                                                         ), #end pickerInput 
+                                                                       div(style = "display:inline-block;", htmlOutput("retitleend")), 
                                                                        
-                                                                       
+                                                                     ), 
+                                                                     ), #end column width=8
+                                                                     ), #end fluidRow
+                                                                  fluidRow(
+                                                                     column(width = 2),
+                                                                     column(width = 8, align = "center",
+                                                                     
+                                                                     
                                                                        htmlOutput("infogheader"),
                                                                        conditionalPanel(condition = "output.showinfogpanel", 
                                                                           div(imageOutput("infogblack", height = "100%", ), style = "margin-bottom: 0.5em;"),

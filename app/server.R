@@ -1543,6 +1543,16 @@ server <- function(input, output, session) {
   ####
   ## RACE/ETHNICITY DISPARITIES MYE HERE
   ###
+  
+  output$retitleend <- renderUI({
+    
+   case_when(
+        input$adm_pop_report == "Admissions" ~ "in Readmissions to Prison from Parole"
+      , input$adm_pop_report == "Population" ~ "in Incarcerated Populations Readmitted to Prison from Parole"
+    )
+    
+    
+  })
 
   output$infogblack <- renderImage({
 
