@@ -134,22 +134,22 @@ pop_denom_text <- function(pop_denom, pop_or_adm_data){
   rlang::arg_match(pop_denom, c("BJS", "CEN"))
   rlang::arg_match(pop_or_adm_data, c("Admissions", "Population"))
   
-  prefix <- "<b>"
-  suffix <- "</b>"
   
   fill <- case_when(
-      pop_denom == "BJS" & pop_or_adm_data == "Admissions" ~ paste0(        prefix, "disparities in prison admissions for parole revocations,"           , suffix,                  " rates")
-    , pop_denom == "CEN" & pop_or_adm_data == "Admissions" ~ paste0("the ", prefix, "cumulative disparities accrued through the criminal justice system,", suffix,     " re-admission rates")
-    , pop_denom == "BJS" & pop_or_adm_data == "Population" ~ paste0(        prefix, "disparities in people serving time for parole revocations,"         , suffix,                  " rates")
-    , pop_denom == "CEN" & pop_or_adm_data == "Population" ~ paste0("the ", prefix, "cumulative disparities accrued through the criminal justice system,", suffix, " re-incarceration rates")
+      pop_denom == "BJS" & pop_or_adm_data == "Admissions" ~ "disparities <i>at the point of readmission</i> to prison from parole"
+    , pop_denom == "CEN" & pop_or_adm_data == "Admissions" ~ "<i>cumulative disparities</i> accrued throughout the criminal justice system at the point of readmission to prison from parole"
+    , pop_denom == "BJS" & pop_or_adm_data == "Population" ~ "disparities in the number of people who are in prison on any given day after being readmitted from parole"
+    , pop_denom == "CEN" & pop_or_adm_data == "Population" ~ "<i>cumulative disparities</i> accrued throughout the criminal justice system for the number of people who are in prison on any given day after being readmitted from parole"
   )
   
   
   outtext <- paste0(
       "<div class = 'resubtitle'>"
      , "To highlight "
+     , "<b>"
      , fill
-     , " are shown relative to White individuals to highlight higher or lower than expected representation."
+     , "</b>"
+     , ", rates are shown relative to White individuals."
      , "</div>"
   )
   
@@ -166,14 +166,22 @@ pop_denom_text <- function(pop_denom, pop_or_adm_data){
 #' @export
 #'
 #' @examples
-infographic_header <- function(dataavail, note){
+infographic_header <- function(dataavail, pop_denom, pop_or_adm_data, note){
   
   char <- as.character(dataavail)
   rlang::arg_match(char, c("1", "0"))
   
   
   if (dataavail == 1){
-    outtext <- paste0("<h3 class = 'reh3'>For every White individual that is revoked ...<h3>")
+    
+    fill <- case_when(
+        pop_denom == "BJS" & pop_or_adm_data == "Admissions" ~ "For every White person who is readmitted to prison from parole..."
+      , pop_denom == "CEN" & pop_or_adm_data == "Admissions" ~ "For every White person in the community who is readmitted to prison from parole..."
+      , pop_denom == "BJS" & pop_or_adm_data == "Population" ~ "For every White person who is incarcerated after being readmitted to prison from parole..."
+      , pop_denom == "CEN" & pop_or_adm_data == "Population" ~ "For every White person in the community who is incarcerated after being readmitted to prison from parole..."
+    )
+    
+    outtext <- paste0("<h3 class = 'reh3'>", fill,"</h3>")
   }
   
   if (dataavail == 0){

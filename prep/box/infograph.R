@@ -27,7 +27,7 @@ mclc_dk_blue  <- "#004270"  # "#236ca7"
 mclc_dk_yellow<- "#D6C246"
 mclc_lt_orange<- "#EDB799"
 mclc_lt_blue  <- "#C7E8F5"
-default_ncols <- 10
+default_ncols <- 12
 
 
 
@@ -197,6 +197,7 @@ create_icons <- function(
   , fillHoriz = FALSE
 ) {
   
+  
   if (infogs-rri_raw<0) {
     infogs<-floor(rri_raw)+1;
     warning(paste0("There are not enough infographics to plot! Number of infographics reset to ",floor(rri_raw)+1))
@@ -290,6 +291,7 @@ create_icons <- function(
 #' @examples
 create_infograph <- function(
     rri_raw 
+  , data_type #Admissons or Year-End Population 
   , suppress = 0
   , race ="tst"
   , label = "tst"
@@ -302,10 +304,11 @@ create_infograph <- function(
   , returngg = FALSE
 ) {
   
+  
   if (whichimage == "person-2745706-bw"){
     title.rel <- 0.4
-    value.rel <- 3
-    title.size <- 60
+    value.rel <- 2.25
+    title.size <- 53
     value.size <- 110
   }
   
@@ -324,12 +327,18 @@ create_infograph <- function(
   }
   
   
+  graphic_text <- case_when(
+      data_type %in% c("A", "Admissions") ~ glue("{str_to_title(race)} people are readmitted to prison from parole.")
+    , data_type %in% c("N", "Population") ~ glue("{str_to_title(race)} people are in prison after being readmitted from parole.")
+  )
+  
+  
   title <- ggdraw() + 
     draw_label(
-      glue("{str_to_title(race)} individuals are revoked")
+      graphic_text
       , x = 0
       , hjust = 0
-      , vjust = 0.25
+      , vjust = 0.3
       , color = mclc_dk_grey
       , size = title.size
       , fontfamily = "Graphik Regular"
@@ -352,7 +361,7 @@ create_infograph <- function(
   value <- ggdraw() + 
     draw_label(
       display_value
-      , x = 0.8
+      , x = 0.85
       , hjust = 1
       , vjust = 0.5
       , color = mclc_dk_grey

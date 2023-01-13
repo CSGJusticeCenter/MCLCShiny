@@ -1611,7 +1611,7 @@ server <- function(input, output, session) {
 
     out <- paste0(
         raceethnicity$pop_denom_text(input$pop_denom, input$adm_pop_report)
-      , raceethnicity$infographic_header(dataavail, rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$NOTE)
+      , raceethnicity$infographic_header(dataavail, input$pop_denom, input$adm_pop_report, rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$NOTE)
     )
 
     HTML(out)
