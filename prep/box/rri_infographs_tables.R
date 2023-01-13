@@ -203,11 +203,21 @@ how_its_calc_txt <- function(DATA, whichRACE, whichSTATE, whichPOP, mult, NCRPLE
     )
     
     suf_txt <- case_when(
-        NCRPLET == "A" & whichPOP == "BJS" ~ "serving parole sentences are re-admitted to prison each year"
-      , NCRPLET == "A" & whichPOP == "CEN" ~ "from the community are re-admitted to prison after being revoked from parole each year"
-      , NCRPLET == "N" & whichPOP == "BJS" ~ "who were revoked from parole sentences remain incarcerated"
-      , NCRPLET == "N" & whichPOP == "CEN" ~ "from the community are in prison after being revoked from parole"
+        NCRPLET == "A" & whichPOP == "BJS" ~ "individuals serving parole sentences are readmitted to prison each year."
+      , NCRPLET == "A" & whichPOP == "CEN" ~ "individuals from the community are readmitted to prison each year."
+      , NCRPLET == "N" & whichPOP == "BJS" ~ "individuals who were readmitted to prison remain incarcerated."
+      , NCRPLET == "N" & whichPOP == "CEN" ~ "individuals from the community who were readmitted to prison remain incarcerated."
     )
+    
+    
+    popdenom_source <- case_when(
+        whichPOP == "BJS" ~ "Bureau of Justice Statistics Annual Parole Survey (BJS)"
+      , whichPOP == "CEN" ~ "Census Public Use Microdata Sample (PUMS)"
+    )
+    
+    
+    ncrp_source <- "National Corrections Reporting Program, 1991-2020: Selected Variables (NCRP)"
+    
     
     multshow <- scales::comma(mult, accuracy = 1)
     
@@ -217,7 +227,7 @@ how_its_calc_txt <- function(DATA, whichRACE, whichSTATE, whichPOP, mult, NCRPLE
       , ~ifelse(
           .x == "No Data"
         , ""
-        , glue("<li>{pre_txt}{.x} in {multshow} {.y} individuals {suf_txt}</li>")
+        , glue("<li>{pre_txt}{.x} in {multshow} {.y} {suf_txt}</li>")
       )
     ) %>% paste(., collapse = "")
     
@@ -253,22 +263,32 @@ how_its_calc_txt <- function(DATA, whichRACE, whichSTATE, whichPOP, mult, NCRPLE
     } else {
       note <- "" 
     }
-    
-
-    
+  
     
     
     out <- paste0(
         "<div class = 'notetxt' style = 'text-align: left;'>"
       ,   "<p><b>How it's calculated:</b><br></p>"
-      ,   "First, calculate the rate of parole revocations within each Racial/Ethnic group:<br>"
+      ,   "State parole data broken down by race and ethnicity were pulled from "
+      ,    ncrp_source
+      ,    ". "
+      ,   "Then, the rate of people readmitted to parole was calculated within each racial and ethnic group based on the "
+      ,   popdenom_source
+      ,   ":<br>"
       ,   "<ul class = 'calctxt'>"
       ,     rate_lst
       ,   "</ul>"
-      ,   "The Relative Rate Index (RRI) is calculated by dividing the rate for Black individuals or Hispanic individuals by the rate for White individuals. In this case:<br>"
+      ,   "The relative rate index is calculated by dividing the rate for Black individuals or Hispanic individuals by the rate for White individuals. In this case:<br>"
       ,   "<ul class = 'calctxt'>"
       ,     rri_lst
       ,   "</ul>"
+      ,   "<p>"
+      ,     "While White, Black, and Hispanic are not the only race and ethnicity categories found in the U.S., the "
+      ,    ncrp_source
+      ,    " only provides four categories: White, Black, Hispanic, and Other. "
+      ,    "Further categories will be added in future data collections by the CSG Justice Center. "
+      ,    "Additionally, the term Hispanic is used here to maintain consistency with the data source material."
+      ,   "</p>"
       ,   note
       ,   anysuppress
       , "</div>"
@@ -421,12 +441,13 @@ prep_for_shiny_PNG <- function(){
     if (dataavail == 1){
       pwalk(
         list(
-          rri_raw = df$S_RRI #do suppressed value (only 2 instances Idaho/West Virigina, both Hispanic)
+            rri_raw = df$S_RRI #do suppressed value (only 2 instances Idaho/West Virigina, both Hispanic)
+          , data_type = whichNCRP
           , suppress = df$SUPPRESS
           , race = df$RACE
           , label   = paste0(whichNCRP, "_", whichSTATE, "_", whichPOP, "_", df$RACE)
           , savefile= TRUE
-          , infogs  = ifelse(df$S_RRI <= 11, 11, 22)
+          , infogs  = ifelse(df$S_RRI <= 12, 12, 24)
         )
         , infograph$create_infograph 
       )
