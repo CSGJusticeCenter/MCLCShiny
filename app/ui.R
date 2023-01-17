@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: ui.R
 # Authors: Mari Roberts
-# Date last updated: August 3, 2022
+# Date last updated: January 17, 2022 (MR)
 # Description:
 #    User interface for shiny app
 #######################################
@@ -198,13 +198,13 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                                    br(),
 
-                                                                   # fluidRow(column(width = 6, align = "center", highchartOutput("state_area_chart", height = 400, width = 390)),
-                                                                   #          column(width = 6, align = "center", highchartOutput("state_bar_chart", height = 400, width =390))),
-
-                                                                   fluidRow(column(width = 5, align = "center", highchartOutput("state_area_chart", height = 400, width = 390)),
-                                                                            column(width = 1, labeled_input('save-btn1', "",
-                                                                                                            downloadButton(outputId = 'save_state_area_chart', "",
-                                                                                                                           class = "download-chart"))),
+                                                                   fluidRow(
+                                                                            # column(width = 5, align = "center", highchartOutput("state_area_chart", height = 400, width = 390)),
+                                                                            # column(width = 1, labeled_input('save-btn1', "",
+                                                                            #                                 downloadButton(outputId = 'save_state_area_chart', "",
+                                                                            #                                                class = "download-chart"))),
+                                                                            column(width = 5, align = "center", uiOutput("state_area")),
+                                                                            column(width = 1, align = "center", uiOutput("state_area_button")),
                                                                             column(width = 5, align = "center", uiOutput("state_nt")),
                                                                             column(width = 1, align = "center", uiOutput("state_nt_button"))
                                                                             ),
