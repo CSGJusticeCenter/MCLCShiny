@@ -8,6 +8,7 @@
 #######################################
 
 # Data visualizations
+# remotes::install_github("timelyportfolio/dataui")
 library(dataui)
 library(highcharter)
 library(purrr)

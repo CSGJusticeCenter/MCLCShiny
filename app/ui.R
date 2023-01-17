@@ -21,6 +21,11 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                            tags$style(type = "text/css", ".navbar {margin-bottom: .5px;}"),
                            tags$style(type = "text/css", ".container-fluid .navbar-header .navbar-brand {margin-left: 0px;}"),
 
+                           #hide errors on user-end
+                           tags$style(type="text/css",
+                                      ".shiny-output-error { visibility: hidden; }",
+                                      ".shiny-output-error:before { visibility: visible; content: ''; }"),
+
                            title = "MCLC Dashboard",
                            tags$html(lang="en"),
 
