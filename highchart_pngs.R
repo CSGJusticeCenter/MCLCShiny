@@ -93,7 +93,7 @@ walk(
     adm_maps_2018_2019[[.x]]
     , folderpath = savefolder
     , id = .x
-    , title = "Admissions_from_2018_2019")
+    , title = "Admissions_2018 - 2019")
 )
 
 admin$mylog("ADMISSIONS MAP 2018-2021")
@@ -104,7 +104,7 @@ walk(
     adm_maps_2018_2021[[.x]]
     , folderpath = savefolder
     , id = .x
-    , title = "Admissions_from_2018_2021")
+    , title = "Admissions_2018 - 2021")
 )
 
 
@@ -116,7 +116,7 @@ walk(
     adm_maps_2019_2020[[.x]]
     , folderpath = savefolder
     , id = .x
-    , title = "Admissions_from_2019_2020")
+    , title = "Admissions_2019 - 2020")
 )
 
 admin$mylog("ADMISSIONS MAP 2020-2021")
@@ -127,7 +127,7 @@ walk(
     adm_maps_2020_2021[[.x]]
     , folderpath = savefolder
     , id = .x
-    , title = "Admissions_from_2020_2021")
+    , title = "Admissions_2020 - 2021")
 )
 
 
@@ -143,7 +143,7 @@ walk(
     pop_maps_2018_2019[[.x]]
     , folderpath = savefolder
     , id = .x
-    , title = "Population_from_2018_2019")
+    , title = "Population_2018 - 2019")
 )
 
 admin$mylog("POPULATIONS MAP 2018-2021")
@@ -154,7 +154,7 @@ walk(
     pop_maps_2018_2021[[.x]]
     , folderpath = savefolder
     , id = .x
-    , title = "Population_from_2018_2021")
+    , title = "Population_2018 - 2021")
 )
 
 admin$mylog("POPULATIONS MAP 2019-2020")
@@ -165,7 +165,7 @@ walk(
     pop_maps_2019_2020[[.x]]
     , folderpath = savefolder
     , id = .x
-    , title = "Population_from_2019_2020")
+    , title = "Population_2019 - 2020")
 )
 
 admin$mylog("POPULATIONS MAP 2020-2021")
@@ -176,7 +176,7 @@ walk(
     pop_maps_2020_2021[[.x]]
     , folderpath = savefolder
     , id = .x
-    , title = "from_Population_2020_2021")
+    , title = "Population_2020 - 2021")
 )
 
 
