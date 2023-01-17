@@ -502,20 +502,20 @@ fnc_create_data_text <- function(df){
       data == "total_violation_admissions"                  ~  "Supervision Violation Admissions",
       data == "total_probation_violation_admissions"        ~  "Probation Violation Admissions",
       data == "new_offense_probation_violation_admissions"  ~  "Probation New Offense Violation Admissions",
-      data == "technical_probation_violation_admissions"    ~  "Probation Technical Admissions",
+      data == "technical_probation_violation_admissions"    ~  "Probation Technical Violation Admissions",
       data == "total_parole_violation_admissions"           ~  "Parole Violation Admissions",
       data == "new_offense_parole_violation_admissions"     ~  "Parole New Offense Violation Admissions",
-      data == "technical_parole_violation_admissions"       ~  "Parole Technical Admissions",
+      data == "technical_parole_violation_admissions"       ~  "Parole Technical Violation Admissions",
       data == "other_admissions"                            ~  "Other Admissions",
 
       data == "total_population"                            ~  "Total Population",
       data == "total_violation_population"                  ~  "Supervision Violation Population",
       data == "total_probation_violation_population"        ~  "Probation Violation Population",
       data == "new_offense_probation_violation_population"  ~  "Probation New Offense Violation Population",
-      data == "technical_probation_violation_population"    ~  "Probation Technical Population",
+      data == "technical_probation_violation_population"    ~  "Probation Technical Violation Population",
       data == "total_parole_violation_population"           ~  "Parole Violation Population",
       data == "new_offense_parole_violation_population"     ~  "Parole New Offense Violation Population",
-      data == "technical_parole_violation_population"       ~  "Parole Technical Population",
+      data == "technical_parole_violation_population"       ~  "Parole Technical Violation Population",
       data == "other_population"                            ~  "Other Population"
 
     ))
