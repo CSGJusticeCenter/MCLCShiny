@@ -128,7 +128,7 @@ adm_maps_2018_2019 <- map(.x = metrics,  .f = function(x) {
     filter(adm_or_pop == "Admissions",
            year       == "2018 - 2019",
            metric     == x)
-  filename <- paste("Change_in_", x, "Admissions_from_2018_2019")
+  filename <- paste("Change_", x, "_Admissions_from_2018_2019", sep = "")
   admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
   return(highcharts)
@@ -140,7 +140,7 @@ adm_maps_2018_2021 <- map(.x = metrics,  .f = function(x) {
     filter(adm_or_pop == "Admissions",
            year       == "2018 - 2021",
            metric     == x)
-  filename <- paste("Change_in_", x, "Admissions_from_2018_2021")
+  filename <- paste("Change_", x, "_Admissions_from_2018_2021", sep = "")
   admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
   return(highcharts)
@@ -152,7 +152,7 @@ adm_maps_2019_2020 <- map(.x = metrics,  .f = function(x) {
     filter(adm_or_pop == "Admissions",
            year       == "2019 - 2020",
            metric     == x)
-  filename <- paste("Change_in_", x, "Admissions_from_2019_2020")
+  filename <- paste("Change_", x, "_Admissions_from_2019_2020", sep = "")
   admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
   return(highcharts)
@@ -164,7 +164,7 @@ adm_maps_2020_2021 <- map(.x = metrics,  .f = function(x) {
     filter(adm_or_pop == "Admissions",
            year       == "2020 - 2021",
            metric     == x)
-  filename <- paste("Change_in_", x, "Admissions_from_2020_2021")
+  filename <- paste("Change_", x, "_Admissions_from_2020_2021", sep = "")
   admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
   return(highcharts)
@@ -176,7 +176,7 @@ pop_maps_2018_2019 <- map(.x = metrics,  .f = function(x) {
     filter(adm_or_pop == "Population",
            year       == "2018 - 2019",
            metric     == x)
-  filename <- paste("Change_in_", x, "Population_from_2018_2019")
+  filename <- paste("Change_", x, "_Population_from_2018_2019", sep = "")
   admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
   return(highcharts)
@@ -188,7 +188,7 @@ pop_maps_2018_2021 <- map(.x = metrics,  .f = function(x) {
     filter(adm_or_pop == "Population",
            year       == "2018 - 2021",
            metric     == x)
-  filename <- paste("Change_in_", x, "Population_from_2018_2021")
+  filename <- paste("Change_", x, "_Population_from_2018_2021", sep = "")
   admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
   return(highcharts)
@@ -200,7 +200,7 @@ pop_maps_2019_2020 <- map(.x = metrics,  .f = function(x) {
     filter(adm_or_pop == "Population",
            year       == "2019 - 2020",
            metric     == x)
-  filename <- paste("Change_in_", x, "Population_from_2019_2020")
+  filename <- paste("Change_", x, "_Population_from_2019_2020", sep = "")
   admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
   return(highcharts)
@@ -212,7 +212,7 @@ pop_maps_2020_2021 <- map(.x = metrics,  .f = function(x) {
     filter(adm_or_pop == "Population",
            year       == "2020 - 2021",
            metric     == x)
-  filename <- paste("Change_in_", x, "Population_from_2020_2021")
+  filename <- paste("Change_", x, "_Population_from_2020_2021", sep = "")
   admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
   return(highcharts)
