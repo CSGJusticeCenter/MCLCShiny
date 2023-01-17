@@ -136,15 +136,15 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                  # Select State
                                                                  column(width = 4, align = "center", class = "input-col",
                                                                         labeled_input('input-btn', "",
-                                                                                      selectizeInput('state_report', div(style = "font-weight: bold", "Select State"),
-                                                                                                     choices = unique(adm_pop_long$state),
-                                                                                                     multiple = FALSE))),
+                                                                                      selectInput('state_report', div(style = "font-weight: bold", "Select State"),
+                                                                                                   choices = unique(adm_pop_long$state),
+                                                                                                   multiple = FALSE))),
                                                                  # Select Adm or Pop
                                                                  column(width = 4, align = "center", class = "input-col",
                                                                         labeled_input('input-btn', "",
-                                                                                      selectizeInput('adm_pop_report', div(style = "font-weight: bold", "Select Type"),
-                                                                                                     choices = c("Admissions", "Population"),
-                                                                                                     multiple = FALSE))),
+                                                                                      selectInput('adm_pop_report', div(style = "font-weight: bold", "Select Type"),
+                                                                                                  choices = c("Admissions", "Population"),
+                                                                                                  multiple = FALSE))),
                                                                  column(width = 2)
                                                                  )),
 
@@ -198,12 +198,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                                    br(),
 
-                                                                   fluidRow(
-                                                                            # column(width = 5, align = "center", highchartOutput("state_area_chart", height = 400, width = 390)),
-                                                                            # column(width = 1, labeled_input('save-btn1', "",
-                                                                            #                                 downloadButton(outputId = 'save_state_area_chart', "",
-                                                                            #                                                class = "download-chart"))),
-                                                                            column(width = 5, align = "center", uiOutput("state_area")),
+                                                                   fluidRow(column(width = 5, align = "center", uiOutput("state_area")),
                                                                             column(width = 1, align = "center", uiOutput("state_area_button")),
                                                                             column(width = 5, align = "center", uiOutput("state_nt")),
                                                                             column(width = 1, align = "center", uiOutput("state_nt_button"))
