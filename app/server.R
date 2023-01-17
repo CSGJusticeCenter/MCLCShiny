@@ -636,7 +636,7 @@ server <- function(input, output, session) {
   output$total_change <- renderValueBox({
 
     if (is.na(df_vb_total()$change)) {
-      text <- "No Data"
+      text <- ""
     } else if (df_vb_total()$change < 0) {
       text <- tagList(HTML("&darr;"), paste0(df_vb_total()$change, "% from 2020"))
     } else {
@@ -663,7 +663,7 @@ server <- function(input, output, session) {
   output$sup_change <- renderValueBox({
 
     if (is.na(df_vb_sup_violations()$change)) {
-      text <- "No Data"
+      text <- ""
     } else if (df_vb_sup_violations()$change < 0) {
       text <- tagList(HTML("&darr;"), paste0(df_vb_sup_violations()$change, "% from 2020"))
     } else {
@@ -690,7 +690,7 @@ server <- function(input, output, session) {
   output$tech_change <- renderValueBox({
 
     if (is.na(df_vb_tech()$change)) {
-      text <- "No Data"
+      text <- ""
     } else if (df_vb_tech()$change < 0) {
       text <- tagList(HTML("&darr;"), paste0(df_vb_tech()$change, "% from 2020"))
     } else {
@@ -717,7 +717,7 @@ server <- function(input, output, session) {
   output$new_off_change <- renderValueBox({
 
     if (is.na(df_vb_new_off()$change)) {
-      text <- "No Data"
+      text <- ""
     } else if (df_vb_new_off()$change < 0) {
       text <- tagList(HTML("&darr;"), paste0(df_vb_new_off()$change, "% from 2020"))
     } else {

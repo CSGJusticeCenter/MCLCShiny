@@ -38,10 +38,10 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                  column(width = 6,
 
-                                                        fluidRow(# Select Data
+                                                        fluidRow(# Select Metric
                                                                  column(width = 3, align = "center", class = "input-col",
                                                                          labeled_input('input-btn', "",
-                                                                               selectizeInput('data_map', div(style = "font-weight: bold", "Select Data"),
+                                                                               selectizeInput('data_map', div(style = "font-weight: bold", "Select Metric"),
                                                                                               choices = c("Total", "New Offense Violation", "Supervision Violation", "Probation Violation", "Parole Violation", "Technical Violation"),
                                                                                               multiple = FALSE))),
                                                                  # Select Adm or Pop
