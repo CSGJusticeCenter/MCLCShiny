@@ -81,7 +81,7 @@ fnc_highchart_state_areachart <- function(df, title_name){
     hc_add_series(data = subset(df, metric == "Total"), name = "Total", type = "area", hcaes(x = year, y = total), color = total_co) %>%
     hc_add_series(data = subset(df, metric == "Supervision Violation"), name = "Supervision Violation", type = "area", hcaes(x = year, y = total), color = viol_co) %>%
     hc_add_series(data = subset(df, metric == "Technical Violation"), name = "Technical Violation", type = "area", hcaes(x = year, y = total), color = tech_co) %>%
-    hc_add_series(data = subset(df, metric == "New Offense"), name = "New Offense", type = "area", hcaes(x = year, y = total), color = new_o_co) %>%
+    hc_add_series(data = subset(df, metric == "New Offense Violation"), name = "New Offense Violation", type = "area", hcaes(x = year, y = total), color = new_o_co) %>%
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
     hc_yAxis(title = "", labels=list(format="{value:,.0f}")) %>%
@@ -114,7 +114,7 @@ fnc_highchart_state_barchart <- function(df, title_name){
     hc_chart(type = "column") %>%
     hc_xAxis(categories = df$metric) %>%
     hc_add_series(data = subset(df, metric == "Technical Violation"), name = "Technical Violation", type = "column", hcaes(x = year, y = total), color = tech_co) %>%
-    hc_add_series(data = subset(df, metric == "New Offense"), name = "New Offense", type = "column", hcaes(x = year, y = total), color = new_o_co) %>%
+    hc_add_series(data = subset(df, metric == "New Offense Violation"), name = "New Offense Violation", type = "column", hcaes(x = year, y = total), color = new_o_co) %>%
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
     hc_yAxis(title = "", labels=list(format="{value:,.0f}")) %>%
@@ -349,7 +349,7 @@ fnc_highchart_map <- function(df, map_filename){
 #                                                      ),
 #
 #                                                      dui_sparkpatternlines(
-#                                                        id = "sup_viols",
+#                                                        id = "sup_violations",
 #                                                        height = 4,
 #                                                        width = 4,
 #                                                        stroke = viol_co,
@@ -423,7 +423,7 @@ fnc_reatable_table <- function(df){
                                         ),
 
                                         dui_sparkpatternlines(
-                                          id = "sup_viols",
+                                          id = "sup_violations",
                                           height = 4,
                                           width = 4,
                                           stroke = viol_co,
@@ -501,20 +501,20 @@ fnc_create_data_text <- function(df){
       data == "total_admissions"                            ~  "Total Admissions",
       data == "total_violation_admissions"                  ~  "Supervision Violation Admissions",
       data == "total_probation_violation_admissions"        ~  "Probation Violation Admissions",
-      data == "new_offense_probation_violation_admissions"  ~  "Probation New Offense Admissions",
+      data == "new_offense_probation_violation_admissions"  ~  "Probation New Offense Violation Admissions",
       data == "technical_probation_violation_admissions"    ~  "Probation Technical Admissions",
       data == "total_parole_violation_admissions"           ~  "Parole Violation Admissions",
-      data == "new_offense_parole_violation_admissions"     ~  "Parole New Offense Admissions",
+      data == "new_offense_parole_violation_admissions"     ~  "Parole New Offense Violation Admissions",
       data == "technical_parole_violation_admissions"       ~  "Parole Technical Admissions",
       data == "other_admissions"                            ~  "Other Admissions",
 
       data == "total_population"                            ~  "Total Population",
       data == "total_violation_population"                  ~  "Supervision Violation Population",
       data == "total_probation_violation_population"        ~  "Probation Violation Population",
-      data == "new_offense_probation_violation_population"  ~  "Probation New Offense Population",
+      data == "new_offense_probation_violation_population"  ~  "Probation New Offense Violation Population",
       data == "technical_probation_violation_population"    ~  "Probation Technical Population",
       data == "total_parole_violation_population"           ~  "Parole Violation Population",
-      data == "new_offense_parole_violation_population"     ~  "Parole New Offense Population",
+      data == "new_offense_parole_violation_population"     ~  "Parole New Offense Violation Population",
       data == "technical_parole_violation_population"       ~  "Parole Technical Population",
       data == "other_population"                            ~  "Other Population"
 
@@ -528,20 +528,20 @@ fnc_create_data_metric <- function(df){
       data == "total_admissions"                            ~  "Total",
       data == "total_violation_admissions"                  ~  "Supervision Violation",
       data == "total_probation_violation_admissions"        ~  "Probation Violation",
-      data == "new_offense_probation_violation_admissions"  ~  "New Offense",
+      data == "new_offense_probation_violation_admissions"  ~  "New Offense Violation",
       data == "technical_probation_violation_admissions"    ~  "Technical Violation",
       data == "total_parole_violation_admissions"           ~  "Parole Violation",
-      data == "new_offense_parole_violation_admissions"     ~  "New Offense",
+      data == "new_offense_parole_violation_admissions"     ~  "New Offense Violation",
       data == "technical_parole_violation_admissions"       ~  "Technical Violation",
       data == "other_admissions"                            ~  "Other",
 
       data == "total_population"                            ~  "Total",
       data == "total_violation_population"                  ~  "Supervision Violation",
       data == "total_probation_violation_population"        ~  "Probation Violation",
-      data == "new_offense_probation_violation_population"  ~  "New Offense",
+      data == "new_offense_probation_violation_population"  ~  "New Offense Violation",
       data == "technical_probation_violation_population"    ~  "Technical Violation",
       data == "total_parole_violation_population"           ~  "Parole Violation",
-      data == "new_offense_parole_violation_population"     ~  "New Offense",
+      data == "new_offense_parole_violation_population"     ~  "New Offense Violation",
       data == "technical_parole_violation_population"       ~  "Technical Violation",
       data == "other_population"                            ~  "Other"
     ))

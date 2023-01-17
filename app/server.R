@@ -499,20 +499,20 @@ server <- function(input, output, session) {
     filter_by <- paste0(input$data_map, " ", input$adm_or_pop_map)
     select_column = input$year_map
     select_column_name = paste0(select_column, " Change")
-    
-    df <- mclc_explorer_table %>% 
-      select(state, data, `2018`, `2019`, `2020`, `2021`, all_of(select_column), total_new, trend) %>% 
-      filter(data == filter_by) %>% 
-      arrange(state) %>% 
-      rename(State = state, change = all_of(select_column)) %>% 
+
+    df <- mclc_explorer_table %>%
+      select(state, data, `2018`, `2019`, `2020`, `2021`, all_of(select_column), total_new, trend) %>%
+      filter(data == filter_by) %>%
+      arrange(state) %>%
+      rename(State = state, change = all_of(select_column)) %>%
       mutate(
         trend = case_when(
             trend == "negative" ~ orange
           , trend == "positive" ~ regblue
           , trend == "same"     ~ "#585858" #grey 35
         )
-      ) 
-    
+      )
+
 
     reactable(df,
               style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
@@ -552,7 +552,7 @@ server <- function(input, output, session) {
                   colDef(minWidth = 140,
                          align = "center",
                          name = "Trend Line",
-                         sortable = FALSE, 
+                         sortable = FALSE,
                          cell = function(value, index) {
                            dui_sparkline(
                              data = value[[1]],
@@ -574,7 +574,7 @@ server <- function(input, output, session) {
                                  stroke = df$trend[index]
                                  )
                                )
-                             )}), 
+                             )}),
                 #trend, don't show, used in determing
                 trend = colDef(show = FALSE)
                 ))
@@ -605,8 +605,8 @@ server <- function(input, output, session) {
              metric == "Total")
   })
 
-  # Filter data to sup viols
-  df_vb_sup_viols <- reactive({
+  # Filter data to sup violations
+  df_vb_sup_violations <- reactive({
     vb_adm_pop %>%
       filter(state == input$state_report &
              adm_or_pop == input$adm_pop_report &
@@ -614,7 +614,7 @@ server <- function(input, output, session) {
              metric == "Supervision Violation")
   })
 
-  # Filter data to tech viols
+  # Filter data to tech violations
   df_vb_tech <- reactive({
     vb_adm_pop %>%
       filter(state == input$state_report &
@@ -623,13 +623,13 @@ server <- function(input, output, session) {
              metric == "Technical Violation")
   })
 
-  # Filter data to new offense viols
+  # Filter data to new offense violations
   df_vb_new_off <- reactive({
     vb_adm_pop %>%
       filter(state == input$state_report &
              adm_or_pop == input$adm_pop_report &
              year == "2021" &
-             metric == "New Offense")
+             metric == "New Offense Violation")
   })
 
   # Value box for change in total admissions or population
@@ -662,18 +662,18 @@ server <- function(input, output, session) {
   # Value box for change in supervision violation admissions or population
   output$sup_change <- renderValueBox({
 
-    if (is.na(df_vb_sup_viols()$change)) {
+    if (is.na(df_vb_sup_violations()$change)) {
       text <- "No Data"
-    } else if (df_vb_sup_viols()$change < 0) {
-      text <- tagList(HTML("&darr;"), paste0(df_vb_sup_viols()$change, "% from 2020"))
+    } else if (df_vb_sup_violations()$change < 0) {
+      text <- tagList(HTML("&darr;"), paste0(df_vb_sup_violations()$change, "% from 2020"))
     } else {
-      text <- tagList(HTML("&uarr;"), paste0(df_vb_sup_viols()$change, "% from 2020"))
+      text <- tagList(HTML("&uarr;"), paste0(df_vb_sup_violations()$change, "% from 2020"))
     }
 
-    if (is.na(df_vb_sup_viols()$total)) {
+    if (is.na(df_vb_sup_violations()$total)) {
       header <- "No Data"
     } else {
-      header <- comma(df_vb_sup_viols()$total, digits = 0)
+      header <- comma(df_vb_sup_violations()$total, digits = 0)
     }
 
     valueBox2(
@@ -732,7 +732,7 @@ server <- function(input, output, session) {
 
     valueBox2(
       header,
-      title = paste0("New Offense ", input$adm_pop_report, " in 2021"),
+      title = paste0("New Offense Violation ", input$adm_pop_report, " in 2021"),
       subtitle = text,
       color = "black",
       href = NULL
@@ -866,11 +866,11 @@ server <- function(input, output, session) {
 
   output$state_nt = renderUI({
 
-    # If state is missing new offense and technical violations (Admissions)
+    # If state is missing new offense violations and technical violations (Admissions)
     if(input$state_report %in% nt_na_adm & input$adm_pop_report == "Admissions"){
       htmlOutput("missing_data_nt_adm")
 
-      # If state is missing new offense and technical violations (Population)
+      # If state is missing new offense violations and technical violations (Population)
     } else if(input$state_report %in% nt_na_pop & input$adm_pop_report == "Population"){
       htmlOutput("missing_data_nt_pop")
 
@@ -888,11 +888,11 @@ server <- function(input, output, session) {
 
   output$state_nt_button = renderUI({
 
-    # If state is missing new offense and technical violations (Admissions)
+    # If state is missing new offense violations and technical violations (Admissions)
     if(input$state_report %in% nt_na_adm & input$adm_pop_report == "Admissions"){
       textOutput("missing_data_nt_button")
 
-      # If state is missing new offense and technical violations (Population)
+      # If state is missing new offense violations and technical violations (Population)
     } else if(input$state_report %in% nt_na_pop & input$adm_pop_report == "Population"){
       textOutput("missing_data_nt_button")
 
@@ -985,7 +985,7 @@ server <- function(input, output, session) {
                                           ),
 
                                           dui_sparkpatternlines(
-                                            id = "sup_viols",
+                                            id = "sup_violations",
                                             height = 4,
                                             width = 4,
                                             stroke = viol_co,
@@ -1225,61 +1225,61 @@ server <- function(input, output, session) {
     )
     HTML(out)
   })
-  
+
   output$parole_nt <- renderUI({
-    
-    # If state is missing new offense and technical violations (Admissions)
+
+    # If state is missing new offense violations and technical violations (Admissions)
     if(input$state_report %in% parole_na_adm & input$adm_pop_report == "Admissions" & !(input$state_report %in% abolish_prob_parole)){
-      
+
       fluidRow(column(width = 3),
                column(width = 6, align = "center", htmlOutput("missing_data_parole_nt_adm")),
                column(width = 3)
       )
-      
-      # If state is missing new offense and technical violations (Population)
+
+      # If state is missing new offense violations and technical violations (Population)
     } else if(input$state_report %in% parole_na_pop & input$adm_pop_report == "Population" & !(input$state_report %in% abolish_prob_parole)){
-      
+
       fluidRow(column(width = 3),
                column(width = 6, align = "center", htmlOutput("missing_data_parole_nt_pop")),
                column(width = 3)
       )
-      
-      # If state is missing new offense and technical violations (Admissions) AND abolished parole
+
+      # If state is missing new offense violations and technical violations (Admissions) AND abolished parole
     } else if(input$state_report %in% parole_na_adm & input$adm_pop_report == "Admissions" & (input$state_report %in% abolish_prob_parole)){
-      
+
       fluidRow(column(width = 3),
                column(width = 6, align = "center", htmlOutput("abolished_parole_adm")),
                column(width = 3)
       )
-      
-      # If state is missing new offense and technical violations (Admissions) AND abolished parole
+
+      # If state is missing new offense violations and technical violations (Admissions) AND abolished parole
     } else if(input$state_report %in% parole_na_pop & input$adm_pop_report == "Population" & (input$state_report %in% abolish_prob_parole)){
-      
+
       fluidRow(column(width = 3),
                column(width = 6, align = "center", htmlOutput("abolished_parole_pop")),
                column(width = 3)
       )
-      
+
       # If state has data (Admissions)
     } else if(input$state_report %in% parole_not_na_adm & input$adm_pop_report == "Admissions"){
-      
+
       fluidRow(column(width = 3),
                column(width = 5, align = "center", highchartOutput("parole_bar_chart", height = 400, width = 390)),
                column(width = 1, align = "left",   downloadButton(outputId = 'save_parole_bar_chart', "", class = "download-chart")),
                column(width = 3)
       )
-      
+
       # If state has data (Population)
     } else if(input$state_report %in% parole_not_na_pop & input$adm_pop_report == "Population"){
-      
+
       fluidRow(column(width = 3),
                column(width = 5, align = "center", highchartOutput("parole_bar_chart", height = 400, width = 390)),
                column(width = 1, align = "left",   downloadButton(outputId = 'save_parole_bar_chart', "", class = "download-chart")),
                column(width = 3)
       )
-      
+
     }
-    
+
   })
 
   #######
@@ -1457,101 +1457,101 @@ server <- function(input, output, session) {
   })
 
   # output$probation_nt = renderUI({
-  # 
-  #   # If state is missing new offense and technical violations (Admissions)
+  #
+  #   # If state is missing new offense violations and technical violations (Admissions)
   #   if(input$state_report %in% probation_na_adm & input$adm_pop_report == "Admissions"){
   #     htmlOutput("missing_data_probation_nt_adm")
-  # 
-  #     # If state is missing new offense and technical violations (Population)
+  #
+  #     # If state is missing new offense violations and technical violations (Population)
   #   } else if(input$state_report %in% probation_na_pop & input$adm_pop_report == "Population"){
   #     htmlOutput("missing_data_probation_nt_pop")
-  # 
+  #
   #     # If state has data (Admissions)
   #   } else if(input$state_report %in% probation_not_na_adm & input$adm_pop_report == "Admissions"){
   #     highchartOutput("probation_bar_chart", height = 400, width = 390)
-  # 
+  #
   #     # If state has data (Population)
   #   } else if(input$state_report %in% probation_not_na_pop & input$adm_pop_report == "Population"){
   #     highchartOutput("probation_bar_chart", height = 400, width = 390)
-  # 
+  #
   #   }
-  # 
+  #
   # })
-  # 
+  #
   # output$probation_nt_button = renderUI({
-  # 
-  #   # If state is missing new offense and technical violations (Admissions)
+  #
+  #   # If state is missing new offense violations and technical violations (Admissions)
   #   if(input$state_report %in% probation_na_adm & input$adm_pop_report == "Admissions"){
   #     textOutput("missing_data_probation_nt_button")
-  # 
-  #     # If state is missing new offense and technical violations (Population)
+  #
+  #     # If state is missing new offense violations and technical violations (Population)
   #   } else if(input$state_report %in% probation_na_pop & input$adm_pop_report == "Population"){
   #     textOutput("missing_data_probation_nt_button")
-  # 
+  #
   #     # If state has data (Admissions)
   #   } else if(input$state_report %in% probation_not_na_adm & input$adm_pop_report == "Admissions"){
   #     downloadButton(outputId = 'save_probation_bar_chart', "", class = "download-chart")
-  # 
+  #
   #     # If state has data (Population)
   #   } else if(input$state_report %in% probation_not_na_pop & input$adm_pop_report == "Population"){
   #     downloadButton(outputId = 'save_probation_bar_chart', "", class = "download-chart")
-  # 
+  #
   #   }
-  # 
+  #
   # })
-  
+
   output$probation_nt <- renderUI({
-    
-    # If state is missing new offense and technical violations (Admissions)
+
+    # If state is missing new offense violations and technical violations (Admissions)
     if(input$state_report %in% probation_na_adm & input$adm_pop_report == "Admissions"){
-      
+
       fluidRow(column(width = 3),
                column(width = 6, align = "center", htmlOutput("missing_data_probation_nt_adm")),
                column(width = 3)
       )
-      
-      # If state is missing new offense and technical violations (Population)
+
+      # If state is missing new offense violations and technical violations (Population)
     } else if(input$state_report %in% probation_na_pop & input$adm_pop_report == "Population"){
-      
+
       fluidRow(column(width = 3),
                column(width = 6, align = "center", htmlOutput("missing_data_probation_nt_pop")),
                column(width = 3)
       )
-      
+
       # If state has data (Admissions)
     } else if(input$state_report %in% probation_not_na_adm & input$adm_pop_report == "Admissions"){
-      
+
       fluidRow(column(width = 3),
                column(width = 5, align = "center", highchartOutput("probation_bar_chart", height = 400, width = 390)),
                column(width = 1, align = "left",   downloadButton(outputId = 'save_probation_bar_chart', "", class = "download-chart")),
                column(width = 3)
       )
-      
+
       # If state has data (Population)
     } else if(input$state_report %in% probation_not_na_pop & input$adm_pop_report == "Population"){
-      
+
       fluidRow(column(width = 3),
                column(width = 5, align = "center", highchartOutput("probation_bar_chart", height = 400, width = 390)),
                column(width = 1, align = "left",   downloadButton(outputId = 'save_probation_bar_chart', "", class = "download-chart")),
                column(width = 3)
       )
-      
+
     }
-    
+
   })
 
   ####
   ## RACE/ETHNICITY DISPARITIES MYE HERE
   ###
-  
+
   output$retitleend <- renderUI({
-    
+
    case_when(
         input$adm_pop_report == "Admissions" ~ "in Readmissions to Prison from Parole"
       , input$adm_pop_report == "Population" ~ "in Incarcerated Populations Readmitted to Prison from Parole"
     )
-    
-    
+
+
   })
 
   output$infogblack <- renderImage({
@@ -1566,7 +1566,7 @@ server <- function(input, output, session) {
         , alt = raceethnicity$infograph_alt(rridata, input$adm_pop_report, input$pop_denom, "Black", input$state_report)
         , width = "100%"
       )
-    } else { #should not be needed - used as back-up 
+    } else { #should not be needed - used as back-up
       plot <- ggplot2::ggplot() + ggplot2::theme_void()
       file <- tempfile(fileext = ".png")
       ggplot2::ggsave(filename = file, plot = plot, width = 24, height = 0.5)
@@ -1591,7 +1591,7 @@ server <- function(input, output, session) {
         , alt = raceethnicity$infograph_alt(rridata, input$adm_pop_report, input$pop_denom, "Hispanic", input$state_report)
         , width = "100%"
       )
-    } else { #should not be needed - used as back-up 
+    } else { #should not be needed - used as back-up
       plot <- ggplot2::ggplot() + ggplot2::theme_void()
       file <- tempfile(fileext = ".png")
       ggplot2::ggsave(filename = file, plot = plot, width = 24, height = 0.5)
@@ -1695,19 +1695,19 @@ server <- function(input, output, session) {
       raceethnicity$create_reactable(df)
     }
   })
-  
-  
-  # conditional panel for tables 
-  
+
+
+  # conditional panel for tables
+
   output$showtablepanel <- reactive({ input$showtables })
   outputOptions(output, 'showtablepanel', suspendWhenHidden = FALSE)
-  
-  
-  # conditional panel for infographics 
-  
-  output$showinfogpanel <- reactive({ 
+
+
+  # conditional panel for infographics
+
+  output$showinfogpanel <- reactive({
     dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
-    ifelse(dataavail == 1, TRUE, FALSE) 
+    ifelse(dataavail == 1, TRUE, FALSE)
   })
   outputOptions(output, 'showinfogpanel', suspendWhenHidden = FALSE)
 

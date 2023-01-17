@@ -42,7 +42,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                  column(width = 3, align = "center", class = "input-col",
                                                                          labeled_input('input-btn', "",
                                                                                selectizeInput('data_map', div(style = "font-weight: bold", "Select Data"),
-                                                                                              choices = c("Total", "New Offense", "Supervision Violation", "Probation Violation", "Parole Violation", "Technical Violation"),
+                                                                                              choices = c("Total", "New Offense Violation", "Supervision Violation", "Probation Violation", "Parole Violation", "Technical Violation"),
                                                                                               multiple = FALSE))),
                                                                  # Select Adm or Pop
                                                                  column(width = 3, align = "center", class = "input-col",
@@ -229,7 +229,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                           tabPanel(value="2","Parole",
 
                                                                    br(),
-                                                                   
+
                                                                    uiOutput("parole_nt"),
 
                                                                    br(),
@@ -248,7 +248,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                    br(),
 
                                                                    uiOutput("probation_nt"),
-                                                                   
+
                                                                    br(),
                                                                    br(),
                                                                    br(),
@@ -265,46 +265,46 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                    br(),
                                                                    fluidRow(
                                                                      column(width = 12, align = "center",
-                                                                     
+
                                                                      div(
                                                                        style = "
-                                                                          font-family: Graphik; 
-                                                                          font-weight: bold; 
-                                                                          font-size: 30px; 
-                                                                          line-height: 1.05em; 
+                                                                          font-family: Graphik;
+                                                                          font-weight: bold;
+                                                                          font-size: 30px;
+                                                                          line-height: 1.05em;
                                                                           margin-bottom: 12px;
-                                                                          display: inline-block; 
-                                                                       ", 
-                                                                       "Racial and Ethnicity", 
+                                                                          display: inline-block;
+                                                                       ",
+                                                                       "Racial and Ethnicity",
                                                                        pickerInput(
-                                                                         'pop_denom', 
-                                                                         label = NULL, #h3("Racial and Ethnicity", class = "reh3", style = "margin-bottom: 0px;"),  
-                                                                         width = "fit", 
+                                                                         'pop_denom',
+                                                                         label = NULL, #h3("Racial and Ethnicity", class = "reh3", style = "margin-bottom: 0px;"),
+                                                                         width = "fit",
                                                                          choices = c(
-                                                                            "Disparities"            = "BJS", 
+                                                                            "Disparities"            = "BJS",
                                                                             "Cumulative Disparities" = "CEN"
-                                                                         ), 
-                                                                         options = list(style = "re-picker"), 
+                                                                         ),
+                                                                         options = list(style = "re-picker"),
                                                                          inline = TRUE
-                                                                         ), #end pickerInput 
-                                                                       div(style = "display:inline-block;", htmlOutput("retitleend")), 
-                                                                       
-                                                                     ), 
+                                                                         ), #end pickerInput
+                                                                       div(style = "display:inline-block;", htmlOutput("retitleend")),
+
+                                                                     ),
                                                                      ), #end column width=8
                                                                      ), #end fluidRow
                                                                   fluidRow(
                                                                      column(width = 2),
                                                                      column(width = 8, align = "center",
-                                                                     
-                                                                     
+
+
                                                                        htmlOutput("infogheader"),
-                                                                       conditionalPanel(condition = "output.showinfogpanel", 
+                                                                       conditionalPanel(condition = "output.showinfogpanel",
                                                                           div(imageOutput("infogblack", height = "100%", ), style = "margin-bottom: 0.5em;"),
                                                                           imageOutput("infoghisp", height = "100%"),
                                                                           htmlOutput("howitscalculated"),
-                                                                       ), # end conditional panel 
-                                                                       
-                                                                       div(checkboxInput("showtables", "Show Additional Data Tables", value = FALSE), align = "left"), 
+                                                                       ), # end conditional panel
+
+                                                                       div(checkboxInput("showtables", "Show Additional Data Tables", value = FALSE), align = "left"),
                                                                        conditionalPanel(condition = "output.showtablepanel",
                                                                           htmlOutput("table_rri_header")   ,
                                                                           htmlOutput("table_rri")          ,
@@ -314,7 +314,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                           htmlOutput("table_revcnt")       ,
                                                                           br(),
                                                                           div(html("&#10033; Asterisk indicates situations where the parole revocation counts were less than 5."), class = "retxt", align = "left")
-                                                                       ), #end conditional Panel 
+                                                                       ), #end conditional Panel
                                                                      ), #end column width=8
                                                                      column(width = 2)
                                                                    ), #end fluidRow
