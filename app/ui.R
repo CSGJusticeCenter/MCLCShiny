@@ -163,7 +163,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                         br(),
 
                                         tags$style(".small-box.bg-black  {background-color: #004270 !important; color: #FFFFFF !important; font-family: Graphik !important;}"),
-                                        tags$style(".small-box           {border: 1px; border-style: solid; border-color: #FFFFFF !important; border-radius: 1px; padding: 0.75em; }"),
+                                        tags$style(".small-box           {border: 1px; border-style: solid; border-color: #FFFFFF !important; border-radius: 1px; padding: 0.75em;}"),
 
                                         fluidRow(column(width = 2),
                                                  column(width = 2,
@@ -174,7 +174,8 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                         valueBoxOutput("tech_change", width = 100)),
                                                  column(width = 2,
                                                         valueBoxOutput("new_off_change", width = 100)),
-                                                 column(width = 2)),
+                                                 column(width = 2)
+                                                 ),
 
                                         br(),
                                         br(),
