@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: server.R
 # Authors: Mari Roberts
-# Date last updated: November 30, 2022
+# Date last updated: January 17, 2022 (MR)
 # Description:
 #    Server for shiny app
 #######################################
@@ -30,6 +30,10 @@ server <- function(input, output, session) {
     if(!is.null(currentTab)){
       updateTabItems(session, "navbarID", selected = currentTab)
     }
+  })
+
+  output$blank <- renderText({
+    ""
   })
 
   ##############################################################################################################################
@@ -791,6 +795,50 @@ server <- function(input, output, session) {
     contentType = "image/png"
   )
 
+  output$state_area_button = renderUI({
+
+    # If state is missing new offense violations and technical violations (Admissions)
+    if(!(input$state_report %in% states) & input$adm_pop_report == "Admissions"){
+      textOutput("blank")
+
+      # If state is missing new offense violations and technical violations (Population)
+    } else if(!(input$state_report %in% states) & input$adm_pop_report == "Population"){
+      textOutput("blank")
+
+      # If state has data (Admissions)
+    } else if(input$state_report %in% states & input$adm_pop_report == "Admissions"){
+      downloadButton(outputId = 'save_state_area_chart', "", class = "download-chart")
+
+      # If state has data (Population)
+    } else if(input$state_report %in% states & input$adm_pop_report == "Population"){
+      downloadButton(outputId = 'save_state_area_chart', "", class = "download-chart")
+
+    }
+
+  })
+
+  output$state_area = renderUI({
+
+    # If state is missing new offense violations and technical violations (Admissions)
+    if(!(input$state_report %in% states) & input$adm_pop_report == "Admissions"){
+      textOutput("blank")
+
+      # If state is missing new offense violations and technical violations (Population)
+    } else if(!(input$state_report %in% states) & input$adm_pop_report == "Population"){
+      textOutput("blank")
+
+      # If state has data (Admissions)
+    } else if(input$state_report %in% states & input$adm_pop_report == "Admissions"){
+      highchartOutput("state_area_chart", height = 400, width = 390)
+
+      # If state has data (Population)
+    } else if(input$state_report %in% states & input$adm_pop_report == "Population"){
+      highchartOutput("state_area_chart", height = 400, width = 390)
+
+    }
+
+  })
+
   #######
   # Bar chart
   #######
@@ -839,6 +887,7 @@ server <- function(input, output, session) {
     },
     contentType = "image/png"
   )
+
 
   #######
   # Supervision Violations Graph - Dynamically change between sentence and graph depending on data availability
