@@ -128,7 +128,7 @@ adm_maps_2018_2019 <- map(.x = metrics,  .f = function(x) {
     filter(adm_or_pop == "Admissions",
            year       == "2018 - 2019",
            metric     == x)
-  filename <- paste("Change_in_", x, "Admissions_from_2018_2019", sep = "")
+  filename <- paste("Change_in_", x, "Admissions_from_2018_2019")
   admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
   return(highcharts)

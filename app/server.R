@@ -636,7 +636,7 @@ server <- function(input, output, session) {
   output$total_change <- renderValueBox({
 
     if (is.na(df_vb_total()$change)) {
-      text <- ""
+      text <- " "
     } else if (df_vb_total()$change < 0) {
       text <- tagList(HTML("&darr;"), paste0(df_vb_total()$change, "% from 2020"))
     } else {
@@ -649,12 +649,15 @@ server <- function(input, output, session) {
       header <- comma(df_vb_total()$total, digits = 0)
     }
 
-    valueBox2(
+
+
+    valueBox1(
       header,
       title = paste0("Overall ", input$adm_pop_report, " in 2021"),
       subtitle = text,
       color = "black",
-      href = NULL
+      href = NULL,
+      width = 5
     )
 
   })
@@ -676,12 +679,13 @@ server <- function(input, output, session) {
       header <- comma(df_vb_sup_violations()$total, digits = 0)
     }
 
-    valueBox2(
+    valueBox1(
       header,
       title = paste0("Supervision Violation ", input$adm_pop_report, " in 2021"),
       subtitle = text,
       color = "black",
-      href = NULL
+      href = NULL,
+      width = 5
     )
 
   })
@@ -703,12 +707,13 @@ server <- function(input, output, session) {
       header <- comma(df_vb_tech()$total, digits = 0)
     }
 
-    valueBox2(
+    valueBox1(
       header,
       title = paste0("Technical Violation ", input$adm_pop_report, " in 2021"),
       subtitle = text,
       color = "black",
-      href = NULL
+      href = NULL,
+      width = 5
     )
 
   })
@@ -735,7 +740,8 @@ server <- function(input, output, session) {
       title = paste0("New Offense Violation ", input$adm_pop_report, " in 2021"),
       subtitle = text,
       color = "black",
-      href = NULL
+      href = NULL,
+      width = 5
     )
 
   })
