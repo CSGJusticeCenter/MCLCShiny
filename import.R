@@ -43,6 +43,7 @@ library(utils)
 library(highcharter)
 library(extrafont)
 library(readr)
+library(usethis)
 
 box::use( prep/box/admin)
 
