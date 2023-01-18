@@ -12,6 +12,8 @@
 # must be in local repo to publish app
 #______________________________________________________
 
+states <- state.name
+
 load(file = "data/adm_pop_long.Rda")
 load(file = "data/mclc_explorer.Rda")
 load(file = "data/mclc_explorer_table.Rda")
