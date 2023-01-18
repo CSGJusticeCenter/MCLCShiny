@@ -24,7 +24,6 @@ server <- function(input, output, session) {
     )
     updateQueryString(newURL, mode = "replace", session)
   })
-
   observe({
     currentTab <- sub("#", "", session$clientData$url_hash)
     if(!is.null(currentTab)){
@@ -32,6 +31,7 @@ server <- function(input, output, session) {
     }
   })
 
+  # Output blank text
   output$blank <- renderText({
     ""
   })
