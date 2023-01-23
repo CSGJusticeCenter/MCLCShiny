@@ -119,6 +119,18 @@ create_reactable <- function(DF){
 }
 
 
+SUBHEAD_TEXT <- function(pop_denom, pop_or_adm_data){
+  
+  case_when(
+      pop_denom == "BJS" & pop_or_adm_data == "Admissions" ~ "disparities <i>at the point of readmission</i> to prison from parole"
+    , pop_denom == "CEN" & pop_or_adm_data == "Admissions" ~ "<i>cumulative disparities</i> accrued throughout the criminal justice system at the point of readmission to prison from parole"
+    , pop_denom == "BJS" & pop_or_adm_data == "Population" ~ "disparities in the number of people who are in prison on any given day after being readmitted from parole"
+    , pop_denom == "CEN" & pop_or_adm_data == "Population" ~ "<i>cumulative disparities</i> accrued throughout the criminal justice system for the number of people who are in prison on any given day after being readmitted from parole"
+  )
+  
+}
+
+
 
 #' Text to display the pop_denom 
 #'
@@ -135,24 +147,29 @@ pop_denom_text <- function(pop_denom, pop_or_adm_data){
   rlang::arg_match(pop_or_adm_data, c("Admissions", "Population"))
   
   
-  fill <- case_when(
-      pop_denom == "BJS" & pop_or_adm_data == "Admissions" ~ "disparities <i>at the point of readmission</i> to prison from parole"
-    , pop_denom == "CEN" & pop_or_adm_data == "Admissions" ~ "<i>cumulative disparities</i> accrued throughout the criminal justice system at the point of readmission to prison from parole"
-    , pop_denom == "BJS" & pop_or_adm_data == "Population" ~ "disparities in the number of people who are in prison on any given day after being readmitted from parole"
-    , pop_denom == "CEN" & pop_or_adm_data == "Population" ~ "<i>cumulative disparities</i> accrued throughout the criminal justice system for the number of people who are in prison on any given day after being readmitted from parole"
-  )
-  
   
   outtext <- paste0(
       "<div class = 'resubtitle'>"
      , "To highlight "
      , "<b>"
-     , fill
+     , SUBHEAD_TEXT(pop_denom, pop_or_adm_data)
      , "</b>"
      , ", rates are shown relative to White individuals."
      , "</div>"
   )
   
+}
+
+
+
+WHITE_INTRO_TEXT <- function(pop_denom, pop_or_adm_data){
+  
+  case_when(
+      pop_denom == "BJS" & pop_or_adm_data == "Admissions" ~ "For every White person who is readmitted to prison from parole"
+    , pop_denom == "CEN" & pop_or_adm_data == "Admissions" ~ "For every White person in the community who is readmitted to prison from parole"
+    , pop_denom == "BJS" & pop_or_adm_data == "Population" ~ "For every White person who is incarcerated after being readmitted to prison from parole"
+    , pop_denom == "CEN" & pop_or_adm_data == "Population" ~ "For every White person in the community who is incarcerated after being readmitted to prison from parole"
+  )
 }
 
 
@@ -174,14 +191,9 @@ infographic_header <- function(dataavail, pop_denom, pop_or_adm_data, note){
   
   if (dataavail == 1){
     
-    fill <- case_when(
-        pop_denom == "BJS" & pop_or_adm_data == "Admissions" ~ "For every White person who is readmitted to prison from parole..."
-      , pop_denom == "CEN" & pop_or_adm_data == "Admissions" ~ "For every White person in the community who is readmitted to prison from parole..."
-      , pop_denom == "BJS" & pop_or_adm_data == "Population" ~ "For every White person who is incarcerated after being readmitted to prison from parole..."
-      , pop_denom == "CEN" & pop_or_adm_data == "Population" ~ "For every White person in the community who is incarcerated after being readmitted to prison from parole..."
-    )
+    fill <- WHITE_INTRO_TEXT(pop_denom, pop_or_adm_data)
     
-    outtext <- paste0("<h3 class = 'reh3'>", fill,"</h3>")
+    outtext <- paste0("<h3 class = 'reh3'>", fill,"...", "</h3>")
   }
   
   if (dataavail == 0){
@@ -197,6 +209,16 @@ infographic_header <- function(dataavail, pop_denom, pop_or_adm_data, note){
   
 }
 
+
+
+INFOGRAPH_RE_TEXT <- function(whichNCRP){
+  
+  case_when(
+      whichNCRP == "Admissions" ~ "people are readmitted to prison from parole"
+    , whichNCRP == "Population" ~ "people are in prison after being readmitted from parole"
+  )
+  
+}
 
 
 #' CReate alt text for infogrpahic
@@ -216,39 +238,29 @@ infograph_alt <- function(RRIDATA, whichNCRP, whichPOP, whichRE, whichSTATE){
   suppress <- thisdata$SUPPRESS
   rri_val <- thisdata$S_RRI
   
-  suppress_pre <- ifelse(suppress == 0, "", "less than ")
-  suppress_suf <- ifelse(suppress == 0, "", " Note that revocation counts have been suppressed.")
-  
-  thistxt <- case_when(
-      whichPOP == "BJS" & whichNCRP == "Admissions" ~ "disparities in prison admissions for parole revocations"
-    , whichPOP == "CEN" & whichNCRP == "Admissions" ~ "the cumulative disparities accrued through the criminal justice system for re-admissions rates"
-    , whichPOP == "BJS" & whichNCRP == "Population" ~ "disparities in people serving time for parole revocations"
-    , whichPOP == "CEN" & whichNCRP == "Population" ~ "the cumulative disparities accrued through the criminal justice system for re-incarceration rates"
+  display_value <- case_when(
+      round(rri_val, 1) == 0 & rri_val > 0   ~ paste0(" less than 0.1")
+    , round(rri_val, 1) >  0 & suppress == 1 ~ paste0(" less than ",  sprintf(glue("%.{1}f"), round(rri_val, 1)))
+    , round(rri_val, 1) >  0 & suppress == 0 ~ paste0(" ",            sprintf(glue("%.{1}f"), round(rri_val, 1)))
   )
   
-  
-  # The info-graphic for [state] highlights [text].  For every White individual
-  # revoked there are *less than* [RRI] [Black/Hispanic] individual revoked.
-  # *Note that the revocation counts have been suppressed.*
-  
+  suppress_suf <- ifelse(suppress == 0, "", " Note that readmissions to prison from parole counts contain suppression.")
   
   string_vec <- c(
     "The info-graphic for "
     , whichSTATE
     , " highlights "
-    , thistxt
-    , "."
-    , " For every White individual revoked there are "
-    , suppress_pre
-    , sprintf("%.1f", round(rri_val, 1))
-    , " "
-    , whichRE
-    , " individuals revoked."
+    , SUBHEAD_TEXT(whichPOP, whichNCRP)
+    , ". "
+    , WHITE_INTRO_TEXT(whichPOP, whichNCRP)
+    , display_value, " "
+    , whichRE, " "
+    , INFOGRAPH_RE_TEXT(whichNCRP), "."
     , suppress_suf
   )
   
   
-  alt_text <- paste(string_vec[!is.na(string_vec)], collapse = "")
+  alt_text <- paste0(string_vec[!is.na(string_vec)], collapse = "")
   
   return(alt_text)
   
@@ -314,10 +326,10 @@ rate_table_header <- function(pop_denom, pop_or_adm_data, mult){
 
   
   out <- case_when(
-      pop_denom == "BJS" & pop_or_adm_data == "Admissions" ~ paste("Rate of Parole Revocations per", mult_txt, "Individuals Serving Parole Sentences")
-    , pop_denom == "CEN" & pop_or_adm_data == "Admissions" ~ paste("Rate of Parole Revocations per", mult_txt, "Individuals from the Community")
-    , pop_denom == "BJS" & pop_or_adm_data == "Population" ~ paste("Rate of Parole Revocations per", mult_txt, "Individuals Serving Parole Sentences")
-    , pop_denom == "CEN" & pop_or_adm_data == "Population" ~ paste("Rate of Parole Revocations per", mult_txt, "Individuals from the Community")
+      pop_denom == "BJS" & pop_or_adm_data == "Admissions" ~ paste("Rate of Readmissions to Prison from Parole per"                   , mult_txt, "Individuals Serving Parole Sentences")
+    , pop_denom == "CEN" & pop_or_adm_data == "Admissions" ~ paste("Rate of Readmissions to Prison from Parole per"                   , mult_txt, "Individuals from the Community")
+    , pop_denom == "BJS" & pop_or_adm_data == "Population" ~ paste("Rate of Incarceration after Readmission to Prison from Parole per", mult_txt, "Individuals Serving Parole Sentences")
+    , pop_denom == "CEN" & pop_or_adm_data == "Population" ~ paste("Rate of Incarceration after Readmission to Prison from Parole per", mult_txt, "Individuals from the Community")
   )
   
   

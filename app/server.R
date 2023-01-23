@@ -1714,7 +1714,7 @@ server <- function(input, output, session) {
 
   output$table_revcnt_header <- renderUI({
     df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")
-    main <- "<h4 class='reh4'>Parole Revocations Counts</h4>"
+    main <- "<h4 class='reh4'>Readmissions to Prison from Parole Counts</h4>"
     if (nrow(df) > 0){
       out <- main
     } else {
