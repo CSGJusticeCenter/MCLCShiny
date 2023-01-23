@@ -1596,23 +1596,18 @@ server <- function(input, output, session) {
   })
 
   ####
-  ## RACE/ETHNICITY DISPARITIES MYE HERE
+  ## RACE/ETHNICITY DISPARITIES  TAB 
   ###
 
   output$retitleend <- renderUI({
-
    case_when(
         input$adm_pop_report == "Admissions" ~ "in Readmissions to Prison from Parole"
       , input$adm_pop_report == "Population" ~ "in Incarcerated Populations Readmitted to Prison from Parole"
     )
-
-
   })
 
   output$infogblack <- renderImage({
-
     png_file  <- glue("data/infogs/{input$adm_pop_report}_{input$state_report}_{input$pop_denom}_Black.png")
-
     if (file.exists(png_file)){
       plot <- png_file
       list(
@@ -1635,9 +1630,7 @@ server <- function(input, output, session) {
   }, deleteFile = FALSE)
 
   output$infoghisp <- renderImage({
-
     png_file  <- glue("data/infogs/{input$adm_pop_report}_{input$state_report}_{input$pop_denom}_Hispanic.png")
-
     if (file.exists(png_file)){
       plot <- png_file
       list(
@@ -1659,18 +1652,13 @@ server <- function(input, output, session) {
     }
   }, deleteFile = FALSE)
 
-
   output$infogheader <- renderUI({
-
     dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
-
     out <- paste0(
         raceethnicity$pop_denom_text(input$pop_denom, input$adm_pop_report)
       , raceethnicity$infographic_header(dataavail, input$pop_denom, input$adm_pop_report, rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$NOTE)
     )
-
     HTML(out)
-
   })
 
   output$howitscalculated <- renderUI({
@@ -1700,9 +1688,7 @@ server <- function(input, output, session) {
     if (dataavail == 1){
       raceethnicity$create_reactable(df)
     }
-
   })
-
 
   output$table_rate_header <- renderUI({
     df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "RATE", whichTABLE = "table_suppress")
@@ -1714,8 +1700,7 @@ server <- function(input, output, session) {
                     , "<div class = 'retxt'>"
                     , "Data to calculate rates were not available for "
                     , input$state_report
-                    , "</div>"
-      )
+                    , "</div>")
     }
     HTML(out)
   })
@@ -1727,10 +1712,9 @@ server <- function(input, output, session) {
     }
   })
 
-
   output$table_revcnt_header <- renderUI({
     df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")
-    main <- "<h4 class='reh4'>Parole Revocations Counts</h4>"
+    main <- "<h4 class='reh4'>Readmissions to Prison from Parole Counts</h4>"
     if (nrow(df) > 0){
       out <- main
     } else {
@@ -1738,8 +1722,7 @@ server <- function(input, output, session) {
                     , "<div class = 'retxt'>"
                     , "Parole revocations data were not available for "
                     , input$state_report
-                    , "</div>"
-      )
+                    , "</div>")
     }
     HTML(out)
   })
@@ -1751,15 +1734,12 @@ server <- function(input, output, session) {
     }
   })
 
-
   # conditional panel for tables
-
   output$showtablepanel <- reactive({ input$showtables })
   outputOptions(output, 'showtablepanel', suspendWhenHidden = FALSE)
 
 
   # conditional panel for infographics
-
   output$showinfogpanel <- reactive({
     dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
     ifelse(dataavail == 1, TRUE, FALSE)
