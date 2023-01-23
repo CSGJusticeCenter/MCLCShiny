@@ -3,6 +3,7 @@
 box::use(
     reactable[...]
   , dplyr[...]
+  , glue[glue]
 )
 
 
