@@ -249,7 +249,7 @@ how_its_calc_txt <- function(DATA, whichRACE, whichSTATE, whichPOP, mult, NCRPLE
       paste(., collapse = "")
     
     
-    anysuppress <- ifelse(sum(DF$SUPPRESS) == 0, "", "<p>&#10033; Asterisk indicates that counts of readmissions to prison from parole are less than 5. In these instances, the actual count values are suppressed, counts are shown with a value of 5, and rates (along with relative rate index) are calculated using a count value of 5.</p>") 
+    anysuppress <- ifelse(sum(DF$SUPPRESS) == 0, "", "<p>&#10033; Asterisk indicates that counts of readmissions to prison from parole are less than 5. In these instances, the actual count values are suppressed, counts are shown with a value of 5, and rates are calculated using a count value of 5.</p>") 
     
     
     if (nrow(DF) == 2){
