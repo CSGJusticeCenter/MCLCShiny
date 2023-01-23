@@ -321,7 +321,8 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                           htmlOutput("table_revcnt_header"),
                                                                           htmlOutput("table_revcnt")       ,
                                                                           br(),
-                                                                          div(html("&#10033; Asterisk indicates situations where the readmissions to prison from parole counts were less than 5."), class = "retxt", align = "left")
+                                                                          div(html("&#10033; Asterisk indicates that counts of readmissions to prison from parole are less than 5. In these instances, the actual count values are suppressed, counts are shown with a value of 5, and rates (along with relative rate index) are calculated using a count value of 5.")
+                                                                              , class = "retxt", align = "left", style = "font-size: 0.95em !important;")
                                                                        ), #end conditional Panel
                                                                      ), #end column width=8
                                                                      column(width = 2)
