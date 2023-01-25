@@ -462,8 +462,8 @@ fnc_reatable_table <- function(df){
 ##########################
 
 # https://jkunst.com/blog/posts/2020-06-26-valuebox-and-sparklines/
-# Value boxes
-valueBox1 <- function(value, title, title2, subtitle, icon = NULL, color = "aqua", width = 4, href = NULL){
+# Value box
+valueBox <- function(value, title, adm_or_pop, finding, icon = NULL, color = "aqua", width = 4, href = NULL){
 
   shinydashboard:::validateColor(color)
 
@@ -474,35 +474,10 @@ valueBox1 <- function(value, title, title2, subtitle, icon = NULL, color = "aqua
     class = paste0("small-box bg-", color),
     div(
       class = "inner",
-      p(HTML(paste0("<b>", title, "</b><br><br>"))),
+      h4(HTML(paste0("<b>", title, "</b>"))),
+      h4(HTML(paste0("<b>", adm_or_pop, "</b>"))),
       h1(HTML(paste0("<b>", value, "</b>"))),
-      p(HTML(paste0("<b>", subtitle, "</b>")))
-    ),
-    if (!is.null(icon)) div(class = "icon-large", icon)
-  )
-
-  if (!is.null(href))
-    boxContent <- a(href = href, boxContent)
-
-  div(
-    class = if (!is.null(width)) paste0("col-sm-", width),
-    boxContent
-  )
-}
-valueBox2 <- function(value, title, subtitle, icon = NULL, color = "aqua", width = 4, href = NULL){
-
-  shinydashboard:::validateColor(color)
-
-  if (!is.null(icon))
-    shinydashboard:::tagAssert(icon, type = "i")
-
-  boxContent <- div(
-    class = paste0("small-box bg-", color),
-    div(
-      class = "inner",
-      p(HTML(paste0("<b>", title, "</b>"))),
-      h1(HTML(paste0("<b>", value, "</b>"))),
-      p(HTML(paste0("<b>", subtitle, "</b>")))
+      h5(HTML(paste0("<b>", finding, "</b>")))
     ),
     if (!is.null(icon)) div(class = "icon-large", icon)
   )
