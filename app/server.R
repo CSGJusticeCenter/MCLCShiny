@@ -655,10 +655,11 @@ server <- function(input, output, session) {
 
 
 
-    valueBox1(
+    valueBox(
       header,
-      title = paste0("Overall ", input$adm_pop_report, " in 2021"),
-      subtitle = text,
+      title = paste0("Overall "),
+      adm_or_pop = paste0(input$adm_pop_report, " in 2021"),
+      finding = text,
       color = "black",
       href = NULL,
       width = 5
@@ -683,10 +684,11 @@ server <- function(input, output, session) {
       header <- comma(df_vb_sup_violations()$total, digits = 0)
     }
 
-    valueBox1(
+    valueBox(
       header,
-      title = paste0("Supervision Violation ", input$adm_pop_report, " in 2021"),
-      subtitle = text,
+      title = paste0("Supervision Violation "),
+      adm_or_pop = paste0(input$adm_pop_report, " in 2021"),
+      finding = text,
       color = "black",
       href = NULL,
       width = 5
@@ -711,10 +713,11 @@ server <- function(input, output, session) {
       header <- comma(df_vb_tech()$total, digits = 0)
     }
 
-    valueBox1(
+    valueBox(
       header,
-      title = paste0("Technical Violation ", input$adm_pop_report, " in 2021"),
-      subtitle = text,
+      title = paste0("Technical Violation "),
+      adm_or_pop = paste0(input$adm_pop_report, " in 2021"),
+      finding = text,
       color = "black",
       href = NULL,
       width = 5
@@ -739,10 +742,11 @@ server <- function(input, output, session) {
       header <- comma(df_vb_new_off()$total, digits = 0)
     }
 
-    valueBox2(
+    valueBox(
       header,
-      title = paste0("New Offense Violation ", input$adm_pop_report, " in 2021"),
-      subtitle = text,
+      title = paste0("New Offense Violation "),
+      adm_or_pop = paste0(input$adm_pop_report, " in 2021"),
+      finding = text,
       color = "black",
       href = NULL,
       width = 5
@@ -1596,7 +1600,7 @@ server <- function(input, output, session) {
   })
 
   ####
-  ## RACE/ETHNICITY DISPARITIES  TAB 
+  ## RACE/ETHNICITY DISPARITIES  TAB
   ###
 
   output$retitleend <- renderUI({

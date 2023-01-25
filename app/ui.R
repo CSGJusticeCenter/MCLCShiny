@@ -177,17 +177,31 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                         tags$style(".small-box.bg-black  {background-color: #004270 !important; color: #FFFFFF !important; font-family: Graphik !important; height: 13em;}"),
                                         tags$style(".small-box           {border: 1px; border-style: solid; border-color: #FFFFFF !important; border-radius: 1px; padding: 0.75em; height: 13em;}"),
 
-                                        fluidRow(column(width = 2),
-                                                 column(width = 2,
-                                                        valueBoxOutput("total_change", width = 100)),
-                                                 column(width = 2,
-                                                        valueBoxOutput("sup_change", width = 100)),
-                                                 column(width = 2,
-                                                        valueBoxOutput("tech_change", width = 100)),
-                                                 column(width = 2,
-                                                        valueBoxOutput("new_off_change", width = 100)),
-                                                 column(width = 2)
+                                        fluidRow(column(width = 1),
+                                                 column(width = 10,
+                                                        fluidRow(
+                                                          column(width = 3,
+                                                                 valueBoxOutput("total_change", width = "100%")),
+                                                          column(width = 3,
+                                                                 valueBoxOutput("sup_change", width = "100%")),
+                                                          column(width = 3,
+                                                                 valueBoxOutput("tech_change", width = "100%")),
+                                                          column(width = 3,
+                                                                 valueBoxOutput("new_off_change", width = "100%")))
+                                                        ),
+                                                 column(width = 1)
                                                  ),
+                                        # fluidRow(column(width = 2),
+                                        #          column(width = 2,
+                                        #                 valueBoxOutput("total_change", width = "100%")),
+                                        #          column(width = 2,
+                                        #                 valueBoxOutput("sup_change", width = "100%")),
+                                        #          column(width = 2,
+                                        #                 valueBoxOutput("tech_change", width = "100%")),
+                                        #          column(width = 2,
+                                        #                 valueBoxOutput("new_off_change", width = "100%")),
+                                        #          column(width = 2)
+                                        # ),
 
                                         br(),
                                         br(),
@@ -268,7 +282,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                           ), # end tabPanel
 
-                                                          #### START RACE/ETHNICITY TAB 
+                                                          #### START RACE/ETHNICITY TAB
                                                           tabPanel(value="4","Race/Ethnicity", #MYE HERE
                                                                    br(),
                                                                    fluidRow(column(width = 12, align = "center",
@@ -281,8 +295,8 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                          options = list(style = "re-picker"),inline = TRUE
                                                                          ), #end pickerInput
                                                                        div(style = "display:inline-block;", htmlOutput("retitleend")),
-                                                                     ) #end div 
-                                                                     )), #end fluidRow>column 
+                                                                     ) #end div
+                                                                     )), #end fluidRow>column
                                                                   fluidRow(
                                                                      column(width = 2),
                                                                      column(width = 8, align = "center",
@@ -310,7 +324,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                    br(),
                                                                    br()
                                                           ) # end tabPanel
-                                                          #### END  RACE/ETHNICITY TAB 
+                                                          #### END  RACE/ETHNICITY TAB
 
                                                         ) # end tabsetPanel
                                                  ), # end column
