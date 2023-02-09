@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: reactable.R
 # Authors: Mari Roberts
-# Date last updated: July 20, 2022
+# Date last updated: February 9, 2023
 # Description:
 #    Create and save reactable tables so the app loads faster
 #######################################
@@ -28,6 +28,7 @@ library(reactable)
 library(stats)
 library(purrr)
 library(highcharter)
+# remotes::install_github("timelyportfolio/dataui")
 library(dataui)
 
 # assign colors for visualizations
@@ -208,14 +209,14 @@ probation_reactable_pop <- setNames(probation_reactable_pop, c("Alabama","Alaska
 theseFOLDERS <- c( "sharepoint" = admin$sp_data, "app" = "app/data")
 
 for (folder in theseFOLDERS){
-  
+
   save(state_reactable_adm,     file=file.path(folder, "state_reactable_adm.Rda"))
   save(state_reactable_pop,     file=file.path(folder, "state_reactable_pop.Rda"))
   save(parole_reactable_adm,    file=file.path(folder, "parole_reactable_adm.Rda"))
   save(parole_reactable_pop,    file=file.path(folder, "parole_reactable_pop.Rda"))
   save(probation_reactable_adm, file=file.path(folder, "probation_reactable_adm.Rda"))
   save(probation_reactable_pop, file=file.path(folder, "probation_reactable_pop.Rda"))
-  
+
 }
 
 

@@ -282,49 +282,49 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                                           ), # end tabPanel
 
-                                                          # #### START RACE/ETHNICITY TAB
-                                                          # tabPanel(value="4","Race/Ethnicity", #MYE HERE
-                                                          #          br(),
-                                                          #          fluidRow(column(width = 12, align = "center",
-                                                          #            div(style = "font-family: Graphik;font-weight: bold; font-size: 30px; line-height: 1.05em; margin-bottom: 12px; display: inline-block;",
-                                                          #              "Racial and Ethnicity",
-                                                          #              pickerInput('pop_denom', label = NULL, width = "fit",
-                                                          #                choices = c(
-                                                          #                   "Disparities"            = "BJS",
-                                                          #                   "Cumulative Disparities" = "CEN"  ),
-                                                          #                options = list(style = "re-picker"),inline = TRUE
-                                                          #                ), #end pickerInput
-                                                          #              div(style = "display:inline-block;", htmlOutput("retitleend")),
-                                                          #            ) #end div
-                                                          #            )), #end fluidRow>column
-                                                          #         fluidRow(
-                                                          #            column(width = 2),
-                                                          #            column(width = 8, align = "center",
-                                                          #              htmlOutput("infogheader"),
-                                                          #              conditionalPanel(condition = "output.showinfogpanel",
-                                                          #                 div(imageOutput("infogblack", height = "100%", ), style = "margin-bottom: 0.5em;"),
-                                                          #                 imageOutput("infoghisp", height = "100%"),
-                                                          #                 htmlOutput("howitscalculated"),
-                                                          #              ), # end conditional panel
-                                                          #              div(checkboxInput("showtables", "Show Additional Data Tables", value = FALSE), align = "left"),
-                                                          #              conditionalPanel(condition = "output.showtablepanel",
-                                                          #                 htmlOutput("table_rri_header")   ,
-                                                          #                 htmlOutput("table_rri")          ,
-                                                          #                 htmlOutput("table_rate_header")  ,
-                                                          #                 htmlOutput("table_rate")         ,
-                                                          #                 htmlOutput("table_revcnt_header"),
-                                                          #                 htmlOutput("table_revcnt")       ,
-                                                          #                 br(),
-                                                          #                 div(html("&#10033; Asterisk indicates that counts of readmissions to prison from parole are less than 5. In these instances, the actual count values are suppressed, counts are shown with a value of 5, and rates are calculated using a count value of 5.")
-                                                          #                     , class = "retxt", align = "left", style = "font-size: 0.95em !important;")
-                                                          #              ), #end conditional Panel
-                                                          #            ), #end column width=8
-                                                          #            column(width = 2)
-                                                          #          ), #end fluidRow
-                                                          #          br(),
-                                                          #          br()
-                                                          # ) # end tabPanel
-                                                          # #### END  RACE/ETHNICITY TAB
+                                                          #### START RACE/ETHNICITY TAB
+                                                          tabPanel(value="4","Race/Ethnicity", #MYE HERE
+                                                                   br(),
+                                                                   fluidRow(column(width = 12, align = "center",
+                                                                     div(style = "font-family: Graphik;font-weight: bold; font-size: 30px; line-height: 1.05em; margin-bottom: 12px; display: inline-block;",
+                                                                       "Racial and Ethnicity",
+                                                                       pickerInput('pop_denom', label = NULL, width = "fit",
+                                                                         choices = c(
+                                                                            "Disparities"            = "BJS",
+                                                                            "Cumulative Disparities" = "CEN"  ),
+                                                                         options = list(style = "re-picker"),inline = TRUE
+                                                                         ), #end pickerInput
+                                                                       div(style = "display:inline-block;", htmlOutput("retitleend")),
+                                                                     ) #end div
+                                                                     )), #end fluidRow>column
+                                                                  fluidRow(
+                                                                     column(width = 2),
+                                                                     column(width = 8, align = "center",
+                                                                       htmlOutput("infogheader"),
+                                                                       conditionalPanel(condition = "output.showinfogpanel",
+                                                                          div(imageOutput("infogblack", height = "100%", ), style = "margin-bottom: 0.5em;"),
+                                                                          imageOutput("infoghisp", height = "100%"),
+                                                                          htmlOutput("howitscalculated"),
+                                                                       ), # end conditional panel
+                                                                       div(checkboxInput("showtables", "Show Additional Data Tables", value = FALSE), align = "left"),
+                                                                       conditionalPanel(condition = "output.showtablepanel",
+                                                                          htmlOutput("table_rri_header")   ,
+                                                                          htmlOutput("table_rri")          ,
+                                                                          htmlOutput("table_rate_header")  ,
+                                                                          htmlOutput("table_rate")         ,
+                                                                          htmlOutput("table_revcnt_header"),
+                                                                          htmlOutput("table_revcnt")       ,
+                                                                          br(),
+                                                                          div(html("&#10033; Asterisk indicates that counts of readmissions to prison from parole are less than 5. In these instances, the actual count values are suppressed, counts are shown with a value of 5, and rates are calculated using a count value of 5.")
+                                                                              , class = "retxt", align = "left", style = "font-size: 0.95em !important;")
+                                                                       ), #end conditional Panel
+                                                                     ), #end column width=8
+                                                                     column(width = 2)
+                                                                   ), #end fluidRow
+                                                                   br(),
+                                                                   br()
+                                                          ) # end tabPanel
+                                                          #### END  RACE/ETHNICITY TAB
 
                                                         ) # end tabsetPanel
                                                  ), # end column
