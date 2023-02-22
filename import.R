@@ -3,12 +3,13 @@
 # File: import.R
 # Authors: Mari Roberts
 # Sub-Author: Martha Eichlersmith
-# Date last updated: January 18, 2022 (MR)
+# Date last updated: February 21, 2023 (MAR)
 
 # Description:
 #    Loads packages
 #    Imports data
 #    Combines data by year
+#    Cleans variable names
 #    Creates data files for app
 
 # Input:
@@ -18,19 +19,19 @@
 
 # Output:
 #     Data frames needed to run shiny app
-#     Saves data to local clone and research SP folder
+#     Saves data to research SP folder
 #######################################
 
-# Install this version of highcharter???
-# Remotes::install_github("batpigandme/highcharter@module-testing")
-# Remotes::install_github("jbkunst/highcharter")
-# install.packages("highcharter")
+# Path to data on research div sharepoint
+# Make sure sharepoint folder is synced locally
+# https://csgorg.sharepoint.com/:f:/s/Team-JC-Research/EhdvImKN2rdPnmHQ2TrKlooBdYqnnWc0SUXBNuh9C7d41g?e=NCsh8I
+# In your Renviron (usethis::edit_r_environ()), set CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"
 
 # Load packages
+library(csgjcr)
 library(rlang)
 library(dplyr)
 library(tidyr)
-library(csgjcr)
 library(geojsonsf)
 library(janitor)
 library(jsonlite)
@@ -42,31 +43,24 @@ library(utils)
 library(highcharter)
 library(extrafont)
 library(readr)
-library(usethis)
-library(zoo)
 
-box::use(prep/box/admin)
+box::use( prep/box/admin)
 
 # Load fonts
 font_add("Graphik",     regular = "app/www/fonts/Graphik.ttf")
 font_add("GraphikBold", regular = "app/www/fonts/GraphikBold.ttf")
 extrafont::loadfonts(quiet = TRUE)
 loadfonts(device="win")
+showtext_auto()
 
 # Load custom functions
 source("app/functions.R")
-
-# Path to data on research div sharepoint
-# Make sure sharepoint folder is synced locally
-# https://csgorg.sharepoint.com/:f:/s/Team-JC-Research/EhdvImKN2rdPnmHQ2TrKlooBdYqnnWc0SUXBNuh9C7d41g?e=NCsh8I
-# In your Renviron (usethis::edit_r_environ()), set CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"
 
 ########
 # Import data
 ########
 
-# Load sp file for map explorer
-# Remove DC
+# Load sp file
 hex <- read_sf(file.path(admin$sp_data_raw, "us_states_hexgrid.geojson")) %>%
   select(state_abb = iso3166_2) %>%
   filter(state_abb != "DC")
@@ -74,23 +68,27 @@ hex <- read_sf(file.path(admin$sp_data_raw, "us_states_hexgrid.geojson")) %>%
 # Load state abb
 stateAbb <- read.csv(file.path(admin$sp_data_raw, "stateAbb.csv"))
 
-# Load MCLC admissions data
+# Load admissions data
 adm18 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Admissions 2018")
 adm19 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Admissions 2019")
 adm20 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Admissions 2020")
 adm21 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Admissions 2021")
 
-# Load MCLC population data
+# Load population data
 pop18 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Population 2018")
 pop19 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Population 2019")
 pop20 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Population 2020")
 pop21 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Population 2021")
 
-# Load states notes
+# Load states  - will change to new notes when ready
 notes_raw <- read_csv(file.path(admin$sp_data_raw, "notes/state_notes_overview.csv"), show_col_types = FALSE)
 
 # Load info on abolishment of parole or probation
 abolish_prob_parole <- read_excel(file.path(admin$sp_survey, "MCLC 2022 Progress Tracking.xlsx"))
+
+# Import BJS total admissions and population since these numbers are more reliable
+bjs_pop <- read_excel(file.path(admin$sp_data_raw, "bjs/BJS - Prison Year-End Populations - 1978 to current.xlsx"))
+bjs_adm <- read_excel(file.path(admin$sp_data_raw, "bjs/BJS - Prison Admissions & Releases - 1978 to current.xlsx"))
 
 ################################################################################
 # Reformat shapefile for hex map
@@ -102,34 +100,32 @@ hex_gj <- hex %>%
   sf_geojson() %>%
   fromJSON(simplifyVector = FALSE)
 
-# Clean variables of state abbreviations file
+# clean state abbreviations file
 stateAbb <- clean_names(stateAbb)
 
 ################################################################################
 # Reformat data about probation and parole being abolished
 ################################################################################
 
-# Get list of states that abolished probation or parole
 abolish_prob_parole <- abolish_prob_parole %>%
   clean_names() %>%
   select(state, abolished_probation, abolished_discretionary_parole) %>%
-  distinct()
-abolish_prob_parole$state <- gsub('Excel', "", abolish_prob_parole$state)
-abolish_prob_parole$state <- gsub('[()]', "", abolish_prob_parole$state)
-abolish_prob_parole$state <- trimws(abolish_prob_parole$state)
-abolish_prob_parole <- abolish_prob_parole %>%
+  distinct() %>%
+  mutate(state = gsub('Excel', "", state),
+         state = gsub('[()]', "", state),
+         state = trimws(state)) %>%
   filter(abolished_discretionary_parole == "Yes")
 abolish_prob_parole <- abolish_prob_parole$state
 
 ################################################################################
-# Clean notes file
+# Reformat notes file
+################################################################################
 
 # weird special space character in Word, retained when copied over
 # In word, it's not a space, it's shown as the last character within a cell
-# Can't be removed with trimws default
+# can't be removed with trimws default
 # note that special_space_char == " " returns false
 # when into csv and just manually removed spaces at end of note
-################################################################################
 
 notes <- notes_raw %>%
   group_by(state) %>%
@@ -137,11 +133,33 @@ notes <- notes_raw %>%
   ungroup() %>%
   rowwise() %>%
   mutate(
-      notes = paste(note_lst, collapse = "</p><p class = 'statetxt'>")
+    notes = paste(note_lst, collapse = "</p><p class = 'statetxt'>")
     , notes = paste0("<p class = 'statetxt'>", notes, "</p>")
   ) %>%
   ungroup() %>%
   select(state, notes)
+
+################################################################################
+# Extract total population and total admissions from BJS data
+################################################################################
+
+# BJS pop
+bjs_pop <- bjs_pop %>%
+  clean_names() %>%
+  mutate(year = as.character(year)) %>%
+  select(state,
+         year,
+         total_prison_population_bjs = total_population) %>%
+  filter(year >= 2018 & year <= 2021)
+
+# BJS adm
+bjs_adm <- bjs_adm %>%
+  clean_names() %>%
+  mutate(year = as.character(year)) %>%
+  select(state,
+         year,
+         total_prison_admissions_bjs = admissions_total) %>%
+  filter(year >= 2018 & year <= 2021)
 
 ################################################################################
 # Admissions and populations dataset
@@ -164,24 +182,37 @@ pop21$year <- "2021"
 adm <- rbind(adm18, adm19, adm20, adm21)
 pop <- rbind(pop18, pop19, pop20, pop21)
 
-# Clean variable names
+# clean names
 adm <- clean_names(adm)
 pop <- clean_names(pop)
 
 # add adm and pop data together
-adm_pop <- merge(adm, pop, by = c("state", "year"))
-
-# Remove state abbrevs
-# Change data types
-# Calculate difference between total and supervision violations to get number of other
-# Rename variables
-adm_pop_all <- adm_pop %>%
+# remove state abbrevs
+# change data types
+# calculate difference between total and supervision violations to get number of other
+# replace total admissions and population numbers with BJS numbers since these are more reliable
+adm_pop <- adm %>%
+  left_join(pop, by = c("state", "year")) %>%
+  left_join(bjs_pop, by = c("state", "year")) %>%
+  left_join(bjs_adm, by = c("state", "year")) %>%
+  select(-c(total_prison_admissions, total_prison_population)) %>%
+  select(state,
+         year,
+         total_prison_admissions = total_prison_admissions_bjs,
+         total_prison_population = total_prison_population_bjs,
+         everything()) %>%
   ungroup() %>%
   select(state, year, everything()) %>%
+  select(-c(total_technical_violation_admissions,
+            total_new_offense_admissions,
+            total_technical_violation_population,
+            total_new_offense_population)) %>%
   mutate(state = factor(state)) %>%
   mutate_if(is.character, as.numeric) %>%
+
   mutate(other_admissions = total_prison_admissions-total_supervision_violation_admissions,
          other_population = total_prison_population-total_supervision_violation_population) %>%
+
   select(state,
          year,
          total_admissions                            = total_prison_admissions,
@@ -192,10 +223,6 @@ adm_pop_all <- adm_pop %>%
          total_parole_violation_admissions           = parole_violation_admissions,
          new_offense_parole_violation_admissions,
          technical_parole_violation_admissions,
-
-         total_technical_violation_admissions,
-         total_new_offense_violation_admissions      = total_new_offense_admissions,
-
          total_population                            = total_prison_population,
          total_violation_population                  = total_supervision_violation_population,
          total_probation_violation_population        = probation_violation_population,
@@ -204,44 +231,38 @@ adm_pop_all <- adm_pop %>%
          total_parole_violation_population           = parole_violation_population,
          new_offense_parole_violation_population,
          technical_parole_violation_population,
-
-         total_technical_violation_population,
-         total_new_offense_violation_population      = total_new_offense_population,
-
          other_admissions,
          other_population)
 
-# Remove variables and save df for later
-adm_pop <- adm_pop_all %>%
-  select(-c(total_technical_violation_admissions,
-            total_new_offense_violation_admissions,
-            total_technical_violation_population,
-            total_new_offense_violation_population))
-
-# Replace all NaN with NA
+# replace all NaN with NA
 adm_pop[adm_pop == "NaN"] <- NA
 
 ################################################################################
 # MAP EXPLORER PAGE
-# Map data
+# Value box data
 ################################################################################
 
-# Remove prob and parole variables
-mclc <- adm_pop_all %>%
+# add prob and parole variables together to get total new offense and technical admissions and population
+# remove prob and parole variables
+mclc <- adm_pop %>%
+  mutate(new_offense_admissions = new_offense_probation_violation_admissions + new_offense_parole_violation_admissions,
+         new_offense_population = new_offense_probation_violation_population + new_offense_parole_violation_population,
+         technical_admissions   = technical_probation_violation_admissions   + technical_parole_violation_admissions,
+         technical_population   = technical_probation_violation_population   + technical_parole_violation_population) %>%
   select(-c(new_offense_probation_violation_admissions, new_offense_parole_violation_admissions,
             new_offense_probation_violation_population, new_offense_parole_violation_population,
-            technical_probation_violation_admissions,   technical_parole_violation_admissions,
-            technical_probation_violation_population,   technical_parole_violation_population))
+            technical_probation_violation_admissions, technical_parole_violation_admissions,
+            technical_probation_violation_population, technical_parole_violation_population))
 
-# Make long form
-mclc_all <- gather(mclc, data, total, total_admissions:other_population)
+# make long form
+mclc_all <- gather(mclc, data, total, total_admissions:technical_population)
 
-# Calculate year changes
-# Remove dups
-# Create label ready variable called metric
-# Create pop vs adm variable
-# Change data types
-# Add state abbreviations
+# create change from 2018 to 2019 to 2020
+# remove dups
+# create label ready variable called metric
+# create pop vs adm variable
+# change data types
+# add state abbreviations
 mclc_all <- mclc_all %>%
   ungroup() %>%
   arrange(state) %>%
@@ -253,16 +274,16 @@ mclc_all <- mclc_all %>%
                      data == "total_violation_admissions"                  ~ "Supervision Violation",
                      data == "total_probation_violation_admissions"        ~ "Probation Violation",
                      data == "total_parole_violation_admissions"           ~ "Parole Violation",
-                     data == "total_new_offense_violation_admissions"      ~ "New Offense Violation",
-                     data == "total_technical_violation_admissions"        ~ "Technical Violation",
+                     data == "new_offense_admissions"                      ~ "New Offense Violation",
+                     data == "technical_admissions"                        ~ "Technical Violation",
                      data == "other_admissions"                            ~ "Other",
 
                      data == "total_population"                            ~ "Total",
                      data == "total_violation_population"                  ~ "Supervision Violation",
                      data == "total_probation_violation_population"        ~ "Probation Violation",
                      data == "total_parole_violation_population"           ~ "Parole Violation",
-                     data == "total_new_offense_violation_population"      ~ "New Offense Violation",
-                     data == "total_technical_violation_population"        ~ "Technical Violation",
+                     data == "new_offense_population"                      ~ "New Offense Violation",
+                     data == "technical_population"                        ~ "Technical Violation",
                      data == "other_population"                            ~ "Other"),
          adm_or_pop = ifelse(grepl("population", data), "Population", "Admissions"),
          data = paste0(metric, " " , adm_or_pop)) %>%
@@ -270,18 +291,18 @@ mclc_all <- mclc_all %>%
   left_join(stateAbb, by = "state") %>%
   select(state, year, total, everything())
 
-# Save labels
+# save labels
 labels <- mclc_all %>% ungroup() %>% select(data, metric, adm_or_pop) %>% distinct()
 
-# Make data frame for counts
-# Data is in wide form
+# make data frame for counts
+# data is in wide form
 mclc_counts <- mclc_all %>%
   select(-change)
 mclc_counts <- spread(mclc_counts, year, total) %>%
   select(state, data, `2018`, `2019`, `2020`, `2021`)
 
-# Make data frame for change
-# Data is in wide form
+# make data frame for change
+# data is in wide form
 mclc_change <- mclc_all %>%
   filter(year != 2018) %>%
   select(-total)
@@ -292,10 +313,11 @@ mclc_change <-
          `2018 - 2019` = `2019`,
          `2019 - 2020` = `2020`,
          `2020 - 2021` = `2021`
-         )
+  )
 
-# Combine counts and change tables together
-mclc_explorer_table <- left_join(mclc_counts, mclc_change, by = c("state", "data")) %>%
+# combine counts and change tables together
+mclc_explorer_table <-
+  left_join(mclc_counts, mclc_change, by = c("state", "data")) %>%
   mutate(`2018 - 2021` = (`2021`-`2018`)/`2018`)
 
 # Get 4 year change
@@ -307,7 +329,7 @@ mclc_explorer_table_4_yr <- mclc_explorer_table %>%
   mutate(year = 2022) %>%
   select(-abbrev)
 
-# Save reactable version of map explorer table
+# save reactable version of map explorer table
 mclc_explorer_table_long <- mclc_explorer_table %>%
   select(state, data, `2018`, `2019`, `2020`, `2021`) %>%
   pivot_longer(cols=c(`2018`, `2019`, `2020`, `2021`),
@@ -323,7 +345,7 @@ mclc_explorer_table_long <- mclc_explorer_table %>%
     , first  = ifelse(length_nona == 0, NA, vec_nona[1])
     , last   = ifelse(length_nona == 0, NA, vec_nona[length_nona])
     , trend = case_when(
-        first == last ~ "same"
+      first == last ~ "same"
       , first >  last ~ "negative" #trend is negative, decreasing
       , first <  last ~ "positive" #trend is positive, increasing
     )
@@ -332,8 +354,8 @@ mclc_explorer_table_long <- mclc_explorer_table %>%
 
 mclc_explorer_table <- merge(mclc_explorer_table, mclc_explorer_table_long, by = c("state", "data"))
 
-# Create year range
-# Create min and max values for legend scale
+# create year range
+# create min and max values for legend scale
 mclc_explorer <- mclc_all %>%
   filter(year != 2018) %>%
   rename(state_abb = code) %>%
@@ -353,24 +375,24 @@ mclc_explorer <- mclc_all %>%
   mutate(min_map = round(min(change, na.rm = TRUE), 0),      # use -1 to round up to nearest tenth
          max_map = round(max(change, na.rm = TRUE), 0)) %>%
   mutate(# get absolute value for comparison
-         min_map_abs = abs(min_map),
-         max_map_abs = abs(max_map),
-         min_map_type = ifelse(min_map >= 0, "positive", "negative"),
-         max_map_type = ifelse(max_map >= 0, "positive", "negative"))
+    min_map_abs = abs(min_map),
+    max_map_abs = abs(max_map),
+    min_map_type = ifelse(min_map >= 0, "positive", "negative"),
+    max_map_type = ifelse(max_map >= 0, "positive", "negative"))
 
 ################################################################################
 # STATE REPORTS PAGE
 # Value box data
 ################################################################################
 
-# Filter to value box values (total, supervision violations, new offense violations, and technical violations)
-# Create increase or decrease category for change
-# Change data types
+# filter to value box values (total, supervision violations, and technical violations)
+# create increase or decrease category for change
+# change data types
 vb_adm_pop <- mclc_all %>%
   filter(metric == "Total" |
-         metric == "Supervision Violation" |
-         metric == "Technical Violation" |
-         metric == "New Offense Violation") %>%
+           metric == "Supervision Violation" |
+           metric == "Technical Violation" |
+           metric == "New Offense Violation") %>%
   mutate(change = round(change*100, 0),
          change_type = ifelse(change > 0, "increase", "decrease"),
          state = as.character(state),
@@ -382,30 +404,29 @@ vb_adm_pop <- mclc_all %>%
 # State table under graph
 ##############################
 
-# Select variables
-# Sum by type
-# Remove probation, parole and other
-# Create text for table
+# select variables
+# sum by type
+# remove probation, parole and other
+# create text for table
 state_table <- mclc_all %>%
   select(state, year, data, total, metric, adm_or_pop) %>%
   group_by(state, year, metric, adm_or_pop) %>%
   summarise(total = sum(total)) %>%
   filter(metric != "Other" & metric != "Probation Violation" & metric != "Parole Violation") %>%
-  mutate(text = case_when(metric == "New Offense Violation"  & adm_or_pop == "Admissions" ~ "New Offense Violation Admissions",
-                          metric == "Supervision Violation"  & adm_or_pop == "Admissions" ~ "Supervision Violation Admissions",
-                          metric == "Technical Violation"    & adm_or_pop == "Admissions" ~ "Technical Violation Admissions",
-                          metric == "Total"                  & adm_or_pop == "Admissions" ~ "Total Admissions",
-
-                          metric == "New Offense Violation"  & adm_or_pop == "Population" ~ "New Offense Violation Population",
-                          metric == "Supervision Violation"  & adm_or_pop == "Population" ~ "Supervision Violation Population",
-                          metric == "Technical Violation"    & adm_or_pop == "Population" ~ "Technical Violation Population",
-                          metric == "Total"                  & adm_or_pop == "Population" ~ "Total Population")) %>%
+  mutate(text = case_when(metric == "New Offense Violation" & adm_or_pop == "Admissions"  ~ "New Offense Violation Admissions",
+                          metric == "Supervision Violation" & adm_or_pop == "Admissions"  ~ "Supervision Violation Admissions",
+                          metric == "Technical Violation" & adm_or_pop == "Admissions"    ~ "Technical Admissions",
+                          metric == "Total" & adm_or_pop == "Admissions"                  ~ "Total Admissions",
+                          metric == "New Offense Violation" & adm_or_pop == "Population"  ~ "New Offense Violation Population",
+                          metric == "Supervision Violation" & adm_or_pop == "Population"  ~ "Supervision Violation Population",
+                          metric == "Technical Violation" & adm_or_pop == "Population"    ~ "Technical Population",
+                          metric == "Total" & adm_or_pop == "Population"                  ~ "Total Population")) %>%
   select(state, text, adm_or_pop, everything())
 
-# Make wide form
+# make wide form
 state_table_wide <- spread(state_table, key = year, value = total)
 
-# Order data for table output
+# order data for table output
 state_table_wide <- state_table_wide %>%
   mutate(order = case_when(metric == "New Offense Violation"   ~ 4,
                            metric == "Supervision Violation"   ~ 2,
@@ -425,37 +446,37 @@ state_table_wide <- state_table_wide %>%
 # Parole table under graph
 ################################################################################
 
-# Make data long form
+# make data long form
 prob_parole_tables <- gather(adm_pop, data, total, total_admissions:other_population)
 
-# Filter to prob and parole info only
+# filter to prob and parole info only
 prob_parole_tables <- prob_parole_tables %>%
   select(state, year, data, total) %>%
   filter(grepl("parole|probation", data)) %>%
   mutate(adm_or_pop     = ifelse(grepl("population", data), "Population", "Admissions"),
          prob_vs_parole = ifelse(grepl("probation", data),  "Probation", "Parole"))
 
-# Create metric and text for table
+# create metric and text for table
 prob_parole_tables <- fnc_create_data_text(prob_parole_tables)
 prob_parole_tables <- fnc_create_data_metric(prob_parole_tables) %>%
   group_by(state, year, metric, adm_or_pop, prob_vs_parole, text) %>%
   summarise(total = sum(total))
 
-# Filter to parole
+# filter to parole
 parole_table <- prob_parole_tables %>%
   filter(prob_vs_parole == "Parole") %>%
   select(state, text, adm_or_pop, everything()) %>%
   select(-metric)
 
-# Make wide form
+# make wide form
 parole_table_wide <- spread(parole_table, key = year, value = total)
 
-# Order data for table output
+# order data for table output
 parole_table_wide <- parole_table_wide %>%
   mutate(order = case_when(
-    metric == "New Offense Violation" ~ 3,
-    metric == "Technical Violation"   ~ 2,
-    metric == "Parole Violation"      ~ 1)) %>%
+    metric == "New Offense Violation"   ~ 3,
+    metric == "Technical Violation"     ~ 2,
+    metric == "Parole Violation"        ~ 1)) %>%
   mutate(four_yr_change = (`2021`-`2018`)/`2018`) %>%
   select(state, text, `2018`, `2019`, `2020`, `2021`, four_yr_change, everything()) %>%
   select(-metric)
@@ -464,21 +485,21 @@ parole_table_wide <- parole_table_wide %>%
 # Probation table under graph
 ################################################################################
 
-# Filter to probation
+# filter to probation
 probation_table <- prob_parole_tables %>%
   filter(prob_vs_parole == "Probation") %>%
   select(state, text, adm_or_pop, everything()) %>%
   select(-metric)
 
-# Make wide form
+# make wide form
 probation_table_wide <- spread(probation_table, key = year, value = total)
 
-# Order data for table output
+# order data for table output
 probation_table_wide <- probation_table_wide %>%
   mutate(order = case_when(
-    metric == "New Offense Violation" ~ 3,
-    metric == "Technical Violation"   ~ 2,
-    metric == "Probation Violation"   ~ 1)) %>%
+    metric == "New Offense Violation"   ~ 3,
+    metric == "Technical Violation"     ~ 2,
+    metric == "Probation Violation"     ~ 1)) %>%
   # 3 year change
   mutate(four_yr_change = (`2021`-`2018`)/`2018`) %>%
   select(state, text, `2018`, `2019`, `2020`, `2021`, four_yr_change, everything()) %>%
@@ -494,9 +515,9 @@ probation_table_wide <- probation_table_wide %>%
 
 adm_pop_long <- gather(adm_pop, data, total, total_admissions:other_population)
 
-# Custom function to add text label depending on metric
-# Custom function to create an adm vs pop variable
-# Custom function to create a prob vs parole variable
+# custom function to add text label depending on metric
+# custom function to create an adm vs pop variable
+# custom function to create a prob vs parole variable
 adm_pop_long <- fnc_create_data_metric(adm_pop_long)
 adm_pop_long <- fnc_create_adm_pop(adm_pop_long)
 adm_pop_long <- fnc_create_prob_vs_parole(adm_pop_long)
@@ -505,13 +526,13 @@ adm_pop_long <- fnc_create_prob_vs_parole(adm_pop_long)
 # add info on probation and parole being abolished
 adm_pop_long <- adm_pop_long %>%
   mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", formattable::comma(total, digits = 0), "<br>"))
-  # left_join(abolish_prob_parole, by = "state")
+# left_join(abolish_prob_parole, by = "state")
 
-# Create new df
+# create new df
 csg <- adm_pop_long
 csg <- fnc_create_data_text(csg)
 
-# Select data and change data types
+# select data and change data types
 csg <- csg %>% ungroup() %>%
   select(state,
          metric = text,
@@ -522,10 +543,10 @@ csg <- csg %>% ungroup() %>%
 
 
 ################################################################################
-# States that don't have graphs because of missing data
+# states that don't have graphs because of missing data
 ################################################################################
 
-# States that are missing data and will not have a graph showing technical and new offense violations
+# states that are missing data and will not have a graph showing technical and new offense violations
 nt_na_adm1 <- mclc_all %>%
   filter(data == "New Offense Violation Admissions" | data == "Technical Violation Admissions") %>%
   group_by(state, data) %>%
@@ -541,7 +562,7 @@ nt_na_pop1 <- mclc_all %>%
   select(state) %>% distinct()
 nt_na_pop <- nt_na_pop1$state
 
-# States that are NOT missing data and will have a graph showing technical and new offense violations
+# states that are NOT missing data and will have a graph showing technical and new offense violations
 nt_not_na_adm <- mclc_all %>%   ungroup() %>% select(state) %>% distinct() %>%
   anti_join(nt_na_adm1, by = "state")
 nt_not_na_adm <- nt_not_na_adm$state
@@ -549,7 +570,7 @@ nt_not_na_pop <- mclc_all %>%   ungroup() %>% select(state) %>% distinct() %>%
   anti_join(nt_na_pop1, by = "state")
 nt_not_na_pop <- nt_not_na_pop$state
 
-# States that are missing data and will not have a parole graph
+# states that are missing data and will not have a parole graph
 parole_na_adm1 <- adm_pop_long %>%
   filter(data == "new_offense_parole_violation_admissions" | data == "technical_parole_violation_admissions") %>%
   mutate(state = as.character(state)) %>%
@@ -569,7 +590,7 @@ parole_na_pop1 <- adm_pop_long %>%
   select(state) %>% distinct()
 parole_na_pop <- parole_na_pop1$state
 
-# States that are NOT missing data and will have a graph showing technical and new offense parole violations
+# states that are NOT missing data and will have a graph showing technical and new offense parole violations
 parole_not_na_adm <- adm_pop_long %>% mutate(state = as.character(state)) %>% ungroup() %>% select(state) %>% distinct() %>%
   anti_join(parole_na_adm1, by = "state")
 parole_not_na_adm <- parole_not_na_adm$state
@@ -577,7 +598,7 @@ parole_not_na_pop <- adm_pop_long %>% mutate(state = as.character(state)) %>% un
   anti_join(parole_na_pop1, by = "state")
 parole_not_na_pop <- parole_not_na_pop$state
 
-# States that are missing data and will not have a probation graph
+# states that are missing data and will not have a probation graph
 probation_na_adm1 <- adm_pop_long %>%
   filter(data == "new_offense_probation_violation_admissions" | data == "technical_probation_violation_admissions") %>%
   mutate(state = as.character(state)) %>%
@@ -597,7 +618,7 @@ probation_na_pop1 <- adm_pop_long %>%
   select(state) %>% distinct()
 probation_na_pop <- probation_na_pop1$state
 
-# States that are NOT missing data and will have a graph showing technical and new offense probation violations
+# states that are NOT missing data and will have a graph showing technical and new offense probation violations
 probation_not_na_adm <- adm_pop_long %>% mutate(state = as.character(state)) %>% ungroup() %>% select(state) %>% distinct() %>%
   anti_join(probation_na_adm1, by = "state")
 probation_not_na_adm <- probation_not_na_adm$state
@@ -606,7 +627,7 @@ probation_not_na_pop <- adm_pop_long %>% mutate(state = as.character(state)) %>%
 probation_not_na_pop <- probation_not_na_pop$state
 
 ################################################################################
-# Save Rdata
+# save Rdata
 ################################################################################
 
 
