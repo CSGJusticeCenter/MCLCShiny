@@ -274,7 +274,7 @@ mclc_all <- mclc_all %>%
                      data == "total_violation_admissions"                  ~ "Supervision Violation",
                      data == "total_probation_violation_admissions"        ~ "Probation Violation",
                      data == "total_parole_violation_admissions"           ~ "Parole Violation",
-                     data == "new_offense_admissions"                      ~ "New Offense",
+                     data == "new_offense_admissions"                      ~ "New Offense Violation",
                      data == "technical_admissions"                        ~ "Technical Violation",
                      data == "other_admissions"                            ~ "Other",
 
@@ -282,7 +282,7 @@ mclc_all <- mclc_all %>%
                      data == "total_violation_population"                  ~ "Supervision Violation",
                      data == "total_probation_violation_population"        ~ "Probation Violation",
                      data == "total_parole_violation_population"           ~ "Parole Violation",
-                     data == "new_offense_population"                      ~ "New Offense",
+                     data == "new_offense_population"                      ~ "New Offense Violation",
                      data == "technical_population"                        ~ "Technical Violation",
                      data == "other_population"                            ~ "Other"),
          adm_or_pop = ifelse(grepl("population", data), "Population", "Admissions"),
@@ -392,7 +392,7 @@ vb_adm_pop <- mclc_all %>%
   filter(metric == "Total" |
            metric == "Supervision Violation" |
            metric == "Technical Violation" |
-           metric == "New Offense") %>%
+           metric == "New Offense Violation") %>%
   mutate(change = round(change*100, 0),
          change_type = ifelse(change > 0, "increase", "decrease"),
          state = as.character(state),
@@ -413,11 +413,11 @@ state_table <- mclc_all %>%
   group_by(state, year, metric, adm_or_pop) %>%
   summarise(total = sum(total)) %>%
   filter(metric != "Other" & metric != "Probation Violation" & metric != "Parole Violation") %>%
-  mutate(text = case_when(metric == "New Offense" & adm_or_pop == "Admissions"            ~ "New Offense Admissions",
+  mutate(text = case_when(metric == "New Offense Violation" & adm_or_pop == "Admissions"  ~ "New Offense Violation Admissions",
                           metric == "Supervision Violation" & adm_or_pop == "Admissions"  ~ "Supervision Violation Admissions",
                           metric == "Technical Violation" & adm_or_pop == "Admissions"    ~ "Technical Admissions",
                           metric == "Total" & adm_or_pop == "Admissions"                  ~ "Total Admissions",
-                          metric == "New Offense" & adm_or_pop == "Population"            ~ "New Offense Population",
+                          metric == "New Offense Violation" & adm_or_pop == "Population"  ~ "New Offense Violation Population",
                           metric == "Supervision Violation" & adm_or_pop == "Population"  ~ "Supervision Violation Population",
                           metric == "Technical Violation" & adm_or_pop == "Population"    ~ "Technical Population",
                           metric == "Total" & adm_or_pop == "Population"                  ~ "Total Population")) %>%
@@ -428,12 +428,12 @@ state_table_wide <- spread(state_table, key = year, value = total)
 
 # order data for table output
 state_table_wide <- state_table_wide %>%
-  mutate(order = case_when(metric == "New Offense"             ~ 4,
+  mutate(order = case_when(metric == "New Offense Violation"   ~ 4,
                            metric == "Supervision Violation"   ~ 2,
                            metric == "Technical Violation"     ~ 3,
                            metric == "Total"                   ~ 1,
 
-                           metric == "New Offense"             ~ 4,
+                           metric == "New Offense Violation"   ~ 4,
                            metric == "Supervision Violation"   ~ 2,
                            metric == "Technical Violation"     ~ 3,
                            metric == "Total"                   ~ 1),
@@ -474,7 +474,7 @@ parole_table_wide <- spread(parole_table, key = year, value = total)
 # order data for table output
 parole_table_wide <- parole_table_wide %>%
   mutate(order = case_when(
-    metric == "New Offense"             ~ 3,
+    metric == "New Offense Violation"   ~ 3,
     metric == "Technical Violation"     ~ 2,
     metric == "Parole Violation"        ~ 1)) %>%
   mutate(four_yr_change = (`2021`-`2018`)/`2018`) %>%
@@ -497,9 +497,9 @@ probation_table_wide <- spread(probation_table, key = year, value = total)
 # order data for table output
 probation_table_wide <- probation_table_wide %>%
   mutate(order = case_when(
-    metric == "New Offense"             ~ 3,
+    metric == "New Offense Violation"   ~ 3,
     metric == "Technical Violation"     ~ 2,
-    metric == "Probation Violation"        ~ 1)) %>%
+    metric == "Probation Violation"     ~ 1)) %>%
   # 3 year change
   mutate(four_yr_change = (`2021`-`2018`)/`2018`) %>%
   select(state, text, `2018`, `2019`, `2020`, `2021`, four_yr_change, everything()) %>%
@@ -548,14 +548,14 @@ csg <- csg %>% ungroup() %>%
 
 # states that are missing data and will not have a graph showing technical and new offense violations
 nt_na_adm1 <- mclc_all %>%
-  filter(data == "New Offense Admissions" | data == "Technical Violation Admissions") %>%
+  filter(data == "New Offense Violation Admissions" | data == "Technical Violation Admissions") %>%
   group_by(state, data) %>%
   summarise(total = sum(total, na.rm = TRUE)) %>%
   group_by(state) %>% filter(all(total == 0)) %>%
   select(state) %>% distinct()
 nt_na_adm <- nt_na_adm1$state
 nt_na_pop1 <- mclc_all %>%
-  filter(data == "New Offense Population" | data == "Technical Violation Population") %>%
+  filter(data == "New Offense Violation Population" | data == "Technical Violation Population") %>%
   group_by(state, data) %>%
   summarise(total = sum(total, na.rm = TRUE)) %>%
   group_by(state) %>% filter(all(total == 0)) %>%

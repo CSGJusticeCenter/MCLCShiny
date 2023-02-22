@@ -174,8 +174,8 @@ ui <- fluidPage(includeCSS("www/theme.css"),
 
                                         br(),
 
-                                        tags$style(".small-box.bg-black  {background-color: #004270 !important; color: #FFFFFF !important; font-family: Graphik !important; minwidth: 13em;}"),
-                                        tags$style(".small-box           {border: 1px; border-style: solid; border-color: #FFFFFF !important; border-radius: 1px; padding: 0.75em; minwidth: 13em;}"),
+                                        tags$style(".small-box.bg-black  {background-color: #004270 !important; color: #FFFFFF !important; font-family: Graphik !important; min-width: 13em; min-height: 13em;}"),
+                                        tags$style(".small-box           {border: 1px; border-style: solid; border-color: #FFFFFF !important; border-radius: 1px; padding: 0.75em; min-width: 13em; min-height: 13em;}"),
 
                                         fluidRow(column(width = 1),
                                                  column(width = 10,
