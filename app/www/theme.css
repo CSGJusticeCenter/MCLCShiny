@@ -78,25 +78,25 @@ Header and global drop down options
 
 
 
-/* picker input styling */ 
+/* picker input styling */
 
 
-/* color drop-down menu items (specifically, non-selected items) */ 
+/* color drop-down menu items (specifically, non-selected items) */
 .dropdown-menu ul li a {
-  color: #004270 !important; 
-  font-family: Graphik; 
+  color: #004270 !important;
+  font-family: Graphik;
 }
 
 
-/* color of selected item in drop down */ 
+/* color of selected item in drop down */
 .dropdown-menu>.active>a, .dropdown-menu>.active>a:focus {
-  color: #004270 !important; 
+  color: #004270 !important;
   background-color: #fff;
 }
 
-/* color background of selected item when hover over it */ 
+/* color background of selected item when hover over it */
 .dropdown-menu>.active>a:hover {
-  background-color: #f5f5f5; 
+  background-color: #f5f5f5;
 }
 
 
@@ -289,6 +289,18 @@ STATE REPORTS
 Tabset Panels
 ########################################*/
 
+/* Pop up for RE tab resizes for content*/
+.modal-dialog {
+    width: fit-content !important;
+}
+.modal-content {
+    font-family: Graphik;
+    border-radius:0px;
+}
+.close {
+    border-radius:0px;
+}
+
 /* Tab formatting - figure out how to change width */
   .nav {
     padding-left: 0;
@@ -357,7 +369,7 @@ Tabset Panels
 }
 
 /* place holder for state notes on overview tab */
-/* can add additional styling using this */ 
+/* can add additional styling using this */
 p.statetxt {
 }
 
@@ -411,22 +423,22 @@ h4.reh4 {
 }
 
 
-.resubtitle{ 
-  font-family: Graphik; 
+.resubtitle{
+  font-family: Graphik;
   font-size: 18px;
 }
 
 .re-picker, .re-picker:hover, .re-picker:active, .re-picker:focus {
-  color: #004270; 
+  color: #004270;
   border-radius:0px;
-  font-size: 30px; 
-  font-family: Graphik; 
-  font-weight: bold; 
+  font-size: 30px;
+  font-family: Graphik;
+  font-weight: bold;
   font-family: Graphik !important;
-  /* margin-bottom: 12px; */ 
+  /* margin-bottom: 12px; */
   text-decoration-line: underline;
-  background-color: #fff; 
-  padding: 0px 0.1em; 
+  background-color: #fff;
+  padding: 0px 0.1em;
 }
 
 
@@ -439,11 +451,11 @@ ul.calctxt {
 
 .checkbox {
   font-family: Graphik;
-} 
+}
 
-/* color of checked box */ 
-input[type=checkbox] { 
-  accent-color: #004270; 
+/* color of checked box */
+input[type=checkbox] {
+  accent-color: #004270;
 }
 
 
@@ -452,7 +464,7 @@ input[type=checkbox] {
 .custom-control-input:checked~.custom-control-label::before {
     color: #fff;
     border-color: red !important;
-    background-color: red !important; 
+    background-color: red !important;
 }
 
 
