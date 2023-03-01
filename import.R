@@ -3,7 +3,7 @@
 # File: import.R
 # Authors: Mari Roberts
 # Sub-Author: Martha Eichlersmith
-# Date last updated: February 21, 2023 (MAR)
+# Date last updated: February 28, 2023 (MAR)
 
 # Description:
 #    Loads packages
@@ -415,7 +415,7 @@ state_table <- mclc_all %>%
   filter(metric != "Other" & metric != "Probation Violation" & metric != "Parole Violation") %>%
   mutate(text = case_when(metric == "New Offense Violation" & adm_or_pop == "Admissions"  ~ "New Offense Violation Admissions",
                           metric == "Supervision Violation" & adm_or_pop == "Admissions"  ~ "Supervision Violation Admissions",
-                          metric == "Technical Violation" & adm_or_pop == "Admissions"    ~ "Technical Admissions",
+                          metric == "Technical Violation" & adm_or_pop == "Admissions"    ~ "Technical Violation Admissions",
                           metric == "Total" & adm_or_pop == "Admissions"                  ~ "Total Admissions",
                           metric == "New Offense Violation" & adm_or_pop == "Population"  ~ "New Offense Violation Population",
                           metric == "Supervision Violation" & adm_or_pop == "Population"  ~ "Supervision Violation Population",

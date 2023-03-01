@@ -517,7 +517,6 @@ server <- function(input, output, session) {
         )
       )
 
-
     reactable(df,
               style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
               theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"), # was center
@@ -652,8 +651,6 @@ server <- function(input, output, session) {
     } else {
       header <- comma(df_vb_total()$total, digits = 0)
     }
-
-
 
     valueBox(
       header,
@@ -1602,6 +1599,24 @@ server <- function(input, output, session) {
   ####
   ## RACE/ETHNICITY DISPARITIES  TAB
   ###
+
+  # When Race/Ethinicity tab is selected, show pop up about how data is not MCLC
+  observeEvent(input$tabsetpanel, {
+    if (input$tabsetpanel == 4)  {
+      str1 = tags$span(
+        "This tab of the dashboard uses data from BJS, PUMS, and NCRP and is not collected through the MCLC survey.",
+        style = "font-size: 1em; font-weight: bold;"
+      )
+      showModal(modalDialog(
+        title = "Race/Ethnicity Data",
+        tagList(str1),
+        HTML('<br><br><img src="different_types_of_disparities.png" />'),
+        easyClose = TRUE
+      ))
+    }
+    else{}
+  }
+  )
 
   output$retitleend <- renderUI({
    case_when(
