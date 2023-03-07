@@ -3,7 +3,7 @@
 # File: import.R
 # Authors: Mari Roberts
 # Sub-Author: Martha Eichlersmith
-# Date last updated: February 28, 2023 (MAR)
+# Date last updated: March 7, 2023 (MAR)
 
 # Description:
 #    Loads packages
@@ -28,6 +28,7 @@
 # In your Renviron (usethis::edit_r_environ()), set CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"
 
 # Load packages
+# remotes::install_github("csgjusticecenter/csgjcr")
 library(csgjcr)
 library(rlang)
 library(dplyr)
@@ -44,7 +45,7 @@ library(highcharter)
 library(extrafont)
 library(readr)
 
-box::use( prep/box/admin)
+box::use(prep/box/admin)
 
 # Load fonts
 font_add("Graphik",     regular = "app/www/fonts/Graphik.ttf")
