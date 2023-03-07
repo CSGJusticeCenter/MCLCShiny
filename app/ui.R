@@ -21,7 +21,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                            tags$style(type = "text/css", ".navbar {margin-bottom: .5px;}"),
                            tags$style(type = "text/css", ".container-fluid .navbar-header .navbar-brand {margin-left: 0px;}"),
 
-                           #hide errors on user-end
+                           # hide errors on user-end
                            tags$style(type="text/css",
                                       ".shiny-output-error { visibility: hidden; }",
                                       ".shiny-output-error:before { visibility: visible; content: ''; }"),
@@ -191,18 +191,6 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                         ),
                                                  column(width = 1)
                                                  ),
-                                        # fluidRow(column(width = 2),
-                                        #          column(width = 2,
-                                        #                 valueBoxOutput("total_change", width = "100%")),
-                                        #          column(width = 2,
-                                        #                 valueBoxOutput("sup_change", width = "100%")),
-                                        #          column(width = 2,
-                                        #                 valueBoxOutput("tech_change", width = "100%")),
-                                        #          column(width = 2,
-                                        #                 valueBoxOutput("new_off_change", width = "100%")),
-                                        #          column(width = 2)
-                                        # ),
-
                                         br(),
                                         br(),
 

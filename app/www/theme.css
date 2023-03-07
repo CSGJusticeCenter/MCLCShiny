@@ -35,7 +35,6 @@ Font size and style
 ########################################*/
 
 /* Add fonts*/
-/* Add fonts*/
 @font-face {
     font-family: "Graphik";
     src: local('Graphik'), url("fonts/Graphik.ttf");

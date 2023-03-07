@@ -11,6 +11,14 @@
 # Highchart
 ##########################
 
+# CSG logo
+render_image <- JS("
+  function(){
+    this.renderer.image('https://csg-state-violent-crime.netlify.app/img/csgjc-logo.png', 30, this.chartHeight - 37, 140.1, 30)
+    .add();
+  }")
+
+
 # Highcharts theme for hex map
 hc_theme_map_jc <- hc_theme_merge(
   hc_theme_smpl(),
@@ -101,9 +109,9 @@ fnc_highchart_state_areachart <- function(df, title_name){
                                  borderWidth = 3),
                    accessibility = list(enabled = TRUE,
                                         keyboardNavigation = list(enabled = TRUE),
-                                        linkedDescription = 'TEXT.',
+                                        linkedDescription = 'This area chart was created by a selected state and selected admissions or population numbers. Image description: A area chart that shows the total prison admissions or population, and number of supervision violation admissions or population, separated out by technical violation and new offense violation.',
                                         landmarkVerbosity = "one"),
-                   area = list(accessibility = list(description = "TEXT."))
+                   area = list(accessibility = list(description = "This area chart was created by a selected state and selected admissions or population numbers. Image description: A area chart that shows the total prison admissions or population, and number of supervision violation admissions or population, separated out by technical violation and new offense violation."))
     )
 }
 
@@ -134,9 +142,9 @@ fnc_highchart_state_barchart <- function(df, title_name){
                                  borderWidth = 3),
                    accessibility = list(enabled = TRUE,
                                         keyboardNavigation = list(enabled = TRUE),
-                                        linkedDescription = 'TEXT.',
+                                        linkedDescription = 'This bar chart was created by a selected state and selected admissions or population numbers. Image description: A bar chart that shows the number of supervision violation admissions or population, separated out by technical violation and new offense violation.',
                                         landmarkVerbosity = "one"),
-                   area = list(accessibility = list(description = "TEXT."))
+                   area = list(accessibility = list(description = "This bar chart was created by a selected state and selected admissions or population numbers. Image description: A bar chart that shows the number of supervision violation admissions or population, separated out by technical violation and new offense violation."))
     )
 }
 
@@ -306,6 +314,257 @@ fnc_highchart_map <- function(df, map_filename){
 
 }
 
+##########################
+# Highcharts with logo
+##########################
+
+# Highchart area chart for state page WITH logo
+fnc_highchart_state_areachart_logo <- function(df, title_name){
+  highchart() %>%
+
+    hc_chart(type="area",
+             events = list(render = render_image),
+             marginBottom = 80) %>%
+    hc_add_series(data = subset(df, metric == "Total"), name = "Total", type = "area", hcaes(x = year, y = total), color = total_co,
+                  dataLabels = list(enabled = TRUE, format='{point.total:,.0f}')) %>%
+    hc_add_series(data = subset(df, metric == "Supervision Violation"), name = "Supervision Violation", type = "area", hcaes(x = year, y = total), color = viol_co,
+                  dataLabels = list(enabled = TRUE, format='{point.total:,.0f}')) %>%
+    hc_add_series(data = subset(df, metric == "Technical Violation"), name = "Technical Violation", type = "area", hcaes(x = year, y = total), color = tech_co,
+                  dataLabels = list(enabled = TRUE, format='{point.total:,.0f}')) %>%
+    hc_add_series(data = subset(df, metric == "New Offense Violation"), name = "New Offense Violation", type = "area", hcaes(x = year, y = total), color = new_o_co,
+                  dataLabels = list(enabled = TRUE, format='{point.total:,.0f}')) %>%
+
+    hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
+    hc_yAxis(title = "", labels=list(format="{value:,.0f}")) %>%
+
+    hc_title(
+      text = title_name,
+      align = "center",
+      style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
+    ) %>%
+
+    hc_add_theme(hc_theme_jc) %>%
+
+    hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
+
+    hc_plotOptions(series = list(animation = FALSE,
+                                 cursor = "pointer",
+                                 borderWidth = 3),
+                   accessibility = list(enabled = TRUE,
+                                        keyboardNavigation = list(enabled = TRUE),
+                                        linkedDescription = 'This area chart was created by a selected state and selected admissions or population numbers. Image description: A area chart that shows the total prison admissions or population, and number of supervision violation admissions or population, separated out by technical violation and new offense violation.',
+                                        landmarkVerbosity = "one"),
+                   area = list(accessibility = list(description = "This area chart was created by a selected state and selected admissions or population numbers. Image description: A area chart that shows the total prison admissions or population, and number of supervision violation admissions or population, separated out by technical violation and new offense violation."))
+    )
+}
+
+
+# Supervision violation highchart bar chart for state page WITH logo
+fnc_highchart_state_barchart_logo <- function(df, title_name){
+  highchart() %>%
+    hc_chart(type = "column",
+             events = list(render = render_image),
+             marginBottom = 80) %>%
+    hc_xAxis(categories = df$metric) %>%
+    hc_add_series(data = subset(df, metric == "Technical Violation"), name = "Technical Violation", type = "column", hcaes(x = year, y = total), color = tech_co,
+                  dataLabels = list(enabled = TRUE, format='{point.total:,.0f}')) %>%
+    hc_add_series(data = subset(df, metric == "New Offense Violation"), name = "New Offense Violation", type = "column", hcaes(x = year, y = total), color = new_o_co,
+                  dataLabels = list(enabled = TRUE, format='{point.total:,.0f}')) %>%
+
+    hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
+    hc_yAxis(title = "", labels=list(format="{value:,.0f}")) %>%
+
+    hc_title(
+      text = title_name,
+      align = "center",
+      style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
+    ) %>%
+
+    hc_add_theme(hc_theme_jc) %>%
+
+    hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
+
+    hc_plotOptions(series = list(animation = FALSE,
+                                 cursor = "pointer",
+                                 borderWidth = 3),
+                   accessibility = list(enabled = TRUE,
+                                        keyboardNavigation = list(enabled = TRUE),
+                                        linkedDescription = 'This bar chart was created by a selected state and selected admissions or population numbers. Image description: A bar chart that shows the number of supervision violation admissions or population, separated out by technical violation and new offense violation.',
+                                        landmarkVerbosity = "one"),
+                   area = list(accessibility = list(description = "This bar chart was created by a selected state and selected admissions or population numbers. Image description: A bar chart that shows the number of supervision violation admissions or population, separated out by technical violation and new offense violation."))
+    )
+}
+
+# WITH logo
+fnc_highchart_map_logo <- function(df, map_filename){
+
+  # Get minimum and maximum value
+  min_map <- min(df$change, na.rm = TRUE)
+  max_map <- max(df$change, na.rm = TRUE)
+
+  # Get absolute value for comparison
+  min_map_abs <- abs(min_map)
+  max_map_abs <- abs(max_map)
+
+  # Get neg or pos sign for min and max
+  min_map_type <- ifelse(min_map >= 0, "positive", "negative")
+  max_map_type <- ifelse(max_map >= 0, "positive", "negative")
+
+  # Generate tile map
+  # Has diverging scales when there are neg and pos values which centers the color gradient at zero
+  # Has a gradient scale when both the min and max are both negative or both positive
+
+  # Determine the new min and max so that zero is centered
+  # For example, If the highest positive value is 20 than the negative value is -20
+  if (min_map_type != max_map_type) {
+
+    NEW_MAX <- case_when(
+      max_map_abs > min_map_abs ~ max_map_abs,
+      max_map_abs < min_map_abs ~ min_map_abs,
+      max_map_abs == min_map_abs ~ max_map_abs)
+    NEW_MIN <- case_when(
+      min_map_abs > max_map_abs ~ min_map_abs,
+      min_map_abs < max_map_abs ~ max_map_abs,
+      min_map_abs == max_map_abs ~ min_map_abs)
+    NEW_MAX <- ifelse(max_map_type == "negative", -abs(NEW_MAX), abs(NEW_MAX))
+    NEW_MIN <- ifelse(min_map_type == "negative", -abs(NEW_MIN), abs(NEW_MIN))
+
+    highchart() %>%
+
+      hc_add_series_map(
+        map = hex_gj,
+        df = df,
+        joinBy = "state_abb",
+        value = "change",
+        dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
+                          style = list(fontSize = "14px",
+                                       fontWeight = "regular",
+                                       fontFamily = "Graphik",
+                                       textOutline = 0)),
+        nullColor = "#e8e8e8") %>%
+
+      hc_colorAxis(min = NEW_MIN,
+                   max = NEW_MAX,
+                   stops = color_stops(7, c(darkorange, orange, lightorange, white, lightblue, regblue, darkblue)),
+                   labels = list(format = "{value}%",
+                                 style = list(fontSize = "14px"))
+      ) %>%
+
+      hc_legend(align = "right",
+                verticalAlign = "bottom",
+                layout = "vertical",
+                #padding = 10,
+                symbolHeight = 200,
+                symbolWidth = 25,
+                x = -25,
+                y = 0
+
+      ) %>%
+
+      hc_add_theme(hc_theme_map_jc) %>%
+      hc_chart(events = list(render = render_image),
+               marginBottom = 80) %>%
+
+      hc_xAxis(title = "") %>%
+      hc_yAxis(title = "") %>%
+      hc_title(
+        text = paste0("Change in ", unique(df$metric), " ", unique(df$adm_or_pop), " from ", unique(df$year)),
+        align = "center",
+        style = list(#fontFamily = "Graphik-Bold", # works in view but not in export
+          fontWeight = "bold",
+          fontFamily = "Graphik", # works in view and export but is the wrong font
+          fontSize = "30px",
+          useHTML = TRUE)
+      ) %>%
+
+      hc_setup() %>%
+      hc_exporting(enabled = FALSE,
+                   filename = map_filename,
+                   buttons = list(
+                     contextButton = list(
+                       menuItems = list('downloadPNG', 'downloadSVG')
+                     ))) %>%
+
+      hc_plotOptions(series = list(animation = FALSE,
+                                   dataLabels = list(enabled = TRUE),
+                                   cursor = "pointer",
+                                   borderWidth = 3),
+                     accessibility = list(enabled = TRUE,
+                                          keyboardNavigation = list(enabled = TRUE),
+                                          linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
+                                          landmarkVerbosity = "one"),
+                     area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
+      )
+
+  } else {
+
+
+    # Determine the new min and max where all values are negative
+    NEW_MAX <- max_map
+    NEW_MIN <- min_map
+
+    highchart() %>%
+
+      hc_add_series_map(
+        map = hex_gj,
+        df = df,
+        joinBy = "state_abb",
+        value = "change",
+        dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
+                          style = list(fontSize = "14px",
+                                       fontWeight = "regular",
+                                       fontFamily = "Graphik",
+                                       textOutline = 0)),
+        nullColor = "#e8e8e8") %>%
+
+      hc_colorAxis(min = NEW_MIN,
+                   max = NEW_MAX,
+                   stops = color_stops(4, c(darkorange, orange, lightorange, white)),
+                   labels = list(format = "{value}%",
+                                 style = list(fontSize = "14px"))) %>%
+
+      hc_legend(align = "right",
+                verticalAlign = "bottom",
+                layout = "vertical",
+                #padding = 10,
+                symbolHeight = 200,
+                symbolWidth = 25,
+                x = -25,
+                y = 0) %>%
+
+      hc_add_theme(hc_theme_map_jc) %>%
+      hc_chart(events = list(render = render_image),
+               marginBottom = 80) %>%
+
+
+      hc_xAxis(title = "") %>%
+      hc_yAxis(title = "") %>%
+      hc_title(
+        text = paste0("Change in ", unique(df$metric), " ", unique(df$adm_or_pop), " from ", unique(df$year)),
+        align = "center",
+        style = list(#fontFamily = "Graphik-Bold", # works in view but not in export
+          fontWeight = "bold",
+          fontFamily = "Graphik",
+          fontSize = "30px",
+          useHTML = TRUE)) %>%
+
+      hc_setup() %>%
+      hc_exporting(enabled = FALSE,
+                   filename = map_filename,
+                   buttons = list(
+                     contextButton = list(
+                       menuItems = list('downloadPNG', 'downloadSVG')
+                     ))) %>%
+
+      hc_plotOptions(series = list(animation = FALSE, dataLabels = list(enabled = TRUE), cursor = "pointer", borderWidth = 3),
+                     accessibility = list(enabled = TRUE,
+                                          keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
+                                          landmarkVerbosity = "one"),
+                     area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
+      )
+  }
+
+}
 
 ##########################
 # Reactable tables
