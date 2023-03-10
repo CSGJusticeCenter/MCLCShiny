@@ -3,7 +3,7 @@
 # File: import.R
 # Authors: Mari Roberts
 # Sub-Author: Martha Eichlersmith
-# Date last updated: March 9, 2023 (MAR)
+# Date last updated: March 10, 2023 (MAR)
 
 # Description:
 #    Loads packages
@@ -14,7 +14,7 @@
 
 # Input:
 #    "data/raw/notes/state_notes_overview.csv" state notes
-#    "data/raw/mclc/mclc_data_2022_v6.xlsx"     2022 survey data
+#    "data/raw/mclc/mclc_data_2022_v7.xlsx"     2022 survey data with edits (BJS data or removal)
 #     Map files
 
 # Output:
@@ -70,7 +70,7 @@ hex <- read_sf(file.path(admin$sp_data_raw, "us_states_hexgrid.geojson")) %>%
 stateAbb <- read.csv(file.path(admin$sp_data_raw, "stateAbb.csv"))
 
 # Load admissions data
-mclc_data <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v6.xlsx"), sheet = "Sheet 1")
+mclc_data <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v7.xlsx"), sheet = "Sheet 1")
 
 # Load states  - will change to new notes when ready
 notes_raw <- read_csv(file.path(admin$sp_data_raw, "notes/state_notes_overview.csv"), show_col_types = FALSE)
@@ -135,7 +135,6 @@ notes <- notes_raw %>%
 
 adm_pop <- mclc_data %>%
   select(state = states, year, everything()) %>%
-  select(-use_mclc_vs_bjs ) %>%
   mutate(state = factor(state)) %>%
   mutate_if(is.character, as.numeric) %>%
 
