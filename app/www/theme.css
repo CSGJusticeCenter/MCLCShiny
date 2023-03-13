@@ -527,3 +527,74 @@ Dropdowns
   font-family: Graphik;
 }
 
+/* Modal Look */
+.modal-header {
+  color: #fff;
+  background-color: #004270;
+  font-size: 30px;
+  font-family: Graphik !important;
+  font-weight: bold;
+}
+
+.modal-footer {
+  background-color:#DDE3E9
+}
+
+/* Floating button */
+.floating-button {
+  position:fixed;
+	width:60px;
+	height:60px;
+	bottom:40px;
+	right:40px;
+	background-color:#004270;
+	color:#FFF;
+	border-radius:50px;
+	text-align:center;
+	box-shadow: 2px 2px 3px #999;
+}
+
+.centered-icon {
+  margin-top: 22px;
+}
+
+/* Tooltip */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+.tooltip .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+.centered-img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+}

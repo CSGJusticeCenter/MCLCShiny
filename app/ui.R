@@ -11,9 +11,12 @@ source("library.R")
 source("colors.R")
 source("dataframes.R")
 source("functions.R")
+source("modals.R")
+source("guides.R")
 
-ui <- fluidPage(includeCSS("www/theme.css"),
-
+ui <- fluidPage(
+       includeCSS("www/theme.css"),
+       use_cicerone(),       
                 navbarPage(id = "navbarID",
 
                            # formats light blue header
@@ -142,16 +145,20 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                  # Select State
                                                                  column(width = 4, align = "center", class = "input-col",
                                                                         labeled_input('input-btn', "",
-                                                                                      selectInput('state_report', div(style = "font-weight: bold", "Select State"),
-                                                                                                   choices = unique(adm_pop_long$state),
-                                                                                                   multiple = FALSE))),
+                                                                        div(id = 'state-selector', 
+                                                                             selectInput('state_report',
+                                                                              div(style = "font-weight: bold", "Select State"),
+                                                                                    choices = unique(adm_pop_long$state),
+                                                                                    multiple = FALSE)))),
                                                                  # Select Adm or Pop
                                                                  column(width = 4, align = "center", class = "input-col",
                                                                         labeled_input('input-btn', "",
-                                                                                      selectInput('adm_pop_report', div(style = "font-weight: bold", "Select Type"),
+                                                                        div(id = "type-selector",
+                                                                             selectInput('adm_pop_report', div(style = "font-weight: bold", "Select Type"),
                                                                                                   choices = c("Admissions", "Population"),
                                                                                                   selected = "Admissions",
-                                                                                                  multiple = FALSE))),
+                                                                                                  multiple = FALSE)
+                                                                        ))),
                                                                  column(width = 2)
                                                                  )),
 
@@ -273,28 +280,27 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                           #### START RACE/ETHNICITY TAB
                                                           tabPanel(value="4","Race/Ethnicity", #MYE HERE
                                                                    br(),
-                                                                   fluidRow(column(width = 12, align = "center",
-                                                                     div(style = "font-family: Graphik;font-weight: bold; font-size: 30px; line-height: 1.05em; margin-bottom: 12px; display: inline-block;",
+                                                                   fluidRow(column(width = 12, align = "center",                                                                     div(style = "font-family: Graphik;font-weight: bold; font-size: 30px; line-height: 1.05em; margin-bottom: 12px; display: inline-block;",
                                                                        "Racial and Ethnicity",
-                                                                       pickerInput('pop_denom', label = NULL, width = "fit",
+                                                                       div(id = "denominator-picker", pickerInput('pop_denom', label = NULL, width = "fit",
                                                                          choices = c(
                                                                             "Disparities"            = "BJS",
                                                                             "Cumulative Disparities" = "CEN"  ),
                                                                          options = list(style = "re-picker"),inline = TRUE
-                                                                         ), #end pickerInput
+                                                                         )), #end pickerInput
                                                                        div(style = "display:inline-block;", htmlOutput("retitleend")),
                                                                      ) #end div
                                                                      )), #end fluidRow>column
                                                                   fluidRow(
                                                                      column(width = 2),
-                                                                     column(width = 8, align = "center",
+                                                                     column(width = 8, align = "center", id = "infopanel-id",
                                                                        htmlOutput("infogheader"),
                                                                        conditionalPanel(condition = "output.showinfogpanel",
                                                                           div(imageOutput("infogblack", height = "100%", ), style = "margin-bottom: 0.5em;"),
                                                                           imageOutput("infoghisp", height = "100%"),
                                                                           htmlOutput("howitscalculated"),
                                                                        ), # end conditional panel
-                                                                       div(checkboxInput("showtables", "Show Additional Data Tables", value = FALSE), align = "left"),
+                                                                       div(id = "showtables-id", checkboxInput("showtables", "Show Additional Data Tables", value = FALSE), align = "left"),
                                                                        conditionalPanel(condition = "output.showtablepanel",
                                                                           htmlOutput("table_rri_header")   ,
                                                                           htmlOutput("table_rri")          ,
@@ -307,7 +313,28 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                               , class = "retxt", align = "left", style = "font-size: 0.95em !important;")
                                                                        ), #end conditional Panel
                                                                      ), #end column width=8
-                                                                     column(width = 2)
+                                                                     column(width = 2),
+                                                                     tags$script(
+                                                                             HTML(
+                                                                             "
+                                                                             const observer = new MutationObserver(function(mutation_list){
+                                                                                    console.log('this is firing on all cylinders');
+                                                                                    mutation_list.forEach(function(mutation) {
+                                                                                           mutation.removedNodes.forEach(function(node) {
+                                                                                                  if(node.id == 'driver-popover-item') {
+                                                                                                         document.getElementsByClassName('driver-close-btn')[0].onclick = function() {console.log('yyyyyaaaaazzzzz')};
+                                                                                                         }
+                                                                                                         }); 
+                                                                                                  });
+                                                                                           });
+                                                                             observer.observe(document.querySelector('body'), { subtree: false, childList: true });                                                              
+                                                                             "
+                                                                             )
+                                                                      ),
+                                                                     div(class = "floating-button", 
+                                                                              id = "guide-button",
+                                                                              onclick = "Shiny.setInputValue(\"show_guide\", true, {priority: \"event\"})",
+                                                                              icon("info", class = "centered-icon", id = "centered-icon"))
                                                                    ), #end fluidRow
                                                                    br(),
                                                                    fluidRow(column(width = 2),

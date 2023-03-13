@@ -1601,22 +1601,25 @@ server <- function(input, output, session) {
   ###
 
   # When Race/Ethinicity tab is selected, show pop up about how data is not MCLC
+  # This will only occur once per session automatically, see localsession
+  localsession <- TRUE
   observeEvent(input$tabsetpanel, {
-    if (input$tabsetpanel == 4)  {
-      str1 = tags$span(
-        "This tab of the dashboard uses data from BJS, PUMS, and NCRP and is not collected through the MCLC survey.",
-        style = "font-size: 1em; font-weight: bold;"
-      )
-      showModal(modalDialog(
-        title = "Race/Ethnicity Data",
-        tagList(str1),
-        HTML('<br><br><img src="different_types_of_disparities.png" />'),
-        easyClose = TRUE
-      ))
-    }
+    if (input$tabsetpanel == 4 & localsession)  {
+      re_modal()
+      localsession <<- FALSE 
+      observeEvent(input$close_modal, {
+        removeModal()
+        updateSelectInput(session, "state_report", selected = "California")
+        first_guide$init()$start()
+        })
+      }
     else{}
-  }
-  )
+    # updateSelectInput(session, "state_report", selected = "Alabama"),
+  })
+
+  observeEvent(input$show_guide, {
+    re_modal()
+  })
 
   output$retitleend <- renderUI({
    case_when(
