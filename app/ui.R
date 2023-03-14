@@ -275,7 +275,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                    br(),
                                                                    fluidRow(column(width = 12, align = "center",
                                                                      div(style = "font-family: Graphik;font-weight: bold; font-size: 30px; line-height: 1.05em; margin-bottom: 12px; display: inline-block;",
-                                                                       "Racial and Ethnicity",
+                                                                       "Racial and Ethnic",
                                                                        pickerInput('pop_denom', label = NULL, width = "fit",
                                                                          choices = c(
                                                                             "Disparities"            = "BJS",
