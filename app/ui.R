@@ -320,9 +320,13 @@ ui <- fluidPage(
                                                                              const observer = new MutationObserver(function(mutation_list){
                                                                                     console.log('this is firing on all cylinders');
                                                                                     mutation_list.forEach(function(mutation) {
-                                                                                           mutation.removedNodes.forEach(function(node) {
+                                                                                           mutation.addedNodes.forEach(function(node) {
                                                                                                   if(node.id == 'driver-popover-item') {
-                                                                                                         document.getElementsByClassName('driver-close-btn')[0].onclick = function() {console.log('yyyyyaaaaazzzzz')};
+                                                                                                         console.log('driver is on')
+                                                                                                         document.getElementsByClassName('driver-close-btn')[0].onclick = function() {Shiny.setInputValue('close_cicerone', true, {priority: 'event'} )};
+                                                                                                         if(document.getElementsByClassName('driver-next-btn')[0].textContent === 'Done') {
+                                                                                                                document.getElementsByClassName('driver-next-btn')[0].onclick = function() {Shiny.setInputValue('close_cicerone', true, {priority: 'event'} )};
+                                                                                                         }
                                                                                                          }
                                                                                                          }); 
                                                                                                   });

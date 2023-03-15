@@ -540,6 +540,13 @@ Dropdowns
   background-color:#DDE3E9
 }
 
+.centered-img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+}
+
 /* Floating button */
 .floating-button {
   position:fixed;
@@ -592,9 +599,3 @@ Dropdowns
   border-color: black transparent transparent transparent;
 }
 
-.centered-img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 80%;
-}

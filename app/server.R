@@ -1614,11 +1614,17 @@ server <- function(input, output, session) {
         })
       }
     else{}
-    # updateSelectInput(session, "state_report", selected = "Alabama"),
+    observeEvent(input$close_cicerone, {
+      updateSelectInput(session, "state_report", selected = "Alabama")
+    })
   })
 
   observeEvent(input$show_guide, {
+    temp <- paste(input$state_report)
     re_modal()
+    observeEvent(input$close_cicerone, {
+      updateSelectInput(session, "state_report", selected = temp)
+    })
   })
 
   output$retitleend <- renderUI({
