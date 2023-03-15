@@ -3,7 +3,7 @@
 # File: import.R
 # Authors: Mari Roberts
 # Sub-Author: Martha Eichlersmith
-# Date last updated: March 7, 2023 (MAR)
+# Date last updated: March 10, 2023 (MAR)
 
 # Description:
 #    Loads packages
@@ -14,7 +14,7 @@
 
 # Input:
 #    "data/raw/notes/state_notes_overview.csv" state notes
-#    "data/raw/mclc/mclc_data_2022_v4.xlsx"     2022 survey data
+#    "data/raw/mclc/mclc_data_2022_v7.xlsx"     2022 survey data with edits (BJS data or removal)
 #     Map files
 
 # Output:
@@ -70,26 +70,13 @@ hex <- read_sf(file.path(admin$sp_data_raw, "us_states_hexgrid.geojson")) %>%
 stateAbb <- read.csv(file.path(admin$sp_data_raw, "stateAbb.csv"))
 
 # Load admissions data
-adm18 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Admissions 2018")
-adm19 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Admissions 2019")
-adm20 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Admissions 2020")
-adm21 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Admissions 2021")
-
-# Load population data
-pop18 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Population 2018")
-pop19 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Population 2019")
-pop20 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Population 2020")
-pop21 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Population 2021")
+mclc_data <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v7.xlsx"), sheet = "Sheet 1")
 
 # Load states  - will change to new notes when ready
 notes_raw <- read_csv(file.path(admin$sp_data_raw, "notes/state_notes_overview.csv"), show_col_types = FALSE)
 
 # Load info on abolishment of parole or probation
 abolish_prob_parole <- read_excel(file.path(admin$sp_survey, "MCLC 2022 Progress Tracking.xlsx"))
-
-# Import BJS total admissions and population since these numbers are more reliable
-bjs_pop <- read_excel(file.path(admin$sp_data_raw, "bjs/BJS - Prison Year-End Populations - 1978 to current.xlsx"))
-bjs_adm <- read_excel(file.path(admin$sp_data_raw, "bjs/BJS - Prison Admissions & Releases - 1978 to current.xlsx"))
 
 ################################################################################
 # Reformat shapefile for hex map
@@ -140,74 +127,14 @@ notes <- notes_raw %>%
   ungroup() %>%
   select(state, notes)
 
-################################################################################
-# Extract total population and total admissions from BJS data
-################################################################################
-
-# BJS pop
-bjs_pop <- bjs_pop %>%
-  clean_names() %>%
-  mutate(year = as.character(year)) %>%
-  select(state,
-         year,
-         total_prison_population_bjs = total_population) %>%
-  filter(year >= 2018 & year <= 2021)
-
-# BJS adm
-bjs_adm <- bjs_adm %>%
-  clean_names() %>%
-  mutate(year = as.character(year)) %>%
-  select(state,
-         year,
-         total_prison_admissions_bjs = admissions_total) %>%
-  filter(year >= 2018 & year <= 2021)
 
 ################################################################################
 # Admissions and populations dataset
 # Wide form of data
 ################################################################################
 
-# add year variable
-adm18$year <- "2018"
-adm19$year <- "2019"
-adm20$year <- "2020"
-adm21$year <- "2021"
-
-# add year variable
-pop18$year <- "2018"
-pop19$year <- "2019"
-pop20$year <- "2020"
-pop21$year <- "2021"
-
-# add data together
-adm <- rbind(adm18, adm19, adm20, adm21)
-pop <- rbind(pop18, pop19, pop20, pop21)
-
-# clean names
-adm <- clean_names(adm)
-pop <- clean_names(pop)
-
-# add adm and pop data together
-# remove state abbrevs
-# change data types
-# calculate difference between total and supervision violations to get number of other
-# replace total admissions and population numbers with BJS numbers since these are more reliable
-adm_pop <- adm %>%
-  left_join(pop, by = c("state", "year")) %>%
-  left_join(bjs_pop, by = c("state", "year")) %>%
-  left_join(bjs_adm, by = c("state", "year")) %>%
-  select(-c(total_prison_admissions, total_prison_population)) %>%
-  select(state,
-         year,
-         total_prison_admissions = total_prison_admissions_bjs,
-         total_prison_population = total_prison_population_bjs,
-         everything()) %>%
-  ungroup() %>%
-  select(state, year, everything()) %>%
-  select(-c(total_technical_violation_admissions,
-            total_new_offense_admissions,
-            total_technical_violation_population,
-            total_new_offense_population)) %>%
+adm_pop <- mclc_data %>%
+  select(state = states, year, everything()) %>%
   mutate(state = factor(state)) %>%
   mutate_if(is.character, as.numeric) %>%
 
@@ -526,15 +453,14 @@ adm_pop_long <- fnc_create_prob_vs_parole(adm_pop_long)
 # add tooltip
 # add info on probation and parole being abolished
 adm_pop_long <- adm_pop_long %>%
-  mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", formattable::comma(total, digits = 0), "<br>"))
-# left_join(abolish_prob_parole, by = "state")
+  mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", formattable::comma(total, digits = 0), "<br>")) %>%
+  arrange(state)
 
-# create new df
-csg <- adm_pop_long
-csg <- fnc_create_data_text(csg)
+# create text labels for variable names "total_admissions = Total Admissions"
+adm_pop_long <- fnc_create_data_text(adm_pop_long)
 
 # select data and change data types
-csg <- csg %>% ungroup() %>%
+csg <- adm_pop_long %>% ungroup() %>%
   select(state,
          metric = text,
          year,
