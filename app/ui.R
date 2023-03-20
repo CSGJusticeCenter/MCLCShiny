@@ -148,7 +148,7 @@ ui <- fluidPage(includeCSS("www/theme.css"),
                                                                  # Select Adm or Pop
                                                                  column(width = 4, align = "center", class = "input-col",
                                                                         labeled_input('input-btn', "",
-                                                                                      selectInput('adm_pop_report', div(style = "font-weight: bold", "Select Metric Type"),
+                                                                                      selectInput('adm_pop_report', div(style = "font-weight: bold", "Select Metric"),
                                                                                                   choices = c("Admissions", "Population"),
                                                                                                   selected = "Admissions",
                                                                                                   multiple = FALSE))),
