@@ -1,60 +1,6 @@
-# TODO Finish me...
-# tooltiptext <- function(text, ttext, class = NULL, tclass = NULL) {
-#    stopifnot("text must be a string." = is.character(text))
-#    stopifnot("text must be a string." = is.character(ttext))
-#    if (!is.null(class)) stopifnot("text must be a string." = is.character(class))
-#    if (!is.null(class)) stopifnot("text must be a string." = is.character(tclass))
-
-#    .class <- ifelse(class, class, 'tooltiptext')
-#    .tclass <- ifelse(tclass, tclass, 'tooltip')
-
-#     tags$div(
-#         class = .class, 
-#         text,
-#         tags$span(
-#             class = .tclass,
-#             ttext
-#             ),
-#         # Add CSS
-#         tags$style(
-#             HTML(
-#                 sprintf(
-#                 "
-#                 <style>
-#                     .%s {
-#                         position: relative;
-#                         display: inline-block;
-#                         border-bottom: 1px dotted black;
-#                     }
-#                      .%s .%s {
-#                         visibility: hidden;
-#                         width: 120px;
-#                         background-color: black;
-#                         color: #fff;
-#                         text-align: center;
-#                         border-radius: 6px;
-#                         padding: 5px 0;
-
-#                         position: absolute;
-#                         z-index: 1;
-#                     }
-
-#                     .%s:hover .%s {
-#                         visibility: visible;
-#                     }
-#                 </style>
-#                 ",
-#                 .tclass, .tclass, .class, .tclass, .class
-#                 )
-#             )
-#         )
-#     ) 
-# }
-
-# tooltiptext(text = "foo", ttext = "bar")
-
 first_guide <- Conductor$
-    new(exitOnEsc = TRUE, keyboardNavigation = TRUE)$
+    new(exitOnEsc = TRUE, keyboardNavigation = TRUE,
+        onComplete = "document.body.scrollTop = document.documentElement.scrollTop = 0;")$
     step(el = "#state-selector",
         title = "Select a state",
         text = "Choose which state’s race/ethnicity data to view using this drop-down menu.")$
