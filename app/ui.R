@@ -336,10 +336,13 @@ ui <- fluidPage(
                                                                #               "
                                                                #               )
                                                                #        ),
-                                                                     div(class = "floating-button", 
-                                                                              id = "guide-button",
-                                                                              onclick = "Shiny.setInputValue(\"show_guide\", true, {priority: \"event\"})",
-                                                                              icon("info", class = "centered-icon", id = "centered-icon"))
+                                                                      tags$button(
+                                                                             class = "floating-button", 
+                                                                             `aria-label` = "info button",
+                                                                             alt = "This button calls the information modal and app guide",
+                                                                             id = "guide-button",
+                                                                             onclick = "Shiny.setInputValue(\"show_guide\", true, {priority: \"event\"})",
+                                                                             icon("info", class = "centered-icon", id = "centered-icon"))
                                                                    ), #end fluidRow
                                                                    br(),
                                                                    fluidRow(column(width = 2),

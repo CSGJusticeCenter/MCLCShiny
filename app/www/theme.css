@@ -562,40 +562,42 @@ Dropdowns
 }
 
 .centered-icon {
-  margin-top: 22px;
+  vertical-align: middle;
+  font-size: 20px;
 }
 
-/* Tooltip */
-.tooltip {
+body.shepherd-active::after {
+  content: "";
+  display: block;
+  background-color: #000000; /*Select your overlay color*/
+  opacity: 0.4; /*Overlay Color Opacity*/
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000000; 
+}
+
+.shepherd-element.shepherd-open{
+  z-index: 10000002;
   position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted black;
+}
+.shepherd-target.shepherd-enabled {
+  z-index: 10000001;
+  pointer-events: none;
 }
 
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 120px;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
-  position: absolute;
-  z-index: 1;
+.shepherd-header{
+  background-color:#004270 !important;
+  font-family: Graphik !important;
 }
 
-.tooltip:hover .tooltiptext {
-  visibility: visible;
+.shepherd-title{
+  color: #FFF;
 }
 
-.tooltip .tooltiptext::after {
-  content: " ";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: black transparent transparent transparent;
+.shepherd-content .shepherd-arrow{
+  background-color:#DDE3E9;
+  font-family: Graphik !important;
 }
-

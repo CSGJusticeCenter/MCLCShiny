@@ -54,7 +54,7 @@
 # tooltiptext(text = "foo", ttext = "bar")
 
 first_guide <- Conductor$
-    new(exitOnEsc = FALSE, keyboardNavigation = FALSE)$
+    new(exitOnEsc = TRUE, keyboardNavigation = TRUE)$
     step(el = "#state-selector",
         title = "Select a state",
         text = "Choose which state’s race/ethnicity data to view using this drop-down menu.")$
