@@ -31,7 +31,6 @@ re_modal <- function() {
         "arrows)",
         style = 'text-align: left; font-size: 1.5em;'),
       easyClose = FALSE,
-      # footer = modalButton("Explore")
       footer = actionButton("close_modal", label = "Explore")
     )
   )

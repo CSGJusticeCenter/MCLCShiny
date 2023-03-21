@@ -301,7 +301,9 @@ ui <- fluidPage(
                                                                           imageOutput("infoghisp", height = "100%"),
                                                                           htmlOutput("howitscalculated"),
                                                                        ), # end conditional panel
-                                                                       div(id = "showtables-id", checkboxInput("showtables", "Show Additional Data Tables", value = FALSE), align = "left"),
+                                                                       div(id = "showtables-id",
+                                                                           checkboxInput("showtables", "Show Additional Data Tables", value = FALSE),
+                                                                           align = "left"),
                                                                        conditionalPanel(condition = "output.showtablepanel",
                                                                           htmlOutput("table_rri_header")   ,
                                                                           htmlOutput("table_rri")          ,
@@ -315,34 +317,14 @@ ui <- fluidPage(
                                                                        ), #end conditional Panel
                                                                      ), #end column width=8
                                                                      column(width = 2),
-                                                               #       tags$script(
-                                                               #               HTML(
-                                                               #               "
-                                                               #               const observer = new MutationObserver(function(mutation_list){
-                                                               #                      console.log('this is firing on all cylinders');
-                                                               #                      mutation_list.forEach(function(mutation) {
-                                                               #                             mutation.addedNodes.forEach(function(node) {
-                                                               #                                    if(node.id == 'driver-popover-item') {
-                                                               #                                           console.log('driver is on')
-                                                               #                                           document.getElementsByClassName('driver-close-btn')[0].onclick = function() {Shiny.setInputValue('close_cicerone', true, {priority: 'event'} )};
-                                                               #                                           if(document.getElementsByClassName('driver-next-btn')[0].textContent === 'Done') {
-                                                               #                                                  document.getElementsByClassName('driver-next-btn')[0].onclick = function() {Shiny.setInputValue('close_cicerone', true, {priority: 'event'} )};
-                                                               #                                           }
-                                                               #                                           }
-                                                               #                                           }); 
-                                                               #                                    });
-                                                               #                             });
-                                                               #               observer.observe(document.querySelector('body'), { subtree: false, childList: true });                                                              
-                                                               #               "
-                                                               #               )
-                                                               #        ),
-                                                                      tags$button(
-                                                                             class = "floating-button", 
-                                                                             `aria-label` = "info button",
-                                                                             alt = "This button calls the information modal and app guide",
-                                                                             id = "guide-button",
-                                                                             onclick = "Shiny.setInputValue(\"show_guide\", true, {priority: \"event\"})",
-                                                                             icon("info", class = "centered-icon", id = "centered-icon"))
+                                                                     tags$button(
+                                                                       class = "floating-button", 
+                                                                       `aria-label` = "info button",
+                                                                       alt = "This button calls the information modal and app guide",
+                                                                       id = "guide-button",
+                                                                       onclick = "Shiny.setInputValue(\"show_guide\", true, {priority: \"event\"})",
+                                                                       icon("info", class = "centered-icon", id = "centered-icon")
+                                                                       )
                                                                    ), #end fluidRow
                                                                    br(),
                                                                    fluidRow(column(width = 2),

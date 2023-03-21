@@ -17,7 +17,7 @@ first_guide <- Conductor$
     step(el = "#infopanel-id",
          title = "Notice...",
          text = "The racial and ethnic disparities or cumulative disparities in your state and metric type selected.",
-         id = "ip1")$#, on_next = "let test = document.getElementsByClassName('driver-close-btn')[0]")$
+         id = "ip1")$
     step(el = "#infopanel-id",
          title = "Notice...",
          text = "The racial and ethnic disparities or cumulative disparities in your state and metric type selected.</br></br> In some states, the data to calculate the disparities in parole revocations are not available.",
