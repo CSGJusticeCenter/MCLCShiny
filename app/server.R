@@ -1609,22 +1609,31 @@ server <- function(input, output, session) {
       localsession <<- FALSE 
       observeEvent(input$close_modal, {
         removeModal()
-        updateSelectInput(session, "state_report", selected = "California")
-        first_guide$init()$start()
+        # updateSelectInput(session, "state_report", selected = "California")
+        dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
+        
+        if (dataavail == 0) {
+          first_guide$init()
+          first_guide$remove(step = c("#infopanel-id", "ip1"))
+        } else {
+          first_guide$init()
+          first_guide$remove(step = c("#infopanel-id", "ip2"))
+        }
+
+        first_guide$start()
         })
       }
-    else{}
-    observeEvent(input$close_cicerone, {
-      updateSelectInput(session, "state_report", selected = "Alabama")
-    })
+    # observeEvent(input$close_cicerone, {
+    #   updateSelectInput(session, "state_report", selected = "Alabama")
+    # })
   })
 
   observeEvent(input$show_guide, {
-    temp <- paste(input$state_report)
+    # prior_state <- paste(input$state_report)
     re_modal()
-    observeEvent(input$close_cicerone, {
-      updateSelectInput(session, "state_report", selected = temp)
-    })
+    # observeEvent(input$close_cicerone, {
+    #   updateSelectInput(session, "state_report", selected = prior_state)
+    # })
   })
 
   output$retitleend <- renderUI({

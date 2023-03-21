@@ -16,7 +16,7 @@ source("guides.R")
 
 ui <- fluidPage(
        includeCSS("www/theme.css"),
-       use_cicerone(),       
+       useConductor(),       
                 navbarPage(id = "navbarID",
 
                            # formats light blue header
@@ -314,27 +314,27 @@ ui <- fluidPage(
                                                                        ), #end conditional Panel
                                                                      ), #end column width=8
                                                                      column(width = 2),
-                                                                     tags$script(
-                                                                             HTML(
-                                                                             "
-                                                                             const observer = new MutationObserver(function(mutation_list){
-                                                                                    console.log('this is firing on all cylinders');
-                                                                                    mutation_list.forEach(function(mutation) {
-                                                                                           mutation.addedNodes.forEach(function(node) {
-                                                                                                  if(node.id == 'driver-popover-item') {
-                                                                                                         console.log('driver is on')
-                                                                                                         document.getElementsByClassName('driver-close-btn')[0].onclick = function() {Shiny.setInputValue('close_cicerone', true, {priority: 'event'} )};
-                                                                                                         if(document.getElementsByClassName('driver-next-btn')[0].textContent === 'Done') {
-                                                                                                                document.getElementsByClassName('driver-next-btn')[0].onclick = function() {Shiny.setInputValue('close_cicerone', true, {priority: 'event'} )};
-                                                                                                         }
-                                                                                                         }
-                                                                                                         }); 
-                                                                                                  });
-                                                                                           });
-                                                                             observer.observe(document.querySelector('body'), { subtree: false, childList: true });                                                              
-                                                                             "
-                                                                             )
-                                                                      ),
+                                                               #       tags$script(
+                                                               #               HTML(
+                                                               #               "
+                                                               #               const observer = new MutationObserver(function(mutation_list){
+                                                               #                      console.log('this is firing on all cylinders');
+                                                               #                      mutation_list.forEach(function(mutation) {
+                                                               #                             mutation.addedNodes.forEach(function(node) {
+                                                               #                                    if(node.id == 'driver-popover-item') {
+                                                               #                                           console.log('driver is on')
+                                                               #                                           document.getElementsByClassName('driver-close-btn')[0].onclick = function() {Shiny.setInputValue('close_cicerone', true, {priority: 'event'} )};
+                                                               #                                           if(document.getElementsByClassName('driver-next-btn')[0].textContent === 'Done') {
+                                                               #                                                  document.getElementsByClassName('driver-next-btn')[0].onclick = function() {Shiny.setInputValue('close_cicerone', true, {priority: 'event'} )};
+                                                               #                                           }
+                                                               #                                           }
+                                                               #                                           }); 
+                                                               #                                    });
+                                                               #                             });
+                                                               #               observer.observe(document.querySelector('body'), { subtree: false, childList: true });                                                              
+                                                               #               "
+                                                               #               )
+                                                               #        ),
                                                                      div(class = "floating-button", 
                                                                               id = "guide-button",
                                                                               onclick = "Shiny.setInputValue(\"show_guide\", true, {priority: \"event\"})",

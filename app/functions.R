@@ -48,9 +48,14 @@ hc_theme_map_jc <- hc_theme_merge(
 )
 
 # Highcharts theme for plots
-hc_theme_jc <- hc_theme(colors = c("#D25E2D", "#EDB799", "#C7E8F5", "#236ca7", "#D6C246", "#dcdcdc"),
-                        chart = list(style = list(fontFamily = "Graphik", color = "#666666")),
-                        title = list(align = "center", style = list(fontFamily = "Graphik", fontWeight = "bold", fontSize = "24px")),
+hc_theme_jc <- hc_theme(colors = c("#D25E2D", "#EDB799", "#C7E8F5", 
+                                   "#236ca7", "#D6C246", "#dcdcdc"),
+                        chart = list(style = list(fontFamily = "Graphik",
+                                                  color = "#666666")),
+                        title = list(align = "center",
+                                     style = list(fontFamily = "Graphik",
+                                                  fontWeight = "bold",
+                                                  fontSize = "24px")),
                         #subtitle = list(align = "center", style = list(fontFamily = "Graphik", fontSize = "16px")),
                         legend = list(align = "center", verticalAlign = "top"),
                         xAxis = list(gridLineColor = "transparent",
@@ -63,12 +68,13 @@ hc_theme_jc <- hc_theme(colors = c("#D25E2D", "#EDB799", "#C7E8F5", "#236ca7", "
                                      majorGridLineColor = "transparent",
                                      minorGridLineColor = "transparent",
                                      tickColor = "transparent"),
-                        plotOptions = list(line = list(marker = list(enabled = FALSE)),
-                                           spline = list(marker = list(enabled = FALSE)),
-                                           area = list(marker = list(enabled = FALSE)),
-                                           areaspline = list(marker = list(enabled = FALSE)),
-                                           arearange = list(marker = list(enabled = FALSE)),
-                                           bubble = list(maxSize = "10%")))
+                        plotOptions = list(
+                          line = list(marker = list(enabled = FALSE)),
+                          spline = list(marker = list(enabled = FALSE)),
+                          area = list(marker = list(enabled = FALSE)),
+                          areaspline = list(marker = list(enabled = FALSE)),
+                          arearange = list(marker = list(enabled = FALSE)),
+                          bubble = list(maxSize = "10%")))
 
 
 # Highcharts download buttons
@@ -77,7 +83,8 @@ hc_setup <- function(x) {
     highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
     highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
     highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-    highcharter::hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
+    highcharter::hc_tooltip(
+      formatter = JS("function(){return(this.point.tooltip)}")) %>%
     highcharter::hc_exporting(enabled = TRUE)
 }
 
@@ -86,10 +93,18 @@ fnc_highchart_state_areachart <- function(df, title_name){
   highchart() %>%
 
     hc_chart(type="area") %>%
-    hc_add_series(data = subset(df, metric == "Total"), name = "Total", type = "area", hcaes(x = year, y = total), color = total_co) %>%
-    hc_add_series(data = subset(df, metric == "Supervision Violation"), name = "Supervision Violation", type = "area", hcaes(x = year, y = total), color = viol_co) %>%
-    hc_add_series(data = subset(df, metric == "Technical Violation"), name = "Technical Violation", type = "area", hcaes(x = year, y = total), color = tech_co) %>%
-    hc_add_series(data = subset(df, metric == "New Offense Violation"), name = "New Offense Violation", type = "area", hcaes(x = year, y = total), color = new_o_co) %>%
+    hc_add_series(data = subset(df, metric == "Total"), name = "Total",
+                  type = "area", hcaes(x = year, y = total),
+                  color = total_co) %>%
+    hc_add_series(data = subset(df, metric == "Supervision Violation"),
+                  name = "Supervision Violation", type = "area",
+                  hcaes(x = year, y = total), color = viol_co) %>%
+    hc_add_series(data = subset(df, metric == "Technical Violation"),
+                  name = "Technical Violation", type = "area",
+                  hcaes(x = year, y = total), color = tech_co) %>%
+    hc_add_series(data = subset(df, metric == "New Offense Violation"),
+                  name = "New Offense Violation", type = "area",
+                  hcaes(x = year, y = total), color = new_o_co) %>%
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
     hc_yAxis(title = "", labels=list(format="{value:,.0f}")) %>%
@@ -108,7 +123,7 @@ fnc_highchart_state_areachart <- function(df, title_name){
                                  cursor = "pointer",
                                  borderWidth = 3),
                    accessibility = list(enabled = TRUE,
-                                        keyboardNavigation = list(enabled = TRUE),
+                                        keyboardNavigation = list(enabled = T),
                                         linkedDescription = 'This area chart was created by a selected state and selected admissions or population numbers. Image description: A area chart that shows the total prison admissions or population, and number of supervision violation admissions or population, separated out by technical violation and new offense violation.',
                                         landmarkVerbosity = "one"),
                    area = list(accessibility = list(description = "This area chart was created by a selected state and selected admissions or population numbers. Image description: A area chart that shows the total prison admissions or population, and number of supervision violation admissions or population, separated out by technical violation and new offense violation."))
@@ -121,8 +136,12 @@ fnc_highchart_state_barchart <- function(df, title_name){
   highchart() %>%
     hc_chart(type = "column") %>%
     hc_xAxis(categories = df$metric) %>%
-    hc_add_series(data = subset(df, metric == "Technical Violation"), name = "Technical Violation", type = "column", hcaes(x = year, y = total), color = tech_co) %>%
-    hc_add_series(data = subset(df, metric == "New Offense Violation"), name = "New Offense Violation", type = "column", hcaes(x = year, y = total), color = new_o_co) %>%
+    hc_add_series(data = subset(df, metric == "Technical Violation"),
+                  name = "Technical Violation", type = "column",
+                  hcaes(x = year, y = total), color = tech_co) %>%
+    hc_add_series(data = subset(df, metric == "New Offense Violation"),
+                  name = "New Offense Violation", type = "column", 
+                  hcaes(x = year, y = total), color = new_o_co) %>%
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
     hc_yAxis(title = "", labels=list(format="{value:,.0f}")) %>%
@@ -141,7 +160,7 @@ fnc_highchart_state_barchart <- function(df, title_name){
                                  cursor = "pointer",
                                  borderWidth = 3),
                    accessibility = list(enabled = TRUE,
-                                        keyboardNavigation = list(enabled = TRUE),
+                                        keyboardNavigation = list(enabled = T),
                                         linkedDescription = 'This bar chart was created by a selected state and selected admissions or population numbers. Image description: A bar chart that shows the number of supervision violation admissions or population, separated out by technical violation and new offense violation.',
                                         landmarkVerbosity = "one"),
                    area = list(accessibility = list(description = "This bar chart was created by a selected state and selected admissions or population numbers. Image description: A bar chart that shows the number of supervision violation admissions or population, separated out by technical violation and new offense violation."))
@@ -197,7 +216,9 @@ fnc_highchart_map <- function(df, map_filename){
 
       hc_colorAxis(min = NEW_MIN,
                    max = NEW_MAX,
-                   stops = color_stops(7, c(darkorange, orange, lightorange, white, lightblue, regblue, darkblue)),
+                   stops = color_stops(7, c(darkorange, orange, lightorange, 
+                                            white, lightblue, regblue,
+                                            darkblue)),
                    labels = list(format = "{value}%",
                                  style = list(fontSize = "14px"))
       ) %>%
@@ -218,7 +239,8 @@ fnc_highchart_map <- function(df, map_filename){
       hc_xAxis(title = "") %>%
       hc_yAxis(title = "") %>%
       hc_title(
-        text = paste0("Change in ", unique(df$metric), " ", unique(df$adm_or_pop), " from ", unique(df$year)),
+        text = paste0("Change in ", unique(df$metric), " ", 
+                      unique(df$adm_or_pop), " from ", unique(df$year)),
         align = "center",
         style = list(#fontFamily = "Graphik-Bold", # works in view but not in export
           fontWeight = "bold",
@@ -239,11 +261,13 @@ fnc_highchart_map <- function(df, map_filename){
                                    dataLabels = list(enabled = TRUE),
                                    cursor = "pointer",
                                    borderWidth = 3),
-                     accessibility = list(enabled = TRUE,
-                                          keyboardNavigation = list(enabled = TRUE),
-                                          linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
-                                          landmarkVerbosity = "one"),
-                     area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
+                     accessibility = list(
+                       enabled = TRUE,
+                       keyboardNavigation = list(enabled = TRUE),
+                       linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
+                       landmarkVerbosity = "one"),
+                     area = list(accessibility = list(
+                       description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
       )
 
   } else {
@@ -269,7 +293,8 @@ fnc_highchart_map <- function(df, map_filename){
 
       hc_colorAxis(min = NEW_MIN,
                    max = NEW_MAX,
-                   stops = color_stops(4, c(darkorange, orange, lightorange, white)),
+                   stops = color_stops(4, c(darkorange, orange, lightorange,
+                                            white)),
                    labels = list(format = "{value}%",
                                  style = list(fontSize = "14px"))) %>%
 
@@ -288,7 +313,8 @@ fnc_highchart_map <- function(df, map_filename){
       hc_xAxis(title = "") %>%
       hc_yAxis(title = "") %>%
       hc_title(
-        text = paste0("Change in ", unique(df$metric), " ", unique(df$adm_or_pop), " from ", unique(df$year)),
+        text = paste0("Change in ", unique(df$metric), " ",
+                      unique(df$adm_or_pop), " from ", unique(df$year)),
         align = "center",
         style = list(#fontFamily = "Graphik-Bold", # works in view but not in export
           fontWeight = "bold",
@@ -304,9 +330,12 @@ fnc_highchart_map <- function(df, map_filename){
                        menuItems = list('downloadPNG', 'downloadSVG')
                      ))) %>%
 
-      hc_plotOptions(series = list(animation = FALSE, dataLabels = list(enabled = TRUE), cursor = "pointer", borderWidth = 3),
+      hc_plotOptions(series = list(animation = FALSE,
+                                   dataLabels = list(enabled = TRUE),
+                                   cursor = "pointer", borderWidth = 3),
                      accessibility = list(enabled = TRUE,
-                                          keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
+                                          keyboardNavigation = list(enabled = TRUE),
+                                          linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
                                           landmarkVerbosity = "one"),
                      area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
       )
@@ -325,14 +354,24 @@ fnc_highchart_state_areachart_logo <- function(df, title_name){
     hc_chart(type="area",
              events = list(render = render_image),
              marginBottom = 80) %>%
-    hc_add_series(data = subset(df, metric == "Total"), name = "Total", type = "area", hcaes(x = year, y = total), color = total_co,
+    hc_add_series(data = subset(df, metric == "Total"), name = "Total",
+                  type = "area", hcaes(x = year, y = total), color = total_co,
                   dataLabels = list(enabled = TRUE, format='{point.total:,.0f}')) %>%
-    hc_add_series(data = subset(df, metric == "Supervision Violation"), name = "Supervision Violation", type = "area", hcaes(x = year, y = total), color = viol_co,
-                  dataLabels = list(enabled = TRUE, format='{point.total:,.0f}')) %>%
-    hc_add_series(data = subset(df, metric == "Technical Violation"), name = "Technical Violation", type = "area", hcaes(x = year, y = total), color = tech_co,
-                  dataLabels = list(enabled = TRUE, format='{point.total:,.0f}')) %>%
-    hc_add_series(data = subset(df, metric == "New Offense Violation"), name = "New Offense Violation", type = "area", hcaes(x = year, y = total), color = new_o_co,
-                  dataLabels = list(enabled = TRUE, format='{point.total:,.0f}')) %>%
+    hc_add_series(data = subset(df, metric == "Supervision Violation"),
+                  name = "Supervision Violation", type = "area",
+                  hcaes(x = year, y = total), color = viol_co,
+                  dataLabels = list(enabled = TRUE,
+                                    format='{point.total:,.0f}')) %>%
+    hc_add_series(data = subset(df, metric == "Technical Violation"),
+                  name = "Technical Violation", type = "area",
+                  hcaes(x = year, y = total), color = tech_co,
+                  dataLabels = list(enabled = TRUE,
+                                    format='{point.total:,.0f}')) %>%
+    hc_add_series(data = subset(df, metric == "New Offense Violation"),
+                  name = "New Offense Violation", type = "area", 
+                  hcaes(x = year, y = total), color = new_o_co,
+                  dataLabels = list(enabled = TRUE, 
+                                    format='{point.total:,.0f}')) %>%
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
     hc_yAxis(title = "", labels=list(format="{value:,.0f}")) %>%
@@ -366,10 +405,16 @@ fnc_highchart_state_barchart_logo <- function(df, title_name){
              events = list(render = render_image),
              marginBottom = 80) %>%
     hc_xAxis(categories = df$metric) %>%
-    hc_add_series(data = subset(df, metric == "Technical Violation"), name = "Technical Violation", type = "column", hcaes(x = year, y = total), color = tech_co,
-                  dataLabels = list(enabled = TRUE, format='{point.total:,.0f}')) %>%
-    hc_add_series(data = subset(df, metric == "New Offense Violation"), name = "New Offense Violation", type = "column", hcaes(x = year, y = total), color = new_o_co,
-                  dataLabels = list(enabled = TRUE, format='{point.total:,.0f}')) %>%
+    hc_add_series(data = subset(df, metric == "Technical Violation"), 
+                  name = "Technical Violation", type = "column", 
+                  hcaes(x = year, y = total), color = tech_co,
+                  dataLabels = list(enabled = TRUE, 
+                                    format='{point.total:,.0f}')) %>%
+    hc_add_series(data = subset(df, metric == "New Offense Violation"),
+                  name = "New Offense Violation", type = "column",
+                  hcaes(x = year, y = total), color = new_o_co,
+                  dataLabels = list(enabled = TRUE,
+                                    format='{point.total:,.0f}')) %>%
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
     hc_yAxis(title = "", labels=list(format="{value:,.0f}")) %>%
@@ -411,11 +456,14 @@ fnc_highchart_map_logo <- function(df, map_filename){
   max_map_type <- ifelse(max_map >= 0, "positive", "negative")
 
   # Generate tile map
-  # Has diverging scales when there are neg and pos values which centers the color gradient at zero
-  # Has a gradient scale when both the min and max are both negative or both positive
+  # Has diverging scales when there are neg and pos values which centers the 
+  # color gradient at zero
+  # Has a gradient scale when both the min and max are both negative or both 
+  # positive
 
   # Determine the new min and max so that zero is centered
-  # For example, If the highest positive value is 20 than the negative value is -20
+  # For example, If the highest positive value is 20 than the negative value is 
+  # -20
   if (min_map_type != max_map_type) {
 
     NEW_MAX <- case_when(
@@ -445,7 +493,9 @@ fnc_highchart_map_logo <- function(df, map_filename){
 
       hc_colorAxis(min = NEW_MIN,
                    max = NEW_MAX,
-                   stops = color_stops(7, c(darkorange, orange, lightorange, white, lightblue, regblue, darkblue)),
+                   stops = color_stops(7, c(darkorange, orange, lightorange, 
+                                            white, lightblue, regblue, 
+                                            darkblue)),
                    labels = list(format = "{value}%",
                                  style = list(fontSize = "14px"))
       ) %>%
@@ -468,7 +518,8 @@ fnc_highchart_map_logo <- function(df, map_filename){
       hc_xAxis(title = "") %>%
       hc_yAxis(title = "") %>%
       hc_title(
-        text = paste0("Change in ", unique(df$metric), " ", unique(df$adm_or_pop), " from ", unique(df$year)),
+        text = paste0("Change in ", unique(df$metric), " ", 
+                      unique(df$adm_or_pop), " from ", unique(df$year)),
         align = "center",
         style = list(#fontFamily = "Graphik-Bold", # works in view but not in export
           fontWeight = "bold",
@@ -519,7 +570,8 @@ fnc_highchart_map_logo <- function(df, map_filename){
 
       hc_colorAxis(min = NEW_MIN,
                    max = NEW_MAX,
-                   stops = color_stops(4, c(darkorange, orange, lightorange, white)),
+                   stops = color_stops(4, c(darkorange, orange, lightorange,
+                                            white)),
                    labels = list(format = "{value}%",
                                  style = list(fontSize = "14px"))) %>%
 
@@ -540,7 +592,8 @@ fnc_highchart_map_logo <- function(df, map_filename){
       hc_xAxis(title = "") %>%
       hc_yAxis(title = "") %>%
       hc_title(
-        text = paste0("Change in ", unique(df$metric), " ", unique(df$adm_or_pop), " from ", unique(df$year)),
+        text = paste0("Change in ", unique(df$metric), " ", 
+                      unique(df$adm_or_pop), " from ", unique(df$year)),
         align = "center",
         style = list(#fontFamily = "Graphik-Bold", # works in view but not in export
           fontWeight = "bold",
@@ -556,9 +609,12 @@ fnc_highchart_map_logo <- function(df, map_filename){
                        menuItems = list('downloadPNG', 'downloadSVG')
                      ))) %>%
 
-      hc_plotOptions(series = list(animation = FALSE, dataLabels = list(enabled = TRUE), cursor = "pointer", borderWidth = 3),
+      hc_plotOptions(series = list(animation = FALSE, 
+                                   dataLabels = list(enabled = TRUE), 
+                                   cursor = "pointer", borderWidth = 3),
                      accessibility = list(enabled = TRUE,
-                                          keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
+                                          keyboardNavigation = list(enabled = TRUE),
+                                          linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
                                           landmarkVerbosity = "one"),
                      area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
       )
@@ -646,8 +702,11 @@ fnc_reatable_table <- function(df){
             style = list(fontFamily = "Graphik, sans-serif"
                          #fontSize = "0.875rem"
                          ),
-            theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
-            defaultColDef = colDef(format = colFormat(separators = TRUE), align = "center"),
+            theme = reactableTheme(cellStyle = list(display = "flex",
+                                                    flexDirection = "column",
+                                                    justifyContent = "center")),
+            defaultColDef = colDef(format = colFormat(separators = TRUE),
+                                   align = "center"),
             compact = TRUE,
             fullWidth = FALSE,
             columns = list(
@@ -661,7 +720,8 @@ fnc_reatable_table <- function(df){
 
               four_yr_change = colDef(minWidth = 110,
                                        name = "4 Year Change",
-                                       format = colFormat(percent = TRUE, digits = 1)),
+                                       format = colFormat(percent = TRUE,
+                                                          digits = 1)),
               # add 4 Year trend graphs to each row
               total_new  = colDef(minWidth = 110,
                                   name = "4 Year Trend",
@@ -669,7 +729,8 @@ fnc_reatable_table <- function(df){
                                     dui_sparkline(
                                       data = value[[1]],
                                       height = 80,
-                                      margin = list(top = 30, right = 20, bottom = 30, left = 20),
+                                      margin = list(top = 30, right = 20,
+                                                    bottom = 30, left = 20),
 
                                       components = list(
                                         dui_sparkpatternlines(
@@ -722,7 +783,8 @@ fnc_reatable_table <- function(df){
 
 # https://jkunst.com/blog/posts/2020-06-26-valuebox-and-sparklines/
 # Value box
-valueBox <- function(value, title, adm_or_pop, finding, icon = NULL, color = "aqua", width = 4, href = NULL){
+valueBox <- function(value, title, adm_or_pop, finding, icon = NULL, 
+                     color = "aqua", width = 4, href = NULL){
 
   shinydashboard:::validateColor(color)
 
@@ -837,7 +899,8 @@ fnc_create_prob_vs_parole <- function(df){
 # Adm vs pop depending on data type
 fnc_create_adm_pop <- function(df){
   df <- df %>%
-    mutate(adm_or_pop = ifelse(grepl("population", data), "Population", "Admissions"))
+    mutate(adm_or_pop = ifelse(grepl("population", data), "Population", 
+                               "Admissions"))
 }
 
 ##########################
