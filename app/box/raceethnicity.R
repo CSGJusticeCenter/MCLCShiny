@@ -200,7 +200,7 @@ infographic_header <- function(dataavail, pop_denom, pop_or_adm_data, note){
   if (dataavail == 0){
     outtext <- paste0("<h3 class='nodata'>No data</h3>"
                       , "<div class = 'notetxt'>"
-                      , "Data to calculate disparites in parole revocations are not available.<br>"
+                      , "Data to calculate disparities in readmissions to prison from parole are not available.<br>"
                       , note
                       , "</div>"
                      )
@@ -284,9 +284,9 @@ infograph_alt_noinfog <- function( whichNCRP, whichPOP, whichRE, whichSTATE){
   # individuals revoked.
   
   thistxt <- case_when(
-      whichPOP == "BJS" & whichNCRP == "Admissions" ~ "disparities in prison admissions for parole revocations"
+      whichPOP == "BJS" & whichNCRP == "Admissions" ~ "disparities in prison admissions for readmissions to prison from parole"
     , whichPOP == "CEN" & whichNCRP == "Admissions" ~ "the cumulative disparities accrued through the criminal justice system for re-admissions rates"
-    , whichPOP == "BJS" & whichNCRP == "Population" ~ "disparities in people serving time for parole revocations"
+    , whichPOP == "BJS" & whichNCRP == "Population" ~ "disparities in people serving time for readmissions to prison from parole"
     , whichPOP == "CEN" & whichNCRP == "Population" ~ "the cumulative disparities accrued through the criminal justice system for re-incarceration rates"
   )
   

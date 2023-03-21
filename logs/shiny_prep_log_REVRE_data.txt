@@ -1,98 +1,98 @@
 [1] "Revocation Counts and Race and Ethnicity"
-[1] "2023-01-23 15:57:05 CST"
-[1mindexing[0m [34mrevcnt_notes.csv[0m [===================================================================================================================================] [32m295.84MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                                                       2023-01-23 15:57:06 - !!START PREP FOR SHINY - DATA
-2023-01-23 15:57:06 - Import and clean NCRP revocations data
-2023-01-23 15:57:06 - Start - NCRP import for admissions
-2023-01-23 15:57:08 - End   - NCRP import for admissions
-2023-01-23 15:57:08 - Start - NCRP prep
-2023-01-23 15:57:08 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
-2023-01-23 15:57:08 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
-2023-01-23 15:57:10 - End   - NCRP prep
-2023-01-23 15:57:10 - Import and clean BJS-APS for PAROLE population (denominator)
-[1mindexing[0m [34mapars_idyear.csv[0m [===================================================================================================================================] [32m147.99MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                                                       2023-01-23 15:57:10 - Start - BJS APS (Parole) import for 2010-2018
-2023-01-23 15:57:10 - End   - BJS APS (Parole) import for 2010-2018
-2023-01-23 15:57:10 - STart - APS prep
-2023-01-23 15:57:10 - APS prep - 
+[1] "2023-03-20 10:36:05 CDT"
+2023-03-20 10:36:05 - !!START PREP FOR SHINY - DATA
+2023-03-20 10:36:05 - Import and clean NCRP revocations data
+2023-03-20 10:36:05 - Start - NCRP import for admissions
+2023-03-20 10:36:06 - End   - NCRP import for admissions
+2023-03-20 10:36:06 - Start - NCRP prep
+2023-03-20 10:36:06 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2023-03-20 10:36:06 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2023-03-20 10:36:08 - End   - NCRP prep
+2023-03-20 10:36:08 - Import and clean BJS-APS for PAROLE population (denominator)
+[1mindexing[0m [34mapars_idyear.csv[0m [=======================================================================================================================================] [32m95.88MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                                                          2023-03-20 10:36:08 - Start - BJS APS (Parole) import for 2010-2018
+2023-03-20 10:36:08 - End   - BJS APS (Parole) import for 2010-2018
+2023-03-20 10:36:08 - STart - APS prep
+2023-03-20 10:36:08 - APS prep - 
 -- Drop Federal total row
 -- calculate other race category, pivot longer, recode into single race variable
 -- make new race variable a factor 
 -- drop rows where POPEST is NA (covered in UNKRACE)
 -- add state id columns
-2023-01-23 15:57:10 - Sum accross state and year
-2023-01-23 15:57:10 - End   - APS prep
-2023-01-23 15:57:10 - Calc - rate/RRI calcuations
+2023-03-20 10:36:08 - Sum accross state and year
+2023-03-20 10:36:08 - End   - APS prep
+2023-03-20 10:36:08 - Calc - rate/RRI calcuations
 Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR", "OFFGENERAL")
 Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR")
-2023-01-23 15:57:10 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
-2023-01-23 15:57:10 - Saved FULL_DF - NCRP_A_REV_BJS.RDS (included a date stamped version)
-2023-01-23 15:57:10 - Import and clean NCRP revocations data
-2023-01-23 15:57:10 - Start - NCRP import for admissions
-2023-01-23 15:57:12 - End   - NCRP import for admissions
-2023-01-23 15:57:12 - Start - NCRP prep
-2023-01-23 15:57:12 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
-2023-01-23 15:57:12 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
-2023-01-23 15:57:14 - End   - NCRP prep
-2023-01-23 15:57:14 - Import and clean PUMS (ACS) for COMMUNITY population (denominator)
-2023-01-23 15:57:14 - Start - PUMS prep
-2023-01-23 15:57:14 - End   - PUMS prep
-2023-01-23 15:57:14 - Calc - rate/RRI calcuations
+2023-03-20 10:36:08 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2023-03-20 10:36:08 - Saved FULL_DF - NCRP_A_REV_BJS.RDS (included a date stamped version)
+2023-03-20 10:36:08 - Import and clean NCRP revocations data
+2023-03-20 10:36:08 - Start - NCRP import for admissions
+2023-03-20 10:36:10 - End   - NCRP import for admissions
+2023-03-20 10:36:10 - Start - NCRP prep
+2023-03-20 10:36:10 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2023-03-20 10:36:10 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2023-03-20 10:36:12 - End   - NCRP prep
+2023-03-20 10:36:12 - Import and clean PUMS (ACS) for COMMUNITY population (denominator)
+2023-03-20 10:36:12 - Start - PUMS prep
+2023-03-20 10:36:12 - End   - PUMS prep
+2023-03-20 10:36:12 - Calc - rate/RRI calcuations
 Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR", "OFFGENERAL")
 Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR")
-2023-01-23 15:57:14 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
-2023-01-23 15:57:14 - Saved FULL_DF - NCRP_A_REV_PUMS.RDS (included a date stamped version)
-2023-01-23 15:57:14 - A tables, takes ~40-50 seconds
-2023-01-23 15:57:41 - A tables end
-2023-01-23 15:57:41 - Flags A BJS - Start
-[1mwrote[0m [32m832.00B[0m in [36m 0s[0m, [32m59.15MB/s[0m                                                                                                                                                                                  [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                                                  2023-01-23 15:57:46 - Flags A BJS - End
-2023-01-23 15:57:46 - Flags A CEN - Start
-[1mwrote[0m [32m899.00B[0m in [36m 0s[0m, [32m63.91MB/s[0m                                                                                                                                                                                  [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                                                  2023-01-23 15:57:51 - Flags A CEN - End
-2023-01-23 15:57:51 - Import and clean NCRP revocations data
-2023-01-23 15:57:51 - Start - NCRP import for year-end population 
-2023-01-23 15:57:54 - End   - NCRP import for year-end population
-2023-01-23 15:57:54 - Start - NCRP prep
-2023-01-23 15:57:54 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
-2023-01-23 15:57:54 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
-2023-01-23 15:57:56 - End   - NCRP prep
-2023-01-23 15:57:56 - Import and clean BJS-APS for PAROLE population (denominator)
-[1mindexing[0m [34mapars_idyear.csv[0m [===================================================================================================================================] [32m162.08MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                                                       2023-01-23 15:57:56 - Start - BJS APS (Parole) import for 2010-2018
-2023-01-23 15:57:56 - End   - BJS APS (Parole) import for 2010-2018
-2023-01-23 15:57:56 - STart - APS prep
-2023-01-23 15:57:56 - APS prep - 
+2023-03-20 10:36:12 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2023-03-20 10:36:12 - Saved FULL_DF - NCRP_A_REV_PUMS.RDS (included a date stamped version)
+2023-03-20 10:36:12 - A tables, takes ~40-50 seconds
+2023-03-20 10:37:00 - A tables end
+2023-03-20 10:37:00 - Flags A BJS - Start
+[1mwrote[0m [32m832.00B[0m in [36m 0s[0m, [32m25.11MB/s[0m                                                                                                                                                                                     [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                                                     2023-03-20 10:37:09 - Flags A BJS - End
+2023-03-20 10:37:09 - Flags A CEN - Start
+[1mwrote[0m [32m899.00B[0m in [36m 0s[0m, [32m68.56MB/s[0m                                                                                                                                                                                     [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                                                     2023-03-20 10:37:19 - Flags A CEN - End
+2023-03-20 10:37:19 - Import and clean NCRP revocations data
+2023-03-20 10:37:19 - Start - NCRP import for year-end population 
+2023-03-20 10:37:24 - End   - NCRP import for year-end population
+2023-03-20 10:37:24 - Start - NCRP prep
+2023-03-20 10:37:24 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2023-03-20 10:37:25 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2023-03-20 10:37:28 - End   - NCRP prep
+2023-03-20 10:37:28 - Import and clean BJS-APS for PAROLE population (denominator)
+[1mindexing[0m [34mapars_idyear.csv[0m [=======================================================================================================================================] [32m73.99MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                                                          2023-03-20 10:37:28 - Start - BJS APS (Parole) import for 2010-2018
+2023-03-20 10:37:28 - End   - BJS APS (Parole) import for 2010-2018
+2023-03-20 10:37:28 - STart - APS prep
+2023-03-20 10:37:28 - APS prep - 
 -- Drop Federal total row
 -- calculate other race category, pivot longer, recode into single race variable
 -- make new race variable a factor 
 -- drop rows where POPEST is NA (covered in UNKRACE)
 -- add state id columns
-2023-01-23 15:57:56 - Sum accross state and year
-2023-01-23 15:57:56 - End   - APS prep
-2023-01-23 15:57:56 - Calc - rate/RRI calcuations
+2023-03-20 10:37:29 - Sum accross state and year
+2023-03-20 10:37:29 - End   - APS prep
+2023-03-20 10:37:29 - Calc - rate/RRI calcuations
 Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR", "OFFGENERAL")
 Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR")
-2023-01-23 15:57:56 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
-2023-01-23 15:57:56 - Saved FULL_DF - NCRP_N_REV_BJS.RDS (included a date stamped version)
-2023-01-23 15:57:56 - Import and clean NCRP revocations data
-2023-01-23 15:57:56 - Start - NCRP import for year-end population 
-2023-01-23 15:57:59 - End   - NCRP import for year-end population
-2023-01-23 15:57:59 - Start - NCRP prep
-2023-01-23 15:57:59 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
-2023-01-23 15:58:00 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
-2023-01-23 15:58:01 - End   - NCRP prep
-2023-01-23 15:58:01 - Import and clean PUMS (ACS) for COMMUNITY population (denominator)
-2023-01-23 15:58:01 - Start - PUMS prep
-2023-01-23 15:58:01 - End   - PUMS prep
-2023-01-23 15:58:01 - Calc - rate/RRI calcuations
+2023-03-20 10:37:29 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2023-03-20 10:37:29 - Saved FULL_DF - NCRP_N_REV_BJS.RDS (included a date stamped version)
+2023-03-20 10:37:29 - Import and clean NCRP revocations data
+2023-03-20 10:37:29 - Start - NCRP import for year-end population 
+2023-03-20 10:37:34 - End   - NCRP import for year-end population
+2023-03-20 10:37:34 - Start - NCRP prep
+2023-03-20 10:37:34 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2023-03-20 10:37:35 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2023-03-20 10:37:38 - End   - NCRP prep
+2023-03-20 10:37:38 - Import and clean PUMS (ACS) for COMMUNITY population (denominator)
+2023-03-20 10:37:38 - Start - PUMS prep
+2023-03-20 10:37:38 - End   - PUMS prep
+2023-03-20 10:37:38 - Calc - rate/RRI calcuations
 Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR", "OFFGENERAL")
 Joining, by = c("STATE", "FIPS", "ABB", "RPTYEAR")
-2023-01-23 15:58:01 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
-2023-01-23 15:58:01 - Saved FULL_DF - NCRP_N_REV_PUMS.RDS (included a date stamped version)
-2023-01-23 15:58:01 - N tables, takes ~40-50 seconds
-2023-01-23 15:58:28 - N tables end
-2023-01-23 15:58:28 - Flags N BJS - Start
-[1mwrote[0m [32m642.00B[0m in [36m 0s[0m, [32m27.76MB/s[0m                                                                                                                                                                                  [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                                                  2023-01-23 15:58:33 - Flags N BJS - End
-2023-01-23 15:58:33 - Flags N CEN - Start
-[1mwrote[0m [32m759.00B[0m in [36m 0s[0m, [32m47.51MB/s[0m                                                                                                                                                                                  [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                                                  2023-01-23 15:58:38 - Flags N CEN - End
-2023-01-23 15:58:38 - Saved outtables - NCRP_RRI_tables.RDS (included a date stamped version)
-2023-01-23 15:58:38 - !!END   PREP FOR SHINY - DATA
+2023-03-20 10:37:38 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2023-03-20 10:37:38 - Saved FULL_DF - NCRP_N_REV_PUMS.RDS (included a date stamped version)
+2023-03-20 10:37:38 - N tables, takes ~40-50 seconds
+2023-03-20 10:38:27 - N tables end
+2023-03-20 10:38:27 - Flags N BJS - Start
+[1mwrote[0m [32m642.00B[0m in [36m 0s[0m, [32m49.87MB/s[0m                                                                                                                                                                                     [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                                                     2023-03-20 10:38:35 - Flags N BJS - End
+2023-03-20 10:38:35 - Flags N CEN - Start
+[1mwrote[0m [32m759.00B[0m in [36m 0s[0m, [32m30.32MB/s[0m                                                                                                                                                                                     [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                                                     2023-03-20 10:38:43 - Flags N CEN - End
+2023-03-20 10:38:43 - Saved outtables - NCRP_RRI_tables.RDS (included a date stamped version)
+2023-03-20 10:38:43 - !!END   PREP FOR SHINY - DATA
 
 
 processing file: rri_overview.qmd

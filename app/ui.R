@@ -60,7 +60,7 @@ ui <- fluidPage(
                                                                  # Select Adm or Pop
                                                                  column(width = 3, align = "center", class = "input-col",
                                                                          labeled_input('input-btn', "",
-                                                                                       selectInput('adm_or_pop_map', div(style = "font-weight: bold", "Select Type"),
+                                                                                       selectInput('adm_or_pop_map', div(style = "font-weight: bold", "Select Metric Type"),
                                                                                                       choices = c("Admissions",
                                                                                                                   "Population"),
                                                                                                       multiple = FALSE))),
@@ -153,6 +153,7 @@ ui <- fluidPage(
                                                                  # Select Adm or Pop
                                                                  column(width = 4, align = "center", class = "input-col",
                                                                         labeled_input('input-btn', "",
+
                                                                         div(id = "type-selector",
                                                                              selectInput('adm_pop_report', div(style = "font-weight: bold", "Select Type"),
                                                                                                   choices = c("Admissions", "Population"),

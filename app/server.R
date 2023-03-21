@@ -1757,7 +1757,7 @@ server <- function(input, output, session) {
     } else {
       out <- paste0(  main
                     , "<div class = 'retxt'>"
-                    , "Parole revocations data were not available for "
+                    , "Readmissions to prison from parole data were not available for "
                     , input$state_report
                     , "</div>")
     }
