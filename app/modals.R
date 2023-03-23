@@ -1,4 +1,4 @@
-re_modal <- function() {
+re_modal_old <- function() {
   showModal(
     modalDialog(
       title = "Race/Ethnicity Data",
@@ -36,3 +36,7 @@ re_modal <- function() {
   )
 }
 
+
+shinyBS::bsModal("re_modal", "Test", "test", size = "large",
+         dataTableOutput("distTable")
+         )

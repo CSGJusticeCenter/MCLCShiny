@@ -528,6 +528,9 @@ Dropdowns
 }
 
 /* Modal Look */
+.modal{
+  display: block;
+}
 .modal-header {
   color: #fff;
   background-color: #004270;

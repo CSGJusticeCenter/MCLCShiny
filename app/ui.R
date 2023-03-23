@@ -324,6 +324,36 @@ ui <- fluidPage(
                                                                        id = "guide-button",
                                                                        onclick = "Shiny.setInputValue(\"show_guide\", true, {priority: \"event\"})",
                                                                        icon("info", class = "centered-icon", id = "centered-icon")
+                                                                       ),
+                                                                       tags$script(
+                                                                             HTML(
+                                                                                    "
+                                                                                    var observedElement = document.body;
+                                                                                    var prevClassState = observedElement.classList.contains('modal-open')
+                                                                                    var observer = new MutationObserver(function(mutations) {
+                                                                                           mutations.forEach(function(mutation) {
+                                                                                                  if (mutation.attributeName == 'class') {
+                                                                                                         var currentClassState = mutation.target.classList.contains('modal-open');
+                                                                                                         if(prevClassState !== currentClassState) {
+                                                                                                                prevClassState = currentClassState;
+                                                                                                                if(currentClassState) {
+                                                                                                                       console.log('temporary fix')
+                                                                                                                       document.body.setAttribute('aria-hidden', false)
+                                                                                                                       document.getElementsByClassName('modal-content')[0].setAttribute('aria-hidden', false)
+                                                                                                                       document.getElementsByClassName('modal-body')[0].setAttribute('aria-hidden', false)
+                                                                                                                       document.getElementsByClassName('tab-content')[0].setAttribute('aria-hidden', true)
+                                                                                                                } else {
+                                                                                                                       console.log('adios fix')
+                                                                                                                       document.body.setAttribute('aria-hidden', false)
+                                                                                                                       document.getElementsByClassName('tab-content')[0].setAttribute('aria-hidden', false)
+                                                                                                                }
+                                                                                                         }
+                                                                                                  }
+                                                                                           })
+                                                                                    })
+                                                                                    observer.observe(observedElement, {attributes: true})
+                                                                                    "
+                                                                             )
                                                                        )
                                                                    ), #end fluidRow
                                                                    br(),

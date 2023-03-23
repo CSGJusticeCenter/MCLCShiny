@@ -1605,8 +1605,8 @@ server <- function(input, output, session) {
   localsession <- TRUE
   observeEvent(input$tabsetpanel, {
     if (input$tabsetpanel == 4 & localsession)  {
-      re_modal()
       localsession <<- FALSE 
+      re_modal()
       observeEvent(input$close_modal, {
         removeModal()
         dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL

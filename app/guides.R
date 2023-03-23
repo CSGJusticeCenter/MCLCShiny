@@ -3,7 +3,12 @@ first_guide <- Conductor$
         onComplete = "document.body.scrollTop = document.documentElement.scrollTop = 0;")$
     step(el = "#state-selector",
         title = "Select a state",
-        text = "Choose which state’s race/ethnicity data to view using this drop-down menu.")$
+        text = "Choose which state’s race/ethnicity data to view using this drop-down menu.",
+        buttons = list(
+          list(
+               action = "next",
+               text = "Next"
+               )))$
     #pick a population
     step(el = "#type-selector",
          title = "Select Metric Type",
