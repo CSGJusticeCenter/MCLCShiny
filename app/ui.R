@@ -337,13 +337,11 @@ ui <- fluidPage(
                                                                                                          if(prevClassState !== currentClassState) {
                                                                                                                 prevClassState = currentClassState;
                                                                                                                 if(currentClassState) {
-                                                                                                                       console.log('temporary fix')
                                                                                                                        document.body.setAttribute('aria-hidden', false)
                                                                                                                        document.getElementsByClassName('modal-content')[0].setAttribute('aria-hidden', false)
                                                                                                                        document.getElementsByClassName('modal-body')[0].setAttribute('aria-hidden', false)
                                                                                                                        document.getElementsByClassName('tab-content')[0].setAttribute('aria-hidden', true)
                                                                                                                 } else {
-                                                                                                                       console.log('adios fix')
                                                                                                                        document.body.setAttribute('aria-hidden', false)
                                                                                                                        document.getElementsByClassName('tab-content')[0].setAttribute('aria-hidden', false)
                                                                                                                 }
