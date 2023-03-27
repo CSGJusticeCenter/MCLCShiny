@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: highchart_download.R
 # Authors: Mari Roberts, Martha Eichlersmith
-# Date last updated: March 7, 2023 (MAR)
+# Date last updated: March 27, 2023 (MAR)
 # Description:
 #    Create and save highcharts WITH LOGO (pngs) so the app loads faster
 #######################################
@@ -329,7 +329,7 @@ parole_bar_adm <- map(.x = states,  .f = function(x) {
     filter(metric == "New Offense Violation" | metric == "Technical Violation") %>%
     mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, big.mark = ",", accuracy = 0), "<br>"))
   admin$mylog(glue("hc: Parole Violation Admissions by Type, {x}"))
-  highcharts <- fnc_highchart_state_barchart_logo(df1, "Parole Violation Admissions by Type")
+  highcharts <- fnc_highchart_parole_barchart_logo(df1, "Parole Violation Admissions by Type")
   return(highcharts)
 })
 
@@ -347,7 +347,7 @@ parole_bar_pop <- map(.x = states,  .f = function(x) {
     filter(metric == "New Offense Violation" | metric == "Technical Violation") %>%
     mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, big.mark = ",", accuracy = 0), "<br>"))
   admin$mylog(glue("hc: Parole Violations Population by Type, {x}"))
-  highcharts <- fnc_highchart_state_barchart_logo(df1, "Parole Violation Population by Type")
+  highcharts <- fnc_highchart_parole_barchart_logo(df1, "Parole Violation Population by Type")
   return(highcharts)
 })
 
@@ -369,7 +369,7 @@ probation_bar_adm <- map(.x = states,  .f = function(x) {
     filter(metric == "New Offense Violation" | metric == "Technical Violation") %>%
     mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, big.mark = ",", accuracy = 0), "<br>"))
   admin$mylog(glue("hc: Probation Violation Admissions by Type, {x}"))
-  highcharts <- fnc_highchart_state_barchart_logo(df1, "Probation Violation Admissions by Type")
+  highcharts <- fnc_highchart_probation_barchart_logo(df1, "Probation Violation Admissions by Type")
   return(highcharts)
 })
 
@@ -387,7 +387,7 @@ probation_bar_pop <- map(.x = states,  .f = function(x) {
     filter(metric == "New Offense Violation" | metric == "Technical Violation") %>%
     mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", comma(total, big.mark = ",", accuracy = 0), "<br>"))
   admin$mylog(glue("hc: Probation Violation Population by Type, {x}"))
-  highcharts <- fnc_highchart_state_barchart_logo(df1, "Probation Violation Population by Type")
+  highcharts <- fnc_highchart_probation_barchart_logo(df1, "Probation Violation Population by Type")
   return(highcharts)
 })
 
