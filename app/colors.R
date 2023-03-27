@@ -27,9 +27,9 @@ colpal_fill <- c("url(#total)",
                  "url(#sup_viols)",
                  "url(#technical)",
                  "url(#new_offense)")
-colpal_stroke <- c(total_co, viol_co , tech_co, new_o_co)
+colpal_stroke <- c(total_co, viol_co, tech_co, new_o_co)
 
 colpal_fill1 <- c("url(#total)",
                   "url(#technical)",
                   "url(#new_offense)")
-colpal_stroke1 <- c(total_co , tech_co, new_o_co)
+colpal_stroke1 <- c(total_co, tech_co, new_o_co)

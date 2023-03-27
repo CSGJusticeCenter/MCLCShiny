@@ -37,6 +37,8 @@ library(ggplot2)
 # remotes::install_github("rstudio/webshot2")
 library(webshot2)
 
+# Guide
+library(conductor)
 
 box::use(
     box/raceethnicity
