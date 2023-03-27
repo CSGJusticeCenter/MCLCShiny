@@ -3,7 +3,7 @@
 # File: import.R
 # Authors: Mari Roberts
 # Sub-Author: Martha Eichlersmith
-# Date last updated: March 10, 2023 (MAR)
+# Date last updated: March 27, 2023 (MAR)
 
 # Description:
 #    Loads packages
@@ -26,6 +26,11 @@
 # Make sure sharepoint folder is synced locally
 # https://csgorg.sharepoint.com/:f:/s/Team-JC-Research/EhdvImKN2rdPnmHQ2TrKlooBdYqnnWc0SUXBNuh9C7d41g?e=NCsh8I
 # In your Renviron (usethis::edit_r_environ()), set CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"
+
+# Highcharter download instructions:
+# remove the existing highcharter package from your R session: remove.packages("highcharter")
+# restart your R session
+# install highcharter with the devtools package (NOT the remotes package): devtools::install_github("mrjoh3/highcharter")
 
 # Load packages
 # remotes::install_github("csgjusticecenter/csgjcr")
