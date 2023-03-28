@@ -51,14 +51,14 @@ server <- function(input, output, session) {
   # Hex map data
   #######
 
-  # Filter data depending on user input for map explorer
-  # Map data
-  df_map <- reactive({
-    mclc_explorer %>%
-      filter(adm_or_pop == input$adm_or_pop_map,
-             metric     == input$data_map,
-             year       == input$year_map)
-  })
+  # # Filter data depending on user input for map explorer
+  # # Map data
+  # df_map <- reactive({
+  #   mclc_explorer %>%
+  #     filter(adm_or_pop == input$adm_or_pop_map,
+  #            metric     == input$data_map,
+  #            year       == input$year_map)
+  # })
 
   # Data for table under map
   df_map_table <- reactive({
@@ -93,157 +93,20 @@ server <- function(input, output, session) {
   # This is necessary to download the map
   foundational_map <- reactive({
 
-    # Get minimum and maximum value
-    min_map <- min(df_map()$change, na.rm = TRUE)
-    max_map <- max(df_map()$change, na.rm = TRUE)
+    if(input$adm_or_pop_map == "Admissions"){
 
-    # Get absolute value for comparison
-    min_map_abs <- abs(min_map)
-    max_map_abs <- abs(max_map)
+             if(input$year_map == "2018 - 2019"){adm_maps_2018_2019[[input$data_map]]}
+        else if(input$year_map == "2018 - 2021"){adm_maps_2018_2021[[input$data_map]]}
+        else if(input$year_map == "2019 - 2020"){adm_maps_2019_2020[[input$data_map]]}
+        else if(input$year_map == "2020 - 2021"){adm_maps_2020_2021[[input$data_map]]}
+    }
 
-    # Get neg or pos sign for min and max
-    min_map_type <- ifelse(min_map >= 0, "positive", "negative")
-    max_map_type <- ifelse(max_map >= 0, "positive", "negative")
+    else if(input$adm_or_pop_map == "Population"){
 
-    # Generate tile map
-    # Has diverging scales when there are neg and pos values which centers the color gradient at zero
-    # Has a gradient scale when both the min and max are both negative or both positive
-
-    # Determine the new min and max so that zero is centered
-    # For example, If the highest positive value is 20 than the negative value is -20
-    if (min_map_type != max_map_type) {
-
-      NEW_MAX <- case_when(
-        max_map_abs > min_map_abs ~ max_map_abs,
-        max_map_abs < min_map_abs ~ min_map_abs,
-        max_map_abs == min_map_abs ~ max_map_abs)
-      NEW_MIN <- case_when(
-        min_map_abs > max_map_abs ~ min_map_abs,
-        min_map_abs < max_map_abs ~ max_map_abs,
-        min_map_abs == max_map_abs ~ min_map_abs)
-      NEW_MAX <- ifelse(max_map_type == "negative", -abs(NEW_MAX), abs(NEW_MAX))
-      NEW_MIN <- ifelse(min_map_type == "negative", -abs(NEW_MIN), abs(NEW_MIN))
-
-      highchart() %>%
-
-        hc_add_series_map(
-          map = hex_gj,
-          df = df_map(),
-          joinBy = "state_abb",
-          value = "change",
-          dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
-                            style = list(fontSize = "14px",
-                                         fontWeight = "regular",
-                                         fontFamily = "Graphik",
-                                         textOutline = 0)),
-          nullColor = "#e8e8e8") %>%
-
-        hc_colorAxis(min = NEW_MIN,
-                     max = NEW_MAX,
-                     stops = color_stops(7, c(darkorange, orange, lightorange, white, lightblue, regblue, darkblue)),
-                     labels = list(format = "{value}%",
-                                   style = list(fontSize = "14px"))
-        ) %>%
-
-        hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical",
-                  #padding = 10,
-                  symbolHeight = 200,
-                  symbolWidth = 25
-        ) %>%
-
-        hc_add_theme(hc_theme_map_jc) %>%
-
-        hc_xAxis(title = "") %>%
-        hc_yAxis(title = "") %>%
-        hc_title(
-          text = paste0("Change in ", unique(df_map()$metric), " ", unique(df_map()$adm_or_pop), " from ", unique(df_map()$year)),
-          align = "center",
-          style = list(#fontFamily = "Graphik-Bold", # works in view but not in export
-                       fontWeight = "bold",
-                       fontFamily = "Graphik", # works in view and export but is the wrong font
-                       fontSize = "30px",
-                       useHTML = TRUE)
-        ) %>%
-
-        hc_setup() %>%
-        hc_exporting(enabled = FALSE,
-                     filename = map_filename(),
-                     buttons = list(
-                       contextButton = list(
-                         menuItems = list('downloadPNG', 'downloadSVG')
-                       ))) %>%
-
-        hc_plotOptions(series = list(animation = FALSE,
-                                     dataLabels = list(enabled = TRUE),
-                                     cursor = "pointer",
-                                     borderWidth = 3),
-                       accessibility = list(enabled = TRUE,
-                                            keyboardNavigation = list(enabled = TRUE),
-                                            linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
-                                            landmarkVerbosity = "one"),
-                       area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
-        )
-
-    } else {
-
-
-      # Determine the new min and max where all values are negative
-      NEW_MAX <- max_map
-      NEW_MIN <- min_map
-
-      highchart() %>%
-
-        hc_add_series_map(
-          map = hex_gj,
-          df = df_map(),
-          joinBy = "state_abb",
-          value = "change",
-          dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
-                            style = list(fontSize = "14px",
-                                         fontWeight = "regular",
-                                         fontFamily = "Graphik",
-                                         textOutline = 0)),
-          nullColor = "#e8e8e8") %>%
-
-        hc_colorAxis(min = NEW_MIN,
-                     max = NEW_MAX,
-                     stops = color_stops(4, c(darkorange, orange, lightorange, white)),
-                     labels = list(format = "{value}%",
-                                   style = list(fontSize = "14px"))) %>%
-
-        hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical",
-                  #padding = 10,
-                  symbolHeight = 200,
-                  symbolWidth = 25) %>%
-
-        hc_add_theme(hc_theme_map_jc) %>%
-
-
-        hc_xAxis(title = "") %>%
-        hc_yAxis(title = "") %>%
-        hc_title(
-          text = paste0("Change in ", unique(df_map()$metric), " ", unique(df_map()$adm_or_pop), " from ", unique(df_map()$year)),
-          align = "center",
-          style = list(#fontFamily = "Graphik-Bold", # works in view but not in export
-                       fontWeight = "bold",
-                       fontFamily = "Graphik",
-                       fontSize = "30px",
-                       useHTML = TRUE)) %>%
-
-        hc_setup() %>%
-        hc_exporting(enabled = FALSE,
-                     filename = map_filename(),
-                     buttons = list(
-                       contextButton = list(
-                         menuItems = list('downloadPNG', 'downloadSVG')
-                       ))) %>%
-
-        hc_plotOptions(series = list(animation = FALSE, dataLabels = list(enabled = TRUE), cursor = "pointer", borderWidth = 3),
-                       accessibility = list(enabled = TRUE,
-                                            keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
-                                            landmarkVerbosity = "one"),
-                       area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
-        )
+           if(input$year_map == "2018 - 2019"){pop_maps_2018_2019[[input$data_map]]}
+      else if(input$year_map == "2018 - 2021"){pop_maps_2018_2021[[input$data_map]]}
+      else if(input$year_map == "2019 - 2020"){pop_maps_2019_2020[[input$data_map]]}
+      else if(input$year_map == "2020 - 2021"){pop_maps_2020_2021[[input$data_map]]}
     }
 
   })
@@ -1605,12 +1468,12 @@ server <- function(input, output, session) {
   localsession <- TRUE
   observeEvent(input$tabsetpanel, {
     if (input$tabsetpanel == 4 & localsession)  {
-      localsession <<- FALSE 
+      localsession <<- FALSE
       re_modal()
       observeEvent(input$close_modal, {
         removeModal()
         dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
-        
+
         if (dataavail == 0) {
           first_guide$init()
           first_guide$remove(step = c("#infopanel-id", "ip1"))
