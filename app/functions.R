@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: functions.R
 # Authors: Mari Roberts
-# Date last updated: March 27, 2023 (MR)
+# Date last updated: March 28, 2023 (MR)
 # Description:
 #    Defines custom functions
 #######################################
@@ -78,13 +78,14 @@ hc_setup <- function(x) {
   highcharter::hc_add_dependency(x, name = "plugins/series-label.js") %>%
     highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
     highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-    highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-    highcharter::hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
-    highcharter::hc_exporting(enabled = TRUE)
+    highcharter::hc_add_dependency(name = "plugins/export-data.js")
+    # highcharter::hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
+    # highcharter::hc_exporting(enabled = TRUE)
 }
 
 # Highchart area chart for state page
 fnc_highchart_state_areachart <- function(df, title_name){
+
   highchart() %>%
 
     hc_chart(type="area") %>%
@@ -92,22 +93,42 @@ fnc_highchart_state_areachart <- function(df, title_name){
                   name = "Total",
                   type = "area",
                   hcaes(x = year, y = total),
-                  color = total_co) %>%
+                  color = total_co,
+                  accessibility = list(
+                    enabled = TRUE,
+                    keyboardNavigation = list(enabled = TRUE),
+                    point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
+                  ) %>%
     hc_add_series(data = subset(df, metric == "Supervision Violation"),
                   name = "Supervision Violation",
                   type = "area",
                   hcaes(x = year, y = total),
-                  color = viol_co) %>%
+                  color = viol_co,
+                  accessibility = list(
+                    enabled = TRUE,
+                    keyboardNavigation = list(enabled = TRUE),
+                    point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
+                  ) %>%
     hc_add_series(data = subset(df, metric == "Technical Violation"),
                   name = "Technical Violation",
                   type = "area",
                   hcaes(x = year, y = total),
-                  color = tech_co) %>%
+                  color = tech_co,
+                  accessibility = list(
+                    enabled = TRUE,
+                    keyboardNavigation = list(enabled = TRUE),
+                    point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
+                  ) %>%
     hc_add_series(data = subset(df, metric == "New Offense Violation"),
                   name = "New Offense Violation",
                   type = "area",
                   hcaes(x = year, y = total),
-                  color = new_o_co) %>%
+                  color = new_o_co,
+                  accessibility = list(
+                    enabled = TRUE,
+                    keyboardNavigation = list(enabled = TRUE),
+                    point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
+                  ) %>%
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
     hc_yAxis(title = "", labels=list(format="{value:,.0f}")) %>%
@@ -118,6 +139,7 @@ fnc_highchart_state_areachart <- function(df, title_name){
       style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
     ) %>%
 
+    hc_setup() %>%
     hc_add_theme(hc_theme_jc) %>%
 
     hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
@@ -127,9 +149,12 @@ fnc_highchart_state_areachart <- function(df, title_name){
                                  borderWidth = 3),
                    accessibility = list(enabled = TRUE,
                                         keyboardNavigation = list(enabled = TRUE),
-                                        linkedDescription = 'This area chart was created by a selected state and selected admissions or population numbers. Image description: An area chart that shows the total prison admissions or total prison population, and number of supervision violation admissions or the supervision violation population, separated out by technical violations and new offense violations. ',
-                                        landmarkVerbosity = "one"),
-                   area = list(accessibility = list(description = "This area chart was created by a selected state and selected admissions or population numbers. Image description: An area chart that shows the total prison admissions or total prison population, and number of supervision violation admissions or the supervision violation population, separated out by technical violations and new offense violations. "))
+                                        linkedDescription = 'This area chart was created by a selected state and selected admissions or population numbers.
+                                                            Image description: An area chart that shows the total prison admissions or total prison population, and number of supervision violation admissions or the supervision violation population, separated out by technical violations and new offense violations.',
+                                        landmarkVerbosity = "one"
+                                        ),
+                   area = list(accessibility = list(description = "This area chart was created by a selected state and selected admissions or population numbers.
+                                                                  Image description: An area chart that shows the total prison admissions or total prison population, and number of supervision violation admissions or the supervision violation population, separated out by technical violations and new offense violations."))
     )
 }
 
@@ -143,12 +168,22 @@ fnc_highchart_state_barchart <- function(df, title_name){
                   name = "Technical Violation",
                   type = "column",
                   hcaes(x = year, y = total),
-                  color = tech_co) %>%
+                  color = tech_co,
+                  accessibility = list(
+                    enabled = TRUE,
+                    keyboardNavigation = list(enabled = TRUE),
+                    point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
+                  ) %>%
     hc_add_series(data = subset(df, metric == "New Offense Violation"),
                   name = "New Offense Violation",
                   type = "column",
                   hcaes(x = year, y = total),
-                  color = new_o_co) %>%
+                  color = new_o_co,
+                  accessibility = list(
+                    enabled = TRUE,
+                    keyboardNavigation = list(enabled = TRUE),
+                    point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
+                  ) %>%
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
     hc_yAxis(title = "", labels=list(format="{value:,.0f}")) %>%
@@ -159,6 +194,7 @@ fnc_highchart_state_barchart <- function(df, title_name){
       style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
     ) %>%
 
+    hc_setup() %>%
     hc_add_theme(hc_theme_jc) %>%
 
     hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
@@ -168,9 +204,12 @@ fnc_highchart_state_barchart <- function(df, title_name){
                                  borderWidth = 3),
                    accessibility = list(enabled = TRUE,
                                         keyboardNavigation = list(enabled = TRUE),
-                                        linkedDescription = 'This bar chart was created by a selected state and selected admissions or population numbers. Image description: A bar chart that shows the number of supervision violation admissions or the supervision violation population, separated out by technical violations and new offense violations. ',
-                                        landmarkVerbosity = "one"),
-                   area = list(accessibility = list(description = "This bar chart was created by a selected state and selected admissions or population numbers. Image description: A bar chart that shows the number of supervision violation admissions or the supervision violation population, separated out by technical violations and new offense violations. "))
+                                        linkedDescription = 'This bar chart was created by a selected state and selected admissions or population numbers.
+                                        Image description: A bar chart that shows the number of supervision violation admissions or the supervision violation population, separated out by technical violations and new offense violations.'
+                                        #landmarkVerbosity = "one"
+                                        ),
+                   area = list(accessibility = list(description = "This bar chart was created by a selected state and selected admissions or population numbers.
+                                                    Image description: A bar chart that shows the number of supervision violation admissions or the supervision violation population, separated out by technical violations and new offense violations."))
     )
 }
 
@@ -183,12 +222,22 @@ fnc_highchart_parole_barchart <- function(df, title_name){
                   name = "Technical Violation",
                   type = "column",
                   hcaes(x = year, y = total),
-                  color = tech_co) %>%
+                  color = tech_co,
+                  accessibility = list(
+                    enabled = TRUE,
+                    keyboardNavigation = list(enabled = TRUE),
+                    point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
+                  ) %>%
     hc_add_series(data = subset(df, metric == "New Offense Violation"),
                   name = "New Offense Violation",
                   type = "column",
                   hcaes(x = year, y = total),
-                  color = new_o_co) %>%
+                  color = new_o_co,
+                  accessibility = list(
+                    enabled = TRUE,
+                    keyboardNavigation = list(enabled = TRUE),
+                    point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
+                  ) %>%
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
     hc_yAxis(title = "", labels=list(format="{value:,.0f}")) %>%
@@ -199,6 +248,7 @@ fnc_highchart_parole_barchart <- function(df, title_name){
       style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
     ) %>%
 
+    hc_setup() %>%
     hc_add_theme(hc_theme_jc) %>%
 
     hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
@@ -208,9 +258,12 @@ fnc_highchart_parole_barchart <- function(df, title_name){
                                  borderWidth = 3),
                    accessibility = list(enabled = TRUE,
                                         keyboardNavigation = list(enabled = TRUE),
-                                        linkedDescription = 'This bar chart was created by a selected state and selected admissions or population numbers. Image description: A bar chart that shows the number of parole violation admissions or the parole violation population, separated out by technical violations and new offense violations. ',
-                                        landmarkVerbosity = "one"),
-                   area = list(accessibility = list(description = "This bar chart was created by a selected state and selected admissions or population numbers. Image description: A bar chart that shows the number of parole violation admissions or the parole violation population, separated out by technical violations and new offense violations. "))
+                                        linkedDescription = 'This bar chart was created by a selected state and selected admissions or population numbers.
+                                        Image description: A bar chart that shows the number of parole violation admissions or the parole violation population, separated out by technical violations and new offense violations.'
+                                        #landmarkVerbosity = "one"
+                                        ),
+                   area = list(accessibility = list(description = "This bar chart was created by a selected state and selected admissions or population numbers.
+                                                    Image description: A bar chart that shows the number of parole violation admissions or the parole violation population, separated out by technical violations and new offense violations."))
     )
 }
 
@@ -223,12 +276,22 @@ fnc_highchart_probation_barchart <- function(df, title_name){
                   name = "Technical Violation",
                   type = "column",
                   hcaes(x = year, y = total),
-                  color = tech_co) %>%
+                  color = tech_co,
+                  accessibility = list(
+                    enabled = TRUE,
+                    keyboardNavigation = list(enabled = TRUE),
+                    point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
+                  ) %>%
     hc_add_series(data = subset(df, metric == "New Offense Violation"),
                   name = "New Offense Violation",
                   type = "column",
                   hcaes(x = year, y = total),
-                  color = new_o_co) %>%
+                  color = new_o_co,
+                  accessibility = list(
+                    enabled = TRUE,
+                    keyboardNavigation = list(enabled = TRUE),
+                    point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
+                  ) %>%
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
     hc_yAxis(title = "", labels=list(format="{value:,.0f}")) %>%
@@ -239,6 +302,7 @@ fnc_highchart_probation_barchart <- function(df, title_name){
       style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
     ) %>%
 
+    hc_setup() %>%
     hc_add_theme(hc_theme_jc) %>%
 
     hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
@@ -248,12 +312,16 @@ fnc_highchart_probation_barchart <- function(df, title_name){
                                  borderWidth = 3),
                    accessibility = list(enabled = TRUE,
                                         keyboardNavigation = list(enabled = TRUE),
-                                        linkedDescription = 'This bar chart was created by a selected state and selected admissions or population numbers. Image description: A bar chart that shows the number of probation violation admissions or the probation violation population, separated out by technical violations and new offense violations. ',
-                                        landmarkVerbosity = "one"),
-                   area = list(accessibility = list(description = "This bar chart was created by a selected state and selected admissions or population numbers. Image description: A bar chart that shows the number of probation violation admissions or the probation violation population, separated out by technical violations and new offense violations. "))
+                                        linkedDescription = 'This bar chart was created by a selected state and selected admissions or population numbers.
+                                        Image description: A bar chart that shows the number of probation violation admissions or the probation violation population, separated out by technical violations and new offense violations.'
+                                        #landmarkVerbosity = "one"
+                                        ),
+                   area = list(accessibility = list(description = "This bar chart was created by a selected state and selected admissions or population numbers.
+                                                    Image description: A bar chart that shows the number of probation violation admissions or the probation violation population, separated out by technical violations and new offense violations."))
     )
 }
 
+# highchart map for map explorer page
 fnc_highchart_map <- function(df, map_filename){
 
   # Get minimum and maximum value
@@ -299,14 +367,17 @@ fnc_highchart_map <- function(df, map_filename){
                                        fontWeight = "regular",
                                        fontFamily = "Graphik",
                                        textOutline = 0)),
-        nullColor = "#e8e8e8") %>%
+        nullColor = "#e8e8e8",
+        accessibility = list(
+          enabled = TRUE,
+          keyboardNavigation = list(enabled = TRUE),
+          point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.value}%"))) %>%
 
       hc_colorAxis(min = NEW_MIN,
                    max = NEW_MAX,
                    stops = color_stops(7, c(darkorange, orange, lightorange, white, lightblue, regblue, darkblue)),
                    labels = list(format = "{value}%",
-                                 style = list(fontSize = "14px"))
-      ) %>%
+                                 style = list(fontSize = "14px"))) %>%
 
       hc_legend(align = "right",
                 verticalAlign = "bottom",
@@ -315,11 +386,7 @@ fnc_highchart_map <- function(df, map_filename){
                 symbolHeight = 200,
                 symbolWidth = 25,
                 x = -25,
-                y = 0
-
-      ) %>%
-
-      hc_add_theme(hc_theme_map_jc) %>%
+                y = 0) %>%
 
       hc_xAxis(title = "") %>%
       hc_yAxis(title = "") %>%
@@ -330,10 +397,12 @@ fnc_highchart_map <- function(df, map_filename){
           fontWeight = "bold",
           fontFamily = "Graphik", # works in view and export but is the wrong font
           fontSize = "30px",
-          useHTML = TRUE)
-      ) %>%
+          useHTML = TRUE)) %>%
 
       hc_setup() %>%
+      hc_add_theme(hc_theme_map_jc) %>%
+      hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
+
       hc_exporting(enabled = FALSE,
                    filename = map_filename,
                    buttons = list(
@@ -347,9 +416,14 @@ fnc_highchart_map <- function(df, map_filename){
                                    borderWidth = 3),
                      accessibility = list(enabled = TRUE,
                                           keyboardNavigation = list(enabled = TRUE),
-                                          linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions or the prison population. Image description: A tile map of the United States of America with a diverging color palette to show the negative or positive change in the selected metric of interest from the year before. The map is interactive, and the user can hover over each state to see the change in the selected metric of interest from the previous year. ',
-                                          landmarkVerbosity = "one"),
-                     area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions or the prison population. Image description: A tile map of the United States of America with a diverging color palette to show the negative or positive change in the selected metric of interest from the year before. The map is interactive, and the user can hover over each state to see the change in the selected metric of interest from the previous year. "))
+                                          linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions or the prison population.
+                                          Image description: A tile map of the United States of America with a diverging color palette to show the negative or positive change in the selected metric of interest from the year before.
+                                          The map is interactive, and the user can hover over each state to see the change in the selected metric of interest from the previous year.',
+                                          landmarkVerbosity = "one"
+                     ),
+                     area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions or the prison population.
+                                                      Image description: A tile map of the United States of America with a diverging color palette to show the negative or positive change in the selected metric of interest from the year before.
+                                                      The map is interactive, and the user can hover over each state to see the change in the selected metric of interest from the previous year."))
       )
 
   } else {
@@ -371,7 +445,11 @@ fnc_highchart_map <- function(df, map_filename){
                                        fontWeight = "regular",
                                        fontFamily = "Graphik",
                                        textOutline = 0)),
-        nullColor = "#e8e8e8") %>%
+        nullColor = "#e8e8e8",
+        accessibility = list(
+          enabled = TRUE,
+          keyboardNavigation = list(enabled = TRUE),
+          point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.value}%"))) %>%
 
       hc_colorAxis(min = NEW_MIN,
                    max = NEW_MAX,
@@ -388,9 +466,6 @@ fnc_highchart_map <- function(df, map_filename){
                 x = -25,
                 y = 0) %>%
 
-      hc_add_theme(hc_theme_map_jc) %>%
-
-
       hc_xAxis(title = "") %>%
       hc_yAxis(title = "") %>%
       hc_title(
@@ -398,11 +473,15 @@ fnc_highchart_map <- function(df, map_filename){
         align = "center",
         style = list(#fontFamily = "Graphik-Bold", # works in view but not in export
           fontWeight = "bold",
-          fontFamily = "Graphik",
+          fontFamily = "Graphik", # works in view and export but is the wrong font
           fontSize = "30px",
-          useHTML = TRUE)) %>%
+          useHTML = TRUE)
+      ) %>%
 
       hc_setup() %>%
+      hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
+      hc_add_theme(hc_theme_map_jc) %>%
+
       hc_exporting(enabled = FALSE,
                    filename = map_filename,
                    buttons = list(
@@ -410,11 +489,19 @@ fnc_highchart_map <- function(df, map_filename){
                        menuItems = list('downloadPNG', 'downloadSVG')
                      ))) %>%
 
-      hc_plotOptions(series = list(animation = FALSE, dataLabels = list(enabled = TRUE), cursor = "pointer", borderWidth = 3),
+      hc_plotOptions(series = list(animation = FALSE,
+                                   dataLabels = list(enabled = TRUE),
+                                   cursor = "pointer",
+                                   borderWidth = 3),
                      accessibility = list(enabled = TRUE,
-                                          keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions or the prison population. Image description: A tile map of the United States of America with a diverging color palette to show the negative or positive change in the selected metric of interest from the year before. The map is interactive, and the user can hover over each state to see the change in the selected metric of interest from the previous year. ',
-                                          landmarkVerbosity = "one"),
-                     area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions or the prison population. Image description: A tile map of the United States of America with a diverging color palette to show the negative or positive change in the selected metric of interest from the year before. The map is interactive, and the user can hover over each state to see the change in the selected metric of interest from the previous year. "))
+                                          keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions or the prison population.
+                                          Image description: A tile map of the United States of America with a diverging color palette to show the negative or positive change in the selected metric of interest from the year before.
+                                          The map is interactive, and the user can hover over each state to see the change in the selected metric of interest from the previous year.',
+                                          landmarkVerbosity = "one"
+                     ),
+                     area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions or the prison population.
+                                                      Image description: A tile map of the United States of America with a diverging color palette to show the negative or positive change in the selected metric of interest from the year before.
+                                                      The map is interactive, and the user can hover over each state to see the change in the selected metric of interest from the previous year."))
       )
   }
 
@@ -469,6 +556,7 @@ fnc_highchart_state_areachart_logo <- function(df, title_name){
       style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
     ) %>%
 
+    hc_setup() %>%
     hc_add_theme(hc_theme_jc) %>%
 
     hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
@@ -478,9 +566,12 @@ fnc_highchart_state_areachart_logo <- function(df, title_name){
                                  borderWidth = 3),
                    accessibility = list(enabled = TRUE,
                                         keyboardNavigation = list(enabled = TRUE),
-                                        linkedDescription = 'This area chart was created by a selected state and selected admissions or population numbers. Image description: A area chart that shows the total prison admissions or population, and number of supervision violation admissions or population, separated out by technical violation and new offense violation.',
-                                        landmarkVerbosity = "one"),
-                   area = list(accessibility = list(description = "This area chart was created by a selected state and selected admissions or population numbers. Image description: A area chart that shows the total prison admissions or population, and number of supervision violation admissions or population, separated out by technical violation and new offense violation."))
+                                        linkedDescription = 'This area chart was created by a selected state and selected admissions or population numbers.
+                                        Image description: A area chart that shows the total prison admissions or population, and number of supervision violation admissions or population, separated out by technical violation and new offense violation.'
+                                        #landmarkVerbosity = "one"
+                                        ),
+                   area = list(accessibility = list(description = "This area chart was created by a selected state and selected admissions or population numbers.
+                                                    Image description: A area chart that shows the total prison admissions or population, and number of supervision violation admissions or population, separated out by technical violation and new offense violation."))
     )
 }
 
@@ -516,6 +607,7 @@ fnc_highchart_state_barchart_logo <- function(df, title_name){
       style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
     ) %>%
 
+    hc_setup() %>%
     hc_add_theme(hc_theme_jc) %>%
 
     hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
@@ -525,9 +617,12 @@ fnc_highchart_state_barchart_logo <- function(df, title_name){
                                  borderWidth = 3),
                    accessibility = list(enabled = TRUE,
                                         keyboardNavigation = list(enabled = TRUE),
-                                        linkedDescription = 'This bar chart was created by a selected state and selected admissions or population numbers. Image description: A bar chart that shows the number of supervision violation admissions or the supervision violation population, separated out by technical violations and new offense violations. ',
-                                        landmarkVerbosity = "one"),
-                   area = list(accessibility = list(description = "This bar chart was created by a selected state and selected admissions or population numbers. Image description: A bar chart that shows the number of supervision violation admissions or the supervision violation population, separated out by technical violations and new offense violations. "))
+                                        linkedDescription = 'This bar chart was created by a selected state and selected admissions or population numbers.
+                                        Image description: A bar chart that shows the number of supervision violation admissions or the supervision violation population, separated out by technical violations and new offense violations.'
+                                        #landmarkVerbosity = "one"
+                                        ),
+                   area = list(accessibility = list(description = "This bar chart was created by a selected state and selected admissions or population numbers.
+                                                    Image description: A bar chart that shows the number of supervision violation admissions or the supervision violation population, separated out by technical violations and new offense violations."))
     )
 }
 
@@ -562,6 +657,7 @@ fnc_highchart_parole_barchart_logo <- function(df, title_name){
       style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
     ) %>%
 
+    hc_setup() %>%
     hc_add_theme(hc_theme_jc) %>%
 
     hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
@@ -571,9 +667,12 @@ fnc_highchart_parole_barchart_logo <- function(df, title_name){
                                  borderWidth = 3),
                    accessibility = list(enabled = TRUE,
                                         keyboardNavigation = list(enabled = TRUE),
-                                        linkedDescription = 'This bar chart was created by a selected state and selected admissions or population numbers. Image description: A bar chart that shows the number of parole violation admissions or the parole violation population, separated out by technical violations and new offense violations. ',
-                                        landmarkVerbosity = "one"),
-                   area = list(accessibility = list(description = "This bar chart was created by a selected state and selected admissions or population numbers. Image description: A bar chart that shows the number of parole violation admissions or the parole violation population, separated out by technical violations and new offense violations. "))
+                                        linkedDescription = 'This bar chart was created by a selected state and selected admissions or population numbers.
+                                        Image description: A bar chart that shows the number of parole violation admissions or the parole violation population, separated out by technical violations and new offense violations.'
+                                        #landmarkVerbosity = "one"
+                                        ),
+                   area = list(accessibility = list(description = "This bar chart was created by a selected state and selected admissions or population numbers.
+                                                    Image description: A bar chart that shows the number of parole violation admissions or the parole violation population, separated out by technical violations and new offense violations."))
     )
 }
 
@@ -608,6 +707,7 @@ fnc_highchart_probation_barchart_logo <- function(df, title_name){
       style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
     ) %>%
 
+    hc_setup() %>%
     hc_add_theme(hc_theme_jc) %>%
 
     hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
@@ -617,9 +717,12 @@ fnc_highchart_probation_barchart_logo <- function(df, title_name){
                                  borderWidth = 3),
                    accessibility = list(enabled = TRUE,
                                         keyboardNavigation = list(enabled = TRUE),
-                                        linkedDescription = 'This bar chart was created by a selected state and selected admissions or population numbers. Image description: A bar chart that shows the number of probation violation admissions or the probation violation population, separated out by technical violations and new offense violations. ',
-                                        landmarkVerbosity = "one"),
-                   area = list(accessibility = list(description = "This bar chart was created by a selected state and selected admissions or population numbers. Image description: A bar chart that shows the number of probation violation admissions or the probation violation population, separated out by technical violations and new offense violations. "))
+                                        linkedDescription = 'This bar chart was created by a selected state and selected admissions or population numbers.
+                                        Image description: A bar chart that shows the number of probation violation admissions or the probation violation population, separated out by technical violations and new offense violations.'
+                                        #landmarkVerbosity = "one"
+                                        ),
+                   area = list(accessibility = list(description = "This bar chart was created by a selected state and selected admissions or population numbers.
+                                                    Image description: A bar chart that shows the number of probation violation admissions or the probation violation population, separated out by technical violations and new offense violations."))
     )
 }
 # WITH logo
@@ -718,9 +821,14 @@ fnc_highchart_map_logo <- function(df, map_filename){
                                    borderWidth = 3),
                      accessibility = list(enabled = TRUE,
                                           keyboardNavigation = list(enabled = TRUE),
-                                          linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions or the prison population. Image description: A tile map of the United States of America with a diverging color palette to show the negative or positive change in the selected metric of interest from the year before. The map is interactive, and the user can hover over each state to see the change in the selected metric of interest from the previous year. ',
-                                          landmarkVerbosity = "one"),
-                     area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions or the prison population. Image description: A tile map of the United States of America with a diverging color palette to show the negative or positive change in the selected metric of interest from the year before. The map is interactive, and the user can hover over each state to see the change in the selected metric of interest from the previous year. "))
+                                          linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions or the prison population.
+                                          Image description: A tile map of the United States of America with a diverging color palette to show the negative or positive change in the selected metric of interest from the year before.
+                                          The map is interactive, and the user can hover over each state to see the change in the selected metric of interest from the previous year.'
+                                          #landmarkVerbosity = "one"
+                                          ),
+                     area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions or the prison population.
+                                                      Image description: A tile map of the United States of America with a diverging color palette to show the negative or positive change in the selected metric of interest from the year before.
+                                                      The map is interactive, and the user can hover over each state to see the change in the selected metric of interest from the previous year."))
       )
 
   } else {
@@ -789,9 +897,14 @@ fnc_highchart_map_logo <- function(df, map_filename){
                                    borderWidth = 3),
                      accessibility = list(enabled = TRUE,
                                           keyboardNavigation = list(enabled = TRUE),
-                                          linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions or the prison population. Image description: A tile map of the United States of America with a diverging color palette to show the negative or positive change in the selected metric of interest from the year before. The map is interactive, and the user can hover over each state to see the change in the selected metric of interest from the previous year. ',
-                                          landmarkVerbosity = "one"),
-                     area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions or the prison population. Image description: A tile map of the United States of America with a diverging color palette to show the negative or positive change in the selected metric of interest from the year before. The map is interactive, and the user can hover over each state to see the change in the selected metric of interest from the previous year. "))
+                                          linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions or the prison population.
+                                          Image description: A tile map of the United States of America with a diverging color palette to show the negative or positive change in the selected metric of interest from the year before.
+                                          The map is interactive, and the user can hover over each state to see the change in the selected metric of interest from the previous year.'
+                                          #landmarkVerbosity = "one"
+                                          ),
+                     area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions or the prison population.
+                                                      Image description: A tile map of the United States of America with a diverging color palette to show the negative or positive change in the selected metric of interest from the year before.
+                                                      The map is interactive, and the user can hover over each state to see the change in the selected metric of interest from the previous year."))
       )
   }
 
