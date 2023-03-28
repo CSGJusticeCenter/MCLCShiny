@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: server.R
 # Authors: Mari Roberts
-# Date last updated: January 17, 2022 (MR)
+# Date last updated: JMarch 28, 2023 (MR)
 # Description:
 #    Server for shiny app
 #######################################
@@ -51,15 +51,6 @@ server <- function(input, output, session) {
   # Hex map data
   #######
 
-  # # Filter data depending on user input for map explorer
-  # # Map data
-  # df_map <- reactive({
-  #   mclc_explorer %>%
-  #     filter(adm_or_pop == input$adm_or_pop_map,
-  #            metric     == input$data_map,
-  #            year       == input$year_map)
-  # })
-
   # Data for table under map
   df_map_table <- reactive({
     filter_by <- paste0(input$data_map, " ", input$adm_or_pop_map)
@@ -89,7 +80,8 @@ server <- function(input, output, session) {
   # Hex map
   #######
 
-  # Create foundational hex map and store it as a reactive expression
+  # Select foundational hex map and store it as a reactive expression
+  # Charts were saved in highchart.R
   # This is necessary to download the map
   foundational_map <- reactive({
 
@@ -618,6 +610,8 @@ server <- function(input, output, session) {
   # Area chart
   #######
 
+  # Select highchart depending on selector input
+  # Charts were saved in highchart.R
   # Area chart
   output$state_area_chart <- renderHighchart({
     if (input$adm_pop_report == "Admissions") {
@@ -1375,50 +1369,6 @@ server <- function(input, output, session) {
     ""
   })
 
-  # output$probation_nt = renderUI({
-  #
-  #   # If state is missing new offense violations and technical violations (Admissions)
-  #   if(input$state_report %in% probation_na_adm & input$adm_pop_report == "Admissions"){
-  #     htmlOutput("missing_data_probation_nt_adm")
-  #
-  #     # If state is missing new offense violations and technical violations (Population)
-  #   } else if(input$state_report %in% probation_na_pop & input$adm_pop_report == "Population"){
-  #     htmlOutput("missing_data_probation_nt_pop")
-  #
-  #     # If state has data (Admissions)
-  #   } else if(input$state_report %in% probation_not_na_adm & input$adm_pop_report == "Admissions"){
-  #     highchartOutput("probation_bar_chart", height = 400, width = 390)
-  #
-  #     # If state has data (Population)
-  #   } else if(input$state_report %in% probation_not_na_pop & input$adm_pop_report == "Population"){
-  #     highchartOutput("probation_bar_chart", height = 400, width = 390)
-  #
-  #   }
-  #
-  # })
-  #
-  # output$probation_nt_button = renderUI({
-  #
-  #   # If state is missing new offense violations and technical violations (Admissions)
-  #   if(input$state_report %in% probation_na_adm & input$adm_pop_report == "Admissions"){
-  #     textOutput("missing_data_probation_nt_button")
-  #
-  #     # If state is missing new offense violations and technical violations (Population)
-  #   } else if(input$state_report %in% probation_na_pop & input$adm_pop_report == "Population"){
-  #     textOutput("missing_data_probation_nt_button")
-  #
-  #     # If state has data (Admissions)
-  #   } else if(input$state_report %in% probation_not_na_adm & input$adm_pop_report == "Admissions"){
-  #     downloadButton(outputId = 'save_probation_bar_chart', "", class = "download-chart")
-  #
-  #     # If state has data (Population)
-  #   } else if(input$state_report %in% probation_not_na_pop & input$adm_pop_report == "Population"){
-  #     downloadButton(outputId = 'save_probation_bar_chart', "", class = "download-chart")
-  #
-  #   }
-  #
-  # })
-
   output$probation_nt <- renderUI({
 
     # If state is missing new offense violations and technical violations (Admissions)
@@ -1698,7 +1648,6 @@ server <- function(input, output, session) {
   # Reactable table of MCLC data for download
   output$selected_download_table <- renderReactable({
 
-
     df1 <- df_download_table() %>%
       mutate(state = factor(state))
 
@@ -1724,9 +1673,7 @@ server <- function(input, output, session) {
                 total  = colDef(name = "Total",
                                 align = "right",
                                 minWidth = 110,
-                                filterable = FALSE)
-              )
-              )
+                                filterable = FALSE)))
 
   })
 
