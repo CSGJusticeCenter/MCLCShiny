@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: highchart.R
 # Authors: Mari Roberts, Martha Eichlersmith
-# Date last updated: March 27, 2023 (MAR)
+# Date last updated: March 28, 2023 (MAR)
 # Description:
 #    Create and save highcharts so the app loads faster
 #######################################
@@ -127,7 +127,8 @@ adm_maps_2018_2019 <- map(.x = metrics,  .f = function(x) {
   df1 <- mclc_explorer %>%
     filter(adm_or_pop == "Admissions",
            year       == "2018 - 2019",
-           metric     == x)
+           metric     == x) %>%
+    mutate(tooltip = paste0("<b>", state, "</b><br>", year, "<br>", metric, " ", adm_or_pop, "<br>", change, "%<br>"))
   filename <- paste("Change_", x, "_Admissions_2018 - 2019", sep = "")
   admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
@@ -139,7 +140,8 @@ adm_maps_2018_2021 <- map(.x = metrics,  .f = function(x) {
   df1 <- mclc_explorer %>%
     filter(adm_or_pop == "Admissions",
            year       == "2018 - 2021",
-           metric     == x)
+           metric     == x)%>%
+    mutate(tooltip = paste0("<b>", state, "</b><br>", year, "<br>", metric, " ", adm_or_pop, "<br>", change, "%<br>"))
   filename <- paste("Change_", x, "_Admissions_2018 - 2021", sep = "")
   admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
@@ -151,7 +153,8 @@ adm_maps_2019_2020 <- map(.x = metrics,  .f = function(x) {
   df1 <- mclc_explorer %>%
     filter(adm_or_pop == "Admissions",
            year       == "2019 - 2020",
-           metric     == x)
+           metric     == x)%>%
+    mutate(tooltip = paste0("<b>", state, "</b><br>", year, "<br>", metric, " ", adm_or_pop, "<br>", change, "%<br>"))
   filename <- paste("Change_", x, "_Admissions_2019 - 2020", sep = "")
   admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
@@ -163,7 +166,8 @@ adm_maps_2020_2021 <- map(.x = metrics,  .f = function(x) {
   df1 <- mclc_explorer %>%
     filter(adm_or_pop == "Admissions",
            year       == "2020 - 2021",
-           metric     == x)
+           metric     == x)%>%
+    mutate(tooltip = paste0("<b>", state, "</b><br>", year, "<br>", metric, " ", adm_or_pop, "<br>", change, "%<br>"))
   filename <- paste("Change_", x, "_Admissions_2020 - 2021", sep = "")
   admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
@@ -175,7 +179,8 @@ pop_maps_2018_2019 <- map(.x = metrics,  .f = function(x) {
   df1 <- mclc_explorer %>%
     filter(adm_or_pop == "Population",
            year       == "2018 - 2019",
-           metric     == x)
+           metric     == x)%>%
+    mutate(tooltip = paste0("<b>", state, "</b><br>", year, "<br>", metric, " ", adm_or_pop, "<br>", change, "%<br>"))
   filename <- paste("Change_", x, "_Population_2018 - 2019", sep = "")
   admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
@@ -187,7 +192,8 @@ pop_maps_2018_2021 <- map(.x = metrics,  .f = function(x) {
   df1 <- mclc_explorer %>%
     filter(adm_or_pop == "Population",
            year       == "2018 - 2021",
-           metric     == x)
+           metric     == x)%>%
+    mutate(tooltip = paste0("<b>", state, "</b><br>", year, "<br>", metric, " ", adm_or_pop, "<br>", change, "%<br>"))
   filename <- paste("Change_", x, "_Population_2018 - 2021", sep = "")
   admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
@@ -199,7 +205,8 @@ pop_maps_2019_2020 <- map(.x = metrics,  .f = function(x) {
   df1 <- mclc_explorer %>%
     filter(adm_or_pop == "Population",
            year       == "2019 - 2020",
-           metric     == x)
+           metric     == x)%>%
+    mutate(tooltip = paste0("<b>", state, "</b><br>", year, "<br>", metric, " ", adm_or_pop, "<br>", change, "%<br>"))
   filename <- paste("Change_", x, "_Population_2019 - 2020", sep = "")
   admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
@@ -211,7 +218,8 @@ pop_maps_2020_2021 <- map(.x = metrics,  .f = function(x) {
   df1 <- mclc_explorer %>%
     filter(adm_or_pop == "Population",
            year       == "2020 - 2021",
-           metric     == x)
+           metric     == x)%>%
+    mutate(tooltip = paste0("<b>", state, "</b><br>", year, "<br>", metric, " ", adm_or_pop, "<br>", change, "%<br>"))
   filename <- paste("Change_", x, "_Population_2020 - 2021", sep = "")
   admin$mylog(glue("hc: {filename}"))
   highcharts <- fnc_highchart_map(df1, filename)
