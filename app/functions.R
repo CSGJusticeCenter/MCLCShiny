@@ -139,7 +139,12 @@ fnc_highchart_state_areachart <- function(df, title_name){
       style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
     ) %>%
 
-    hc_setup() %>%
+    # hc_setup() %>%
+    # hc_add_dependency(name = "modules/series-label.js") %>%
+    # hc_add_dependency(name = "modules/annotations.js") %>%
+    # hc_add_dependency(name = "modules/accessibility.js") %>%
+    # hc_add_dependency(name = "modules/exporting.js") %>%
+    # hc_add_dependency(name = "modules/export-data.js") %>%
     hc_add_theme(hc_theme_jc) %>%
 
     hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
@@ -194,7 +199,7 @@ fnc_highchart_state_barchart <- function(df, title_name){
       style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
     ) %>%
 
-    hc_setup() %>%
+    # hc_setup() %>%
     hc_add_theme(hc_theme_jc) %>%
 
     hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
@@ -248,7 +253,7 @@ fnc_highchart_parole_barchart <- function(df, title_name){
       style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
     ) %>%
 
-    hc_setup() %>%
+    # hc_setup() %>%
     hc_add_theme(hc_theme_jc) %>%
 
     hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
@@ -302,7 +307,7 @@ fnc_highchart_probation_barchart <- function(df, title_name){
       style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
     ) %>%
 
-    hc_setup() %>%
+    # hc_setup() %>%
     hc_add_theme(hc_theme_jc) %>%
 
     hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
@@ -399,16 +404,9 @@ fnc_highchart_map <- function(df, map_filename){
           fontSize = "30px",
           useHTML = TRUE)) %>%
 
-      hc_setup() %>%
+      # hc_setup() %>%
       hc_add_theme(hc_theme_map_jc) %>%
       hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
-
-      hc_exporting(enabled = FALSE,
-                   filename = map_filename,
-                   buttons = list(
-                     contextButton = list(
-                       menuItems = list('downloadPNG', 'downloadSVG')
-                     ))) %>%
 
       hc_plotOptions(series = list(animation = FALSE,
                                    dataLabels = list(enabled = TRUE),
@@ -478,16 +476,9 @@ fnc_highchart_map <- function(df, map_filename){
           useHTML = TRUE)
       ) %>%
 
-      hc_setup() %>%
+      # hc_setup() %>%
       hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
       hc_add_theme(hc_theme_map_jc) %>%
-
-      hc_exporting(enabled = FALSE,
-                   filename = map_filename,
-                   buttons = list(
-                     contextButton = list(
-                       menuItems = list('downloadPNG', 'downloadSVG')
-                     ))) %>%
 
       hc_plotOptions(series = list(animation = FALSE,
                                    dataLabels = list(enabled = TRUE),
@@ -556,7 +547,7 @@ fnc_highchart_state_areachart_logo <- function(df, title_name){
       style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
     ) %>%
 
-    hc_setup() %>%
+    # hc_setup() %>%
     hc_add_theme(hc_theme_jc) %>%
 
     hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
@@ -607,7 +598,7 @@ fnc_highchart_state_barchart_logo <- function(df, title_name){
       style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
     ) %>%
 
-    hc_setup() %>%
+    # hc_setup() %>%
     hc_add_theme(hc_theme_jc) %>%
 
     hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
@@ -657,7 +648,7 @@ fnc_highchart_parole_barchart_logo <- function(df, title_name){
       style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
     ) %>%
 
-    hc_setup() %>%
+    # hc_setup() %>%
     hc_add_theme(hc_theme_jc) %>%
 
     hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
@@ -707,7 +698,7 @@ fnc_highchart_probation_barchart_logo <- function(df, title_name){
       style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
     ) %>%
 
-    hc_setup() %>%
+    # hc_setup() %>%
     hc_add_theme(hc_theme_jc) %>%
 
     hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
@@ -807,14 +798,6 @@ fnc_highchart_map_logo <- function(df, map_filename){
           useHTML = TRUE)
       ) %>%
 
-      hc_setup() %>%
-      hc_exporting(enabled = FALSE,
-                   filename = map_filename,
-                   buttons = list(
-                     contextButton = list(
-                       menuItems = list('downloadPNG', 'downloadSVG')
-                     ))) %>%
-
       hc_plotOptions(series = list(animation = FALSE,
                                    dataLabels = list(enabled = TRUE),
                                    cursor = "pointer",
@@ -882,14 +865,6 @@ fnc_highchart_map_logo <- function(df, map_filename){
           fontFamily = "Graphik",
           fontSize = "30px",
           useHTML = TRUE)) %>%
-
-      hc_setup() %>%
-      hc_exporting(enabled = FALSE,
-                   filename = map_filename,
-                   buttons = list(
-                     contextButton = list(
-                       menuItems = list('downloadPNG', 'downloadSVG')
-                     ))) %>%
 
       hc_plotOptions(series = list(animation = FALSE,
                                    dataLabels = list(enabled = TRUE),
