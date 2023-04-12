@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: reactable.R
 # Authors: Mari Roberts
-# Date last updated: February 9, 2023
+# Date last updated: April 12, 2023 (MAR)
 # Description:
 #    Create and save reactable tables so the app loads faster
 #######################################
@@ -34,6 +34,57 @@ library(dataui)
 # assign colors for visualizations
 source("app/colors.R")
 source("app/functions.R")
+
+states_list <- list('Alabama',
+                    'Alaska',
+                    'Arizona',
+                    'Arkansas',
+                    'California',
+                    'Colorado',
+                    'Connecticut',
+                    'Delaware',
+                    'Florida',
+                    'Georgia',
+                    'Hawaii',
+                    'Idaho',
+                    'Illinois',
+                    'Indiana',
+                    'Iowa',
+                    'Kansas',
+                    'Kentucky',
+                    'Louisiana',
+                    'Maine',
+                    'Maryland',
+                    'Massachusetts',
+                    'Michigan',
+                    'Minnesota',
+                    'Mississippi',
+                    'Missouri',
+                    'Montana',
+                    'Nebraska',
+                    'Nevada',
+                    'New Hampshire',
+                    'New Jersey',
+                    'New Mexico',
+                    'New York',
+                    'North Carolina',
+                    'North Dakota',
+                    'Ohio',
+                    'Oklahoma',
+                    'Oregon',
+                    'Pennsylvania',
+                    'Rhode Island',
+                    'South Carolina',
+                    'South Dakota',
+                    'Tennessee',
+                    'Texas',
+                    'Utah',
+                    'Vermont',
+                    'Virginia',
+                    'Washington',
+                    'West Virginia',
+                    'Wisconsin',
+                    'Wyoming')
 
 # get state list
 states <- state_table$state %>%
@@ -67,7 +118,7 @@ state_reactable_adm <- map(.x = states,  .f = function(x) {
 
 })
 
-state_reactable_adm <- setNames(state_reactable_adm, c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"))
+state_reactable_adm <- setNames(state_reactable_adm, states_list)
 
 # generate list of state reactables to call in app (population)
 state_reactable_pop <- map(.x = states,  .f = function(x) {
@@ -92,7 +143,7 @@ state_reactable_pop <- map(.x = states,  .f = function(x) {
 
 })
 
-state_reactable_pop <- setNames(state_reactable_pop, c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"))
+state_reactable_pop <- setNames(state_reactable_pop, states_list)
 
 ############
 # Parole table
@@ -121,7 +172,7 @@ parole_reactable_adm <- map(.x = states,  .f = function(x) {
 
 })
 
-parole_reactable_adm <- setNames(parole_reactable_adm, c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"))
+parole_reactable_adm <- setNames(parole_reactable_adm, states_list)
 
 # generate list of parole reactables to call in app (population)
 parole_reactable_pop <- map(.x = states,  .f = function(x) {
@@ -146,7 +197,7 @@ parole_reactable_pop <- map(.x = states,  .f = function(x) {
 
 })
 
-parole_reactable_pop <- setNames(parole_reactable_pop, c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"))
+parole_reactable_pop <- setNames(parole_reactable_pop, states_list)
 
 ############
 # Probation table
@@ -175,7 +226,7 @@ probation_reactable_adm <- map(.x = states,  .f = function(x) {
 
 })
 
-probation_reactable_adm <- setNames(probation_reactable_adm, c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"))
+probation_reactable_adm <- setNames(probation_reactable_adm, states_list)
 
 # generate list of probation reactables to call in app (population)
 probation_reactable_pop <- map(.x = states,  .f = function(x) {
@@ -200,7 +251,7 @@ probation_reactable_pop <- map(.x = states,  .f = function(x) {
 
 })
 
-probation_reactable_pop <- setNames(probation_reactable_pop, c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"))
+probation_reactable_pop <- setNames(probation_reactable_pop, states_list)
 
 ############
 # Save data
