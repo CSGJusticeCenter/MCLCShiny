@@ -14,7 +14,7 @@
 
 # Input:
 #    "data/raw/notes/state_notes_overview.csv" state notes
-#    "data/raw/mclc/mclc_data_2022_v7.xlsx"     2022 survey data with edits (BJS data or removal)
+#    "data/raw/mclc/mclc_data_2022_v8.xlsx"     2022 survey data with edits (BJS data or removal)
 #     Map files
 
 # Output:
@@ -78,7 +78,7 @@ hex <- read_sf(file.path(admin$sp_data_raw, "us_states_hexgrid.geojson")) %>%
 stateAbb <- read.csv(file.path(admin$sp_data_raw, "stateAbb.csv"))
 
 # Load admissions data
-mclc_data <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v7.xlsx"), sheet = "Sheet 1")
+mclc_data <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v8.xlsx"), sheet = "Sheet 1")
 
 # Load states  - will change to new notes when ready
 notes_raw <- read_csv(file.path(admin$sp_data_raw, "notes/state_notes_overview.csv"), show_col_types = FALSE)
@@ -148,31 +148,42 @@ adm_pop <- mclc_data %>%
   mutate(state = factor(state)) %>%
   mutate_if(is.character, as.numeric) %>%
 
-  mutate(other_admissions = total_prison_admissions-total_supervision_violation_admissions,
-         other_population = total_prison_population-total_supervision_violation_population) %>%
-
   select(state,
          year,
          total_admissions                            = total_prison_admissions,
          total_violation_admissions                  = total_supervision_violation_admissions,
+         total_new_offense_violation_admissions,
+         total_technical_violation_admissions,
+
          total_probation_violation_admissions        = probation_violation_admissions,
          new_offense_probation_violation_admissions,
          technical_probation_violation_admissions,
+
          total_parole_violation_admissions           = parole_violation_admissions,
          new_offense_parole_violation_admissions,
          technical_parole_violation_admissions,
+
          total_population                            = total_prison_population,
          total_violation_population                  = total_supervision_violation_population,
+         total_new_offense_violation_population,
+         total_technical_violation_population,
+
          total_probation_violation_population        = probation_violation_population,
          new_offense_probation_violation_population,
          technical_probation_violation_population,
+
          total_parole_violation_population           = parole_violation_population,
          new_offense_parole_violation_population,
-         technical_parole_violation_population,
-         other_admissions,
-         other_population)
+         technical_parole_violation_population) %>%
 
-# replace all NaN with NA
+  # change data to numeric
+  mutate(state = as.factor(state)) %>%
+  mutate_if(is.character, as.numeric) %>%
+
+  # replace all zeros with NA - no states should have zeros
+  mutate_at(vars(c(-"state")), ~ case_when(.==0 ~ NA, TRUE ~ .))
+
+# replace all NaN and zeros with NA
 adm_pop[adm_pop == "NaN"] <- NA
 
 ################################################################################
@@ -184,17 +195,18 @@ adm_pop[adm_pop == "NaN"] <- NA
 # remove prob and parole variables
 mclc <- adm_pop %>%
   rowwise() %>%
-  mutate(new_offense_admissions = sum(new_offense_probation_violation_admissions, new_offense_parole_violation_admissions, na.rm = TRUE),
-         new_offense_population = sum(new_offense_probation_violation_population, new_offense_parole_violation_population, na.rm = TRUE),
-         technical_admissions   = sum(technical_probation_violation_admissions,   technical_parole_violation_admissions,   na.rm = TRUE),
-         technical_population   = sum(technical_probation_violation_population,   technical_parole_violation_population,   na.rm = TRUE)) %>%
   select(-c(new_offense_probation_violation_admissions, new_offense_parole_violation_admissions,
             new_offense_probation_violation_population, new_offense_parole_violation_population,
-            technical_probation_violation_admissions, technical_parole_violation_admissions,
-            technical_probation_violation_population, technical_parole_violation_population))
+            technical_probation_violation_admissions,   technical_parole_violation_admissions,
+            technical_probation_violation_population,   technical_parole_violation_population)) %>%
+  # change data to numeric
+  mutate(state = as.factor(state)) %>%
+  mutate_if(is.character, as.numeric) %>%
+  # replace all zeros with NA - no states should have zeros
+  mutate_at(vars(c(-"state")), ~ case_when(.==0 ~ NA, TRUE ~ .))
 
 # make long form
-mclc_all <- gather(mclc, data, total, total_admissions:technical_population)
+mclc_all <- gather(mclc, data, total, total_admissions:total_parole_violation_population)
 
 # create change from 2018 to 2019 to 2020
 # remove dups
@@ -213,17 +225,15 @@ mclc_all <- mclc_all %>%
                      data == "total_violation_admissions"                  ~ "Supervision Violation",
                      data == "total_probation_violation_admissions"        ~ "Probation Violation",
                      data == "total_parole_violation_admissions"           ~ "Parole Violation",
-                     data == "new_offense_admissions"                      ~ "New Offense Violation",
-                     data == "technical_admissions"                        ~ "Technical Violation",
-                     data == "other_admissions"                            ~ "Other",
+                     data == "total_new_offense_violation_admissions"      ~ "New Offense Violation",
+                     data == "total_technical_violation_admissions"        ~ "Technical Violation",
 
                      data == "total_population"                            ~ "Total",
                      data == "total_violation_population"                  ~ "Supervision Violation",
                      data == "total_probation_violation_population"        ~ "Probation Violation",
                      data == "total_parole_violation_population"           ~ "Parole Violation",
-                     data == "new_offense_population"                      ~ "New Offense Violation",
-                     data == "technical_population"                        ~ "Technical Violation",
-                     data == "other_population"                            ~ "Other"),
+                     data == "total_new_offense_violation_population"      ~ "New Offense Violation",
+                     data == "total_technical_violation_population"        ~ "Technical Violation"),
          adm_or_pop = ifelse(grepl("population", data), "Population", "Admissions"),
          data = paste0(metric, " " , adm_or_pop)) %>%
   mutate_if(is.character, as.factor) %>%
@@ -335,9 +345,9 @@ mclc_explorer <- mclc_all %>%
 # change data types
 vb_adm_pop <- mclc_all %>%
   filter(metric == "Total" |
-           metric == "Supervision Violation" |
-           metric == "Technical Violation" |
-           metric == "New Offense Violation") %>%
+         metric == "Supervision Violation" |
+         metric == "Technical Violation" |
+         metric == "New Offense Violation") %>%
   mutate(change = round(change*100, 0),
          change_type = ifelse(change > 0, "increase", "decrease"),
          state = as.character(state),
@@ -393,7 +403,7 @@ state_table_wide <- state_table_wide %>%
 ################################################################################
 
 # make data long form
-prob_parole_tables <- gather(adm_pop, data, total, total_admissions:other_population)
+prob_parole_tables <- gather(adm_pop, data, total, total_admissions:technical_parole_violation_population)
 
 # filter to prob and parole info only
 prob_parole_tables <- prob_parole_tables %>%
@@ -460,7 +470,7 @@ probation_table_wide <- probation_table_wide %>%
 ########
 
 # make data long form
-adm_pop_long <- gather(adm_pop, data, total, total_admissions:other_population)
+adm_pop_long <- gather(adm_pop, data, total, total_admissions:technical_parole_violation_population)
 
 # custom function to add text label depending on metric
 # custom function to create an adm vs pop variable
