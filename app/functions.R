@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: functions.R
 # Authors: Mari Roberts
-# Date last updated: March 28, 2023 (MR)
+# Date last updated: April 13, 2023 (MAR)
 # Description:
 #    Defines custom functions
 #######################################
@@ -136,15 +136,9 @@ fnc_highchart_state_areachart <- function(df, title_name){
     hc_title(
       text = title_name,
       align = "center",
-      style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
-    ) %>%
+      style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)) %>%
 
     # hc_setup() %>%
-    # hc_add_dependency(name = "modules/series-label.js") %>%
-    # hc_add_dependency(name = "modules/annotations.js") %>%
-    # hc_add_dependency(name = "modules/accessibility.js") %>%
-    # hc_add_dependency(name = "modules/exporting.js") %>%
-    # hc_add_dependency(name = "modules/export-data.js") %>%
     hc_add_theme(hc_theme_jc) %>%
 
     hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
@@ -196,8 +190,7 @@ fnc_highchart_state_barchart <- function(df, title_name){
     hc_title(
       text = title_name,
       align = "center",
-      style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)
-    ) %>%
+      style = list(fontWeight = "bold", fontSize = "16px", useHTML = TRUE)) %>%
 
     # hc_setup() %>%
     hc_add_theme(hc_theme_jc) %>%
