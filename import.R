@@ -3,7 +3,7 @@
 # File: import.R
 # Authors: Mari Roberts
 # Sub-Author: Martha Eichlersmith
-# Date last updated: April 12, 2023 (MAR)
+# Date last updated: April 13, 2023 (MAR)
 
 # Description:
 #    Loads packages
@@ -30,9 +30,12 @@
 # Highcharter download instructions:
 # remove the existing highcharter package from your R session: remove.packages("highcharter")
 # restart your R session
-# install highcharter with the devtools package (NOT the remotes package): devtools::install_github("mrjoh3/highcharter")
+# install highcharter with the devtools package (NOT the remotes package):
+# install.packages("devtools")
+# devtools::install_github("mrjoh3/highcharter")
 
 # Load packages
+# install.packages("remotes")
 # remotes::install_github("csgjusticecenter/csgjcr")
 library(csgjcr)
 library(rlang)
@@ -249,8 +252,7 @@ mclc_change <-
          data,
          `2018 - 2019` = `2019`,
          `2019 - 2020` = `2020`,
-         `2020 - 2021` = `2021`
-  )
+         `2020 - 2021` = `2021`)
 
 # combine counts and change tables together
 mclc_explorer_table <-
@@ -297,13 +299,19 @@ mclc_explorer <- mclc_all %>%
   filter(year != 2018) %>%
   rename(state_abb = code) %>%
   select(-abbrev) %>%
-  full_join(mclc_explorer_table_4_yr, by = c("state", "data", "year", "change", "state_abb", "metric", "adm_or_pop")) %>%
+  full_join(mclc_explorer_table_4_yr, by = c("state",
+                                             "data",
+                                             "year",
+                                             "change",
+                                             "state_abb",
+                                             "metric",
+                                             "adm_or_pop")) %>%
   mutate(year = case_when(year == 2019 ~ "2018 - 2019",
                           year == 2020 ~ "2019 - 2020",
                           year == 2021 ~ "2020 - 2021",
                           year == 2022 ~ "2018 - 2021"),
          change = round(change*100, 1),
-         tooltip = paste0("<b>", state, "</b><br>","Change from ", year, "<br>",change, "%<br>"),
+         tooltip = paste0("<b>", state, "</b><br>","Change in ", data, "<br>from ", year, "<br>",change, "%<br>"),
          datalabel = ifelse(is.na(change), paste0("", state_abb, ""),
                             paste0("<p style=", "text-align:center", ">", state_abb, "", "<br>",
                                    round(change, 0), "%</p>"))) %>%
@@ -464,7 +472,10 @@ adm_pop_long <- fnc_create_prob_vs_parole(adm_pop_long)
 # add tooltip
 # add info on probation and parole being abolished
 adm_pop_long <- adm_pop_long %>%
-  mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>", metric, " ", adm_or_pop, "<br>", formattable::comma(total, digits = 0), "<br>")) %>%
+  mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>",
+                          metric, " ",
+                          adm_or_pop, "<br>",
+                          formattable::comma(total, digits = 0), "<br>")) %>%
   arrange(state)
 
 # create text labels for variable names "total_admissions = Total Admissions"
@@ -597,32 +608,32 @@ theseFOLDERS <- c( "sharepoint" = admin$sp_data, "app"  = "app/data")
 
 for (folder in theseFOLDERS){
 
-  save(adm_pop_long,                file=file.path(folder, "adm_pop_long.Rda"))
-  save(mclc_explorer,               file=file.path(folder, "mclc_explorer.Rda"))
-  save(mclc_explorer_table,         file=file.path(folder, "mclc_explorer_table.Rda"))
-  save(vb_adm_pop,                  file=file.path(folder, "vb_adm_pop.Rda"))
-  save(state_table,                 file=file.path(folder, "state_table.Rda"))
-  save(state_table_wide,            file=file.path(folder, "state_table_wide.Rda"))
-  save(parole_table,                file=file.path(folder, "parole_table.Rda"))
-  save(parole_table_wide,           file=file.path(folder, "parole_table_wide.Rda"))
-  save(probation_table,             file=file.path(folder, "probation_table.Rda"))
-  save(probation_table_wide,        file=file.path(folder, "probation_table_wide.Rda"))
-  save(hex_gj,                      file=file.path(folder, "hex_gj.Rda"))
-  save(notes,                       file=file.path(folder, "notes.Rda"))
-  save(csg,                         file=file.path(folder, "csg.Rda"))
+  save(adm_pop_long,                file=file.path(folder, "adm_pop_long.rds"))
+  save(mclc_explorer,               file=file.path(folder, "mclc_explorer.rds"))
+  save(mclc_explorer_table,         file=file.path(folder, "mclc_explorer_table.rds"))
+  save(vb_adm_pop,                  file=file.path(folder, "vb_adm_pop.rds"))
+  save(state_table,                 file=file.path(folder, "state_table.rds"))
+  save(state_table_wide,            file=file.path(folder, "state_table_wide.rds"))
+  save(parole_table,                file=file.path(folder, "parole_table.rds"))
+  save(parole_table_wide,           file=file.path(folder, "parole_table_wide.rds"))
+  save(probation_table,             file=file.path(folder, "probation_table.rds"))
+  save(probation_table_wide,        file=file.path(folder, "probation_table_wide.rds"))
+  save(hex_gj,                      file=file.path(folder, "hex_gj.rds"))
+  save(notes,                       file=file.path(folder, "notes.rds"))
+  save(csg,                         file=file.path(folder, "csg.rds"))
 
-  save(nt_na_adm,                   file=file.path(folder, "nt_na_adm.Rda"))
-  save(nt_na_pop,                   file=file.path(folder, "nt_na_pop.Rda"))
-  save(nt_not_na_adm,               file=file.path(folder, "nt_not_na_adm.Rda"))
-  save(nt_not_na_pop,               file=file.path(folder, "nt_not_na_pop.Rda"))
-  save(abolish_prob_parole,         file=file.path(folder, "abolish_prob_parole.Rda"))
-  save(parole_na_adm,               file=file.path(folder, "parole_na_adm.Rda"))
-  save(parole_na_pop,               file=file.path(folder, "parole_na_pop.Rda"))
-  save(parole_not_na_adm,           file=file.path(folder, "parole_not_na_adm.Rda"))
-  save(parole_not_na_pop,           file=file.path(folder, "parole_not_na_pop.Rda"))
-  save(probation_na_adm,            file=file.path(folder, "probation_na_adm.Rda"))
-  save(probation_na_pop,            file=file.path(folder, "probation_na_pop.Rda"))
-  save(probation_not_na_adm,        file=file.path(folder, "probation_not_na_adm.Rda"))
-  save(probation_not_na_pop,        file=file.path(folder, "probation_not_na_pop.Rda"))
+  save(nt_na_adm,                   file=file.path(folder, "nt_na_adm.rds"))
+  save(nt_na_pop,                   file=file.path(folder, "nt_na_pop.rds"))
+  save(nt_not_na_adm,               file=file.path(folder, "nt_not_na_adm.rds"))
+  save(nt_not_na_pop,               file=file.path(folder, "nt_not_na_pop.rds"))
+  save(abolish_prob_parole,         file=file.path(folder, "abolish_prob_parole.rds"))
+  save(parole_na_adm,               file=file.path(folder, "parole_na_adm.rds"))
+  save(parole_na_pop,               file=file.path(folder, "parole_na_pop.rds"))
+  save(parole_not_na_adm,           file=file.path(folder, "parole_not_na_adm.rds"))
+  save(parole_not_na_pop,           file=file.path(folder, "parole_not_na_pop.rds"))
+  save(probation_na_adm,            file=file.path(folder, "probation_na_adm.rds"))
+  save(probation_na_pop,            file=file.path(folder, "probation_na_pop.rds"))
+  save(probation_not_na_adm,        file=file.path(folder, "probation_not_na_adm.rds"))
+  save(probation_not_na_pop,        file=file.path(folder, "probation_not_na_pop.rds"))
 
 }

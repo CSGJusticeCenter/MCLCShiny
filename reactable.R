@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: reactable.R
 # Authors: Mari Roberts
-# Date last updated: April 12, 2023 (MAR)
+# Date last updated: April 13, 2023 (MAR)
 # Description:
 #    Create and save reactable tables so the app loads faster
 #######################################
@@ -15,12 +15,12 @@
 box::use( prep/box/admin)
 
 # load data
-load(file = file.path(admin$sp_data, "state_table.Rda"))
-load(file = file.path(admin$sp_data, "state_table_wide.Rda"))
-load(file = file.path(admin$sp_data, "parole_table.Rda"))
-load(file = file.path(admin$sp_data, "parole_table_wide.Rda"))
-load(file = file.path(admin$sp_data, "probation_table.Rda"))
-load(file = file.path(admin$sp_data, "probation_table_wide.Rda"))
+load(file = file.path(admin$sp_data, "state_table.rds"))
+load(file = file.path(admin$sp_data, "state_table_wide.rds"))
+load(file = file.path(admin$sp_data, "parole_table.rds"))
+load(file = file.path(admin$sp_data, "parole_table_wide.rds"))
+load(file = file.path(admin$sp_data, "probation_table.rds"))
+load(file = file.path(admin$sp_data, "probation_table_wide.rds"))
 
 # load packages
 library(dplyr)
@@ -28,6 +28,7 @@ library(reactable)
 library(stats)
 library(purrr)
 library(highcharter)
+# install.packages("remotes")
 # remotes::install_github("timelyportfolio/dataui")
 library(dataui)
 
@@ -261,12 +262,12 @@ theseFOLDERS <- c( "sharepoint" = admin$sp_data, "app" = "app/data")
 
 for (folder in theseFOLDERS){
 
-  save(state_reactable_adm,     file=file.path(folder, "state_reactable_adm.Rda"))
-  save(state_reactable_pop,     file=file.path(folder, "state_reactable_pop.Rda"))
-  save(parole_reactable_adm,    file=file.path(folder, "parole_reactable_adm.Rda"))
-  save(parole_reactable_pop,    file=file.path(folder, "parole_reactable_pop.Rda"))
-  save(probation_reactable_adm, file=file.path(folder, "probation_reactable_adm.Rda"))
-  save(probation_reactable_pop, file=file.path(folder, "probation_reactable_pop.Rda"))
+  save(state_reactable_adm,     file=file.path(folder, "state_reactable_adm.rds"))
+  save(state_reactable_pop,     file=file.path(folder, "state_reactable_pop.rds"))
+  save(parole_reactable_adm,    file=file.path(folder, "parole_reactable_adm.rds"))
+  save(parole_reactable_pop,    file=file.path(folder, "parole_reactable_pop.rds"))
+  save(probation_reactable_adm, file=file.path(folder, "probation_reactable_adm.rds"))
+  save(probation_reactable_pop, file=file.path(folder, "probation_reactable_pop.rds"))
 
 }
 
