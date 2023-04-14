@@ -553,35 +553,31 @@ server <- function(input, output, session) {
   # Supervision Violations Graph - Dynamically change between sentence and graph depending on data availability
   #######
 
+  # If data is missing a supervision violation admissions graph
   output$missing_data_nt_adm <- renderUI({
-    out <- paste0(
-        "<h3 class = 'nodata'>No data</h3>"
-      , "<div class = 'notetxt'>"
-      , input$state_report
-      , " did not provide data on prison admissions due to technical and new offense violations."
-      , "</div>"
-    )
+    out <- missingness_sentences %>%
+      filter(state == input$state_report)
+    out <- out$supervision_violation_admissions_graph
     HTML(out)
   })
 
+  # If data is missing a supervision violation population graph
   output$missing_data_nt_pop <- renderUI({
-    out <- paste0(
-        "<h3 class = 'nodata'>No data</h3>"
-      , "<div class = 'notetxt'>"
-      , input$state_report
-      , " did not provide data on the number of people in prison due to technical and new offense violations."
-      , "</div>"
-    )
+    out <- missingness_sentences %>%
+      filter(state == input$state_report)
+    out <- out$supervision_violation_population_graph
     HTML(out)
   })
 
+  # Remove download button if no graph
   output$missing_data_nt_button <- renderText({
     ""
   })
 
+  # Show graph or missing data sentence depending on state
   output$state_nt = renderUI({
 
-    # If state is missing new offense violations and technical violations (Admissions)
+      # If state is missing new offense violations and technical violations (Admissions)
     if(input$state_report %in% nt_na_adm & input$adm_pop_report == "Admissions"){
       htmlOutput("missing_data_nt_adm")
 
@@ -601,6 +597,7 @@ server <- function(input, output, session) {
 
   })
 
+  # Show graph download button or no button depending on state
   output$state_nt_button = renderUI({
 
     # If state is missing new offense violations and technical violations (Admissions)
@@ -885,54 +882,27 @@ server <- function(input, output, session) {
   # Parole Graph - Dynamically change between sentence and graph depending on data availability
   #######
 
+  # If data is missing a parole violation admissions graph
   output$missing_data_parole_nt_adm <- renderUI({
-    out <- paste0(
-        "<h3 class = 'nodata'>No data</h3>"
-      , "<div class = 'notetxt'>"
-      , input$state_report
-      , " did not provide data on prison admissions due to technical and new offense parole violations."
-      , "</div>"
-    )
+    out <- missingness_sentences %>%
+      filter(state == input$state_report)
+    out <- out$parole_violation_admissions_graph
     HTML(out)
   })
 
+  # If data is missing a parole violation population graph
   output$missing_data_parole_nt_pop <- renderUI({
-    out <- paste0(
-        "<h3 class = 'nodata'>No data</h3>"
-      , "<div class = 'notetxt'>"
-      , input$state_report
-      , " did not provide data on the number of people in prison due to technical and new offense parole violations."
-      , "</div>"
-    )
+    out <- missingness_sentences %>%
+      filter(state == input$state_report)
+    out <- out$parole_violation_population_graph
     HTML(out)
   })
 
-  output$abolished_parole_adm <- renderUI({
-    out <- paste0(
-        "<h3 class = 'nodata'>No data</h3>"
-      , "<div class = 'notetxt'>"
-      , input$state_report
-      , " abolished parole and therefore did not provide data on prison admissions due to technical and new offense parole violations."
-      , "</div>"
-    )
-    HTML(out)
-  })
-
-  output$abolished_parole_pop <- renderUI({
-    out <- paste0(
-        "<h3 class = 'nodata'>No data</h3>"
-      , "<div class = 'notetxt'>"
-      , input$state_report
-      , " abolished parole and therefore did not provide data on the number of people in prison due to technical and new offense parole violations."
-      , "</div>"
-    )
-    HTML(out)
-  })
-
+  # Show parole graph or missing data sentence depending on state
   output$parole_nt <- renderUI({
 
     # If state is missing new offense violations and technical violations (Admissions)
-    if(input$state_report %in% parole_na_adm & input$adm_pop_report == "Admissions" & !(input$state_report %in% abolish_prob_parole)){
+    if(input$state_report %in% parole_na_adm & input$adm_pop_report == "Admissions"){
 
       fluidRow(column(width = 3),
                column(width = 6, align = "center", htmlOutput("missing_data_parole_nt_adm")),
@@ -940,26 +910,10 @@ server <- function(input, output, session) {
       )
 
       # If state is missing new offense violations and technical violations (Population)
-    } else if(input$state_report %in% parole_na_pop & input$adm_pop_report == "Population" & !(input$state_report %in% abolish_prob_parole)){
+    } else if(input$state_report %in% parole_na_pop & input$adm_pop_report == "Population"){
 
       fluidRow(column(width = 3),
                column(width = 6, align = "center", htmlOutput("missing_data_parole_nt_pop")),
-               column(width = 3)
-      )
-
-      # If state is missing new offense violations and technical violations (Admissions) AND abolished parole
-    } else if(input$state_report %in% parole_na_adm & input$adm_pop_report == "Admissions" & (input$state_report %in% abolish_prob_parole)){
-
-      fluidRow(column(width = 3),
-               column(width = 6, align = "center", htmlOutput("abolished_parole_adm")),
-               column(width = 3)
-      )
-
-      # If state is missing new offense violations and technical violations (Admissions) AND abolished parole
-    } else if(input$state_report %in% parole_na_pop & input$adm_pop_report == "Population" & (input$state_report %in% abolish_prob_parole)){
-
-      fluidRow(column(width = 3),
-               column(width = 6, align = "center", htmlOutput("abolished_parole_pop")),
                column(width = 3)
       )
 
@@ -1121,32 +1075,23 @@ server <- function(input, output, session) {
   # Probation Graph - Dynamically change between sentence and graph depending on data availability
   #######
 
+  # If data is missing a probation violation admissions graph
   output$missing_data_probation_nt_adm <- renderUI({
-    out <- paste0(
-      "<h3 class = 'nodata'>No data</h3>"
-      , "<div class = 'notetxt'>"
-      , input$state_report
-      , " did not provide data on prison admissions due to technical and new offense probation violations."
-      , "</div>"
-    )
+    out <- missingness_sentences %>%
+      filter(state == input$state_report)
+    out <- out$probation_violation_admissions_graph
     HTML(out)
   })
 
+  # If data is missing a probation violation population graph
   output$missing_data_probation_nt_pop <- renderUI({
-    out <- paste0(
-      "<h3 class = 'nodata'>No data</h3>"
-      , "<div class = 'notetxt'>"
-      , input$state_report
-      , " state did not provide data on the number of people in prison due to technical and new offense probation violations."
-      , "</div>"
-    )
+    out <- missingness_sentences %>%
+      filter(state == input$state_report)
+    out <- out$probation_violation_population_graph
     HTML(out)
   })
 
-  output$missing_data_probation_nt_button <- renderText({
-    ""
-  })
-
+  # Show probation graph or missing data sentence depending on state
   output$probation_nt <- renderUI({
 
     # If state is missing new offense violations and technical violations (Admissions)
