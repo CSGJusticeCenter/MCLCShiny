@@ -83,8 +83,8 @@ mclc_data <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v8.xls
 # Load states  - will change to new notes when ready
 notes_raw <- read_csv(file.path(admin$sp_data_raw, "notes/state_notes_overview.csv"), show_col_types = FALSE)
 
-# Load info on abolishment of parole or probation
-abolish_prob_parole <- read_excel(file.path(admin$sp_survey, "MCLC 2022 Progress Tracking.xlsx"))
+# Load info on missing sentence info
+missingness_sentences <- read_excel(file.path(admin$sp_survey, "MCLC 2022 Progress Tracking.xlsx"))
 
 ################################################################################
 # Reformat shapefile for hex map
@@ -103,15 +103,25 @@ stateAbb <- clean_names(stateAbb)
 # Reformat data about probation and parole being abolished
 ################################################################################
 
-abolish_prob_parole <- abolish_prob_parole %>%
+missingness_sentences <- missingness_sentences %>%
   clean_names() %>%
-  select(state, abolished_probation, abolished_discretionary_parole) %>%
+  select(state,
+         supervision_violation_admissions_graph,
+         parole_violation_admissions_graph,
+         probation_violation_admissions_graph,
+         supervision_violation_population_graph,
+         parole_violation_population_graph,
+         probation_violation_population_graph) %>%
   distinct() %>%
   mutate(state = gsub('Excel', "", state),
          state = gsub('[()]', "", state),
-         state = trimws(state)) %>%
-  filter(abolished_discretionary_parole == "Yes")
-abolish_prob_parole <- abolish_prob_parole$state
+         state = trimws(state),
+         supervision_violation_admissions_graph = gsub('[\"]', '', supervision_violation_admissions_graph),
+         parole_violation_admissions_graph      = gsub('[\"]', '', parole_violation_admissions_graph),
+         probation_violation_admissions_graph   = gsub('[\"]', '', probation_violation_admissions_graph),
+         supervision_violation_population_graph = gsub('[\"]', '', supervision_violation_population_graph),
+         parole_violation_population_graph      = gsub('[\"]', '', parole_violation_population_graph),
+         probation_violation_population_graph   = gsub('[\"]', '', probation_violation_population_graph))
 
 ################################################################################
 # Reformat notes file
@@ -507,107 +517,85 @@ csg <- adm_pop_long %>% ungroup() %>%
 
 # states that are missing data and will not have a graph showing technical and new offense violations
 # adm
-nt_na_adm1 <- mclc_all %>%
-  filter(data == "New Offense Violation Admissions" | data == "Technical Violation Admissions") %>%
-  group_by(state, data) %>%
-  summarise(total = sum(total, na.rm = TRUE)) %>%
-  group_by(state) %>% filter(all(total == 0)) %>%
-  select(state) %>% distinct()
+nt_na_adm1 <- missingness_sentences %>%
+  filter(!is.na(supervision_violation_admissions_graph))
 nt_na_adm <- nt_na_adm1$state
 
 # states that are missing data and will not have a graph showing technical and new offense violations
 # pop
-nt_na_pop1 <- mclc_all %>%
-  filter(data == "New Offense Violation Population" | data == "Technical Violation Population") %>%
-  group_by(state, data) %>%
-  summarise(total = sum(total, na.rm = TRUE)) %>%
-  group_by(state) %>% filter(all(total == 0)) %>%
-  select(state) %>% distinct()
+nt_na_pop1 <- missingness_sentences %>%
+  filter(!is.na(supervision_violation_population_graph))
 nt_na_pop <- nt_na_pop1$state
 
 # states that are NOT missing data and will have a graph showing technical and new offense violations
 # adm
-nt_not_na_adm <- mclc_all %>%   ungroup() %>% select(state) %>% distinct() %>%
+nt_not_na_adm1 <- missingness_sentences %>%
+  ungroup() %>% select(state) %>% distinct() %>%
   anti_join(nt_na_adm1, by = "state")
-nt_not_na_adm <- nt_not_na_adm$state
+nt_not_na_adm <- nt_not_na_adm1$state
 
 # states that are NOT missing data and will have a graph showing technical and new offense violations
 # pop
-nt_not_na_pop <- mclc_all %>%   ungroup() %>% select(state) %>% distinct() %>%
+nt_not_na_pop1 <- missingness_sentences %>%
+  ungroup() %>% select(state) %>% distinct() %>%
   anti_join(nt_na_pop1, by = "state")
-nt_not_na_pop <- nt_not_na_pop$state
+nt_not_na_pop <- nt_not_na_pop1$state
 
 # states that are missing data and will not have a parole graph
 # adm
-parole_na_adm1 <- adm_pop_long %>%
-  filter(data == "new_offense_parole_violation_admissions" | data == "technical_parole_violation_admissions") %>%
-  mutate(state = as.character(state)) %>%
-  group_by(state, data) %>%
-  summarise(total = sum(total, na.rm = TRUE)) %>%
-  group_by(state) %>%
-  filter(all(total == 0)) %>%
-  select(state) %>% distinct()
+parole_na_adm1 <- missingness_sentences %>%
+  filter(!is.na(parole_violation_admissions_graph))
 parole_na_adm <- parole_na_adm1$state
 
 # states that are missing data and will not have a parole graph
 # pop
-parole_na_pop1 <- adm_pop_long %>%
-  filter(data == "new_offense_parole_violation_population" | data == "technical_parole_violation_population") %>%
-  mutate(state = as.character(state)) %>%
-  group_by(state, data) %>%
-  summarise(total = sum(total, na.rm = TRUE)) %>%
-  group_by(state) %>%
-  filter(all(total == 0)) %>%
-  select(state) %>% distinct()
+parole_na_pop1 <- missingness_sentences %>%
+  filter(!is.na(parole_violation_population_graph))
 parole_na_pop <- parole_na_pop1$state
 
 # states that are NOT missing data and will have a graph showing technical and new offense parole violations
 # adm
-parole_not_na_adm <- adm_pop_long %>% mutate(state = as.character(state)) %>% ungroup() %>% select(state) %>% distinct() %>%
+parole_not_na_adm1 <- missingness_sentences %>%
+  select(state) %>%
+  distinct() %>%
   anti_join(parole_na_adm1, by = "state")
-parole_not_na_adm <- parole_not_na_adm$state
+parole_not_na_adm <- parole_not_na_adm1$state
 
 # states that are NOT missing data and will have a graph showing technical and new offense parole violations
 # pop
-parole_not_na_pop <- adm_pop_long %>% mutate(state = as.character(state)) %>% ungroup() %>% select(state) %>% distinct() %>%
+parole_not_na_pop1 <- missingness_sentences %>%
+  select(state) %>%
+  distinct() %>%
   anti_join(parole_na_pop1, by = "state")
-parole_not_na_pop <- parole_not_na_pop$state
+parole_not_na_pop <- parole_not_na_pop1$state
 
 # states that are missing data and will not have a probation graph
 # adm
-probation_na_adm1 <- adm_pop_long %>%
-  filter(data == "new_offense_probation_violation_admissions" | data == "technical_probation_violation_admissions") %>%
-  mutate(state = as.character(state)) %>%
-  group_by(state, data) %>%
-  summarise(total = sum(total, na.rm = TRUE)) %>%
-  group_by(state) %>%
-  filter(all(total == 0)) %>%
-  select(state) %>% distinct()
+probation_na_adm1 <- missingness_sentences %>%
+  filter(!is.na(probation_violation_admissions_graph))
 probation_na_adm <- probation_na_adm1$state
 
 # states that are missing data and will not have a probation graph
 # pop
-probation_na_pop1 <- adm_pop_long %>%
-  filter(data == "new_offense_probation_violation_population" | data == "technical_probation_violation_population") %>%
-  mutate(state = as.character(state)) %>%
-  group_by(state, data) %>%
-  summarise(total = sum(total, na.rm = TRUE)) %>%
-  group_by(state) %>%
-  filter(all(total == 0)) %>%
-  select(state) %>% distinct()
+probation_na_pop1 <- missingness_sentences %>%
+  filter(!is.na(probation_violation_population_graph))
 probation_na_pop <- probation_na_pop1$state
 
 # states that are NOT missing data and will have a graph showing technical and new offense probation violations
 # adm
-probation_not_na_adm <- adm_pop_long %>% mutate(state = as.character(state)) %>% ungroup() %>% select(state) %>% distinct() %>%
+probation_not_na_adm1 <- missingness_sentences %>%
+  select(state) %>%
+  distinct() %>%
   anti_join(probation_na_adm1, by = "state")
-probation_not_na_adm <- probation_not_na_adm$state
+probation_not_na_adm <- probation_not_na_adm1$state
 
 # states that are NOT missing data and will have a graph showing technical and new offense probation violations
 # pop
-probation_not_na_pop <- adm_pop_long %>% mutate(state = as.character(state)) %>% ungroup() %>% select(state) %>% distinct() %>%
+probation_not_na_pop1 <- missingness_sentences %>%
+  select(state) %>%
+  distinct() %>%
   anti_join(probation_na_pop1, by = "state")
-probation_not_na_pop <- probation_not_na_pop$state
+probation_not_na_pop <- probation_not_na_pop1$state
 
 ################################################################################
 # save Rdata
@@ -631,12 +619,12 @@ for (folder in theseFOLDERS){
   save(hex_gj,                      file=file.path(folder, "hex_gj.rds"))
   save(notes,                       file=file.path(folder, "notes.rds"))
   save(csg,                         file=file.path(folder, "csg.rds"))
+  save(missingness_sentences,       file=file.path(folder, "missingness_sentences.rds"))
 
   save(nt_na_adm,                   file=file.path(folder, "nt_na_adm.rds"))
   save(nt_na_pop,                   file=file.path(folder, "nt_na_pop.rds"))
   save(nt_not_na_adm,               file=file.path(folder, "nt_not_na_adm.rds"))
   save(nt_not_na_pop,               file=file.path(folder, "nt_not_na_pop.rds"))
-  save(abolish_prob_parole,         file=file.path(folder, "abolish_prob_parole.rds"))
   save(parole_na_adm,               file=file.path(folder, "parole_na_adm.rds"))
   save(parole_na_pop,               file=file.path(folder, "parole_na_pop.rds"))
   save(parole_not_na_adm,           file=file.path(folder, "parole_not_na_adm.rds"))
