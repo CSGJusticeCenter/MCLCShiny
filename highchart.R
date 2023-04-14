@@ -175,7 +175,8 @@ all_state_area_adm <- map(.x = states,  .f = function(x) {
                 metric == "Technical Violation")) %>%
     group_by(state, year, metric, adm_or_pop) %>%
     summarise(total = sum(total, na.rm = TRUE), .groups = "keep") %>%
-    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>",
+    mutate(total = ifelse(total == 0, NA, total),
+           tooltip = paste0("<b>", state, " - ", year, "</b><br>",
                             metric, " ",
                             adm_or_pop, "<br>",
                             formattable::comma(total, digits = 0), "<br>"))
@@ -196,7 +197,8 @@ all_state_area_pop <- map(.x = states,  .f = function(x) {
                 metric == "Technical Violation")) %>%
     group_by(state, year, metric, adm_or_pop) %>%
     summarise(total = sum(total, na.rm = TRUE), .groups = "keep") %>%
-    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>",
+    mutate(total = ifelse(total == 0, NA, total),
+           tooltip = paste0("<b>", state, " - ", year, "</b><br>",
                             metric, " ",
                             adm_or_pop, "<br>",
                             formattable::comma(total, digits = 0), "<br>"))
@@ -220,7 +222,8 @@ all_state_bar_adm <- map(.x = states,  .f = function(x) {
     group_by(state, year, metric, adm_or_pop) %>%
     summarise(total = sum(total, na.rm = TRUE), .groups = "keep") %>%
     filter(metric == "New Offense Violation" | metric == "Technical Violation") %>%
-    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>",
+    mutate(total = ifelse(total == 0, NA, total),
+           tooltip = paste0("<b>", state, " - ", year, "</b><br>",
                             metric, " ",
                             adm_or_pop, "<br>",
                             formattable::comma(total, digits = 0), "<br>"))
@@ -240,7 +243,8 @@ all_state_bar_pop <- map(.x = states,  .f = function(x) {
     group_by(state, year, metric, adm_or_pop) %>%
     summarise(total = sum(total, na.rm = TRUE), .groups = "keep") %>%
     filter(metric == "New Offense Violation" | metric == "Technical Violation") %>%
-    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>",
+    mutate(total = ifelse(total == 0, NA, total),
+           tooltip = paste0("<b>", state, " - ", year, "</b><br>",
                             metric, " ",
                             adm_or_pop, "<br>",
                             formattable::comma(total, digits = 0), "<br>"))
@@ -265,7 +269,8 @@ parole_bar_adm <- map(.x = states,  .f = function(x) {
     group_by(state, year, metric, adm_or_pop) %>%
     summarise(total = sum(total, na.rm = TRUE), .groups = "keep") %>%
     filter(metric == "New Offense Violation" | metric == "Technical Violation") %>%
-    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>",
+    mutate(total = ifelse(total == 0, NA, total),
+           tooltip = paste0("<b>", state, " - ", year, "</b><br>",
                             metric, " ",
                             adm_or_pop, "<br>",
                             formattable::comma(total, digits = 0), "<br>"))
@@ -286,7 +291,8 @@ parole_bar_pop <- map(.x = states,  .f = function(x) {
     group_by(state, year, metric, adm_or_pop) %>%
     summarise(total = sum(total, na.rm = TRUE), .groups = "keep") %>%
     filter(metric == "New Offense Violation" | metric == "Technical Violation") %>%
-    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>",
+    mutate(total = ifelse(total == 0, NA, total),
+           tooltip = paste0("<b>", state, " - ", year, "</b><br>",
                             metric, " ",
                             adm_or_pop, "<br>",
                             formattable::comma(total, digits = 0), "<br>"))
@@ -311,7 +317,8 @@ probation_bar_adm <- map(.x = states,  .f = function(x) {
     group_by(state, year, metric, adm_or_pop) %>%
     summarise(total = sum(total, na.rm = TRUE), .groups = "keep") %>%
     filter(metric == "New Offense Violation" | metric == "Technical Violation") %>%
-    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>",
+    mutate(total = ifelse(total == 0, NA, total),
+           tooltip = paste0("<b>", state, " - ", year, "</b><br>",
                             metric, " ",
                             adm_or_pop, "<br>",
                             formattable::comma(total, digits = 0), "<br>"))
@@ -332,7 +339,8 @@ probation_bar_pop <- map(.x = states,  .f = function(x) {
     group_by(state, year, metric, adm_or_pop) %>%
     summarise(total = sum(total, na.rm = TRUE), .groups = "keep") %>%
     filter(metric == "New Offense Violation" | metric == "Technical Violation") %>%
-    mutate(tooltip = paste0("<b>", state, " - ", year, "</b><br>",
+    mutate(total = ifelse(total == 0, NA, total),
+           tooltip = paste0("<b>", state, " - ", year, "</b><br>",
                             metric, " ",
                             adm_or_pop, "<br>",
                             formattable::comma(total, digits = 0), "<br>"))
