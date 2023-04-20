@@ -16,7 +16,7 @@ source("guides.R")
 
 ui <- fluidPage(
        includeCSS("www/theme.css"),
-       useConductor(),       
+       useConductor(),
                 navbarPage(id = "navbarID",
 
                            # formats light blue header
@@ -145,7 +145,7 @@ ui <- fluidPage(
                                                                  # Select State
                                                                  column(width = 4, align = "center", class = "input-col",
                                                                         labeled_input('input-btn', "",
-                                                                        div(id = 'state-selector', 
+                                                                        div(id = 'state-selector',
                                                                              selectInput('state_report',
                                                                               div(style = "font-weight: bold", "Select State"),
                                                                                     choices = unique(adm_pop_long$state),
@@ -182,18 +182,15 @@ ui <- fluidPage(
 
                                         br(),
 
-                                        tags$style(".small-box.bg-black  {background-color: #004270 !important; color: #FFFFFF !important; font-family: Graphik !important; min-width: 13em; min-height: 13em;}"),
-                                        tags$style(".small-box           {border: 1px; border-style: solid; border-color: #FFFFFF !important; border-radius: 1px; padding: 0.75em; min-width: 13em; min-height: 13em;}"),
-
                                         fluidRow(column(width = 1),
                                                  column(width = 10,
                                                         fluidRow(
                                                           column(width = 3,
-                                                                 valueBoxOutput("total_change", width = "100%")),
+                                                                 valueBoxOutput("total_change",   width = "100%")),
                                                           column(width = 3,
-                                                                 valueBoxOutput("sup_change", width = "100%")),
+                                                                 valueBoxOutput("sup_change",     width = "100%")),
                                                           column(width = 3,
-                                                                 valueBoxOutput("tech_change", width = "100%")),
+                                                                 valueBoxOutput("tech_change",    width = "100%")),
                                                           column(width = 3,
                                                                  valueBoxOutput("new_off_change", width = "100%")))
                                                         ),
@@ -318,7 +315,7 @@ ui <- fluidPage(
                                                                      ), #end column width=8
                                                                      column(width = 2),
                                                                      tags$button(
-                                                                       class = "floating-button", 
+                                                                       class = "floating-button",
                                                                        `aria-label` = "info button",
                                                                        alt = "This button calls the information modal and app guide",
                                                                        id = "guide-button",
