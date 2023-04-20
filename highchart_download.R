@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: highchart_download.R
 # Authors: Mari Roberts, Martha Eichlersmith
-# Date last updated: April 13, 2023 (MAR)
+# Date last updated: April 18, 2023 (MAR)
 # Description:
 #    Create and save highcharts WITH LOGO (pngs) so the app loads faster
 #######################################
@@ -252,8 +252,9 @@ all_state_area_adm <- map(.x = states,  .f = function(x) {
              (metric == "Total" | metric == "Supervision Violation" |
                 metric == "New Offense Violation" |
                 metric == "Technical Violation")) %>%
-    group_by(state, year, metric, adm_or_pop) %>%
+    group_by(state, year, metric, adm_or_pop, probation_or_parole) %>%
     summarise(total = sum(total, na.rm = TRUE), .groups = "keep") %>%
+    ungroup() %>%
     mutate(total = ifelse(total == 0, NA, total))
   admin$mylog(glue("hc: Prison Admissions, {x}"))
   highcharts <- fnc_highchart_state_areachart_logo(df1, "Prison Admissions")
@@ -270,8 +271,9 @@ all_state_area_pop <- map(.x = states,  .f = function(x) {
              (metric == "Total" | metric == "Supervision Violation" |
                 metric == "New Offense Violation" |
                 metric == "Technical Violation")) %>%
-    group_by(state, year, metric, adm_or_pop) %>%
+    group_by(state, year, metric, adm_or_pop, probation_or_parole) %>%
     summarise(total = sum(total, na.rm = TRUE), .groups = "keep") %>%
+    ungroup() %>%
     mutate(total = ifelse(total == 0, NA, total))
   admin$mylog(glue("hc: Prison Population, {x}"))
   highcharts <- fnc_highchart_state_areachart_logo(df1, "Prison Population")
@@ -290,8 +292,9 @@ all_state_bar_adm <- map(.x = states,  .f = function(x) {
   df1 <- adm_pop_long %>%
     filter(state == x &
              adm_or_pop == "Admissions") %>%
-    group_by(state, year, metric, adm_or_pop) %>%
+    group_by(state, year, metric, adm_or_pop, probation_or_parole) %>%
     summarise(total = sum(total, na.rm = TRUE), .groups = "keep") %>%
+    ungroup() %>%
     filter(metric == "New Offense Violation" | metric == "Technical Violation") %>%
     mutate(total = ifelse(total == 0, NA, total))
   admin$mylog(glue("hc: Supervision Violation Admissions by Type, {x}"))
@@ -307,8 +310,9 @@ all_state_bar_pop <- map(.x = states,  .f = function(x) {
   df1 <- adm_pop_long %>%
     filter(state == x &
              adm_or_pop == "Population") %>%
-    group_by(state, year, metric, adm_or_pop) %>%
+    group_by(state, year, metric, adm_or_pop, probation_or_parole) %>%
     summarise(total = sum(total, na.rm = TRUE), .groups = "keep") %>%
+    ungroup() %>%
     filter(metric == "New Offense Violation" | metric == "Technical Violation") %>%
     mutate(total = ifelse(total == 0, NA, total))
   admin$mylog(glue("hc: Supervision Violation Population by Type, {x}"))

@@ -88,65 +88,65 @@ server <- function(input, output, session) {
 
     if(input$adm_or_pop_map == "Admissions"){
 
-             if(input$year_map == "2018 - 2019"){
-               adm_maps_2018_2019[[input$data_map]]%>%
-                highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-                highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-                highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-                highcharter::hc_add_dependency(name = "plugins/export-data.js")}
+      if(input$year_map == "2018 - 2019"){
+        adm_maps_2018_2019[[input$data_map]]%>%
+          highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/export-data.js")}
 
-        else if(input$year_map == "2018 - 2021"){
-          adm_maps_2018_2021[[input$data_map]]%>%
-                highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-                highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-                highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-                highcharter::hc_add_dependency(name = "plugins/export-data.js")}
+      else if(input$year_map == "2018 - 2021"){
+        adm_maps_2018_2021[[input$data_map]]%>%
+          highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/export-data.js")}
 
-        else if(input$year_map == "2019 - 2020"){
-          adm_maps_2019_2020[[input$data_map]]%>%
-                highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-                highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-                highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-                highcharter::hc_add_dependency(name = "plugins/export-data.js")}
+      else if(input$year_map == "2019 - 2020"){
+        adm_maps_2019_2020[[input$data_map]]%>%
+          highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/export-data.js")}
 
-        else if(input$year_map == "2020 - 2021"){
-          adm_maps_2020_2021[[input$data_map]]%>%
-                highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-                highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-                highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-                highcharter::hc_add_dependency(name = "plugins/export-data.js")}
+      else if(input$year_map == "2020 - 2021"){
+        adm_maps_2020_2021[[input$data_map]]%>%
+          highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/export-data.js")}
 
     }
 
     else if(input$adm_or_pop_map == "Population"){
 
-           if(input$year_map == "2018 - 2019"){
-             pop_maps_2018_2019[[input$data_map]]%>%
-              highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-              highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-              highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-              highcharter::hc_add_dependency(name = "plugins/export-data.js")}
+      if(input$year_map == "2018 - 2019"){
+        pop_maps_2018_2019[[input$data_map]]%>%
+          highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/export-data.js")}
 
       else if(input$year_map == "2018 - 2021"){
         pop_maps_2018_2021[[input$data_map]]%>%
-              highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-              highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-              highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-              highcharter::hc_add_dependency(name = "plugins/export-data.js")}
+          highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/export-data.js")}
 
       else if(input$year_map == "2019 - 2020"){
         pop_maps_2019_2020[[input$data_map]]%>%
-              highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-              highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-              highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-              highcharter::hc_add_dependency(name = "plugins/export-data.js")}
+          highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/export-data.js")}
 
       else if(input$year_map == "2020 - 2021"){
         pop_maps_2020_2021[[input$data_map]]%>%
-              highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-              highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-              highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-              highcharter::hc_add_dependency(name = "plugins/export-data.js")}
+          highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+          highcharter::hc_add_dependency(name = "plugins/export-data.js")}
     }
 
   })
@@ -192,7 +192,7 @@ server <- function(input, output, session) {
       rename(State = state, change = all_of(select_column)) %>%
       mutate(
         trend = case_when(
-            trend == "negative" ~ orange
+          trend == "negative" ~ orange
           , trend == "positive" ~ regblue
           , trend == "same"     ~ "#585858" #grey 35
         )
@@ -202,7 +202,7 @@ server <- function(input, output, session) {
               style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
               theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"), # was center
                                      headerStyle = list(textAlign = "right")
-                                     ),
+              ),
               defaultColDef = colDef(format = colFormat(separators = TRUE), align = "right"),
               compact = TRUE,
               fullWidth = FALSE,
@@ -254,14 +254,14 @@ server <- function(input, output, session) {
                                dui_sparklineseries(
                                  curve = "linear",
                                  showArea = FALSE,
-                                  fill = df$trend[index],
+                                 fill = df$trend[index],
                                  stroke = df$trend[index]
-                                 )
                                )
-                             )}),
+                             )
+                           )}),
                 #trend, don't show, used in determing
                 trend = colDef(show = FALSE)
-                ))
+              ))
 
   })
 
@@ -319,28 +319,15 @@ server <- function(input, output, session) {
   # Value box for change in total admissions or population
   output$total_change <- renderValueBox({
 
-    if (is.na(df_vb_total()$change)) {
-      text <- " "
-    } else if (df_vb_total()$change < 0) {
-      text <- tagList(HTML("&darr;"), paste0(df_vb_total()$change, "% from 2020"))
-    } else {
-      text <- tagList(HTML("&uarr;"), paste0(df_vb_total()$change, "% from 2020"))
-    }
-
-    if (is.na(df_vb_total()$total)) {
-      header <- "No Data"
-    } else {
-      header <- comma(df_vb_total()$total, digits = 0)
-    }
-
-    valueBox(
-      header,
-      title = paste0("Overall "),
+    fnc_value_box(
+      title      = paste0("Overall "),
       adm_or_pop = paste0(input$adm_pop_report, " in 2021"),
-      finding = text,
-      color = "black",
-      href = NULL,
-      width = 5
+      subtitle   = df_vb_total()$subheader,
+      value      = df_vb_total()$value_shown,
+      finding    = df_vb_total()$text,
+      color      = "black",
+      href       = NULL,
+      width      = 5
     )
 
   })
@@ -348,28 +335,15 @@ server <- function(input, output, session) {
   # Value box for change in supervision violation admissions or population
   output$sup_change <- renderValueBox({
 
-    if (is.na(df_vb_sup_violations()$change)) {
-      text <- ""
-    } else if (df_vb_sup_violations()$change < 0) {
-      text <- tagList(HTML("&darr;"), paste0(df_vb_sup_violations()$change, "% from 2020"))
-    } else {
-      text <- tagList(HTML("&uarr;"), paste0(df_vb_sup_violations()$change, "% from 2020"))
-    }
-
-    if (is.na(df_vb_sup_violations()$total)) {
-      header <- "No Data"
-    } else {
-      header <- comma(df_vb_sup_violations()$total, digits = 0)
-    }
-
-    valueBox(
-      header,
-      title = paste0("Supervision Violation "),
+    fnc_value_box(
+      title      = paste0("Supervision Violation "),
       adm_or_pop = paste0(input$adm_pop_report, " in 2021"),
-      finding = text,
-      color = "black",
-      href = NULL,
-      width = 5
+      subtitle   = df_vb_sup_violations()$subheader,
+      value      = df_vb_sup_violations()$value_shown,
+      finding    = df_vb_sup_violations()$text,
+      color      = "black",
+      href       = NULL,
+      width      = 5
     )
 
   })
@@ -377,28 +351,15 @@ server <- function(input, output, session) {
   # Value box for change in technical violation admissions or population
   output$tech_change <- renderValueBox({
 
-    if (is.na(df_vb_tech()$change)) {
-      text <- ""
-    } else if (df_vb_tech()$change < 0) {
-      text <- tagList(HTML("&darr;"), paste0(df_vb_tech()$change, "% from 2020"))
-    } else {
-      text <- tagList(HTML("&uarr;"), paste0(df_vb_tech()$change, "% from 2020"))
-    }
-
-    if (is.na(df_vb_tech()$total)) {
-      header <- "No Data"
-    } else {
-      header <- comma(df_vb_tech()$total, digits = 0)
-    }
-
-    valueBox(
-      header,
-      title = paste0("Technical Violation "),
+    fnc_value_box(
+      title      = paste0("Technical Violation "),
       adm_or_pop = paste0(input$adm_pop_report, " in 2021"),
-      finding = text,
-      color = "black",
-      href = NULL,
-      width = 5
+      subtitle   = df_vb_tech()$subheader,
+      value      = df_vb_tech()$value_shown,
+      finding    = df_vb_tech()$text,
+      color      = "black",
+      href       = NULL,
+      width      = 5
     )
 
   })
@@ -406,28 +367,15 @@ server <- function(input, output, session) {
   # Value box for change in new offense violation admissions or population
   output$new_off_change <- renderValueBox({
 
-    if (is.na(df_vb_new_off()$change)) {
-      text <- ""
-    } else if (df_vb_new_off()$change < 0) {
-      text <- tagList(HTML("&darr;"), paste0(df_vb_new_off()$change, "% from 2020"))
-    } else {
-      text <- tagList(HTML("&uarr;"), paste0(df_vb_new_off()$change, "% from 2020"))
-    }
-
-    if (is.na(df_vb_new_off()$total)) {
-      header <- "No Data"
-    } else {
-      header <- comma(df_vb_new_off()$total, digits = 0)
-    }
-
-    valueBox(
-      header,
-      title = paste0("New Offense Violation "),
+    fnc_value_box(
+      title      = paste0("New Offense Violation "),
       adm_or_pop = paste0(input$adm_pop_report, " in 2021"),
-      finding = text,
-      color = "black",
-      href = NULL,
-      width = 5
+      subtitle   = df_vb_new_off()$subheader,
+      value      = df_vb_new_off()$value_shown,
+      finding    = df_vb_new_off()$text,
+      color      = "black",
+      href       = NULL,
+      width      = 5
     )
 
   })
@@ -577,7 +525,7 @@ server <- function(input, output, session) {
   # Show graph or missing data sentence depending on state
   output$state_nt = renderUI({
 
-      # If state is missing new offense violations and technical violations (Admissions)
+    # If state is missing new offense violations and technical violations (Admissions)
     if(input$state_report %in% nt_na_adm & input$adm_pop_report == "Admissions"){
       htmlOutput("missing_data_nt_adm")
 
@@ -641,12 +589,12 @@ server <- function(input, output, session) {
     # Filter data
     df <- state_table %>%
       filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report) %>%
+               adm_or_pop == input$adm_pop_report) %>%
       group_by(text) %>%
       summarise(total_new = list(list(total)))
     df1 <- state_table_wide %>%
       filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report) %>%
+               adm_or_pop == input$adm_pop_report) %>%
       arrange(order) %>%
       select(-adm_or_pop, -state)
 
@@ -667,9 +615,9 @@ server <- function(input, output, session) {
               pagination = FALSE,
               columns = list(
                 text            = colDef(name = "Metric",
-                                       align = "left",
-                                       minWidth = 275,
-                                       style = list(fontWeight = "bold")),
+                                         align = "left",
+                                         minWidth = 275,
+                                         style = list(fontWeight = "bold")),
                 `2018`          = colDef(minWidth = 95),
                 `2019`          = colDef(minWidth = 95),
                 `2020`          = colDef(minWidth = 95),
@@ -787,12 +735,12 @@ server <- function(input, output, session) {
     # Filter data
     df <- parole_table %>%
       filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report) %>%
+               adm_or_pop == input$adm_pop_report) %>%
       group_by(text) %>%
       summarise(total_new = list(list(total)))
     df1 <- parole_table_wide %>%
       filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report) %>%
+               adm_or_pop == input$adm_pop_report) %>%
       arrange(order)
 
     # Merge data
@@ -980,12 +928,12 @@ server <- function(input, output, session) {
     # Filter data
     df <- probation_table %>%
       filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report) %>%
+               adm_or_pop == input$adm_pop_report) %>%
       group_by(text) %>%
       summarise(total_new = list(list(total)))
     df1 <- probation_table_wide %>%
       filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report) %>%
+               adm_or_pop == input$adm_pop_report) %>%
       arrange(order)
 
     # Merge data
@@ -1156,8 +1104,8 @@ server <- function(input, output, session) {
         }
 
         first_guide$start()
-        })
-      }
+      })
+    }
   })
 
   observeEvent(input$show_guide, {
@@ -1165,8 +1113,8 @@ server <- function(input, output, session) {
   })
 
   output$retitleend <- renderUI({
-   case_when(
-        input$adm_pop_report == "Admissions" ~ "in Readmissions to Prison from Parole"
+    case_when(
+      input$adm_pop_report == "Admissions" ~ "in Readmissions to Prison from Parole"
       , input$adm_pop_report == "Population" ~ "in Incarcerated Populations Readmitted to Prison from Parole"
     )
   })
@@ -1176,7 +1124,7 @@ server <- function(input, output, session) {
     if (file.exists(png_file)){
       plot <- png_file
       list(
-          src =normalizePath(plot)
+        src =normalizePath(plot)
         , contentType = "image/png"
         , alt = raceethnicity$infograph_alt(rridata, input$adm_pop_report, input$pop_denom, "Black", input$state_report)
         , width = "100%"
@@ -1186,7 +1134,7 @@ server <- function(input, output, session) {
       file <- tempfile(fileext = ".png")
       ggplot2::ggsave(filename = file, plot = plot, width = 24, height = 0.5)
       list(
-          src =normalizePath(file)
+        src =normalizePath(file)
         , contentType = "image/png"
         , alt = raceethnicity$infograph_alt_noinfog(input$adm_pop_report, input$pop_denom, "Black", input$state_report)
         , width = "100%"
@@ -1199,7 +1147,7 @@ server <- function(input, output, session) {
     if (file.exists(png_file)){
       plot <- png_file
       list(
-          src =normalizePath(plot)
+        src =normalizePath(plot)
         , contentType = "image/png"
         , alt = raceethnicity$infograph_alt(rridata, input$adm_pop_report, input$pop_denom, "Hispanic", input$state_report)
         , width = "100%"
@@ -1209,7 +1157,7 @@ server <- function(input, output, session) {
       file <- tempfile(fileext = ".png")
       ggplot2::ggsave(filename = file, plot = plot, width = 24, height = 0.5)
       list(
-          src =normalizePath(file)
+        src =normalizePath(file)
         , contentType = "image/png"
         , alt = raceethnicity$infograph_alt_noinfog(input$adm_pop_report, input$pop_denom, "Hispanic", input$state_report)
         , width = "100%"
@@ -1220,7 +1168,7 @@ server <- function(input, output, session) {
   output$infogheader <- renderUI({
     dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
     out <- paste0(
-        raceethnicity$pop_denom_text(input$pop_denom, input$adm_pop_report)
+      raceethnicity$pop_denom_text(input$pop_denom, input$adm_pop_report)
       , raceethnicity$infographic_header(dataavail, input$pop_denom, input$adm_pop_report, rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$NOTE)
     )
     HTML(out)
@@ -1238,11 +1186,11 @@ server <- function(input, output, session) {
       out <- main
     } else {
       out <- paste0( main
-                    , "<div class = 'retxt'>"
-                    , "Data to calculate relative rate index were not available for "
-                    , input$state_report
-                    , "</div>"
-                    )
+                     , "<div class = 'retxt'>"
+                     , "Data to calculate relative rate index were not available for "
+                     , input$state_report
+                     , "</div>"
+      )
     }
     HTML(out)
   })
@@ -1262,10 +1210,10 @@ server <- function(input, output, session) {
       out <- main
     } else {
       out <- paste0(  main
-                    , "<div class = 'retxt'>"
-                    , "Data to calculate rates were not available for "
-                    , input$state_report
-                    , "</div>")
+                      , "<div class = 'retxt'>"
+                      , "Data to calculate rates were not available for "
+                      , input$state_report
+                      , "</div>")
     }
     HTML(out)
   })
@@ -1284,10 +1232,10 @@ server <- function(input, output, session) {
       out <- main
     } else {
       out <- paste0(  main
-                    , "<div class = 'retxt'>"
-                    , "Readmissions to prison from parole data were not available for "
-                    , input$state_report
-                    , "</div>")
+                      , "<div class = 'retxt'>"
+                      , "Readmissions to prison from parole data were not available for "
+                      , input$state_report
+                      , "</div>")
     }
     HTML(out)
   })
@@ -1388,7 +1336,7 @@ server <- function(input, output, session) {
                                 align = "left",
                                 style = list(fontWeight = "bold"),
                                 minWidth = 200,
-                                ),
+                ),
                 metric = colDef(name = "Metric",
                                 minWidth = 370),
                 year   = colDef(name = "Year",

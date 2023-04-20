@@ -7,21 +7,6 @@ Screen Settings
   display:none;
 }
 
-/* Adds white space on sides of navbar
-body > div {
-  max-width: 1200px;
-}*/
-
-  /* Very top of page spans entire width
-#page-top {
-height: auto;
-width: 100vw;
-margin-left: calc(50% - 50vw);
-padding: 0;
-padding-top: 6PX;
-position: relative;
-}*/
-
 /* Make body smaller width than header which spans the entire page */
 /* Center everything */
 #app-body {
@@ -43,11 +28,6 @@ Font size and style
     font-family: "Graphik";
     src: local('Graphik'), url("fonts/GraphikBold.ttf");
     font-weight: bold;
-}
-
-/* Make some wordy sections smaller
-.small_text {
-  font-size: small;
 }
 
 /* Change font family throughout - DO NOT USE WITH PICKERINPUT
@@ -277,10 +257,27 @@ Title and value boxes
 /* Title of state settings */
 #selected-state {
   text-align: center;
-  /*font-weight: bold;*/
   font-size: 30px;
   font-family: Graphik;
   font-weight: bold;
+}
+
+/* Value box styling */
+.small-box.bg-black{
+  background-color: #004270 !important;
+  color: #FFFFFF !important;
+  font-family: Graphik !important;
+  min-width: 13em;
+  min-height: 15em;
+}
+.small-box{
+  border: 1px;
+  border-style: solid;
+  border-color: #FFFFFF !important;
+  border-radius: 1px;
+  padding: 0.75em;
+  min-width: 13em;
+  min-height: 15em;
 }
 
 /*######################################
@@ -579,7 +576,7 @@ body.shepherd-active::after {
   height: 100%;
   top: 0;
   left: 0;
-  z-index: 1000000; 
+  z-index: 1000000;
 }
 
 .shepherd-element.shepherd-open{
