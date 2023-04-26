@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: ui.R
 # Authors: Mari Roberts
-# Date last updated: January 17, 2022 (MR)
+# Date last updated: April 26, 2023 (MAR)
 # Description:
 #    User interface for shiny app
 #######################################
@@ -19,21 +19,25 @@ ui <- fluidPage(
        useConductor(),
                 navbarPage(id = "navbarID",
 
-                           # formats light blue header
+                           # Formats light blue header
                            tags$style(type = "text/css", ".container-fluid {padding-left:0px; padding-right:0px;}"),
                            tags$style(type = "text/css", ".navbar {margin-bottom: .5px;}"),
                            tags$style(type = "text/css", ".container-fluid .navbar-header .navbar-brand {margin-left: 0px;}"),
 
-                           # hide errors on user-end
+                           # Hide errors on user-end
                            tags$style(type="text/css",
                                       ".shiny-output-error { visibility: hidden; }",
                                       ".shiny-output-error:before { visibility: visible; content: ''; }"),
 
+                           # App title
                            title = "MCLC Dashboard",
+
+                           # English
                            tags$html(lang="en"),
 
                            ##############################################################################################################################
 
+                           # Map Explorer Page
                            tabPanel("mapexplorer", id = "mapexplorer",
 
                                     div(id = "header",
@@ -94,7 +98,10 @@ ui <- fluidPage(
                                         #######
 
                                         fluidRow(column(width = 1),
-                                                 column(width = 10, align = "center", div(id = "hex-map", highchartOutput("hex_map", height = 550, width = "100%"))),
+                                                 column(width = 10, align = "center", div(id = "hex-map",
+                                                                                          highchartOutput("hex_map",
+                                                                                                          height = 550,
+                                                                                                          width = "100%"))),
                                                  column(width = 1)),
 
                                         br(),
@@ -105,7 +112,8 @@ ui <- fluidPage(
                                         #######
 
                                         fluidRow(column(width = 1),
-                                                 column(width = 10, align = "center", div(id = "selected-map-table", textOutput("selected_map_table"))),
+                                                 column(width = 10, align = "center", div(id = "selected-map-table",
+                                                                                          textOutput("selected_map_table"))),
                                                  column(width = 1)),
 
                                         br(),
@@ -128,6 +136,7 @@ ui <- fluidPage(
 
                            ##############################################################################################################################
 
+                           # State Reports Page
                            tabPanel("statereports", id = "statereports",
 
                                     #######
@@ -136,13 +145,10 @@ ui <- fluidPage(
 
                                     div(id = "app-header",
                                         fluidRow(column(width = 3),
-
                                                  column(width = 6,
+                                                        fluidRow(column(width = 2),
 
-                                                        fluidRow(
-                                                                 column(width = 2),
-
-                                                                 # Select State
+                                                                 # Drop Down - Select State
                                                                  column(width = 4, align = "center", class = "input-col",
                                                                         labeled_input('input-btn', "",
                                                                         div(id = 'state-selector',
@@ -150,19 +156,18 @@ ui <- fluidPage(
                                                                               div(style = "font-weight: bold", "Select State"),
                                                                                     choices = unique(adm_pop_long$state),
                                                                                     multiple = FALSE)))),
-                                                                 # Select Adm or Pop
+
+                                                                 # Drop Down - Select Admissions or Population
                                                                  column(width = 4, align = "center", class = "input-col",
                                                                         labeled_input('input-btn', "",
 
                                                                         div(id = "type-selector",
-                                                                             selectInput('adm_pop_report', div(style = "font-weight: bold", "Select Type"),
-                                                                                                  choices = c("Admissions", "Population"),
-                                                                                                  selected = "Admissions",
-                                                                                                  multiple = FALSE)
-                                                                        ))),
-                                                                 column(width = 2)
-                                                                 )),
-
+                                                                             selectInput('adm_pop_report',
+                                                                                         div(style = "font-weight: bold", "Select Type"),
+                                                                                             choices = c("Admissions", "Population"),
+                                                                                             selected = "Admissions",
+                                                                                             multiple = FALSE)))),
+                                                                 column(width = 2))),
                                                  column(width = 3)
 
                                                  ) # fluidRow
@@ -176,12 +181,13 @@ ui <- fluidPage(
                                         # Value boxes
                                         #######
 
+                                        # State title
                                         fluidRow(column(width = 1),
                                                  column(width = 10, div(id = "selected-state", textOutput("selected_state"))),
                                                  column(width = 1)),
-
                                         br(),
 
+                                        # Value boxes
                                         fluidRow(column(width = 1),
                                                  column(width = 10,
                                                         fluidRow(
@@ -192,15 +198,12 @@ ui <- fluidPage(
                                                           column(width = 3,
                                                                  valueBoxOutput("tech_change",    width = "100%")),
                                                           column(width = 3,
-                                                                 valueBoxOutput("new_off_change", width = "100%")))
-                                                        ),
-                                                 column(width = 1)
-                                                 ),
-                                        br(),
-                                        br(),
+                                                                 valueBoxOutput("new_off_change", width = "100%")))),
+                                                 column(width = 1)),
+                                        br(),br(),
 
                                         #######
-                                        # Panels for Overview, Parole, Probation, and Revocations
+                                        # Panels for Overview, Parole, Probation, and Race/Ethnic Disparities
                                         #######
 
                                         fluidRow(column(width = 1),
@@ -209,76 +212,83 @@ ui <- fluidPage(
                                                         tabsetPanel(selected = "1", type = "tabs",id = "tabsetpanel",
 
                                                           tabPanel(value="1","Overview",
-
                                                                    br(),
 
-                                                                   fluidRow(column(width = 5, align = "center", uiOutput("state_area")),
-                                                                            column(width = 1, align = "center", uiOutput("state_area_button")),
-                                                                            column(width = 5, align = "center", uiOutput("state_nt")),
-                                                                            column(width = 1, align = "center", uiOutput("state_nt_button"))
-                                                                            ),
+                                                                   # Area graph and download button
+                                                                   fluidRow(column(width = 5,
+                                                                                   align = "center",
+                                                                                   uiOutput("state_area")),
+                                                                            column(width = 1, align = "center",
+                                                                                   uiOutput("state_area_button")),
+                                                                   # Supervision violation graph and download button
+                                                                            column(width = 5, align = "center",
+                                                                                   uiOutput("state_nt")),
+                                                                            column(width = 1, align = "center",
+                                                                                   uiOutput("state_nt_button"))),
+                                                                   br(),br(),br(),
 
-                                                                   br(),
-                                                                   br(),
-                                                                   br(),
-
-                                                                   fluidRow(column(width = 12, align = "center", reactableOutput("state_table"))),
-
-                                                                   br(),
-
-                                                                   fluidRow(column(width = 12, align = "left", div(id = "selected-state-note-title", "State Notes"))),
-
-                                                                   br(),
-
-                                                                   fluidRow(column(width = 12, align = "left", div(id = "selected-state-note", htmlOutput("selected_state_note")))),
-
+                                                                   # State overview table
+                                                                   fluidRow(column(width = 12,
+                                                                                   align = "center",
+                                                                                   reactableOutput("state_table"))),
                                                                    br(),
 
-                                                                   fluidRow(column(width = 12, align = "left", div(id = "consistent-state-note", state_note))),
-
+                                                                   # States notes
+                                                                   fluidRow(column(width = 12,
+                                                                                   align = "left",
+                                                                                   div(id = "selected-state-note-title",
+                                                                                       "State Notes"))),
                                                                    br(),
-                                                                   br()
+
+                                                                   fluidRow(column(width = 12,
+                                                                                   align = "left",
+                                                                                   div(id = "selected-state-note",
+                                                                                       htmlOutput("selected_state_note")))),
+                                                                   br(),
+
+                                                                   fluidRow(column(width = 12,
+                                                                                   align = "left",
+                                                                                   div(id = "consistent-state-note",
+                                                                                       state_note))),
+                                                                   br(),br()
 
                                                           ), # end tabPanel
 
                                                           tabPanel(value="2","Parole",
-
                                                                    br(),
 
+                                                                   # Parole graph and download button depending on data availability
                                                                    uiOutput("parole_nt"),
+                                                                   br(),br(),br(),
 
-                                                                   br(),
-                                                                   br(),
-                                                                   br(),
-
-                                                                   fluidRow(column(width = 12, align = "center", reactableOutput("parole_table"))),
-
-                                                                   br(),
-                                                                   br()
+                                                                   # Parole reactable table
+                                                                   fluidRow(column(width = 12,
+                                                                                   align = "center",
+                                                                                   reactableOutput("parole_table"))),
+                                                                   br(),br()
 
                                                           ), # end tabPanel
 
                                                           tabPanel(value="3","Probation",
-
                                                                    br(),
 
+                                                                   # Probation graph and download button depending on data availability
                                                                    uiOutput("probation_nt"),
+                                                                   br(),br(),br(),
 
-                                                                   br(),
-                                                                   br(),
-                                                                   br(),
-
-                                                                   fluidRow(column(width = 12, align = "center", reactableOutput("probation_table"))),
-
-                                                                   br(),
-                                                                   br()
+                                                                   # Probation reactable table
+                                                                   fluidRow(column(width = 12,
+                                                                                   align = "center",
+                                                                                   reactableOutput("probation_table"))),
+                                                                   br(),br()
 
                                                           ), # end tabPanel
 
                                                           #### START RACE/ETHNICITY TAB
                                                           tabPanel(value="4","Race/Ethnicity", #MYE HERE
                                                                    br(),
-                                                                   fluidRow(column(width = 12, align = "center",                                                                     div(style = "font-family: Graphik;font-weight: bold; font-size: 30px; line-height: 1.05em; margin-bottom: 12px; display: inline-block;",
+                                                                   fluidRow(column(width = 12, align = "center",
+                                                                                   div(style = "font-family: Graphik;font-weight: bold; font-size: 30px; line-height: 1.05em; margin-bottom: 12px; display: inline-block;",
                                                                        "Racial and Ethnic",
                                                                        div(id = "denominator-picker", pickerInput('pop_denom', label = NULL, width = "fit",
                                                                          choices = c(
@@ -373,6 +383,7 @@ ui <- fluidPage(
 
                            ##############################################################################################################################
 
+                           # Download data page
                            tabPanel("downloaddata", id = "downloaddata",
 
                                     #######
@@ -382,13 +393,7 @@ ui <- fluidPage(
                                     div(id = "app-header",
 
                                         fluidRow(column(width = 3),
-
                                                  column(width = 6,
-
-                                                        # https://stackoverflow.com/questions/51355878/how-to-text-wrap-choices-from-a-pickerinput-if-the-length-of-the-choices-are-lo
-                                                        # https://stackoverflow.com/questions/67212995/r-shiny-pickerinput-chiocesopt
-                                                        # https://stackoverflow.com/questions/63255906/change-colour-of-pickerinput-items-in-shiny
-                                                        # https://stackoverflow.com/questions/70222968/how-to-change-the-font-size-of-a-pickerinput-in-shiny
 
                                                         fluidRow(# Select State(s)
                                                                  column(width = 3, align = "center", class = "input-col",
@@ -411,10 +416,7 @@ ui <- fluidPage(
                                                                                                   # ), # choices style
                                                                                                   # choicesOpt = list(style = sprintf('background:%s;', 'green')),
                                                                                                   options = list(`actions-box` = TRUE,
-                                                                                                                 style = "picker-style")
-                                                                                                  )
-                                                                                      )
-                                                                        ),
+                                                                                                                 style = "picker-style")))),
 
                                                                  # Select Metric(s)
                                                                  column(width = 3, align = "center", class = "input-col",
@@ -442,10 +444,7 @@ ui <- fluidPage(
                                                                  # Download Data
                                                                  column(width = 3, align = "center", class = "input-col",
                                                                                       downloadButton(outputId = 'save_data', "Download Data",
-                                                                                                     class = "download-btn-lg"
-                                                                                                     ))
-                                                        )),
-
+                                                                                                     class = "download-btn-lg")))),
                                                  column(width = 3)
 
                                         ) # fluidRow
@@ -460,31 +459,39 @@ ui <- fluidPage(
                                     div(id = "app-body",
 
                                         fluidRow(column(width = 2),
-                                                 column(width = 8, div(id = "download-title", "Download Data")),
+                                                 column(width = 8, div(id = "download-title",
+                                                                       "Download Data")),
                                                  column(width = 2)),
 
                                         br(),
 
                                         fluidRow(column(width = 2),
-                                                 column(width = 8, div(id = "download-data-title", "More Community, Less Confinement (2022)")),
+                                                 column(width = 8, div(id = "download-data-title",
+                                                                       "More Community, Less Confinement (2022)")),
                                                  column(width = 2)),
 
                                         br(),
 
                                         fluidRow(column(width = 2),
-                                                 column(width = 8, div(id = "download-info", "To understand the impact of community supervision (i.e., probation, parole, post-release supervision) on state prison populations, The Council of State Governments (CSG) Justice Center surveyed corrections leaders in all 50 states. This project was supported by Arnold Ventures and produced in partnership with the Correctional Leaders Association (CLA). The resulting data spans 4 years—from 2018 to 2021—and demonstrate how the number of people sent to prison for supervision violations changed.")),
+                                                 column(width = 8, div(id = "download-info",
+                                                                       "To understand the impact of community supervision
+                                                                       (i.e., probation, parole, post-release supervision) on state prison populations,
+                                                                       The Council of State Governments (CSG) Justice Center surveyed corrections
+                                                                       leaders in all 50 states. This project was supported by Arnold Ventures and
+                                                                       produced in partnership with the Correctional Leaders Association (CLA).
+                                                                       The resulting data spans 4 years—from 2018 to 2021—and demonstrate how the number
+                                                                       of people sent to prison for supervision violations changed.")),
                                                  column(width = 2)),
                                         br(),
 
                                         fluidRow(column(width = 2),
                                                  column(width = 8,
                                                         align = "center",
-                                                        div(id = "selected-download-table", reactableOutput("selected_download_table"))
-                                                 ),
+                                                        div(id = "selected-download-table",
+                                                            reactableOutput("selected_download_table"))),
                                                  column(width = 2)),
 
-                                        br(),
-                                        br()
+                                        br(),br()
 
                                     ) # end div
 

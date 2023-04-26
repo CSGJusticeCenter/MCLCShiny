@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: server.R
 # Authors: Mari Roberts
-# Date last updated: April 13, 2023 (MAR)
+# Date last updated: April 26, 2023 (MAR)
 # Description:
 #    Server for shiny app
 #######################################
@@ -80,9 +80,8 @@ server <- function(input, output, session) {
   # Hex map
   #######
 
-  # THIS DOES NOT WORK FOR SOME REASON
   # Select foundational hex map and store it as a reactive expression
-  # Charts were saved in highchart.R
+  # Charts were created in highchart.R
   # This is necessary to download the map
   foundational_map <- reactive({
 
@@ -162,11 +161,13 @@ server <- function(input, output, session) {
 
   output$save_map <- downloadHandler(
     filename <- function() {
-      paste("Change_", input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep="")
+      paste("Change_", input$data_map, "_", input$adm_or_pop_map, "_",
+            input$year_map, ".png", sep="")
     },
-
     content <- function(file) {
-      file.copy(paste("data/plots/Change_", input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""), file)
+      file.copy(paste("data/plots/Change_", input$data_map, "_",
+                      input$adm_or_pop_map, "_",
+                      input$year_map, ".png", sep=""), file)
     },
     contentType = "image/png"
   )
@@ -186,7 +187,8 @@ server <- function(input, output, session) {
     select_column_name = paste0(select_column, " Change")
 
     df <- mclc_explorer_table %>%
-      select(state, data, `2018`, `2019`, `2020`, `2021`, all_of(select_column), total_new, trend) %>%
+      select(state, data, `2018`, `2019`, `2020`, `2021`,
+             all_of(select_column), total_new, trend) %>%
       filter(data == filter_by) %>%
       arrange(state) %>%
       rename(State = state, change = all_of(select_column)) %>%
@@ -199,11 +201,15 @@ server <- function(input, output, session) {
       )
 
     reactable(df,
-              style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
-              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"), # was center
+              style = list(fontFamily = "Graphik, sans-serif",
+                           fontSize = "1.4rem"),
+              theme = reactableTheme(cellStyle = list(display = "flex",
+                                                      flexDirection = "column",
+                                                      justifyContent = "center"), # was center
                                      headerStyle = list(textAlign = "right")
               ),
-              defaultColDef = colDef(format = colFormat(separators = TRUE), align = "right"),
+              defaultColDef = colDef(format = colFormat(separators = TRUE),
+                                     align = "right"),
               compact = TRUE,
               fullWidth = FALSE,
               searchable = TRUE,
@@ -217,10 +223,14 @@ server <- function(input, output, session) {
 
               pagination = FALSE,
               columns = list(
-                State           = colDef(name = "State", align = "left", minWidth = 120,
+                State           = colDef(name = "State",
+                                         align = "left",
+                                         minWidth = 120,
                                          style = list(fontWeight = "bold")),
                 data            = colDef(show = F,
-                                         name = "Metric", align = "left", minWidth = 240,
+                                         name = "Metric",
+                                         align = "left",
+                                         minWidth = 240,
                                          style = list(fontWeight = "bold")),
                 `2018`          = colDef(minWidth = 110),
                 `2019`          = colDef(minWidth = 110),
@@ -235,7 +245,7 @@ server <- function(input, output, session) {
                 total_new  =
                   colDef(minWidth = 140,
                          align = "center",
-                         name = "Trend Line",
+                         name = "Trend Line (2018 - 2021)",
                          sortable = FALSE,
                          cell = function(value, index) {
                            dui_sparkline(
@@ -319,10 +329,11 @@ server <- function(input, output, session) {
   # Value box for change in total admissions or population
   output$total_change <- renderValueBox({
 
+    # No subtitle needed regarding no parole or prob data
     fnc_value_box(
       title      = paste0("Overall "),
       adm_or_pop = paste0(input$adm_pop_report, " in 2021"),
-      subtitle   = df_vb_total()$subheader,
+      subtitle   = " ",
       value      = df_vb_total()$value_shown,
       finding    = df_vb_total()$text,
       color      = "black",

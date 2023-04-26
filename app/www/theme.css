@@ -2,11 +2,6 @@
 Screen Settings
 ########################################*/
 
-/* Hide navigation bar menu items */
-#navbarID{
-  display:none;
-}
-
 /* Make body smaller width than header which spans the entire page */
 /* Center everything */
 #app-body {
@@ -30,15 +25,14 @@ Font size and style
     font-weight: bold;
 }
 
-/* Change font family throughout - DO NOT USE WITH PICKERINPUT
-  when set the entire font to 'Graphik' the emojis used
-  in the download data button and pickerinput selection (checkmarks)
-  will not render because they aren't in the correct font /*
-/*{font-family: "Graphik", sans-serif !important;}
-
 /*##################################################################################################################
 Navigation Bar
 ####################################################################################################################*/
+
+/* Hide navigation bar menu items */
+#navbarID{
+  display:none;
+}
 
 /* Hide navigation bar */
 .navbar{
@@ -56,16 +50,13 @@ Header and global drop down options
 }
 
 
-
 /* picker input styling */
-
 
 /* color drop-down menu items (specifically, non-selected items) */
 .dropdown-menu ul li a {
   color: #004270 !important;
   font-family: Graphik;
 }
-
 
 /* color of selected item in drop down */
 .dropdown-menu>.active>a, .dropdown-menu>.active>a:focus {
@@ -79,26 +70,14 @@ Header and global drop down options
 }
 
 
-
 /* Top of page is a small grid of controls and info*/
 /* Can change background of header here background-color:#DEF0F6; */
 #header {
-  /*margin: 1rem auto; making everything shift to the left*/
-  /*width: 768px;
-  display: -ms-flexbox;
-  display: flex; vertically aligns to the left */
   background-color:#DDE3E9 !important;
-  /*height: 100px;*/
   min-height: 7.0em;
-  /*padding: 0 0px;*/
   display: absolute; /* without this the blue part of the header disappears */
   left: 50%;
 }
-
-/* Issues with splitlayout
-/* without this, dropdown menus are cut off while using splitLayout - Don't need if not using split layout
-overflow:hidden; gets rid of scroll but not overlap
-/*display: inline-block; gets rid of overlap but not scroll*/
 
 .shiny-split-layout > div {
   overflow:visible;
@@ -120,9 +99,7 @@ button > div {
 /* Format state header, same as map explorer header and download data header */
 #app-header {
   background-color:#DDE3E9 !important;
-  /*height: 100px;*/
   min-height: 7.0em;
-  /*padding: 0 0px;*/
   margin-left: auto;
   margin-right: auto;
 }
@@ -141,7 +118,6 @@ Dropdowns and buttons
   color: #004270;
   font-family: Graphik;
 }
-
 
 .input-col {
   min-width: 12em;
@@ -168,7 +144,7 @@ Hex map
 ########################################*/
 
 /* Map select input margins and font style */
-  /* Text inputs bottom margin prevents it from lining up nicely, so remove */
+/* Text inputs bottom margin prevents it from lining up nicely, so remove */
 .form-group.shiny-input-container, .selectize-control {
   margin-bottom: 0;
 }
@@ -184,9 +160,7 @@ Hex map
 /* Map settings*/
 #hex-map{
   text-align: center;
-  /*font-weight: bold;
-  font-size: 30px;
-  font-family: Graphik;*/
+  font-family: Graphik;
 }
 
 /*######################################
@@ -218,21 +192,10 @@ Table
   height: 32px;
   background: #FFFFFF;
   position: relative; bottom: 10px;
-  /*position: relative; bottom: 30px;*/
 }
 
-/*
-  .dataTables_filter {
-    position: relative;
-  }
-.dataTables_filter .fa-search {
-  position: absolute;
-  top: 10px;
-  left: auto;
-  right: 10px;
-}*/
 
-  /*##################################################################################################################
+/*##################################################################################################################
 STATE REPORTS
 Dropdowns
 ####################################################################################################################*/
