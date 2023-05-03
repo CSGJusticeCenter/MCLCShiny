@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: server.R
 # Authors: Mari Roberts
-# Date last updated: April 26, 2023 (MAR)
+# Date last updated: May 3, 2023 (MAR)
 # Description:
 #    Server for shiny app
 #######################################
@@ -45,7 +45,10 @@ server <- function(input, output, session) {
   #######
 
   # Title of map based on user input
-  output$selected_map <- renderText({paste("Change in ", input$data_map, " ", input$adm_or_pop_map, "from ", input$year_map)})
+  output$selected_map <- renderText({paste("Change in ",
+                                           input$data_map, " ",
+                                           input$adm_or_pop_map, "from ",
+                                           input$year_map)})
 
   #######
   # Hex map data
@@ -53,9 +56,17 @@ server <- function(input, output, session) {
 
   # Data for table under map
   df_map_table <- reactive({
-    filter_by <- paste0(input$data_map, " ", input$adm_or_pop_map)
+    filter_by <- paste0(input$data_map, " ",
+                        input$adm_or_pop_map)
     select_column = input$year_map
-    df <- mclc_explorer_table[, c('state', 'data', '2018', '2019', '2020', '2021', select_column, 'total_new')]
+    df <- mclc_explorer_table[, c('state',
+                                  'data',
+                                  '2018',
+                                  '2019',
+                                  '2020',
+                                  '2021',
+                                  select_column,
+                                  'total_new')]
     df <- df %>%
       filter(data == filter_by) %>%
       arrange(state) %>%
@@ -177,12 +188,15 @@ server <- function(input, output, session) {
   #######
 
   # Title of table under map based on user input
-  output$selected_map_table <- renderText({paste(input$data_map, " ", input$adm_or_pop_map)})
+  output$selected_map_table <-
+    renderText({paste(input$data_map, " ",
+                      input$adm_or_pop_map)})
 
   # Reactable table under hex map
   output$table_map <- renderReactable({
 
-    filter_by <- paste0(input$data_map, " ", input$adm_or_pop_map)
+    filter_by <- paste0(input$data_map, " ",
+                        input$adm_or_pop_map)
     select_column = input$year_map
     select_column_name = paste0(select_column, " Change")
 
@@ -284,7 +298,11 @@ server <- function(input, output, session) {
   #######
 
   # Title of state based on user input
-  output$selected_state <- renderText({paste(input$adm_pop_report, " Trends in ", input$state_report, sep = "")})
+  output$selected_state <-
+    renderText({paste(input$adm_pop_report,
+                      " Trends in ",
+                      input$state_report,
+                      sep = "")})
 
   #######
   # Value boxes
@@ -417,11 +435,14 @@ server <- function(input, output, session) {
   # Download button
   output$save_state_area_chart <- downloadHandler(
     filename <- function() {
-      paste(input$state_report, "_Prison_", input$adm_pop_report, ".png", sep="")
+      paste(input$state_report, "_Prison_",
+            input$adm_pop_report, ".png", sep="")
     },
 
     content <- function(file) {
-      file.copy(paste("data/plots/", input$state_report, "_Prison_", input$adm_pop_report, ".png", sep=""), file)
+      file.copy(paste("data/plots/",
+                      input$state_report, "_Prison_",
+                      input$adm_pop_report, ".png", sep=""), file)
     },
     contentType = "image/png"
   )
@@ -429,21 +450,26 @@ server <- function(input, output, session) {
   output$state_area_button = renderUI({
 
     # If state is missing new offense violations and technical violations (Admissions)
-    if(!(input$state_report %in% states) & input$adm_pop_report == "Admissions"){
+    if(!(input$state_report %in% states) &
+       input$adm_pop_report == "Admissions"){
       textOutput("blank")
 
       # If state is missing new offense violations and technical violations (Population)
-    } else if(!(input$state_report %in% states) & input$adm_pop_report == "Population"){
+    } else if(!(input$state_report %in% states) &
+              input$adm_pop_report == "Population"){
       textOutput("blank")
 
       # If state has data (Admissions)
-    } else if(input$state_report %in% states & input$adm_pop_report == "Admissions"){
-      downloadButton(outputId = 'save_state_area_chart', "", class = "download-chart")
+    } else if(input$state_report %in% states &
+              input$adm_pop_report == "Admissions"){
+      downloadButton(outputId = 'save_state_area_chart', "",
+                     class = "download-chart")
 
       # If state has data (Population)
-    } else if(input$state_report %in% states & input$adm_pop_report == "Population"){
-      downloadButton(outputId = 'save_state_area_chart', "", class = "download-chart")
-
+    } else if(input$state_report %in% states &
+              input$adm_pop_report == "Population"){
+      downloadButton(outputId = 'save_state_area_chart', "",
+                     class = "download-chart")
     }
 
   })
@@ -451,21 +477,26 @@ server <- function(input, output, session) {
   output$state_area = renderUI({
 
     # If state is missing new offense violations and technical violations (Admissions)
-    if(!(input$state_report %in% states) & input$adm_pop_report == "Admissions"){
+    if(!(input$state_report %in% states) &
+       input$adm_pop_report == "Admissions"){
       textOutput("blank")
 
       # If state is missing new offense violations and technical violations (Population)
-    } else if(!(input$state_report %in% states) & input$adm_pop_report == "Population"){
+    } else if(!(input$state_report %in% states) &
+              input$adm_pop_report == "Population"){
       textOutput("blank")
 
       # If state has data (Admissions)
-    } else if(input$state_report %in% states & input$adm_pop_report == "Admissions"){
-      highchartOutput("state_area_chart", height = 400, width = 390)
+    } else if(input$state_report %in% states &
+              input$adm_pop_report == "Admissions"){
+      highchartOutput("state_area_chart",
+                      height = 400, width = 390)
 
       # If state has data (Population)
-    } else if(input$state_report %in% states & input$adm_pop_report == "Population"){
-      highchartOutput("state_area_chart", height = 400, width = 390)
-
+    } else if(input$state_report %in% states &
+              input$adm_pop_report == "Population"){
+      highchartOutput("state_area_chart",
+                      height = 400, width = 390)
     }
 
   })
@@ -498,18 +529,22 @@ server <- function(input, output, session) {
   # Download button
   output$save_state_bar_chart <- downloadHandler(
     filename <- function() {
-      paste(input$state_report, "_Supervision_Violation_", input$adm_pop_report, "_by_Type.png", sep="")
+      paste(input$state_report, "_Supervision_Violation_",
+            input$adm_pop_report, "_by_Type.png", sep="")
     },
 
     content <- function(file) {
-      file.copy(paste("data/plots/", input$state_report, "_Supervision_Violation_", input$adm_pop_report, "_by_Type.png", sep=""), file)
+      file.copy(paste("data/plots/",
+                      input$state_report, "_Supervision_Violation_",
+                      input$adm_pop_report, "_by_Type.png", sep=""), file)
     },
     contentType = "image/png"
   )
 
 
   #######
-  # Supervision Violations Graph - Dynamically change between sentence and graph depending on data availability
+  # Supervision Violations Graph - Dynamically change between
+  # sentence and graph depending on data availability
   #######
 
   # If data is missing a supervision violation admissions graph
@@ -537,21 +572,24 @@ server <- function(input, output, session) {
   output$state_nt = renderUI({
 
     # If state is missing new offense violations and technical violations (Admissions)
-    if(input$state_report %in% nt_na_adm & input$adm_pop_report == "Admissions"){
+    if(input$state_report %in% nt_na_adm &
+       input$adm_pop_report == "Admissions"){
       htmlOutput("missing_data_nt_adm")
 
       # If state is missing new offense violations and technical violations (Population)
-    } else if(input$state_report %in% nt_na_pop & input$adm_pop_report == "Population"){
+    } else if(input$state_report %in% nt_na_pop &
+              input$adm_pop_report == "Population"){
       htmlOutput("missing_data_nt_pop")
 
       # If state has data (Admissions)
-    } else if(input$state_report %in% nt_not_na_adm & input$adm_pop_report == "Admissions"){
+    } else if(input$state_report %in% nt_not_na_adm &
+              input$adm_pop_report == "Admissions"){
       highchartOutput("state_bar_chart", height = 400, width = 390)
 
       # If state has data (Population)
-    } else if(input$state_report %in% nt_not_na_pop & input$adm_pop_report == "Population"){
+    } else if(input$state_report %in% nt_not_na_pop &
+              input$adm_pop_report == "Population"){
       highchartOutput("state_bar_chart", height = 400, width = 390)
-
     }
 
   })
@@ -560,21 +598,26 @@ server <- function(input, output, session) {
   output$state_nt_button = renderUI({
 
     # If state is missing new offense violations and technical violations (Admissions)
-    if(input$state_report %in% nt_na_adm & input$adm_pop_report == "Admissions"){
+    if(input$state_report %in% nt_na_adm &
+       input$adm_pop_report == "Admissions"){
       textOutput("missing_data_nt_button")
 
       # If state is missing new offense violations and technical violations (Population)
-    } else if(input$state_report %in% nt_na_pop & input$adm_pop_report == "Population"){
+    } else if(input$state_report %in% nt_na_pop &
+              input$adm_pop_report == "Population"){
       textOutput("missing_data_nt_button")
 
       # If state has data (Admissions)
-    } else if(input$state_report %in% nt_not_na_adm & input$adm_pop_report == "Admissions"){
-      downloadButton(outputId = 'save_state_bar_chart', "", class = "download-chart")
+    } else if(input$state_report %in% nt_not_na_adm &
+              input$adm_pop_report == "Admissions"){
+      downloadButton(outputId = 'save_state_bar_chart', "",
+                     class = "download-chart")
 
       # If state has data (Population)
-    } else if(input$state_report %in% nt_not_na_pop & input$adm_pop_report == "Population"){
-      downloadButton(outputId = 'save_state_bar_chart', "", class = "download-chart")
-
+    } else if(input$state_report %in% nt_not_na_pop &
+              input$adm_pop_report == "Population"){
+      downloadButton(outputId = 'save_state_bar_chart', "",
+                     class = "download-chart")
     }
 
   })
@@ -616,10 +659,13 @@ server <- function(input, output, session) {
     # Create table with 4 Year trend line in last column
     reactable(df,
               style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
-              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"), # was center
+              theme = reactableTheme(cellStyle = list(display = "flex",
+                                                      flexDirection = "column",
+                                                      justifyContent = "center"), # was center
                                      headerStyle = list(textAlign = "right")
               ),
-              defaultColDef = colDef(format = colFormat(separators = TRUE), align = "right"),
+              defaultColDef = colDef(format = colFormat(separators = TRUE),
+                                     align = "right"),
               compact = TRUE,
               fullWidth = FALSE,
               searchable = FALSE,
@@ -635,7 +681,8 @@ server <- function(input, output, session) {
                 four_yr_change = colDef(minWidth = 110,
                                         name = "2018-2021 Change",
                                         style = list(fontWeight = "bold"),
-                                        format = colFormat(percent = TRUE, digits = 1)),
+                                        format = colFormat(percent = TRUE,
+                                                           digits = 1)),
                 # Add 4 Year trend graphs to each row
                 total_new  = colDef(minWidth = 110,
                                     name = "4 Year Trend",
@@ -643,7 +690,10 @@ server <- function(input, output, session) {
                                       dui_sparkline(
                                         data = value[[1]],
                                         height = 80,
-                                        margin = list(top = 30, right = 20, bottom = 30, left = 20),
+                                        margin = list(top = 30,
+                                                      right = 20,
+                                                      bottom = 30,
+                                                      left = 20),
 
                                         components = list(
                                           dui_sparkpatternlines(
@@ -652,8 +702,7 @@ server <- function(input, output, session) {
                                             width = 4,
                                             stroke = total_co,
                                             strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
+                                            orientation = "diagonal"),
 
                                           dui_sparkpatternlines(
                                             id = "sup_violations",
@@ -661,8 +710,7 @@ server <- function(input, output, session) {
                                             width = 4,
                                             stroke = viol_co,
                                             strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
+                                            orientation = "diagonal"),
 
                                           dui_sparkpatternlines(
                                             id = "technical",
@@ -670,8 +718,7 @@ server <- function(input, output, session) {
                                             width = 4,
                                             stroke = tech_co,
                                             strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
+                                            orientation = "diagonal"),
 
                                           dui_sparkpatternlines(
                                             id = "new_offense",
@@ -679,15 +726,13 @@ server <- function(input, output, session) {
                                             width = 4,
                                             stroke = new_o_co,
                                             strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
+                                            orientation = "diagonal"),
 
                                           dui_sparklineseries(
                                             curve = "linear",
                                             showArea = FALSE,
                                             fill = colpal_fill[index],
-                                            stroke = colpal_stroke[index])))}))
-    )
+                                            stroke = colpal_stroke[index])))})))
   })
 
   #######
@@ -731,11 +776,14 @@ server <- function(input, output, session) {
   # Download button
   output$save_parole_bar_chart <- downloadHandler(
     filename <- function() {
-      paste(input$state_report, "_Parole_Violation_", input$adm_pop_report, "_by_Type.png", sep="")
+      paste(input$state_report, "_Parole_Violation_",
+            input$adm_pop_report, "_by_Type.png", sep="")
     },
 
     content <- function(file) {
-      file.copy(paste("data/plots/", input$state_report, "_Parole_Violation_", input$adm_pop_report, "_by_Type.png", sep=""), file)
+      file.copy(paste("data/plots/",
+                      input$state_report, "_Parole_Violation_",
+                      input$adm_pop_report, "_by_Type.png", sep=""), file)
     },
     contentType = "image/png"
   )
@@ -756,15 +804,19 @@ server <- function(input, output, session) {
 
     # Merge data
     df <- merge(df1, df, by = "text")
-    df <- df %>% arrange(order) %>% select(-c(order, adm_or_pop, state, prob_vs_parole, metric))
+    df <- df %>% arrange(order) %>%
+      select(-c(order, adm_or_pop, state, prob_vs_parole, metric))
 
     # Create table with 4 Year trend line in last column
     reactable(df,
               style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
-              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"), # was center
+              theme = reactableTheme(cellStyle = list(display = "flex",
+                                                      flexDirection = "column",
+                                                      justifyContent = "center"), # was center
                                      headerStyle = list(textAlign = "right")
               ),
-              defaultColDef = colDef(format = colFormat(separators = TRUE), align = "right"),
+              defaultColDef = colDef(format = colFormat(separators = TRUE),
+                                     align = "right"),
               compact = TRUE,
               fullWidth = FALSE,
               searchable = FALSE,
@@ -780,7 +832,8 @@ server <- function(input, output, session) {
                 four_yr_change = colDef(minWidth = 110,
                                         name = "2018-2021 Change",
                                         style = list(fontWeight = "bold"),
-                                        format = colFormat(percent = TRUE, digits = 1)),
+                                        format = colFormat(percent = TRUE,
+                                                           digits = 1)),
                 # add 4 Year trend graphs to each row
                 total_new  = colDef(minWidth = 110,
                                     name = "4 Year Trend",
@@ -788,7 +841,10 @@ server <- function(input, output, session) {
                                       dui_sparkline(
                                         data = value[[1]],
                                         height = 80,
-                                        margin = list(top = 30, right = 20, bottom = 30, left = 20),
+                                        margin = list(top = 30,
+                                                      right = 20,
+                                                      bottom = 30,
+                                                      left = 20),
 
                                         components = list(
                                           dui_sparkpatternlines(
@@ -797,8 +853,7 @@ server <- function(input, output, session) {
                                             width = 4,
                                             stroke = total_co,
                                             strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
+                                            orientation = "diagonal"),
 
                                           dui_sparkpatternlines(
                                             id = "technical",
@@ -806,8 +861,7 @@ server <- function(input, output, session) {
                                             width = 4,
                                             stroke = tech_co,
                                             strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
+                                            orientation = "diagonal"),
 
                                           dui_sparkpatternlines(
                                             id = "new_offense",
@@ -815,15 +869,13 @@ server <- function(input, output, session) {
                                             width = 4,
                                             stroke = new_o_co,
                                             strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
+                                            orientation = "diagonal"),
 
                                           dui_sparklineseries(
                                             curve = "linear",
                                             showArea = FALSE,
                                             fill = colpal_fill1[index],
-                                            stroke = colpal_stroke1[index])))}))
-    )
+                                            stroke = colpal_stroke1[index])))})))
   })
 
   # # This won't work because of library issues
@@ -861,41 +913,50 @@ server <- function(input, output, session) {
   output$parole_nt <- renderUI({
 
     # If state is missing new offense violations and technical violations (Admissions)
-    if(input$state_report %in% parole_na_adm & input$adm_pop_report == "Admissions"){
+    if(input$state_report %in% parole_na_adm &
+       input$adm_pop_report == "Admissions"){
 
       fluidRow(column(width = 3),
-               column(width = 6, align = "center", htmlOutput("missing_data_parole_nt_adm")),
-               column(width = 3)
-      )
+               column(width = 6, align = "center",
+                      htmlOutput("missing_data_parole_nt_adm")),
+               column(width = 3))
 
       # If state is missing new offense violations and technical violations (Population)
-    } else if(input$state_report %in% parole_na_pop & input$adm_pop_report == "Population"){
+    } else if(input$state_report %in% parole_na_pop &
+              input$adm_pop_report == "Population"){
 
       fluidRow(column(width = 3),
-               column(width = 6, align = "center", htmlOutput("missing_data_parole_nt_pop")),
-               column(width = 3)
-      )
+               column(width = 6, align = "center",
+                      htmlOutput("missing_data_parole_nt_pop")),
+               column(width = 3))
 
       # If state has data (Admissions)
-    } else if(input$state_report %in% parole_not_na_adm & input$adm_pop_report == "Admissions"){
+    } else if(input$state_report %in% parole_not_na_adm &
+              input$adm_pop_report == "Admissions"){
 
       fluidRow(column(width = 3),
-               column(width = 5, align = "center", highchartOutput("parole_bar_chart", height = 400, width = 390)),
-               column(width = 1, align = "left",   downloadButton(outputId = 'save_parole_bar_chart', "", class = "download-chart")),
-               column(width = 3)
-      )
+               column(width = 5, align = "center",
+                      highchartOutput("parole_bar_chart",
+                                      height = 400,
+                                      width = 390)),
+               column(width = 1, align = "left",
+                      downloadButton(outputId = 'save_parole_bar_chart', "",
+                                     class = "download-chart")),
+               column(width = 3))
 
       # If state has data (Population)
-    } else if(input$state_report %in% parole_not_na_pop & input$adm_pop_report == "Population"){
+    } else if(input$state_report %in% parole_not_na_pop &
+              input$adm_pop_report == "Population"){
 
       fluidRow(column(width = 3),
-               column(width = 5, align = "center", highchartOutput("parole_bar_chart", height = 400, width = 390)),
-               column(width = 1, align = "left",   downloadButton(outputId = 'save_parole_bar_chart', "", class = "download-chart")),
-               column(width = 3)
-      )
-
+               column(width = 5, align = "center",
+                      highchartOutput("parole_bar_chart",
+                                      height = 400, width = 390)),
+               column(width = 1, align = "left",
+                      downloadButton(outputId = 'save_parole_bar_chart', "",
+                                     class = "download-chart")),
+               column(width = 3))
     }
-
   })
 
   #######
@@ -924,11 +985,13 @@ server <- function(input, output, session) {
   # Download button
   output$save_probation_bar_chart <- downloadHandler(
     filename <- function() {
-      paste(input$state_report, "_Probation_Violation_", input$adm_pop_report, "_by_Type.png", sep="")
+      paste(input$state_report, "_Probation_Violation_",
+            input$adm_pop_report, "_by_Type.png", sep="")
     },
 
     content <- function(file) {
-      file.copy(paste("data/plots/", input$state_report, "_Probation_Violation_", input$adm_pop_report, "_by_Type.png", sep=""), file)
+      file.copy(paste("data/plots/", input$state_report, "_Probation_Violation_",
+                      input$adm_pop_report, "_by_Type.png", sep=""), file)
     },
     contentType = "image/png"
   )
@@ -949,15 +1012,20 @@ server <- function(input, output, session) {
 
     # Merge data
     df <- merge(df1, df, by = "text")
-    df <- df %>% arrange(order) %>% select(-c(order, adm_or_pop, state, prob_vs_parole, metric))
+    df <- df %>% arrange(order) %>%
+      select(-c(order, adm_or_pop, state, prob_vs_parole, metric))
 
     # Create table with 4 Year trend line in last column
     reactable(df,
-              style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
-              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"), # was center
+              style = list(fontFamily = "Graphik, sans-serif",
+                           fontSize = "1.4rem"),
+              theme = reactableTheme(cellStyle = list(display = "flex",
+                                                      flexDirection = "column",
+                                                      justifyContent = "center"), # was center
                                      headerStyle = list(textAlign = "right")
               ),
-              defaultColDef = colDef(format = colFormat(separators = TRUE), align = "right"),
+              defaultColDef = colDef(format = colFormat(separators = TRUE),
+                                     align = "right"),
               compact = TRUE,
               fullWidth = FALSE,
               searchable = FALSE,
@@ -973,7 +1041,8 @@ server <- function(input, output, session) {
                 four_yr_change = colDef(minWidth = 110,
                                         name = "2018-2021 Change",
                                         style = list(fontWeight = "bold"),
-                                        format = colFormat(percent = TRUE, digits = 1)),
+                                        format = colFormat(percent = TRUE,
+                                                           digits = 1)),
                 # add 4 Year trend graphs to each row
                 total_new  = colDef(minWidth = 110,
                                     name = "4 Year Trend",
@@ -981,7 +1050,10 @@ server <- function(input, output, session) {
                                       dui_sparkline(
                                         data = value[[1]],
                                         height = 80,
-                                        margin = list(top = 30, right = 20, bottom = 30, left = 20),
+                                        margin = list(top = 30,
+                                                      right = 20,
+                                                      bottom = 30,
+                                                      left = 20),
 
                                         components = list(
                                           dui_sparkpatternlines(
@@ -990,8 +1062,7 @@ server <- function(input, output, session) {
                                             width = 4,
                                             stroke = total_co,
                                             strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
+                                            orientation = "diagonal"),
 
                                           dui_sparkpatternlines(
                                             id = "technical",
@@ -999,8 +1070,7 @@ server <- function(input, output, session) {
                                             width = 4,
                                             stroke = tech_co,
                                             strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
+                                            orientation = "diagonal"),
 
                                           dui_sparkpatternlines(
                                             id = "new_offense",
@@ -1008,15 +1078,13 @@ server <- function(input, output, session) {
                                             width = 4,
                                             stroke = new_o_co,
                                             strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
+                                            orientation = "diagonal"),
 
                                           dui_sparklineseries(
                                             curve = "linear",
                                             showArea = FALSE,
                                             fill = colpal_fill1[index],
-                                            stroke = colpal_stroke1[index])))}))
-    )
+                                            stroke = colpal_stroke1[index])))})))
   })
 
   # This won't work because of library issues
@@ -1054,41 +1122,50 @@ server <- function(input, output, session) {
   output$probation_nt <- renderUI({
 
     # If state is missing new offense violations and technical violations (Admissions)
-    if(input$state_report %in% probation_na_adm & input$adm_pop_report == "Admissions"){
+    if(input$state_report %in% probation_na_adm &
+       input$adm_pop_report == "Admissions"){
 
       fluidRow(column(width = 3),
-               column(width = 6, align = "center", htmlOutput("missing_data_probation_nt_adm")),
-               column(width = 3)
-      )
+               column(width = 6, align = "center",
+                      htmlOutput("missing_data_probation_nt_adm")),
+               column(width = 3))
 
       # If state is missing new offense violations and technical violations (Population)
-    } else if(input$state_report %in% probation_na_pop & input$adm_pop_report == "Population"){
+    } else if(input$state_report %in% probation_na_pop &
+              input$adm_pop_report == "Population"){
 
       fluidRow(column(width = 3),
-               column(width = 6, align = "center", htmlOutput("missing_data_probation_nt_pop")),
-               column(width = 3)
-      )
+               column(width = 6,
+                      align = "center",
+                      htmlOutput("missing_data_probation_nt_pop")),
+               column(width = 3))
 
       # If state has data (Admissions)
-    } else if(input$state_report %in% probation_not_na_adm & input$adm_pop_report == "Admissions"){
+    } else if(input$state_report %in% probation_not_na_adm &
+              input$adm_pop_report == "Admissions"){
 
       fluidRow(column(width = 3),
-               column(width = 5, align = "center", highchartOutput("probation_bar_chart", height = 400, width = 390)),
-               column(width = 1, align = "left",   downloadButton(outputId = 'save_probation_bar_chart', "", class = "download-chart")),
-               column(width = 3)
-      )
+               column(width = 5, align = "center",
+                      highchartOutput("probation_bar_chart",
+                                      height = 400, width = 390)),
+               column(width = 1, align = "left",
+                      downloadButton(outputId = 'save_probation_bar_chart', "",
+                                     class = "download-chart")),
+               column(width = 3))
 
       # If state has data (Population)
-    } else if(input$state_report %in% probation_not_na_pop & input$adm_pop_report == "Population"){
+    } else if(input$state_report %in% probation_not_na_pop &
+              input$adm_pop_report == "Population"){
 
       fluidRow(column(width = 3),
-               column(width = 5, align = "center", highchartOutput("probation_bar_chart", height = 400, width = 390)),
-               column(width = 1, align = "left",   downloadButton(outputId = 'save_probation_bar_chart', "", class = "download-chart")),
-               column(width = 3)
-      )
-
+               column(width = 5, align = "center",
+                      highchartOutput("probation_bar_chart",
+                                      height = 400, width = 390)),
+               column(width = 1, align = "left",
+                      downloadButton(outputId = 'save_probation_bar_chart', "",
+                                     class = "download-chart")),
+               column(width = 3))
     }
-
   })
 
   ####
@@ -1334,20 +1411,21 @@ server <- function(input, output, session) {
       mutate(state = factor(state))
 
     reactable(df1,
-              style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
-              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
-              defaultColDef = colDef(format = colFormat(separators = TRUE), align = "left"),
+              style = list(fontFamily = "Graphik, sans-serif",
+                           fontSize = "1.4rem"),
+              theme = reactableTheme(cellStyle = list(display = "flex",
+                                                      flexDirection = "column",
+                                                      justifyContent = "center")),
+              defaultColDef = colDef(format = colFormat(separators = TRUE),
+                                     align = "left"),
               compact = TRUE,
               fullWidth = FALSE,
               defaultPageSize = 50,
-              #filterable = TRUE,
-
               columns = list(
                 state  = colDef(name = "State",
                                 align = "left",
                                 style = list(fontWeight = "bold"),
-                                minWidth = 200,
-                ),
+                                minWidth = 200),
                 metric = colDef(name = "Metric",
                                 minWidth = 370),
                 year   = colDef(name = "Year",
@@ -1356,7 +1434,6 @@ server <- function(input, output, session) {
                                 align = "right",
                                 minWidth = 110,
                                 filterable = FALSE)))
-
   })
 
 }
