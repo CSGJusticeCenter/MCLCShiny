@@ -14,7 +14,7 @@
 
 # Input:
 #    "data/raw/notes/state_notes_overview.csv" state notes
-#    "data/raw/mclc/mclc_data_2022_v8.xlsx"     2022 survey data with edits (BJS data or removal)
+#    "data/raw/mclc/mclc_data_2022_v8.xlsx"    2022 survey data with edits (BJS data or removal)
 #     Map files
 
 # Output:
@@ -88,8 +88,7 @@ mclc_data <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v8.xls
                         sheet = "Sheet 1")
 
 # Load states  - will change to new notes when ready
-notes_raw <- read_csv(file.path(admin$sp_data_raw, "notes/state_notes_overview.csv"),
-                      show_col_types = FALSE)
+notes_raw <- read_excel(file.path(admin$sp_data_raw, "notes/state_notes_overview_v2.xlsx"))
 
 # Load info on missing sentence info
 missingness_sentences <- read_excel(file.path(admin$sp_survey, "MCLC Overview.xlsx"),
@@ -163,7 +162,7 @@ notes <- notes_raw %>%
   ungroup() %>%
   rowwise() %>%
   mutate(
-    notes = paste(note_lst, collapse = "</p><p class = 'statetxt'>")
+      notes = paste(note_lst, collapse = "</p><p class = 'statetxt'>")
     , notes = paste0("<p class = 'statetxt'>", notes, "</p>")
   ) %>%
   ungroup() %>%

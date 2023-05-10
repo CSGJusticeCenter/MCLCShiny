@@ -33,7 +33,7 @@ library(sp)
 library(ggplot2)
 
 # Save highchart
-# Download this! webshot removes font styles when saving so webshot2 is better
+# webshot removes font styles when saving so webshot2 is better
 # remotes::install_github("rstudio/webshot2")
 library(webshot2)
 

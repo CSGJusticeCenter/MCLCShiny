@@ -2,12 +2,12 @@
 # Project: MCLCShiny
 # File: app.R
 # Authors: Mari Roberts
-# Date last updated: April 12, 2023 (MAR)
+# Date last updated: April 26, 2023 (MAR)
 # Description:
 #    Run ui and server
 #######################################
 
-# Add fonts to shiny linux server
+# add fonts to shiny linux server
 if (Sys.info()[['sysname']] == 'Linux') {
   dir.create('~/.fonts')
   fonts = c(

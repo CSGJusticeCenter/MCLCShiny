@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: functions.R
 # Authors: Mari Roberts
-# Date last updated: April 18, 2023 (MAR)
+# Date last updated: May 3, 2023 (MAR)
 # Description:
 #    Defines custom functions
 #######################################
@@ -107,7 +107,8 @@ fnc_highchart_state_areachart <- function(df, title_name, state_name, adm_or_pop
                   accessibility = list(
                     enabled = TRUE,
                     keyboardNavigation = list(enabled = TRUE),
-                    point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
+                    point = list(valueDescriptionFormat =
+                                   "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
                   ) %>%
     hc_add_series(data = subset(df, metric == "Supervision Violation"),
                   name = "Supervision Violation",
@@ -117,7 +118,8 @@ fnc_highchart_state_areachart <- function(df, title_name, state_name, adm_or_pop
                   accessibility = list(
                     enabled = TRUE,
                     keyboardNavigation = list(enabled = TRUE),
-                    point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
+                    point = list(valueDescriptionFormat =
+                                   "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
                   ) %>%
     hc_add_series(data = subset(df, metric == "Technical Violation"),
                   name = "Technical Violation",
@@ -127,7 +129,8 @@ fnc_highchart_state_areachart <- function(df, title_name, state_name, adm_or_pop
                   accessibility = list(
                     enabled = TRUE,
                     keyboardNavigation = list(enabled = TRUE),
-                    point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
+                    point = list(valueDescriptionFormat =
+                                   "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
                   ) %>%
     hc_add_series(data = subset(df, metric == "New Offense Violation"),
                   name = "New Offense Violation",
@@ -137,7 +140,8 @@ fnc_highchart_state_areachart <- function(df, title_name, state_name, adm_or_pop
                   accessibility = list(
                     enabled = TRUE,
                     keyboardNavigation = list(enabled = TRUE),
-                    point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
+                    point = list(valueDescriptionFormat =
+                                   "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
                   ) %>%
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
@@ -186,7 +190,8 @@ fnc_highchart_state_barchart <- function(df, title_name, state_name, adm_or_pop)
                   accessibility = list(
                     enabled = TRUE,
                     keyboardNavigation = list(enabled = TRUE),
-                    point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
+                    point = list(valueDescriptionFormat =
+                                   "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
                   ) %>%
     hc_add_series(data = subset(df, metric == "New Offense Violation"),
                   name = "New Offense Violation",
@@ -196,7 +201,8 @@ fnc_highchart_state_barchart <- function(df, title_name, state_name, adm_or_pop)
                   accessibility = list(
                     enabled = TRUE,
                     keyboardNavigation = list(enabled = TRUE),
-                    point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
+                    point = list(valueDescriptionFormat =
+                                   "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
                   ) %>%
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
@@ -238,7 +244,8 @@ fnc_highchart_parole_barchart <- function(df, title_name, state_name, adm_or_pop
                   accessibility = list(
                     enabled = TRUE,
                     keyboardNavigation = list(enabled = TRUE),
-                    point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
+                    point = list(valueDescriptionFormat =
+                                   "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
                   ) %>%
     hc_add_series(data = subset(df, metric == "New Offense Violation"),
                   name = "New Offense Violation",
@@ -248,7 +255,8 @@ fnc_highchart_parole_barchart <- function(df, title_name, state_name, adm_or_pop
                   accessibility = list(
                     enabled = TRUE,
                     keyboardNavigation = list(enabled = TRUE),
-                    point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
+                    point = list(valueDescriptionFormat =
+                                   "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
                   ) %>%
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
@@ -289,7 +297,8 @@ fnc_highchart_probation_barchart <- function(df, title_name, state_name, adm_or_
                   accessibility = list(
                     enabled = TRUE,
                     keyboardNavigation = list(enabled = TRUE),
-                    point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
+                    point = list(valueDescriptionFormat =
+                                   "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
                   ) %>%
     hc_add_series(data = subset(df, metric == "New Offense Violation"),
                   name = "New Offense Violation",
@@ -299,7 +308,8 @@ fnc_highchart_probation_barchart <- function(df, title_name, state_name, adm_or_
                   accessibility = list(
                     enabled = TRUE,
                     keyboardNavigation = list(enabled = TRUE),
-                    point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
+                    point = list(valueDescriptionFormat =
+                                   "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.total:,.0f}"))
                   ) %>%
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
@@ -377,7 +387,8 @@ fnc_highchart_map <- function(df, map_filename, state_name, adm_or_pop){
         accessibility = list(
           enabled = TRUE,
           keyboardNavigation = list(enabled = TRUE),
-          point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.value}%"))) %>%
+          point = list(valueDescriptionFormat =
+                         "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.value}%"))) %>%
 
       hc_colorAxis(min = NEW_MIN,
                    max = NEW_MAX,
@@ -445,7 +456,8 @@ fnc_highchart_map <- function(df, map_filename, state_name, adm_or_pop){
         accessibility = list(
           enabled = TRUE,
           keyboardNavigation = list(enabled = TRUE),
-          point = list(valueDescriptionFormat = "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.value}%"))) %>%
+          point = list(valueDescriptionFormat =
+                         "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.value}%"))) %>%
 
       hc_colorAxis(min = NEW_MIN,
                    max = NEW_MAX,
