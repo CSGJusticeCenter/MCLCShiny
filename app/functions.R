@@ -392,7 +392,7 @@ fnc_highchart_map <- function(df, map_filename, state_name, adm_or_pop){
 
       hc_colorAxis(min = NEW_MIN,
                    max = NEW_MAX,
-                   stops = color_stops(7, c(darkorange, orange, lightorange, white, lightblue, regblue, darkblue)),
+                   stops = color_stops(7, c(darkblue, regblue, lightblue, white, lightorange, orange, darkorange)),
                    labels = list(format = "{value}%",
                                  style = list(fontSize = "14px"))) %>%
 
@@ -407,13 +407,24 @@ fnc_highchart_map <- function(df, map_filename, state_name, adm_or_pop){
       hc_xAxis(title = "") %>%
       hc_yAxis(title = "") %>%
       hc_title(
-        text = paste0("Change in ", unique(df$metric), " ", unique(df$adm_or_pop), " from ", unique(df$year)),
+
+        text = if (adm_or_pop == "admissions" & unique(df$metric) != "Total") {
+          paste0("Change in Admissions to State Prison for ", unique(df$metric), "s, ", unique(df$year))
+        } else if(adm_or_pop == "population" & unique(df$metric) != "Total") {
+          paste0("Change in State Prison Population for ", unique(df$metric), "s, ", unique(df$year))
+        } else if(adm_or_pop == "admissions" & unique(df$metric) == "Total") {
+          paste0("Change in Total Admissions to State Prison", ", ", unique(df$year))
+        } else if(adm_or_pop == "population" & unique(df$metric) == "Total") {
+          paste0("Change in Total Population in State Prison, ", unique(df$year))
+        },
         align = "center",
         style = list(
           fontWeight = "bold",
-          fontFamily = "Graphik", # works in view and export but is the wrong font
+          fontFamily = "Graphik",
           fontSize = "30px",
-          useHTML = TRUE)) %>%
+          useHTML = TRUE
+        )
+      ) %>%
 
       # hc_setup() %>%
       hc_add_theme(hc_theme_map_jc) %>%
@@ -461,7 +472,7 @@ fnc_highchart_map <- function(df, map_filename, state_name, adm_or_pop){
 
       hc_colorAxis(min = NEW_MIN,
                    max = NEW_MAX,
-                   stops = color_stops(4, c(darkorange, orange, lightorange, white)),
+                   stops = color_stops(4, c(darkblue, regblue, lightblue, white)),
                    labels = list(format = "{value}%",
                                  style = list(fontSize = "14px"))) %>%
 
@@ -476,7 +487,15 @@ fnc_highchart_map <- function(df, map_filename, state_name, adm_or_pop){
       hc_xAxis(title = "") %>%
       hc_yAxis(title = "") %>%
       hc_title(
-        text = paste0("Change in ", unique(df$metric), " ", unique(df$adm_or_pop), " from ", unique(df$year)),
+        text = if (adm_or_pop == "admissions" & unique(df$metric) != "Total") {
+          paste0("Change in Admissions to State Prison for ", unique(df$metric), "s, ", unique(df$year))
+        } else if(adm_or_pop == "population" & unique(df$metric) != "Total") {
+          paste0("Change in State Prison Population for ", unique(df$metric), "s, ", unique(df$year))
+        } else if(adm_or_pop == "admissions" & unique(df$metric) == "Total") {
+          paste0("Change in Total Admissions to State Prison", ", ", unique(df$year))
+        } else if(adm_or_pop == "population" & unique(df$metric) == "Total") {
+          paste0("Change in Total Population in State Prison, ", unique(df$year))
+        },
         align = "center",
         style = list(
           fontWeight = "bold",
@@ -660,7 +679,7 @@ fnc_highchart_probation_barchart_logo <- function(df, title_name){
 }
 
 # Map explorer WITH logo
-fnc_highchart_map_logo <- function(df, map_filename){
+fnc_highchart_map_logo <- function(df, map_filename, adm_or_pop){
 
   # Get minimum and maximum value
   min_map <- min(df$change, na.rm = TRUE)
@@ -709,7 +728,7 @@ fnc_highchart_map_logo <- function(df, map_filename){
 
       hc_colorAxis(min = NEW_MIN,
                    max = NEW_MAX,
-                   stops = color_stops(7, c(darkorange, orange, lightorange, white, lightblue, regblue, darkblue)),
+                   stops = color_stops(7, c(darkblue, regblue, lightblue, white, lightorange, orange, darkorange)),
                    labels = list(format = "{value}%",
                                  style = list(fontSize = "14px"))) %>%
 
@@ -728,7 +747,15 @@ fnc_highchart_map_logo <- function(df, map_filename){
       hc_xAxis(title = "") %>%
       hc_yAxis(title = "") %>%
       hc_title(
-        text = paste0("Change in ", unique(df$metric), " ", unique(df$adm_or_pop), " from ", unique(df$year)),
+        text = if (adm_or_pop == "admissions" & unique(df$metric) != "Total") {
+          paste0("Change in Admissions to State Prison for ", unique(df$metric), "s, ", unique(df$year))
+        } else if(adm_or_pop == "population" & unique(df$metric) != "Total") {
+          paste0("Change in State Prison Population for ", unique(df$metric), "s, ", unique(df$year))
+        } else if(adm_or_pop == "admissions" & unique(df$metric) == "Total") {
+          paste0("Change in Total Admissions to State Prison", ", ", unique(df$year))
+        } else if(adm_or_pop == "population" & unique(df$metric) == "Total") {
+          paste0("Change in Total Population in State Prison, ", unique(df$year))
+        },
         align = "center",
         style = list(
           fontWeight = "bold",
@@ -759,7 +786,7 @@ fnc_highchart_map_logo <- function(df, map_filename){
 
       hc_colorAxis(min = NEW_MIN,
                    max = NEW_MAX,
-                   stops = color_stops(4, c(darkorange, orange, lightorange, white)),
+                   stops = color_stops(4, c(darkblue, regblue, lightblue, white)),
                    labels = list(format = "{value}%",
                                  style = list(fontSize = "14px"))) %>%
 
@@ -778,7 +805,15 @@ fnc_highchart_map_logo <- function(df, map_filename){
       hc_xAxis(title = "") %>%
       hc_yAxis(title = "") %>%
       hc_title(
-        text = paste0("Change in ", unique(df$metric), " ", unique(df$adm_or_pop), " from ", unique(df$year)),
+        text = if (adm_or_pop == "admissions" & unique(df$metric) != "Total") {
+          paste0("Change in Admissions to State Prison for ", unique(df$metric), "s, ", unique(df$year))
+        } else if(adm_or_pop == "population" & unique(df$metric) != "Total") {
+          paste0("Change in State Prison Population for ", unique(df$metric), "s, ", unique(df$year))
+        } else if(adm_or_pop == "admissions" & unique(df$metric) == "Total") {
+          paste0("Change in Total Admissions to State Prison", ", ", unique(df$year))
+        } else if(adm_or_pop == "population" & unique(df$metric) == "Total") {
+          paste0("Change in Total Population in State Prison, ", unique(df$year))
+        },
         align = "center",
         style = list(
           fontWeight = "bold",
@@ -1080,6 +1115,27 @@ fnc_create_prob_vs_parole <- function(df){
 fnc_create_adm_pop <- function(df){
   df <- df %>%
     mutate(adm_or_pop = ifelse(grepl("population", data), "Population", "Admissions"))
+}
+
+# Create trend line data for reactable table on map explorer page
+fnc_create_trend_data <- function(df){
+  df <- df %>%
+    group_by(state, data) %>%
+    summarise(total_new = list(list(total))) %>%
+    ungroup() %>%
+    rowwise() %>%
+    mutate(
+      vec_nona = list(total_new[[1]][!is.na(total_new[[1]])])
+      , length_nona = length(vec_nona)
+      , first  = ifelse(length_nona == 0, NA, vec_nona[1])
+      , last   = ifelse(length_nona == 0, NA, vec_nona[length_nona])
+      , trend = case_when(
+        first == last ~ "same"
+        , first >  last ~ "negative" #trend is negative, decreasing
+        , first <  last ~ "positive" #trend is positive, increasing
+      )
+    ) %>%
+    select(state, data, total_new, trend)
 }
 
 ##########################
