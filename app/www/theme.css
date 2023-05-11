@@ -10,6 +10,11 @@ Screen Settings
   margin-right: auto;
 }
 
+/* remove rounded edges everything */
+* {
+  border-radius: 0!important;
+}
+
 /*######################################
 Font size and style
 ########################################*/

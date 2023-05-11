@@ -41,16 +41,6 @@ server <- function(input, output, session) {
   ##############################################################################################################################
 
   #######
-  # Hex map title
-  #######
-
-  # Title of map based on user input
-  output$selected_map <- renderText({paste("Change in ",
-                                           input$data_map, " ",
-                                           input$adm_or_pop_map, "from ",
-                                           input$year_map)})
-
-  #######
   # Hex map data
   #######
 
@@ -192,25 +182,69 @@ server <- function(input, output, session) {
     renderText({paste(input$data_map, " ",
                       input$adm_or_pop_map)})
 
+
+  # Title of map based on user input
+  output$selected_map_table <- renderText({
+    if (input$adm_or_pop_map == "Admissions" & input$data_map == "Total") {
+      paste(input$data_map, " ", input$adm_or_pop_map, " to State Prison", sep = "")
+
+    } else if (input$adm_or_pop_map == "Population" & input$data_map == "Total") {
+      paste(input$data_map, " ", input$adm_or_pop_map, " in State Prison", sep = "")
+
+    } else if (input$adm_or_pop_map == "Admissions" & input$data_map != "Total") {
+      paste("State Prison Admissions for ", input$data_map, "s", sep = "")
+
+    } else if (input$adm_or_pop_map == "Population" & input$data_map != "Total") {
+      paste("People in State Prison for ", input$data_map, "s", sep = "")
+    }
+
+  })
+
+
   # Reactable table under hex map
   output$table_map <- renderReactable({
 
     filter_by <- paste0(input$data_map, " ",
                         input$adm_or_pop_map)
-    select_column = input$year_map
-    select_column_name = paste0(select_column, " Change")
+    select_column <- input$year_map
+    select_column_name <- paste0(select_column, " Change")
+    select_trend_data_column <-
+      if(input$year_map == "2018 - 2021"){
+        paste0("trend_data_18_21")
+    } else if(input$year_map == "2018 - 2019"){
+      paste0("trend_data_18_19")
+    } else if(input$year_map == "2019 - 2020"){
+      paste0("trend_data_19_20")
+    } else if(input$year_map == "2020 - 2021"){
+      paste0("trend_data_20_21")
+    }
+
+    select_trend_column <-
+      if(input$year_map == "2018 - 2021"){
+        paste0("trend_18_21")
+      } else if(input$year_map == "2018 - 2019"){
+        paste0("trend_18_19")
+      } else if(input$year_map == "2019 - 2020"){
+        paste0("trend_19_20")
+      } else if(input$year_map == "2020 - 2021"){
+        paste0("trend_20_21")
+      }
 
     df <- mclc_explorer_table %>%
       select(state, data, `2018`, `2019`, `2020`, `2021`,
-             all_of(select_column), total_new, trend) %>%
+             all_of(select_column),
+             all_of(select_trend_data_column),
+             all_of(select_trend_column)) %>%
       filter(data == filter_by) %>%
       arrange(state) %>%
-      rename(State = state, change = all_of(select_column)) %>%
+      rename(change = all_of(select_column),
+             total_new = 8,
+             trend     = 9) %>%
       mutate(
         trend = case_when(
-          trend == "negative" ~ orange
-          , trend == "positive" ~ regblue
-          , trend == "same"     ~ "#585858" #grey 35
+          trend == "negative"   ~ regblue
+          , trend == "positive" ~ orange
+          , trend == "same"     ~ "#585858"
         )
       )
 
@@ -237,7 +271,7 @@ server <- function(input, output, session) {
 
               pagination = FALSE,
               columns = list(
-                State           = colDef(name = "State",
+                state           = colDef(name = "State",
                                          align = "left",
                                          minWidth = 120,
                                          style = list(fontWeight = "bold")),
@@ -259,7 +293,7 @@ server <- function(input, output, session) {
                 total_new  =
                   colDef(minWidth = 140,
                          align = "center",
-                         name = "Trend Line (2018 - 2021)",
+                         name = "Trend Line",
                          sortable = FALSE,
                          cell = function(value, index) {
                            dui_sparkline(
@@ -289,6 +323,9 @@ server <- function(input, output, session) {
 
   })
 
+
+
+
   ##############################################################################################################################
   # State Reports
   ##############################################################################################################################
@@ -298,11 +335,15 @@ server <- function(input, output, session) {
   #######
 
   # Title of state based on user input
-  output$selected_state <-
-    renderText({paste(input$adm_pop_report,
-                      " Trends in ",
-                      input$state_report,
-                      sep = "")})
+  output$selected_state <- renderText({
+    if (input$adm_pop_report == "Admissions") {
+      paste("Prison Admission Trends in", input$state_report)
+    } else if (input$adm_pop_report == "Population") {
+      paste("Prison Population Trends in", input$state_report)
+    } else {
+      ""
+    }
+  })
 
   #######
   # Value boxes

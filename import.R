@@ -319,28 +319,75 @@ mclc_explorer_table_4_yr <- mclc_explorer_table %>%
   mutate(year = 2022) %>%
   select(-abbrev)
 
-# save reactable version of map explorer table
-mclc_explorer_table_long <- mclc_explorer_table %>%
+# get trend data and trend line whether negative or positive
+# for 2018 to 2021
+mclc_explorer_table_18_21 <- mclc_explorer_table %>%
   select(state, data, `2018`, `2019`, `2020`, `2021`) %>%
   pivot_longer(cols=c(`2018`, `2019`, `2020`, `2021`),
                names_to='year',
                values_to='total') %>%
-  group_by(state, data) %>%
-  summarise(total_new = list(list(total))) %>%
-  ungroup() %>%
-  rowwise() %>%
-  mutate(
-    vec_nona = list(total_new[[1]][!is.na(total_new[[1]])])
-    , length_nona = length(vec_nona)
-    , first  = ifelse(length_nona == 0, NA, vec_nona[1])
-    , last   = ifelse(length_nona == 0, NA, vec_nona[length_nona])
-    , trend = case_when(
-      first == last ~ "same"
-      , first >  last ~ "negative" #trend is negative, decreasing
-      , first <  last ~ "positive" #trend is positive, increasing
-    )
-  ) %>%
-  select(state, data, total_new, trend)
+  fnc_create_trend_data() %>%
+  rename(trend_data_18_21 = total_new,
+         trend_18_21 = trend)
+
+# for 2018 to 2019
+mclc_explorer_table_18_19 <- mclc_explorer_table %>%
+  select(state, data, `2018`, `2019`) %>%
+  pivot_longer(cols=c(`2018`, `2019`),
+               names_to='year',
+               values_to='total') %>%
+  fnc_create_trend_data() %>%
+  rename(trend_data_18_19 = total_new,
+         trend_18_19 = trend)
+
+# for 2019 to 2020
+mclc_explorer_table_19_20 <- mclc_explorer_table %>%
+  select(state, data, `2019`, `2020`) %>%
+  pivot_longer(cols=c(`2019`, `2020`),
+               names_to='year',
+               values_to='total') %>%
+  fnc_create_trend_data() %>%
+  rename(trend_data_19_20 = total_new,
+         trend_19_20 = trend)
+
+# for 2020 to 2021
+mclc_explorer_table_20_21 <- mclc_explorer_table %>%
+  select(state, data, `2020`, `2021`) %>%
+  pivot_longer(cols=c(`2020`, `2021`),
+               names_to='year',
+               values_to='total') %>%
+  fnc_create_trend_data() %>%
+  rename(trend_data_20_21 = total_new,
+         trend_20_21 = trend)
+
+# combine trend data together
+mclc_explorer_table_long <- mclc_explorer_table_18_21 %>%
+  left_join(mclc_explorer_table_18_19, by = c("state", "data")) %>%
+  left_join(mclc_explorer_table_19_20, by = c("state", "data")) %>%
+  left_join(mclc_explorer_table_20_21, by = c("state", "data"))
+
+# # save reactable version of map explorer table
+# mclc_explorer_table_long <- mclc_explorer_table %>%
+#   select(state, data, `2018`, `2019`, `2020`, `2021`) %>%
+#   pivot_longer(cols=c(`2018`, `2019`, `2020`, `2021`),
+#                names_to='year',
+#                values_to='total') %>%
+#   group_by(state, data) %>%
+#   summarise(total_new = list(list(total))) %>%
+#   ungroup() %>%
+#   rowwise() %>%
+#   mutate(
+#     vec_nona = list(total_new[[1]][!is.na(total_new[[1]])])
+#     , length_nona = length(vec_nona)
+#     , first  = ifelse(length_nona == 0, NA, vec_nona[1])
+#     , last   = ifelse(length_nona == 0, NA, vec_nona[length_nona])
+#     , trend = case_when(
+#       first == last ~ "same"
+#       , first >  last ~ "negative" #trend is negative, decreasing
+#       , first <  last ~ "positive" #trend is positive, increasing
+#     )
+#   ) %>%
+#   select(state, data, total_new, trend)
 
 mclc_explorer_table <- merge(mclc_explorer_table, mclc_explorer_table_long, by = c("state", "data"))
 

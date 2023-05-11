@@ -42,7 +42,7 @@ ui <- fluidPage(
      ##############################################################################################################################
 
      # Map Explorer Page
-     tabPanel("mapexplorer", id = "mapexplorer",
+     tabPanel("nationalmaps", id = "nationalmaps",
 
               div(id = "header",
 
@@ -89,7 +89,7 @@ ui <- fluidPage(
                                                                                 choices = c('2018 - 2019, 1 year' = "2018 - 2019",
                                                                                             '2019 - 2020, 1 year' = "2019 - 2020",
                                                                                             '2020 - 2021, 1 year' = "2020 - 2021",
-                                                                                            '2018 - 2021, 3 years' = "2018 - 2021"),
+                                                                                            '2018 - 2021, 4 years' = "2018 - 2021"),
                                                                                 selected = "2018 - 2021",
                                                                                 multiple = FALSE))),
                                            # Download Map
