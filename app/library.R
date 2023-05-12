@@ -2,15 +2,25 @@
 # Project: MCLCShiny
 # File: libraries.R
 # Authors: Mari Roberts
-# Last date updated: July 20, 2022
+# Last date updated: May 12, 2023
 # Description:
 #    Load packages
 #######################################
 
-# Data visualizations
+# Dataui for lines in reactable table download instructions
+# install.packages("remotes")
 # remotes::install_github("timelyportfolio/dataui")
+
+# Highcharter download instructions:
+# remove the existing highcharter package from your R session: remove.packages("highcharter")
+# restart your R session
+# install highcharter with the devtools package (NOT the remotes package):
+# install.packages("devtools")
+# devtools::install_github("mrjoh3/highcharter")
+
 library(dataui)
 library(highcharter)
+options(highcharter.rjson = FALSE) # for hc_boost(enabled = TRUE)
 library(purrr)
 library(htmlwidgets)
 library(glue)
@@ -20,6 +30,7 @@ library(shiny)
 library(shinyWidgets)
 library(dashboardthemes)
 library(shinydashboard)
+library(shinymeta)
 
 # Tables
 library(reactable)

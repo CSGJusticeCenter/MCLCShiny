@@ -1,5 +1,5 @@
 /*######################################
-Screen Settings
+Overall Settings
 ########################################*/
 
 /* Make body smaller width than header which spans the entire page */
@@ -10,7 +10,7 @@ Screen Settings
   margin-right: auto;
 }
 
-/* remove rounded edges everything */
+/* Remove rounded edges everything like buttons and drop downs */
 * {
   border-radius: 0!important;
 }
@@ -84,11 +84,15 @@ Header and global drop down options
   left: 50%;
 }
 
+/* The overflow property controls how content that exceeds the dimensions of an
+element is handled. By setting it to visible, any content that extends beyond
+the boundaries of the <div> elements will be visible and may overlap with other
+elements on the page.*/
 .shiny-split-layout > div {
   overflow:visible;
 }
 
-/* Download buttons */
+/* Property ensures that the text wraps normally for download buttons */
 button > div {
   -o-text-overflow: visible;
   text-overflow: visible;
@@ -265,7 +269,7 @@ Tabset Panels
     border-radius:0px;
 }
 
-/* Tab formatting - figure out how to change width */
+/* Tab formatting */
 .nav {
   padding-left: 0;
   margin-bottom: 0;
