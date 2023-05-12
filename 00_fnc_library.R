@@ -601,7 +601,8 @@ fnc_highchart_map <- function(df, map_filename, state_name, adm_or_pop){
 
       hc_plotOptions(series = list(animation = FALSE,
                                    cursor = "pointer",
-                                   borderWidth = 3),
+                                   borderWidth = 3,
+                                   events = list(click = click_js)),
                      accessibility = list(enabled = TRUE,
                                           keyboardNavigation = list(enabled = TRUE),
                                           linkedDescription = paste0("This is an area chart for the state of", state_name, "
@@ -680,7 +681,8 @@ fnc_highchart_map <- function(df, map_filename, state_name, adm_or_pop){
 
       hc_plotOptions(series = list(animation = FALSE,
                                    cursor = "pointer",
-                                   borderWidth = 3),
+                                   borderWidth = 3,
+                                   events = list(click = click_js)),
                      accessibility = list(enabled = TRUE,
                                           keyboardNavigation = list(enabled = TRUE),
                                           linkedDescription = paste0("This is an area chart for the state of", state_name, "

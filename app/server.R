@@ -12,6 +12,37 @@ server <- function(input, output, session) {
   # Enable caching
   shinyjs::enable("cache")
 
+
+  #################################################################################
+
+  # Redirect to state page depending on state selected in hex map
+
+  # Reactive values for state selected on map
+  selected_state_map <- reactiveVal(NULL)
+
+  # Map clicking
+  click_js <- JS("function(event) {
+    var stateName = event.point.name;
+    Shiny.onInputChange('selected_state_map', stateName);
+    $('#tabs a[href=\"#tabs-2\"]').tab('show');
+  }")
+
+  # redirect to the State tab and update selected state
+  observeEvent(input$selected_state_map, {
+    selected_state_map(input$selected_state_map)
+    updateNavbarPage(session, "navbarID", selected = "State")
+  })
+
+  # update selectInput choices based on selected state
+  observeEvent(selected_state_map(), {
+    updateSelectInput(session, "state_report", selected = selected_state_map(),
+                      choices = ifelse(is.null(selected_state_map()), NULL, selected_state_map()))
+  })
+
+
+
+  #################################################################################
+
   # Change URL depending on tab selection in navbar
   observeEvent(input$navbarID, {
 
