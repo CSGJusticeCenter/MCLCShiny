@@ -9,6 +9,9 @@
 
 server <- function(input, output, session) {
 
+  # Enable caching
+  shinyjs::enable("cache")
+
   # Change URL depending on tab selection in navbar
   observeEvent(input$navbarID, {
 
@@ -93,28 +96,36 @@ server <- function(input, output, session) {
           highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
           highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
           highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/export-data.js")}
+          highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+          hc_boost(enabled = TRUE)
+        }
 
       else if(input$year_map == "2018 - 2021"){
         adm_maps_2018_2021[[input$data_map]]%>%
           highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
           highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
           highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/export-data.js")}
+          highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+          hc_boost(enabled = TRUE)
+        }
 
       else if(input$year_map == "2019 - 2020"){
         adm_maps_2019_2020[[input$data_map]]%>%
           highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
           highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
           highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/export-data.js")}
+          highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+          hc_boost(enabled = TRUE)
+        }
 
       else if(input$year_map == "2020 - 2021"){
         adm_maps_2020_2021[[input$data_map]]%>%
           highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
           highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
           highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/export-data.js")}
+          highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+          hc_boost(enabled = TRUE)
+        }
 
     }
 
@@ -125,28 +136,36 @@ server <- function(input, output, session) {
           highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
           highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
           highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/export-data.js")}
+          highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+          hc_boost(enabled = TRUE)
+        }
 
       else if(input$year_map == "2018 - 2021"){
         pop_maps_2018_2021[[input$data_map]]%>%
           highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
           highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
           highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/export-data.js")}
+          highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+          hc_boost(enabled = TRUE)
+        }
 
       else if(input$year_map == "2019 - 2020"){
         pop_maps_2019_2020[[input$data_map]]%>%
           highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
           highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
           highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/export-data.js")}
+          highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+          hc_boost(enabled = TRUE)
+        }
 
       else if(input$year_map == "2020 - 2021"){
         pop_maps_2020_2021[[input$data_map]]%>%
           highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
           highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
           highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/export-data.js")}
+          highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+          hc_boost(enabled = TRUE)
+        }
     }
 
   })
@@ -262,12 +281,7 @@ server <- function(input, output, session) {
               fullWidth = FALSE,
               searchable = TRUE,
 
-              language = reactableLang(
-                searchPlaceholder = "Search for Your State"
-                # # Accessible labels for assistive technology, such as screen readers
-                # pagePreviousLabel = "Previous page",
-                # pageNextLabel = "Next page"
-              ),
+              language = reactableLang(searchPlaceholder = "Search for Your State"),
 
               pagination = FALSE,
               columns = list(
@@ -301,7 +315,6 @@ server <- function(input, output, session) {
                            dui_sparkline(
                              data = value[[1]],
                              height = 60,
-                             #margin = list(top = 30, right = 20, bottom = 30, left = 20),
                              components = list(
                                dui_sparkpatternlines(
                                  id = "total",
@@ -319,7 +332,7 @@ server <- function(input, output, session) {
                                )
                              )
                            )}),
-                #trend, don't show, used in determing
+                #trend, don't show, used in determining
                 trend = colDef(show = FALSE)
               ))
 
@@ -465,13 +478,15 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js")
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+        hc_boost(enabled = TRUE)
     } else {
       all_state_area_pop[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js")
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+        hc_boost(enabled = TRUE)
     }
   })
 
@@ -559,13 +574,15 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js")
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+        hc_boost(enabled = TRUE)
     } else {
       all_state_bar_pop[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js")
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+        hc_boost(enabled = TRUE)
     }
   })
 
@@ -807,13 +824,15 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js")
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+        hc_boost(enabled = TRUE)
     } else {
       parole_bar_pop[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js")
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+        hc_boost(enabled = TRUE)
     }
   })
 
@@ -1017,13 +1036,15 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js")
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+        hc_boost(enabled = TRUE)
     } else {
       probation_bar_pop[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js")
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+        hc_boost(enabled = TRUE)
     }
   })
 

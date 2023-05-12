@@ -16,6 +16,9 @@ source("guides.R")
 
 ui <- fluidPage(
 
+  # Add the shinyjs library for enabling caching
+  shinyjs::useShinyjs(),
+
   includeCSS("www/theme.css"),
   useConductor(),
   navbarPage(id = "navbarID",
