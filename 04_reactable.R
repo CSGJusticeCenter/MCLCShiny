@@ -14,6 +14,8 @@
 
 box::use( prep/box/admin)
 
+
+
 # load data
 load(file = file.path(admin$sp_data, "state_table.rds"))
 load(file = file.path(admin$sp_data, "state_table_wide.rds"))
@@ -21,6 +23,8 @@ load(file = file.path(admin$sp_data, "parole_table.rds"))
 load(file = file.path(admin$sp_data, "parole_table_wide.rds"))
 load(file = file.path(admin$sp_data, "probation_table.rds"))
 load(file = file.path(admin$sp_data, "probation_table_wide.rds"))
+
+
 
 # load packages
 library(dplyr)
@@ -32,9 +36,13 @@ library(highcharter)
 # remotes::install_github("timelyportfolio/dataui")
 library(dataui)
 
+
+
 # assign colors for visualizations
 source("app/colors.R")
-source("app/functions.R")
+source("00_fnc_library.R")
+
+
 
 states_list <- list('Alabama',
                     'Alaska',

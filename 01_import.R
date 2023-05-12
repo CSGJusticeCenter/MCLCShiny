@@ -6,7 +6,6 @@
 # Date last updated: April 20, 2023 (MAR)
 
 # Description:
-#    Loads packages
 #    Imports data
 #    Combines data by year
 #    Cleans variable names
@@ -22,54 +21,8 @@
 #     Saves data to research SP folder
 #######################################
 
-# Path to data on research div sharepoint
-# Make sure sharepoint folder is synced locally
-# https://csgorg.sharepoint.com/:f:/s/Team-JC-Research/EhdvImKN2rdPnmHQ2TrKlooBdYqnnWc0SUXBNuh9C7d41g?e=NCsh8I
-# In your Renviron (usethis::edit_r_environ()), set CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"
-
-# Highcharter download instructions:
-# remove the existing highcharter package from your R session: remove.packages("highcharter")
-# restart your R session
-# install highcharter with the devtools package (NOT the remotes package):
-# install.packages("devtools")
-# devtools::install_github("mrjoh3/highcharter")
-
-# Load packages
-# install.packages("remotes")
-# remotes::install_github("csgjusticecenter/csgjcr")
-library(csgjcr)
-library(rlang)
-library(dplyr)
-library(tidyr)
-library(geojsonsf)
-library(janitor)
-library(jsonlite)
-library(readxl)
-library(sf)
-library(showtext)
-library(sysfonts)
-library(utils)
-library(highcharter)
-library(extrafont)
-library(readr)
-library(htmltools)
-
-box::use(prep/box/admin)
-
-# Load fonts
-font_add("Graphik",     regular = "app/www/fonts/Graphik.ttf")
-font_add("GraphikBold", regular = "app/www/fonts/GraphikBold.ttf")
-extrafont::loadfonts(quiet = TRUE)
-loadfonts(device="win")
-showtext_auto()
-
-# Load custom functions
-source("app/functions.R")
-
-
-
-
-
+# Load packages and custom functions
+source("00_fnc_library.R")
 
 ########
 # Import data

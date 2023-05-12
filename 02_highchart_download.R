@@ -44,7 +44,9 @@ walk(obj_list, ~load(file = file.path(admin$sp_data, .x), envir = .GlobalEnv))
 
 # assign colors for visualizations
 source("app/colors.R")
-source("app/functions.R")
+source("00_fnc_library.R")
+
+
 
 # list of states for function
 states <- adm_pop_long$state %>%
