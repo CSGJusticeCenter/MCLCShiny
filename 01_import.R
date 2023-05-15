@@ -31,7 +31,8 @@ source("00_fnc_library.R")
 # Load sp file
 hex <- read_sf(file.path(admin$sp_data_raw, "us_states_hexgrid.geojson")) %>%
   select(state_abb = iso3166_2) %>%
-  filter(state_abb != "DC")
+  filter(state_abb != "DC") %>%
+  mutate(state_name = state.name[match(state_abb, state.abb)])
 
 # Load state abb
 stateAbb <- read.csv(file.path(admin$sp_data_raw, "stateAbb.csv"))
@@ -62,7 +63,10 @@ hex_gj <- hex %>%
   sf_geojson() %>%
   fromJSON(simplifyVector = FALSE)
 
-# clean state abbreviations file
+
+
+
+# Clean state abbreviations file
 stateAbb <- clean_names(stateAbb)
 
 

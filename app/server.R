@@ -43,6 +43,16 @@ server <- function(input, output, session) {
   # MAP EXPLORER
   ##############################################################################################################################
 
+  # save reactive values for which states are clicked on in the hex map
+  selected_state_map <- reactiveVal(NULL)
+
+  # map clicking
+  click_js <- JS("function(event) {
+    var state = event.point.state_abb;
+    Shiny.setInputValue('selected_state_map', state);
+    $('#navbarID a[href=\"#statereports\"]').tab('show');
+  }")
+
   #######
   # Hex map data
   #######
@@ -172,7 +182,25 @@ server <- function(input, output, session) {
 
   # output hex map
   output$hex_map <- renderHighchart({
-    foundational_map()
+    foundational_map() %>%
+      hc_plotOptions(series = list(events = list(click = click_js)))
+  })
+
+  # redirect to the statereports tab and update selected state
+  observeEvent(input$selected_state_map, {
+    selected_state_map(input$selected_state_map)
+    updateNavbarPage(session, "navbarID", selected = "statereports")
+  })
+
+  # update selectInput choices based on selected state from hex map
+  observeEvent(selected_state_map(), {
+
+    # get state name from state abbreviation
+    state_name <- state.name[match(selected_state_map(), state.abb)]
+
+    updateSelectInput(session, "state_report",
+                      selected = state_name,
+                      choices = ifelse(is.null(state_name), NULL, state_name))
   })
 
   #######
