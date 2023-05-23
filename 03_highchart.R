@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: highchart.R
 # Authors: Mari Roberts, Martha Eichlersmith
-# Date last updated: April 18, 2023 (MAR)
+# Date last updated: May 15, 2023 (MAR)
 # Description:
 #    Create and save highcharts so the app loads faster
 #######################################
@@ -47,6 +47,16 @@ source("00_fnc_library.R")
 states <- adm_pop_long$state %>%
   unique() %>%
   sort()
+
+# list of metrics for function
+metrics <- c("New Offense Violation",
+             "Parole Violation",
+             "Probation Violation",
+             "Supervision Violation",
+             "Technical Violation",
+             "Total")
+
+
 
 ############
 # MAP EXPLORER - Maps

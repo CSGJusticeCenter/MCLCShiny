@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: functions.R
 # Authors: Mari Roberts
-# Date last updated: May 12, 2023 (MAR)
+# Date last updated: May 15, 2023 (MAR)
 # Description:
 #    Defines custom functions
 #######################################
@@ -18,19 +18,17 @@ fnc_add_dash <- function(value) {
 
 # https://jkunst.com/blog/posts/2020-06-26-valuebox-and-sparklines/
 # Value box
-fnc_value_box <-
-  function(title,
-           adm_or_pop,
-           subtitle,
-
-           value,
-           finding,
-
-           icon = NULL,
-           color = "aqua",
-           width = 4,
-           href = NULL){
-
+fnc_value_box <- function(
+    title,
+    adm_or_pop,
+    subtitle,
+    value,
+    finding,
+    icon = NULL,
+    color = "aqua",
+    width = 4,
+    href = NULL
+) {
   shinydashboard:::validateColor(color)
 
   if (!is.null(icon))
@@ -40,11 +38,11 @@ fnc_value_box <-
     class = paste0("small-box bg-", color),
     div(
       class = "inner",
-      h4(HTML(paste0("<b>", title,      "</b>"))),
-      h4(HTML(paste0("<b>", adm_or_pop, "</b>"))),
-      h5(HTML(paste0("<b>", subtitle,   "</b>"))),
-      h1(HTML(paste0("<b>", value,      "</b>"))),
-      h5(HTML(paste0("<b>", finding,    "</b>")))
+      HTML(paste0("<h4><b>", title, "</b></h4>")),
+      HTML(paste0("<h4><b>", adm_or_pop, "</b></h4>")),
+      HTML(paste0("<h5><b>", subtitle, "</b></h5>")),
+      HTML(paste0("<h1><b>", value, "</b></h1>")),
+      HTML(paste0("<h5><b>", finding, "</b></h5>"))
     ),
     if (!is.null(icon)) div(class = "icon-large", icon)
   )
@@ -57,6 +55,7 @@ fnc_value_box <-
     boxContent
   )
 }
+
 
 # add a nicely styled label above selection box
 labeled_input <- function(id, label, input){

@@ -3,7 +3,7 @@
 # File: import.R
 # Authors: Mari Roberts
 # Sub-Author: Martha Eichlersmith
-# Date last updated: April 20, 2023 (MAR)
+# Date last updated: May 15, 2023 (MAR)
 
 # Description:
 #    Loads packages
@@ -560,7 +560,7 @@ fnc_highchart_map <- function(df, map_filename, state_name, adm_or_pop){
           enabled = TRUE,
           keyboardNavigation = list(enabled = TRUE),
           point = list(valueDescriptionFormat =
-                         "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.value}%"))) %>%
+                         "{point.state}, {point.metric}, {point.adm_or_pop}, Change from {point.year}, {point.value}%"))) %>%
 
       hc_colorAxis(min = NEW_MIN,
                    max = NEW_MAX,
@@ -643,7 +643,7 @@ fnc_highchart_map <- function(df, map_filename, state_name, adm_or_pop){
           enabled = TRUE,
           keyboardNavigation = list(enabled = TRUE),
           point = list(valueDescriptionFormat =
-                         "{point.state}, {point.year}, {point.metric}, {point.adm_or_pop}, {point.value}%"))) %>%
+                         "{point.state}, {point.metric}, {point.adm_or_pop}, Change from {point.year}, {point.value}%"))) %>%
 
       hc_colorAxis(min = NEW_MIN,
                    max = NEW_MAX,
