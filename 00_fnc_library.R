@@ -3,7 +3,7 @@
 # File: import.R
 # Authors: Mari Roberts
 # Sub-Author: Martha Eichlersmith
-# Date last updated: May 15, 2023 (MAR)
+# Date last updated: May 23, 2023 (MAR)
 
 # Description:
 #    Loads packages
@@ -15,16 +15,18 @@
 # https://csgorg.sharepoint.com/:f:/s/Team-JC-Research/EhdvImKN2rdPnmHQ2TrKlooBdYqnnWc0SUXBNuh9C7d41g?e=NCsh8I
 # In your Renviron (usethis::edit_r_environ()), set CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"
 
-# Highcharter download instructions:
+# highcharter download instructions:
 # remove the existing highcharter package from your R session: remove.packages("highcharter")
 # restart your R session
 # install highcharter with the devtools package (NOT the remotes package):
 # install.packages("devtools")
 # devtools::install_github("mrjoh3/highcharter")
 
-# Load packages
+# csgjcr download instructions:
 # install.packages("remotes")
 # remotes::install_github("csgjusticecenter/csgjcr")
+
+# Load packages
 library(csgjcr)
 library(rlang)
 library(dplyr)
@@ -1091,72 +1093,3 @@ fnc_reatable_table <- function(df){
   )
 }
 
-# fnc_reatable_table <- function(df){
-#   # create table with 4 Year trend line in last column
-#   reactable(df,
-#             theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
-#             defaultColDef = colDef(format = colFormat(separators = TRUE), align = "center"),
-#             compact = TRUE,
-#             fullWidth = FALSE)
-# }
-#
-# columns_formatting <- list(text            = colDef(name = "Metric",
-#                                                     align = "left",
-#                                                     minWidth = 275),
-#                            `2018`          = colDef(minWidth = 95),
-#                            `2019`          = colDef(minWidth = 95),
-#                            `2020`          = colDef(minWidth = 95),
-#                            four_yr_change = colDef(minWidth = 110,
-#                                                     name = "4 Year Change",
-#                                                     format = colFormat(percent = TRUE, digits = 1)),
-#                            # add 4 Year trend graphs to each row
-#                            total_new  = colDef(minWidth = 110,
-#                                                name = "4 Year Trend",
-#                                                cell = function(value, index) {
-#                                                  dui_sparkline(
-#                                                    data = value[[1]],
-#                                                    height = 80,
-#                                                    margin = list(top = 30, right = 20, bottom = 30, left = 20),
-#
-#                                                    components = list(
-#                                                      dui_sparkpatternlines(
-#                                                        id = "total",
-#                                                        height = 4,
-#                                                        width = 4,
-#                                                        stroke = total_co,
-#                                                        strokeWidth = 2.5,
-#                                                        orientation = "diagonal"
-#                                                      ),
-#
-#                                                      dui_sparkpatternlines(
-#                                                        id = "sup_violations",
-#                                                        height = 4,
-#                                                        width = 4,
-#                                                        stroke = viol_co,
-#                                                        strokeWidth = 2.5,
-#                                                        orientation = "diagonal"
-#                                                      ),
-#
-#                                                      dui_sparkpatternlines(
-#                                                        id = "technical",
-#                                                        height = 4,
-#                                                        width = 4,
-#                                                        stroke = tech_co,
-#                                                        strokeWidth = 2.5,
-#                                                        orientation = "diagonal"
-#                                                      ),
-#
-#                                                      dui_sparkpatternlines(
-#                                                        id = "new_offense",
-#                                                        height = 4,
-#                                                        width = 4,
-#                                                        stroke = new_o_co,
-#                                                        strokeWidth = 2.5,
-#                                                        orientation = "diagonal"
-#                                                      ),
-#
-#                                                      dui_sparklineseries(
-#                                                        curve = "linear",
-#                                                        showArea = FALSE,
-#                                                        fill = colpal_fill[index],
-#                                                        stroke = colpal_stroke[index])))}))

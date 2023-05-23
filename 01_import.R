@@ -3,7 +3,7 @@
 # File: import.R
 # Authors: Mari Roberts
 # Sub-Author: Martha Eichlersmith
-# Date last updated: May 15, 2023 (MAR)
+# Date last updated: May 23, 2023 (MAR)
 
 # Description:
 #    Imports data
@@ -13,7 +13,7 @@
 
 # Input:
 #    "data/raw/notes/state_notes_overview.csv" state notes
-#    "data/raw/mclc/mclc_data_2022_v8.xlsx"    2022 survey data with edits (BJS data or removal)
+#    "data/raw/mclc/mclc_data_2022_v9.xlsx"    2022 survey data with edits (BJS data or removal)
 #     Map files
 
 # Output:
@@ -38,7 +38,7 @@ hex <- read_sf(file.path(admin$sp_data_raw, "us_states_hexgrid.geojson")) %>%
 stateAbb <- read.csv(file.path(admin$sp_data_raw, "stateAbb.csv"))
 
 # Load admissions data
-mclc_data <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v8.xlsx"),
+mclc_data <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v9.xlsx"),
                         sheet = "Sheet 1")
 
 # Load states  - will change to new notes when ready
