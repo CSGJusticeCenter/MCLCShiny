@@ -182,8 +182,9 @@ server <- function(input, output, session) {
 
   # output hex map
   output$hex_map <- renderHighchart({
-    foundational_map() %>%
-      hc_plotOptions(series = list(events = list(click = click_js)))
+    foundational_map()
+      # %>%
+      # hc_plotOptions(series = list(events = list(click = click_js)))
   })
 
   # redirect to the statereports tab and update selected state
