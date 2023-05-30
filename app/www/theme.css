@@ -172,6 +172,11 @@ Hex map
   font-family: Graphik;
 }
 
+/* Map labels */
+.maplabel{
+  text-align: center;
+}
+
 /*######################################
 MAP EXPLORER
 Table

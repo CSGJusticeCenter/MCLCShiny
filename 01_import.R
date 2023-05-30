@@ -3,7 +3,7 @@
 # File: import.R
 # Authors: Mari Roberts
 # Sub-Author: Martha Eichlersmith
-# Date last updated: May 23, 2023 (MAR)
+# Date last updated: May 30, 2023 (MAR)
 
 # Description:
 #    Imports data
@@ -373,9 +373,42 @@ mclc_explorer <- mclc_all %>%
                           change, "%<br>"),
          datalabel = ifelse(is.na(change),
                             paste0("", state_abb, ""),
-                            paste0("<p style=", "text-align:center", ">",
-                                   state_abb, "", "<br>",
-                                   round(change, 0), "%</p>"))) %>%
+                            paste0("<div class = 'maplabel'>",
+                                   state_abb, "<br>",
+                                   round(change, 0), "%</div>")
+                            # NOT WORKING
+                            # glue("<div style='text-align: center;'>
+                            # <div>{state_abb}</div>
+                            # <div>{change}</div></div>")
+                            # paste0("<p style=", "text-align:center", ">",
+                            #        state_abb, "<br>",
+                            #        "<span style=", "display:block;text-align:center", ">",
+                            #        change, "%</span>", "</p>")
+                            # paste0("<div style='text-align:center;'>", state_abb, "<br>",
+                            #        "<span style='display:block;margin:0 auto;'>",
+                            #        round(change, 0), "%</span>", "</div>")
+                            # paste0("<div style='text-align:center;'>", "<p>", state_abb, "</p>", "<p>", round(change, 0), "%</p>", "</div>")
+                            # paste0(
+                            #   "<div style='display:flex;justify-content:center;text-align:center;'>",
+                            #   state_abb,
+                            #   "<br>",
+                            #   "<span style='display:block;margin:0 auto;text-align:center;'>",
+                            #   change,
+                            #   "%</span>",
+                            #   "</div>"
+                            # )
+                            # paste0(
+                            #   "<div style='text-align:center;'>",
+                            #   "<span style='display:inline-block;width:100%;text-align:center;'>",
+                            #   state_abb,
+                            #   "</span>",
+                            #   "<br>",
+                            #   "<span style='display:inline-block;width:100%;text-align:center;'>",
+                            #   change,
+                            #   "%</span>",
+                            #   "</div>"
+                            # )
+                            )) %>%
   ungroup() %>%
   group_by(year, data) %>%
   mutate(min_map = round(min(change, na.rm = TRUE), 0), # use -1 to round up to nearest tenth
