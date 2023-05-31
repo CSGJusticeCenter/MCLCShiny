@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: highchart.R
 # Authors: Mari Roberts, Martha Eichlersmith
-# Date last updated: May 15, 2023 (MAR)
+# Date last updated: May 30, 2023 (MAR)
 # Description:
 #    Create and save highcharts so the app loads faster
 #######################################
@@ -401,4 +401,3 @@ for (folder in theseFOLDERS){
   save(probation_bar_pop,      file=file.path(folder, "probation_bar_pop.rds"))
 
 }
-

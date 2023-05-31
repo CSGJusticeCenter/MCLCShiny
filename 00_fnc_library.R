@@ -3,7 +3,7 @@
 # File: import.R
 # Authors: Mari Roberts
 # Sub-Author: Martha Eichlersmith
-# Date last updated: May 23, 2023 (MAR)
+# Date last updated: May 30, 2023 (MAR)
 
 # Description:
 #    Loads packages
@@ -183,7 +183,8 @@ hc_theme_map_jc <-
   hc_theme(
     chart = list(
       marginTop = 75,
-      style = list(fontFamily = "Graphik")
+      style = list(fontFamily = "Graphik",
+                   align = "center")
     ),
     title = list(align = "center",
                  style = list(fontFamily = "Graphik",
@@ -195,7 +196,7 @@ hc_theme_map_jc <-
                                  fontWeight = "bold",
                                  color = "black",
                                  fontSize   = "30px")),
-    caption = list(align = "right", y = 15),
+    caption = list(align = "center", y = 15),
     xAxis = list(
       labels = list(
         style = list(fontSize = "15px"),
@@ -552,9 +553,15 @@ fnc_highchart_map <- function(df, map_filename, state_name, adm_or_pop){
         df = df,
         joinBy = "state_abb",
         value = "change",
-        dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
+        dataLabels = list(enabled = TRUE,
+                          useHTML = TRUE,
+                          formatter = JS("function() {return '<div style=\"text-align:center;\">' +
+                            '<span style=\"font-weight:bold;\">' + this.point.state_abb + '</span><br>' +
+                            '<span>' + this.point.changelabel + '</span>' +
+                            '</div>';}"),
                           style = list(fontSize = "14px",
                                        fontWeight = "regular",
+                                       align = "center",
                                        fontFamily = "Graphik",
                                        textOutline = 0)),
         nullColor = "#e8e8e8",
@@ -635,9 +642,15 @@ fnc_highchart_map <- function(df, map_filename, state_name, adm_or_pop){
         df = df,
         joinBy = "state_abb",
         value = "change",
-        dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
+        dataLabels = list(enabled = TRUE,
+                          useHTML = TRUE,
+                          formatter = JS("function() {return '<div style=\"text-align:center;\">' +
+                            '<span style=\"font-weight:bold;\">' + this.point.state_abb + '</span><br>' +
+                            '<span>' + this.point.changelabel + '</span>' +
+                            '</div>';}"),
                           style = list(fontSize = "14px",
                                        fontWeight = "regular",
+                                       align = "center",
                                        fontFamily = "Graphik",
                                        textOutline = 0)),
         nullColor = "#e8e8e8",
@@ -898,9 +911,15 @@ fnc_highchart_map_logo <- function(df, map_filename, adm_or_pop){
         df = df,
         joinBy = "state_abb",
         value = "change",
-        dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
+        dataLabels = list(enabled = TRUE,
+                          useHTML = TRUE,
+                          formatter = JS("function() {return '<div style=\"text-align:center;\">' +
+                            '<span style=\"font-weight:bold;\">' + this.point.state_abb + '</span><br>' +
+                            '<span>' + this.point.changelabel + '</span>' +
+                            '</div>';}"),
                           style = list(fontSize = "14px",
                                        fontWeight = "regular",
+                                       align = "center",
                                        fontFamily = "Graphik",
                                        textOutline = 0)),
         nullColor = "#e8e8e8") %>%
@@ -964,9 +983,14 @@ fnc_highchart_map_logo <- function(df, map_filename, adm_or_pop){
         joinBy = "state_abb",
         value = "change",
         dataLabels = list(enabled = TRUE,
-                          format = "{point.datalabel}",
+                          useHTML = TRUE,
+                          formatter = JS("function() {return '<div style=\"text-align:center;\">' +
+                            '<span style=\"font-weight:bold;\">' + this.point.state_abb + '</span><br>' +
+                            '<span>' + this.point.changelabel + '</span>' +
+                            '</div>';}"),
                           style = list(fontSize = "14px",
                                        fontWeight = "regular",
+                                       align = "center",
                                        fontFamily = "Graphik",
                                        textOutline = 0)),
         nullColor = "#e8e8e8") %>%
