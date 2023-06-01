@@ -49,9 +49,6 @@ box::use(prep/box/admin)
 # Load fonts
 font_add("Graphik",     regular = "app/www/fonts/Graphik.ttf")
 font_add("GraphikBold", regular = "app/www/fonts/GraphikBold.ttf")
-extrafont::loadfonts(quiet = TRUE)
-loadfonts(device="win")
-showtext_auto()
 
 ##########################
 # Data cleaning
@@ -606,7 +603,14 @@ fnc_highchart_map <- function(df, map_filename, state_name, adm_or_pop){
       hc_subtitle(text = unique(df$year)) %>%
 
       hc_add_theme(hc_theme_map_jc) %>%
-      hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
+
+      hc_tooltip(
+        formatter = JS("function() {
+        return '<div style=\"background-color: #FFFFFF; opacity: 1; padding: 8px; border: none;\">' +
+        this.point.tooltip +
+        '</div>';}"),
+        useHTML = TRUE
+      ) %>%
 
       hc_plotOptions(series = list(animation = FALSE,
                                    cursor = "pointer",
@@ -689,9 +693,15 @@ fnc_highchart_map <- function(df, map_filename, state_name, adm_or_pop){
         }) %>%
       hc_subtitle(text = unique(df$year)) %>%
 
-      # hc_setup() %>%
-      hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) %>%
       hc_add_theme(hc_theme_map_jc) %>%
+
+      hc_tooltip(
+        formatter = JS("function() {
+        return '<div style=\"background-color: #FFFFFF; opacity: 1; padding: 8px; border: none;\">' +
+        this.point.tooltip +
+        '</div>';}"),
+        useHTML = TRUE
+      ) %>%
 
       hc_plotOptions(series = list(animation = FALSE,
                                    cursor = "pointer",

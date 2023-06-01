@@ -190,7 +190,6 @@ adm_pop <- mclc_data %>%
 # Value box data
 ################################################################################
 
-# add prob and parole variables together to get total new offense and technical admissions and population
 # remove prob and parole variables
 mclc <- adm_pop %>%
   select(-c(new_offense_probation_violation_admissions, new_offense_parole_violation_admissions,
