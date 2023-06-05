@@ -23,4 +23,6 @@ source("ui.R")
 source("server.R")
 
 # launch shiny app
-shinyApp(ui = ui, server = server)
+profvis::profvis({
+  shinyApp(ui = ui, server = server)
+})

@@ -79,12 +79,12 @@ load(file = "data/probation_bar_pop.rds")
 #______________________________________________________
 
 # not working because of library issue (htmlwidgets)
-# load(file = "data/state_reactable_adm.rds")
-# load(file = "data/state_reactable_pop.rds")
-# load(file = "data/parole_reactable_adm.rds")
-# load(file = "data/parole_reactable_pop.rds")
-# load(file = "data/probation_reactable_adm.rds")
-# load(file = "data/probation_reactable_pop.rds")
+load(file = "data/state_reactable_adm.rds")
+load(file = "data/state_reactable_pop.rds")
+load(file = "data/parole_reactable_adm.rds")
+load(file = "data/parole_reactable_pop.rds")
+load(file = "data/probation_reactable_adm.rds")
+load(file = "data/probation_reactable_pop.rds")
 
 #______________________________________________________
 # colors TBD
