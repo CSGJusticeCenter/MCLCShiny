@@ -103,88 +103,101 @@ server <- function(input, output, session) {
   # Select foundational hex map and store it as a reactive expression
   # Charts were created in highchart.R
   # This is necessary to download the map
+  # foundational_map <- reactive({
+  #
+  #   if(input$adm_or_pop_map == "Admissions"){
+  #
+  #     if(input$year_map == "2018 - 2019"){
+  #       adm_maps_2018_2019[[input$data_map]]%>%
+  #         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+  #         hc_boost(enabled = TRUE)
+  #     }
+  #
+  #     else if(input$year_map == "2018 - 2021"){
+  #       adm_maps_2018_2021[[input$data_map]]%>%
+  #         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+  #         hc_boost(enabled = TRUE)
+  #     }
+  #
+  #     else if(input$year_map == "2019 - 2020"){
+  #       adm_maps_2019_2020[[input$data_map]]%>%
+  #         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+  #         hc_boost(enabled = TRUE)
+  #     }
+  #
+  #     else if(input$year_map == "2020 - 2021"){
+  #       adm_maps_2020_2021[[input$data_map]]%>%
+  #         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+  #         hc_boost(enabled = TRUE)
+  #     }
+  #
+  #   }
+  #
+  #   else if(input$adm_or_pop_map == "Population"){
+  #
+  #     if(input$year_map == "2018 - 2019"){
+  #       pop_maps_2018_2019[[input$data_map]]%>%
+  #         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+  #         hc_boost(enabled = TRUE)
+  #     }
+  #
+  #     else if(input$year_map == "2018 - 2021"){
+  #       pop_maps_2018_2021[[input$data_map]]%>%
+  #         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+  #         hc_boost(enabled = TRUE)
+  #     }
+  #
+  #     else if(input$year_map == "2019 - 2020"){
+  #       pop_maps_2019_2020[[input$data_map]]%>%
+  #         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+  #         hc_boost(enabled = TRUE)
+  #     }
+  #
+  #     else if(input$year_map == "2020 - 2021"){
+  #       pop_maps_2020_2021[[input$data_map]]%>%
+  #         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+  #         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+  #         hc_boost(enabled = TRUE)
+  #     }
+  #   }
+  #
+  # }) %>%
+  #   bindCache(input$data_map,
+  #             input$adm_or_pop_map,
+  #             input$year_map)
+
+  # select foundational hex map and store it as a reactive expression
   foundational_map <- reactive({
-
-    if(input$adm_or_pop_map == "Admissions"){
-
-      if(input$year_map == "2018 - 2019"){
-        adm_maps_2018_2019[[input$data_map]]%>%
-          highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-          hc_boost(enabled = TRUE)
-      }
-
-      else if(input$year_map == "2018 - 2021"){
-        adm_maps_2018_2021[[input$data_map]]%>%
-          highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-          hc_boost(enabled = TRUE)
-      }
-
-      else if(input$year_map == "2019 - 2020"){
-        adm_maps_2019_2020[[input$data_map]]%>%
-          highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-          hc_boost(enabled = TRUE)
-      }
-
-      else if(input$year_map == "2020 - 2021"){
-        adm_maps_2020_2021[[input$data_map]]%>%
-          highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-          hc_boost(enabled = TRUE)
-      }
-
-    }
-
-    else if(input$adm_or_pop_map == "Population"){
-
-      if(input$year_map == "2018 - 2019"){
-        pop_maps_2018_2019[[input$data_map]]%>%
-          highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-          hc_boost(enabled = TRUE)
-      }
-
-      else if(input$year_map == "2018 - 2021"){
-        pop_maps_2018_2021[[input$data_map]]%>%
-          highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-          hc_boost(enabled = TRUE)
-      }
-
-      else if(input$year_map == "2019 - 2020"){
-        pop_maps_2019_2020[[input$data_map]]%>%
-          highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-          hc_boost(enabled = TRUE)
-      }
-
-      else if(input$year_map == "2020 - 2021"){
-        pop_maps_2020_2021[[input$data_map]]%>%
-          highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-          highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-          hc_boost(enabled = TRUE)
-      }
-    }
-
-  }) %>%
+    data <- data_map[[input$adm_or_pop_map]][[input$year_map]][[input$data_map]]
+    data %>%
+      highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+      highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+      highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+      highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+      hc_boost(enabled = TRUE)}) %>%
     bindCache(input$data_map,
               input$adm_or_pop_map,
               input$year_map)
@@ -768,18 +781,9 @@ server <- function(input, output, session) {
     # Filter data
     df <- state_table %>%
       filter(state == input$state_report &
-               adm_or_pop == input$adm_pop_report) %>%
-      group_by(text) %>%
-      summarise(total_new = list(list(total)))
-    df1 <- state_table_wide %>%
-      filter(state == input$state_report &
-               adm_or_pop == input$adm_pop_report) %>%
+             adm_or_pop == input$adm_pop_report) %>%
       arrange(order) %>%
-      select(-adm_or_pop, -state)
-
-    # Merge data
-    df <- merge(df1, df, by = "text")
-    df <- df %>% arrange(order) %>% select(-order)
+      select(-c(state, order, adm_or_pop, metric))
 
     # Create table with 4 Year trend line in last column
     reactable(df,
@@ -927,18 +931,8 @@ server <- function(input, output, session) {
     # Filter data
     df <- parole_table %>%
       filter(state == input$state_report &
-               adm_or_pop == input$adm_pop_report) %>%
-      group_by(text) %>%
-      summarise(total_new = list(list(total)))
-    df1 <- parole_table_wide %>%
-      filter(state == input$state_report &
-               adm_or_pop == input$adm_pop_report) %>%
-      arrange(order)
-
-    # Merge data
-    df <- merge(df1, df, by = "text")
-    df <- df %>% arrange(order) %>%
-      select(-c(order, adm_or_pop, state, prob_vs_parole, metric))
+             adm_or_pop == input$adm_pop_report) %>%
+      select(-c(adm_or_pop, state))
 
     # Create table with 4 Year trend line in last column
     reactable(df,
@@ -1146,18 +1140,8 @@ server <- function(input, output, session) {
     # Filter data
     df <- probation_table %>%
       filter(state == input$state_report &
-               adm_or_pop == input$adm_pop_report) %>%
-      group_by(text) %>%
-      summarise(total_new = list(list(total)))
-    df1 <- probation_table_wide %>%
-      filter(state == input$state_report &
-               adm_or_pop == input$adm_pop_report) %>%
-      arrange(order)
-
-    # Merge data
-    df <- merge(df1, df, by = "text")
-    df <- df %>% arrange(order) %>%
-      select(-c(order, adm_or_pop, state, prob_vs_parole, metric))
+             adm_or_pop == input$adm_pop_report) %>%
+      select(-c(adm_or_pop, state))
 
     # Create table with 4 Year trend line in last column
     reactable(df,
