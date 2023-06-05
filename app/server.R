@@ -2,15 +2,15 @@
 # Project: MCLCShiny
 # File: server.R
 # Authors: Mari Roberts
-# Date last updated: May 3, 2023 (MAR)
+# Date last updated: June 5, 2023 (MAR)
 # Description:
 #    Server for shiny app
 #######################################
 
 server <- function(input, output, session) {
 
-  # Enable caching
-  shinyjs::enable("cache")
+  # # Enable caching
+  # shinyjs::enable("cache")
 
   # Change URL depending on tab selection in navbar
   observeEvent(input$navbarID, {
@@ -43,15 +43,15 @@ server <- function(input, output, session) {
   # MAP EXPLORER
   ##############################################################################################################################
 
-  # save reactive values for which states are clicked on in the hex map
-  selected_state_map <- reactiveVal(NULL)
-
-  # map clicking
-  click_js <- JS("function(event) {
-    var state = event.point.state_abb;
-    Shiny.setInputValue('selected_state_map', state);
-    $('#navbarID a[href=\"#statereports\"]').tab('show');
-  }")
+  # # save reactive values for which states are clicked on in the hex map
+  # selected_state_map <- reactiveVal(NULL)
+  #
+  # # map clicking
+  # click_js <- JS("function(event) {
+  #   var state = event.point.state_abb;
+  #   Shiny.setInputValue('selected_state_map', state);
+  #   $('#navbarID a[href=\"#statereports\"]').tab('show');
+  # }")
 
   #######
   # Hex map data
@@ -75,19 +75,25 @@ server <- function(input, output, session) {
       arrange(state) %>%
       rename(State = state,
              change = 7)
-  })
+  }) %>%
+    bindCache(input$data_map,
+              input$adm_or_pop_map,
+              input$year_map)
 
   # Dynamically change name of map
   map_filename <- reactive({
-    temp <- mclc_explorer %>%
+    name <- mclc_explorer %>%
       filter(adm_or_pop == input$adm_or_pop_map,
              metric     == input$data_map,
              year       == input$year_map) %>%
       select(data, year) %>% distinct()
-    temp$year <- gsub(" - ", " ", temp$year)
-    temp <- paste(temp$data, temp$year, sep = '_')
-    temp <- gsub(" ", "_", temp)
-  })
+    name$year <- gsub(" - ", " ", name$year)
+    name <- paste(name$data, name$year, sep = '_')
+    name <- gsub(" ", "_", name)
+  }) %>%
+    bindCache(input$data_map,
+              input$adm_or_pop_map,
+              input$year_map)
 
 
   #######
@@ -108,7 +114,7 @@ server <- function(input, output, session) {
           highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
           highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
           hc_boost(enabled = TRUE)
-        }
+      }
 
       else if(input$year_map == "2018 - 2021"){
         adm_maps_2018_2021[[input$data_map]]%>%
@@ -117,7 +123,7 @@ server <- function(input, output, session) {
           highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
           highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
           hc_boost(enabled = TRUE)
-        }
+      }
 
       else if(input$year_map == "2019 - 2020"){
         adm_maps_2019_2020[[input$data_map]]%>%
@@ -126,7 +132,7 @@ server <- function(input, output, session) {
           highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
           highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
           hc_boost(enabled = TRUE)
-        }
+      }
 
       else if(input$year_map == "2020 - 2021"){
         adm_maps_2020_2021[[input$data_map]]%>%
@@ -135,7 +141,7 @@ server <- function(input, output, session) {
           highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
           highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
           hc_boost(enabled = TRUE)
-        }
+      }
 
     }
 
@@ -148,7 +154,7 @@ server <- function(input, output, session) {
           highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
           highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
           hc_boost(enabled = TRUE)
-        }
+      }
 
       else if(input$year_map == "2018 - 2021"){
         pop_maps_2018_2021[[input$data_map]]%>%
@@ -157,7 +163,7 @@ server <- function(input, output, session) {
           highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
           highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
           hc_boost(enabled = TRUE)
-        }
+      }
 
       else if(input$year_map == "2019 - 2020"){
         pop_maps_2019_2020[[input$data_map]]%>%
@@ -166,7 +172,7 @@ server <- function(input, output, session) {
           highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
           highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
           hc_boost(enabled = TRUE)
-        }
+      }
 
       else if(input$year_map == "2020 - 2021"){
         pop_maps_2020_2021[[input$data_map]]%>%
@@ -175,34 +181,37 @@ server <- function(input, output, session) {
           highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
           highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
           hc_boost(enabled = TRUE)
-        }
+      }
     }
 
-  })
+  }) %>%
+    bindCache(input$data_map,
+              input$adm_or_pop_map,
+              input$year_map)
 
   # output hex map
   output$hex_map <- renderHighchart({
     foundational_map()
-      # %>%
-      # hc_plotOptions(series = list(events = list(click = click_js)))
+    # %>%
+    # hc_plotOptions(series = list(events = list(click = click_js)))
   })
 
-  # redirect to the statereports tab and update selected state
-  observeEvent(input$selected_state_map, {
-    selected_state_map(input$selected_state_map)
-    updateNavbarPage(session, "navbarID", selected = "statereports")
-  })
-
-  # update selectInput choices based on selected state from hex map
-  observeEvent(selected_state_map(), {
-
-    # get state name from state abbreviation
-    state_name <- state.name[match(selected_state_map(), state.abb)]
-
-    updateSelectInput(session, "state_report",
-                      selected = state_name,
-                      choices = ifelse(is.null(state_name), NULL, state_name))
-  })
+  # # redirect to the statereports tab and update selected state
+  # observeEvent(input$selected_state_map, {
+  #   selected_state_map(input$selected_state_map)
+  #   updateNavbarPage(session, "navbarID", selected = "statereports")
+  # })
+  #
+  # # update selectInput choices based on selected state from hex map
+  # observeEvent(selected_state_map(), {
+  #
+  #   # get state name from state abbreviation
+  #   state_name <- state.name[match(selected_state_map(), state.abb)]
+  #
+  #   updateSelectInput(session, "state_report",
+  #                     selected = state_name,
+  #                     choices = ifelse(is.null(state_name), NULL, state_name))
+  # })
 
   #######
   # Download map button near dropdowns
@@ -228,7 +237,9 @@ server <- function(input, output, session) {
   # Title of table under map based on user input
   output$selected_map_table <-
     renderText({paste(input$data_map, " ",
-                      input$adm_or_pop_map)})
+                      input$adm_or_pop_map)}) %>%
+    bindCache(input$data_map,
+              input$adm_or_pop_map)
 
 
   # Title of map based on user input
@@ -246,7 +257,9 @@ server <- function(input, output, session) {
       paste("People in State Prison for ", input$data_map, "s", sep = "")
     }
 
-  })
+  }) %>%
+    bindCache(input$data_map,
+              input$adm_or_pop_map)
 
 
   # Reactable table under hex map
@@ -259,13 +272,13 @@ server <- function(input, output, session) {
     select_trend_data_column <-
       if(input$year_map == "2018 - 2021"){
         paste0("trend_data_18_21")
-    } else if(input$year_map == "2018 - 2019"){
-      paste0("trend_data_18_19")
-    } else if(input$year_map == "2019 - 2020"){
-      paste0("trend_data_19_20")
-    } else if(input$year_map == "2020 - 2021"){
-      paste0("trend_data_20_21")
-    }
+      } else if(input$year_map == "2018 - 2019"){
+        paste0("trend_data_18_19")
+      } else if(input$year_map == "2019 - 2020"){
+        paste0("trend_data_19_20")
+      } else if(input$year_map == "2020 - 2021"){
+        paste0("trend_data_20_21")
+      }
 
     select_trend_column <-
       if(input$year_map == "2018 - 2021"){
@@ -364,8 +377,10 @@ server <- function(input, output, session) {
                 #trend, don't show, used in determining
                 trend = colDef(show = FALSE)
               ))
-
-  })
+  }) %>%
+    bindCache(input$data_map,
+              input$adm_or_pop_map,
+              input$year_map)
 
 
 
@@ -387,7 +402,9 @@ server <- function(input, output, session) {
     } else {
       ""
     }
-  })
+  }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   #######
   # Value boxes
@@ -397,37 +414,45 @@ server <- function(input, output, session) {
   df_vb_total <- reactive({
     vb_adm_pop %>%
       filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report &
-             year == "2021" &
-             metric == "Total")
-  })
+               adm_or_pop == input$adm_pop_report &
+               year == "2021" &
+               metric == "Total")
+  }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   # Filter data to sup violations
   df_vb_sup_violations <- reactive({
     vb_adm_pop %>%
       filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report &
-             year == "2021" &
-             metric == "Supervision Violation")
-  })
+               adm_or_pop == input$adm_pop_report &
+               year == "2021" &
+               metric == "Supervision Violation")
+  }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   # Filter data to tech violations
   df_vb_tech <- reactive({
     vb_adm_pop %>%
       filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report &
-             year == "2021" &
-             metric == "Technical Violation")
-  })
+               adm_or_pop == input$adm_pop_report &
+               year == "2021" &
+               metric == "Technical Violation")
+  }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   # Filter data to new offense violations
   df_vb_new_off <- reactive({
     vb_adm_pop %>%
       filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report &
-             year == "2021" &
-             metric == "New Offense Violation")
-  })
+               adm_or_pop == input$adm_pop_report &
+               year == "2021" &
+               metric == "New Offense Violation")
+  }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   # Value box for change in total admissions or population
   output$total_change <- renderValueBox({
@@ -459,7 +484,6 @@ server <- function(input, output, session) {
       href       = NULL,
       width      = 5
     )
-
   })
 
   # Value box for change in technical violation admissions or population
@@ -475,7 +499,6 @@ server <- function(input, output, session) {
       href       = NULL,
       width      = 5
     )
-
   })
 
   # Value box for change in new offense violation admissions or population
@@ -491,7 +514,6 @@ server <- function(input, output, session) {
       href       = NULL,
       width      = 5
     )
-
   })
 
   #######
@@ -517,7 +539,9 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
         hc_boost(enabled = TRUE)
     }
-  })
+  }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   # Download button
   output$save_state_area_chart <- downloadHandler(
@@ -559,7 +583,9 @@ server <- function(input, output, session) {
                      class = "download-chart")
     }
 
-  })
+  }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   output$state_area = renderUI({
 
@@ -586,7 +612,9 @@ server <- function(input, output, session) {
                       height = 400, width = 390)
     }
 
-  })
+  }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   #######
   # Bar chart
@@ -613,7 +641,9 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
         hc_boost(enabled = TRUE)
     }
-  })
+  }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   # Download button
   output$save_state_bar_chart <- downloadHandler(
@@ -642,7 +672,8 @@ server <- function(input, output, session) {
       filter(state == input$state_report)
     out <- out$supervision_violation_admissions_graph
     HTML(out)
-  })
+  }) %>%
+    bindCache(input$state_report)
 
   # If data is missing a supervision violation population graph
   output$missing_data_nt_pop <- renderUI({
@@ -650,7 +681,8 @@ server <- function(input, output, session) {
       filter(state == input$state_report)
     out <- out$supervision_violation_population_graph
     HTML(out)
-  })
+  }) %>%
+    bindCache(input$state_report)
 
   # Remove download button if no graph
   output$missing_data_nt_button <- renderText({
@@ -681,7 +713,9 @@ server <- function(input, output, session) {
       highchartOutput("state_bar_chart", height = 400, width = 390)
     }
 
-  })
+  }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   # Show graph download button or no button depending on state
   output$state_nt_button = renderUI({
@@ -709,14 +743,16 @@ server <- function(input, output, session) {
                      class = "download-chart")
     }
 
-  })
+  }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   #######
   # Table under state graphs
   #######
 
-  # This won't work because of library issues
-  # output$state_table <- renderReactable({
+  # # This won't work because of htmlwidget and dataui issues
+  # output$state_table <- reactable::renderReactable({
   #   # Select reactable depending on selector input
   #   # tables were saved in reactable.R
   #   if (input$adm_pop_report == "Admissions") {
@@ -823,7 +859,9 @@ server <- function(input, output, session) {
                                             showArea = FALSE,
                                             fill = colpal_fill[index],
                                             stroke = colpal_stroke[index])))})))
-  })
+  }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   #######
   # State notes
@@ -833,7 +871,8 @@ server <- function(input, output, session) {
   df_notes <- reactive({
     notes %>%
       filter(state == input$state_report)
-  })
+  }) %>%
+    bindCache(input$state_report)
 
   # Title of state based on user input
   output$selected_state_note <- renderUI({
@@ -863,7 +902,9 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
         hc_boost(enabled = TRUE)
     }
-  })
+  }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   # Download button
   output$save_parole_bar_chart <- downloadHandler(
@@ -969,7 +1010,9 @@ server <- function(input, output, session) {
                                             showArea = FALSE,
                                             fill = colpal_fill1[index],
                                             stroke = colpal_stroke1[index])))})))
-  })
+  }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   # # This won't work because of library issues
   # output$parole_table <- renderReactable({
@@ -992,7 +1035,8 @@ server <- function(input, output, session) {
       filter(state == input$state_report)
     out <- out$parole_violation_admissions_graph
     HTML(out)
-  })
+  }) %>%
+    bindCache(input$state_report)
 
   # If data is missing a parole violation population graph
   output$missing_data_parole_nt_pop <- renderUI({
@@ -1000,7 +1044,8 @@ server <- function(input, output, session) {
       filter(state == input$state_report)
     out <- out$parole_violation_population_graph
     HTML(out)
-  })
+  }) %>%
+    bindCache(input$state_report)
 
   # Show parole graph or missing data sentence depending on state
   output$parole_nt <- renderUI({
@@ -1050,7 +1095,9 @@ server <- function(input, output, session) {
                                      class = "download-chart")),
                column(width = 3))
     }
-  })
+  }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   #######
   # Probation Tab
@@ -1075,7 +1122,9 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
         hc_boost(enabled = TRUE)
     }
-  })
+  }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   # Download button
   output$save_probation_bar_chart <- downloadHandler(
@@ -1181,7 +1230,9 @@ server <- function(input, output, session) {
                                             showArea = FALSE,
                                             fill = colpal_fill1[index],
                                             stroke = colpal_stroke1[index])))})))
-  })
+  }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   # This won't work because of library issues
   # output$probation_table <- renderReactable({
@@ -1204,7 +1255,8 @@ server <- function(input, output, session) {
       filter(state == input$state_report)
     out <- out$probation_violation_admissions_graph
     HTML(out)
-  })
+  }) %>%
+    bindCache(input$state_report)
 
   # If data is missing a probation violation population graph
   output$missing_data_probation_nt_pop <- renderUI({
@@ -1212,7 +1264,8 @@ server <- function(input, output, session) {
       filter(state == input$state_report)
     out <- out$probation_violation_population_graph
     HTML(out)
-  })
+  }) %>%
+    bindCache(input$state_report)
 
   # Show probation graph or missing data sentence depending on state
   output$probation_nt <- renderUI({
@@ -1262,7 +1315,9 @@ server <- function(input, output, session) {
                                      class = "download-chart")),
                column(width = 3))
     }
-  })
+  }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   ####
   ## RACE/ETHNICITY DISPARITIES  TAB
@@ -1487,7 +1542,10 @@ server <- function(input, output, session) {
       filter(state %in% input$download_state) %>%
       filter(metric %in% input$download_metric) %>%
       arrange(state, year)
-  })
+  }) %>%
+    bindCache(input$download_year,
+              input$download_state,
+              input$download_metric)
 
   # Save data as csv
   output$save_data <- downloadHandler(

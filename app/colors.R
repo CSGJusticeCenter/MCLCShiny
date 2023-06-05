@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: colors.R
 # Authors: Mari Roberts
-# Date last updated: July 20, 2022
+# Date last updated: June 5, 2023 (MAR)
 # Description:
 #    Assign colors
 #######################################
@@ -22,7 +22,7 @@ viol_co  <- yellow
 tech_co  <- orange
 new_o_co <- lightorange
 
-# choose colors for cute line graphs within tables
+# choose colors for line graphs within tables
 colpal_fill <- c("url(#total)",
                  "url(#sup_viols)",
                  "url(#technical)",
