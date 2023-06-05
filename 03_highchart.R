@@ -374,21 +374,37 @@ probation_bar_pop <- setNames(probation_bar_pop, states)
 # Save plots
 ############
 
+data_map <- list(
+  "Admissions" = list(
+    "2018 - 2019" = adm_maps_2018_2019,
+    "2018 - 2021" = adm_maps_2018_2021,
+    "2019 - 2020" = adm_maps_2019_2020,
+    "2020 - 2021" = adm_maps_2020_2021
+  ),
+  "Population" = list(
+    "2018 - 2019" = pop_maps_2018_2019,
+    "2018 - 2021" = pop_maps_2018_2021,
+    "2019 - 2020" = pop_maps_2019_2020,
+    "2020 - 2021" = pop_maps_2020_2021
+  )
+)
 
 
 theseFOLDERS <- c("sharepoint" = admin$sp_data, "app" = "app/data")
 
 for (folder in theseFOLDERS){
 
-  save(adm_maps_2018_2019,     file=file.path(folder, "adm_maps_2018_2019.rds"))
-  save(adm_maps_2018_2021,     file=file.path(folder, "adm_maps_2018_2021.rds"))
-  save(adm_maps_2019_2020,     file=file.path(folder, "adm_maps_2019_2020.rds"))
-  save(adm_maps_2020_2021,     file=file.path(folder, "adm_maps_2020_2021.rds"))
+  # save(adm_maps_2018_2019,     file=file.path(folder, "adm_maps_2018_2019.rds"))
+  # save(adm_maps_2018_2021,     file=file.path(folder, "adm_maps_2018_2021.rds"))
+  # save(adm_maps_2019_2020,     file=file.path(folder, "adm_maps_2019_2020.rds"))
+  # save(adm_maps_2020_2021,     file=file.path(folder, "adm_maps_2020_2021.rds"))
+  #
+  # save(pop_maps_2018_2019,     file=file.path(folder, "pop_maps_2018_2019.rds"))
+  # save(pop_maps_2018_2021,     file=file.path(folder, "pop_maps_2018_2021.rds"))
+  # save(pop_maps_2019_2020,     file=file.path(folder, "pop_maps_2019_2020.rds"))
+  # save(pop_maps_2020_2021,     file=file.path(folder, "pop_maps_2020_2021.rds"))
 
-  save(pop_maps_2018_2019,     file=file.path(folder, "pop_maps_2018_2019.rds"))
-  save(pop_maps_2018_2021,     file=file.path(folder, "pop_maps_2018_2021.rds"))
-  save(pop_maps_2019_2020,     file=file.path(folder, "pop_maps_2019_2020.rds"))
-  save(pop_maps_2020_2021,     file=file.path(folder, "pop_maps_2020_2021.rds"))
+  save(data_map,               file=file.path(folder, "data_map.rds"))
 
   save(all_state_area_adm,     file=file.path(folder, "all_state_area_adm.rds"))
   save(all_state_area_pop,     file=file.path(folder, "all_state_area_pop.rds"))

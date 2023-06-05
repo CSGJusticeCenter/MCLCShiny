@@ -407,27 +407,22 @@ state_table <- mclc_all %>%
                           metric == "Supervision Violation" & adm_or_pop == "Population"  ~ "Supervision Violation Population",
                           metric == "Technical Violation"   & adm_or_pop == "Population"  ~ "Technical Population",
                           metric == "Total"                 & adm_or_pop == "Population"  ~ "Total Population")) %>%
-  select(state, text, adm_or_pop, everything())
-
-# make wide form
-state_table_wide <- spread(state_table, key = year, value = total)
-
-# order data for table output
-state_table_wide <- state_table_wide %>%
+  select(state, text, adm_or_pop, everything()) %>%
+  pivot_wider(names_from = year, values_from = total) %>%
   mutate(order = case_when(metric == "New Offense Violation"   ~ 4,
-                           metric == "Supervision Violation"   ~ 2,
-                           metric == "Technical Violation"     ~ 3,
-                           metric == "Total"                   ~ 1,
+                         metric == "Supervision Violation"   ~ 2,
+                         metric == "Technical Violation"     ~ 3,
+                         metric == "Total"                   ~ 1,
 
-                           metric == "New Offense Violation"   ~ 4,
-                           metric == "Supervision Violation"   ~ 2,
-                           metric == "Technical Violation"     ~ 3,
-                           metric == "Total"                   ~ 1),
-         four_yr_change = (`2021`-`2018`)/`2018`) %>%
+                         metric == "New Offense Violation"   ~ 4,
+                         metric == "Supervision Violation"   ~ 2,
+                         metric == "Technical Violation"     ~ 3,
+                         metric == "Total"                   ~ 1),
+       four_yr_change = (`2021`-`2018`)/`2018`) %>%
   select(state, text, `2018`, `2019`, `2020`, `2021`, four_yr_change, everything()) %>%
-  ungroup() %>%
-  select(-metric)
-
+  rowwise() %>%
+  mutate(total_new = list(list(c(`2018`, `2019`, `2020`, `2021`)))) %>%
+  ungroup()
 
 
 
@@ -453,26 +448,20 @@ prob_parole_tables <- fnc_create_data_metric(prob_parole_tables) %>%
   group_by(state, year, metric, adm_or_pop, prob_vs_parole, text) %>%
   summarise(total = sum(total))
 
-# filter to parole
 parole_table <- prob_parole_tables %>%
   filter(prob_vs_parole == "Parole") %>%
-  select(state, text, adm_or_pop, everything()) %>%
-  select(-metric)
-
-# make wide form
-parole_table_wide <- spread(parole_table, key = year, value = total)
-
-# order data for table output
-parole_table_wide <- parole_table_wide %>%
-  mutate(order = case_when(
-    metric == "New Offense Violation"   ~ 3,
-    metric == "Technical Violation"     ~ 2,
-    metric == "Parole Violation"        ~ 1)) %>%
-  mutate(four_yr_change = (`2021`-`2018`)/`2018`) %>%
-  select(state, text, `2018`, `2019`, `2020`, `2021`, four_yr_change, everything()) %>%
-  select(-metric)
-
-
+  pivot_wider(names_from = year, values_from = total) %>%
+  mutate(four_yr_change = (`2021` - `2018`) / `2018`,
+         order = case_when(
+           metric == "New Offense Violation" ~ 3,
+           metric == "Technical Violation"   ~ 2,
+           metric == "Parole Violation"      ~ 1)) %>%
+  arrange(order) %>%
+  ungroup() %>%
+  dplyr::select(state, adm_or_pop, text, `2018`, `2019`, `2020`, `2021`, four_yr_change) %>%
+  rowwise() %>%
+  mutate(total_new = list(list(c(`2018`, `2019`, `2020`, `2021`)))) %>%
+  ungroup()
 
 
 
@@ -481,28 +470,20 @@ parole_table_wide <- parole_table_wide %>%
 # Probation table under graph
 ################################################################################
 
-# filter to probation
 probation_table <- prob_parole_tables %>%
   filter(prob_vs_parole == "Probation") %>%
-  select(state, text, adm_or_pop, everything()) %>%
-  select(-metric)
-
-# make wide form
-probation_table_wide <- spread(probation_table, key = year, value = total)
-
-# order data for table output
-probation_table_wide <- probation_table_wide %>%
-  mutate(order = case_when(
-    metric == "New Offense Violation"   ~ 3,
-    metric == "Technical Violation"     ~ 2,
-    metric == "Probation Violation"     ~ 1)) %>%
-  # 3 year change
-  mutate(four_yr_change = (`2021`-`2018`)/`2018`) %>%
-  select(state, text, `2018`, `2019`, `2020`, `2021`, four_yr_change, everything()) %>%
-  select(-metric)
-
-
-
+  pivot_wider(names_from = year, values_from = total) %>%
+  mutate(four_yr_change = (`2021` - `2018`) / `2018`,
+         order = case_when(
+           metric == "New Offense Violation" ~ 3,
+           metric == "Technical Violation"   ~ 2,
+           metric == "Probation Violation"   ~ 1)) %>%
+  arrange(order) %>%
+  ungroup() %>%
+  dplyr::select(state, adm_or_pop, text, `2018`, `2019`, `2020`, `2021`, four_yr_change) %>%
+  rowwise() %>%
+  mutate(total_new = list(list(c(`2018`, `2019`, `2020`, `2021`)))) %>%
+  ungroup()
 
 
 
@@ -765,11 +746,8 @@ for (folder in theseFOLDERS){
   save(mclc_explorer_table,         file=file.path(folder, "mclc_explorer_table.rds"))
   save(vb_adm_pop,                  file=file.path(folder, "vb_adm_pop.rds"))
   save(state_table,                 file=file.path(folder, "state_table.rds"))
-  save(state_table_wide,            file=file.path(folder, "state_table_wide.rds"))
   save(parole_table,                file=file.path(folder, "parole_table.rds"))
-  save(parole_table_wide,           file=file.path(folder, "parole_table_wide.rds"))
   save(probation_table,             file=file.path(folder, "probation_table.rds"))
-  save(probation_table_wide,        file=file.path(folder, "probation_table_wide.rds"))
   save(hex_gj,                      file=file.path(folder, "hex_gj.rds"))
   save(notes,                       file=file.path(folder, "notes.rds"))
   save(csg,                         file=file.path(folder, "csg.rds"))
