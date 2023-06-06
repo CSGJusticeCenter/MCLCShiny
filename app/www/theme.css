@@ -15,6 +15,13 @@ Overall Settings
   border-radius: 0!important;
 }
 
+/* State note section */
+#state-note-section {
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /*######################################
 Font size and style
 ########################################*/
@@ -331,6 +338,14 @@ Tabset Panels
 #selected-state-note-title {
   text-align: center;
   font-size: 30px;
+  font-family: Graphik;
+  font-weight: bold;
+}
+
+/* State note subtitle setting */
+#selected-state-note-subtitle {
+  text-align: left;
+  font-size: 16px;
   font-family: Graphik;
   font-weight: bold;
 }

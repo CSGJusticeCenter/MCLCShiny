@@ -872,15 +872,63 @@ server <- function(input, output, session) {
   #######
 
   # Filter data
-  df_notes <- reactive({
-    notes %>%
+  df_parole_asterisks_notes <- reactive({
+    parole_asterisks_notes %>%
       filter(state == input$state_report)
   }) %>%
     bindCache(input$state_report)
 
-  # Title of state based on user input
-  output$selected_state_note <- renderUI({
-    HTML(df_notes()$notes)
+  # Parole asterisks state notes
+  output$state_parole_asterisks_notes <- renderUI({
+    HTML(df_parole_asterisks_notes()$notes)
+  })
+
+  # Filter data
+  df_probation_asterisks_notes <- reactive({
+    probation_asterisks_notes %>%
+      filter(state == input$state_report)
+  }) %>%
+    bindCache(input$state_report)
+
+  # Probation asterisks state notes
+  output$state_probation_asterisks_notes <- renderUI({
+    HTML(df_probation_asterisks_notes()$notes)
+  })
+
+  # Filter parole data
+  df_parole_notes <- reactive({
+    parole_notes %>%
+      filter(state == input$state_report)
+  }) %>%
+    bindCache(input$state_report)
+
+  # Parole state notes
+  output$state_parole_notes <- renderUI({
+    HTML(df_parole_notes()$notes)
+  })
+
+  # Filter probation data
+  df_probation_notes <- reactive({
+    probation_notes %>%
+      filter(state == input$state_report)
+  }) %>%
+    bindCache(input$state_report)
+
+  # Probation state notes
+  output$state_probation_notes <- renderUI({
+    HTML(df_probation_notes()$notes)
+  })
+
+  # Filter data
+  df_additional_notes <- reactive({
+    additional_notes %>%
+      filter(state == input$state_report)
+  }) %>%
+    bindCache(input$state_report)
+
+  # additional state notes
+  output$state_additional_notes <- renderUI({
+    HTML(df_additional_notes()$notes)
   })
 
   #######
