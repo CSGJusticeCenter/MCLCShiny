@@ -41,14 +41,16 @@ stateAbb <- read.csv(file.path(admin$sp_data_raw, "stateAbb.csv"))
 mclc_data <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v9.xlsx"),
                         sheet = "Sheet 1")
 
-# Load states  - will change to new notes when ready
-notes_raw <- read_excel(file.path(admin$sp_data_raw, "notes/state_notes_overview_v2.xlsx"))
+# # Load states  - will change to new notes when ready
+# notes_raw <- read_excel(file.path(admin$sp_data_raw, "notes/state_notes_overview_v2.xlsx"))
 
 # Load info on missing sentence info
 missingness_sentences <- read_excel(file.path(admin$sp_survey, "MCLC Overview.xlsx"),
                                     sheet = "Missingness 2022", skip = 1)
 
-
+# Load new states notes
+notes_raw <- read.xlsx(file.path(admin$sp_survey, "MCLC Overview.xlsx"),
+                       sheet = "Formatted Notes 2022")
 
 
 
@@ -107,15 +109,18 @@ missingness_sentences <- missingness_sentences %>%
 # Reformat notes file
 ################################################################################
 
-# weird special space character in Word, retained when copied over
-# In word, it's not a space, it's shown as the last character within a cell
-# can't be removed with trimws default
-# note that special_space_char == " " returns false
-# when into csv and just manually removed spaces at end of note
-
+# fix spacing in parole and probation related notes
 notes <- notes_raw %>%
+  clean_names() %>%
+  mutate(probation_metrics =
+           str_replace_all(probation_metrics, "☒|☐", "<br>\\0"),
+         parole_post_incarceration_supervision =
+           str_replace_all(parole_post_incarceration_supervision, "☒|☐", "<br>\\0"))
+
+# get probation related notes
+probation_notes <- notes %>%
   group_by(state) %>%
-  summarize(note_lst = list(notes)) %>%
+  summarize(note_lst = list(probation_metrics)) %>%
   ungroup() %>%
   rowwise() %>%
   mutate(
@@ -125,8 +130,63 @@ notes <- notes_raw %>%
   ungroup() %>%
   select(state, notes)
 
+# get parole related notes
+parole_notes <- notes %>%
+  group_by(state) %>%
+  summarize(note_lst = list(parole_post_incarceration_supervision)) %>%
+  ungroup() %>%
+  rowwise() %>%
+  mutate(
+    notes = paste(note_lst, collapse = "</p><p class = 'statetxt'>")
+    , notes = paste0("<p class = 'statetxt'>", notes, "</p>")
+  ) %>%
+  ungroup() %>%
+  select(state, notes)
 
+# get parole asteriks notes
+# make asteriks bold
+parole_asterisks_notes <- notes %>%
+  mutate(parole_asterisks = str_replace_all(parole_asterisks, "\\*+", "<b>\\0</b>")) %>%
+  mutate(parole_asterisks = str_replace(parole_asterisks, "<b>\\*\\*</b>", "<br><br><b>\\*\\*</b>")) %>%
+  group_by(state) %>%
+  summarize(note_lst = list(parole_asterisks)) %>%
+  ungroup() %>%
+  rowwise() %>%
+  mutate(
+    notes = paste(note_lst, collapse = "</p><p class = 'statetxt'>")
+    , notes = paste0("<p class = 'statetxt'>", notes, "</p>")
+  ) %>%
+  ungroup() %>%
+  select(state, notes)
 
+# get probation asteriks notes
+# make asteriks bold
+probation_asterisks_notes <- notes %>%
+  mutate(probation_asterisks = str_replace_all(probation_asterisks, "\\*+", "<b>\\0</b>")) %>%
+  mutate(probation_asterisks = str_replace(probation_asterisks, "<b>\\*\\*</b>", "<br><br><b>\\*\\*</b>")) %>%
+  group_by(state) %>%
+  summarize(note_lst = list(probation_asterisks)) %>%
+  ungroup() %>%
+  rowwise() %>%
+  mutate(
+    notes = paste(note_lst, collapse = "</p><p class = 'statetxt'>")
+    , notes = paste0("<p class = 'statetxt'>", notes, "</p>")
+  ) %>%
+  ungroup() %>%
+  select(state, notes)
+
+# get additional notes
+additional_notes <- notes %>%
+  group_by(state) %>%
+  summarize(note_lst = list(additional_notes)) %>%
+  ungroup() %>%
+  rowwise() %>%
+  mutate(
+    notes = paste(note_lst, collapse = "</p><p class = 'statetxt'>")
+    , notes = paste0("<p class = 'statetxt'>", notes, "</p>")
+  ) %>%
+  ungroup() %>%
+  select(state, notes)
 
 
 
@@ -749,10 +809,13 @@ for (folder in theseFOLDERS){
   save(parole_table,                file=file.path(folder, "parole_table.rds"))
   save(probation_table,             file=file.path(folder, "probation_table.rds"))
   save(hex_gj,                      file=file.path(folder, "hex_gj.rds"))
-  save(notes,                       file=file.path(folder, "notes.rds"))
+  save(parole_notes,                file=file.path(folder, "parole_notes.rds"))
+  save(probation_notes,             file=file.path(folder, "probation_notes.rds"))
+  save(parole_asterisks_notes,      file=file.path(folder, "parole_asterisks_notes.rds"))
+  save(probation_asterisks_notes,   file=file.path(folder, "probation_asterisks_notes.rds"))
+  save(additional_notes,            file=file.path(folder, "additional_notes.rds"))
   save(csg,                         file=file.path(folder, "csg.rds"))
   save(missingness_sentences,       file=file.path(folder, "missingness_sentences.rds"))
-
   save(nt_na_adm,                   file=file.path(folder, "nt_na_adm.rds"))
   save(nt_na_pop,                   file=file.path(folder, "nt_na_pop.rds"))
   save(nt_not_na_adm,               file=file.path(folder, "nt_not_na_adm.rds"))

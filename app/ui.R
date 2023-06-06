@@ -258,25 +258,35 @@ ui <- fluidPage(
                                              fluidRow(column(width = 12,
                                                              align = "center",
                                                              reactableOutput("state_table"))),
-                                             br(),
-
-                                             # States notes
-                                             fluidRow(column(width = 12,
-                                                             align = "left",
-                                                             div(id = "selected-state-note-title",
-                                                                 "State Notes"))),
-                                             br(),
-
-                                             fluidRow(column(width = 12,
-                                                             align = "left",
-                                                             div(id = "selected-state-note",
-                                                                 htmlOutput("selected_state_note")))),
-                                             br(),
-
-                                             fluidRow(column(width = 12,
-                                                             align = "left",
-                                                             div(id = "consistent-state-note",
-                                                                 state_note))),
+                                             # # States notes
+                                             # fluidRow(column(width = 12,
+                                             #                 align = "center",
+                                             #                 div(id = "selected-state-note-title",
+                                             #                     "State Notes"))),
+                                             # br(), br(),
+                                             #
+                                             # fluidRow(column(width = 1),
+                                             #          column(width = 5,
+                                             #                 div(id = "selected-state-note-subtitle",
+                                             #                     "Probation Metrics"),
+                                             #                 div(id = "selected-state-note",
+                                             #                     htmlOutput("state_probation_notes"))),
+                                             #          column(width = 5,
+                                             #                 div(id = "selected-state-note-subtitle",
+                                             #                     "Parole/Post-Incarceration Metrics"),
+                                             #                 div(id = "selected-state-note",
+                                             #                     htmlOutput("state_parole_notes"))),
+                                             #          column(width = 1)),
+                                             #
+                                             # fluidRow(column(width = 12,
+                                             #                 align = "left",
+                                             #                 div(id = "selected-state-note",
+                                             #                     htmlOutput("state_asterisks_notes")))),
+                                             #
+                                             # fluidRow(column(width = 12,
+                                             #                 align = "left",
+                                             #                 div(id = "consistent-state-note",
+                                             #                     state_note))),
                                              br(), br()
 
                                     ), # end tabPanel
@@ -402,7 +412,37 @@ ui <- fluidPage(
                            column(width = 1)
                   ), # end fluidRow
 
-                  br()
+                  br(),
+
+                  div(id = "state-note-section",
+                      # States notes
+                      fluidRow(column(width = 12,
+                                      align = "center",
+                                      div(id = "selected-state-note-title",
+                                          "State Notes"))),
+                      br(), br(),
+
+                      fluidRow(column(width = 1),
+                               column(width = 5,
+                                      div(id = "selected-state-note-subtitle",
+                                          "Probation Metrics"),
+                                      div(id = "selected-state-note",
+                                          htmlOutput("state_probation_notes"),
+                                          htmlOutput("state_probation_asterisks_notes"))),
+                               column(width = 5,
+                                      div(id = "selected-state-note-subtitle",
+                                          "Parole/Post-Incarceration Metrics"),
+                                      div(id = "selected-state-note",
+                                          htmlOutput("state_parole_notes"),
+                                          htmlOutput("state_parole_asterisks_notes"))),
+                               column(width = 1)),
+
+                      fluidRow(column(width = 12,
+                                      align = "left",
+                                      div(id = "consistent-state-note",
+                                          state_note)))),
+
+                  br(), br()
 
               ) # end div
 
