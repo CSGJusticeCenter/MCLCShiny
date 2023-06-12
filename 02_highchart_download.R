@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: highchart_download.R
 # Authors: Mari Roberts, Martha Eichlersmith
-# Date last updated: April 18, 2023 (MAR)
+# Date last updated: June 8, 2023 (MAR)
 # Description:
 #    Create and save highcharts WITH LOGO (pngs) so the app loads faster
 #######################################
@@ -24,13 +24,6 @@ box::use(
   , webshot2[webshot]
 )
 
-# load packages
-library(purrr)
-library(dplyr)
-library(highcharter)
-library(scales)
-library(stats)
-library(webshot2)
 
 obj_list <- c(
   "adm_pop_long.rds"
