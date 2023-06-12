@@ -3,7 +3,7 @@
 # File: import.R
 # Authors: Mari Roberts
 # Sub-Author: Martha Eichlersmith
-# Date last updated: May 30, 2023 (MAR)
+# Date last updated: June 8, 2023 (MAR)
 
 # Description:
 #    Loads packages
@@ -15,14 +15,17 @@
 # https://csgorg.sharepoint.com/:f:/s/Team-JC-Research/EhdvImKN2rdPnmHQ2TrKlooBdYqnnWc0SUXBNuh9C7d41g?e=NCsh8I
 # In your Renviron (usethis::edit_r_environ()), set CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"
 
-# highcharter download instructions:
-# remove the existing highcharter package from your R session: remove.packages("highcharter")
-# restart your R session
-# install highcharter with the devtools package (NOT the remotes package):
+# # highcharter download instructions:
+# # remove the existing highcharter package from your R session: remove.packages("highcharter")
+# # restart your R session
+# # install highcharter with the devtools package (NOT the remotes package):
 # install.packages("devtools")
 # devtools::install_github("mrjoh3/highcharter")
 
-# csgjcr download instructions:
+# # dataui download instructions:
+# remotes::install_github("timelyportfolio/dataui")
+
+# # csgjcr download instructions:
 # install.packages("remotes")
 # remotes::install_github("csgjusticecenter/csgjcr")
 
@@ -45,6 +48,13 @@ library(readr)
 library(htmltools)
 library(stringr)
 library(openxlsx)
+library(reactable)
+library(stats)
+library(purrr)
+library(dataui)
+library(scales)
+library(webshot2)
+library(formattable)
 
 box::use(prep/box/admin)
 

@@ -41,9 +41,6 @@ stateAbb <- read.csv(file.path(admin$sp_data_raw, "stateAbb.csv"))
 mclc_data <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v9.xlsx"),
                         sheet = "Sheet 1")
 
-# # Load states  - will change to new notes when ready
-# notes_raw <- read_excel(file.path(admin$sp_data_raw, "notes/state_notes_overview_v2.xlsx"))
-
 # Load info on missing sentence info
 missingness_sentences <- read_excel(file.path(admin$sp_survey, "MCLC Overview.xlsx"),
                                     sheet = "Missingness 2022", skip = 1)
@@ -109,13 +106,19 @@ missingness_sentences <- missingness_sentences %>%
 # Reformat notes file
 ################################################################################
 
-# fix spacing in parole and probation related notes
+# format checkbox and x box for parole and probation metrics
+# if the state submitted the variable, it gets a green check
+# if the state did not submit the variable, it gets a red x
 notes <- notes_raw %>%
   clean_names() %>%
   mutate(probation_metrics =
-           str_replace_all(probation_metrics, "☒|☐", "<br>\\0"),
-         parole_post_incarceration_supervision =
-           str_replace_all(parole_post_incarceration_supervision, "☒|☐", "<br>\\0"))
+           str_replace_all(probation_metrics,
+                           c("☒" = "<br><span style='color: #248A3D;'>&#x2714;&nbsp;&nbsp;&nbsp;</span>",
+                             "☐" = "<br><span style='color: #D70015;'>&#x2716;&nbsp;&nbsp;&nbsp;</span>")),
+         parole_metrics =
+           str_replace_all(parole_metrics,
+                           c("☒" = "<br><span style='color: #248A3D;'>&#x2714;&nbsp;&nbsp;&nbsp;</span>",
+                             "☐" = "<br><span style='color: #D70015;'>&#x2716;&nbsp;&nbsp;&nbsp;</span>")))
 
 # get probation related notes
 probation_notes <- notes %>%
@@ -133,7 +136,7 @@ probation_notes <- notes %>%
 # get parole related notes
 parole_notes <- notes %>%
   group_by(state) %>%
-  summarize(note_lst = list(parole_post_incarceration_supervision)) %>%
+  summarize(note_lst = list(parole_metrics)) %>%
   ungroup() %>%
   rowwise() %>%
   mutate(
@@ -157,7 +160,10 @@ parole_asterisks_notes <- notes %>%
     , notes = paste0("<p class = 'statetxt'>", notes, "</p>")
   ) %>%
   ungroup() %>%
-  select(state, notes)
+  select(state, notes) %>%
+  mutate(notes =
+           str_replace_all(notes, "<p class = 'statetxt'>NA</p>", "<p class = 'statetxt'></p>"))
+
 
 # get probation asteriks notes
 # make asteriks bold
@@ -173,10 +179,17 @@ probation_asterisks_notes <- notes %>%
     , notes = paste0("<p class = 'statetxt'>", notes, "</p>")
   ) %>%
   ungroup() %>%
-  select(state, notes)
+  select(state, notes) %>%
+  mutate(notes =
+           str_replace_all(notes, "<p class = 'statetxt'>NA</p>", "<p class = 'statetxt'></p>"))
 
 # get additional notes
 additional_notes <- notes %>%
+  mutate(
+    additional_notes = ifelse(is.na(additional_notes), "", additional_notes),
+    additional_notes = ifelse(is.na(additional_notes),
+                              paste0(additional_notes, cy_or_fy_notes, sep = ""),
+                              paste0(additional_notes, cy_or_fy_notes, sep = " "))) %>%
   group_by(state) %>%
   summarize(note_lst = list(additional_notes)) %>%
   ungroup() %>%
