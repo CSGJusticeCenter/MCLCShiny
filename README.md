@@ -47,10 +47,11 @@ MCLCShiny
 |
 |-- shiny_prep.R      # run shiny prep 
 |-- shiny_prep_log.txt #log file 
-|-- import.R          # imports MCLC data and shapefiles 
-|-- highchart.R       # create and save highcharts for app
-|-- highchart_download.R # create and save highcharts with logo and labels for app
-|-- reactable.R       # create and save reactable tables for app
+|-- 00_fnc_library.R  # loads packages and custom functions 
+|-- 01_import.R       # imports MCLC data and shapefiles 
+|-- 02_highchart_download.R # create and save highcharts with logo and labels for app
+|-- 03_highchart.R    # create and save highcharts for app
+|-- 04_reactable.R    # create and save reactable tables for app
 |-- run_save.R        # shiny prep for R/E infographs & tables
 | 
 |-- prep              # folder for prep data/info for app 
@@ -58,6 +59,7 @@ MCLCShiny
     |-- infographics  # exploration data 
     |...              # various files for exploration/documentation 
 ```
+
 
 # Run App 
 
@@ -72,6 +74,7 @@ After creating a clone, there are a few other steps you will need to take in ord
     * The root folder should be the string you would entere into the `csgjc::csg_sp_path()` function to get the pathway to the `MCLC Shiny App` folder on SharePoint 
     * This will take ~15 minutes to run this folder (majority of the time is creating the infographic pngs) 
     * runnig this script will produce a log txt file 
+1. Run files 00_fnc_library.R, 01_import.R, 02_highchart_download.R, and 03_highchart.R to save all data and visualizations ahead of time so that the app runs faster. This code will save data and visualizations to your local data folder, which is required to publish the Shiny app, and Sharepoint. The reactable.R file is currently commented out because saving reactable tables with trend lines (using the dataui package) ahead of time does not work when publishing the app.   
     
 After completing these steps you can run the app, either by opening `app.R`/`ui.R`/`server.R` and click the **Run App** button OR by entering `shiny::runApp()` into the console.
 

@@ -41,15 +41,15 @@ Font size and style
 Navigation Bar
 ####################################################################################################################*/
 
-/* Hide navigation bar menu items */
+/* Hide navigation bar menu items
 #navbarID{
   display:none;
-}
+}*/
 
-/* Hide navigation bar */
+/* Hide navigation bar
 .navbar{
   display:none !important;
-}
+}*/
 
 /*##################################################################################################################
 Header and global drop down options

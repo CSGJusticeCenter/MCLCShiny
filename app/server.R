@@ -12,27 +12,27 @@ server <- function(input, output, session) {
   # # Enable caching
   # shinyjs::enable("cache")
 
-  # Change URL depending on tab selection in navbar
-  observeEvent(input$navbarID, {
-
-    newURL <- paste0(
-      session$clientData$url_protocol,
-      "//",
-      session$clientData$url_hostname,
-      ":",
-      session$clientData$url_port,
-      session$clientData$url_pathname,
-      "#",
-      input$navbarID
-    )
-    updateQueryString(newURL, mode = "replace", session)
-  })
-  observe({
-    currentTab <- sub("#", "", session$clientData$url_hash)
-    if(!is.null(currentTab)){
-      updateTabItems(session, "navbarID", selected = currentTab)
-    }
-  })
+  # # Change URL depending on tab selection in navbar
+  # observeEvent(input$navbarID, {
+  #
+  #   newURL <- paste0(
+  #     session$clientData$url_protocol,
+  #     "//",
+  #     session$clientData$url_hostname,
+  #     ":",
+  #     session$clientData$url_port,
+  #     session$clientData$url_pathname,
+  #     "#",
+  #     input$navbarID
+  #   )
+  #   updateQueryString(newURL, mode = "replace", session)
+  # })
+  # observe({
+  #   currentTab <- sub("#", "", session$clientData$url_hash)
+  #   if(!is.null(currentTab)){
+  #     updateTabItems(session, "navbarID", selected = currentTab)
+  #   }
+  # })
 
   # Output blank text
   output$blank <- renderText({
