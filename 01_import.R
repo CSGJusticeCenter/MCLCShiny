@@ -3,7 +3,7 @@
 # File: import.R
 # Authors: Mari Roberts
 # Sub-Author: Martha Eichlersmith
-# Date last updated: May 30, 2023 (MAR)
+# Date last updated: June 26, 2023 (MAR)
 
 # Description:
 #    Imports data
@@ -12,9 +12,9 @@
 #    Creates data files for app
 
 # Input:
-#    "data/raw/notes/state_notes_overview.csv" state notes
-#    "data/raw/mclc/mclc_data_2022_v9.xlsx"    2022 survey data with edits (BJS data or removal)
-#     Map files
+#    mclc_data_2022_v9.xlsx    - 2022 survey data with edits (BJS data or removal)
+#    us_states_hexgrid.geojson - hex map files
+#    MCLC Overview.xlsx        - formatted notes, sentences about missing data
 
 # Output:
 #     Data frames needed to run shiny app
@@ -395,29 +395,7 @@ mclc_explorer_table_long <- mclc_explorer_table_18_21 %>%
   left_join(mclc_explorer_table_19_20, by = c("state", "data")) %>%
   left_join(mclc_explorer_table_20_21, by = c("state", "data"))
 
-# # save reactable version of map explorer table
-# mclc_explorer_table_long <- mclc_explorer_table %>%
-#   select(state, data, `2018`, `2019`, `2020`, `2021`) %>%
-#   pivot_longer(cols=c(`2018`, `2019`, `2020`, `2021`),
-#                names_to='year',
-#                values_to='total') %>%
-#   group_by(state, data) %>%
-#   summarise(total_new = list(list(total))) %>%
-#   ungroup() %>%
-#   rowwise() %>%
-#   mutate(
-#     vec_nona = list(total_new[[1]][!is.na(total_new[[1]])])
-#     , length_nona = length(vec_nona)
-#     , first  = ifelse(length_nona == 0, NA, vec_nona[1])
-#     , last   = ifelse(length_nona == 0, NA, vec_nona[length_nona])
-#     , trend = case_when(
-#       first == last ~ "same"
-#       , first >  last ~ "negative" #trend is negative, decreasing
-#       , first <  last ~ "positive" #trend is positive, increasing
-#     )
-#   ) %>%
-#   select(state, data, total_new, trend)
-
+# combine datas
 mclc_explorer_table <- merge(mclc_explorer_table, mclc_explorer_table_long, by = c("state", "data"))
 
 # create year range
@@ -560,13 +538,11 @@ probation_table <- prob_parole_tables %>%
 
 
 
-################################################################################
-# Download data tables (BJS vs CSG)
-################################################################################
 
-########
-# CSG download data
-########
+
+################################################################################
+# Whether data is missing parole or probation
+################################################################################
 
 # if total is equal to probation or parole, then indicate that the total only includes
 #   probation or parole
@@ -611,6 +587,18 @@ probation_or_parole_pop <- adm_pop %>%
 # add probation_or_parole pop and adm together
 probation_or_parole <- rbind(probation_or_parole_adm, probation_or_parole_pop)
 
+
+
+
+
+################################################################################
+# Download data tables
+################################################################################
+
+########
+# CSG download data
+########
+
 # make data long form
 adm_pop_long <- gather(adm_pop, data, total, total_admissions:technical_parole_violation_population)
 
@@ -648,7 +636,8 @@ csg <- adm_pop_long %>% ungroup() %>%
          year,
          total) %>%
   mutate(state = as.character(state),
-         year = as.character(year))
+         year = as.character(year)) %>%
+  filter(!is.na(metric)) # removes total new offense and total technical
 
 
 

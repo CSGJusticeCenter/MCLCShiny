@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: highchart.R
 # Authors: Mari Roberts, Martha Eichlersmith
-# Date last updated: June 8, 2023 (MAR)
+# Date last updated: June 26, 2023 (MAR)
 # Description:
 #    Create and save highcharts so the app loads faster
 #######################################
@@ -49,7 +49,6 @@ metrics <- c("New Offense Violation",
              "Supervision Violation",
              "Technical Violation",
              "Total")
-
 
 
 ############

@@ -470,29 +470,19 @@ ui <- fluidPage(
                                   fluidRow(# Select State(s)
                                            column(width = 3, align = "center", class = "input-col",
 
-                                                  labeled_input('input-btn', "", #"Select State(s)",
+                                                  labeled_input('input-btn', "",
                                                                 pickerInput(inputId = 'download_state',
                                                                             width = "100%",
                                                                             choices = NULL,
                                                                             selected = NULL,
                                                                             multiple = TRUE,
                                                                             div(style = "font-weight: bold", "Select State(s)"),
-
-                                                                            # choicesOpt is not working
-                                                                            # choicesOpt = list(
-                                                                            #   style = rep(("color: black; background: lightgrey; font-weight: bold;"),50)),
-                                                                            # choicesOpt = list(`actions-box` = TRUE,
-                                                                            #                   style = "picker-style"),
-                                                                            # choicesOpt = list(
-                                                                            #   style = rep_len("font-size: 10%; line-height: 1.6;", 50)
-                                                                            # ), # choices style
-                                                                            # choicesOpt = list(style = sprintf('background:%s;', 'green')),
                                                                             options = list(`actions-box` = TRUE,
                                                                                            style = "picker-style")))),
 
                                            # Select Metric(s)
                                            column(width = 3, align = "center", class = "input-col",
-                                                  labeled_input('input-btn', "", #"Select Metric(s)",
+                                                  labeled_input('input-btn', "",
                                                                 pickerInput(inputId = 'download_metric',
                                                                             width = "100%",
                                                                             choices = NULL,
@@ -503,14 +493,13 @@ ui <- fluidPage(
                                                                                            style = "picker-style")))),
                                            # Select Year(s)
                                            column(width = 3, align = "center", class = "input-col",
-                                                  labeled_input('input-btn', "", #"Select Year(s)",
+                                                  labeled_input('input-btn', "",
                                                                 pickerInput(inputId = 'download_year',
                                                                             width = "100%",
                                                                             choices = NULL,
                                                                             selected = NULL,
                                                                             multiple = TRUE,
                                                                             div(style = "font-weight: bold", "Select Year(s)"),
-
                                                                             options = list(`actions-box` = TRUE,
                                                                                            style = "picker-style")))),
                                            # Download Data
