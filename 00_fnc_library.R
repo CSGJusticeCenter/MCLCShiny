@@ -3,7 +3,7 @@
 # File: import.R
 # Authors: Mari Roberts
 # Sub-Author: Martha Eichlersmith
-# Date last updated: June 8, 2023 (MAR)
+# Date last updated: June 26, 2023 (MAR)
 
 # Description:
 #    Loads packages
@@ -396,7 +396,8 @@ fnc_highchart_state_barchart <- function(df, title_name, state_name, adm_or_pop)
 
     hc_plotOptions(series = list(animation = FALSE,
                                  cursor = "pointer",
-                                 borderWidth = 3),
+                                 borderWidth = 3,
+                                 minPointLength = 4),
                    accessibility = list(enabled = TRUE,
                                         keyboardNavigation = list(enabled = TRUE),
                                         linkedDescription = paste0("This is a bar chart for the state of", state_name, "
@@ -449,7 +450,8 @@ fnc_highchart_parole_barchart <- function(df, title_name, state_name, adm_or_pop
 
     hc_plotOptions(series = list(animation = FALSE,
                                  cursor = "pointer",
-                                 borderWidth = 3),
+                                 borderWidth = 3,
+                                 minPointLength = 4),
                    accessibility = list(enabled = TRUE,
                                         keyboardNavigation = list(enabled = TRUE),
                                         linkedDescription = paste0("This is a bar chart for the state of", state_name, "
@@ -502,7 +504,8 @@ fnc_highchart_probation_barchart <- function(df, title_name, state_name, adm_or_
 
     hc_plotOptions(series = list(animation = FALSE,
                                  cursor = "pointer",
-                                 borderWidth = 3),
+                                 borderWidth = 3,
+                                 minPointLength = 4),
                    accessibility = list(enabled = TRUE,
                                         keyboardNavigation = list(enabled = TRUE),
                                         linkedDescription = paste0("This is an area chart for the state of", state_name, "
@@ -747,7 +750,8 @@ fnc_highchart_state_areachart_logo <- function(df, title_name){
 
     hc_chart(type="area",
              events = list(render = render_image),
-             marginBottom = 80) %>%
+             marginBottom = 80,
+             marginRight = 20) %>%
     hc_add_series(data = subset(df, metric == "Total"),
                   name = "Total",
                   type = "area",
@@ -768,6 +772,7 @@ fnc_highchart_state_areachart_logo <- function(df, title_name){
                   hcaes(x = year, y = total),
                   color = tech_co,
                   dataLabels = list(enabled = TRUE,
+                                    y = 4,
                                     format='{point.total:,.0f}')) %>%
     hc_add_series(data = subset(df, metric == "New Offense Violation"),
                   name = "New Offense Violation",
@@ -775,6 +780,7 @@ fnc_highchart_state_areachart_logo <- function(df, title_name){
                   hcaes(x = year, y = total),
                   color = new_o_co,
                   dataLabels = list(enabled = TRUE,
+                                    y = -2,
                                     format='{point.total:,.0f}')) %>%
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
@@ -783,7 +789,13 @@ fnc_highchart_state_areachart_logo <- function(df, title_name){
     hc_title(text = title_name) %>%
     hc_subtitle(text = subtitle_name) %>%
 
-    hc_add_theme(hc_theme_jc)
+    hc_add_theme(hc_theme_jc) %>%
+
+    hc_plotOptions(
+      series = list(
+        dataLabels = list(
+          enabled = TRUE,
+          allowOverlap = TRUE)))
 }
 
 # Supervision violation highchart bar chart for state page WITH LOGO
@@ -821,7 +833,9 @@ fnc_highchart_state_barchart_logo <- function(df, title_name){
     hc_subtitle(text = subtitle_name) %>%
 
     # hc_setup() %>%
-    hc_add_theme(hc_theme_jc)
+    hc_add_theme(hc_theme_jc) %>%
+
+    hc_plotOptions(series = list(minPointLength = 4))
 }
 
 # Parole highchart bar chart for state page WITH logo
@@ -852,7 +866,9 @@ fnc_highchart_parole_barchart_logo <- function(df, title_name){
     hc_title(text = title_name) %>%
 
     # hc_setup() %>%
-    hc_add_theme(hc_theme_jc)
+    hc_add_theme(hc_theme_jc) %>%
+
+    hc_plotOptions(series = list(minPointLength = 4))
 }
 
 # probation highchart bar chart for state page WITH logo
@@ -883,7 +899,9 @@ fnc_highchart_probation_barchart_logo <- function(df, title_name){
     hc_title(text = title_name) %>%
 
     # hc_setup() %>%
-    hc_add_theme(hc_theme_jc)
+    hc_add_theme(hc_theme_jc) %>%
+
+    hc_plotOptions(series = list(minPointLength = 4))
 }
 
 # Map explorer WITH logo
@@ -923,10 +941,9 @@ fnc_highchart_map_logo <- function(df, map_filename, adm_or_pop){
     highchart() %>%
 
       hc_chart(
-        spacingTop = 1,
-        spacingRight = 1,
-        spacingBottom = 1,
-        spacingLeft = 1) %>%
+        events = list(render = render_image),
+        marginBottom = 80
+      ) %>%
 
       hc_add_series_map(
         map = hex_gj,
@@ -958,17 +975,12 @@ fnc_highchart_map_logo <- function(df, map_filename, adm_or_pop){
                    labels = list(format = "{value}%",
                                  style = list(fontSize = "14px"))) %>%
 
-      hc_legend(align = "right",
-                verticalAlign = "bottom",
-                layout = "vertical",
-                symbolHeight = 200,
-                symbolWidth = 25,
-                x = -25,
-                y = 0) %>%
-
       hc_add_theme(hc_theme_map_jc) %>%
-      hc_chart(events = list(render = render_image),
-               marginBottom = 80) %>%
+
+      hc_legend(align = "right",
+                layout = "vertical",
+                verticalAlign = "top",
+                y = 300) %>%
 
       hc_xAxis(title = "") %>%
       hc_yAxis(title = "") %>%
@@ -994,10 +1006,9 @@ fnc_highchart_map_logo <- function(df, map_filename, adm_or_pop){
     highchart() %>%
 
       hc_chart(
-        spacingTop = 1,
-        spacingRight = 1,
-        spacingBottom = 1,
-        spacingLeft = 1) %>%
+        events = list(render = render_image),
+        marginBottom = 80
+      ) %>%
 
       hc_add_series_map(
         map = hex_gj,
@@ -1023,17 +1034,12 @@ fnc_highchart_map_logo <- function(df, map_filename, adm_or_pop){
                    labels = list(format = "{value}%",
                                  style = list(fontSize = "14px"))) %>%
 
-      hc_legend(align = "right",
-                verticalAlign = "bottom",
-                layout = "vertical",
-                symbolHeight = 200,
-                symbolWidth = 25,
-                x = -25,
-                y = 0) %>%
-
       hc_add_theme(hc_theme_map_jc) %>%
-      hc_chart(events = list(render = render_image),
-               marginBottom = 80) %>%
+
+      hc_legend(align = "right",
+                layout = "vertical",
+                verticalAlign = "top",
+                y = 300) %>%
 
       hc_xAxis(title = "") %>%
       hc_yAxis(title = "") %>%

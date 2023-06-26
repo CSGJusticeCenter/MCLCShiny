@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: highchart_download.R
 # Authors: Mari Roberts, Martha Eichlersmith
-# Date last updated: June 8, 2023 (MAR)
+# Date last updated: June 26, 2023 (MAR)
 # Description:
 #    Create and save highcharts WITH LOGO (pngs) so the app loads faster
 #######################################
@@ -38,8 +38,6 @@ walk(obj_list, ~load(file = file.path(admin$sp_data, .x), envir = .GlobalEnv))
 # assign colors for visualizations
 source("app/colors.R")
 source("00_fnc_library.R")
-
-
 
 # list of states for function
 states <- adm_pop_long$state %>%
@@ -220,6 +218,7 @@ pop_maps_2020_2021 <- map(.x = metrics,  .f = function(x) {
   return(highcharts)
 })
 
+# assign map names to list
 adm_maps_2018_2019 <- setNames(adm_maps_2018_2019, metrics)
 adm_maps_2018_2021 <- setNames(adm_maps_2018_2021, metrics)
 adm_maps_2019_2020 <- setNames(adm_maps_2019_2020, metrics)
