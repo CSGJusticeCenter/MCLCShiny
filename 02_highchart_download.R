@@ -475,7 +475,7 @@ for (folder in theseFOLDERS){
 
 
 ##########
-# MAPS Admissions - loops are separate for now because of timeout issues
+# MAPS Admissions - loops are separate because of timeout issues
 ##########
 
 admin$mylog("ADMISSIONS MAP 2018-2019")

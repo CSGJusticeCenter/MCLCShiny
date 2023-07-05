@@ -772,7 +772,7 @@ fnc_highchart_state_areachart_logo <- function(df, title_name){
                   hcaes(x = year, y = total),
                   color = tech_co,
                   dataLabels = list(enabled = TRUE,
-                                    y = 4,
+                                    #y = 4,
                                     format='{point.total:,.0f}')) %>%
     hc_add_series(data = subset(df, metric == "New Offense Violation"),
                   name = "New Offense Violation",
@@ -780,7 +780,7 @@ fnc_highchart_state_areachart_logo <- function(df, title_name){
                   hcaes(x = year, y = total),
                   color = new_o_co,
                   dataLabels = list(enabled = TRUE,
-                                    y = -2,
+                                    #y = -2,
                                     format='{point.total:,.0f}')) %>%
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%

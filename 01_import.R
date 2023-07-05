@@ -784,9 +784,9 @@ vb_adm_pop <- mclc_all %>%
     adm_or_pop  = as.character(adm_or_pop)) %>%
 
   # change subheader if there is no data
-  mutate(subheader = case_when(value_shown == "No Data" ~ " ",
+  mutate(subheader = case_when(value_shown == "No Data" ~ "<br>",
                                TRUE ~ subheader),
-         subheader = case_when(is.na(subheader) ~ " ",
+         subheader = case_when(is.na(subheader) ~ "<br>",
                                TRUE ~ subheader))
 
 

@@ -474,7 +474,7 @@ server <- function(input, output, session) {
     fnc_value_box(
       title      = paste0("Overall "),
       adm_or_pop = paste0(input$adm_pop_report, " in 2021"),
-      subtitle   = " ",
+      subtitle   = HTML("<br>"),
       value      = df_vb_total()$value_shown,
       finding    = df_vb_total()$text,
       color      = "black",
