@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: highchart_download.R
 # Authors: Mari Roberts, Martha Eichlersmith
-# Date last updated: June 26, 2023 (MAR)
+# Date last updated: July 6, 2023 (MAR)
 # Description:
 #    Create and save highcharts WITH LOGO (pngs) so the app loads faster
 #######################################
@@ -118,9 +118,11 @@ metrics_list <- list("New Offense Violation",
 
 ################################################################################
 
-############
+####################################
+
 # MAP EXPLORER - Maps
-############
+
+####################################
 
 # generate list of state highcharts to call in app (admissions)
 adm_maps_2018_2019 <- map(.x = metrics,  .f = function(x) {
@@ -229,57 +231,443 @@ pop_maps_2018_2021 <- setNames(pop_maps_2018_2021, metrics)
 pop_maps_2019_2020 <- setNames(pop_maps_2019_2020, metrics)
 pop_maps_2020_2021 <- setNames(pop_maps_2020_2021, metrics)
 
-############
-# STATE REPORTS - State area chart
-############
 
-# set options so that y axis has comma separator
-hcoptslang <- getOption("highcharter.lang")
-hcoptslang$thousandsSep <- ","
-options(highcharter.lang = hcoptslang)
+
+
+
+
+####################################
+
+# STATE REPORTS - State area chart for admissions
+
+####################################
+
+######
+# Data labels: Adjusted
+######
+
+# states with adjustments to their data labels
+states <- c(
+  "Alabama",
+  "Arizona",
+  "Arkansas",
+  "California",
+  "Delaware",
+  "Georgia",
+  "Hawaii",
+  "Idaho",
+  "Indiana",
+  "Iowa",
+  "Kansas",
+  "Louisiana",
+  "Maine",
+  "Minnesota",
+  "Mississippi",
+  "Montana",
+  "Nebraska",
+  "South Dakota",
+  "Tennessee",
+  "Utah",
+  "Vermont",
+  "Virginia",
+  "Wyoming"
+)
 
 # generate list of state highcharts to call in app (admissions)
-all_state_area_adm <- map(.x = states,  .f = function(x) {
-  df1 <- adm_pop_long %>%
-    filter(state == x &
-             adm_or_pop == "Admissions" &
-             (metric == "Total" | metric == "Supervision Violation" |
-                metric == "New Offense Violation" |
-                metric == "Technical Violation")) %>%
-    group_by(state, year, metric, adm_or_pop, probation_or_parole) %>%
-    summarise(total = sum(total, na.rm = TRUE), .groups = "keep") %>%
-    ungroup() %>%
-    mutate(total = ifelse(total == 0, NA, total))
+all_state_area_adm_adjusted <- map(.x = states,  .f = function(x) {
+  df1 <- fnc_areachart_adm_data_prep(state_name = x)
   admin$mylog(glue("hc: Prison Admissions, {x}"))
-  highcharts <- fnc_highchart_state_areachart_logo(df1, "Prison Admissions")
+  highcharts <- fnc_highchart_state_areachart_logo(df1,
+                                                   "Prison Admissions",
+                                                   sup_viol_y = 0,
+                                                   tech_y = 4,
+                                                   new_off_y = -2)
   return(highcharts)
 })
 
-all_state_area_adm <- setNames(all_state_area_adm, states)
+all_state_area_adm_adjusted <- setNames(all_state_area_adm_adjusted, states)
 
-# generate list of state highcharts to call in app (population)
-all_state_area_pop <- map(.x = states,  .f = function(x) {
-  df1 <- adm_pop_long %>%
-    filter(state == x &
-             adm_or_pop == "Population" &
-             (metric == "Total" | metric == "Supervision Violation" |
-                metric == "New Offense Violation" |
-                metric == "Technical Violation")) %>%
-    group_by(state, year, metric, adm_or_pop, probation_or_parole) %>%
-    summarise(total = sum(total, na.rm = TRUE), .groups = "keep") %>%
-    ungroup() %>%
-    mutate(total = ifelse(total == 0, NA, total))
+
+
+
+######
+# Data labels: Regular
+######
+
+# States with no changes to their data labels
+states <- c(
+  "Missouri",
+  "Nevada",
+  "New Hampshire",
+  "New Mexico",
+  "North Carolina",
+  "North Dakota",
+  "Ohio",
+  "Oregon",
+  "Rhode Island",
+  "South Carolina",
+  "Texas",
+  "Wisconsin"
+)
+
+# generate list of state highcharts to call in app (admissions)
+all_state_area_adm_regular <- map(.x = states,  .f = function(x) {
+  df1 <- fnc_areachart_adm_data_prep(state_name = x)
+  admin$mylog(glue("hc: Prison Admissions, {x}"))
+  highcharts <- fnc_highchart_state_areachart_logo(df1,
+                                                   "Prison Admissions",
+                                                   sup_viol_y = 0,
+                                                   tech_y = 0,
+                                                   new_off_y = 0)
+  return(highcharts)
+})
+
+all_state_area_adm_regular <- setNames(all_state_area_adm_regular, states)
+
+
+
+
+######
+# Data labels: Manual changes
+######
+
+# States with manual changes to data labels
+states <- c(
+  "Alaska",
+  "Colorado",
+  "Connecticut",
+  "Florida",
+  "Illinois",
+  "Kentucky",
+  "Maryland",
+  "Massachusetts",
+  "Michigan",
+  "New Jersey",
+  "New York",
+  "Oklahoma",
+  "Pennsylvania",
+  "Washington",
+  "West Virginia"
+)
+
+# create graph for state
+df1 <- fnc_areachart_adm_data_prep(state_name = "Alaska")
+Alaska <- fnc_highchart_state_areachart_logo(df1, "Prison Admissions",
+                                             sup_viol_y = -2, tech_y = 0, new_off_y = 10)
+
+# create graph for state ___ ISSUE
+df1 <- fnc_areachart_adm_data_prep(state_name = "Colorado")
+Colorado <-
+  fnc_highchart_state_areachart_logo(df1, "Prison Admissions",
+                                     sup_viol_y = -2, tech_y = 0, new_off_y = 12)
+
+# create graph for state
+df1 <- fnc_areachart_adm_data_prep(state_name = "Connecticut")
+Connecticut <-
+  fnc_highchart_state_areachart_logo(df1, "Prison Admissions",
+                                     sup_viol_y = 0, tech_y = 10, new_off_y = 5)
+
+# create graph for state ___ ISSUES
+df1 <- fnc_areachart_adm_data_prep(state_name = "Florida")
+Florida <-
+  fnc_highchart_state_areachart_logo(df1, "Prison Admissions",
+                                     sup_viol_y = 0, tech_y = 0, new_off_y = 15)
+
+# create graph for state
+df1 <- fnc_areachart_adm_data_prep(state_name = "Illinois")
+Illinois <-
+  fnc_highchart_state_areachart_logo(df1, "Prison Admissions",
+                                     sup_viol_y = 0, tech_y = 10, new_off_y = 0)
+
+# create graph for state
+df1 <- fnc_areachart_adm_data_prep(state_name = "Kentucky")
+Kentucky <-
+  fnc_highchart_state_areachart_logo(df1, "Prison Admissions",
+                                     sup_viol_y = 0, tech_y = 10, new_off_y = 0)
+
+# create graph for state
+df1 <- fnc_areachart_adm_data_prep(state_name = "Maryland")
+Maryland <-
+  fnc_highchart_state_areachart_logo(df1, "Prison Admissions",
+                                     sup_viol_y = 0, tech_y = 10, new_off_y = 0)
+
+# create graph for state
+df1 <- fnc_areachart_adm_data_prep(state_name = "Massachusetts")
+Massachusetts <-
+  fnc_highchart_state_areachart_logo(df1, "Prison Admissions",
+                                     sup_viol_y = 0, tech_y = 5, new_off_y = 5)
+
+# create graph for state
+df1 <- fnc_areachart_adm_data_prep(state_name = "Michigan")
+Michigan <-
+  fnc_highchart_state_areachart_logo(df1, "Prison Admissions",
+                                     sup_viol_y = 0, tech_y = 0, new_off_y = 10)
+
+# create graph for state
+df1 <- fnc_areachart_adm_data_prep(state_name = "New Jersey")
+`New Jersey` <-
+  fnc_highchart_state_areachart_logo(df1, "Prison Admissions",
+                                     sup_viol_y = -5, tech_y = 5, new_off_y = 10)
+
+# create graph for state
+df1 <- fnc_areachart_adm_data_prep(state_name = "New York")
+`New York` <-
+  fnc_highchart_state_areachart_logo(df1, "Prison Admissions",
+                                     sup_viol_y = -3, tech_y = 0, new_off_y = 0)
+
+# create graph for state ___ ISSUES
+df1 <- fnc_areachart_adm_data_prep(state_name = "Oklahoma")
+Oklahoma <-
+  fnc_highchart_state_areachart_logo(df1, "Prison Admissions",
+                                     sup_viol_y = 0, tech_y = 0, new_off_y = 15)
+
+# create graph for state
+df1 <- fnc_areachart_adm_data_prep(state_name = "Pennsylvania")
+Pennsylvania <-
+  fnc_highchart_state_areachart_logo(df1, "Prison Admissions",
+                                     sup_viol_y = 0, tech_y = 0, new_off_y = 15)
+
+# create graph for state
+df1 <- fnc_areachart_adm_data_prep(state_name = "Washington")
+Washington <-
+  fnc_highchart_state_areachart_logo(df1, "Prison Admissions",
+                                     sup_viol_y = 0, tech_y = 15, new_off_y = 0)
+
+# create graph for state
+df1 <- fnc_areachart_adm_data_prep(state_name = "West Virginia")
+`West Virginia` <-
+  fnc_highchart_state_areachart_logo(df1, "Prison Admissions",
+                                     sup_viol_y = 0, tech_y = 0, new_off_y = 5)
+
+# combine manual charts into a list
+all_state_area_adm_manual <-
+  list(Alaska,
+       Colorado,
+       Connecticut,
+       Florida,
+       Illinois,
+       Kentucky,
+       Maryland,
+       Massachusetts,
+       Michigan,
+       `New Jersey`,
+       `New York`,
+       Oklahoma,
+       Pennsylvania,
+       Washington,
+       `West Virginia`)
+
+# add state name to the respective graph
+all_state_area_adm_manual <- setNames(all_state_area_adm_manual, states)
+
+# combine lists into final area chart list for prison admissions by state
+all_state_area_adm <- c(all_state_area_adm_adjusted,
+                        all_state_area_adm_regular,
+                        all_state_area_adm_manual)
+
+
+
+
+
+
+
+####################################
+
+# STATE REPORTS - State area chart for population
+
+####################################
+
+######
+# Data labels: Regular
+######
+
+# regular
+states <- c(
+  "Alabama",
+  "Alaska",
+  "Arizona",
+  "Arkansas",
+  "Colorado",
+  "Connecticut",
+  "Delaware",
+  "Hawaii",
+  "Idaho",
+  "Iowa",
+  "Kentucky",
+  "Louisiana",
+  "Maine",
+  "Maryland",
+  "Michigan",
+  "Minnesota",
+  "Mississippi",
+  "Missouri",
+  "Montana",
+  "Nevada",
+  "New Hampshire",
+  "New Jersey",
+  "New Mexico",
+  "North Dakota",
+  "Ohio",
+  "Oklahoma",
+  "Rhode Island",
+  "South Carolina",
+  "South Dakota",
+  "Utah",
+  "Vermont",
+  "Virginia",
+  "Washington",
+  "Wisconsin",
+  "Wyoming"
+)
+
+# generate list of state highcharts to call in app (admissions)
+all_state_area_pop_regular <- map(.x = states,  .f = function(x) {
+  df1 <- fnc_areachart_pop_data_prep(state_name = x)
   admin$mylog(glue("hc: Prison Population, {x}"))
-  highcharts <- fnc_highchart_state_areachart_logo(df1, "Prison Population")
+  highcharts <- fnc_highchart_state_areachart_logo(df1,
+                                                   "Prison Population",
+                                                   sup_viol_y = 0,
+                                                   tech_y = 0,
+                                                   new_off_y = 0)
   return(highcharts)
 })
 
-# set names of charts
-all_state_area_pop <- setNames(all_state_area_pop, states)
+all_state_area_pop_regular <- setNames(all_state_area_pop_regular, states)
 
-############
+
+
+
+
+######
+# Data labels: Manual changes
+######
+
+# manual
+states <- c(
+  "California",
+  "Florida",
+  "Georgia",
+  "Hawaii",
+  "Illinois",
+  "Indiana",
+  "Kansas",
+  "Massachusetts",
+  "Nebraska",
+  "New York",
+  "North Carolina",
+  "Oregon",
+  "Pennsylvania",
+  "Tennessee",
+  "Texas",
+  "West Virginia"
+)
+
+# Create graph for California
+df1 <- fnc_areachart_pop_data_prep(state_name = "California")
+California <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 0, new_off_y = 10)
+
+# Create graph for Florida
+df1 <- fnc_areachart_pop_data_prep(state_name = "Florida")
+Florida <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 5, new_off_y = 0)
+
+# Create graph for Georgia
+df1 <- fnc_areachart_pop_data_prep(state_name = "Georgia")
+Georgia <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 5, new_off_y = 0)
+
+# Create graph for Hawaii
+df1 <- fnc_areachart_pop_data_prep(state_name = "Hawaii")
+Hawaii <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 20, new_off_y = 0)
+
+# Create graph for Illinois
+df1 <- fnc_areachart_pop_data_prep(state_name = "Illinois")
+Illinois <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 0, new_off_y = 10)
+
+# Create graph for Indiana ____ ISSUES
+df1 <- fnc_areachart_pop_data_prep(state_name = "Indiana")
+Indiana <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 10, new_off_y = 0)
+
+# Create graph for Kansas ____ ISSUES
+df1 <- fnc_areachart_pop_data_prep(state_name = "Kansas")
+Kansas <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 0, new_off_y = 15)
+
+# Create graph for Massachusetts
+df1 <- fnc_areachart_pop_data_prep(state_name = "Massachusetts")
+Massachusetts <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = -20, tech_y = -10, new_off_y = 0)
+
+# Create graph for Nebraska
+df1 <- fnc_areachart_pop_data_prep(state_name = "Nebraska")
+Nebraska <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 5, new_off_y = 0)
+
+# Create graph for New York
+df1 <- fnc_areachart_pop_data_prep(state_name = "New York")
+`New York` <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 8, new_off_y = 5)
+
+# Create graph for North Carolina
+df1 <- fnc_areachart_pop_data_prep(state_name = "North Carolina")
+`North Carolina` <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 0, new_off_y = 10)
+
+# Create graph for Oregon ____ ISSUES
+df1 <- fnc_areachart_pop_data_prep(state_name = "Oregon")
+Oregon <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 0, new_off_y = 12)
+
+df1 <- fnc_areachart_pop_data_prep(state_name = "Pennsylvania")
+Pennsylvania <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 10, new_off_y = 0)
+
+# Create graph for Tennessee
+df1 <- fnc_areachart_pop_data_prep(state_name = "Tennessee")
+Tennessee <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 10, new_off_y = 5)
+
+# Create graph for Texas
+df1 <- fnc_areachart_pop_data_prep(state_name = "Texas")
+Texas <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 5, new_off_y = 0)
+
+# Create graph for West Virginia
+df1 <- fnc_areachart_pop_data_prep(state_name = "West Virginia")
+`West Virginia` <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 10, new_off_y = 10)
+
+
+# combine manual charts into a list
+all_state_area_pop_manual <-
+  list(California,
+       Florida,
+       Georgia,
+       Hawaii,
+       Illinois,
+       Indiana,
+       Kansas,
+       Massachusetts,
+       Nebraska,
+       `New York`,
+       `North Carolina`,
+       Oregon,
+       Pennsylvania,
+       Tennessee,
+       Texas,
+       `West Virginia`)
+
+# add state name to the respective graph
+all_state_area_pop_manual <- setNames(all_state_area_pop_manual, states)
+
+# combine lists into final area chart list for prison population by state
+all_state_area_pop <- c(all_state_area_pop_regular,
+                        all_state_area_pop_manual)
+
+
+
+
+
+
+
+####################################
+
 # STATE REPORTS - State bar chart
-############
+
+####################################
+
+# list of states for function
+states <- adm_pop_long$state %>%
+  unique() %>%
+  sort()
 
 # generate list of state highcharts to call in app (admissions)
 all_state_bar_adm <- map(.x = states,  .f = function(x) {
@@ -317,9 +705,16 @@ all_state_bar_pop <- map(.x = states,  .f = function(x) {
 # set names of charts
 all_state_bar_pop <- setNames(all_state_bar_pop, states)
 
-############
+
+
+
+
+
+####################################
+
 # STATE REPORTS - Parole bar chart
-############
+
+####################################
 
 # generate list of state highcharts to call in app (admissions)
 parole_bar_adm <- map(.x = states,  .f = function(x) {
@@ -357,9 +752,16 @@ parole_bar_pop <- map(.x = states,  .f = function(x) {
 # set names of charts
 parole_bar_pop <- setNames(parole_bar_pop,states)
 
-############
+
+
+
+
+
+####################################
+
 # STATE REPORTS - Probation bar chart
-############
+
+####################################
 
 # generate list of state highcharts to call in app (admissions)
 probation_bar_adm <- map(.x = states,  .f = function(x) {
