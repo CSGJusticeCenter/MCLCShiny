@@ -487,7 +487,6 @@ states <- c(
   "Alaska",
   "Arizona",
   "Arkansas",
-  "Colorado",
   "Connecticut",
   "Delaware",
   "Hawaii",
@@ -545,6 +544,7 @@ all_state_area_pop_regular <- setNames(all_state_area_pop_regular, states)
 # manual
 states <- c(
   "California",
+  "Colorado",
   "Florida",
   "Georgia",
   "Hawaii",
@@ -562,66 +562,70 @@ states <- c(
   "West Virginia"
 )
 
-# Create graph for California
+# create graph for California
 df1 <- fnc_areachart_pop_data_prep(state_name = "California")
 California <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 0, new_off_y = 10)
 
-# Create graph for Florida
+# create graph for Colorado
+df1 <- fnc_areachart_pop_data_prep(state_name = "Colorado")
+Colorado <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 0, new_off_y = 5)
+
+# create graph for Florida
 df1 <- fnc_areachart_pop_data_prep(state_name = "Florida")
 Florida <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 5, new_off_y = 0)
 
-# Create graph for Georgia
+# create graph for Georgia
 df1 <- fnc_areachart_pop_data_prep(state_name = "Georgia")
 Georgia <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 5, new_off_y = 0)
 
-# Create graph for Hawaii
+# create graph for Hawaii
 df1 <- fnc_areachart_pop_data_prep(state_name = "Hawaii")
 Hawaii <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 20, new_off_y = 0)
 
-# Create graph for Illinois
+# create graph for Illinois
 df1 <- fnc_areachart_pop_data_prep(state_name = "Illinois")
 Illinois <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 0, new_off_y = 10)
 
-# Create graph for Indiana ____ ISSUES
+# create graph for Indiana ____ ISSUES
 df1 <- fnc_areachart_pop_data_prep(state_name = "Indiana")
 Indiana <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 10, new_off_y = 0)
 
-# Create graph for Kansas ____ ISSUES
+# create graph for Kansas ____ ISSUES
 df1 <- fnc_areachart_pop_data_prep(state_name = "Kansas")
 Kansas <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 0, new_off_y = 15)
 
-# Create graph for Massachusetts
+# create graph for Massachusetts
 df1 <- fnc_areachart_pop_data_prep(state_name = "Massachusetts")
 Massachusetts <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = -20, tech_y = -10, new_off_y = 0)
 
-# Create graph for Nebraska
+# create graph for Nebraska
 df1 <- fnc_areachart_pop_data_prep(state_name = "Nebraska")
 Nebraska <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 5, new_off_y = 0)
 
-# Create graph for New York
+# create graph for New York
 df1 <- fnc_areachart_pop_data_prep(state_name = "New York")
 `New York` <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 8, new_off_y = 5)
 
-# Create graph for North Carolina
+# create graph for North Carolina
 df1 <- fnc_areachart_pop_data_prep(state_name = "North Carolina")
 `North Carolina` <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 0, new_off_y = 10)
 
-# Create graph for Oregon ____ ISSUES
+# create graph for Oregon ____ ISSUES
 df1 <- fnc_areachart_pop_data_prep(state_name = "Oregon")
 Oregon <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 0, new_off_y = 12)
 
 df1 <- fnc_areachart_pop_data_prep(state_name = "Pennsylvania")
 Pennsylvania <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 10, new_off_y = 0)
 
-# Create graph for Tennessee
+# create graph for Tennessee
 df1 <- fnc_areachart_pop_data_prep(state_name = "Tennessee")
 Tennessee <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 10, new_off_y = 5)
 
-# Create graph for Texas
+# create graph for Texas
 df1 <- fnc_areachart_pop_data_prep(state_name = "Texas")
 Texas <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 5, new_off_y = 0)
 
-# Create graph for West Virginia
+# create graph for West Virginia
 df1 <- fnc_areachart_pop_data_prep(state_name = "West Virginia")
 `West Virginia` <- fnc_highchart_state_areachart_logo(df1, "Prison Population", sup_viol_y = 0, tech_y = 10, new_off_y = 10)
 
@@ -629,6 +633,7 @@ df1 <- fnc_areachart_pop_data_prep(state_name = "West Virginia")
 # combine manual charts into a list
 all_state_area_pop_manual <-
   list(California,
+       Colorado,
        Florida,
        Georgia,
        Hawaii,

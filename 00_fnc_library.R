@@ -791,7 +791,7 @@ fnc_highchart_state_areachart_logo <-
       hc_chart(type="area",
                events = list(render = render_image),
                marginBottom = 80,
-               marginRight = 20) %>%
+               marginRight = 30) %>%
       hc_add_series(data = subset(df, metric == "Total"),
                     name = "Total",
                     type = "area",
@@ -942,7 +942,16 @@ fnc_highchart_probation_barchart_logo <- function(df, title_name){
     # hc_setup() %>%
     hc_add_theme(hc_theme_jc) %>%
 
-    hc_plotOptions(series = list(minPointLength = 4))
+    hc_plotOptions(
+      series = list(
+        dataLabels = list(
+          enabled = TRUE,
+          allowOverlap = TRUE,
+          padding = 0,
+          minPointLength = 4
+        )
+      )
+    )
 }
 
 # Map explorer with logo
