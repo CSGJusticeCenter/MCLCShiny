@@ -3,7 +3,7 @@
 # File: import.R
 # Authors: Mari Roberts
 # Sub-Author: Martha Eichlersmith
-# Date last updated: July 6, 2023 (MAR)
+# Date last updated: July 19, 2023 (MAR)
 
 # Description:
 #    Loads packages
@@ -263,7 +263,7 @@ hc_theme_jc <- hc_theme(colors = c("#D25E2D", "#EDB799", "#C7E8F5", "#236ca7", "
                                            bubble     = list(maxSize = "10%")))
 
 
-# Highcharts download buttons
+# Highcharts accessibility
 hc_setup <- function(x) {
   highcharter::hc_add_dependency(x, name = "plugins/series-label.js") %>%
     highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
@@ -745,7 +745,7 @@ fnc_highchart_map <- function(df, map_filename, state_name, adm_or_pop){
 # Highcharts with logo
 ##########################
 
-# prep data for area chart
+# prep admissions data for area chart
 fnc_areachart_adm_data_prep <- function(state_name){
   df1 <- adm_pop_long %>%
     filter(state == state_name &
@@ -759,6 +759,7 @@ fnc_areachart_adm_data_prep <- function(state_name){
     mutate(total = ifelse(total == 0, NA, total))
 }
 
+# prep population data for area chart
 fnc_areachart_pop_data_prep <- function(state_name){
   df1 <- adm_pop_long %>%
     filter(state == state_name &
@@ -772,8 +773,7 @@ fnc_areachart_pop_data_prep <- function(state_name){
     mutate(total = ifelse(total == 0, NA, total))
 }
 
-# function to create highchart area chart for state page with logo
-# and data label adjustments
+# Prison admissions or population area chart for state page with logo
 fnc_highchart_state_areachart_logo <-
   function(df,
            title_name,
@@ -858,6 +858,7 @@ fnc_highchart_state_barchart_logo <- function(df, title_name){
                   hcaes(x = year, y = total),
                   color = tech_co,
                   dataLabels = list(enabled = TRUE,
+                                    y = -5,
                                     format='{point.total:,.0f}')) %>%
     hc_add_series(data = subset(df, metric == "New Offense Violation"),
                   name = "New Offense Violation",
@@ -865,6 +866,7 @@ fnc_highchart_state_barchart_logo <- function(df, title_name){
                   hcaes(x = year, y = total),
                   color = new_o_co,
                   dataLabels = list(enabled = TRUE,
+                                    y = -5,
                                     format='{point.total:,.0f}')) %>%
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
@@ -876,7 +878,16 @@ fnc_highchart_state_barchart_logo <- function(df, title_name){
     # hc_setup() %>%
     hc_add_theme(hc_theme_jc) %>%
 
-    hc_plotOptions(series = list(minPointLength = 4))
+    hc_plotOptions(
+      series = list(
+        dataLabels = list(
+          enabled = TRUE,
+          allowOverlap = TRUE,
+          padding = 0,
+          minPointLength = 4
+        )
+      )
+    )
 }
 
 # Parole highchart bar chart for state page with logo
@@ -892,6 +903,7 @@ fnc_highchart_parole_barchart_logo <- function(df, title_name){
                   hcaes(x = year, y = total),
                   color = tech_co,
                   dataLabels = list(enabled = TRUE,
+                                    y = -5,
                                     format='{point.total:,.0f}')) %>%
     hc_add_series(data = subset(df, metric == "New Offense Violation"),
                   name = "New Offense Violation",
@@ -899,6 +911,7 @@ fnc_highchart_parole_barchart_logo <- function(df, title_name){
                   hcaes(x = year, y = total),
                   color = new_o_co,
                   dataLabels = list(enabled = TRUE,
+                                    y = -5,
                                     format='{point.total:,.0f}')) %>%
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%
@@ -909,10 +922,19 @@ fnc_highchart_parole_barchart_logo <- function(df, title_name){
     # hc_setup() %>%
     hc_add_theme(hc_theme_jc) %>%
 
-    hc_plotOptions(series = list(minPointLength = 4))
+    hc_plotOptions(
+      series = list(
+        dataLabels = list(
+          enabled = TRUE,
+          allowOverlap = TRUE,
+          padding = 0,
+          minPointLength = 4
+        )
+      )
+    )
 }
 
-# probation highchart bar chart for state page with logo
+# Probation highchart bar chart for state page with logo
 fnc_highchart_probation_barchart_logo <- function(df, title_name){
   highchart() %>%
     hc_chart(type = "column",
@@ -925,6 +947,7 @@ fnc_highchart_probation_barchart_logo <- function(df, title_name){
                   hcaes(x = year, y = total),
                   color = tech_co,
                   dataLabels = list(enabled = TRUE,
+                                    y = -5,
                                     format='{point.total:,.0f}')) %>%
     hc_add_series(data = subset(df, metric == "New Offense Violation"),
                   name = "New Offense Violation",
@@ -932,6 +955,7 @@ fnc_highchart_probation_barchart_logo <- function(df, title_name){
                   hcaes(x = year, y = total),
                   color = new_o_co,
                   dataLabels = list(enabled = TRUE,
+                                    y = -5,
                                     format='{point.total:,.0f}')) %>%
 
     hc_xAxis(title = "", tickPositions = c(2018, 2019, 2020, 2021)) %>%

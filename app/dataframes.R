@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: dataframes.R
 # Authors: Mari Roberts
-# Date last updated: May 3, 2023 (MAR)
+# Date last updated: July 19, 2023 (MAR)
 # Description:
 #    Load data files created in import.R, assign colors, and fonts
 #######################################
@@ -56,15 +56,7 @@ state_note <- c('Whether an incarceration is the result of a new offense or tech
 # must be in local repo to publish app
 #______________________________________________________
 
-load(file = "data/adm_maps_2018_2019.rds")
-load(file = "data/adm_maps_2018_2021.rds")
-load(file = "data/adm_maps_2019_2020.rds")
-load(file = "data/adm_maps_2020_2021.rds")
-load(file = "data/pop_maps_2018_2019.rds")
-load(file = "data/pop_maps_2018_2021.rds")
-load(file = "data/pop_maps_2019_2020.rds")
-load(file = "data/pop_maps_2020_2021.rds")
-load(file = "data/data_map.rds")
+load(file = "data/adm_pop_maps.rds")
 
 load(file = "data/all_state_area_adm.rds")
 load(file = "data/all_state_area_pop.rds")

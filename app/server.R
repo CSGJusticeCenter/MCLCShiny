@@ -103,96 +103,9 @@ server <- function(input, output, session) {
   # Select foundational hex map and store it as a reactive expression
   # Charts were created in highchart.R
   # This is necessary to download the map
-  # foundational_map <- reactive({
-  #
-  #   if(input$adm_or_pop_map == "Admissions"){
-  #
-  #     if(input$year_map == "2018 - 2019"){
-  #       adm_maps_2018_2019[[input$data_map]]%>%
-  #         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-  #         hc_boost(enabled = TRUE)
-  #     }
-  #
-  #     else if(input$year_map == "2018 - 2021"){
-  #       adm_maps_2018_2021[[input$data_map]]%>%
-  #         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-  #         hc_boost(enabled = TRUE)
-  #     }
-  #
-  #     else if(input$year_map == "2019 - 2020"){
-  #       adm_maps_2019_2020[[input$data_map]]%>%
-  #         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-  #         hc_boost(enabled = TRUE)
-  #     }
-  #
-  #     else if(input$year_map == "2020 - 2021"){
-  #       adm_maps_2020_2021[[input$data_map]]%>%
-  #         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-  #         hc_boost(enabled = TRUE)
-  #     }
-  #
-  #   }
-  #
-  #   else if(input$adm_or_pop_map == "Population"){
-  #
-  #     if(input$year_map == "2018 - 2019"){
-  #       pop_maps_2018_2019[[input$data_map]]%>%
-  #         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-  #         hc_boost(enabled = TRUE)
-  #     }
-  #
-  #     else if(input$year_map == "2018 - 2021"){
-  #       pop_maps_2018_2021[[input$data_map]]%>%
-  #         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-  #         hc_boost(enabled = TRUE)
-  #     }
-  #
-  #     else if(input$year_map == "2019 - 2020"){
-  #       pop_maps_2019_2020[[input$data_map]]%>%
-  #         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-  #         hc_boost(enabled = TRUE)
-  #     }
-  #
-  #     else if(input$year_map == "2020 - 2021"){
-  #       pop_maps_2020_2021[[input$data_map]]%>%
-  #         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-  #         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-  #         hc_boost(enabled = TRUE)
-  #     }
-  #   }
-  #
-  # }) %>%
-  #   bindCache(input$data_map,
-  #             input$adm_or_pop_map,
-  #             input$year_map)
-
-  # select foundational hex map and store it as a reactive expression
   foundational_map <- reactive({
-    data <- data_map[[input$adm_or_pop_map]][[input$year_map]][[input$data_map]]
-    data %>%
+    map <- adm_pop_maps[[input$adm_or_pop_map]][[input$year_map]][[input$data_map]]
+    map %>%
       highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
       highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
       highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
