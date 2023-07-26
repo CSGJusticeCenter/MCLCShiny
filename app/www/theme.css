@@ -430,6 +430,17 @@ h4.reh4 {
 }
 
 
+.retitle {
+  font-family: Graphik;
+  font-weight: bold; 
+  font-size: 30px !important; 
+  width: 90%;
+}
+
+
+  
+
+
 ul.calctxt {
   padding-left: 16px;
   padding-top: 0.25em;
