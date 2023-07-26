@@ -1296,10 +1296,10 @@ server <- function(input, output, session) {
     re_modal()
   })
 
-  output$retitleend <- renderUI({
+  output$retitleend <- renderText({
     case_when(
-      input$adm_pop_report == "Admissions" ~ "in Readmissions to Prison from Parole"
-      , input$adm_pop_report == "Population" ~ "in Incarcerated Populations Readmitted to Prison from Parole"
+      input$adm_pop_report == "Admissions" ~ "in People Readmitted to Prison from Parole"
+      , input$adm_pop_report == "Population" ~ "in Incarcerated Populations After Being Readmitted to Prison from Parole"
     )
   })
 
@@ -1373,7 +1373,7 @@ server <- function(input, output, session) {
                      , "<div class = 'retxt'>"
                      , "Data to calculate relative rate index were not available for "
                      , input$state_report
-                     , "</div>"
+                     , ".</div>"
       )
     }
     HTML(out)

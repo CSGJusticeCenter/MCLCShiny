@@ -21,7 +21,7 @@ ui <- fluidPage(
 
   includeCSS("www/theme.css"),
   useConductor(),
-  navbarPage(id = "navbarID",
+  navbarPage(id = "navbarID", 
 
      # Formats light blue header
      tags$style(type = "text/css",
@@ -360,17 +360,30 @@ ui <- fluidPage(
                                     tabPanel(value="4","Race/Ethnicity", #MYE HERE
                                              br(),
                                              fluidRow(column(width = 12, align = "center",
-                                                             div(style = "font-family: Graphik;font-weight: bold; font-size: 30px; line-height: 1.05em; margin-bottom: 12px; display: inline-block;",
-                                                 "Racial and Ethnic",
-                                                 div(id = "denominator-picker", pickerInput('pop_denom', label = NULL, width = "fit",
-                                                   choices = c(
-                                                      "Disparities"            = "BJS",
-                                                      "Cumulative Disparities" = "CEN"  ),
-                                                   options = list(style = "re-picker"),inline = TRUE
-                                                   )), #end pickerInput
-                                                 div(style = "display:inline-block;", htmlOutput("retitleend")),
-                                               ) #end div
-                                               )), #end fluidRow>column
+                                               div(id = "denominator-picker", class = "retitle", style = "margin-bottom: 12px;",
+                                                   "Racial and Ethnic",
+                                                    pickerInput('pop_denom', label = NULL, width = "fit",
+                                                                choices = c(
+                                                                "Disparities"            = "BJS",
+                                                                "Cumulative Disparities" = "CEN"  ),
+                                                                options = list(style = "re-picker", class = "retitle"),
+                                                                inline = TRUE
+                                                                 ), #end pickerInput
+                                                   textOutput("retitleend", inline = TRUE)
+                                                ), #end div first line
+                                             )), #end fluidRow>column
+                                             # fluidRow(column(width = 12, align = "center",
+                                             #                 div(style = "font-family: Graphik;font-weight: bold; font-size: 30px; line-height: 1.05em; margin-bottom: 12px; display: inline-block;",
+                                             #     "Racial and Ethnic",
+                                             #     div(id = "denominator-picker", pickerInput('pop_denom', label = NULL, width = "fit",
+                                             #       choices = c(
+                                             #          "Disparities"            = "BJS",
+                                             #          "Cumulative Disparities" = "CEN"  ),
+                                             #       options = list(style = "re-picker"),inline = TRUE
+                                             #       )), #end pickerInput
+                                             #     div(style = "display:inline-block;", htmlOutput("retitleend")),
+                                             #   ) #end div
+                                             #   )), #end fluidRow>column
                                             fluidRow(
                                                column(width = 2),
                                                column(width = 8, align = "center", id = "infopanel-id",
