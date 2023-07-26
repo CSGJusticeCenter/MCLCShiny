@@ -123,10 +123,10 @@ create_reactable <- function(DF){
 SUBHEAD_TEXT <- function(pop_denom, pop_or_adm_data){
   
   case_when(
-      pop_denom == "BJS" & pop_or_adm_data == "Admissions" ~ "disparities <i>at the point of readmission</i> to prison from parole"
-    , pop_denom == "CEN" & pop_or_adm_data == "Admissions" ~ "<i>cumulative disparities</i> accrued throughout the criminal justice system at the point of readmission to prison from parole"
-    , pop_denom == "BJS" & pop_or_adm_data == "Population" ~ "disparities in the number of people who are in prison on any given day after being readmitted from parole"
-    , pop_denom == "CEN" & pop_or_adm_data == "Population" ~ "<i>cumulative disparities</i> accrued throughout the criminal justice system for the number of people who are in prison on any given day after being readmitted from parole"
+      pop_denom == "BJS" & pop_or_adm_data == "Admissions" ~ "<b>disparities at the point of readmission to prison from parole</b>"
+    , pop_denom == "CEN" & pop_or_adm_data == "Admissions" ~ "<b>cumulative disparities accrued throughout the criminal justice system</b> at the point of readmission to prison from parole"
+    , pop_denom == "BJS" & pop_or_adm_data == "Population" ~ "<b>disparities in the number of people who are in prison</b> on any given day after being readmitted from parole"
+    , pop_denom == "CEN" & pop_or_adm_data == "Population" ~ "<b>cumulative disparities accrued throughout the criminal justice system</b> for the number of people who are in prison on any given day after being readmitted from parole"
   )
   
 }
@@ -152,9 +152,7 @@ pop_denom_text <- function(pop_denom, pop_or_adm_data){
   outtext <- paste0(
       "<div class = 'resubtitle'>"
      , "To highlight "
-     , "<b>"
      , SUBHEAD_TEXT(pop_denom, pop_or_adm_data)
-     , "</b>"
      , ", rates are shown relative to White individuals."
      , "</div>"
   )
@@ -284,10 +282,10 @@ infograph_alt_noinfog <- function( whichNCRP, whichPOP, whichRE, whichSTATE){
   # individuals revoked.
   
   thistxt <- case_when(
-      whichPOP == "BJS" & whichNCRP == "Admissions" ~ "disparities in prison admissions for readmissions to prison from parole"
-    , whichPOP == "CEN" & whichNCRP == "Admissions" ~ "the cumulative disparities accrued through the criminal justice system for re-admissions rates"
-    , whichPOP == "BJS" & whichNCRP == "Population" ~ "disparities in people serving time for readmissions to prison from parole"
-    , whichPOP == "CEN" & whichNCRP == "Population" ~ "the cumulative disparities accrued through the criminal justice system for re-incarceration rates"
+      whichPOP == "BJS" & whichNCRP == "Admissions" ~ "disparities at the point of readmission to prison from parole"
+    , whichPOP == "CEN" & whichNCRP == "Admissions" ~ "cumulative disparities accrued throughout the criminal justice system at the point of readmission to prison from parole"
+    , whichPOP == "BJS" & whichNCRP == "Population" ~ "disparities in the number of people who are in prison on any given day after being readmitted from parole"
+    , whichPOP == "CEN" & whichNCRP == "Population" ~ "cumulative disparities accrued throughout the criminal justice system for the number of people who are in prison on any given day after being readmitted from parole"
   )
   
 
