@@ -198,7 +198,7 @@ infographic_header <- function(dataavail, pop_denom, pop_or_adm_data, note){
   if (dataavail == 0){
     outtext <- paste0("<h3 class='nodata'>No data</h3>"
                       , "<div class = 'notetxt'>"
-                      , "Data to calculate disparities in readmissions to prison from parole are not available.<br>"
+                      , "Data to calculate disparities in readmissions to prison from parole are not available for this state.<br>"
                       , note
                       , "</div>"
                      )
