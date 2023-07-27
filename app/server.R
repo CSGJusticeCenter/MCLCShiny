@@ -1299,7 +1299,7 @@ server <- function(input, output, session) {
   output$retitleend <- renderText({
     case_when(
       input$adm_pop_report == "Admissions" ~ "in People Readmitted to Prison from Parole"
-      , input$adm_pop_report == "Population" ~ "in Incarcerated Populations After Being Readmitted to Prison from Parole"
+      , input$adm_pop_report == "Population" ~ "in Incarcerated Population After Being Readmitted to Prison from Parole"
     )
   })
 
