@@ -33,6 +33,10 @@ library(kableExtra)
 #https://stackoverflow.com/questions/66974669/collapse-rows-is-not-collapsed-and-updating-packages-does-not-fix
 #devtools::install_github(repo="haozhu233/kableExtra", ref="a6af5c0") #to get collapse rows to work 
 
+#https://github.com/quarto-dev/quarto-cli/issues/5702
+# need to use knitr 1.42
+# otherwise get error when trying to use DT::datatable
+
 box::use(
     box/admin
   , box/assignflags
