@@ -372,18 +372,6 @@ ui <- fluidPage(
                                                    textOutput("retitleend", inline = TRUE)
                                                 ), #end div first line
                                              )), #end fluidRow>column
-                                             # fluidRow(column(width = 12, align = "center",
-                                             #                 div(style = "font-family: Graphik;font-weight: bold; font-size: 30px; line-height: 1.05em; margin-bottom: 12px; display: inline-block;",
-                                             #     "Racial and Ethnic",
-                                             #     div(id = "denominator-picker", pickerInput('pop_denom', label = NULL, width = "fit",
-                                             #       choices = c(
-                                             #          "Disparities"            = "BJS",
-                                             #          "Cumulative Disparities" = "CEN"  ),
-                                             #       options = list(style = "re-picker"),inline = TRUE
-                                             #       )), #end pickerInput
-                                             #     div(style = "display:inline-block;", htmlOutput("retitleend")),
-                                             #   ) #end div
-                                             #   )), #end fluidRow>column
                                             fluidRow(
                                                column(width = 2),
                                                column(width = 8, align = "center", id = "infopanel-id",
