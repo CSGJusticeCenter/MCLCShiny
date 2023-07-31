@@ -405,9 +405,11 @@ create_infograph <- function(
     h.full <- ((baseval*rows)*(1+title.rel))
     w.full <- ((img_ar_wh*baseval))*(cols+value.rel)
     
-    #ggsave will not save fonts unless uninstall {ragg}
+    #ggsave will not save unless specify device = png 
+    # singe this is within a box module need to specify device = grDevices::png
     ggsave(
-      file.path(admin$sp_data, "infographs", glue("{label}.png"))
+        file.path(admin$sp_data, "infographs", paste0(label, ".png"))
+      , device = grDevices::png
       , plot = fullinfog
       , height = h.full
       , width = w.full

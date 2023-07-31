@@ -274,7 +274,10 @@ how_its_calc_txt <- function(DATA, whichRACE, whichSTATE, whichPOP, mult, NCRPLE
       ,    ". "
       ,   "Then, the rate of people readmitted to parole was calculated within each racial and ethnic group based on the "
       ,   popdenom_source
-      ,   ":<br>"
+      ,   ".<br>"
+      ,   "In "
+      ,    whichSTATE
+      ,    ":<br>"
       ,   "<ul class = 'calctxt'>"
       ,     rate_lst
       ,   "</ul>"
