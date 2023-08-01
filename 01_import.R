@@ -3,7 +3,7 @@
 # File: import.R
 # Authors: Mari Roberts
 # Sub-Author: Martha Eichlersmith
-# Date last updated: June 26, 2023 (MAR)
+# Date last updated: August 1, 2023 (MAR)
 
 # Description:
 #    Imports data
@@ -12,9 +12,9 @@
 #    Creates data files for app
 
 # Input:
-#    mclc_data_2022_v9.xlsx    - 2022 survey data with edits (BJS data or removal)
-#    us_states_hexgrid.geojson - hex map files
-#    MCLC Overview.xlsx        - formatted notes, sentences about missing data
+#    mclc_data_2022_v9.xlsx         - 2022 survey data with edits (BJS data or removal)
+#    us_states_hexgrid.geojson      - hex map files
+#    states_notes_no_data_text.xlsx - formatted notes, sentences about missing data
 
 # Output:
 #     Data frames needed to run shiny app
@@ -42,11 +42,11 @@ mclc_data <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v9.xls
                         sheet = "Sheet 1")
 
 # Load info on missing sentence info
-missingness_sentences <- read_excel(file.path(admin$sp_survey, "MCLC Overview.xlsx"),
+missingness_sentences <- read_excel(file.path(admin$sp_data_raw, "notes/states_notes_no_data_text.xlsx"),
                                     sheet = "Missingness 2022", skip = 1)
 
 # Load new states notes
-notes_raw <- read.xlsx(file.path(admin$sp_survey, "MCLC Overview.xlsx"),
+notes_raw <- read.xlsx(file.path(admin$sp_data_raw, "notes/states_notes_no_data_text.xlsx"),
                        sheet = "Formatted Notes 2022")
 
 
@@ -186,10 +186,11 @@ probation_asterisks_notes <- notes %>%
 # get additional notes
 additional_notes <- notes %>%
   mutate(
+    cy_or_fy_notes   = ifelse(is.na(cy_or_fy_notes), "", cy_or_fy_notes),
     additional_notes = ifelse(is.na(additional_notes), "", additional_notes),
     additional_notes = ifelse(is.na(additional_notes),
-                              paste0(additional_notes, cy_or_fy_notes, sep = ""),
-                              paste0(additional_notes, cy_or_fy_notes, sep = " "))) %>%
+                              paste(additional_notes, cy_or_fy_notes, sep = " "),
+                              paste(additional_notes, cy_or_fy_notes, sep = " "))) %>%
   group_by(state) %>%
   summarize(note_lst = list(additional_notes)) %>%
   ungroup() %>%
