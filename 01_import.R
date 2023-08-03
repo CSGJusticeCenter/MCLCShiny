@@ -274,10 +274,9 @@ mclc <- adm_pop %>%
   mutate(state = as.factor(state)) %>%
   mutate_if(is.character, as.numeric) %>%
   # replace all zeros with NA - no states should have zeros
-  mutate_at(vars(c(-"state")), ~ case_when(.==0 ~ NA, TRUE ~ .))
-
-# make long form
-mclc_all <- gather(mclc, data, total, total_admissions:total_parole_violation_population)
+  mutate_at(vars(c(-"state")), ~ case_when(.==0 ~ NA, TRUE ~ .)) %>%
+  # make long form
+  gather(data, total, total_admissions:total_parole_violation_population)
 
 # create change from 2018 to 2019 to 2020
 # remove dups
@@ -285,7 +284,7 @@ mclc_all <- gather(mclc, data, total, total_admissions:total_parole_violation_po
 # create pop vs adm variable
 # change data types
 # add state abbreviations
-mclc_all <- mclc_all %>%
+mclc_all <- mclc %>%
   ungroup() %>%
   arrange(state) %>%
   group_by(state, data) %>%
@@ -396,9 +395,10 @@ mclc_explorer_table_long <- mclc_explorer_table_18_21 %>%
   left_join(mclc_explorer_table_19_20, by = c("state", "data")) %>%
   left_join(mclc_explorer_table_20_21, by = c("state", "data"))
 
-# combine datas
+# combine data sets
 mclc_explorer_table <- merge(mclc_explorer_table, mclc_explorer_table_long, by = c("state", "data"))
 
+# data for map
 # create year range
 # create min and max values for legend scale
 mclc_explorer <- mclc_all %>%
