@@ -45,11 +45,13 @@ mclc_data <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v9.xls
 missingness_sentences <- read_excel(file.path(admin$sp_data_raw, "notes/states_notes_no_data_text.xlsx"),
                                     sheet = "Missingness 2022", skip = 1)
 
-# Load new states notes
+# Load states notes
 notes_raw <- read.xlsx(file.path(admin$sp_data_raw, "notes/states_notes_no_data_text.xlsx"),
                        sheet = "Formatted Notes 2022")
 
-
+# Load definitions for disparities
+disparities_definitions <- read.xlsx(file.path(admin$sp_data_raw, "notes/states_notes_no_data_text.xlsx"),
+                                     sheet = "Disparities Definitions")
 
 
 ################################################################################
@@ -804,6 +806,7 @@ theseFOLDERS <- c( "sharepoint" = admin$sp_data, "app"  = "app/data")
 
 for (folder in theseFOLDERS){
 
+  save(disparities_definitions,     file=file.path(folder, "disparities_definitions.rds"))
   save(adm_pop_long,                file=file.path(folder, "adm_pop_long.rds"))
   save(mclc_explorer,               file=file.path(folder, "mclc_explorer.rds"))
   save(mclc_explorer_table,         file=file.path(folder, "mclc_explorer_table.rds"))

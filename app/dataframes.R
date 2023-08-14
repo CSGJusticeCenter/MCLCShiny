@@ -30,6 +30,7 @@ load(file = "data/additional_notes.rds")
 load(file = "data/csg.rds")
 
 load(file = "data/missingness_sentences.rds")
+load(file = "data/disparities_definitions.rds")
 
 load(file = "data/nt_na_adm.rds")
 load(file = "data/nt_na_pop.rds")

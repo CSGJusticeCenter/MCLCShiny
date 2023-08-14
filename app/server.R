@@ -9,32 +9,6 @@
 
 server <- function(input, output, session) {
 
-  # # Enable caching
-  # shinyjs::enable("cache")
-
-  # # Change URL depending on tab selection in navbar
-  # observeEvent(input$navbarID, {
-  #
-  #   newURL <- paste0(
-  #     session$clientData$url_protocol,
-  #     "//",
-  #     session$clientData$url_hostname,
-  #     ":",
-  #     session$clientData$url_port,
-  #     session$clientData$url_pathname,
-  #     "#",
-  #     input$navbarID
-  #   )
-  #   updateQueryString(newURL, mode = "replace", session)
-  # })
-  # observe({
-  #   currentTab <- sub("#", "", session$clientData$url_hash)
-  #   if(!is.null(currentTab)){
-  #     updateTabItems(session, "navbarID", selected = currentTab)
-  #   }
-  # })
-
-  # Output blank text
   output$blank <- renderText({
     ""
   })
@@ -42,16 +16,6 @@ server <- function(input, output, session) {
   ##############################################################################################################################
   # MAP EXPLORER
   ##############################################################################################################################
-
-  # # save reactive values for which states are clicked on in the hex map
-  # selected_state_map <- reactiveVal(NULL)
-  #
-  # # map clicking
-  # click_js <- JS("function(event) {
-  #   var state = event.point.state_abb;
-  #   Shiny.setInputValue('selected_state_map', state);
-  #   $('#navbarID a[href=\"#statereports\"]').tab('show');
-  # }")
 
   #######
   # Hex map data
@@ -121,23 +85,6 @@ server <- function(input, output, session) {
     # %>%
     # hc_plotOptions(series = list(events = list(click = click_js)))
   })
-
-  # # redirect to the statereports tab and update selected state
-  # observeEvent(input$selected_state_map, {
-  #   selected_state_map(input$selected_state_map)
-  #   updateNavbarPage(session, "navbarID", selected = "statereports")
-  # })
-  #
-  # # update selectInput choices based on selected state from hex map
-  # observeEvent(selected_state_map(), {
-  #
-  #   # get state name from state abbreviation
-  #   state_name <- state.name[match(selected_state_map(), state.abb)]
-  #
-  #   updateSelectInput(session, "state_report",
-  #                     selected = state_name,
-  #                     choices = ifelse(is.null(state_name), NULL, state_name))
-  # })
 
   #######
   # Download map button near dropdowns
@@ -1268,6 +1215,30 @@ server <- function(input, output, session) {
   ## RACE/ETHNICITY DISPARITIES  TAB
   ###
 
+  # Change tooltip definition depending on user selection (Disparities vs Cumulative Disparities)
+  disparities_definition <- reactiveVal()
+  observe({
+    disparities_definition(
+      ifelse(input$pop_denom == "BJS",
+             disparities_definitions %>% filter(term == "Disparities") %>% pull(definition),
+             disparities_definitions %>% filter(term == "Cumulative Disparities") %>% pull(definition))
+    )
+  })
+  output$redefinition <- renderUI({
+    tippy(
+      icon(name = "info-circle", lib = "font-awesome", style = "font-size: 0.5em; color: #004270"),
+      tooltip = paste0("<tooltip role='tooltip'
+                          aria-label='Definitions for disparities and cumulative disparities.'
+                          style='font-family: Graphik;
+                                 font-size: 2em;'>",
+                       disparities_definition(),
+                       "</tooltip>"),
+      interactive = TRUE,
+      placement = "right",
+      theme = "light"
+    )
+  })
+
   # When Race/Ethinicity tab is selected, show pop up about how data is not MCLC
   # This will only occur once per session automatically, see localsession
   localsession <- TRUE
@@ -1302,6 +1273,10 @@ server <- function(input, output, session) {
       , input$adm_pop_report == "Population" ~ "in Incarcerated Population After Being Readmitted to Prison from Parole"
     )
   })
+
+
+
+
 
   output$infogblack <- renderImage({
     png_file  <- glue("data/infogs/{input$adm_pop_report}_{input$state_report}_{input$pop_denom}_Black.png")
