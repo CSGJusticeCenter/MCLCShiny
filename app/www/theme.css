@@ -38,12 +38,12 @@ Font size and style
 }
 
 /*######################################
-colors 
+colors
 ########################################*/
 
 :root {
- --accent_lite: #DDE3E9;  
- --accent_blue: #004270;     
+ --accent_lite: #DDE3E9;
+ --accent_blue: #004270;
 }
 
 /*##################################################################################################################
@@ -433,21 +433,29 @@ h4.reh4 {
   font-weight: bold;
   font-family: Graphik !important;
   /* margin-bottom: 12px; */
-  text-decoration-line: underline;
+  /*text-decoration-line: underline;*/
   background-color: #fff;
   padding: 0px 0.1em;
+  border-bottom: 2px solid;
+  border-bottom-color: #004270;
 }
 
 
 .retitle {
   font-family: Graphik;
-  font-weight: bold; 
-  font-size: 30px !important; 
+  font-weight: bold;
+  font-size: 30px !important;
+  width: 90%;
+}
+
+.retitle-info {
+  font-family: Graphik;
+  font-weight: bold;
+  font-size: 15px !important;
   width: 90%;
 }
 
 
-  
 
 
 ul.calctxt {
@@ -600,17 +608,17 @@ body.shepherd-active::after {
   pointer-events: none;
 }
 
-/* header bar for each step in the guide box */ 
+/* header bar for each step in the guide box */
 .shepherd-header{
-  background-color: #004270 !important;   
+  background-color: #004270 !important;
 
 }
 
-/* text within the header bar for the guide box */ 
+/* text within the header bar for the guide box */
 .shepherd-title{
   color: #FFF !important;
   font-family: Graphik !important;
-  text-indent: 1em !important; /* requried when the X (exit) icon is used */ 
+  text-indent: 1em !important; /* requried when the X (exit) icon is used */
 }
 
 .shepherd-content .shepherd-arrow {
@@ -618,40 +626,40 @@ body.shepherd-active::after {
   font-family: Graphik !important;
 }
 
-/* .shepherd-enabled = the highlighted part of the app that that step in the guide is focusing on */ 
+/* .shepherd-enabled = the highlighted part of the app that that step in the guide is focusing on */
 
 .guidetext {
   font-family: Graphik;
 }
 
 
-/* shepherd-cancel-icon = X icon to exit the guide */ 
-/* pulled from conductor.js; View source code (when app is in browser) > conductor.js */ 
+/* shepherd-cancel-icon = X icon to exit the guide */
+/* pulled from conductor.js; View source code (when app is in browser) > conductor.js */
 
-/* make 'X' white so can see against dark blue background */ 
+/* make 'X' white so can see against dark blue background */
 .shepherd-cancel-icon{
-  color: #fff !important; 
-  
+  color: #fff !important;
+
 }
 
-/* make 'X' very light blue when hover over icon */ 
+/* make 'X' very light blue when hover over icon */
 .shepherd-cancel-icon:hover{
   color: #DDE3E9 !important;
-  
+
 }
 
-/* .shepherd-button = next/previous buttons wihtin the guide box */ 
-/* pulled from conductor.js; View source code (when app is in browser) > conductor.js */ 
+/* .shepherd-button = next/previous buttons wihtin the guide box */
+/* pulled from conductor.js; View source code (when app is in browser) > conductor.js */
 
-/* make button dark accent blue */ 
+/* make button dark accent blue */
 .shepherd-button{
   background: var(--accent_blue);
-  color: #ffffff; 
+  color: #ffffff;
 }
 .shepherd-button:not(:disabled):hover{
-  /*background: #00427099;*/ 
+  /*background: #00427099;*/
   background: color-mix(in srgb, var(--accent_blue) 80%, transparent);
-  color: #ffffff; 
+  color: #ffffff;
 }
 
 

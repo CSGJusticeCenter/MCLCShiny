@@ -14,7 +14,7 @@ lightorange <- "#EDB799"
 white       <- "#FFFFFF"
 lightblue   <- "#C7E8F5"
 regblue     <- "#236ca7"
-darkblue    <- "#26456e"
+darkblue    <- "#004270"
 yellow      <- "#D6C246"
 gray        <- "#dcdcdc"
 total_co <- lightblue

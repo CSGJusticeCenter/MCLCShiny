@@ -50,6 +50,8 @@ library(webshot2)
 
 # Guide
 library(conductor)
+library(shinyBS)
+# library(shinyjs)
 
 box::use(
     box/raceethnicity

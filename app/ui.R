@@ -16,12 +16,12 @@ source("guides.R")
 
 ui <- fluidPage(
 
-  # # Add the shinyjs library for enabling caching
-  # shinyjs::useShinyjs(),
+  # Add the shinyjs library for enabling caching
+  shinyjs::useShinyjs(),
 
   includeCSS("www/theme.css"),
   useConductor(),
-  navbarPage(id = "navbarID", 
+  navbarPage(id = "navbarID",
 
      # Formats light blue header
      tags$style(type = "text/css",
@@ -365,10 +365,12 @@ ui <- fluidPage(
                                                     pickerInput('pop_denom', label = NULL, width = "fit",
                                                                 choices = c(
                                                                 "Disparities"            = "BJS",
-                                                                "Cumulative Disparities" = "CEN"  ),
+                                                                "Cumulative Disparities" = "CEN"
+                                                                ),
                                                                 options = list(style = "re-picker", class = "retitle"),
                                                                 inline = TRUE
                                                                  ), #end pickerInput
+                                                   uiOutput("redefinition", inline = TRUE),
                                                    textOutput("retitleend", inline = TRUE)
                                                 ), #end div first line
                                              )), #end fluidRow>column
