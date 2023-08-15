@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: ui.R
 # Authors: Mari Roberts
-# Date last updated: May 3, 2023 (MAR)
+# Date last updated: August 15, 2023 (MAR)
 # Description:
 #    User interface for shiny app
 #######################################
@@ -16,9 +16,7 @@ source("guides.R")
 
 ui <- fluidPage(
 
-  # Add the shinyjs library for enabling caching
-  shinyjs::useShinyjs(),
-
+  # include custom CSS
   includeCSS("www/theme.css"),
   useConductor(),
   navbarPage(id = "navbarID",
@@ -195,10 +193,6 @@ ui <- fluidPage(
 
               div(id = "app-body",
 
-                  #######
-                  # Value boxes
-                  #######
-
                   # State title
                   fluidRow(column(width = 1),
                            column(width = 10,
@@ -207,7 +201,9 @@ ui <- fluidPage(
                            column(width = 1)),
                   br(),
 
+                  #######
                   # Value boxes
+                  #######
                   fluidRow(column(width = 1),
                            column(width = 10,
                                   fluidRow(
@@ -261,37 +257,8 @@ ui <- fluidPage(
 
                                              br(),
 
-                                             # # States notes
-                                             # fluidRow(column(width = 12,
-                                             #                 align = "center",
-                                             #                 div(id = "selected-state-note-title",
-                                             #                     "State Notes"))),
-                                             # br(), br(),
-                                             #
-                                             # fluidRow(column(width = 1),
-                                             #          column(width = 5,
-                                             #                 div(id = "selected-state-note-subtitle",
-                                             #                     "Probation Metrics"),
-                                             #                 div(id = "selected-state-note",
-                                             #                     htmlOutput("state_probation_notes"))),
-                                             #          column(width = 5,
-                                             #                 div(id = "selected-state-note-subtitle",
-                                             #                     "Parole/Post-Incarceration Metrics"),
-                                             #                 div(id = "selected-state-note",
-                                             #                     htmlOutput("state_parole_notes"))),
-                                             #          column(width = 1)),
-                                             #
-                                             # fluidRow(column(width = 12,
-                                             #                 align = "left",
-                                             #                 div(id = "selected-state-note",
-                                             #                     htmlOutput("state_asterisks_notes")))),
-                                             #
-                                             # fluidRow(column(width = 12,
-                                             #                 align = "left",
-                                             #                 div(id = "consistent-state-note",
-                                             #                     state_note))),
+                                             # States notes
                                              div(id = "state-note-section",
-                                                 # States notes
                                                  fluidRow(column(width = 12,
                                                                  align = "center",
                                                                  div(id = "selected-state-note-title",
@@ -319,7 +286,6 @@ ui <- fluidPage(
                                                                  div(id = "selected-state-note",
                                                                      htmlOutput("state_additional_notes"))),
                                                           column(width = 1)),
-
                                              ),
 
                                              br(), br()
@@ -356,21 +322,20 @@ ui <- fluidPage(
 
                                     ), # end tabPanel
 
-                                    #### START RACE/ETHNICITY TAB
-                                    tabPanel(value="4","Race/Ethnicity", #MYE HERE
+                                    tabPanel(value="4","Race/Ethnicity",
                                              br(),
                                              fluidRow(column(width = 12, align = "center",
                                                div(id = "denominator-picker", class = "retitle", style = "margin-bottom: 12px;",
                                                    "Racial and Ethnic",
-                                                    pickerInput('pop_denom', label = NULL, width = "fit",
-                                                                choices = c(
-                                                                "Disparities"            = "BJS",
-                                                                "Cumulative Disparities" = "CEN"
-                                                                ),
-                                                                options = list(style = "re-picker", class = "retitle"),
-                                                                inline = TRUE
-                                                                 ), #end pickerInput
-                                                   uiOutput("redefinition", inline = TRUE),
+                                                  pickerInput('pop_denom', label = NULL, width = "fit",
+                                                              choices = c(
+                                                              "Disparities"            = "BJS",
+                                                              "Cumulative Disparities" = "CEN"
+                                                              ),
+                                                              options = list(style = "re-picker", class = "retitle"),
+                                                              inline = TRUE
+                                                              ), #end pickerInput
+                                                   uiOutput("redefinition", inline = TRUE), # add tooltip depending on pop_denom selection
                                                    textOutput("retitleend", inline = TRUE)
                                                 ), #end div first line
                                              )), #end fluidRow>column
@@ -472,7 +437,6 @@ ui <- fluidPage(
 
                                   fluidRow(# Select State(s)
                                            column(width = 3, align = "center", class = "input-col",
-
                                                   labeled_input('input-btn', "",
                                                                 pickerInput(inputId = 'download_state',
                                                                             width = "100%",

@@ -2,6 +2,14 @@
 Overall Settings
 ########################################*/
 
+.tooltip > .tooltip-inner {
+                max-width: 300px;
+                font-size: 1em;
+                color: white;
+                background-color: black;
+                text-align: left;
+                }
+
 /* Make body smaller width than header which spans the entire page */
 /* Center everything */
 #app-body {
@@ -454,9 +462,6 @@ h4.reh4 {
   font-size: 15px !important;
   width: 90%;
 }
-
-
-
 
 ul.calctxt {
   padding-left: 16px;
