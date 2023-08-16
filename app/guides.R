@@ -36,7 +36,7 @@ first_guide <- Conductor$
        <br><br><b><i>Cumulative disparities</b></i> for parole returns represents the accumulation of disparities between race and ethnic groups for people who have returned to prison from parole. This metric compares the admissions and populations of individuals who returned to prison from parole from each racial and ethnic group to their representation in the community.
       </span>",
       cancelIcon = list(enabled = TRUE, label = "Exit the app guide"),
-      position = 'top'
+      position = 'bottom'
     )$
     # focus on infograph
     step(

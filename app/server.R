@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: server.R
 # Authors: Mari Roberts
-# Date last updated: June 5, 2023 (MAR)
+# Date last updated: August 15, 2023 (MAR)
 # Description:
 #    Server for shiny app
 #######################################
@@ -1215,57 +1215,55 @@ server <- function(input, output, session) {
   ## RACE/ETHNICITY DISPARITIES  TAB
   ###
 
-  # Change tooltip definition depending on user selection (Disparities vs Cumulative Disparities)
-  disparities_definition <- reactiveVal()
+  # Generate tooltip depending on disparities or cumulative disparities
+  TIP <- reactiveValues()
   observe({
-    disparities_definition(
-      ifelse(input$pop_denom == "BJS",
-             disparities_definitions %>% filter(term == "Disparities") %>% pull(definition),
-             disparities_definitions %>% filter(term == "Cumulative Disparities") %>% pull(definition))
-    )
+    TIP$a <- ifelse(input$pop_denom =="BJS",
+                    disparities_definitions %>% filter(term == "Disparities") %>% pull(definition),
+                    disparities_definitions %>% filter(term == "Cumulative Disparities") %>% pull(definition))
   })
   output$redefinition <- renderUI({
-    tippy(
-      icon(name = "info-circle", lib = "font-awesome", style = "font-size: 0.5em; color: #004270"),
-      tooltip = paste0("<tooltip role='tooltip'
-                          aria-label='Definitions for disparities and cumulative disparities.'
-                          style='font-family: Graphik;
-                                 font-size: 2em;'>",
-                       disparities_definition(),
-                       "</tooltip>"),
-      interactive = TRUE,
-      placement = "right",
-      theme = "light"
+    tags$span("",
+              tipify(el = icon("info-circle",
+                          lib = "font-awesome",
+                          style = "color: #004270; font-size: 0.5em;"),
+                     title = TIP$a)
     )
   })
+  # output$redefinition <- renderUI({
+  #             tipify(el = icon("info-circle",
+  #                              lib = "font-awesome",
+  #                              style = "color: #004270; font-size: 0.5em;"),
+  #                    title = TIP$a)
+  # })
 
   # When Race/Ethinicity tab is selected, show pop up about how data is not MCLC
   # This will only occur once per session automatically, see localsession
-  localsession <- TRUE
-  observeEvent(input$tabsetpanel, {
-    if (input$tabsetpanel == 4 & localsession)  {
-      localsession <<- FALSE
-      re_modal()
-      observeEvent(input$close_modal, {
-        removeModal()
-        dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
-
-        if (dataavail == 0) {
-          first_guide$init()
-          first_guide$remove(step = c("#infopanel-id", "ip1"))
-        } else {
-          first_guide$init()
-          first_guide$remove(step = c("#infopanel-id", "ip2"))
-        }
-
-        first_guide$start()
-      })
-    }
-  })
-
-  observeEvent(input$show_guide, {
-    re_modal()
-  })
+  # localsession <- TRUE
+  # observeEvent(input$tabsetpanel, {
+  #   if (input$tabsetpanel == 4 & localsession)  {
+  #     localsession <<- FALSE
+  #     re_modal()
+  #     observeEvent(input$close_modal, {
+  #       removeModal()
+  #       dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
+  #
+  #       if (dataavail == 0) {
+  #         first_guide$init()
+  #         first_guide$remove(step = c("#infopanel-id", "ip1"))
+  #       } else {
+  #         first_guide$init()
+  #         first_guide$remove(step = c("#infopanel-id", "ip2"))
+  #       }
+  #
+  #       first_guide$start()
+  #     })
+  #   }
+  # })
+  #
+  # observeEvent(input$show_guide, {
+  #   re_modal()
+  # })
 
   output$retitleend <- renderText({
     case_when(
