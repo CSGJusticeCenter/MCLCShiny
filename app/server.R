@@ -9,8 +9,27 @@
 
 server <- function(input, output, session) {
 
-  output$blank <- renderText({
-    ""
+  # Change URL depending on tab selection in navbar
+  observeEvent(input$navbarID, {
+
+    newURL <- paste0(
+      session$clientData$url_protocol,
+      "//",
+      session$clientData$url_hostname,
+      ":",
+      session$clientData$url_port,
+      session$clientData$url_pathname,
+      "#",
+      input$navbarID
+    )
+    updateQueryString(newURL, mode = "replace", session)
+  })
+
+  observe({
+    currentTab <- sub("#", "", session$clientData$url_hash)
+    if(!is.null(currentTab)){
+      updateTabItems(session, "navbarID", selected = currentTab)
+    }
   })
 
   ##############################################################################################################################
@@ -18,55 +37,12 @@ server <- function(input, output, session) {
   ##############################################################################################################################
 
   #######
-  # Hex map data
-  #######
-
-  # Data for table under map
-  df_map_table <- reactive({
-    filter_by <- paste0(input$data_map, " ",
-                        input$adm_or_pop_map)
-    select_column = input$year_map
-    df <- mclc_explorer_table[, c('state',
-                                  'data',
-                                  '2018',
-                                  '2019',
-                                  '2020',
-                                  '2021',
-                                  select_column,
-                                  'total_new')]
-    df <- df %>%
-      filter(data == filter_by) %>%
-      arrange(state) %>%
-      rename(State = state,
-             change = 7)
-  }) %>%
-    bindCache(input$data_map,
-              input$adm_or_pop_map,
-              input$year_map)
-
-  # Dynamically change name of map
-  map_filename <- reactive({
-    name <- mclc_explorer %>%
-      filter(adm_or_pop == input$adm_or_pop_map,
-             metric     == input$data_map,
-             year       == input$year_map) %>%
-      select(data, year) %>% distinct()
-    name$year <- gsub(" - ", " ", name$year)
-    name <- paste(name$data, name$year, sep = '_')
-    name <- gsub(" ", "_", name)
-  }) %>%
-    bindCache(input$data_map,
-              input$adm_or_pop_map,
-              input$year_map)
-
-
-  #######
   # Hex map
   #######
 
   # Select foundational hex map and store it as a reactive expression
+  # This allows the map to be downloaded after the map is changed
   # Charts were created in highchart.R
-  # This is necessary to download the map
   foundational_map <- reactive({
     map <- adm_pop_maps[[input$adm_or_pop_map]][[input$year_map]][[input$data_map]]
     map %>%
@@ -79,17 +55,16 @@ server <- function(input, output, session) {
               input$adm_or_pop_map,
               input$year_map)
 
-  # output hex map
+  # Output hex map
   output$hex_map <- renderHighchart({
     foundational_map()
-    # %>%
-    # hc_plotOptions(series = list(events = list(click = click_js)))
   })
 
   #######
   # Download map button near dropdowns
   #######
 
+  # Save map
   output$save_map <- downloadHandler(
     filename <- function() {
       paste("Change_", input$data_map, "_", input$adm_or_pop_map, "_",
@@ -107,15 +82,7 @@ server <- function(input, output, session) {
   # Table under hex map
   #######
 
-  # Title of table under map based on user input
-  output$selected_map_table <-
-    renderText({paste(input$data_map, " ",
-                      input$adm_or_pop_map)}) %>%
-    bindCache(input$data_map,
-              input$adm_or_pop_map)
-
-
-  # Title of map based on user input
+  # Title of table under map
   output$selected_map_table <- renderText({
     if (input$adm_or_pop_map == "Admissions" & input$data_map == "Total") {
       paste(input$data_map, " ", input$adm_or_pop_map, " to State Prison", sep = "")
@@ -129,8 +96,7 @@ server <- function(input, output, session) {
     } else if (input$adm_or_pop_map == "Population" & input$data_map != "Total") {
       paste("People in State Prison for ", input$data_map, "s", sep = "")
     }
-
-  }) %>%
+    }) %>%
     bindCache(input$data_map,
               input$adm_or_pop_map)
 
@@ -250,7 +216,7 @@ server <- function(input, output, session) {
                 #trend, don't show, used in determining
                 trend = colDef(show = FALSE)
               ))
-  }) %>%
+    }) %>%
     bindCache(input$data_map,
               input$adm_or_pop_map,
               input$year_map)
@@ -395,7 +361,6 @@ server <- function(input, output, session) {
 
   # Select highchart depending on selector input
   # Charts were saved in highchart.R
-  # Area chart
   output$state_area_chart <- renderHighchart({
     if (input$adm_pop_report == "Admissions") {
       all_state_area_adm[[input$state_report]] %>%
@@ -412,11 +377,11 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
         hc_boost(enabled = TRUE)
     }
-  }) %>%
+    }) %>%
     bindCache(input$state_report,
               input$adm_pop_report)
 
-  # Download button
+  # Download button for state area chart
   output$save_state_area_chart <- downloadHandler(
     filename <- function() {
       paste(input$state_report, "_Prison_",
@@ -431,6 +396,7 @@ server <- function(input, output, session) {
     contentType = "image/png"
   )
 
+  # Show download button if data is available
   output$state_area_button = renderUI({
 
     # If state is missing new offense violations and technical violations (Admissions)
@@ -455,11 +421,11 @@ server <- function(input, output, session) {
       downloadButton(outputId = 'save_state_area_chart', "",
                      class = "download-chart")
     }
-
-  }) %>%
+    }) %>%
     bindCache(input$state_report,
               input$adm_pop_report)
 
+  # Show plot if data is available
   output$state_area = renderUI({
 
     # If state is missing new offense violations and technical violations (Admissions)
@@ -484,8 +450,7 @@ server <- function(input, output, session) {
       highchartOutput("state_area_chart",
                       height = 400, width = 390)
     }
-
-  }) %>%
+    }) %>%
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -493,11 +458,9 @@ server <- function(input, output, session) {
   # Bar chart
   #######
 
-  # Bar chart
+  # Select highchart depending on selector input
+  # Charts were saved in highchart.R
   output$state_bar_chart <- renderHighchart({
-
-    # Select highchart depending on selector input
-    # Charts were saved in highchart.R
     if (input$adm_pop_report == "Admissions") {
 
       all_state_bar_adm[[input$state_report]] %>%
@@ -514,7 +477,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
         hc_boost(enabled = TRUE)
     }
-  }) %>%
+    }) %>%
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -524,7 +487,6 @@ server <- function(input, output, session) {
       paste(input$state_report, "_Supervision_Violation_",
             input$adm_pop_report, "_by_Type.png", sep="")
     },
-
     content <- function(file) {
       file.copy(paste("data/plots/",
                       input$state_report, "_Supervision_Violation_",
@@ -535,8 +497,8 @@ server <- function(input, output, session) {
 
 
   #######
-  # Supervision Violations Graph - Dynamically change between
-  # sentence and graph depending on data availability
+  # Supervision Violations Graph - Dynamically change between sentence and graph depending on data availability
+  # Show "Data Unavailable", "Did Not Respond" or "Partial Data Submitted" or chart if required data is available
   #######
 
   # If data is missing a supervision violation admissions graph
@@ -585,8 +547,7 @@ server <- function(input, output, session) {
               input$adm_pop_report == "Population"){
       highchartOutput("state_bar_chart", height = 400, width = 390)
     }
-
-  }) %>%
+    }) %>%
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -615,25 +576,13 @@ server <- function(input, output, session) {
       downloadButton(outputId = 'save_state_bar_chart', "",
                      class = "download-chart")
     }
-
-  }) %>%
+    }) %>%
     bindCache(input$state_report,
               input$adm_pop_report)
 
   #######
   # Table under state graphs
   #######
-
-  # # This won't work because of htmlwidget and dataui issues
-  # output$state_table <- reactable::renderReactable({
-  #   # Select reactable depending on selector input
-  #   # tables were saved in reactable.R
-  #   if (input$adm_pop_report == "Admissions") {
-  #     state_reactable_adm[[input$state_report]]
-  #   } else {
-  #     state_reactable_pop[[input$state_report]]
-  #   }
-  # })
 
   # State table
   output$state_table <- renderReactable({
@@ -723,7 +672,7 @@ server <- function(input, output, session) {
                                             showArea = FALSE,
                                             fill = colpal_fill[index],
                                             stroke = colpal_stroke[index])))})))
-  }) %>%
+    }) %>%
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -786,7 +735,7 @@ server <- function(input, output, session) {
   }) %>%
     bindCache(input$state_report)
 
-  # additional state notes
+  # Additional state notes
   output$state_additional_notes <- renderUI({
     HTML(df_additional_notes()$notes)
   })
@@ -795,10 +744,9 @@ server <- function(input, output, session) {
   # Parole Tab
   #######
 
-  # Bar chart
+  # Select highchart depending on selector input
+  # Charts were saved in highchart.R
   output$parole_bar_chart <- renderHighchart({
-    # Select highchart depending on selector input
-    # Carts were saved in highchart.R
     if (input$adm_pop_report == "Admissions") {
       parole_bar_adm[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
@@ -814,7 +762,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
         hc_boost(enabled = TRUE)
     }
-  }) %>%
+    }) %>%
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -912,23 +860,13 @@ server <- function(input, output, session) {
                                             showArea = FALSE,
                                             fill = colpal_fill1[index],
                                             stroke = colpal_stroke1[index])))})))
-  }) %>%
+    }) %>%
     bindCache(input$state_report,
               input$adm_pop_report)
 
-  # # This won't work because of library issues
-  # output$parole_table <- renderReactable({
-  #   # Select reactable depending on selector input
-  #   # tables were saved in reactable.R
-  #   if (input$adm_pop_report == "Admissions") {
-  #     parole_reactable_adm[[input$state_report]]
-  #   } else {
-  #     parole_reactable_pop[[input$state_report]]
-  #   }
-  # })
-
   #######
   # Parole Graph - Dynamically change between sentence and graph depending on data availability
+  # Show "Data Unavailable", "Did Not Respond" or "Partial Data Submitted" or chart if required data is available
   #######
 
   # If data is missing a parole violation admissions graph
@@ -997,7 +935,7 @@ server <- function(input, output, session) {
                                      class = "download-chart")),
                column(width = 3))
     }
-  }) %>%
+    }) %>%
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -1005,10 +943,9 @@ server <- function(input, output, session) {
   # Probation Tab
   #######
 
-  # Bar chart
+  # Select highchart depending on selector input
+  # Charts were saved in highchart.R
   output$probation_bar_chart <- renderHighchart({
-    # Select highchart depending on selector input
-    # Carts were saved in highchart.R
     if (input$adm_pop_report == "Admissions") {
       probation_bar_adm[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
@@ -1024,7 +961,7 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
         hc_boost(enabled = TRUE)
     }
-  }) %>%
+    }) %>%
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -1126,19 +1063,9 @@ server <- function(input, output, session) {
     bindCache(input$state_report,
               input$adm_pop_report)
 
-  # This won't work because of library issues
-  # output$probation_table <- renderReactable({
-  #   # Select reactable depending on selector input
-  #   # tables were saved in reactable.R
-  #   if (input$adm_pop_report == "Admissions") {
-  #     probation_reactable_adm[[input$state_report]]
-  #   } else {
-  #     probation_reactable_pop[[input$state_report]]
-  #   }
-  # })
-
   #######
   # Probation Graph - Dynamically change between sentence and graph depending on data availability
+  # Show "Data Unavailable", "Did Not Respond" or "Partial Data Submitted" or chart if required data is available
   #######
 
   # If data is missing a probation violation admissions graph
@@ -1207,35 +1134,33 @@ server <- function(input, output, session) {
                                      class = "download-chart")),
                column(width = 3))
     }
-  }) %>%
+    }) %>%
     bindCache(input$state_report,
               input$adm_pop_report)
 
   ####
-  ## RACE/ETHNICITY DISPARITIES  TAB
+  ## RACE/ETHNICITY DISPARITIES TAB
   ###
 
+  ############################################################################################################################################ tooltip
+
   # Generate tooltip depending on disparities or cumulative disparities
-  TIP <- reactiveValues()
+  disparities_tooltip <- reactiveValues()
   observe({
-    TIP$a <- ifelse(input$pop_denom =="BJS",
+    disparities_tooltip$a <- ifelse(input$pop_denom =="BJS",
                     disparities_definitions %>% filter(term == "Disparities") %>% pull(definition),
                     disparities_definitions %>% filter(term == "Cumulative Disparities") %>% pull(definition))
   })
-  output$redefinition <- renderUI({
+  output$redefinition_tooltip <- renderUI({
     tags$span("",
               tipify(el = icon("info-circle",
                           lib = "font-awesome",
                           style = "color: #004270; font-size: 0.5em;"),
-                     title = TIP$a)
+                     title = disparities_tooltip$a)
     )
   })
-  # output$redefinition <- renderUI({
-  #             tipify(el = icon("info-circle",
-  #                              lib = "font-awesome",
-  #                              style = "color: #004270; font-size: 0.5em;"),
-  #                    title = TIP$a)
-  # })
+
+  ############################################################################################################################################ tooltip
 
   # When Race/Ethinicity tab is selected, show pop up about how data is not MCLC
   # This will only occur once per session automatically, see localsession
