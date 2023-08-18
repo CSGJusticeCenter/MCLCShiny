@@ -1142,31 +1142,31 @@ server <- function(input, output, session) {
 
   # When Race/Ethinicity tab is selected, show pop up about how data is not MCLC
   # This will only occur once per session automatically, see localsession
-  # localsession <- TRUE
-  # observeEvent(input$tabsetpanel, {
-  #   if (input$tabsetpanel == 4 & localsession)  {
-  #     localsession <<- FALSE
-  #     re_modal()
-  #     observeEvent(input$close_modal, {
-  #       removeModal()
-  #       dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
-  #
-  #       if (dataavail == 0) {
-  #         first_guide$init()
-  #         first_guide$remove(step = c("#infopanel-id", "ip1"))
-  #       } else {
-  #         first_guide$init()
-  #         first_guide$remove(step = c("#infopanel-id", "ip2"))
-  #       }
-  #
-  #       first_guide$start()
-  #     })
-  #   }
-  # })
-  #
-  # observeEvent(input$show_guide, {
-  #   re_modal()
-  # })
+  localsession <- TRUE
+  observeEvent(input$tabsetpanel, {
+    if (input$tabsetpanel == 4 & localsession)  {
+      localsession <<- FALSE
+      re_modal()
+      observeEvent(input$close_modal, {
+        removeModal()
+        dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
+
+        if (dataavail == 0) {
+          first_guide$init()
+          first_guide$remove(step = c("#infopanel-id", "ip1"))
+        } else {
+          first_guide$init()
+          first_guide$remove(step = c("#infopanel-id", "ip2"))
+        }
+
+        first_guide$start()
+      })
+    }
+  })
+
+  observeEvent(input$show_guide, {
+    re_modal()
+  })
 
   output$retitleend <- renderText({
     case_when(
