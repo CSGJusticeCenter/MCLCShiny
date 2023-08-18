@@ -14,6 +14,8 @@ source("functions.R")
 source("modals.R")
 source("guides.R")
 
+library(sparkline)
+
 ui <- fluidPage(
 
   # include custom CSS
@@ -35,7 +37,8 @@ ui <- fluidPage(
                         ".shiny-output-error:before { visibility: visible; content: ''; }"),
 
              # App title - Accessible
-             tags$head(tags$title("More Community, Less Confinement Dashboard")),
+             # tags$head(tags$title("More Community, Less Confinement Dashboard")),
+             title = "More Community, Less Confinement Dashboard",
 
              # English - Accessible
              tags$html(lang="en"),

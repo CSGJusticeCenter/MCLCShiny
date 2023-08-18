@@ -197,14 +197,12 @@ server <- function(input, output, session) {
                              data = value[[1]],
                              height = 60,
                              components = list(
-                               dui_sparkpatternlines(
-                                 id = "total",
-                                 height = 4,
-                                 width = 4,
+                               dui_sparkpointseries(
+                                 points =  list("all"),
                                  stroke = df$trend[index],
-                                 strokeWidth = 2.5,
-                                 orientation = "diagonal"),
-
+                                 fill = df$trend[index],
+                                 size = 2
+                               ),
                                dui_sparklineseries(
                                  curve = "linear",
                                  showArea = FALSE,
@@ -623,55 +621,43 @@ server <- function(input, output, session) {
                                          format = colFormat(percent = TRUE,
                                                             digits = 1)),
                 # Add 4 Year trend graphs to each row
-                total_new  = colDef(minWidth = 110,
-                                    name = "4 Year Trend",
-                                    cell = function(value, index) {
-                                      dui_sparkline(
-                                        data = value[[1]],
-                                        height = 80,
-                                        margin = list(top = 30,
-                                                      right = 20,
-                                                      bottom = 30,
-                                                      left = 20),
+                total_new = colDef(minWidth = 110,
+                                   name = "Trend Line",
+                                   cell = function(value, index) {
+                                     if (!is.null(value[[1]]) && length(value[[1]]) > 0) {
+                                       points_list <- if (length(value[[1]]) >= 4) {
+                                         list("all")
+                                       } else {
+                                         seq(length(value[[1]]) - 1)
+                                       }
 
-                                        components = list(
-                                          dui_sparkpatternlines(
-                                            id = "total",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = total_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"),
-
-                                          dui_sparkpatternlines(
-                                            id = "sup_violations",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = viol_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"),
-
-                                          dui_sparkpatternlines(
-                                            id = "technical",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = tech_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"),
-
-                                          dui_sparkpatternlines(
-                                            id = "new_offense",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = new_o_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"),
-
-                                          dui_sparklineseries(
-                                            curve = "linear",
-                                            showArea = FALSE,
-                                            fill = colpal_fill[index],
-                                            stroke = colpal_stroke[index])))})))
+                                       dui_sparkline(
+                                         data = value[[1]],
+                                         height = 80,
+                                         margin = list(top = 30,
+                                                       right = 20,
+                                                       bottom = 30,
+                                                       left = 20),
+                                         components = list(
+                                           dui_sparkpointseries(
+                                             points = points_list,
+                                             stroke = colpal_fill[index],
+                                             fill = colpal_stroke[index],
+                                             size = 2.5
+                                           ),
+                                           dui_sparklineseries(
+                                             curve = "linear",
+                                             showArea = FALSE,
+                                             fill = colpal_fill[index],
+                                             stroke = colpal_stroke[index]
+                                           )
+                                         )
+                                       )
+                                     } else {
+                                       htmltools::HTML("")  # Return an empty element if no data
+                                     }
+                                   })
+              ))
     }) %>%
     bindCache(input$state_report,
               input$adm_pop_report)
@@ -819,47 +805,43 @@ server <- function(input, output, session) {
                                          format = colFormat(percent = TRUE,
                                                             digits = 1)),
                 # add 4 Year trend graphs to each row
-                total_new  = colDef(minWidth = 110,
-                                    name = "4 Year Trend",
-                                    cell = function(value, index) {
-                                      dui_sparkline(
-                                        data = value[[1]],
-                                        height = 80,
-                                        margin = list(top = 30,
-                                                      right = 20,
-                                                      bottom = 30,
-                                                      left = 20),
+                total_new = colDef(minWidth = 110,
+                                   name = "Trend Line",
+                                   cell = function(value, index) {
+                                     if (!is.null(value[[1]]) && length(value[[1]]) > 0) {
+                                       points_list <- if (length(value[[1]]) >= 4) {
+                                         list("all")
+                                       } else {
+                                         seq(length(value[[1]]) - 1)
+                                       }
 
-                                        components = list(
-                                          dui_sparkpatternlines(
-                                            id = "total",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = total_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"),
-
-                                          dui_sparkpatternlines(
-                                            id = "technical",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = tech_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"),
-
-                                          dui_sparkpatternlines(
-                                            id = "new_offense",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = new_o_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"),
-
-                                          dui_sparklineseries(
-                                            curve = "linear",
-                                            showArea = FALSE,
-                                            fill = colpal_fill1[index],
-                                            stroke = colpal_stroke1[index])))})))
+                                       dui_sparkline(
+                                         data = value[[1]],
+                                         height = 80,
+                                         margin = list(top = 30,
+                                                       right = 20,
+                                                       bottom = 30,
+                                                       left = 20),
+                                         components = list(
+                                           dui_sparkpointseries(
+                                             points = points_list,
+                                             stroke = colpal_fill[index],
+                                             fill = colpal_stroke[index],
+                                             size = 2.5
+                                           ),
+                                           dui_sparklineseries(
+                                             curve = "linear",
+                                             showArea = FALSE,
+                                             fill = colpal_fill[index],
+                                             stroke = colpal_stroke[index]
+                                           )
+                                         )
+                                       )
+                                     } else {
+                                       htmltools::HTML("")  # Return an empty element if no data
+                                     }
+                                   })
+              ))
     }) %>%
     bindCache(input$state_report,
               input$adm_pop_report)
@@ -1018,48 +1000,44 @@ server <- function(input, output, session) {
                                          format = colFormat(percent = TRUE,
                                                             digits = 1)),
                 # add 4 Year trend graphs to each row
-                total_new  = colDef(minWidth = 110,
-                                    name = "4 Year Trend",
-                                    cell = function(value, index) {
-                                      dui_sparkline(
-                                        data = value[[1]],
-                                        height = 80,
-                                        margin = list(top = 30,
-                                                      right = 20,
-                                                      bottom = 30,
-                                                      left = 20),
+                total_new = colDef(minWidth = 110,
+                                   name = "Trend Line",
+                                   cell = function(value, index) {
+                                     if (!is.null(value[[1]]) && length(value[[1]]) > 0) {
+                                       points_list <- if (length(value[[1]]) >= 4) {
+                                         list("all")
+                                       } else {
+                                         seq(length(value[[1]]) - 1)
+                                       }
 
-                                        components = list(
-                                          dui_sparkpatternlines(
-                                            id = "total",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = total_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"),
-
-                                          dui_sparkpatternlines(
-                                            id = "technical",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = tech_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"),
-
-                                          dui_sparkpatternlines(
-                                            id = "new_offense",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = new_o_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"),
-
-                                          dui_sparklineseries(
-                                            curve = "linear",
-                                            showArea = FALSE,
-                                            fill = colpal_fill1[index],
-                                            stroke = colpal_stroke1[index])))})))
-  }) %>%
+                                       dui_sparkline(
+                                         data = value[[1]],
+                                         height = 80,
+                                         margin = list(top = 30,
+                                                       right = 20,
+                                                       bottom = 30,
+                                                       left = 20),
+                                         components = list(
+                                           dui_sparkpointseries(
+                                             points = points_list,
+                                             stroke = colpal_fill[index],
+                                             fill = colpal_stroke[index],
+                                             size = 2.5
+                                           ),
+                                           dui_sparklineseries(
+                                             curve = "linear",
+                                             showArea = FALSE,
+                                             fill = colpal_fill[index],
+                                             stroke = colpal_stroke[index]
+                                           )
+                                         )
+                                       )
+                                     } else {
+                                       htmltools::HTML("")  # Return an empty element if no data
+                                     }
+                                   })
+              ))
+    }) %>%
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -1193,7 +1171,7 @@ server <- function(input, output, session) {
   output$retitleend <- renderText({
     case_when(
       input$adm_pop_report == "Admissions" ~ "in People Readmitted to Prison from Parole"
-      , input$adm_pop_report == "Population" ~ "in Incarcerated Population After Being Readmitted to Prison from Parole"
+      , input$adm_pop_report == "Population" ~ "in the Incarcerated Population After Being Readmitted to Prison from Parole"
     )
   })
 
