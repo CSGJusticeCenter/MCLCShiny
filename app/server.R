@@ -197,14 +197,12 @@ server <- function(input, output, session) {
                              data = value[[1]],
                              height = 60,
                              components = list(
-                               dui_sparkpatternlines(
-                                 id = "total",
-                                 height = 4,
-                                 width = 4,
+                               dui_sparkpointseries(
+                                 points =  list("all"),
                                  stroke = df$trend[index],
-                                 strokeWidth = 2.5,
-                                 orientation = "diagonal"),
-
+                                 fill = df$trend[index],
+                                 size = 2
+                               ),
                                dui_sparklineseries(
                                  curve = "linear",
                                  showArea = FALSE,
