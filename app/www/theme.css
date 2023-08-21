@@ -2,8 +2,7 @@
 Overall Settings
 ########################################*/
 
-/* Make body smaller width than header which spans the entire page */
-/* Center everything */
+/* Center and limit the width of the main content area */
 #app-body {
   max-width: 1200px;
   margin-left: auto;
@@ -15,7 +14,7 @@ Overall Settings
   border-radius: 0!important;
 }
 
-/* State note section */
+/* Center the state note section within the content area */
 #state-note-section {
   max-width: 1000px;
   margin-left: auto;
@@ -64,7 +63,7 @@ Navigation Bar
 Header, global drop down options, tooltips
 ########################################*/
 
-/* Remove rounded edges from drop downs and make blue */
+/* Adjust appearance of drop-downs and set text color */
 .selectize-input, .selectize-input.dropdown-active, .selectize-dropdown, .selectize-dropdown-content .active {
   border-radius:0px;
   color: #004270;
@@ -73,26 +72,26 @@ Header, global drop down options, tooltips
 
 /* picker input styling */
 
-/* color drop-down menu items (specifically, non-selected items) */
+/* Set color for non-selected items in color drop-down menu */
 .dropdown-menu ul li a {
   color: #004270 !important;
   font-family: Graphik;
 }
 
-/* color of selected item in drop down */
+/* Set color for selected item in drop-down */
 .dropdown-menu>.active>a, .dropdown-menu>.active>a:focus {
   color: #004270 !important;
   background-color: #fff;
 }
 
-/* color background of selected item when hover over it */
+/* Set background color for selected item on hover */
 .dropdown-menu>.active>a:hover {
   background-color: #f5f5f5;
 }
 
 
-/* Top of page is a small grid of controls and info*/
-/* Can change background of header here background-color:#DEF0F6; */
+/* Styling for the top section of the page containing controls and info */
+/* You can adjust the background color of the header here */
 #header {
   background-color:#DDE3E9 !important;
   min-height: 7.0em;
@@ -108,7 +107,7 @@ elements on the page.*/
   overflow:visible;
 }
 
-/* Property ensures that the text wraps normally for download buttons */
+/* Ensure normal text wrapping for download buttons */
 button > div {
   -o-text-overflow: visible;
   text-overflow: visible;
@@ -116,7 +115,7 @@ button > div {
   white-space: visible;
 }
 
-/* Makes the label for header inputs sit centered on top */
+/* Center align labels for header inputs */
 #header > * > span {
   text-align: center;
 }
@@ -129,6 +128,7 @@ button > div {
   margin-right: auto;
 }
 
+/* Styling for tooltips */
 .tooltip > .tooltip-inner {
                 max-width: 300px;
                 font-size: 1em;
@@ -143,7 +143,7 @@ MAP EXPLORER
 Dropdowns and buttons
 ########################################*/
 
-/* Format for selector input */
+/* Style for selector input */
 #input-btn {
   width: 90%;
   max-width: 20em;
@@ -159,7 +159,7 @@ Dropdowns and buttons
   padding-right: 0px;
 }
 
-/* Format for download map button */
+/* Style for download map button */
 .download-map {
   margin: 2.75em 1em 2.75em 1em;
   border-radius:0px;
@@ -177,8 +177,7 @@ MAP EXPLORER
 Hex map
 ########################################*/
 
-/* Map select input margins and font style */
-/* Text inputs bottom margin prevents it from lining up nicely, so remove */
+/* Margins and font style for map select input */
 .form-group.shiny-input-container, .selectize-control {
   margin-bottom: 0;
 }
@@ -223,10 +222,11 @@ Table
   /*white-space: nowrap;*/
 }
 
-/* Change search bar appearance - need to figure out how to keep the style consistent when clicked*/
+/* Change search bar appearance */
 #table-map input {
   border-radius: 0px;
-  border: 3px color: #004270;
+  border: 3px;
+  color: #004270;
   width: 275px;
   height: 32px;
   background: #FFFFFF;
@@ -239,7 +239,7 @@ STATE REPORTS
 Dropdowns
 ########################################*/
 
-/* Format download chart button */
+/* Style for download chart button */
 .download-chart {
   border-radius:0px;
   color: #fff;
@@ -264,7 +264,7 @@ Title and value boxes
   font-weight: bold;
 }
 
-/* Value box styling */
+/* Styling for value boxes */
 .small-box.bg-black{
   background-color: #004270 !important;
   color: #FFFFFF !important;
@@ -287,14 +287,18 @@ STATE REPORTS
 Tabset Panels
 ########################################*/
 
-/* Pop up for RE tab resizes for content*/
+/* Adjust modal width for pop-up */
 .modal-dialog {
     width: fit-content !important;
 }
+
+/* Modal content style */
 .modal-content {
     font-family: Graphik;
     border-radius:0px;
 }
+
+/* Close button style */
 .close {
     border-radius:0px;
 }
@@ -352,7 +356,7 @@ Tabset Panels
   border: 2px solid #cccccc;
 }*/
 
-/* State note title setting */
+/* Styling for state note title */
 #selected-state-note-title {
   text-align: center;
   font-size: 30px;
@@ -360,7 +364,7 @@ Tabset Panels
   font-weight: bold;
 }
 
-/* State note subtitle setting */
+/* Styling for state note subtitle */
 #selected-state-note-subtitle {
   text-align: left;
   font-size: 16px;
@@ -368,25 +372,25 @@ Tabset Panels
   font-weight: bold;
 }
 
-/* State note setting */
+/* Styling for state note content */
 #selected-state-note {
   text-align: left;
   font-family: Graphik;
 }
 
-/* place holder for state notes on overview tab */
-/* can add additional styling using this */
+/* Placeholder for state notes on overview tab */
+/* Additional styling can be added using this class */
 p.statetxt {
 }
 
-/* State note setting */
+/* Styling for consistent state note */
 #consistent-state-note {
   text-align: left;
   font-style: italic;
   font-family: Graphik;
 }
 
-
+/* Various title and subtitle styles */
 div.retxt {
   font-family: Graphik;
   font-size: 1em;
@@ -434,6 +438,7 @@ h4.reh4 {
   font-size: 18px;
 }
 
+/* Styling for picker button */
 .re-picker, .re-picker:hover, .re-picker:active, .re-picker:focus {
   color: #004270;
   border-radius:0px;
@@ -449,6 +454,7 @@ h4.reh4 {
   border-bottom-color: #004270;
 }
 
+/* Styling for titles */
 .retitle {
   font-family: Graphik;
   font-weight: bold;
@@ -463,25 +469,25 @@ h4.reh4 {
   width: 90%;
 }
 
+/* Styling for unordered list in calctxt class */
 ul.calctxt {
   padding-left: 16px;
   padding-top: 0.25em;
 }
 
 
-
+/* Styling for checkboxes */
 .checkbox {
   font-family: Graphik;
 }
 
-/* color of checked box */
+/* Color of checked checkbox */
 input[type=checkbox] {
   accent-color: #004270;
 }
 
 
-
-/* Blue background when checked */
+/* Blue background when checkbox is checked */
 .custom-control-input:checked~.custom-control-label::before {
     color: #fff;
     border-color: red !important;
@@ -496,10 +502,7 @@ Dropdowns
 
 /*.dropdown-menu span {text-align: left; width: 100%;}*/
 
-/* Format for selector input for download page*/
-
-
-
+/* Style for selector input in download page */
 .picker-style, .picker-style:hover, .picker-style:active, .picker-style:focus {
   color: #004270;
   border-radius:0px;
@@ -512,7 +515,7 @@ Dropdowns
   max-width: 20em;
 }
 
-/* Format for download data button */
+/* Style for download data button */
 .download-btn-lg {
   width: 90%;
   max-width: 20em;
@@ -591,6 +594,7 @@ Dropdowns
   font-size: 20px;
 }
 
+/* Shepherd Guide Styling */
 body.shepherd-active::after {
   content: "";
   display: block;
@@ -613,13 +617,13 @@ body.shepherd-active::after {
   pointer-events: none;
 }
 
-/* header bar for each step in the guide box */
+/* Header bar for each step in the guide box */
 .shepherd-header{
   background-color: #004270 !important;
 
 }
 
-/* text within the header bar for the guide box */
+/* Text within the header bar for the guide box */
 .shepherd-title{
   color: #FFF !important;
   font-family: Graphik !important;
@@ -641,6 +645,7 @@ body.shepherd-active::after {
 /* shepherd-cancel-icon = X icon to exit the guide */
 /* pulled from conductor.js; View source code (when app is in browser) > conductor.js */
 
+/* Shepherd Cancel Icon Styling */
 /* make 'X' white so can see against dark blue background */
 .shepherd-cancel-icon{
   color: #fff !important;
@@ -656,7 +661,7 @@ body.shepherd-active::after {
 /* .shepherd-button = next/previous buttons wihtin the guide box */
 /* pulled from conductor.js; View source code (when app is in browser) > conductor.js */
 
-/* make button dark accent blue */
+/* Shepherd Button Styling */
 .shepherd-button{
   background: var(--accent_blue);
   color: #ffffff;
