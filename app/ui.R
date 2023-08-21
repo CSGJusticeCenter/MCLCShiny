@@ -324,7 +324,7 @@ ui <- fluidPage(
 
                                     ), # end tabPanel
 
-                                    tabPanel(value="4","Race/Ethnicity",
+                                    tabPanel(value="4","Race and Ethnicity",
                                              br(),
                                              fluidRow(column(width = 12,
                                                              align = "center",
