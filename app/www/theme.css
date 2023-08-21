@@ -50,15 +50,15 @@ colors
 Navigation Bar
 ####################################################################################################################*/
 
-/* Hide navigation bar menu items
+/* Hide navigation bar menu items*/
 #navbarID{
   display:none;
-}*/
+}
 
-/* Hide navigation bar
+/* Hide navigation bar*/
 .navbar{
   display:none !important;
-}*/
+}
 
 /*##################################################################################################################
 Header, global drop down options, tooltips
@@ -441,14 +441,13 @@ h4.reh4 {
   font-family: Graphik;
   font-weight: bold;
   font-family: Graphik !important;
-  /* margin-bottom: 12px; */
-  /*text-decoration-line: underline;*/
   background-color: #fff;
-  padding: 0px 0.1em;
+  padding: 0px 0.1em 0px 0.0em;
+  margin-right: 10px;
+  margin-left: -0.10em;
   border-bottom: 2px solid;
   border-bottom-color: #004270;
 }
-
 
 .retitle {
   font-family: Graphik;

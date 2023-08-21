@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: ui.R
 # Authors: Mari Roberts
-# Date last updated: August 17, 2023 (MAR)
+# Date last updated: August 21, 2023 (MAR)
 # Description:
 #    User interface for shiny app
 #######################################
@@ -13,8 +13,6 @@ source("dataframes.R")
 source("functions.R")
 source("modals.R")
 source("guides.R")
-
-library(sparkline)
 
 ui <- fluidPage(
 
