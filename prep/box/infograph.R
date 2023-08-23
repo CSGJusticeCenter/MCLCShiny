@@ -308,7 +308,7 @@ create_infograph <- function(
   if (whichimage == "person-2745706-bw"){
     title.rel <- 0.4
     value.rel <- 2.25
-    title.size <- 53
+    title.size <- 30
     value.size <- 110
   }
   
@@ -326,11 +326,38 @@ create_infograph <- function(
     cols <- infogs
   }
   
+  display_value <- case_when(
+    rri_raw > 0               & round(rri_raw, rri_digits) == 0 & suppress == 0 ~ paste0("<", as.numeric(glue("1e-{rri_digits}")))
+    , race != admin$lev_RACE[1] & round(rri_raw, rri_digits) >  0 & suppress == 0 ~ sprintf(glue("%.{rri_digits}f"), round(rri_raw, rri_digits))
+    , rri_raw > 0               & round(rri_raw, rri_digits) == 0 & suppress == 1 ~ paste0("<", as.numeric(glue("1e-{rri_digits}")), "*")
+    , race != admin$lev_RACE[1] & round(rri_raw, rri_digits) >  0 & suppress == 1 ~ sprintf(glue("<%.{rri_digits}f*"), round(rri_raw, rri_digits))
+  )
   
   graphic_text <- case_when(
-      data_type %in% c("A", "Admissions") ~ glue("{str_to_title(race)} people are readmitted to prison from parole.")
-    , data_type %in% c("N", "Population") ~ glue("{str_to_title(race)} people are in prison after being readmitted from parole.")
-  )
+    
+    ##NOT SUPPRESSED
+    #RRI>1 not suppressed
+      data_type %in% c("A", "Admissions") & as.numeric(display_value) > 1 & suppress == 0 ~ paste0(glue("{str_to_title(race)} people are "), display_value," times more likely to be admitted to prison \nfor a parole revocation than White people.")
+    , data_type %in% c("N", "Population") & as.numeric(display_value) > 1 & suppress == 0 ~ paste0(glue("{str_to_title(race)} people are "), display_value," times more likely to be incarcerated \nfor a parole revocation than White people.")
+    #RRI<1 not suppressed
+    , data_type %in% c("A", "Admissions") & as.numeric(display_value) < 1 & suppress == 0 ~ paste0(glue("{str_to_title(race)} people are "), (1-as.numeric(display_value))*100,"% less likely to be admitted to prison \nfor a parole revocation than White people.")
+    , data_type %in% c("N", "Population") & as.numeric(display_value) < 1 & suppress == 0 ~ paste0(glue("{str_to_title(race)} people are "), (1-as.numeric(display_value))*100,"% less likely to be incarcerated \nfor a parole revocation than White people.")
+    #RRI=1 not suppressed
+    , data_type %in% c("A", "Admissions") & as.numeric(display_value) == 1 & suppress == 0 ~ glue("{str_to_title(race)} people are equally likely to be admitted to prison \nfor a parole revocation as White people.")
+    , data_type %in% c("N", "Population") & as.numeric(display_value) == 1 & suppress == 0 ~ glue("{str_to_title(race)} people are equally likely to be incarcerated \nfor a parole revocation as White people.")
+    
+    ##SUPPRESSED
+    #RRI>1 suppressed
+    , data_type %in% c("A", "Admissions") & round(rri_raw, rri_digits) > 1 & suppress == 1 ~ paste0(glue("{str_to_title(race)} people are "), display_value," times more likely to be admitted to prison \nfor a parole revocation than White people.")
+    , data_type %in% c("N", "Population") & round(rri_raw, rri_digits) > 1 & suppress == 1 ~ paste0(glue("{str_to_title(race)} people are "), display_value," times more likely to be incarcerated \nfor a parole revocation than White people.")
+    #RRI<1 suppressed
+    , data_type %in% c("A", "Admissions") & round(rri_raw, rri_digits) < 1 & suppress == 1 ~ paste0(glue("{str_to_title(race)} people are "), (1-round(rri_raw, rri_digits))*100,"%* less likely to be admitted to prison \nfor a parole revocation than White people.")
+    , data_type %in% c("N", "Population") & round(rri_raw, rri_digits) < 1 & suppress == 1 ~ paste0(glue("{str_to_title(race)} people are "), (1-round(rri_raw, rri_digits))*100,"%* less likely to be incarcerated \nfor a parole revocation than White people.")
+    #RRI=1 suppressed
+    , data_type %in% c("A", "Admissions") & round(rri_raw, rri_digits) == 1 & suppress == 1 ~ glue("{str_to_title(race)} people are equally* likely to be admitted to prison \nfor a parole revocation as White people.")
+    , data_type %in% c("N", "Population") & round(rri_raw, rri_digits) == 1 & suppress == 1 ~ glue("{str_to_title(race)} people are equally* likely to be incarcerated \nfor a parole revocation as White people.")
+    
+    )
   
   
   title <- ggdraw() + 
@@ -338,7 +365,7 @@ create_infograph <- function(
       graphic_text
       , x = 0
       , hjust = 0
-      , vjust = 0.3
+      , vjust = 0.5
       , color = mclc_dk_grey
       , size = title.size
       , fontfamily = "Graphik Regular"
@@ -349,14 +376,6 @@ create_infograph <- function(
   #   , sprintf(glue("%.0f"),            round(rri_raw, rri_digits))
   #   , sprintf(glue("%.{rri_digits}f"), round(rri_raw, rri_digits))
   # )
-  
-  
-  display_value <- case_when(
-      rri_raw > 0               & round(rri_raw, rri_digits) == 0 & suppress == 0 ~ paste0("<", as.numeric(glue("1e-{rri_digits}")))
-    , race != admin$lev_RACE[1] & round(rri_raw, rri_digits) >  0 & suppress == 0 ~ sprintf(glue("%.{rri_digits}f"), round(rri_raw, rri_digits))
-    , rri_raw > 0               & round(rri_raw, rri_digits) == 0 & suppress == 1 ~ paste0("<", as.numeric(glue("1e-{rri_digits}")), "*")
-    , race != admin$lev_RACE[1] & round(rri_raw, rri_digits) >  0 & suppress == 1 ~ sprintf(glue("<%.{rri_digits}f*"), round(rri_raw, rri_digits))
-  )
   
   value <- ggdraw() + 
     draw_label(
