@@ -101,7 +101,7 @@ create_reactable <- function(DF){
               return {borderTop: borderTop}
               }")
         )
-      , RACE       = colDef(name = "Race/Ethnicity", align = "left", minWidth = 105)
+      , RACE       = colDef(name = "Race and Ethnicity", align = "left", minWidth = 105)
       , OFFGENERALB = colDef(show = FALSE)
 
     ) #end columns list
@@ -147,15 +147,14 @@ pop_denom_text <- function(pop_denom, pop_or_adm_data){
   rlang::arg_match(pop_denom, c("BJS", "CEN"))
   rlang::arg_match(pop_or_adm_data, c("Admissions", "Population"))
 
-
-
-  outtext <- paste0(
-      "<div class = 'resubtitle'>"
-     , "To highlight "
-     , SUBHEAD_TEXT(pop_denom, pop_or_adm_data)
-     , ", rates are shown relative to White individuals."
-     , "</div>"
-  )
+  # outtext <- paste0(
+  #     "<div class = 'resubtitle'>"
+  #    , "To highlight "
+  #    , SUBHEAD_TEXT(pop_denom, pop_or_adm_data)
+  #    , ", rates are shown relative to White individuals."
+  #    , "</div>"
+  # )
+  outtext <- ""
 
 }
 
@@ -192,7 +191,8 @@ infographic_header <- function(dataavail, pop_denom, pop_or_adm_data, note){
 
     fill <- WHITE_INTRO_TEXT(pop_denom, pop_or_adm_data)
 
-    outtext <- paste0("<h3 class = 'reh3'>", fill,"...", "</h3>")
+    # outtext <- paste0("<h3 class = 'reh3'>", fill,"...", "</h3>")
+    outtext <- ""
   }
 
   if (dataavail == 0){
@@ -325,10 +325,10 @@ rate_table_header <- function(pop_denom, pop_or_adm_data, mult){
 
 
   out <- case_when(
-      pop_denom == "BJS" & pop_or_adm_data == "Admissions" ~ paste("Rate of Readmissions to Prison from Parole per"                   , mult_txt, "Individuals Serving Parole Sentences")
-    , pop_denom == "CEN" & pop_or_adm_data == "Admissions" ~ paste("Rate of Readmissions to Prison from Parole per"                   , mult_txt, "Individuals from the Community")
-    , pop_denom == "BJS" & pop_or_adm_data == "Population" ~ paste("Rate of Incarceration after Readmission to Prison from Parole per", mult_txt, "Individuals Serving Parole Sentences")
-    , pop_denom == "CEN" & pop_or_adm_data == "Population" ~ paste("Rate of Incarceration after Readmission to Prison from Parole per", mult_txt, "Individuals from the Community")
+      pop_denom == "BJS" & pop_or_adm_data == "Admissions" ~ paste("Readmissions from Parole per"    , mult_txt, "Individuals Serving Parole Sentences")
+    , pop_denom == "CEN" & pop_or_adm_data == "Admissions" ~ paste("Readmissions from Parole per"    , mult_txt, "Individuals from the Community")
+    , pop_denom == "BJS" & pop_or_adm_data == "Population" ~ paste("Reincarcerations from Parole per", mult_txt, "Individuals Serving Parole Sentences")
+    , pop_denom == "CEN" & pop_or_adm_data == "Population" ~ paste("Reincarcerations from Parole per", mult_txt, "Individuals from the Community")
   )
 
 

@@ -440,7 +440,7 @@ h4.reh4 {
 
 /* Styling for picker button */
 .re-picker, .re-picker:hover, .re-picker:active, .re-picker:focus {
-  color: #004270;
+  color: #D25E2D;
   border-radius:0px;
   font-size: 30px;
   font-family: Graphik;
@@ -451,7 +451,7 @@ h4.reh4 {
   margin-right: 10px;
   margin-left: -0.10em;
   border-bottom: 2px solid;
-  border-bottom-color: #004270;
+  border-bottom-color: #D25E2D;
 }
 
 /* Styling for titles */
@@ -673,5 +673,9 @@ body.shepherd-active::after {
 }
 
 
-
+#re-explanation {
+  text-align: center;
+  font-size: 1.25em;
+  font-family: Graphik;
+}
 

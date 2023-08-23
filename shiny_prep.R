@@ -1,14 +1,11 @@
 
-#############################################################
-## HAVE YOU UPDATED THE ROOT FILE TO MATCH YOUR PATHWAY??? ##
-#############################################################
 
-# run start to finish takes ~1-1.5 hours 
+# run start to finish takes ~1-1.5 hours
 
 #############################################################
-## Revocation Counts and Race and Ethnicity - DATA 
+## Revocation Counts and Race and Ethnicity - DATA
 
-Sys.time() #takes ~ 5 min 
+Sys.time() #takes ~ 5 min
 
 my_log <- file("logs/shiny_prep_log_REVRE_data.txt") # File name of output log
 
@@ -23,7 +20,7 @@ Sys.time()
 box::use(prep/box/rri_infographs_tables)
 rri_infographs_tables$prep_for_shiny_DATA()
 
-# overview html and check 
+# overview html and check
 csgjcr::csg_render_ds(
     "prep/rri_overview.qmd"
   , file.path(
@@ -41,9 +38,9 @@ Sys.time()
 
 
 #############################################################
-## Revocation Counts and Race and Ethnicity - PNGS 
+## Revocation Counts and Race and Ethnicity - PNGS
 
-Sys.time() #takes ~ 25 min 
+Sys.time() #takes ~ 25 min
 
 my_log <- file("logs/shiny_prep_log_REVRE_pngs.txt") # File name of output log
 
@@ -54,7 +51,7 @@ print("Revocation Counts and Race and Ethnicity")
 
 ####### takes ~ 25min
 # working directory should be the root of the repository ~MCLCShiny/
-# need to do this one first (before MCLC survey data prep) otherwise fonts will get messed up on pngs 
+# need to do this one first (before MCLC survey data prep) otherwise fonts will get messed up on pngs
 Sys.time()
 box::use(prep/box/rri_infographs_tables)
 rri_infographs_tables$prep_for_shiny_PNG()
@@ -68,9 +65,9 @@ Sys.time()
 
 
 #############################################################
-## MCLC Data Prep  
+## MCLC Data Prep
 
-Sys.time() #takes ~ 2-4 min 
+Sys.time() #takes ~ 2-4 min
 
 my_log <- file("logs/shiny_prep_log_MCLCdata.txt") # File name of output log
 
@@ -79,9 +76,7 @@ sink(my_log, append = FALSE, type = "message")
 
 print("MCLC Data Prep")
 
-source("import.R", echo = TRUE)
-
-source("reactable.R", echo = TRUE)
+source("fnc_import.R", echo = TRUE)
 
 warnings()
 
@@ -91,9 +86,9 @@ Sys.time()
 
 
 #############################################################
-## MCLC Plot Prep, Creation, and PNGs  
+## MCLC Plot Prep, Creation, and PNGs
 
-Sys.time() #takes ~2 min 
+Sys.time() #takes ~2 min
 
 my_log <- file("logs/shiny_prep_log_MCLCplot.txt") # File name of output log
 
@@ -113,7 +108,7 @@ Sys.time()
 
 
 #############################################################
-## MCLC Plot Prep, Creation, and PNGs  
+## MCLC Plot Prep, Creation, and PNGs
 
 Sys.time() #takes ~15-20 min
 
@@ -124,7 +119,7 @@ sink(my_log, append = FALSE, type = "message")
 
 print("MCLC Plot Prep, Creation, and PNGs")
 
-source("highchart_pngs.R", echo = TRUE)
+source("highchart_download.R", echo = TRUE)
 
 warnings()
 
