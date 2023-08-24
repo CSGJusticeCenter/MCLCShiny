@@ -124,9 +124,9 @@ SUBHEAD_TEXT <- function(pop_denom, pop_or_adm_data){
 
   case_when(
       pop_denom == "BJS" & pop_or_adm_data == "Admissions" ~ "<b>disparities at the point of readmission to prison from parole</b>"
-    , pop_denom == "CEN" & pop_or_adm_data == "Admissions" ~ "<b>cumulative disparities accrued throughout the criminal justice system</b> at the point of readmission to prison from parole"
+    , pop_denom == "CEN" & pop_or_adm_data == "Admissions" ~ "<b>total disparities accrued throughout the criminal justice system</b> at the point of readmission to prison from parole"
     , pop_denom == "BJS" & pop_or_adm_data == "Population" ~ "<b>disparities in the number of people who are in prison</b> on any given day after being readmitted from parole"
-    , pop_denom == "CEN" & pop_or_adm_data == "Population" ~ "<b>cumulative disparities accrued throughout the criminal justice system</b> for the number of people who are in prison on any given day after being readmitted from parole"
+    , pop_denom == "CEN" & pop_or_adm_data == "Population" ~ "<b>total disparities accrued throughout the criminal justice system</b> for the number of people who are in prison on any given day after being readmitted from parole"
   )
 
 }
@@ -283,9 +283,9 @@ infograph_alt_noinfog <- function( whichNCRP, whichPOP, whichRE, whichSTATE){
 
   thistxt <- case_when(
       whichPOP == "BJS" & whichNCRP == "Admissions" ~ "disparities at the point of readmission to prison from parole"
-    , whichPOP == "CEN" & whichNCRP == "Admissions" ~ "cumulative disparities accrued throughout the criminal justice system at the point of readmission to prison from parole"
+    , whichPOP == "CEN" & whichNCRP == "Admissions" ~ "total disparities accrued throughout the criminal justice system at the point of readmission to prison from parole"
     , whichPOP == "BJS" & whichNCRP == "Population" ~ "disparities in the number of people who are in prison on any given day after being readmitted from parole"
-    , whichPOP == "CEN" & whichNCRP == "Population" ~ "cumulative disparities accrued throughout the criminal justice system for the number of people who are in prison on any given day after being readmitted from parole"
+    , whichPOP == "CEN" & whichNCRP == "Population" ~ "total disparities accrued throughout the criminal justice system for the number of people who are in prison on any given day after being readmitted from parole"
   )
 
 

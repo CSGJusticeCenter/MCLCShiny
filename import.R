@@ -22,7 +22,7 @@
 #######################################
 
 # Load packages and custom functions
-source("00_fnc_library.R")
+source("fnc_library.R")
 
 ########
 # Import data

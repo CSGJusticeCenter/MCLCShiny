@@ -76,7 +76,8 @@ sink(my_log, append = FALSE, type = "message")
 
 print("MCLC Data Prep")
 
-source("fnc_import.R", echo = TRUE)
+source("fnc_library.R", echo = TRUE)
+source("import.R", echo = TRUE)
 
 warnings()
 

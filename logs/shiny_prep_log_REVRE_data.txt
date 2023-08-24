@@ -1,106 +1,98 @@
 [1] "Revocation Counts and Race and Ethnicity"
-[1] "2023-08-24 10:27:15 EDT"
-[1mindexing[0m [34mrevcnt_notes.csv[0m [=====================================================================================================] [32m313.08MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                         2023-08-24 10:27:16 - !!START PREP FOR SHINY - DATA
-2023-08-24 10:27:16 - Import and clean NCRP revocations data
-2023-08-24 10:27:16 - Start - NCRP import for admissions
-2023-08-24 10:27:23 - End   - NCRP import for admissions
-2023-08-24 10:27:23 - Start - NCRP prep
-2023-08-24 10:27:23 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
-2023-08-24 10:27:23 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
-2023-08-24 10:27:26 - End   - NCRP prep
-2023-08-24 10:27:26 - Import and clean BJS-APS for PAROLE population (denominator)
-[1mindexing[0m [34mapars_idyear.csv[0m [=====================================================================================================] [32m162.08MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                         2023-08-24 10:27:27 - Start - BJS APS (Parole) import for 2010-2018
-2023-08-24 10:27:30 - End   - BJS APS (Parole) import for 2010-2018
-2023-08-24 10:27:30 - STart - APS prep
-2023-08-24 10:27:30 - APS prep - 
+[1] "2023-08-24 11:51:27 EDT"
+2023-08-24 11:51:27 - !!START PREP FOR SHINY - DATA
+2023-08-24 11:51:27 - Import and clean NCRP revocations data
+2023-08-24 11:51:27 - Start - NCRP import for admissions
+2023-08-24 11:51:29 - End   - NCRP import for admissions
+2023-08-24 11:51:29 - Start - NCRP prep
+2023-08-24 11:51:29 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2023-08-24 11:51:29 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2023-08-24 11:51:32 - End   - NCRP prep
+2023-08-24 11:51:32 - Import and clean BJS-APS for PAROLE population (denominator)
+[1mindexing[0m [34mapars_idyear.csv[0m [======================================================================================================] [32m89.57MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                         2023-08-24 11:51:32 - Start - BJS APS (Parole) import for 2010-2018
+2023-08-24 11:51:32 - End   - BJS APS (Parole) import for 2010-2018
+2023-08-24 11:51:32 - STart - APS prep
+2023-08-24 11:51:32 - APS prep - 
 -- Drop Federal total row
 -- calculate other race category, pivot longer, recode into single race variable
 -- make new race variable a factor 
 -- drop rows where POPEST is NA (covered in UNKRACE)
 -- add state id columns
-2023-08-24 10:27:30 - Sum accross state and year
-2023-08-24 10:27:30 - End   - APS prep
-2023-08-24 10:27:30 - Calc - rate/RRI calcuations
+2023-08-24 11:51:32 - Sum accross state and year
+2023-08-24 11:51:32 - End   - APS prep
+2023-08-24 11:51:32 - Calc - rate/RRI calcuations
 Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR, OFFGENERAL)`
 Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR)`
-2023-08-24 10:27:30 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
-2023-08-24 10:27:31 - Saved FULL_DF - NCRP_A_REV_BJS.RDS (included a date stamped version)
-2023-08-24 10:27:31 - Import and clean NCRP revocations data
-2023-08-24 10:27:31 - Start - NCRP import for admissions
-2023-08-24 10:27:33 - End   - NCRP import for admissions
-2023-08-24 10:27:33 - Start - NCRP prep
-2023-08-24 10:27:33 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
-2023-08-24 10:27:33 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
-2023-08-24 10:27:35 - End   - NCRP prep
-2023-08-24 10:27:35 - Import and clean PUMS (ACS) for COMMUNITY population (denominator)
-2023-08-24 10:27:35 - Start - PUMS prep
-2023-08-24 10:27:36 - End   - PUMS prep
-2023-08-24 10:27:36 - Calc - rate/RRI calcuations
+2023-08-24 11:51:32 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2023-08-24 11:51:32 - Saved FULL_DF - NCRP_A_REV_BJS.RDS (included a date stamped version)
+2023-08-24 11:51:32 - Import and clean NCRP revocations data
+2023-08-24 11:51:32 - Start - NCRP import for admissions
+2023-08-24 11:51:34 - End   - NCRP import for admissions
+2023-08-24 11:51:34 - Start - NCRP prep
+2023-08-24 11:51:34 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2023-08-24 11:51:34 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2023-08-24 11:51:37 - End   - NCRP prep
+2023-08-24 11:51:37 - Import and clean PUMS (ACS) for COMMUNITY population (denominator)
+2023-08-24 11:51:37 - Start - PUMS prep
+2023-08-24 11:51:37 - End   - PUMS prep
+2023-08-24 11:51:37 - Calc - rate/RRI calcuations
 Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR, OFFGENERAL)`
 Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR)`
-2023-08-24 10:27:36 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
-2023-08-24 10:27:36 - Saved FULL_DF - NCRP_A_REV_PUMS.RDS (included a date stamped version)
-2023-08-24 10:27:36 - A tables, takes ~40-50 seconds
-2023-08-24 10:28:03 - A tables end
-2023-08-24 10:28:03 - Flags A BJS - Start
-[1mwrote[0m [32m832.00B[0m in [36m 0s[0m, [32m68.42MB/s[0m                                                                                                                                                    [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                    2023-08-24 10:28:08 - Flags A BJS - End
-2023-08-24 10:28:08 - Flags A CEN - Start
-[1mwrote[0m [32m899.00B[0m in [36m 0s[0m, [32m28.14MB/s[0m                                                                                                                                                    [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                    2023-08-24 10:28:14 - Flags A CEN - End
-2023-08-24 10:28:14 - Import and clean NCRP revocations data
-2023-08-24 10:28:14 - Start - NCRP import for year-end population 
-2023-08-24 10:28:37 - End   - NCRP import for year-end population
-2023-08-24 10:28:37 - Start - NCRP prep
-2023-08-24 10:28:37 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
-2023-08-24 10:28:37 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
-2023-08-24 10:28:41 - End   - NCRP prep
-2023-08-24 10:28:41 - Import and clean BJS-APS for PAROLE population (denominator)
-[1mindexing[0m [34mapars_idyear.csv[0m [=====================================================================================================] [32m179.14MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                         2023-08-24 10:28:41 - Start - BJS APS (Parole) import for 2010-2018
-2023-08-24 10:28:41 - End   - BJS APS (Parole) import for 2010-2018
-2023-08-24 10:28:41 - STart - APS prep
-2023-08-24 10:28:41 - APS prep - 
+2023-08-24 11:51:37 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2023-08-24 11:51:37 - Saved FULL_DF - NCRP_A_REV_PUMS.RDS (included a date stamped version)
+2023-08-24 11:51:37 - A tables, takes ~40-50 seconds
+2023-08-24 11:52:02 - A tables end
+2023-08-24 11:52:02 - Flags A BJS - Start
+[1mwrote[0m [32m832.00B[0m in [36m 0s[0m, [32m64.62MB/s[0m                                                                                                                                                    [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                    2023-08-24 11:52:07 - Flags A BJS - End
+2023-08-24 11:52:07 - Flags A CEN - Start
+[1mwrote[0m [32m899.00B[0m in [36m 0s[0m, [32m75.41MB/s[0m                                                                                                                                                    [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                    2023-08-24 11:52:13 - Flags A CEN - End
+2023-08-24 11:52:13 - Import and clean NCRP revocations data
+2023-08-24 11:52:13 - Start - NCRP import for year-end population 
+2023-08-24 11:52:17 - End   - NCRP import for year-end population
+2023-08-24 11:52:17 - Start - NCRP prep
+2023-08-24 11:52:17 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2023-08-24 11:52:17 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2023-08-24 11:52:20 - End   - NCRP prep
+2023-08-24 11:52:20 - Import and clean BJS-APS for PAROLE population (denominator)
+[1mindexing[0m [34mapars_idyear.csv[0m [=====================================================================================================] [32m136.15MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                         2023-08-24 11:52:20 - Start - BJS APS (Parole) import for 2010-2018
+2023-08-24 11:52:20 - End   - BJS APS (Parole) import for 2010-2018
+2023-08-24 11:52:20 - STart - APS prep
+2023-08-24 11:52:20 - APS prep - 
 -- Drop Federal total row
 -- calculate other race category, pivot longer, recode into single race variable
 -- make new race variable a factor 
 -- drop rows where POPEST is NA (covered in UNKRACE)
 -- add state id columns
-2023-08-24 10:28:41 - Sum accross state and year
-2023-08-24 10:28:41 - End   - APS prep
-2023-08-24 10:28:41 - Calc - rate/RRI calcuations
+2023-08-24 11:52:20 - Sum accross state and year
+2023-08-24 11:52:20 - End   - APS prep
+2023-08-24 11:52:20 - Calc - rate/RRI calcuations
 Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR, OFFGENERAL)`
 Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR)`
-2023-08-24 10:28:41 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
-2023-08-24 10:28:41 - Saved FULL_DF - NCRP_N_REV_BJS.RDS (included a date stamped version)
-2023-08-24 10:28:41 - Import and clean NCRP revocations data
-2023-08-24 10:28:41 - Start - NCRP import for year-end population 
-2023-08-24 10:28:45 - End   - NCRP import for year-end population
-2023-08-24 10:28:46 - Start - NCRP prep
-2023-08-24 10:28:46 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
-2023-08-24 10:28:46 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
-2023-08-24 10:28:49 - End   - NCRP prep
-2023-08-24 10:28:49 - Import and clean PUMS (ACS) for COMMUNITY population (denominator)
-2023-08-24 10:28:49 - Start - PUMS prep
-2023-08-24 10:28:49 - End   - PUMS prep
-2023-08-24 10:28:49 - Calc - rate/RRI calcuations
+2023-08-24 11:52:20 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2023-08-24 11:52:20 - Saved FULL_DF - NCRP_N_REV_BJS.RDS (included a date stamped version)
+2023-08-24 11:52:20 - Import and clean NCRP revocations data
+2023-08-24 11:52:20 - Start - NCRP import for year-end population 
+2023-08-24 11:52:24 - End   - NCRP import for year-end population
+2023-08-24 11:52:24 - Start - NCRP prep
+2023-08-24 11:52:24 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2023-08-24 11:52:24 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2023-08-24 11:52:27 - End   - NCRP prep
+2023-08-24 11:52:27 - Import and clean PUMS (ACS) for COMMUNITY population (denominator)
+2023-08-24 11:52:27 - Start - PUMS prep
+2023-08-24 11:52:27 - End   - PUMS prep
+2023-08-24 11:52:27 - Calc - rate/RRI calcuations
 Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR, OFFGENERAL)`
 Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR)`
-2023-08-24 10:28:49 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
-2023-08-24 10:28:49 - Saved FULL_DF - NCRP_N_REV_PUMS.RDS (included a date stamped version)
-2023-08-24 10:28:49 - N tables, takes ~40-50 seconds
-2023-08-24 10:29:16 - N tables end
-2023-08-24 10:29:16 - Flags N BJS - Start
-[1mwrote[0m [32m642.00B[0m in [36m 0s[0m, [32m32.06MB/s[0m                                                                                                                                                    [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                    2023-08-24 10:29:23 - Flags N BJS - End
-2023-08-24 10:29:23 - Flags N CEN - Start
-[1mwrote[0m [32m759.00B[0m in [36m 0s[0m, [32m63.67MB/s[0m                                                                                                                                                    [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                    2023-08-24 10:29:29 - Flags N CEN - End
-2023-08-24 10:29:29 - Saved outtables - NCRP_RRI_tables.RDS (included a date stamped version)
-2023-08-24 10:29:29 - !!END   PREP FOR SHINY - DATA
-Warning message:
-There was 1 warning in `mutate()`.
-ℹ In argument: `RACE = fct_explicit_na(RACE, na_level = admin$lev_RACE[5])`.
-Caused by warning:
-! `fct_explicit_na()` was deprecated in forcats 1.0.0.
-ℹ Please use `fct_na_value_to_level()` instead.
-This warning is displayed once every 8 hours.
-Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated. 
+2023-08-24 11:52:27 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2023-08-24 11:52:27 - Saved FULL_DF - NCRP_N_REV_PUMS.RDS (included a date stamped version)
+2023-08-24 11:52:27 - N tables, takes ~40-50 seconds
+2023-08-24 11:52:53 - N tables end
+2023-08-24 11:52:53 - Flags N BJS - Start
+[1mwrote[0m [32m642.00B[0m in [36m 0s[0m, [32m40.19MB/s[0m                                                                                                                                                    [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                    2023-08-24 11:52:59 - Flags N BJS - End
+2023-08-24 11:52:59 - Flags N CEN - Start
+[1mwrote[0m [32m759.00B[0m in [36m 0s[0m, [32m57.88MB/s[0m                                                                                                                                                    [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                    2023-08-24 11:53:05 - Flags N CEN - End
+2023-08-24 11:53:05 - Saved outtables - NCRP_RRI_tables.RDS (included a date stamped version)
+2023-08-24 11:53:05 - !!END   PREP FOR SHINY - DATA
 Warning message:
 renv 0.15.5 was loaded from project library, but this project is configured to use renv ${VERSION}.
 Use `renv::record("renv@0.15.5")` to record renv 0.15.5 in the lockfile.
@@ -154,117 +146,4 @@ Output created: rri_overview.html
 
 Error in tools::file_path_as_absolute(dirname(output_file)) : 
   file 'C:/Users/mroberts/The Council of State Governments/50 State Revocations Project/MCLC Shiny App/products' does not exist
-Loading required package: shiny
-Warning: package ‘shiny’ was built under R version 4.2.3
-
-Listening on http://127.0.0.1:3174
-Warning: package ‘htmlwidgets’ was built under R version 4.2.3
-WARNING: the 'dashboardthemes' package is no longer being maintained as of version 1.1.6, and will eventually be removed from CRAN. It is recommended that users switch over to the 'bslib' or 'fresh' theming packages available on CRAN.
-
-Attaching package: ‘shinydashboard’
-
-The following object is masked from ‘package:graphics’:
-
-    box
-
-Warning: package ‘shinymeta’ was built under R version 4.2.3
-Warning: package ‘reactable’ was built under R version 4.2.3
-Warning: package ‘DT’ was built under R version 4.2.3
-
-Attaching package: ‘DT’
-
-The following objects are masked from ‘package:shiny’:
-
-    dataTableOutput, renderDataTable
-
-Warning: package ‘dplyr’ was built under R version 4.2.3
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-
-Warning: package ‘sp’ was built under R version 4.2.3
-The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,
-which was just loaded, will retire in October 2023.
-Please refer to R-spatial evolution reports for details, especially
-https://r-spatial.org/r/2023/05/15/evolution4.html.
-It may be desirable to make the sf package available;
-package maintainers should consider adding sf to Suggests:.
-The sp package is now running under evolution status 2
-     (status 2 uses the sf package in place of rgdal)
-Warning: package ‘ggplot2’ was built under R version 4.2.3
-
-Attaching package: ‘ggplot2’
-
-The following object is masked from ‘package:reactablefmtr’:
-
-    margin
-
-Warning: package ‘webshot2’ was built under R version 4.2.3
-Warning: package ‘conductor’ was built under R version 4.2.3
-Warning: package ‘shinyBS’ was built under R version 4.2.3
-Warning: Navigation containers expect a collection of `bslib::nav_panel()`/`shiny::tabPanel()`s and/or `bslib::nav_menu()`/`shiny::navbarMenu()`s. Consider using `header` or `footer` if you wish to place content above (or below) every panel's contents.
-Warning: Navigation containers expect a collection of `bslib::nav_panel()`/`shiny::tabPanel()`s and/or `bslib::nav_menu()`/`shiny::navbarMenu()`s. Consider using `header` or `footer` if you wish to place content above (or below) every panel's contents.
-Warning: Navigation containers expect a collection of `bslib::nav_panel()`/`shiny::tabPanel()`s and/or `bslib::nav_menu()`/`shiny::navbarMenu()`s. Consider using `header` or `footer` if you wish to place content above (or below) every panel's contents.
-Warning: Navigation containers expect a collection of `bslib::nav_panel()`/`shiny::tabPanel()`s and/or `bslib::nav_menu()`/`shiny::navbarMenu()`s. Consider using `header` or `footer` if you wish to place content above (or below) every panel's contents.
-Warning: Navigation containers expect a collection of `bslib::nav_panel()`/`shiny::tabPanel()`s and/or `bslib::nav_menu()`/`shiny::navbarMenu()`s. Consider using `header` or `footer` if you wish to place content above (or below) every panel's contents.
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+[1] "2023-08-24 11:53:49 EDT"

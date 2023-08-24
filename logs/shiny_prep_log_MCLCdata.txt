@@ -4,25 +4,21 @@
 > # Project: MCLCShiny
 > # File: import.R
 > # Authors: Mari Roberts
-> # Sub-Author: Martha Eichlersmith 
-> # .... [TRUNCATED] 
+> # Sub-Author: Martha Eichlersmith
+> #  .... [TRUNCATED] 
+
+> library(rlang)
+
+Attaching package: ‘rlang’
+
+The following objects are masked from ‘package:purrr’:
+
+    %@%, flatten, flatten_chr, flatten_dbl, flatten_int, flatten_lgl, flatten_raw, invoke, splice
+
 
 > library(dplyr)
 
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-
-
 > library(tidyr)
-
-> library(csgjcr)
 
 > library(geojsonsf)
 
@@ -43,11 +39,19 @@ The following objects are masked from ‘package:rlang’:
 
     flatten, unbox
 
+The following object is masked from ‘package:purrr’:
+
+    flatten
+
+The following object is masked from ‘package:shiny’:
+
+    validate
+
 
 > library(readxl)
 
 > library(sf)
-Linking to GEOS 3.9.1, GDAL 3.4.3, PROJ 7.2.1; sf_use_s2() is TRUE
+Linking to GEOS 3.9.3, GDAL 3.5.2, PROJ 8.2.1; sf_use_s2() is TRUE
 
 > library(showtext)
 Loading required package: sysfonts
@@ -58,11 +62,6 @@ Loading required package: showtextdb
 > library(utils)
 
 > library(highcharter)
-Registered S3 method overwritten by 'quantmod':
-  method            from
-  as.zoo.data.frame zoo 
-Highcharts (www.highcharts.com) is a Highsoft software product which is
-not free for commercial and Governmental use
 
 > library(extrafont)
 Registering fonts with R
@@ -76,584 +75,11 @@ The following object is masked from ‘package:showtextdb’:
 
 > library(readr)
 
-> box::use( prep/box/admin)
+> library(htmltools)
 
-> # Load fonts
-> font_add("Graphik",     regular = "app/www/fonts/Graphik.ttf")
+> library(stringr)
 
-> font_add("GraphikBold", regular = "app/www/fonts/GraphikBold.ttf")
-
-> # font_add("Graphik",      regular = "app/www/fonts/Graphik.ttf"
-> #                          ,
-> #                          bold    = "app/www/font ..." ... [TRUNCATED] 
-
-> loadfonts(device="win")
-Agency FB already registered with windowsFonts().
-Algerian already registered with windowsFonts().
-Arial Black already registered with windowsFonts().
-Arial already registered with windowsFonts().
-Arial Narrow already registered with windowsFonts().
-Arial Rounded MT Bold already registered with windowsFonts().
-Bahnschrift already registered with windowsFonts().
-Baskerville Old Face already registered with windowsFonts().
-Bauhaus 93 already registered with windowsFonts().
-Bell MT already registered with windowsFonts().
-Berlin Sans FB already registered with windowsFonts().
-Berlin Sans FB Demi already registered with windowsFonts().
-Bernard MT Condensed already registered with windowsFonts().
-Blackadder ITC already registered with windowsFonts().
-Bodoni MT already registered with windowsFonts().
-Bodoni MT Black already registered with windowsFonts().
-Bodoni MT Condensed already registered with windowsFonts().
-Bodoni MT Poster Compressed already registered with windowsFonts().
-Book Antiqua already registered with windowsFonts().
-Bookman Old Style already registered with windowsFonts().
-Bookshelf Symbol 7 already registered with windowsFonts().
-Bradley Hand ITC already registered with windowsFonts().
-Britannic Bold already registered with windowsFonts().
-Broadway already registered with windowsFonts().
-Brush Script MT already registered with windowsFonts().
-Calibri already registered with windowsFonts().
-Calibri Light already registered with windowsFonts().
-Californian FB already registered with windowsFonts().
-Calisto MT already registered with windowsFonts().
-Cambria already registered with windowsFonts().
-Candara already registered with windowsFonts().
-Candara Light already registered with windowsFonts().
-Castellar already registered with windowsFonts().
-Centaur already registered with windowsFonts().
-Century already registered with windowsFonts().
-Century Gothic already registered with windowsFonts().
-Century Schoolbook already registered with windowsFonts().
-Chiller already registered with windowsFonts().
-Colonna MT already registered with windowsFonts().
-Comic Sans MS already registered with windowsFonts().
-Consolas already registered with windowsFonts().
-Constantia already registered with windowsFonts().
-Cooper Black already registered with windowsFonts().
-Copperplate Gothic Bold already registered with windowsFonts().
-Copperplate Gothic Light already registered with windowsFonts().
-Corbel already registered with windowsFonts().
-Corbel Light already registered with windowsFonts().
-Courier New already registered with windowsFonts().
-Curlz MT already registered with windowsFonts().
-Dubai already registered with windowsFonts().
-Dubai Light already registered with windowsFonts().
-Dubai Medium already registered with windowsFonts().
-Ebrima already registered with windowsFonts().
-Edwardian Script ITC already registered with windowsFonts().
-Elephant already registered with windowsFonts().
-Engravers MT already registered with windowsFonts().
-Eras Bold ITC already registered with windowsFonts().
-Eras Demi ITC already registered with windowsFonts().
-Eras Light ITC already registered with windowsFonts().
-Eras Medium ITC already registered with windowsFonts().
-Felix Titling already registered with windowsFonts().
-Footlight MT Light already registered with windowsFonts().
-Forte already registered with windowsFonts().
-Franklin Gothic Book already registered with windowsFonts().
-Franklin Gothic Demi already registered with windowsFonts().
-Franklin Gothic Demi Cond already registered with windowsFonts().
-Franklin Gothic Heavy already registered with windowsFonts().
-Franklin Gothic Medium already registered with windowsFonts().
-Franklin Gothic Medium Cond already registered with windowsFonts().
-Freestyle Script already registered with windowsFonts().
-French Script MT already registered with windowsFonts().
-Gabriola already registered with windowsFonts().
-Gadugi already registered with windowsFonts().
-Garamond already registered with windowsFonts().
-Georgia already registered with windowsFonts().
-Gigi already registered with windowsFonts().
-Gill Sans Ultra Bold already registered with windowsFonts().
-Gill Sans Ultra Bold Condensed already registered with windowsFonts().
-Gill Sans MT already registered with windowsFonts().
-Gill Sans MT Condensed already registered with windowsFonts().
-Gill Sans MT Ext Condensed Bold already registered with windowsFonts().
-Gloucester MT Extra Condensed already registered with windowsFonts().
-Goudy Old Style already registered with windowsFonts().
-Goudy Stout already registered with windowsFonts().
-Haettenschweiler already registered with windowsFonts().
-Harlow Solid Italic already registered with windowsFonts().
-Harrington already registered with windowsFonts().
-High Tower Text already registered with windowsFonts().
-HoloLens MDL2 Assets already registered with windowsFonts().
-Impact already registered with windowsFonts().
-Imprint MT Shadow already registered with windowsFonts().
-Informal Roman already registered with windowsFonts().
-Ink Free already registered with windowsFonts().
-Javanese Text already registered with windowsFonts().
-Jokerman already registered with windowsFonts().
-Juice ITC already registered with windowsFonts().
-Kristen ITC already registered with windowsFonts().
-Kunstler Script already registered with windowsFonts().
-Wide Latin already registered with windowsFonts().
-Leelawadee already registered with windowsFonts().
-Leelawadee UI already registered with windowsFonts().
-Leelawadee UI Semilight already registered with windowsFonts().
-Lucida Bright already registered with windowsFonts().
-Lucida Calligraphy already registered with windowsFonts().
-Lucida Console already registered with windowsFonts().
-Lucida Fax already registered with windowsFonts().
-Lucida Handwriting already registered with windowsFonts().
-Lucida Sans already registered with windowsFonts().
-Lucida Sans Typewriter already registered with windowsFonts().
-Lucida Sans Unicode already registered with windowsFonts().
-Magneto already registered with windowsFonts().
-Maiandra GD already registered with windowsFonts().
-Malgun Gothic already registered with windowsFonts().
-Malgun Gothic Semilight already registered with windowsFonts().
-Marlett already registered with windowsFonts().
-Matura MT Script Capitals already registered with windowsFonts().
-Microsoft Himalaya already registered with windowsFonts().
-Microsoft Yi Baiti already registered with windowsFonts().
-Microsoft New Tai Lue already registered with windowsFonts().
-Microsoft PhagsPa already registered with windowsFonts().
-Microsoft Sans Serif already registered with windowsFonts().
-Microsoft Tai Le already registered with windowsFonts().
-Microsoft Uighur already registered with windowsFonts().
-Mistral already registered with windowsFonts().
-Modern No. 20 already registered with windowsFonts().
-Mongolian Baiti already registered with windowsFonts().
-Monotype Corsiva already registered with windowsFonts().
-MS Outlook already registered with windowsFonts().
-MS Reference Sans Serif already registered with windowsFonts().
-MS Reference Specialty already registered with windowsFonts().
-MT Extra already registered with windowsFonts().
-MV Boli already registered with windowsFonts().
-Myanmar Text already registered with windowsFonts().
-Niagara Engraved already registered with windowsFonts().
-Niagara Solid already registered with windowsFonts().
-Nirmala UI already registered with windowsFonts().
-Nirmala UI Semilight already registered with windowsFonts().
-OCR A Extended already registered with windowsFonts().
-Old English Text MT already registered with windowsFonts().
-Onyx already registered with windowsFonts().
-Palace Script MT already registered with windowsFonts().
-Palatino Linotype already registered with windowsFonts().
-Papyrus already registered with windowsFonts().
-Parchment already registered with windowsFonts().
-Perpetua already registered with windowsFonts().
-Perpetua Titling MT already registered with windowsFonts().
-Playbill already registered with windowsFonts().
-Poor Richard already registered with windowsFonts().
-Pristina already registered with windowsFonts().
-Rage Italic already registered with windowsFonts().
-Ravie already registered with windowsFonts().
-Rockwell already registered with windowsFonts().
-Rockwell Condensed already registered with windowsFonts().
-Rockwell Extra Bold already registered with windowsFonts().
-Script MT Bold already registered with windowsFonts().
-Segoe Fluent Icons already registered with windowsFonts().
-Segoe MDL2 Assets already registered with windowsFonts().
-Segoe Print already registered with windowsFonts().
-Segoe Script already registered with windowsFonts().
-Segoe UI already registered with windowsFonts().
-Segoe UI Light already registered with windowsFonts().
-Segoe UI Semibold already registered with windowsFonts().
-Segoe UI Semilight already registered with windowsFonts().
-Segoe UI Black already registered with windowsFonts().
-Segoe UI Historic already registered with windowsFonts().
-Segoe UI Symbol already registered with windowsFonts().
-Segoe UI Variable already registered with windowsFonts().
-Showcard Gothic already registered with windowsFonts().
-SimSun-ExtB already registered with windowsFonts().
-Sitka Text already registered with windowsFonts().
-Snap ITC already registered with windowsFonts().
-Source Code Pro ExtraLight already registered with windowsFonts().
-Stencil already registered with windowsFonts().
-Sylfaen already registered with windowsFonts().
-Symbol already registered with windowsFonts().
-Tahoma already registered with windowsFonts().
-Tempus Sans ITC already registered with windowsFonts().
-Times New Roman already registered with windowsFonts().
-Trebuchet MS already registered with windowsFonts().
-Tw Cen MT already registered with windowsFonts().
-Tw Cen MT Condensed already registered with windowsFonts().
-Tw Cen MT Condensed Extra Bold already registered with windowsFonts().
-Verdana already registered with windowsFonts().
-Viner Hand ITC already registered with windowsFonts().
-Vivaldi already registered with windowsFonts().
-Vladimir Script already registered with windowsFonts().
-Webdings already registered with windowsFonts().
-Wingdings already registered with windowsFonts().
-Wingdings 2 already registered with windowsFonts().
-Wingdings 3 already registered with windowsFonts().
-Graphik Regular already registered with windowsFonts().
-Graphik Bold already registered with windowsFonts().
-Graphik Extralight already registered with windowsFonts().
-Graphik Medium already registered with windowsFonts().
-Graphik Light already registered with windowsFonts().
-
-> showtext_auto()
-
-> # Load custom functions
-> source("app/functions.R")
-
-> # Path to data on research div sharepoint
-> # Make sure sharepoint folder is synced locally
-> # https://csgorg.sharepoint.com/:f:/s/Team-JC-Research .... [TRUNCATED] 
-
-> # Load state abb
-> stateAbb <- read.csv(file.path(admin$sp_data_raw, "stateAbb.csv"))
-
-> # Load admissions data
-> adm18 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Admissions 2018")
-
-> adm19 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Admissions 2019")
-
-> adm20 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Admissions 2020")
-
-> adm21 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Admissions 2021")
-
-> # Load population data
-> pop18 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Population 2018")
-
-> pop19 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Population 2019")
-
-> pop20 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Population 2020")
-
-> pop21 <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v4.xlsx"), sheet = "Population 2021")
-
-> # Load states  - will change to new notes when ready 
-> notes_raw <- read_csv(file.path(admin$sp_data_raw, "notes/state_notes_overview.csv"), show_c .... [TRUNCATED] 
-[1mindexing[0m [34mstate_notes_overview.csv[0m [=======================================================================================================================] [32m1.54GB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                                                 
-> # Load info on abolishment of parole or probation
-> abolish_prob_parole <- read_excel(file.path(admin$sp_survey, "MCLC 2022 Progress Tracking.xlsx") .... [TRUNCATED] 
--/                                                                                                                                                                            /                                                                                                                                                                            -                                                                                                                                                                            New names:
-• `CY/FY [ask at a later date]` -> `CY/FY [ask at a later date]...14`
-• `CY/FY [ask at a later date]` -> `CY/FY [ask at a later date]...15`
-• `` -> `...19`
-• `` -> `...22`
-
-> ################################################################################
-> # Reformat shapefile for hex map
-> ############################## .... [TRUNCATED] 
-
-> # clean state abbreviations file
-> stateAbb <- clean_names(stateAbb)
-
-> ################################################################################
-> # Reformat data about probation and parole being abolished
-> #### .... [TRUNCATED] 
-
-> abolish_prob_parole$state <- gsub('Excel', "", abolish_prob_parole$state)
-
-> abolish_prob_parole$state <- gsub('[()]', "", abolish_prob_parole$state)
-
-> abolish_prob_parole$state <- trimws(abolish_prob_parole$state)
-
-> abolish_prob_parole <- abolish_prob_parole %>%
-+   filter(abolished_discretionary_parole == "Yes")
-
-> abolish_prob_parole <- abolish_prob_parole$state
-
-> ################################################################################
-> # Admissions and populations dataset
-> # Wide form of data
-> #### .... [TRUNCATED] 
-
-> # add year variable
-> adm18$year <- "2018"
-
-> adm19$year <- "2019"
-
-> adm20$year <- "2020"
-
-> adm21$year <- "2021"
-
-> # add year variable
-> pop18$year <- "2018"
-
-> pop19$year <- "2019"
-
-> pop20$year <- "2020"
-
-> pop21$year <- "2021"
-
-> # add data together
-> adm <- rbind(adm18, adm19, adm20, adm21)
-
-> pop <- rbind(pop18, pop19, pop20, pop21)
-
-> # clean names
-> # rename variable
-> adm <- clean_names(adm)
-
-> pop <- clean_names(pop)
-
-> # add adm and pop data together
-> adm_pop <- merge(adm, pop, by = c("state", "year"))
-
-> # remove state abbrevs
-> # change data types
-> # calculate difference between total and supervision violations to get number of other
-> adm_pop <- a .... [TRUNCATED] 
-
-> # replace all NaN with NA
-> adm_pop[adm_pop == "NaN"] <- NA
-
-> ################################################################################
-> # MAP EXPLORER PAGE
-> # Value box data
-> ######################## .... [TRUNCATED] 
-
-> # make long form
-> mclc_all <- gather(mclc, data, total, total_admissions:technical_population)
-
-> # create change from 2018 to 2019 to 2020
-> # remove dups
-> # create label ready variable called metric
-> # create pop vs adm variable
-> # change da .... [TRUNCATED] 
-`mutate_if()` ignored the following grouping variables:
-• Columns `state`, `data`
-
-> # save labels
-> labels <- mclc_all %>% ungroup() %>% select(data, metric, adm_or_pop) %>% distinct()
-
-> # make data frame for counts
-> # data is in wide form
-> mclc_counts <- mclc_all %>%
-+   select(-change)
-
-> mclc_counts <- spread(mclc_counts, year, total) %>%
-+   select(state, data, `2018`, `2019`, `2020`, `2021`)
-
-> # make data frame for change
-> # data is in wide form
-> mclc_change <- mclc_all %>%
-+   filter(year != 2018) %>%
-+   select(-total)
-
-> mclc_change <-
-+   spread(mclc_change, year, change) %>%
-+   select(state,
-+          data,
-+          `2018 - 2019` = `2019`,
-+          `2019 - 20 .... [TRUNCATED] 
-
-> # combine counts and change tables together
-> mclc_explorer_table <- left_join(mclc_counts, mclc_change, by = c("state", "data")) %>%
-+   mutate(`20 .... [TRUNCATED] 
-
-> # Get 4 year change
-> mclc_explorer_table_4_yr <- mclc_explorer_table %>%
-+   select(state, data, change = `2018 - 2021`) %>%
-+   left_join(stateAbb .... [TRUNCATED] 
-
-> # save reactable version of map explorer table
-> mclc_explorer_table_long <- mclc_explorer_table %>%
-+   select(state, data, `2018`, `2019`, `2020`, .... [TRUNCATED] 
-`summarise()` has grouped output by 'state'. You can override using the `.groups` argument.
-
-> mclc_explorer_table <- merge(mclc_explorer_table, mclc_explorer_table_long, by = c("state", "data"))
-
-> # create year range
-> # create min and max values for legend scale
-> mclc_explorer <- mclc_all %>%
-+   filter(year != 2018) %>%
-+   rename(state_abb .... [TRUNCATED] 
-
-> ################################################################################
-> # STATE REPORTS PAGE
-> # Value box data
-> ####################### .... [TRUNCATED] 
-
-> ##############################
-> # State table under graph
-> ##############################
-> 
-> # select variables
-> # sum by type
-> # remove proba .... [TRUNCATED] 
-`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
-
-> # make wide form
-> state_table_wide <- spread(state_table, key = year, value = total)
-
-> # order data for table output
-> state_table_wide <- state_table_wide %>%
-+   mutate(order = case_when(metric == "New Offense"             ~ 4,
-+     .... [TRUNCATED] 
-
-> ################################################################################
-> # Parole table under graph
-> #################################### .... [TRUNCATED] 
-
-> # filter to prob and parole info only
-> prob_parole_tables <- prob_parole_tables %>%
-+   select(state, year, data, total) %>%
-+   filter(grepl("paro ..." ... [TRUNCATED] 
-
-> # create metric and text for table
-> prob_parole_tables <- fnc_create_data_text(prob_parole_tables)
-
-> prob_parole_tables <- fnc_create_data_metric(prob_parole_tables) %>%
-+   group_by(state, year, metric, adm_or_pop, prob_vs_parole, text) %>%
-+   sum .... [TRUNCATED] 
-`summarise()` has grouped output by 'state', 'year', 'metric', 'adm_or_pop', 'prob_vs_parole'. You can override using the `.groups` argument.
-
-> # filter to parole
-> parole_table <- prob_parole_tables %>%
-+   filter(prob_vs_parole == "Parole") %>%
-+   select(state, text, adm_or_pop, everythin .... [TRUNCATED] 
-Adding missing grouping variables: `metric`
-
-> # make wide form
-> parole_table_wide <- spread(parole_table, key = year, value = total)
-
-> # order data for table output
-> parole_table_wide <- parole_table_wide %>%
-+   mutate(order = case_when(
-+     metric == "New Offense"             ~ .... [TRUNCATED] 
-Adding missing grouping variables: `metric`
-
-> ################################################################################
-> # Probation table under graph
-> ################################# .... [TRUNCATED] 
-Adding missing grouping variables: `metric`
-
-> # make wide form
-> probation_table_wide <- spread(probation_table, key = year, value = total)
-
-> # order data for table output
-> probation_table_wide <- probation_table_wide %>%
-+   mutate(order = case_when(
-+     metric == "New Offense"         .... [TRUNCATED] 
-Adding missing grouping variables: `metric`
-
-> ################################################################################
-> # Download data tables (BJS vs CSG)
-> ########################### .... [TRUNCATED] 
-
-> # custom function to add text label depending on metric
-> # custom function to create an adm vs pop variable
-> # custom function to create a prob vs .... [TRUNCATED] 
-
-> adm_pop_long <- fnc_create_adm_pop(adm_pop_long)
-
-> adm_pop_long <- fnc_create_prob_vs_parole(adm_pop_long)
-
-> # add tooltip
-> # add info on probation and parole being abolished
-> adm_pop_long <- adm_pop_long %>%
-+   mutate(tooltip = paste0("<b>", state, " -  ..." ... [TRUNCATED] 
-
->   # left_join(abolish_prob_parole, by = "state")
-> 
-> # create new df
-> csg <- adm_pop_long
-
-> csg <- fnc_create_data_text(csg)
-
-> # select data and change data types
-> csg <- csg %>% ungroup() %>%
-+   select(state,
-+          metric = text,
-+          year,
-+          total) %> .... [TRUNCATED] 
-
-> ################################################################################
-> # states that don't have graphs because of missing data
-> ####### .... [TRUNCATED] 
-`summarise()` has grouped output by 'state'. You can override using the `.groups` argument.
-
-> nt_na_adm <- nt_na_adm1$state
-
-> nt_na_pop1 <- mclc_all %>%
-+   filter(data == "New Offense Population" | data == "Technical Violation Population") %>%
-+   group_by(state, data) %>% .... [TRUNCATED] 
-`summarise()` has grouped output by 'state'. You can override using the `.groups` argument.
-
-> nt_na_pop <- nt_na_pop1$state
-
-> # states that are NOT missing data and will have a graph showing technical and new offense violations
-> nt_not_na_adm <- mclc_all %>%   ungroup() %> .... [TRUNCATED] 
-
-> nt_not_na_adm <- nt_not_na_adm$state
-
-> nt_not_na_pop <- mclc_all %>%   ungroup() %>% select(state) %>% distinct() %>%
-+   anti_join(nt_na_pop1, by = "state")
-
-> nt_not_na_pop <- nt_not_na_pop$state
-
-> # states that are missing data and will not have a parole graph
-> parole_na_adm1 <- adm_pop_long %>%
-+   filter(data == "new_offense_parole_violatio ..." ... [TRUNCATED] 
-`summarise()` has grouped output by 'state'. You can override using the `.groups` argument.
-
-> parole_na_adm <- parole_na_adm1$state
-
-> parole_na_pop1 <- adm_pop_long %>%
-+   filter(data == "new_offense_parole_violation_population" | data == "technical_parole_violation_population") % .... [TRUNCATED] 
-`summarise()` has grouped output by 'state'. You can override using the `.groups` argument.
-
-> parole_na_pop <- parole_na_pop1$state
-
-> # states that are NOT missing data and will have a graph showing technical and new offense parole violations
-> parole_not_na_adm <- adm_pop_long %>% .... [TRUNCATED] 
-
-> parole_not_na_adm <- parole_not_na_adm$state
-
-> parole_not_na_pop <- adm_pop_long %>% mutate(state = as.character(state)) %>% ungroup() %>% select(state) %>% distinct() %>%
-+   anti_join(parole_na .... [TRUNCATED] 
-
-> parole_not_na_pop <- parole_not_na_pop$state
-
-> # states that are missing data and will not have a probation graph
-> probation_na_adm1 <- adm_pop_long %>%
-+   filter(data == "new_offense_probation ..." ... [TRUNCATED] 
-`summarise()` has grouped output by 'state'. You can override using the `.groups` argument.
-
-> probation_na_adm <- probation_na_adm1$state
-
-> probation_na_pop1 <- adm_pop_long %>%
-+   filter(data == "new_offense_probation_violation_population" | data == "technical_probation_violation_popul ..." ... [TRUNCATED] 
-`summarise()` has grouped output by 'state'. You can override using the `.groups` argument.
-
-> probation_na_pop <- probation_na_pop1$state
-
-> # states that are NOT missing data and will have a graph showing technical and new offense probation violations
-> probation_not_na_adm <- adm_pop_lo .... [TRUNCATED] 
-
-> probation_not_na_adm <- probation_not_na_adm$state
-
-> probation_not_na_pop <- adm_pop_long %>% mutate(state = as.character(state)) %>% ungroup() %>% select(state) %>% distinct() %>%
-+   anti_join(probat .... [TRUNCATED] 
-
-> probation_not_na_pop <- probation_not_na_pop$state
-
-> ################################################################################
-> # save Rdata
-> ################################################## .... [TRUNCATED] 
-
-> for (folder in theseFOLDERS){
-+ 
-+   save(adm_pop_long,                file=file.path(folder, "adm_pop_long.Rda"))
-+   save(mclc_explorer,           .... [TRUNCATED] 
-
-> #######################################
-> # Project: MCLCShiny
-> # File: reactable.R
-> # Authors: Mari Roberts
-> # Date last updated: July 20, 2022
- .... [TRUNCATED] 
-
-> # load data
-> load(file = file.path(admin$sp_data, "state_table.Rda"))
-
-> load(file = file.path(admin$sp_data, "state_table_wide.Rda"))
-
-> load(file = file.path(admin$sp_data, "parole_table.Rda"))
-
-> load(file = file.path(admin$sp_data, "parole_table_wide.Rda"))
-
-> load(file = file.path(admin$sp_data, "probation_table.Rda"))
-
-> load(file = file.path(admin$sp_data, "probation_table_wide.Rda"))
-
-> # load packages
-> library(dplyr)
+> library(openxlsx)
 
 > library(reactable)
 
@@ -661,286 +87,184 @@ Adding missing grouping variables: `metric`
 
 > library(purrr)
 
-Attaching package: ‘purrr’
-
-The following object is masked from ‘package:jsonlite’:
-
-    flatten
-
-The following objects are masked from ‘package:rlang’:
-
-    %@%, as_function, flatten, flatten_chr, flatten_dbl, flatten_int, flatten_lgl, flatten_raw, invoke, splice
-
-
-> library(highcharter)
-
 > library(dataui)
 
-> # assign colors for visualizations
-> source("app/colors.R")
+> library(scales)
 
-> source("app/functions.R")
+Attaching package: ‘scales’
 
-> # get state list
-> states <- state_table$state %>%
-+   unique() %>%
-+   sort()
+The following object is masked from ‘package:readr’:
 
-> ############
-> # State overall table
-> ############
+    col_factor
+
+The following objects are masked from ‘package:formattable’:
+
+    comma, percent, scientific
+
+The following object is masked from ‘package:purrr’:
+
+    discard
+
+
+> library(webshot2)
+
+> library(formattable)
+
+> box::use(prep/box/admin)
+
+> # Load fonts
+> font_add("Graphik",     regular = "app/www/fonts/Graphik.ttf")
+
+> font_add("GraphikBold", regular = "app/www/fonts/GraphikBold.ttf")
+
+> # set options so that y axis has comma separator
+> hcoptslang <- getOption("highcharter.lang")
+
+> hcoptslang$thousandsSep <- ","
+
+> options(highcharter.lang = hcoptslang)
+
+> ##########################
+> # Data cleaning
+> ##########################
 > 
-> # generate list of state reactables to call in app (admissions)
-> state_reactable_adm <- ma .... [TRUNCATED] 
+> # Text depending on data type
+> fnc_create_data_text <- function(df){ .... [TRUNCATED] 
 
-> state_reactable_adm <- setNames(state_reactable_adm, c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Flo ..." ... [TRUNCATED] 
+> # Metric depending on data
+> fnc_create_data_metric <- function(df){
++   df <- df %>%
++     mutate(metric = case_when(
++       data == "total_admiss ..." ... [TRUNCATED] 
 
-> # generate list of state reactables to call in app (population)
-> state_reactable_pop <- map(.x = states,  .f = function(x) {
+> # Prob vs parole depending on data type
+> fnc_create_prob_vs_parole <- function(df){
++   df <- df %>%
++     mutate(prob_vs_parole = case_when(
++     .... [TRUNCATED] 
+
+> # Adm vs pop depending on data type
+> fnc_create_adm_pop <- function(df){
++   df <- df %>%
++     mutate(adm_or_pop = ifelse(grepl("population", data .... [TRUNCATED] 
+
+> # Create trend line data for reactable table on map explorer page
+> fnc_create_trend_data <- function(df){
++   df <- df %>%
++     group_by(state, da .... [TRUNCATED] 
+
+> ##########################
+> # Highchart
+> ##########################
+> 
+> # CSG logo
+> render_image <- JS("
++   function(){
++     this.renderer.ima ..." ... [TRUNCATED] 
+
+> # Highcharts theme for hex map
+> hc_theme_map_jc <-
++   hc_theme_merge(
++   hc_theme_smpl(),
++   hc_theme(
++     chart = list(
++       marginTop = 7 .... [TRUNCATED] 
+
+> # Highcharts theme for plots
+> hc_theme_jc <- hc_theme(colors = c("#D25E2D", "#EDB799", "#C7E8F5", "#236ca7", "#D6C246", "#dcdcdc"),
++               .... [TRUNCATED] 
+
+> # Highcharts accessibility
+> hc_setup <- function(x) {
++   highcharter::hc_add_dependency(x, name = "plugins/series-label.js") %>%
++     highcharter .... [TRUNCATED] 
+
+> # Highchart area chart for state page
+> fnc_highchart_state_areachart <- function(df, title_name, state_name, adm_or_pop){
 + 
-+   # filter data b .... [TRUNCATED] 
++   subtitle_name <- d .... [TRUNCATED] 
 
-> state_reactable_pop <- setNames(state_reactable_pop, c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Flo ..." ... [TRUNCATED] 
-
-> ############
-> # Parole table
-> ############
-> 
-> # generate list of parole reactables to call in app (admissions)
-> parole_reactable_adm <- map(.x  .... [TRUNCATED] 
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-
-> parole_reactable_adm <- setNames(parole_reactable_adm, c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","F ..." ... [TRUNCATED] 
-
-> # generate list of parole reactables to call in app (population)
-> parole_reactable_pop <- map(.x = states,  .f = function(x) {
+> # Supervision violation highchart bar chart for state page
+> fnc_highchart_state_barchart <- function(df, title_name, state_name, adm_or_pop){
 + 
-+   # filter data .... [TRUNCATED] 
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
++  .... [TRUNCATED] 
 
-> parole_reactable_pop <- setNames(parole_reactable_pop, c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","F ..." ... [TRUNCATED] 
+> # Parole highchart bar chart for state page
+> fnc_highchart_parole_barchart <- function(df, title_name, state_name, adm_or_pop){
++   highchart() %>% .... [TRUNCATED] 
 
-> ############
-> # Probation table
-> ############
-> 
-> # generate list of probation reactables to call in app (admissions)
-> probation_reactable_adm < .... [TRUNCATED] 
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
+> # probation highchart bar chart for state page
+> fnc_highchart_probation_barchart <- function(df, title_name, state_name, adm_or_pop){
++   highchart .... [TRUNCATED] 
 
-> probation_reactable_adm <- setNames(probation_reactable_adm, c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delawa ..." ... [TRUNCATED] 
-
-> # generate list of probation reactables to call in app (population)
-> probation_reactable_pop <- map(.x = states,  .f = function(x) {
+> # highchart map for map explorer page
+> fnc_highchart_map <- function(df, map_filename, state_name, adm_or_pop){
 + 
-+   # filte .... [TRUNCATED] 
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
-Adding missing grouping variables: `state`, `adm_or_pop`
++   # Get minimum and maximum va .... [TRUNCATED] 
 
-> probation_reactable_pop <- setNames(probation_reactable_pop, c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delawa ..." ... [TRUNCATED] 
-
-> ############
-> # Save data
-> ############
+> ##########################
+> # Highcharts with logo
+> ##########################
 > 
-> theseFOLDERS <- c( "sharepoint" = admin$sp_data, "app" = "app/data")
+> # prep admissions data for area chart
+> fnc_areachart_adm_data .... [TRUNCATED] 
 
-> for (folder in theseFOLDERS){
-+   
-+   save(state_reactable_adm,     file=file.path(folder, "state_reactable_adm.Rda"))
-+   save(state_reactable_pop .... [TRUNCATED] 
+> # prep population data for area chart
+> fnc_areachart_pop_data_prep <- function(state_name){
++   df1 <- adm_pop_long %>%
++     filter(state == state .... [TRUNCATED] 
+
+> # Prison admissions or population area chart for state page with logo
+> fnc_highchart_state_areachart_logo <-
++   function(df,
++            title_na .... [TRUNCATED] 
+
+> # Supervision violation highchart bar chart for state page with logo
+> fnc_highchart_state_barchart_logo <- function(df, title_name){
++ 
++   subtitl .... [TRUNCATED] 
+
+> # Parole highchart bar chart for state page with logo
+> fnc_highchart_parole_barchart_logo <- function(df, title_name){
++   highchart() %>%
++     hc .... [TRUNCATED] 
+
+> # Probation highchart bar chart for state page with logo
+> fnc_highchart_probation_barchart_logo <- function(df, title_name){
++   highchart() %>%
++  .... [TRUNCATED] 
+
+> # Map explorer with logo
+> fnc_highchart_map_logo <- function(df, map_filename, adm_or_pop){
++ 
++   # Get minimum and maximum value
++   min_map <- m .... [TRUNCATED] 
+
+> ##########################
+> # Reactable tables
+> ##########################
+> 
+> # Reactable table with 4 Year trend line in last column
+> fnc_reat .... [TRUNCATED] 
+Warning messages:
+1: package ‘rlang’ was built under R version 4.2.3 
+2: package ‘jsonlite’ was built under R version 4.2.3 
+3: package ‘readxl’ was built under R version 4.2.3 
+4: package ‘sf’ was built under R version 4.2.3 
+5: package ‘showtext’ was built under R version 4.2.3 
+6: package ‘htmltools’ was built under R version 4.2.3 
+7: package ‘openxlsx’ was built under R version 4.2.3 
+8: package ‘scales’ was built under R version 4.2.3 
+
+> #######################################
+> # Project: MCLCShiny
+> # File: import.R
+> # Authors: Mari Roberts
+> # Sub-Author: Martha Eichlersmith
+> #  .... [TRUNCATED] 
+Error in file(filename, "r", encoding = encoding) : 
+  cannot open the connection
+In addition: Warning message:
+In file(filename, "r", encoding = encoding) :
+  cannot open file '00_fnc_library.R': No such file or directory
+[1] "2023-08-24 12:32:19 EDT"

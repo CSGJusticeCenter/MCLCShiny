@@ -335,19 +335,15 @@ ui <- fluidPage(
                                                                label = NULL,
                                                                width = "fit",
                                                                choices = c("Total Disparities" = "CEN",
-                                                                           "Portion of disparities attributable to parole revocations" = "BJS"),
+                                                                           "Portion of Disparities Attributable to Parole Revocations" = "BJS"),
                                                                options = list(style = "re-picker",
                                                                               class = "retitle"),
                                                                selected = "CEN",
                                                                inline = TRUE),
 
-                                                   ####################################################################################################### tooltip
-
                                                    # Add tooltip depending on pop_denom selection/tabindex = 0 for screenreader
                                                    tagAppendAttributes(uiOutput("redefinition_tooltip",
                                                                                 inline = TRUE), tabindex = 0)
-
-                                                   ####################################################################################################### tooltip
 
                                                 )
                                              )),
@@ -364,6 +360,7 @@ ui <- fluidPage(
                                                  conditionalPanel(condition = "output.showinfogpanel",
                                                     div(imageOutput("infogblack", height = "100%", ), style = "margin-bottom: 0.5em;"),
                                                     imageOutput("infoghisp", height = "100%"), br(),
+                                                    div(id = "re-note", textOutput("renote")), br(),
                                                     htmlOutput("howitscalculated"),
                                                  ), # end conditional panel
                                                  div(id = "showtables-id",

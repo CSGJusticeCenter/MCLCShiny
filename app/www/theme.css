@@ -130,7 +130,7 @@ button > div {
 
 /* Styling for tooltips */
 .tooltip > .tooltip-inner {
-                max-width: 300px;
+                max-width: 350px;
                 font-size: 1em;
                 color: white;
                 background-color: black;
@@ -679,3 +679,8 @@ body.shepherd-active::after {
   font-family: Graphik;
 }
 
+#re-note {
+  text-align: left;
+  font-size: 1em;
+  font-family: Graphik;
+}

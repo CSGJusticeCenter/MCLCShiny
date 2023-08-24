@@ -1126,8 +1126,8 @@ server <- function(input, output, session) {
   disparities_tooltip <- reactiveValues()
   observe({
     disparities_tooltip$a <- ifelse(input$pop_denom =="BJS",
-                    disparities_definitions %>% filter(term == "Disparities") %>% pull(definition),
-                    disparities_definitions %>% filter(term == "Cumulative Disparities") %>% pull(definition))
+                    disparities_definitions %>% filter(term == "Portion of Disparities Attributable to Parole Revocations") %>% pull(definition),
+                    disparities_definitions %>% filter(term == "Total Disparities") %>% pull(definition))
   })
   output$redefinition_tooltip <- renderUI({
     mytooltip <- gsub("<b>|</b>|<i>|</i>", "",
@@ -1193,7 +1193,7 @@ server <- function(input, output, session) {
         src =normalizePath(plot)
         , contentType = "image/png"
         , alt = raceethnicity$infograph_alt(rridata, input$adm_pop_report, input$pop_denom, "Black", input$state_report)
-        , width = "100%"
+        , width = "130%"
       )
     } else { #should not be needed - used as back-up
       plot <- ggplot2::ggplot() + ggplot2::theme_void()
@@ -1203,7 +1203,7 @@ server <- function(input, output, session) {
         src =normalizePath(file)
         , contentType = "image/png"
         , alt = raceethnicity$infograph_alt_noinfog(input$adm_pop_report, input$pop_denom, "Black", input$state_report)
-        , width = "100%"
+        , width = "130%"
       )
     }
   }, deleteFile = FALSE)
@@ -1216,7 +1216,7 @@ server <- function(input, output, session) {
         src =normalizePath(plot)
         , contentType = "image/png"
         , alt = raceethnicity$infograph_alt(rridata, input$adm_pop_report, input$pop_denom, "Hispanic", input$state_report)
-        , width = "100%"
+        , width = "130%"
       )
     } else { #should not be needed - used as back-up
       plot <- ggplot2::ggplot() + ggplot2::theme_void()
@@ -1226,7 +1226,7 @@ server <- function(input, output, session) {
         src =normalizePath(file)
         , contentType = "image/png"
         , alt = raceethnicity$infograph_alt_noinfog(input$adm_pop_report, input$pop_denom, "Hispanic", input$state_report)
-        , width = "100%"
+        , width = "130%"
       )
     }
   }, deleteFile = FALSE)
@@ -1238,6 +1238,15 @@ server <- function(input, output, session) {
       , raceethnicity$infographic_header(dataavail, input$pop_denom, input$adm_pop_report, rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$NOTE)
     )
     HTML(out)
+  })
+
+  output$renote <- renderText({
+    if(input$pop_denom == "BJS"){
+      "Note that the disparities in parole revocations can either amplify or reduce preexisting disparities."
+    } else if (input$pop_denom == "CEN"){
+      ""
+    }
+
   })
 
   output$howitscalculated <- renderUI({
