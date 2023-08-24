@@ -1130,11 +1130,13 @@ server <- function(input, output, session) {
                     disparities_definitions %>% filter(term == "Cumulative Disparities") %>% pull(definition))
   })
   output$redefinition_tooltip <- renderUI({
+    mytooltip <- gsub("<b>|</b>|<i>|</i>", "",
+                      disparities_tooltip$a)
     shiny::tags$span(tipify(el = icon("info-circle",
                                lib = "font-awesome",
                                style = "color: #D25E2D; font-size: 0.5em;"),
                      title = disparities_tooltip$a),
-              "aria-label" = disparities_tooltip$a
+              "aria-label" = mytooltip
     )
   })
 
