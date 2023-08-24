@@ -1,108 +1,270 @@
 [1] "Revocation Counts and Race and Ethnicity"
-[1] "2023-08-24 09:07:26 EDT"
-2023-08-24 09:07:27 - !!START PREP FOR SHINY - DATA
-2023-08-24 09:07:27 - Import and clean NCRP revocations data
-2023-08-24 09:07:27 - Start - NCRP import for admissions
-Error in readChar(con, 5L, useBytes = TRUE) : cannot open the connection
-In addition: Warning message:
-In readChar(con, 5L, useBytes = TRUE) :
-  cannot open compressed file 'C:/Users/mroberts/The Council of State Governments/CC/data/raw/NCRP/ICPSR_38492-V1/ICPSR_38492/DS0002/38492-0002-Data.rda', probable reason 'No such file or directory'
+[1] "2023-08-24 10:27:15 EDT"
+[1mindexing[0m [34mrevcnt_notes.csv[0m [=====================================================================================================] [32m313.08MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                         2023-08-24 10:27:16 - !!START PREP FOR SHINY - DATA
+2023-08-24 10:27:16 - Import and clean NCRP revocations data
+2023-08-24 10:27:16 - Start - NCRP import for admissions
+2023-08-24 10:27:23 - End   - NCRP import for admissions
+2023-08-24 10:27:23 - Start - NCRP prep
+2023-08-24 10:27:23 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2023-08-24 10:27:23 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2023-08-24 10:27:26 - End   - NCRP prep
+2023-08-24 10:27:26 - Import and clean BJS-APS for PAROLE population (denominator)
+[1mindexing[0m [34mapars_idyear.csv[0m [=====================================================================================================] [32m162.08MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                         2023-08-24 10:27:27 - Start - BJS APS (Parole) import for 2010-2018
+2023-08-24 10:27:30 - End   - BJS APS (Parole) import for 2010-2018
+2023-08-24 10:27:30 - STart - APS prep
+2023-08-24 10:27:30 - APS prep - 
+-- Drop Federal total row
+-- calculate other race category, pivot longer, recode into single race variable
+-- make new race variable a factor 
+-- drop rows where POPEST is NA (covered in UNKRACE)
+-- add state id columns
+2023-08-24 10:27:30 - Sum accross state and year
+2023-08-24 10:27:30 - End   - APS prep
+2023-08-24 10:27:30 - Calc - rate/RRI calcuations
+Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR, OFFGENERAL)`
+Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR)`
+2023-08-24 10:27:30 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2023-08-24 10:27:31 - Saved FULL_DF - NCRP_A_REV_BJS.RDS (included a date stamped version)
+2023-08-24 10:27:31 - Import and clean NCRP revocations data
+2023-08-24 10:27:31 - Start - NCRP import for admissions
+2023-08-24 10:27:33 - End   - NCRP import for admissions
+2023-08-24 10:27:33 - Start - NCRP prep
+2023-08-24 10:27:33 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2023-08-24 10:27:33 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2023-08-24 10:27:35 - End   - NCRP prep
+2023-08-24 10:27:35 - Import and clean PUMS (ACS) for COMMUNITY population (denominator)
+2023-08-24 10:27:35 - Start - PUMS prep
+2023-08-24 10:27:36 - End   - PUMS prep
+2023-08-24 10:27:36 - Calc - rate/RRI calcuations
+Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR, OFFGENERAL)`
+Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR)`
+2023-08-24 10:27:36 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2023-08-24 10:27:36 - Saved FULL_DF - NCRP_A_REV_PUMS.RDS (included a date stamped version)
+2023-08-24 10:27:36 - A tables, takes ~40-50 seconds
+2023-08-24 10:28:03 - A tables end
+2023-08-24 10:28:03 - Flags A BJS - Start
+[1mwrote[0m [32m832.00B[0m in [36m 0s[0m, [32m68.42MB/s[0m                                                                                                                                                    [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                    2023-08-24 10:28:08 - Flags A BJS - End
+2023-08-24 10:28:08 - Flags A CEN - Start
+[1mwrote[0m [32m899.00B[0m in [36m 0s[0m, [32m28.14MB/s[0m                                                                                                                                                    [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                    2023-08-24 10:28:14 - Flags A CEN - End
+2023-08-24 10:28:14 - Import and clean NCRP revocations data
+2023-08-24 10:28:14 - Start - NCRP import for year-end population 
+2023-08-24 10:28:37 - End   - NCRP import for year-end population
+2023-08-24 10:28:37 - Start - NCRP prep
+2023-08-24 10:28:37 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2023-08-24 10:28:37 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2023-08-24 10:28:41 - End   - NCRP prep
+2023-08-24 10:28:41 - Import and clean BJS-APS for PAROLE population (denominator)
+[1mindexing[0m [34mapars_idyear.csv[0m [=====================================================================================================] [32m179.14MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                         2023-08-24 10:28:41 - Start - BJS APS (Parole) import for 2010-2018
+2023-08-24 10:28:41 - End   - BJS APS (Parole) import for 2010-2018
+2023-08-24 10:28:41 - STart - APS prep
+2023-08-24 10:28:41 - APS prep - 
+-- Drop Federal total row
+-- calculate other race category, pivot longer, recode into single race variable
+-- make new race variable a factor 
+-- drop rows where POPEST is NA (covered in UNKRACE)
+-- add state id columns
+2023-08-24 10:28:41 - Sum accross state and year
+2023-08-24 10:28:41 - End   - APS prep
+2023-08-24 10:28:41 - Calc - rate/RRI calcuations
+Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR, OFFGENERAL)`
+Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR)`
+2023-08-24 10:28:41 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2023-08-24 10:28:41 - Saved FULL_DF - NCRP_N_REV_BJS.RDS (included a date stamped version)
+2023-08-24 10:28:41 - Import and clean NCRP revocations data
+2023-08-24 10:28:41 - Start - NCRP import for year-end population 
+2023-08-24 10:28:45 - End   - NCRP import for year-end population
+2023-08-24 10:28:46 - Start - NCRP prep
+2023-08-24 10:28:46 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2023-08-24 10:28:46 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2023-08-24 10:28:49 - End   - NCRP prep
+2023-08-24 10:28:49 - Import and clean PUMS (ACS) for COMMUNITY population (denominator)
+2023-08-24 10:28:49 - Start - PUMS prep
+2023-08-24 10:28:49 - End   - PUMS prep
+2023-08-24 10:28:49 - Calc - rate/RRI calcuations
+Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR, OFFGENERAL)`
+Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR)`
+2023-08-24 10:28:49 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2023-08-24 10:28:49 - Saved FULL_DF - NCRP_N_REV_PUMS.RDS (included a date stamped version)
+2023-08-24 10:28:49 - N tables, takes ~40-50 seconds
+2023-08-24 10:29:16 - N tables end
+2023-08-24 10:29:16 - Flags N BJS - Start
+[1mwrote[0m [32m642.00B[0m in [36m 0s[0m, [32m32.06MB/s[0m                                                                                                                                                    [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                    2023-08-24 10:29:23 - Flags N BJS - End
+2023-08-24 10:29:23 - Flags N CEN - Start
+[1mwrote[0m [32m759.00B[0m in [36m 0s[0m, [32m63.67MB/s[0m                                                                                                                                                    [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                                                                    2023-08-24 10:29:29 - Flags N CEN - End
+2023-08-24 10:29:29 - Saved outtables - NCRP_RRI_tables.RDS (included a date stamped version)
+2023-08-24 10:29:29 - !!END   PREP FOR SHINY - DATA
+Warning message:
+There was 1 warning in `mutate()`.
+ℹ In argument: `RACE = fct_explicit_na(RACE, na_level = admin$lev_RACE[5])`.
+Caused by warning:
+! `fct_explicit_na()` was deprecated in forcats 1.0.0.
+ℹ Please use `fct_na_value_to_level()` instead.
+This warning is displayed once every 8 hours.
+Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated. 
+Warning message:
+renv 0.15.5 was loaded from project library, but this project is configured to use renv ${VERSION}.
+Use `renv::record("renv@0.15.5")` to record renv 0.15.5 in the lockfile.
+Use `renv::restore(packages = "renv")` to install renv ${VERSION} into the project library. 
+
+
+processing file: rri_overview.qmd
+1/13                  
+2/13 [setup]          
+3/13                  
+4/13 [unnamed-chunk-2]
+5/13                  
+6/13 [unnamed-chunk-3]
+7/13                  
+8/13 [unnamed-chunk-4]
+9/13                  
+10/13 [unnamed-chunk-5]
+11/13                  
+12/13 [unnamed-chunk-6]
+13/13                  
+output file: rri_overview.knit.md
+
+pandoc 
+  to: html
+  output-file: rri_overview.html
+  standalone: true
+  self-contained: true
+  section-divs: true
+  html-math-method: mathjax
+  wrap: none
+  default-image-extension: png
+  
+metadata
+  document-css: false
+  link-citations: true
+  lang: en
+  title: RRI Overview
+  description: 'Last User: `r stringr::str_sub(getwd(), 10, stringr::str_locate(stringr::str_sub(getwd(), 10, -1), ''/'')[1]+10-2)`'
+  date: last-modified
+  date-format: 'YYYY-MM-DD HH:mm:ss'
+  published-title: Last Modified
+  doi: '`r Sys.time()`'
+  doi-title: Last Ran
+  editor: source
+  editor_options:
+    chunk_output_type: console
+  page-layout: full
+  fontsize: 0.9em
+  
+Output created: rri_overview.html
 
-Listening on http://127.0.0.1:5765
-Warning: Navigation containers expect a collection of `bslib::nav_panel()`/`shiny::tabPanel()`s and/or `bslib::nav_menu()`/`shiny::navbarMenu()`s. Consider using `header` or `footer` if you wish to place content above (or below) every panel's contents.
-Warning: Navigation containers expect a collection of `bslib::nav_panel()`/`shiny::tabPanel()`s and/or `bslib::nav_menu()`/`shiny::navbarMenu()`s. Consider using `header` or `footer` if you wish to place content above (or below) every panel's contents.
-Warning: Navigation containers expect a collection of `bslib::nav_panel()`/`shiny::tabPanel()`s and/or `bslib::nav_menu()`/`shiny::navbarMenu()`s. Consider using `header` or `footer` if you wish to place content above (or below) every panel's contents.
-Warning: Navigation containers expect a collection of `bslib::nav_panel()`/`shiny::tabPanel()`s and/or `bslib::nav_menu()`/`shiny::navbarMenu()`s. Consider using `header` or `footer` if you wish to place content above (or below) every panel's contents.
-Warning: Navigation containers expect a collection of `bslib::nav_panel()`/`shiny::tabPanel()`s and/or `bslib::nav_menu()`/`shiny::navbarMenu()`s. Consider using `header` or `footer` if you wish to place content above (or below) every panel's contents.
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Error in tools::file_path_as_absolute(dirname(output_file)) : 
+  file 'C:/Users/mroberts/The Council of State Governments/50 State Revocations Project/MCLC Shiny App/products' does not exist
+Loading required package: shiny
+Warning: package ‘shiny’ was built under R version 4.2.3
 
-[1mindexing[0m [34mrevcnt_notes.csv[0m [=================================================================================================================] [32m643.80MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                                     # A tibble: 52 × 4
-   ncrp  popdenom STATE       note                                                                                                                                
-   <chr> <chr>    <chr>       <chr>                                                                                                                               
- 1 A     BJS      Alabama     Alabama only reported 'White' race and ethnicity data for their readmissions to prison from parole observations in the National Cor…
- 2 A     CEN      Alabama     Alabama only reported 'White' race and ethnicity data for their readmissions to prison from parole observations in the National Cor…
- 3 N     BJS      Alabama     Alabama only reported 'White' race and ethnicity data for their readmissions to prison from parole observations in the National Cor…
- 4 N     CEN      Alabama     Alabama only reported 'White' race and ethnicity data for their readmissions to prison from parole observations in the National Cor…
- 5 A     BJS      Alaska      Alaska did not report admission type (and thus readmissions to prison from parole) for observations in the National Corrections Rep…
- 6 A     CEN      Alaska      Alaska did not report admission type (and thus readmissions to prison from parole) for observations in the National Corrections Rep…
- 7 N     BJS      Alaska      Alaska did not report admission type (and thus readmissions to prison from parole) for observations in the National Corrections Rep…
- 8 N     CEN      Alaska      Alaska did not report admission type (and thus readmissions to prison from parole) for observations in the National Corrections Rep…
- 9 A     BJS      Connecticut Connecticut did not report any observations in the National Corrections Reporting Program admissions data set.                      
-10 A     CEN      Connecticut Connecticut did not report any observations in the National Corrections Reporting Program admissions data set.                      
-# ℹ 42 more rows
-# ℹ Use `print(n = ...)` to see more rows
-function(){
-  
-  admin$mylog("!!START PREP FOR SHINY - DATA")
-  
-  outtables <- list(
-      "Admissions" = create_single_table("A") #this should match option on shiny 
-    , "Population" = create_single_table("N") #this should match option on shiny 
-    , "STATEVEC"   = state_vec 
-  )
-  
-  
-  admin$SPsaveRDS(outtables, glue("NCRP_RRI_tables.RDS"))
-  
-  file.copy(
-      from = file.path(admin$sp_data, glue("NCRP_RRI_tables.RDS"))
-    , to = "app/data/NCRP_RRI_tables.RDS"
-    , overwrite = TRUE
-  )
-  
-  admin$mylog("!!END   PREP FOR SHINY - DATA")
-  
-}
+Listening on http://127.0.0.1:3174
+Warning: package ‘htmlwidgets’ was built under R version 4.2.3
+WARNING: the 'dashboardthemes' package is no longer being maintained as of version 1.1.6, and will eventually be removed from CRAN. It is recommended that users switch over to the 'bslib' or 'fresh' theming packages available on CRAN.
+
+Attaching package: ‘shinydashboard’
+
+The following object is masked from ‘package:graphics’:
+
+    box
+
+Warning: package ‘shinymeta’ was built under R version 4.2.3
+Warning: package ‘reactable’ was built under R version 4.2.3
+Warning: package ‘DT’ was built under R version 4.2.3
+
+Attaching package: ‘DT’
+
+The following objects are masked from ‘package:shiny’:
+
+    dataTableOutput, renderDataTable
+
+Warning: package ‘dplyr’ was built under R version 4.2.3
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Warning: package ‘sp’ was built under R version 4.2.3
+The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,
+which was just loaded, will retire in October 2023.
+Please refer to R-spatial evolution reports for details, especially
+https://r-spatial.org/r/2023/05/15/evolution4.html.
+It may be desirable to make the sf package available;
+package maintainers should consider adding sf to Suggests:.
+The sp package is now running under evolution status 2
+     (status 2 uses the sf package in place of rgdal)
+Warning: package ‘ggplot2’ was built under R version 4.2.3
+
+Attaching package: ‘ggplot2’
+
+The following object is masked from ‘package:reactablefmtr’:
+
+    margin
+
+Warning: package ‘webshot2’ was built under R version 4.2.3
+Warning: package ‘conductor’ was built under R version 4.2.3
+Warning: package ‘shinyBS’ was built under R version 4.2.3
+Warning: Navigation containers expect a collection of `bslib::nav_panel()`/`shiny::tabPanel()`s and/or `bslib::nav_menu()`/`shiny::navbarMenu()`s. Consider using `header` or `footer` if you wish to place content above (or below) every panel's contents.
+Warning: Navigation containers expect a collection of `bslib::nav_panel()`/`shiny::tabPanel()`s and/or `bslib::nav_menu()`/`shiny::navbarMenu()`s. Consider using `header` or `footer` if you wish to place content above (or below) every panel's contents.
+Warning: Navigation containers expect a collection of `bslib::nav_panel()`/`shiny::tabPanel()`s and/or `bslib::nav_menu()`/`shiny::navbarMenu()`s. Consider using `header` or `footer` if you wish to place content above (or below) every panel's contents.
+Warning: Navigation containers expect a collection of `bslib::nav_panel()`/`shiny::tabPanel()`s and/or `bslib::nav_menu()`/`shiny::navbarMenu()`s. Consider using `header` or `footer` if you wish to place content above (or below) every panel's contents.
+Warning: Navigation containers expect a collection of `bslib::nav_panel()`/`shiny::tabPanel()`s and/or `bslib::nav_menu()`/`shiny::navbarMenu()`s. Consider using `header` or `footer` if you wish to place content above (or below) every panel's contents.
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
+Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
