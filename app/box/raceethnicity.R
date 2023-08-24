@@ -325,10 +325,10 @@ rate_table_header <- function(pop_denom, pop_or_adm_data, mult){
 
 
   out <- case_when(
-      pop_denom == "BJS" & pop_or_adm_data == "Admissions" ~ paste("Readmissions from Parole per"    , mult_txt, "Individuals Serving Parole Sentences")
-    , pop_denom == "CEN" & pop_or_adm_data == "Admissions" ~ paste("Readmissions from Parole per"    , mult_txt, "Individuals from the Community")
-    , pop_denom == "BJS" & pop_or_adm_data == "Population" ~ paste("Reincarcerations from Parole per", mult_txt, "Individuals Serving Parole Sentences")
-    , pop_denom == "CEN" & pop_or_adm_data == "Population" ~ paste("Reincarcerations from Parole per", mult_txt, "Individuals from the Community")
+      pop_denom == "BJS" & pop_or_adm_data == "Admissions" ~ paste("Admissions for Parole Revocations per"    , mult_txt, "Individuals Serving Parole Sentences")
+    , pop_denom == "CEN" & pop_or_adm_data == "Admissions" ~ paste("Admissions for Parole Revocations per"    , mult_txt, "Individuals from the Community")
+    , pop_denom == "BJS" & pop_or_adm_data == "Population" ~ paste("Number of People Incarcerated for Parole Revocations per", mult_txt, "Individuals Serving Parole Sentences")
+    , pop_denom == "CEN" & pop_or_adm_data == "Population" ~ paste("Number of People Incarcerated for Parole Revocations per", mult_txt, "Individuals from the Community")
   )
 
 

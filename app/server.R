@@ -1308,9 +1308,9 @@ server <- function(input, output, session) {
     df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")
 
     if (input$adm_pop_report == "Population") {
-      main_header <- "Reincarcerations from Parole in the Incarcerated Population"
+      main_header <- "Number of People Incarcerated for Parole Revocations"
     } else if (input$adm_pop_report == "Admissions") {
-      main_header <- "Reincarcerations from Parole"
+      main_header <- "Admissions from Parole"
     }
 
     if (nrow(df) > 0) {
