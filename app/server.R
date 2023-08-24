@@ -1130,11 +1130,11 @@ server <- function(input, output, session) {
                     disparities_definitions %>% filter(term == "Cumulative Disparities") %>% pull(definition))
   })
   output$redefinition_tooltip <- renderUI({
-    tags$span("",
-              tipify(el = icon("info-circle",
-                          lib = "font-awesome",
-                          style = "color: #004270; font-size: 0.5em;"),
-                     title = disparities_tooltip$a)
+    shiny::tags$span(tipify(el = icon("info-circle",
+                               lib = "font-awesome",
+                               style = "color: #D25E2D; font-size: 0.5em;"),
+                     title = disparities_tooltip$a),
+              "aria-label" = disparities_tooltip$a
     )
   })
 
@@ -1170,8 +1170,12 @@ server <- function(input, output, session) {
 
   output$retitleend <- renderText({
     case_when(
-      input$adm_pop_report == "Admissions" ~ "in People Readmitted to Prison from Parole"
-      , input$adm_pop_report == "Population" ~ "in the Incarcerated Population After Being Readmitted to Prison from Parole"
+      # Portion of disparities attributable to parole revocations
+      input$adm_pop_report == "Admissions" & input$pop_denom == "BJS" ~ "Racial and ethnic disparities in prison admissions for parole revocations represent the accumulation of disparities across the system. Only a portion of these disparities can be attributed to parole revocations.",
+      input$adm_pop_report == "Population" & input$pop_denom == "BJS" ~ "Racial and ethnic disparities in populations incarcerated for parole revocations represent the accumulation of disparities across the system. Only a portion of these disparities can be attributed to parole revocations.",
+      # Total Disparities
+      input$adm_pop_report == "Admissions" & input$pop_denom == "CEN" ~ "Racial and ethnic disparities in prison admissions for parole revocations represent the accumulation of disparities across the system.",
+      input$adm_pop_report == "Population" & input$pop_denom == "CEN" ~ "Racial and ethnic disparities in populations incarcerated for parole revocations represent the accumulation of disparities across the system."
     )
   })
 
@@ -1285,20 +1289,45 @@ server <- function(input, output, session) {
     }
   })
 
+  # output$table_revcnt_header <- renderUI({
+  #   df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")
+  #   main <- "<h4 class='reh4'>Readmissions to Prison from Parole Counts</h4>"
+  #   if (nrow(df) > 0){
+  #     out <- main
+  #   } else {
+  #     out <- paste0(  main
+  #                     , "<div class = 'retxt'>"
+  #                     , "Readmissions to prison from parole data were not available for "
+  #                     , input$state_report
+  #                     , "</div>")
+  #   }
+  #   HTML(out)
+  # })
   output$table_revcnt_header <- renderUI({
+
     df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")
-    main <- "<h4 class='reh4'>Readmissions to Prison from Parole Counts</h4>"
-    if (nrow(df) > 0){
-      out <- main
-    } else {
-      out <- paste0(  main
-                      , "<div class = 'retxt'>"
-                      , "Readmissions to prison from parole data were not available for "
-                      , input$state_report
-                      , "</div>")
+
+    if (input$adm_pop_report == "Population") {
+      main_header <- "Number of People Incarcerated for Parole Revocations"
+    } else if (input$adm_pop_report == "Admissions") {
+      main_header <- "Admissions from Parole"
     }
+
+    if (nrow(df) > 0) {
+      out <- paste0("<h4 class='reh4'>", tools::toTitleCase(main_header), "</h4>")
+    } else {
+      out <- paste0(
+        "<h4 class='reh4'>", tools::toTitleCase(main_header), "</h4>",
+        "<div class='retxt'>",
+        tools::toTitleCase(main_header), " data were not available for ",
+        input$state_report,
+        "</div>"
+      )
+    }
+
     HTML(out)
   })
+
 
   output$table_revcnt <- renderUI({
     df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")

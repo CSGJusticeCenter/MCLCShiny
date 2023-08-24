@@ -331,34 +331,39 @@ ui <- fluidPage(
                                                div(id = "denominator-picker",
                                                    class = "retitle",
                                                    style = "margin-bottom: 12px;",
-                                                   "Racial and Ethnic",
                                                    pickerInput('pop_denom',
                                                                label = NULL,
                                                                width = "fit",
-                                                               choices = c("Disparities" = "BJS",
-                                                                           "Cumulative Disparities" = "CEN"),
+                                                               choices = c("Total Disparities" = "CEN",
+                                                                           "Portion of disparities attributable to parole revocations" = "BJS"),
                                                                options = list(style = "re-picker",
                                                                               class = "retitle"),
+                                                               selected = "CEN",
                                                                inline = TRUE),
 
                                                    ####################################################################################################### tooltip
 
                                                    # Add tooltip depending on pop_denom selection/tabindex = 0 for screenreader
                                                    tagAppendAttributes(uiOutput("redefinition_tooltip",
-                                                                                inline = TRUE), tabindex = 0),
+                                                                                inline = TRUE), tabindex = 0)
 
                                                    ####################################################################################################### tooltip
 
-                                                   textOutput("retitleend", inline = TRUE)
                                                 )
-                                             )), #end fluidRow>column
-                                            fluidRow(
+                                             )),
+                                             fluidRow(column(width = 2),
+                                                      column(width = 8,
+                                                             align = "center",
+                                                             div(id = "re-explanation", textOutput("retitleend")),
+                                                             br(), br()),
+                                                      column(width = 2)),
+                                             fluidRow(
                                                column(width = 2),
                                                column(width = 8, align = "center", id = "infopanel-id",
                                                  htmlOutput("infogheader"),
                                                  conditionalPanel(condition = "output.showinfogpanel",
                                                     div(imageOutput("infogblack", height = "100%", ), style = "margin-bottom: 0.5em;"),
-                                                    imageOutput("infoghisp", height = "100%"),
+                                                    imageOutput("infoghisp", height = "100%"), br(),
                                                     htmlOutput("howitscalculated"),
                                                  ), # end conditional panel
                                                  div(id = "showtables-id",
