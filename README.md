@@ -74,7 +74,6 @@ After creating a clone, there are a few other steps you will need to take in ord
     * The root folder should be the string you would entere into the `csgjc::csg_sp_path()` function to get the pathway to the `MCLC Shiny App` folder on SharePoint 
     * This will take ~15 minutes to run this folder (majority of the time is creating the infographic pngs) 
     * runnig this script will produce a log txt file 
-1. Run files 00_fnc_library.R, 01_import.R, 02_highchart_download.R, and 03_highchart.R to save all data and visualizations ahead of time so that the app runs faster. This code will save data and visualizations to your local data folder, which is required to publish the Shiny app, and Sharepoint. The reactable.R file is currently commented out because saving reactable tables with trend lines (using the dataui package) ahead of time does not work when publishing the app.   
     
 After completing these steps you can run the app, either by opening `app.R`/`ui.R`/`server.R` and click the **Run App** button OR by entering `shiny::runApp()` into the console.
 

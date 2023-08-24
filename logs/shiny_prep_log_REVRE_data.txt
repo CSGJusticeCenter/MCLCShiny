@@ -1,14 +1,14 @@
 [1] "Revocation Counts and Race and Ethnicity"
-[1] "2023-08-23 11:38:38 EDT"
-[1mindexing[0m [34mrevcnt_notes.csv[0m [==================================================================================================] [32m435.33MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                      2023-08-23 11:38:39 - !!START PREP FOR SHINY - DATA
-2023-08-23 11:38:39 - Import and clean NCRP revocations data
-2023-08-23 11:38:39 - Start - NCRP import for admissions
+[1] "2023-08-24 09:07:26 EDT"
+2023-08-24 09:07:27 - !!START PREP FOR SHINY - DATA
+2023-08-24 09:07:27 - Import and clean NCRP revocations data
+2023-08-24 09:07:27 - Start - NCRP import for admissions
 Error in readChar(con, 5L, useBytes = TRUE) : cannot open the connection
 In addition: Warning message:
 In readChar(con, 5L, useBytes = TRUE) :
   cannot open compressed file 'C:/Users/mroberts/The Council of State Governments/CC/data/raw/NCRP/ICPSR_38492-V1/ICPSR_38492/DS0002/38492-0002-Data.rda', probable reason 'No such file or directory'
 
-Listening on http://127.0.0.1:6583
+Listening on http://127.0.0.1:5765
 Warning: Navigation containers expect a collection of `bslib::nav_panel()`/`shiny::tabPanel()`s and/or `bslib::nav_menu()`/`shiny::navbarMenu()`s. Consider using `header` or `footer` if you wish to place content above (or below) every panel's contents.
 Warning: Navigation containers expect a collection of `bslib::nav_panel()`/`shiny::tabPanel()`s and/or `bslib::nav_menu()`/`shiny::navbarMenu()`s. Consider using `header` or `footer` if you wish to place content above (or below) every panel's contents.
 Warning: Navigation containers expect a collection of `bslib::nav_panel()`/`shiny::tabPanel()`s and/or `bslib::nav_menu()`/`shiny::navbarMenu()`s. Consider using `header` or `footer` if you wish to place content above (or below) every panel's contents.
@@ -69,84 +69,40 @@ Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p
 Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
 Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
 
-
-Error: object 'prep_for_shiny_DATA' not found
-<module: prep/box/rri_infographs_tables>
-[1mindexing[0m [34mrevcnt_notes.csv[0m [==================================================================================================] [32m672.20MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                      # A tibble: 52 × 4
-   ncrp  popdenom STATE       note                                                                                                                 
-   <chr> <chr>    <chr>       <chr>                                                                                                                
- 1 A     BJS      Alabama     Alabama only reported 'White' race and ethnicity data for their readmissions to prison from parole observations in t…
- 2 A     CEN      Alabama     Alabama only reported 'White' race and ethnicity data for their readmissions to prison from parole observations in t…
- 3 N     BJS      Alabama     Alabama only reported 'White' race and ethnicity data for their readmissions to prison from parole observations in t…
- 4 N     CEN      Alabama     Alabama only reported 'White' race and ethnicity data for their readmissions to prison from parole observations in t…
- 5 A     BJS      Alaska      Alaska did not report admission type (and thus readmissions to prison from parole) for observations in the National …
- 6 A     CEN      Alaska      Alaska did not report admission type (and thus readmissions to prison from parole) for observations in the National …
- 7 N     BJS      Alaska      Alaska did not report admission type (and thus readmissions to prison from parole) for observations in the National …
- 8 N     CEN      Alaska      Alaska did not report admission type (and thus readmissions to prison from parole) for observations in the National …
- 9 A     BJS      Connecticut Connecticut did not report any observations in the National Corrections Reporting Program admissions data set.       
-10 A     CEN      Connecticut Connecticut did not report any observations in the National Corrections Reporting Program admissions data set.       
+[1mindexing[0m [34mrevcnt_notes.csv[0m [=================================================================================================================] [32m643.80MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                                     # A tibble: 52 × 4
+   ncrp  popdenom STATE       note                                                                                                                                
+   <chr> <chr>    <chr>       <chr>                                                                                                                               
+ 1 A     BJS      Alabama     Alabama only reported 'White' race and ethnicity data for their readmissions to prison from parole observations in the National Cor…
+ 2 A     CEN      Alabama     Alabama only reported 'White' race and ethnicity data for their readmissions to prison from parole observations in the National Cor…
+ 3 N     BJS      Alabama     Alabama only reported 'White' race and ethnicity data for their readmissions to prison from parole observations in the National Cor…
+ 4 N     CEN      Alabama     Alabama only reported 'White' race and ethnicity data for their readmissions to prison from parole observations in the National Cor…
+ 5 A     BJS      Alaska      Alaska did not report admission type (and thus readmissions to prison from parole) for observations in the National Corrections Rep…
+ 6 A     CEN      Alaska      Alaska did not report admission type (and thus readmissions to prison from parole) for observations in the National Corrections Rep…
+ 7 N     BJS      Alaska      Alaska did not report admission type (and thus readmissions to prison from parole) for observations in the National Corrections Rep…
+ 8 N     CEN      Alaska      Alaska did not report admission type (and thus readmissions to prison from parole) for observations in the National Corrections Rep…
+ 9 A     BJS      Connecticut Connecticut did not report any observations in the National Corrections Reporting Program admissions data set.                      
+10 A     CEN      Connecticut Connecticut did not report any observations in the National Corrections Reporting Program admissions data set.                      
 # ℹ 42 more rows
 # ℹ Use `print(n = ...)` to see more rows
-[1mindexing[0m [34mrevcnt_notes.csv[0m [====================================================================================================] [32m1.20GB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                      [1mindexing[0m [34mrevcnt_notes.csv[0m [==================================================================================================] [32m914.19MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                      
-Listening on http://127.0.0.1:6583
-Warning: Navigation containers expect a collection of `bslib::nav_panel()`/`shiny::tabPanel()`s and/or `bslib::nav_menu()`/`shiny::navbarMenu()`s. Consider using `header` or `footer` if you wish to place content above (or below) every panel's contents.
-Warning: Navigation containers expect a collection of `bslib::nav_panel()`/`shiny::tabPanel()`s and/or `bslib::nav_menu()`/`shiny::navbarMenu()`s. Consider using `header` or `footer` if you wish to place content above (or below) every panel's contents.
-Warning: Navigation containers expect a collection of `bslib::nav_panel()`/`shiny::tabPanel()`s and/or `bslib::nav_menu()`/`shiny::navbarMenu()`s. Consider using `header` or `footer` if you wish to place content above (or below) every panel's contents.
-Warning: Navigation containers expect a collection of `bslib::nav_panel()`/`shiny::tabPanel()`s and/or `bslib::nav_menu()`/`shiny::navbarMenu()`s. Consider using `header` or `footer` if you wish to place content above (or below) every panel's contents.
-Warning: Navigation containers expect a collection of `bslib::nav_panel()`/`shiny::tabPanel()`s and/or `bslib::nav_menu()`/`shiny::navbarMenu()`s. Consider using `header` or `footer` if you wish to place content above (or below) every panel's contents.
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-Warning: `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'. 
-
-
+function(){
+  
+  admin$mylog("!!START PREP FOR SHINY - DATA")
+  
+  outtables <- list(
+      "Admissions" = create_single_table("A") #this should match option on shiny 
+    , "Population" = create_single_table("N") #this should match option on shiny 
+    , "STATEVEC"   = state_vec 
+  )
+  
+  
+  admin$SPsaveRDS(outtables, glue("NCRP_RRI_tables.RDS"))
+  
+  file.copy(
+      from = file.path(admin$sp_data, glue("NCRP_RRI_tables.RDS"))
+    , to = "app/data/NCRP_RRI_tables.RDS"
+    , overwrite = TRUE
+  )
+  
+  admin$mylog("!!END   PREP FOR SHINY - DATA")
+  
+}
