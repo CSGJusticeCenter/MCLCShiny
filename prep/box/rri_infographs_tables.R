@@ -182,7 +182,7 @@ how_its_calc_txt <- function(DATA, whichRACE, whichSTATE, whichPOP, mult, NCRPLE
         shownRRI  = admin$roundedval(S_RRI,       accuracy = 0.1)
       , shownRATE = admin$roundedval(S_RATE*mult, accuracy = 1)
     ) %>% 
-    # add asterik if suppressed 
+    # add asterisk if suppressed 
     mutate_at(vars(shownRRI, shownRATE), ~ifelse(SUPPRESS == 1 & !is.na(.), admin$addsuppressasterick(.), .)) %>% 
     # remove any NA or Inf RRI rows 
     filter(!is.na(S_RRI), S_RRI != Inf)
@@ -444,8 +444,9 @@ prep_for_shiny_PNG <- function(){
     if (dataavail == 1){
       pwalk(
         list(
-            rri_raw = df$S_RRI #do suppressed value (only 2 instances Idaho/West Virigina, both Hispanic)
+            rri_raw = df$S_RRI #do suppressed value (only 2 instances Idaho/West Virginia, both Hispanic)
           , data_type = whichNCRP
+          , pop_type = whichPOP
           , suppress = df$SUPPRESS
           , race = df$RACE
           , label   = paste0(whichNCRP, "_", whichSTATE, "_", whichPOP, "_", df$RACE)
