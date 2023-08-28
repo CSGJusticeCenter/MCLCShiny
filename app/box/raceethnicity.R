@@ -218,20 +218,6 @@ PAROLE_TEXT <- function(pop_denom){
   
 }
 
-VALUE_TEXT <- function(suppress,displayvalue,whichNCRP){
-  
-  case_when(
-      suppress == 0 & as.numeric(display_value) > 1  & whichNCRP == "Admissions" ~ paste0(display_value," times more likely to be admitted to prison for a parole revocation than White people.")
-    , suppress == 0 & as.numeric(display_value) > 1  & whichNCRP == "Population" ~ paste0(display_value," times more likely to be incarcerated for a parole revocation than White people.")
-    , suppress == 0 & as.numeric(display_value) < 1  & whichNCRP == "Admissions" ~ paste0((1-as.numeric(display_value))*100,"% less likely to be admitted to prison for a parole revocation than White people.")
-    , suppress == 0 & as.numeric(display_value) < 1  & whichNCRP == "Population" ~ paste0((1-as.numeric(display_value))*100,"% less likely to be incarcerated for a parole revocation than White people.")
-    , suppress == 0 & as.numeric(display_value) == 1 & whichNCRP == "Admissions" ~ "equally likely to be admitted to prison for a parole revocation as White people."
-    , suppress == 0 & as.numeric(display_value) == 1 & whichNCRP == "Population" ~ "equally likely to be incarcerated for a parole revocation as White people."
-  )
-  
-}
-
-
 INFOGRAPH_RE_TEXT <- function(whichNCRP){
 
   case_when(
@@ -264,6 +250,19 @@ infograph_alt <- function(RRIDATA, whichNCRP, whichPOP, whichRE, whichSTATE){
     , round(rri_val, 1) >  0 & suppress == 1 ~ paste0(" less than ",  sprintf(glue("%.{1}f"), round(rri_val, 1)))
     , round(rri_val, 1) >  0 & suppress == 0 ~ paste0(" ",            sprintf(glue("%.{1}f"), round(rri_val, 1)))
   )
+  
+  VALUE_TEXT <- function(suppress,display_value,whichNCRP){
+    
+    case_when(
+      suppress == 0 & as.numeric(display_value) > 1  & whichNCRP == "Admissions" ~ paste0(display_value," times more likely to be admitted to prison for a parole revocation than White people.")
+      , suppress == 0 & as.numeric(display_value) > 1  & whichNCRP == "Population" ~ paste0(display_value," times more likely to be incarcerated for a parole revocation than White people.")
+      , suppress == 0 & as.numeric(display_value) < 1  & whichNCRP == "Admissions" ~ paste0((1-as.numeric(display_value))*100,"% less likely to be admitted to prison for a parole revocation than White people.")
+      , suppress == 0 & as.numeric(display_value) < 1  & whichNCRP == "Population" ~ paste0((1-as.numeric(display_value))*100,"% less likely to be incarcerated for a parole revocation than White people.")
+      , suppress == 0 & as.numeric(display_value) == 1 & whichNCRP == "Admissions" ~ "equally likely to be admitted to prison for a parole revocation as White people."
+      , suppress == 0 & as.numeric(display_value) == 1 & whichNCRP == "Population" ~ "equally likely to be incarcerated for a parole revocation as White people."
+    )
+    
+  }
 
   suppress_suf <- ifelse(suppress == 0, "", " This estimate should be interpreted with caution because one racial or ethnic group included in its calculation had fewer than 5 people. See data tables below for details.")
 
