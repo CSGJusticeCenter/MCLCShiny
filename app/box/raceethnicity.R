@@ -209,11 +209,11 @@ infographic_header <- function(dataavail, pop_denom, pop_or_adm_data, note){
 }
 
 
-PAROLE_TEXT <- function(pop_denom){
+PAROLE_TEXT <- function(whichPOP){
   
   case_when(
-      pop_denom == "BJS" ~ "people on parole are"
-    , pop_denom == "CEN" ~ "people are"
+      whichPOP == "BJS" ~ "people on parole are"
+    , whichPOP == "CEN" ~ "people are"
   )
   
 }
@@ -231,17 +231,16 @@ INFOGRAPH_RE_TEXT <- function(whichNCRP){
 #' Create alt text for infographic
 #'
 #' @param RRIDATA
-#' @param pop_denom
 #' @param whichNCRP
 #' @param whichPOP
 #' @param whichRE
 #' @param whichSTATE
 #'
 #' @export
-infograph_alt <- function(RRIDATA, pop_denom, whichNCRP, whichPOP, whichRE, whichSTATE){
+infograph_alt <- function(RRIDATA, whichNCRP, whichPOP, whichRE, whichSTATE){
 
 
-  thisdata <- RRIDATA[[pop_denom]][[whichNCRP]][[whichPOP]][[whichSTATE]]$INFOGRAPH$DF |> filter(RACE == whichRE)
+  thisdata <- RRIDATA[[whichNCRP]][[whichPOP]][[whichSTATE]]$INFOGRAPH$DF |> filter(RACE == whichRE)
 
   suppress <- thisdata$SUPPRESS
   rri_val <- thisdata$S_RRI
@@ -274,7 +273,7 @@ infograph_alt <- function(RRIDATA, pop_denom, whichNCRP, whichPOP, whichRE, whic
     , SUBHEAD_TEXT(whichPOP, whichNCRP)
     , ". "
     , whichRE, " "
-    , PAROLE_TEXT(pop_denom), " "
+    , PAROLE_TEXT(whichPOP), " "
     , VALUE_TEXT(suppress,display_value,whichNCRP)
     , suppress_suf, "."
     
@@ -291,6 +290,14 @@ infograph_alt <- function(RRIDATA, pop_denom, whichNCRP, whichPOP, whichRE, whic
   return(alt_text)
 
 }
+
+# TESTING
+ # RRIDATA <- readRDS("data/NCRP_RRI_tables.RDS")
+ # whichPOP <- "BJS"
+ # whichSTATE <- "Arizona"
+ # whichRE <- "Black"
+ # whichNCRP <- "Admissions"
+ # infograph_alt(RRIDATA, whichNCRP, whichPOP, whichRE, whichSTATE)
 
 
 
@@ -316,8 +323,8 @@ infograph_alt_noinfog <- function( whichNCRP, whichPOP, whichRE, whichSTATE){
   )
   
   thistxt2 <- case_when(
-        pop_denom == "BJS" ~ " on parole."
-      , pop_denom == "CEN" ~ "."
+        whichPOP == "BJS" ~ " on parole."
+      , whichPOP == "CEN" ~ "."
     )
 
 
