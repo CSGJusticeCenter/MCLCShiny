@@ -231,16 +231,17 @@ INFOGRAPH_RE_TEXT <- function(whichNCRP){
 #' Create alt text for infographic
 #'
 #' @param RRIDATA
+#' @param pop_denom
 #' @param whichNCRP
 #' @param whichPOP
 #' @param whichRE
 #' @param whichSTATE
 #'
 #' @export
-infograph_alt <- function(RRIDATA, whichNCRP, whichPOP, whichRE, whichSTATE){
+infograph_alt <- function(RRIDATA, pop_denom, whichNCRP, whichPOP, whichRE, whichSTATE){
 
 
-  thisdata <- RRIDATA[[whichNCRP]][[whichPOP]][[whichSTATE]]$INFOGRAPH$DF |> filter(RACE == whichRE)
+  thisdata <- RRIDATA[[pop_denom]][[whichNCRP]][[whichPOP]][[whichSTATE]]$INFOGRAPH$DF |> filter(RACE == whichRE)
 
   suppress <- thisdata$SUPPRESS
   rri_val <- thisdata$S_RRI
