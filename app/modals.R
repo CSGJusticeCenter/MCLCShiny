@@ -40,7 +40,7 @@ re_modal <- function() {
   showModal(modalDialog(
     title = "YouTube Video",
     tags$iframe(width = "560", height = "315", src = "LINK", frameborder = "0", allowfullscreen = NA),
-    easyClose = TRUE,
-    footer = modalButton("Explore")
+    easyClose = FALSE,
+    footer = actionButton("close_modal", label = "Explore")
   ))
 }
