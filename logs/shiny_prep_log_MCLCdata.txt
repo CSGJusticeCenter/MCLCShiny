@@ -262,9 +262,342 @@ Warning messages:
 > # Authors: Mari Roberts
 > # Sub-Author: Martha Eichlersmith
 > #  .... [TRUNCATED] 
-Error in file(filename, "r", encoding = encoding) : 
-  cannot open the connection
-In addition: Warning message:
-In file(filename, "r", encoding = encoding) :
-  cannot open file '00_fnc_library.R': No such file or directory
-[1] "2023-08-24 12:32:19 EDT"
+
+> ########
+> # Import data
+> ########
+> 
+> # Load sp file
+> hex <- read_sf(file.path(admin$sp_data_raw, "us_states_hexgrid.geojson")) %>%
++   select(s .... [TRUNCATED] 
+
+> # Load state abb
+> stateAbb <- read.csv(file.path(admin$sp_data_raw, "stateAbb.csv"))
+
+> # Load admissions data
+> mclc_data <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v9.xlsx"),
++                         sheet = "She ..." ... [TRUNCATED] 
+-/                                                                                                                                               /                                                                                                                                               -                                                                                                                                               
+> # Load info on missing sentence info
+> missingness_sentences <- read_excel(file.path(admin$sp_data_raw, "notes/states_notes_no_data_text.xlsx"),
++   .... [TRUNCATED] 
+-/                                                                                                                                               /                                                                                                                                               -                                                                                                                                               
+> # Load states notes
+> notes_raw <- read.xlsx(file.path(admin$sp_data_raw, "notes/states_notes_no_data_text.xlsx"),
++                        sheet =  .... [TRUNCATED] 
+
+> # Load definitions for disparities
+> disparities_definitions <- read.xlsx(file.path(admin$sp_data_raw, "notes/states_notes_no_data_text.xlsx"),
++    .... [TRUNCATED] 
+
+> ################################################################################
+> # Reformat shapefile for hex map
+> ############################## .... [TRUNCATED] 
+
+> # Clean state abbreviations file
+> stateAbb <- clean_names(stateAbb)
+
+> ################################################################################
+> # Reformat data about probation and parole being abolished
+> #### .... [TRUNCATED] 
+
+> ################################################################################
+> # Reformat notes file
+> ######################################### .... [TRUNCATED] 
+
+> # get probation related notes
+> probation_notes <- notes %>%
++   group_by(state) %>%
++   summarize(note_lst = list(probation_metrics)) %>%
++   ungro .... [TRUNCATED] 
+
+> # get parole related notes
+> parole_notes <- notes %>%
++   group_by(state) %>%
++   summarize(note_lst = list(parole_metrics)) %>%
++   ungroup() %>%
+ .... [TRUNCATED] 
+
+> # get parole asteriks notes
+> # make asteriks bold
+> parole_asterisks_notes <- notes %>%
++   mutate(parole_asterisks = str_replace_all(parole_asteri .... [TRUNCATED] 
+
+> # get probation asteriks notes
+> # make asteriks bold
+> probation_asterisks_notes <- notes %>%
++   mutate(probation_asterisks = str_replace_all(prob .... [TRUNCATED] 
+
+> # get additional notes
+> additional_notes <- notes %>%
++   mutate(
++     cy_or_fy_notes   = ifelse(is.na(cy_or_fy_notes), "", cy_or_fy_notes),
++     .... [TRUNCATED] 
+
+> ################################################################################
+> # Admissions and populations dataset
+> # Wide form of data
+> #### .... [TRUNCATED] 
+
+> ################################################################################
+> # MAP EXPLORER PAGE
+> # Value box data
+> ######################## .... [TRUNCATED] 
+
+> # create change from 2018 to 2019 to 2020
+> # remove dups
+> # create label ready variable called metric
+> # create pop vs adm variable
+> # change da .... [TRUNCATED] 
+`mutate_if()` ignored the following grouping variables:
+• Columns `state`, `data`
+
+> # save labels
+> labels <- mclc_all %>% ungroup() %>%
++   select(data, metric, adm_or_pop) %>% distinct()
+
+> # make data frame for counts
+> # data is in wide form
+> mclc_counts <- mclc_all %>%
++   select(-change)
+
+> mclc_counts <- spread(mclc_counts, year, total) %>%
++   select(state, data, `2018`, `2019`, `2020`, `2021`)
+
+> # make data frame for change
+> # data is in wide form
+> mclc_change <- mclc_all %>%
++   filter(year != 2018) %>%
++   select(-total)
+
+> mclc_change <-
++   spread(mclc_change, year, change) %>%
++   select(state,
++          data,
++          `2018 - 2019` = `2019`,
++          `2019 - 20 .... [TRUNCATED] 
+
+> # combine counts and change tables together
+> mclc_explorer_table <-
++   left_join(mclc_counts, mclc_change, by = c("state", "data")) %>%
++   mutate .... [TRUNCATED] 
+
+> # Get 4 year change
+> mclc_explorer_table_4_yr <- mclc_explorer_table %>%
++   select(state, data, change = `2018 - 2021`) %>%
++   left_join(stateAbb .... [TRUNCATED] 
+
+> # get trend data and trend line whether negative or positive
+> # for 2018 to 2021
+> mclc_explorer_table_18_21 <- mclc_explorer_table %>%
++   select( .... [TRUNCATED] 
+`summarise()` has grouped output by 'state'. You can override using the `.groups` argument.
+
+> # for 2018 to 2019
+> mclc_explorer_table_18_19 <- mclc_explorer_table %>%
++   select(state, data, `2018`, `2019`) %>%
++   pivot_longer(cols=c(`2018` .... [TRUNCATED] 
+`summarise()` has grouped output by 'state'. You can override using the `.groups` argument.
+
+> # for 2019 to 2020
+> mclc_explorer_table_19_20 <- mclc_explorer_table %>%
++   select(state, data, `2019`, `2020`) %>%
++   pivot_longer(cols=c(`2019` .... [TRUNCATED] 
+`summarise()` has grouped output by 'state'. You can override using the `.groups` argument.
+
+> # for 2020 to 2021
+> mclc_explorer_table_20_21 <- mclc_explorer_table %>%
++   select(state, data, `2020`, `2021`) %>%
++   pivot_longer(cols=c(`2020` .... [TRUNCATED] 
+`summarise()` has grouped output by 'state'. You can override using the `.groups` argument.
+
+> # combine trend data together
+> mclc_explorer_table_long <- mclc_explorer_table_18_21 %>%
++   left_join(mclc_explorer_table_18_19, by = c("state", " ..." ... [TRUNCATED] 
+
+> # combine data sets
+> mclc_explorer_table <- merge(mclc_explorer_table, mclc_explorer_table_long, by = c("state", "data"))
+
+> # data for map
+> # create year range
+> # create min and max values for legend scale
+> mclc_explorer <- mclc_all %>%
++   filter(year != 2018) %>%
++   .... [TRUNCATED] 
+
+> ##############################
+> # State table under graph
+> ##############################
+> 
+> # select variables
+> # sum by type
+> # remove proba .... [TRUNCATED] 
+`summarise()` has grouped output by 'state', 'year', 'metric'. You can override using the `.groups` argument.
+
+> ################################################################################
+> # Parole table under graph
+> #################################### .... [TRUNCATED] 
+
+> # filter to prob and parole info only
+> prob_parole_tables <- prob_parole_tables %>%
++   select(state, year, data, total) %>%
++   filter(grepl("paro ..." ... [TRUNCATED] 
+
+> # create metric and text for table
+> prob_parole_tables <- fnc_create_data_text(prob_parole_tables)
+
+> prob_parole_tables <- fnc_create_data_metric(prob_parole_tables) %>%
++   group_by(state, year, metric, adm_or_pop, prob_vs_parole, text) %>%
++   sum .... [TRUNCATED] 
+`summarise()` has grouped output by 'state', 'year', 'metric', 'adm_or_pop', 'prob_vs_parole'. You can override using the `.groups` argument.
+
+> parole_table <- prob_parole_tables %>%
++   filter(prob_vs_parole == "Parole") %>%
++   pivot_wider(names_from = year, values_from = total) %>%
++   mu .... [TRUNCATED] 
+
+> ################################################################################
+> # Probation table under graph
+> ################################# .... [TRUNCATED] 
+
+> ################################################################################
+> # Whether data is missing parole or probation
+> ################# .... [TRUNCATED] 
+
+> # if total is equal to probation or parole, then indicate that the total only includes
+> #   probation or parole
+> # population
+> probation_or_parol .... [TRUNCATED] 
+
+> # add probation_or_parole pop and adm together
+> probation_or_parole <- rbind(probation_or_parole_adm, probation_or_parole_pop)
+
+> ################################################################################
+> # Download data tables
+> ######################################## .... [TRUNCATED] 
+
+> # custom function to add text label depending on metric
+> # custom function to create an adm vs pop variable
+> # custom function to create a prob vs .... [TRUNCATED] 
+
+> adm_pop_long <- fnc_create_adm_pop(adm_pop_long)
+
+> adm_pop_long <- fnc_create_prob_vs_parole(adm_pop_long)
+
+> # add tooltip
+> # add info on probation and parole
+> adm_pop_long <- adm_pop_long %>%
++   mutate(tooltip = paste0("<b>", state, " - ", year, "</b><b ..." ... [TRUNCATED] 
+
+> # create text labels for variable names "total_admissions = Total Admissions"
+> adm_pop_long <- fnc_create_data_text(adm_pop_long)
+
+> # select data and change data types
+> csg <- adm_pop_long %>% ungroup() %>%
++   select(state,
++          metric = text,
++          year,
++           .... [TRUNCATED] 
+
+> ################################################################################
+> # states that don't have graphs because of missing data
+> ####### .... [TRUNCATED] 
+
+> nt_na_adm <- nt_na_adm1$state
+
+> # states that are missing data and will not have a graph showing technical and new offense violations
+> # pop
+> nt_na_pop1 <- missingness_sentences  .... [TRUNCATED] 
+
+> nt_na_pop <- nt_na_pop1$state
+
+> # states that are NOT missing data and will have a graph showing technical and new offense violations
+> # adm
+> nt_not_na_adm1 <- missingness_senten .... [TRUNCATED] 
+
+> nt_not_na_adm <- nt_not_na_adm1$state
+
+> # states that are NOT missing data and will have a graph showing technical and new offense violations
+> # pop
+> nt_not_na_pop1 <- missingness_senten .... [TRUNCATED] 
+
+> nt_not_na_pop <- nt_not_na_pop1$state
+
+> # states that are missing data and will not have a parole graph
+> # adm
+> parole_na_adm1 <- missingness_sentences %>%
++   filter(!is.na(parole_viola .... [TRUNCATED] 
+
+> parole_na_adm <- parole_na_adm1$state
+
+> # states that are missing data and will not have a parole graph
+> # pop
+> parole_na_pop1 <- missingness_sentences %>%
++   filter(!is.na(parole_viola .... [TRUNCATED] 
+
+> parole_na_pop <- parole_na_pop1$state
+
+> # states that are NOT missing data and will have a graph showing technical and new offense parole violations
+> # adm
+> parole_not_na_adm1 <- missing .... [TRUNCATED] 
+
+> parole_not_na_adm <- parole_not_na_adm1$state
+
+> # states that are NOT missing data and will have a graph showing technical and new offense parole violations
+> # pop
+> parole_not_na_pop1 <- missing .... [TRUNCATED] 
+
+> parole_not_na_pop <- parole_not_na_pop1$state
+
+> # states that are missing data and will not have a probation graph
+> # adm
+> probation_na_adm1 <- missingness_sentences %>%
++   filter(!is.na(probat .... [TRUNCATED] 
+
+> probation_na_adm <- probation_na_adm1$state
+
+> # states that are missing data and will not have a probation graph
+> # pop
+> probation_na_pop1 <- missingness_sentences %>%
++   filter(!is.na(probat .... [TRUNCATED] 
+
+> probation_na_pop <- probation_na_pop1$state
+
+> # states that are NOT missing data and will have a graph showing technical and new offense probation violations
+> # adm
+> probation_not_na_adm1 <- m .... [TRUNCATED] 
+
+> probation_not_na_adm <- probation_not_na_adm1$state
+
+> # states that are NOT missing data and will have a graph showing technical and new offense probation violations
+> # pop
+> probation_not_na_pop1 <- m .... [TRUNCATED] 
+
+> probation_not_na_pop <- probation_not_na_pop1$state
+
+> ################################################################################
+> # STATE REPORTS PAGE
+> # Value box data
+> ####################### .... [TRUNCATED] 
+
+> # create value box data
+> # filter to value box values (total, supervision violations, and technical violations)
+> # merge info on whether probation .... [TRUNCATED] 
+
+> ################################################################################
+> # save Rdata
+> ################################################## .... [TRUNCATED] 
+
+> for (folder in theseFOLDERS){
++ 
++   save(disparities_definitions,     file=file.path(folder, "disparities_definitions.rds"))
++   save(adm_pop_long, .... [TRUNCATED] 
+Warning messages:
+1: package ‘rlang’ was built under R version 4.2.3
+2: package ‘jsonlite’ was built under R version 4.2.3
+3: package ‘readxl’ was built under R version 4.2.3
+4: package ‘sf’ was built under R version 4.2.3
+5: package ‘showtext’ was built under R version 4.2.3
+6: package ‘htmltools’ was built under R version 4.2.3
+7: package ‘openxlsx’ was built under R version 4.2.3
+8: package ‘scales’ was built under R version 4.2.3
