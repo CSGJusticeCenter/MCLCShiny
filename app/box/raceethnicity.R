@@ -123,10 +123,10 @@ create_reactable <- function(DF){
 SUBHEAD_TEXT <- function(pop_denom, pop_or_adm_data){
 
   case_when(
-      pop_denom == "BJS" & pop_or_adm_data == "Admissions" ~ "racial and ethnic disparities in prison admissions for parole revocations represent the accumulation of disparities across the system. Only a portion of these disparities can be attributed to parole revocations"
-    , pop_denom == "CEN" & pop_or_adm_data == "Admissions" ~ "racial and ethnic disparities in prison admissions for parole revocations represent the accumulation of disparities across the system"
-    , pop_denom == "BJS" & pop_or_adm_data == "Population" ~ "racial and ethnic disparities in populations incarcerated for parole revocations represent the accumulation of disparities across the system. Only a portion of these disparities can be attributed to parole revocations"
-    , pop_denom == "CEN" & pop_or_adm_data == "Population" ~ "racial and ethnic disparities in populations incarcerated for parole revocations represent the accumulation of disparities across the system"
+      pop_denom == "BJS" & pop_or_adm_data == "Admissions" ~ "racial and ethnic disparities in prison admissions for parole revocations represents the accumulation of disparities across the system. Only a portion of these disparities can be attributed to parole revocations"
+    , pop_denom == "CEN" & pop_or_adm_data == "Admissions" ~ "racial and ethnic disparities in prison admissions for parole revocations represents the accumulation of disparities across the system"
+    , pop_denom == "BJS" & pop_or_adm_data == "Population" ~ "racial and ethnic disparities in populations incarcerated for parole revocations represents the accumulation of disparities across the system. Only a portion of these disparities can be attributed to parole revocations"
+    , pop_denom == "CEN" & pop_or_adm_data == "Population" ~ "racial and ethnic disparities in populations incarcerated for parole revocations represents the accumulation of disparities across the system"
   )
 
 }
@@ -212,8 +212,8 @@ infographic_header <- function(dataavail, pop_denom, pop_or_adm_data, note){
 PAROLE_TEXT <- function(whichPOP){
   
   case_when(
-      whichPOP == "BJS" ~ "people on parole are"
-    , whichPOP == "CEN" ~ "people are"
+      whichPOP == "BJS" ~ "people on parole are "
+    , whichPOP == "CEN" ~ "people are "
   )
   
 }
@@ -231,6 +231,7 @@ INFOGRAPH_RE_TEXT <- function(whichNCRP){
 #' Create alt text for infographic
 #'
 #' @param RRIDATA
+#' @param rri_raw
 #' @param whichNCRP
 #' @param whichPOP
 #' @param whichRE
@@ -246,20 +247,30 @@ infograph_alt <- function(RRIDATA, whichNCRP, whichPOP, whichRE, whichSTATE){
   rri_val <- thisdata$S_RRI
 
   display_value <- case_when(
-      round(rri_val, 1) == 0 & rri_val > 0   ~ paste0(" less than 0.1")
-    , round(rri_val, 1) >  0 & suppress == 1 ~ paste0(" less than ",  sprintf(glue("%.{1}f"), round(rri_val, 1)))
-    , round(rri_val, 1) >  0 & suppress == 0 ~ paste0(" ",            sprintf(glue("%.{1}f"), round(rri_val, 1)))
+    
+    #RRI approx. 0
+    rri_val > 0 & round(rri_val, 1) == 0 ~ as.character(as.numeric(glue("1e-1")))
+    
+    #RRI > 0, black/hispanic
+    , round(rri_val, 1) > 0 ~ sprintf(glue("%.1f"), round(rri_val, 1))
+    
   )
   
-  VALUE_TEXT <- function(suppress,display_value,whichNCRP){
+  # display_value <- case_when(
+  #     round(rri_val, 1) == 0 & rri_val > 0   ~ paste0(" less than 0.1")
+  #   , round(rri_val, 1) >  0 & suppress == 1 ~ paste0(" less than ",  sprintf(glue("%.{1}f"), round(rri_val, 1)))
+  #   , round(rri_val, 1) >  0 & suppress == 0 ~ paste0(" ",            sprintf(glue("%.{1}f"), round(rri_val, 1)))
+  # )
+  
+  VALUE_TEXT <- function(display_value,whichNCRP){
     
     case_when(
-      suppress == 0 & as.numeric(display_value) > 1  & whichNCRP == "Admissions" ~ paste0(display_value," times more likely to be admitted to prison for a parole revocation than White people.")
-      , suppress == 0 & as.numeric(display_value) > 1  & whichNCRP == "Population" ~ paste0(display_value," times more likely to be incarcerated for a parole revocation than White people.")
-      , suppress == 0 & as.numeric(display_value) < 1  & whichNCRP == "Admissions" ~ paste0((1-as.numeric(display_value))*100,"% less likely to be admitted to prison for a parole revocation than White people.")
-      , suppress == 0 & as.numeric(display_value) < 1  & whichNCRP == "Population" ~ paste0((1-as.numeric(display_value))*100,"% less likely to be incarcerated for a parole revocation than White people.")
-      , suppress == 0 & as.numeric(display_value) == 1 & whichNCRP == "Admissions" ~ "equally likely to be admitted to prison for a parole revocation as White people."
-      , suppress == 0 & as.numeric(display_value) == 1 & whichNCRP == "Population" ~ "equally likely to be incarcerated for a parole revocation as White people."
+      as.numeric(display_value) > 1  & whichNCRP == "Admissions" ~ paste0(display_value," times more likely to be admitted to prison for a parole revocation than White people.")
+      , as.numeric(display_value) > 1  & whichNCRP == "Population" ~ paste0(display_value," times more likely to be incarcerated for a parole revocation than White people.")
+      , as.numeric(display_value) < 1  & whichNCRP == "Admissions" ~ paste0((1-as.numeric(display_value))*100,"% less likely to be admitted to prison for a parole revocation than White people.")
+      , as.numeric(display_value) < 1  & whichNCRP == "Population" ~ paste0((1-as.numeric(display_value))*100,"% less likely to be incarcerated for a parole revocation than White people.")
+      , as.numeric(display_value) == 1 & whichNCRP == "Admissions" ~ "equally likely to be admitted to prison for a parole revocation as White people."
+      , as.numeric(display_value) == 1 & whichNCRP == "Population" ~ "equally likely to be incarcerated for a parole revocation as White people."
     )
     
   }
@@ -268,14 +279,13 @@ infograph_alt <- function(RRIDATA, whichNCRP, whichPOP, whichRE, whichSTATE){
 
   string_vec <- c(
     "The info-graphic for "
-    , whichSTATE
-    , " highlights "
+    , whichSTATE, " "
     , SUBHEAD_TEXT(whichPOP, whichNCRP)
     , ". "
     , whichRE, " "
-    , PAROLE_TEXT(whichPOP), " "
-    , VALUE_TEXT(suppress,display_value,whichNCRP)
-    , suppress_suf, "."
+    , PAROLE_TEXT(whichPOP)
+    , VALUE_TEXT(display_value,whichNCRP)
+    , suppress_suf
     
     #, WHITE_INTRO_TEXT(whichPOP, whichNCRP)
     #, display_value, " "
@@ -323,8 +333,8 @@ infograph_alt_noinfog <- function( whichNCRP, whichPOP, whichRE, whichSTATE){
   )
   
   thistxt2 <- case_when(
-        whichPOP == "BJS" ~ " on parole."
-      , whichPOP == "CEN" ~ "."
+        whichPOP == "BJS" ~ "people on parole."
+      , whichPOP == "CEN" ~ "people."
     )
 
 
@@ -334,7 +344,6 @@ infograph_alt_noinfog <- function( whichNCRP, whichPOP, whichRE, whichSTATE){
     , thistxt
     , "for"
     , whichRE
-    , "people"
     , thistxt2
   )
 
