@@ -40,6 +40,21 @@ server <- function(input, output, session) {
   # Hex map
   #######
 
+  # Dynamically change name of map
+  map_filename <- reactive({
+    name <- mclc_explorer %>%
+      filter(adm_or_pop == input$adm_or_pop_map,
+             metric     == input$data_map,
+             year       == input$year_map) %>%
+      select(data, year) %>% distinct()
+    name$year <- gsub(" - ", " ", name$year)
+    name <- paste(name$data, name$year, sep = '_')
+    name <- gsub(" ", "_", name)
+  }) %>%
+    bindCache(input$data_map,
+              input$adm_or_pop_map,
+              input$year_map)
+
   # Select foundational hex map and store it as a reactive expression
   # This allows the map to be downloaded after the map is changed
   # Charts were created in highchart.R
@@ -1122,7 +1137,7 @@ server <- function(input, output, session) {
 
   ############################################################################################################################################ tooltip
 
-  # Generate tooltip depending on disparities or cumulative disparities
+  # Generate tooltip depending on Total disparities or Portion of disparities attributable to parole revocations
   disparities_tooltip <- reactiveValues()
   observe({
     disparities_tooltip$a <- ifelse(input$pop_denom =="BJS",

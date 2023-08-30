@@ -10,10 +10,10 @@ box::use(
 )
 
 # MR
-CC_path <- csg_sp_path("JC Research - CC/data/raw")
+# CC_path <- csg_sp_path("JC Research - CC/data/raw")
 
-# # ME
-# CC_path <- csg_sp_path("CC/data/raw")
+# ME
+CC_path <- csg_sp_path("CC/data/raw")
 
 
 
