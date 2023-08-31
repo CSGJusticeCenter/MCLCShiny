@@ -13,7 +13,7 @@
 # in your Renviron (usethis::edit_r_environ()), set CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"
 
 # define the path to the desktop manually
-temp_folder_path <- "C:/Users/mherman/OneDrive - The Council of State Governments/Desktop/MCLC_temp_files"
+temp_folder_path <- "C:/Users/mroberts/OneDrive - The Council of State Governments/Desktop/MCLC_temp_files"
 
 box::use(
   prep/box/admin
@@ -854,7 +854,7 @@ save_state_png <- function(hc_obj, folderpath, id, title){
 
   admin$mylog(glue("Save plot: {title} for {id}"))
   saveWidget(hc_obj, file = "temp.html", selfcontained = TRUE)
-  webshot2::webshotwebshot(
+  webshot2::webshot(
     url = "temp.html"
     , file = file.path(folderpath, glue("{id}_{title}.png"))
     , zoom = 4
@@ -908,7 +908,7 @@ walk(
   metrics_list,
   ~save_map_png(
     adm_maps_2018_2019[[.x]]
-    , folderpath = tempfolder
+    , folderpath = savefolder
     , id = .x
     , title = "Admissions_2018 - 2019")
 )
@@ -919,7 +919,7 @@ walk(
   metrics_list,
   ~save_map_png(
     adm_maps_2018_2021[[.x]]
-    , folderpath = tempfolder
+    , folderpath = savefolder
     , id = .x
     , title = "Admissions_2018 - 2021")
 )
@@ -931,7 +931,7 @@ walk(
   metrics_list,
   ~save_map_png(
     adm_maps_2019_2020[[.x]]
-    , folderpath = tempfolder
+    , folderpath = savefolder
     , id = .x
     , title = "Admissions_2019 - 2020")
 )
@@ -942,7 +942,7 @@ walk(
   metrics_list,
   ~save_map_png(
     adm_maps_2020_2021[[.x]]
-    , folderpath = tempfolder
+    , folderpath = savefolder
     , id = .x
     , title = "Admissions_2020 - 2021")
 )
@@ -958,7 +958,7 @@ walk(
   metrics_list,
   ~save_map_png(
     pop_maps_2018_2019[[.x]]
-    , folderpath = tempfolder
+    , folderpath = savefolder
     , id = .x
     , title = "Population_2018 - 2019")
 )
@@ -969,7 +969,7 @@ walk(
   metrics_list,
   ~save_map_png(
     pop_maps_2018_2021[[.x]]
-    , folderpath = tempfolder
+    , folderpath = savefolder
     , id = .x
     , title = "Population_2018 - 2021")
 )
@@ -980,7 +980,7 @@ walk(
   metrics_list,
   ~save_map_png(
     pop_maps_2019_2020[[.x]]
-    , folderpath = tempfolder
+    , folderpath = savefolder
     , id = .x
     , title = "Population_2019 - 2020")
 )
@@ -991,7 +991,7 @@ walk(
   metrics_list,
   ~save_map_png(
     pop_maps_2020_2021[[.x]]
-    , folderpath = tempfolder
+    , folderpath = savefolder
     , id = .x
     , title = "Population_2020 - 2021")
 )
@@ -1006,7 +1006,7 @@ walk(
   states_list,
   ~save_state_png(
     add_st_name(all_state_area_adm[[.x]], .x)
-    , folderpath = tempfolder
+    , folderpath = savefolder
     , id = .x
     , title = "Prison_Admissions")
 )
@@ -1017,7 +1017,7 @@ walk(
   states_list,
   ~save_state_png(
     add_st_name(all_state_area_pop[[.x]], .x)
-    , folderpath = tempfolder
+    , folderpath = savefolder
     , id = .x
     , title = "Prison_Population")
 )
@@ -1033,7 +1033,7 @@ walk(
   states_list,
   ~save_state_png(
     add_st_name(all_state_bar_adm[[.x]], .x)
-    , folderpath = tempfolder
+    , folderpath = savefolder
     , id = .x
     , title = "Supervision_Violation_Admissions_by_Type")
 )
@@ -1043,7 +1043,7 @@ walk(
   states_list,
   ~save_state_png(
     add_st_name(all_state_bar_pop[[.x]], .x)
-    , folderpath = tempfolder
+    , folderpath = savefolder
     , id = .x
     , title = "Supervision_Violation_Population_by_Type")
 )
@@ -1059,7 +1059,7 @@ walk(
   states_list,
   ~save_state_png(
     add_st_name(probation_bar_adm[[.x]], .x)
-    , folderpath = tempfolder
+    , folderpath = savefolder
     , id = .x
     , title = "Probation_Violation_Admissions_by_Type")
 )
@@ -1070,7 +1070,7 @@ walk(
   states_list,
   ~save_state_png(
     add_st_name(probation_bar_pop[[.x]], .x)
-    , folderpath = tempfolder
+    , folderpath = savefolder
     , id = .x
     , title = "Probation_Violation_Population_by_Type")
 )
@@ -1086,7 +1086,7 @@ walk(
   states_list,
   ~save_state_png(
     add_st_name(parole_bar_adm[[.x]], .x)
-    , folderpath = tempfolder
+    , folderpath = savefolder
     , id = .x
     , title = "Parole_Violation_Admissions_by_Type")
 )
@@ -1096,7 +1096,7 @@ walk(
   states_list,
   ~save_state_png(
     add_st_name(parole_bar_pop[[.x]], .x)
-    , folderpath = tempfolder
+    , folderpath = savefolder
     , id = .x
     , title = "Parole_Violation_Population_by_Type")
 )
@@ -1105,23 +1105,23 @@ walk(
 
 # copy over pngs from temp folder to app
 walk(
-  list.files(tempfolder, pattern = "*.png")
+  list.files(savefolder, pattern = "*.png")
   , ~file.copy(
-    from = file.path(tempfolder, .x)
-    , to = file.path(savefolder, .x)
-    , overwrite = TRUE
-  )
-)
-
-# copy over pngs from temp folder to sp
-walk(
-  list.files(tempfolder, pattern = "*.png")
-  , ~file.copy(
-    from = file.path(tempfolder, .x)
+    from = file.path(savefolder, .x)
     , to = file.path(copyfolder, .x)
     , overwrite = TRUE
   )
 )
+
+# # copy over pngs from temp folder to sp
+# walk(
+#   list.files(tempfolder, pattern = "*.png")
+#   , ~file.copy(
+#     from = file.path(tempfolder, .x)
+#     , to = file.path(copyfolder, .x)
+#     , overwrite = TRUE
+#   )
+# )
 
 admin$mylog("!!END SAVING HIGHCHARTS AS PNGS")
 
