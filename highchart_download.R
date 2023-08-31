@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: highchart_download.R
 # Authors: Mari Roberts, Martha Eichlersmith
-# Date last updated: July 6, 2023 (MAR)
+# Date last updated: August 31, 2023 (MAR)
 # Description:
 #    Create and save highcharts WITH LOGO (pngs) so the app loads faster
 #######################################
@@ -12,7 +12,8 @@
 # https://csgorg.sharepoint.com/:f:/s/Team-JC-Research/EhdvImKN2rdPnmHQ2TrKlooBdYqnnWc0SUXBNuh9C7d41g?e=NCsh8I
 # in your Renviron (usethis::edit_r_environ()), set CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"
 
-
+# define the path to the desktop manually
+temp_folder_path <- "C:/Users/mherman/OneDrive - The Council of State Governments/Desktop/MCLC_temp_files"
 
 box::use(
   prep/box/admin
@@ -125,7 +126,7 @@ metrics_list <- list("New Offense Violation",
 
 ####################################
 
-# generate list of state highcharts to call in app (admissions)
+# generate list of map highcharts to call in app (admissions)
 adm_maps_2018_2019 <- map(.x = metrics,  .f = function(x) {
   df1 <- mclc_explorer %>%
     filter(adm_or_pop == "Admissions",
@@ -137,7 +138,7 @@ adm_maps_2018_2019 <- map(.x = metrics,  .f = function(x) {
   return(highcharts)
 })
 
-# generate list of state highcharts to call in app (admissions)
+# generate list of map highcharts to call in app (admissions)
 adm_maps_2018_2021 <- map(.x = metrics,  .f = function(x) {
   df1 <- mclc_explorer %>%
     filter(adm_or_pop == "Admissions",
@@ -149,7 +150,7 @@ adm_maps_2018_2021 <- map(.x = metrics,  .f = function(x) {
   return(highcharts)
 })
 
-# generate list of state highcharts to call in app (admissions)
+# generate list of map highcharts to call in app (admissions)
 adm_maps_2019_2020 <- map(.x = metrics,  .f = function(x) {
   df1 <- mclc_explorer %>%
     filter(adm_or_pop == "Admissions",
@@ -161,7 +162,7 @@ adm_maps_2019_2020 <- map(.x = metrics,  .f = function(x) {
   return(highcharts)
 })
 
-# generate list of state highcharts to call in app (admissions)
+# generate list of map highcharts to call in app (admissions)
 adm_maps_2020_2021 <- map(.x = metrics,  .f = function(x) {
   df1 <- mclc_explorer %>%
     filter(adm_or_pop == "Admissions",
@@ -173,7 +174,7 @@ adm_maps_2020_2021 <- map(.x = metrics,  .f = function(x) {
   return(highcharts)
 })
 
-# generate list of state highcharts to call in app (Population)
+# generate list of map highcharts to call in app (Population)
 pop_maps_2018_2019 <- map(.x = metrics,  .f = function(x) {
   df1 <- mclc_explorer %>%
     filter(adm_or_pop == "Population",
@@ -185,7 +186,7 @@ pop_maps_2018_2019 <- map(.x = metrics,  .f = function(x) {
   return(highcharts)
 })
 
-# generate list of state highcharts to call in app (Population)
+# generate list of map highcharts to call in app (Population)
 pop_maps_2018_2021 <- map(.x = metrics,  .f = function(x) {
   df1 <- mclc_explorer %>%
     filter(adm_or_pop == "Population",
@@ -197,7 +198,7 @@ pop_maps_2018_2021 <- map(.x = metrics,  .f = function(x) {
   return(highcharts)
 })
 
-# generate list of state highcharts to call in app (Population)
+# generate list of map highcharts to call in app (Population)
 pop_maps_2019_2020 <- map(.x = metrics,  .f = function(x) {
   df1 <- mclc_explorer %>%
     filter(adm_or_pop == "Population",
@@ -209,7 +210,7 @@ pop_maps_2019_2020 <- map(.x = metrics,  .f = function(x) {
   return(highcharts)
 })
 
-# generate list of state highcharts to call in app (Population)
+# generate list of map highcharts to call in app (Population)
 pop_maps_2020_2021 <- map(.x = metrics,  .f = function(x) {
   df1 <- mclc_explorer %>%
     filter(adm_or_pop == "Population",
@@ -827,14 +828,14 @@ probation_bar_pop <- setNames(probation_bar_pop, states)
 
 ################################################################################
 
-# Save graphs as pngs (with logo and data labels - need to fix area chart still)
+# Save graphs as pngs (with logo and data labels)
 
 ################################################################################
 
 admin$mylog("!!START SAVING HIGHCHARTS AS PNGS")
 
 
-## functions
+# functions
 
 add_st_name <- function(hc_obj, state = NA){
 
@@ -842,8 +843,6 @@ add_st_name <- function(hc_obj, state = NA){
   thisstate <- ifelse(!is.na(state), state, hc_obj$x$hc_opts$series[[1]]$data[[1]]$state)
 
   new_title <- paste0(thisstate, " ", org_title)
-
-  #admin$mylog(glue("Add state to title: {org_title} plot for {thisstate}"))
 
   hc_obj %>%
     hc_title(text = new_title)
@@ -854,11 +853,9 @@ add_st_name <- function(hc_obj, state = NA){
 save_state_png <- function(hc_obj, folderpath, id, title){
 
   admin$mylog(glue("Save plot: {title} for {id}"))
-
-  temp <- tempfile(fileext = ".html")
-  saveWidget(hc_obj, file = temp, selfcontained = TRUE)
-  webshot(
-    url = temp
+  saveWidget(hc_obj, file = "temp.html", selfcontained = TRUE)
+  webshot2::webshotwebshot(
+    url = "temp.html"
     , file = file.path(folderpath, glue("{id}_{title}.png"))
     , zoom = 4
     , vwidth = 500
@@ -866,18 +863,15 @@ save_state_png <- function(hc_obj, folderpath, id, title){
     , delay = 1
   )
 
-
 }
 
 
 save_map_png <- function(hc_obj, folderpath, id, title){
 
   admin$mylog(glue("Save plot: {title} for {id}"))
-
-  temp <- tempfile(fileext = ".html")
-  saveWidget(hc_obj, file = temp, selfcontained = TRUE)
-  webshot(
-    url = temp
+  saveWidget(hc_obj, file = "temp.html", selfcontained = TRUE)
+  webshot2::webshot(
+    url = "temp.html"
     , file = file.path(folderpath, glue("Change_{id}_{title}.png"))
     , delay = 1
   )
@@ -885,19 +879,23 @@ save_map_png <- function(hc_obj, folderpath, id, title){
 
 }
 
-## folders
 
-theseFOLDERS <- c("sharepoint" = file.path(admin$sp_data, "plots"), "app" = "app/data/plots")
-savefolder <- theseFOLDERS[1]
-copyfolder <- theseFOLDERS[2]
+# folders
+theseFOLDERS <- c("tempfolder" = file.path(temp_folder_path),
+                  "sharepoint" = file.path(admin$sp_data, "plots"),
+                  "app" = "app/data/plots")
+tempfolder <- theseFOLDERS[1]
+savefolder <- theseFOLDERS[2]
+copyfolder <- theseFOLDERS[3]
 
 
-## remove pngs from sharepoint and app
+# remove pngs from sharepoint and app
 for (folder in theseFOLDERS){
 
   walk(list.files(folder, pattern = "*.png"), ~file.remove(file.path(folder, .x)))
 
 }
+
 
 
 ##########
@@ -910,7 +908,7 @@ walk(
   metrics_list,
   ~save_map_png(
     adm_maps_2018_2019[[.x]]
-    , folderpath = savefolder
+    , folderpath = tempfolder
     , id = .x
     , title = "Admissions_2018 - 2019")
 )
@@ -921,7 +919,7 @@ walk(
   metrics_list,
   ~save_map_png(
     adm_maps_2018_2021[[.x]]
-    , folderpath = savefolder
+    , folderpath = tempfolder
     , id = .x
     , title = "Admissions_2018 - 2021")
 )
@@ -933,7 +931,7 @@ walk(
   metrics_list,
   ~save_map_png(
     adm_maps_2019_2020[[.x]]
-    , folderpath = savefolder
+    , folderpath = tempfolder
     , id = .x
     , title = "Admissions_2019 - 2020")
 )
@@ -944,7 +942,7 @@ walk(
   metrics_list,
   ~save_map_png(
     adm_maps_2020_2021[[.x]]
-    , folderpath = savefolder
+    , folderpath = tempfolder
     , id = .x
     , title = "Admissions_2020 - 2021")
 )
@@ -960,7 +958,7 @@ walk(
   metrics_list,
   ~save_map_png(
     pop_maps_2018_2019[[.x]]
-    , folderpath = savefolder
+    , folderpath = tempfolder
     , id = .x
     , title = "Population_2018 - 2019")
 )
@@ -971,7 +969,7 @@ walk(
   metrics_list,
   ~save_map_png(
     pop_maps_2018_2021[[.x]]
-    , folderpath = savefolder
+    , folderpath = tempfolder
     , id = .x
     , title = "Population_2018 - 2021")
 )
@@ -982,7 +980,7 @@ walk(
   metrics_list,
   ~save_map_png(
     pop_maps_2019_2020[[.x]]
-    , folderpath = savefolder
+    , folderpath = tempfolder
     , id = .x
     , title = "Population_2019 - 2020")
 )
@@ -993,7 +991,7 @@ walk(
   metrics_list,
   ~save_map_png(
     pop_maps_2020_2021[[.x]]
-    , folderpath = savefolder
+    , folderpath = tempfolder
     , id = .x
     , title = "Population_2020 - 2021")
 )
@@ -1008,7 +1006,7 @@ walk(
   states_list,
   ~save_state_png(
     add_st_name(all_state_area_adm[[.x]], .x)
-    , folderpath = savefolder
+    , folderpath = tempfolder
     , id = .x
     , title = "Prison_Admissions")
 )
@@ -1019,7 +1017,7 @@ walk(
   states_list,
   ~save_state_png(
     add_st_name(all_state_area_pop[[.x]], .x)
-    , folderpath = savefolder
+    , folderpath = tempfolder
     , id = .x
     , title = "Prison_Population")
 )
@@ -1035,7 +1033,7 @@ walk(
   states_list,
   ~save_state_png(
     add_st_name(all_state_bar_adm[[.x]], .x)
-    , folderpath = savefolder
+    , folderpath = tempfolder
     , id = .x
     , title = "Supervision_Violation_Admissions_by_Type")
 )
@@ -1045,7 +1043,7 @@ walk(
   states_list,
   ~save_state_png(
     add_st_name(all_state_bar_pop[[.x]], .x)
-    , folderpath = savefolder
+    , folderpath = tempfolder
     , id = .x
     , title = "Supervision_Violation_Population_by_Type")
 )
@@ -1061,7 +1059,7 @@ walk(
   states_list,
   ~save_state_png(
     add_st_name(probation_bar_adm[[.x]], .x)
-    , folderpath = savefolder
+    , folderpath = tempfolder
     , id = .x
     , title = "Probation_Violation_Admissions_by_Type")
 )
@@ -1072,7 +1070,7 @@ walk(
   states_list,
   ~save_state_png(
     add_st_name(probation_bar_pop[[.x]], .x)
-    , folderpath = savefolder
+    , folderpath = tempfolder
     , id = .x
     , title = "Probation_Violation_Population_by_Type")
 )
@@ -1088,7 +1086,7 @@ walk(
   states_list,
   ~save_state_png(
     add_st_name(parole_bar_adm[[.x]], .x)
-    , folderpath = savefolder
+    , folderpath = tempfolder
     , id = .x
     , title = "Parole_Violation_Admissions_by_Type")
 )
@@ -1098,17 +1096,28 @@ walk(
   states_list,
   ~save_state_png(
     add_st_name(parole_bar_pop[[.x]], .x)
-    , folderpath = savefolder
+    , folderpath = tempfolder
     , id = .x
     , title = "Parole_Violation_Population_by_Type")
 )
 
 #########################
-## copy over pngs from sharepoint to app
+
+# copy over pngs from temp folder to app
 walk(
-  list.files(savefolder, pattern = "*.png")
+  list.files(tempfolder, pattern = "*.png")
   , ~file.copy(
-    from = file.path(savefolder, .x)
+    from = file.path(tempfolder, .x)
+    , to = file.path(savefolder, .x)
+    , overwrite = TRUE
+  )
+)
+
+# copy over pngs from temp folder to sp
+walk(
+  list.files(tempfolder, pattern = "*.png")
+  , ~file.copy(
+    from = file.path(tempfolder, .x)
     , to = file.path(copyfolder, .x)
     , overwrite = TRUE
   )
