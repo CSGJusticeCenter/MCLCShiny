@@ -44,7 +44,7 @@ ui <- fluidPage(
      ############################################################################################################################## MAP
 
      # Map Explorer Page
-     tabPanel("nationalmaps",
+     tabPanel("nationaltrends",
 
               div(id = "header",
 
@@ -147,7 +147,7 @@ ui <- fluidPage(
      ############################################################################################################################## State Reports
 
      # State Reports Page
-     tabPanel("statereports",
+     tabPanel("statedashboard",
 
               #######
               # Dropdown and download buttons
