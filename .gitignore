@@ -39,4 +39,11 @@
 *.geojson
 .Rproj.user
 
+*_by_Type.png
+*Admissions.png
+*Population.png
+*2019.png
+*2020.png
+*2021.png
+
 !shiny_prep_log**.txt

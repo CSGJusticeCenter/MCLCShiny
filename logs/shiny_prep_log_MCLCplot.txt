@@ -36,82 +36,82 @@
 > 
 > # generate list of state highcharts to call in app (admissions)
 > adm_maps_2018_2019 <- map .... [TRUNCATED] 
-2023-08-28 17:13:01 - hc: Change_New Offense Violation_Admissions_2018 - 2019
-2023-08-28 17:13:01 - hc: Change_Parole Violation_Admissions_2018 - 2019
-2023-08-28 17:13:01 - hc: Change_Probation Violation_Admissions_2018 - 2019
-2023-08-28 17:13:01 - hc: Change_Supervision Violation_Admissions_2018 - 2019
-2023-08-28 17:13:01 - hc: Change_Technical Violation_Admissions_2018 - 2019
-2023-08-28 17:13:01 - hc: Change_Total_Admissions_2018 - 2019
+2023-09-12 21:36:17.63881 - hc: Change_New Offense Violation_Admissions_2018 - 2019
+2023-09-12 21:36:17.819584 - hc: Change_Parole Violation_Admissions_2018 - 2019
+2023-09-12 21:36:17.883054 - hc: Change_Probation Violation_Admissions_2018 - 2019
+2023-09-12 21:36:17.977838 - hc: Change_Supervision Violation_Admissions_2018 - 2019
+2023-09-12 21:36:18.066864 - hc: Change_Technical Violation_Admissions_2018 - 2019
+2023-09-12 21:36:18.193686 - hc: Change_Total_Admissions_2018 - 2019
 
 > # generate list of state highcharts to call in app (admissions)
 > adm_maps_2018_2021 <- map(.x = metrics,  .f = function(x) {
 +   df1 <- mclc_explor .... [TRUNCATED] 
-2023-08-28 17:13:01 - hc: Change_New Offense Violation_Admissions_2018 - 2021
-2023-08-28 17:13:01 - hc: Change_Parole Violation_Admissions_2018 - 2021
-2023-08-28 17:13:01 - hc: Change_Probation Violation_Admissions_2018 - 2021
-2023-08-28 17:13:01 - hc: Change_Supervision Violation_Admissions_2018 - 2021
-2023-08-28 17:13:01 - hc: Change_Technical Violation_Admissions_2018 - 2021
-2023-08-28 17:13:01 - hc: Change_Total_Admissions_2018 - 2021
+2023-09-12 21:36:18.293787 - hc: Change_New Offense Violation_Admissions_2018 - 2021
+2023-09-12 21:36:18.388121 - hc: Change_Parole Violation_Admissions_2018 - 2021
+2023-09-12 21:36:18.468873 - hc: Change_Probation Violation_Admissions_2018 - 2021
+2023-09-12 21:36:18.573971 - hc: Change_Supervision Violation_Admissions_2018 - 2021
+2023-09-12 21:36:18.687666 - hc: Change_Technical Violation_Admissions_2018 - 2021
+2023-09-12 21:36:18.783315 - hc: Change_Total_Admissions_2018 - 2021
 
 > # generate list of state highcharts to call in app (admissions)
 > adm_maps_2019_2020 <- map(.x = metrics,  .f = function(x) {
 +   df1 <- mclc_explor .... [TRUNCATED] 
-2023-08-28 17:13:01 - hc: Change_New Offense Violation_Admissions_2019 - 2020
-2023-08-28 17:13:01 - hc: Change_Parole Violation_Admissions_2019 - 2020
-2023-08-28 17:13:02 - hc: Change_Probation Violation_Admissions_2019 - 2020
-2023-08-28 17:13:02 - hc: Change_Supervision Violation_Admissions_2019 - 2020
-2023-08-28 17:13:02 - hc: Change_Technical Violation_Admissions_2019 - 2020
-2023-08-28 17:13:02 - hc: Change_Total_Admissions_2019 - 2020
+2023-09-12 21:36:18.887247 - hc: Change_New Offense Violation_Admissions_2019 - 2020
+2023-09-12 21:36:19.021598 - hc: Change_Parole Violation_Admissions_2019 - 2020
+2023-09-12 21:36:19.088711 - hc: Change_Probation Violation_Admissions_2019 - 2020
+2023-09-12 21:36:19.150029 - hc: Change_Supervision Violation_Admissions_2019 - 2020
+2023-09-12 21:36:19.229717 - hc: Change_Technical Violation_Admissions_2019 - 2020
+2023-09-12 21:36:19.286276 - hc: Change_Total_Admissions_2019 - 2020
 
 > # generate list of state highcharts to call in app (admissions)
 > adm_maps_2020_2021 <- map(.x = metrics,  .f = function(x) {
 +   df1 <- mclc_explor .... [TRUNCATED] 
-2023-08-28 17:13:02 - hc: Change_New Offense Violation_Admissions_2020 - 2021
-2023-08-28 17:13:02 - hc: Change_Parole Violation_Admissions_2020 - 2021
-2023-08-28 17:13:02 - hc: Change_Probation Violation_Admissions_2020 - 2021
-2023-08-28 17:13:02 - hc: Change_Supervision Violation_Admissions_2020 - 2021
-2023-08-28 17:13:02 - hc: Change_Technical Violation_Admissions_2020 - 2021
-2023-08-28 17:13:02 - hc: Change_Total_Admissions_2020 - 2021
+2023-09-12 21:36:19.347284 - hc: Change_New Offense Violation_Admissions_2020 - 2021
+2023-09-12 21:36:19.466777 - hc: Change_Parole Violation_Admissions_2020 - 2021
+2023-09-12 21:36:19.554147 - hc: Change_Probation Violation_Admissions_2020 - 2021
+2023-09-12 21:36:19.630747 - hc: Change_Supervision Violation_Admissions_2020 - 2021
+2023-09-12 21:36:19.697397 - hc: Change_Technical Violation_Admissions_2020 - 2021
+2023-09-12 21:36:19.778943 - hc: Change_Total_Admissions_2020 - 2021
 
 > # generate list of state highcharts to call in app (Population)
 > pop_maps_2018_2019 <- map(.x = metrics,  .f = function(x) {
 +   df1 <- mclc_explor .... [TRUNCATED] 
-2023-08-28 17:13:02 - hc: Change_New Offense Violation_Population_2018 - 2019
-2023-08-28 17:13:02 - hc: Change_Parole Violation_Population_2018 - 2019
-2023-08-28 17:13:02 - hc: Change_Probation Violation_Population_2018 - 2019
-2023-08-28 17:13:02 - hc: Change_Supervision Violation_Population_2018 - 2019
-2023-08-28 17:13:02 - hc: Change_Technical Violation_Population_2018 - 2019
-2023-08-28 17:13:02 - hc: Change_Total_Population_2018 - 2019
+2023-09-12 21:36:19.837353 - hc: Change_New Offense Violation_Population_2018 - 2019
+2023-09-12 21:36:19.912 - hc: Change_Parole Violation_Population_2018 - 2019
+2023-09-12 21:36:20.029867 - hc: Change_Probation Violation_Population_2018 - 2019
+2023-09-12 21:36:20.119996 - hc: Change_Supervision Violation_Population_2018 - 2019
+2023-09-12 21:36:20.184018 - hc: Change_Technical Violation_Population_2018 - 2019
+2023-09-12 21:36:20.258348 - hc: Change_Total_Population_2018 - 2019
 
 > # generate list of state highcharts to call in app (Population)
 > pop_maps_2018_2021 <- map(.x = metrics,  .f = function(x) {
 +   df1 <- mclc_explor .... [TRUNCATED] 
-2023-08-28 17:13:02 - hc: Change_New Offense Violation_Population_2018 - 2021
-2023-08-28 17:13:02 - hc: Change_Parole Violation_Population_2018 - 2021
-2023-08-28 17:13:03 - hc: Change_Probation Violation_Population_2018 - 2021
-2023-08-28 17:13:03 - hc: Change_Supervision Violation_Population_2018 - 2021
-2023-08-28 17:13:03 - hc: Change_Technical Violation_Population_2018 - 2021
-2023-08-28 17:13:03 - hc: Change_Total_Population_2018 - 2021
+2023-09-12 21:36:20.335352 - hc: Change_New Offense Violation_Population_2018 - 2021
+2023-09-12 21:36:20.468151 - hc: Change_Parole Violation_Population_2018 - 2021
+2023-09-12 21:36:20.535752 - hc: Change_Probation Violation_Population_2018 - 2021
+2023-09-12 21:36:20.596473 - hc: Change_Supervision Violation_Population_2018 - 2021
+2023-09-12 21:36:20.656321 - hc: Change_Technical Violation_Population_2018 - 2021
+2023-09-12 21:36:20.729899 - hc: Change_Total_Population_2018 - 2021
 
 > # generate list of state highcharts to call in app (Population)
 > pop_maps_2019_2020 <- map(.x = metrics,  .f = function(x) {
 +   df1 <- mclc_explor .... [TRUNCATED] 
-2023-08-28 17:13:03 - hc: Change_New Offense Violation_Population_2019 - 2020
-2023-08-28 17:13:03 - hc: Change_Parole Violation_Population_2019 - 2020
-2023-08-28 17:13:03 - hc: Change_Probation Violation_Population_2019 - 2020
-2023-08-28 17:13:03 - hc: Change_Supervision Violation_Population_2019 - 2020
-2023-08-28 17:13:03 - hc: Change_Technical Violation_Population_2019 - 2020
-2023-08-28 17:13:03 - hc: Change_Total_Population_2019 - 2020
+2023-09-12 21:36:20.852316 - hc: Change_New Offense Violation_Population_2019 - 2020
+2023-09-12 21:36:20.916336 - hc: Change_Parole Violation_Population_2019 - 2020
+2023-09-12 21:36:20.972975 - hc: Change_Probation Violation_Population_2019 - 2020
+2023-09-12 21:36:21.047432 - hc: Change_Supervision Violation_Population_2019 - 2020
+2023-09-12 21:36:21.128524 - hc: Change_Technical Violation_Population_2019 - 2020
+2023-09-12 21:36:21.207078 - hc: Change_Total_Population_2019 - 2020
 
 > # generate list of state highcharts to call in app (Population)
 > pop_maps_2020_2021 <- map(.x = metrics,  .f = function(x) {
 +   df1 <- mclc_explor .... [TRUNCATED] 
-2023-08-28 17:13:03 - hc: Change_New Offense Violation_Population_2020 - 2021
-2023-08-28 17:13:03 - hc: Change_Parole Violation_Population_2020 - 2021
-2023-08-28 17:13:03 - hc: Change_Probation Violation_Population_2020 - 2021
-2023-08-28 17:13:03 - hc: Change_Supervision Violation_Population_2020 - 2021
-2023-08-28 17:13:03 - hc: Change_Technical Violation_Population_2020 - 2021
-2023-08-28 17:13:03 - hc: Change_Total_Population_2020 - 2021
+2023-09-12 21:36:21.267556 - hc: Change_New Offense Violation_Population_2020 - 2021
+2023-09-12 21:36:21.3412 - hc: Change_Parole Violation_Population_2020 - 2021
+2023-09-12 21:36:21.424853 - hc: Change_Probation Violation_Population_2020 - 2021
+2023-09-12 21:36:21.538805 - hc: Change_Supervision Violation_Population_2020 - 2021
+2023-09-12 21:36:21.619539 - hc: Change_Technical Violation_Population_2020 - 2021
+2023-09-12 21:36:21.675421 - hc: Change_Total_Population_2020 - 2021
 
 > adm_maps_2018_2019 <- setNames(adm_maps_2018_2019, metrics)
 
@@ -143,112 +143,112 @@
 > # generate list of state highcharts to call in app (admissions)
 > all_state_area_adm <- map(.x = states,  .f = function(x) {
 +   df1 <- adm_pop_long .... [TRUNCATED] 
-2023-08-28 17:13:03 - hc: Prison Admissions, Alabama
-2023-08-28 17:13:04 - hc: Prison Admissions, Alaska
-2023-08-28 17:13:04 - hc: Prison Admissions, Arizona
-2023-08-28 17:13:04 - hc: Prison Admissions, Arkansas
-2023-08-28 17:13:04 - hc: Prison Admissions, California
-2023-08-28 17:13:04 - hc: Prison Admissions, Colorado
-2023-08-28 17:13:04 - hc: Prison Admissions, Connecticut
-2023-08-28 17:13:04 - hc: Prison Admissions, Delaware
-2023-08-28 17:13:05 - hc: Prison Admissions, Florida
-2023-08-28 17:13:05 - hc: Prison Admissions, Georgia
-2023-08-28 17:13:05 - hc: Prison Admissions, Hawaii
-2023-08-28 17:13:05 - hc: Prison Admissions, Idaho
-2023-08-28 17:13:05 - hc: Prison Admissions, Illinois
-2023-08-28 17:13:05 - hc: Prison Admissions, Indiana
-2023-08-28 17:13:05 - hc: Prison Admissions, Iowa
-2023-08-28 17:13:05 - hc: Prison Admissions, Kansas
-2023-08-28 17:13:06 - hc: Prison Admissions, Kentucky
-2023-08-28 17:13:06 - hc: Prison Admissions, Louisiana
-2023-08-28 17:13:06 - hc: Prison Admissions, Maine
-2023-08-28 17:13:06 - hc: Prison Admissions, Maryland
-2023-08-28 17:13:06 - hc: Prison Admissions, Massachusetts
-2023-08-28 17:13:06 - hc: Prison Admissions, Michigan
-2023-08-28 17:13:06 - hc: Prison Admissions, Minnesota
-2023-08-28 17:13:06 - hc: Prison Admissions, Mississippi
-2023-08-28 17:13:06 - hc: Prison Admissions, Missouri
-2023-08-28 17:13:07 - hc: Prison Admissions, Montana
-2023-08-28 17:13:07 - hc: Prison Admissions, Nebraska
-2023-08-28 17:13:07 - hc: Prison Admissions, Nevada
-2023-08-28 17:13:07 - hc: Prison Admissions, New Hampshire
-2023-08-28 17:13:07 - hc: Prison Admissions, New Jersey
-2023-08-28 17:13:07 - hc: Prison Admissions, New Mexico
-2023-08-28 17:13:07 - hc: Prison Admissions, New York
-2023-08-28 17:13:07 - hc: Prison Admissions, North Carolina
-2023-08-28 17:13:07 - hc: Prison Admissions, North Dakota
-2023-08-28 17:13:08 - hc: Prison Admissions, Ohio
-2023-08-28 17:13:08 - hc: Prison Admissions, Oklahoma
-2023-08-28 17:13:08 - hc: Prison Admissions, Oregon
-2023-08-28 17:13:08 - hc: Prison Admissions, Pennsylvania
-2023-08-28 17:13:08 - hc: Prison Admissions, Rhode Island
-2023-08-28 17:13:08 - hc: Prison Admissions, South Carolina
-2023-08-28 17:13:08 - hc: Prison Admissions, South Dakota
-2023-08-28 17:13:08 - hc: Prison Admissions, Tennessee
-2023-08-28 17:13:09 - hc: Prison Admissions, Texas
-2023-08-28 17:13:09 - hc: Prison Admissions, Utah
-2023-08-28 17:13:09 - hc: Prison Admissions, Vermont
-2023-08-28 17:13:09 - hc: Prison Admissions, Virginia
-2023-08-28 17:13:09 - hc: Prison Admissions, Washington
-2023-08-28 17:13:09 - hc: Prison Admissions, West Virginia
-2023-08-28 17:13:09 - hc: Prison Admissions, Wisconsin
-2023-08-28 17:13:09 - hc: Prison Admissions, Wyoming
+2023-09-12 21:36:21.802334 - hc: Prison Admissions, Alabama
+2023-09-12 21:36:21.97258 - hc: Prison Admissions, Alaska
+2023-09-12 21:36:22.115956 - hc: Prison Admissions, Arizona
+2023-09-12 21:36:22.279215 - hc: Prison Admissions, Arkansas
+2023-09-12 21:36:22.508272 - hc: Prison Admissions, California
+2023-09-12 21:36:22.714883 - hc: Prison Admissions, Colorado
+2023-09-12 21:36:22.859851 - hc: Prison Admissions, Connecticut
+2023-09-12 21:36:23.087558 - hc: Prison Admissions, Delaware
+2023-09-12 21:36:23.279775 - hc: Prison Admissions, Florida
+2023-09-12 21:36:23.434962 - hc: Prison Admissions, Georgia
+2023-09-12 21:36:23.569202 - hc: Prison Admissions, Hawaii
+2023-09-12 21:36:23.742938 - hc: Prison Admissions, Idaho
+2023-09-12 21:36:23.933315 - hc: Prison Admissions, Illinois
+2023-09-12 21:36:24.272416 - hc: Prison Admissions, Indiana
+2023-09-12 21:36:24.734578 - hc: Prison Admissions, Iowa
+2023-09-12 21:36:25.188053 - hc: Prison Admissions, Kansas
+2023-09-12 21:36:25.653957 - hc: Prison Admissions, Kentucky
+2023-09-12 21:36:26.099339 - hc: Prison Admissions, Louisiana
+2023-09-12 21:36:26.555751 - hc: Prison Admissions, Maine
+2023-09-12 21:36:27.011716 - hc: Prison Admissions, Maryland
+2023-09-12 21:36:27.449434 - hc: Prison Admissions, Massachusetts
+2023-09-12 21:36:27.909882 - hc: Prison Admissions, Michigan
+2023-09-12 21:36:28.345204 - hc: Prison Admissions, Minnesota
+2023-09-12 21:36:28.793555 - hc: Prison Admissions, Mississippi
+2023-09-12 21:36:29.220028 - hc: Prison Admissions, Missouri
+2023-09-12 21:36:29.703939 - hc: Prison Admissions, Montana
+2023-09-12 21:36:30.145215 - hc: Prison Admissions, Nebraska
+2023-09-12 21:36:30.620011 - hc: Prison Admissions, Nevada
+2023-09-12 21:36:31.059203 - hc: Prison Admissions, New Hampshire
+2023-09-12 21:36:31.477433 - hc: Prison Admissions, New Jersey
+2023-09-12 21:36:31.93771 - hc: Prison Admissions, New Mexico
+2023-09-12 21:36:32.332818 - hc: Prison Admissions, New York
+2023-09-12 21:36:32.779008 - hc: Prison Admissions, North Carolina
+2023-09-12 21:36:33.243263 - hc: Prison Admissions, North Dakota
+2023-09-12 21:36:33.711176 - hc: Prison Admissions, Ohio
+2023-09-12 21:36:34.179847 - hc: Prison Admissions, Oklahoma
+2023-09-12 21:36:34.715762 - hc: Prison Admissions, Oregon
+2023-09-12 21:36:35.185302 - hc: Prison Admissions, Pennsylvania
+2023-09-12 21:36:35.72234 - hc: Prison Admissions, Rhode Island
+2023-09-12 21:36:36.230674 - hc: Prison Admissions, South Carolina
+2023-09-12 21:36:36.717485 - hc: Prison Admissions, South Dakota
+2023-09-12 21:36:37.245362 - hc: Prison Admissions, Tennessee
+2023-09-12 21:36:37.809088 - hc: Prison Admissions, Texas
+2023-09-12 21:36:38.309771 - hc: Prison Admissions, Utah
+2023-09-12 21:36:38.741863 - hc: Prison Admissions, Vermont
+2023-09-12 21:36:39.133791 - hc: Prison Admissions, Virginia
+2023-09-12 21:36:39.51131 - hc: Prison Admissions, Washington
+2023-09-12 21:36:39.724287 - hc: Prison Admissions, West Virginia
+2023-09-12 21:36:39.86292 - hc: Prison Admissions, Wisconsin
+2023-09-12 21:36:40.016558 - hc: Prison Admissions, Wyoming
 
 > all_state_area_adm <- setNames(all_state_area_adm, states)
 
 > # generate list of state highcharts to call in app (population)
 > all_state_area_pop <- map(.x = states,  .f = function(x) {
 +   df1 <- adm_pop_long .... [TRUNCATED] 
-2023-08-28 17:13:10 - hc: Prison Population, Alabama
-2023-08-28 17:13:10 - hc: Prison Population, Alaska
-2023-08-28 17:13:10 - hc: Prison Population, Arizona
-2023-08-28 17:13:10 - hc: Prison Population, Arkansas
-2023-08-28 17:13:10 - hc: Prison Population, California
-2023-08-28 17:13:10 - hc: Prison Population, Colorado
-2023-08-28 17:13:10 - hc: Prison Population, Connecticut
-2023-08-28 17:13:10 - hc: Prison Population, Delaware
-2023-08-28 17:13:11 - hc: Prison Population, Florida
-2023-08-28 17:13:11 - hc: Prison Population, Georgia
-2023-08-28 17:13:11 - hc: Prison Population, Hawaii
-2023-08-28 17:13:11 - hc: Prison Population, Idaho
-2023-08-28 17:13:11 - hc: Prison Population, Illinois
-2023-08-28 17:13:11 - hc: Prison Population, Indiana
-2023-08-28 17:13:11 - hc: Prison Population, Iowa
-2023-08-28 17:13:12 - hc: Prison Population, Kansas
-2023-08-28 17:13:12 - hc: Prison Population, Kentucky
-2023-08-28 17:13:12 - hc: Prison Population, Louisiana
-2023-08-28 17:13:12 - hc: Prison Population, Maine
-2023-08-28 17:13:12 - hc: Prison Population, Maryland
-2023-08-28 17:13:12 - hc: Prison Population, Massachusetts
-2023-08-28 17:13:12 - hc: Prison Population, Michigan
-2023-08-28 17:13:13 - hc: Prison Population, Minnesota
-2023-08-28 17:13:13 - hc: Prison Population, Mississippi
-2023-08-28 17:13:13 - hc: Prison Population, Missouri
-2023-08-28 17:13:13 - hc: Prison Population, Montana
-2023-08-28 17:13:13 - hc: Prison Population, Nebraska
-2023-08-28 17:13:13 - hc: Prison Population, Nevada
-2023-08-28 17:13:13 - hc: Prison Population, New Hampshire
-2023-08-28 17:13:13 - hc: Prison Population, New Jersey
-2023-08-28 17:13:14 - hc: Prison Population, New Mexico
-2023-08-28 17:13:14 - hc: Prison Population, New York
-2023-08-28 17:13:14 - hc: Prison Population, North Carolina
-2023-08-28 17:13:14 - hc: Prison Population, North Dakota
-2023-08-28 17:13:14 - hc: Prison Population, Ohio
-2023-08-28 17:13:14 - hc: Prison Population, Oklahoma
-2023-08-28 17:13:14 - hc: Prison Population, Oregon
-2023-08-28 17:13:14 - hc: Prison Population, Pennsylvania
-2023-08-28 17:13:15 - hc: Prison Population, Rhode Island
-2023-08-28 17:13:15 - hc: Prison Population, South Carolina
-2023-08-28 17:13:15 - hc: Prison Population, South Dakota
-2023-08-28 17:13:15 - hc: Prison Population, Tennessee
-2023-08-28 17:13:15 - hc: Prison Population, Texas
-2023-08-28 17:13:15 - hc: Prison Population, Utah
-2023-08-28 17:13:15 - hc: Prison Population, Vermont
-2023-08-28 17:13:15 - hc: Prison Population, Virginia
-2023-08-28 17:13:15 - hc: Prison Population, Washington
-2023-08-28 17:13:16 - hc: Prison Population, West Virginia
-2023-08-28 17:13:16 - hc: Prison Population, Wisconsin
-2023-08-28 17:13:16 - hc: Prison Population, Wyoming
+2023-09-12 21:36:40.192555 - hc: Prison Population, Alabama
+2023-09-12 21:36:40.333726 - hc: Prison Population, Alaska
+2023-09-12 21:36:40.562547 - hc: Prison Population, Arizona
+2023-09-12 21:36:40.713777 - hc: Prison Population, Arkansas
+2023-09-12 21:36:40.860907 - hc: Prison Population, California
+2023-09-12 21:36:41.009786 - hc: Prison Population, Colorado
+2023-09-12 21:36:41.140037 - hc: Prison Population, Connecticut
+2023-09-12 21:36:41.320582 - hc: Prison Population, Delaware
+2023-09-12 21:36:41.4616 - hc: Prison Population, Florida
+2023-09-12 21:36:41.619382 - hc: Prison Population, Georgia
+2023-09-12 21:36:41.75037 - hc: Prison Population, Hawaii
+2023-09-12 21:36:41.884945 - hc: Prison Population, Idaho
+2023-09-12 21:36:42.026421 - hc: Prison Population, Illinois
+2023-09-12 21:36:42.181971 - hc: Prison Population, Indiana
+2023-09-12 21:36:42.356948 - hc: Prison Population, Iowa
+2023-09-12 21:36:42.491396 - hc: Prison Population, Kansas
+2023-09-12 21:36:42.644374 - hc: Prison Population, Kentucky
+2023-09-12 21:36:42.786556 - hc: Prison Population, Louisiana
+2023-09-12 21:36:42.927696 - hc: Prison Population, Maine
+2023-09-12 21:36:43.060906 - hc: Prison Population, Maryland
+2023-09-12 21:36:43.231279 - hc: Prison Population, Massachusetts
+2023-09-12 21:36:43.376317 - hc: Prison Population, Michigan
+2023-09-12 21:36:43.51754 - hc: Prison Population, Minnesota
+2023-09-12 21:36:43.664416 - hc: Prison Population, Mississippi
+2023-09-12 21:36:43.818472 - hc: Prison Population, Missouri
+2023-09-12 21:36:43.996991 - hc: Prison Population, Montana
+2023-09-12 21:36:44.140596 - hc: Prison Population, Nebraska
+2023-09-12 21:36:44.293274 - hc: Prison Population, Nevada
+2023-09-12 21:36:44.428953 - hc: Prison Population, New Hampshire
+2023-09-12 21:36:44.621865 - hc: Prison Population, New Jersey
+2023-09-12 21:36:44.758142 - hc: Prison Population, New Mexico
+2023-09-12 21:36:44.945155 - hc: Prison Population, New York
+2023-09-12 21:36:45.167276 - hc: Prison Population, North Carolina
+2023-09-12 21:36:45.303226 - hc: Prison Population, North Dakota
+2023-09-12 21:36:45.460381 - hc: Prison Population, Ohio
+2023-09-12 21:36:45.629174 - hc: Prison Population, Oklahoma
+2023-09-12 21:36:45.784461 - hc: Prison Population, Oregon
+2023-09-12 21:36:45.939683 - hc: Prison Population, Pennsylvania
+2023-09-12 21:36:46.12066 - hc: Prison Population, Rhode Island
+2023-09-12 21:36:46.285667 - hc: Prison Population, South Carolina
+2023-09-12 21:36:46.422463 - hc: Prison Population, South Dakota
+2023-09-12 21:36:46.571044 - hc: Prison Population, Tennessee
+2023-09-12 21:36:46.732915 - hc: Prison Population, Texas
+2023-09-12 21:36:46.88131 - hc: Prison Population, Utah
+2023-09-12 21:36:47.022715 - hc: Prison Population, Vermont
+2023-09-12 21:36:47.170493 - hc: Prison Population, Virginia
+2023-09-12 21:36:47.30652 - hc: Prison Population, Washington
+2023-09-12 21:36:47.452347 - hc: Prison Population, West Virginia
+2023-09-12 21:36:47.627915 - hc: Prison Population, Wisconsin
+2023-09-12 21:36:47.753221 - hc: Prison Population, Wyoming
 
 > # set names of charts
 > all_state_area_pop <- setNames(all_state_area_pop, states)
@@ -259,56 +259,56 @@
 > 
 > # generate list of state highcharts to call in app (admissions)
 > all_state_bar .... [TRUNCATED] 
-2023-08-28 17:13:16 - hc: Supervision Violation Admissions by Type, Alabama
-2023-08-28 17:13:16 - hc: Supervision Violation Admissions by Type, Alaska
-2023-08-28 17:13:16 - hc: Supervision Violation Admissions by Type, Arizona
-2023-08-28 17:13:16 - hc: Supervision Violation Admissions by Type, Arkansas
-2023-08-28 17:13:16 - hc: Supervision Violation Admissions by Type, California
-2023-08-28 17:13:16 - hc: Supervision Violation Admissions by Type, Colorado
-2023-08-28 17:13:17 - hc: Supervision Violation Admissions by Type, Connecticut
-2023-08-28 17:13:17 - hc: Supervision Violation Admissions by Type, Delaware
-2023-08-28 17:13:17 - hc: Supervision Violation Admissions by Type, Florida
-2023-08-28 17:13:17 - hc: Supervision Violation Admissions by Type, Georgia
-2023-08-28 17:13:17 - hc: Supervision Violation Admissions by Type, Hawaii
-2023-08-28 17:13:17 - hc: Supervision Violation Admissions by Type, Idaho
-2023-08-28 17:13:17 - hc: Supervision Violation Admissions by Type, Illinois
-2023-08-28 17:13:17 - hc: Supervision Violation Admissions by Type, Indiana
-2023-08-28 17:13:17 - hc: Supervision Violation Admissions by Type, Iowa
-2023-08-28 17:13:17 - hc: Supervision Violation Admissions by Type, Kansas
-2023-08-28 17:13:17 - hc: Supervision Violation Admissions by Type, Kentucky
-2023-08-28 17:13:18 - hc: Supervision Violation Admissions by Type, Louisiana
-2023-08-28 17:13:18 - hc: Supervision Violation Admissions by Type, Maine
-2023-08-28 17:13:18 - hc: Supervision Violation Admissions by Type, Maryland
-2023-08-28 17:13:18 - hc: Supervision Violation Admissions by Type, Massachusetts
-2023-08-28 17:13:18 - hc: Supervision Violation Admissions by Type, Michigan
-2023-08-28 17:13:18 - hc: Supervision Violation Admissions by Type, Minnesota
-2023-08-28 17:13:18 - hc: Supervision Violation Admissions by Type, Mississippi
-2023-08-28 17:13:18 - hc: Supervision Violation Admissions by Type, Missouri
-2023-08-28 17:13:18 - hc: Supervision Violation Admissions by Type, Montana
-2023-08-28 17:13:18 - hc: Supervision Violation Admissions by Type, Nebraska
-2023-08-28 17:13:18 - hc: Supervision Violation Admissions by Type, Nevada
-2023-08-28 17:13:18 - hc: Supervision Violation Admissions by Type, New Hampshire
-2023-08-28 17:13:19 - hc: Supervision Violation Admissions by Type, New Jersey
-2023-08-28 17:13:19 - hc: Supervision Violation Admissions by Type, New Mexico
-2023-08-28 17:13:19 - hc: Supervision Violation Admissions by Type, New York
-2023-08-28 17:13:19 - hc: Supervision Violation Admissions by Type, North Carolina
-2023-08-28 17:13:19 - hc: Supervision Violation Admissions by Type, North Dakota
-2023-08-28 17:13:19 - hc: Supervision Violation Admissions by Type, Ohio
-2023-08-28 17:13:19 - hc: Supervision Violation Admissions by Type, Oklahoma
-2023-08-28 17:13:19 - hc: Supervision Violation Admissions by Type, Oregon
-2023-08-28 17:13:19 - hc: Supervision Violation Admissions by Type, Pennsylvania
-2023-08-28 17:13:19 - hc: Supervision Violation Admissions by Type, Rhode Island
-2023-08-28 17:13:19 - hc: Supervision Violation Admissions by Type, South Carolina
-2023-08-28 17:13:20 - hc: Supervision Violation Admissions by Type, South Dakota
-2023-08-28 17:13:20 - hc: Supervision Violation Admissions by Type, Tennessee
-2023-08-28 17:13:20 - hc: Supervision Violation Admissions by Type, Texas
-2023-08-28 17:13:20 - hc: Supervision Violation Admissions by Type, Utah
-2023-08-28 17:13:20 - hc: Supervision Violation Admissions by Type, Vermont
-2023-08-28 17:13:20 - hc: Supervision Violation Admissions by Type, Virginia
-2023-08-28 17:13:20 - hc: Supervision Violation Admissions by Type, Washington
-2023-08-28 17:13:20 - hc: Supervision Violation Admissions by Type, West Virginia
-2023-08-28 17:13:20 - hc: Supervision Violation Admissions by Type, Wisconsin
-2023-08-28 17:13:20 - hc: Supervision Violation Admissions by Type, Wyoming
+2023-09-12 21:36:47.948376 - hc: Supervision Violation Admissions by Type, Alabama
+2023-09-12 21:36:48.101935 - hc: Supervision Violation Admissions by Type, Alaska
+2023-09-12 21:36:48.187332 - hc: Supervision Violation Admissions by Type, Arizona
+2023-09-12 21:36:48.278657 - hc: Supervision Violation Admissions by Type, Arkansas
+2023-09-12 21:36:48.384689 - hc: Supervision Violation Admissions by Type, California
+2023-09-12 21:36:48.472911 - hc: Supervision Violation Admissions by Type, Colorado
+2023-09-12 21:36:48.61581 - hc: Supervision Violation Admissions by Type, Connecticut
+2023-09-12 21:36:48.704685 - hc: Supervision Violation Admissions by Type, Delaware
+2023-09-12 21:36:48.793623 - hc: Supervision Violation Admissions by Type, Florida
+2023-09-12 21:36:48.898611 - hc: Supervision Violation Admissions by Type, Georgia
+2023-09-12 21:36:48.9863 - hc: Supervision Violation Admissions by Type, Hawaii
+2023-09-12 21:36:49.094071 - hc: Supervision Violation Admissions by Type, Idaho
+2023-09-12 21:36:49.184639 - hc: Supervision Violation Admissions by Type, Illinois
+2023-09-12 21:36:49.285489 - hc: Supervision Violation Admissions by Type, Indiana
+2023-09-12 21:36:49.396986 - hc: Supervision Violation Admissions by Type, Iowa
+2023-09-12 21:36:49.5146 - hc: Supervision Violation Admissions by Type, Kansas
+2023-09-12 21:36:49.628357 - hc: Supervision Violation Admissions by Type, Kentucky
+2023-09-12 21:36:49.741576 - hc: Supervision Violation Admissions by Type, Louisiana
+2023-09-12 21:36:49.853774 - hc: Supervision Violation Admissions by Type, Maine
+2023-09-12 21:36:49.941054 - hc: Supervision Violation Admissions by Type, Maryland
+2023-09-12 21:36:50.026984 - hc: Supervision Violation Admissions by Type, Massachusetts
+2023-09-12 21:36:50.197076 - hc: Supervision Violation Admissions by Type, Michigan
+2023-09-12 21:36:50.304028 - hc: Supervision Violation Admissions by Type, Minnesota
+2023-09-12 21:36:50.414909 - hc: Supervision Violation Admissions by Type, Mississippi
+2023-09-12 21:36:50.547577 - hc: Supervision Violation Admissions by Type, Missouri
+2023-09-12 21:36:50.651936 - hc: Supervision Violation Admissions by Type, Montana
+2023-09-12 21:36:50.761188 - hc: Supervision Violation Admissions by Type, Nebraska
+2023-09-12 21:36:50.851373 - hc: Supervision Violation Admissions by Type, Nevada
+2023-09-12 21:36:50.986322 - hc: Supervision Violation Admissions by Type, New Hampshire
+2023-09-12 21:36:51.085045 - hc: Supervision Violation Admissions by Type, New Jersey
+2023-09-12 21:36:51.195484 - hc: Supervision Violation Admissions by Type, New Mexico
+2023-09-12 21:36:51.288799 - hc: Supervision Violation Admissions by Type, New York
+2023-09-12 21:36:51.380886 - hc: Supervision Violation Admissions by Type, North Carolina
+2023-09-12 21:36:51.484253 - hc: Supervision Violation Admissions by Type, North Dakota
+2023-09-12 21:36:51.570535 - hc: Supervision Violation Admissions by Type, Ohio
+2023-09-12 21:36:51.672692 - hc: Supervision Violation Admissions by Type, Oklahoma
+2023-09-12 21:36:51.762691 - hc: Supervision Violation Admissions by Type, Oregon
+2023-09-12 21:36:51.854134 - hc: Supervision Violation Admissions by Type, Pennsylvania
+2023-09-12 21:36:51.967337 - hc: Supervision Violation Admissions by Type, Rhode Island
+2023-09-12 21:36:52.060149 - hc: Supervision Violation Admissions by Type, South Carolina
+2023-09-12 21:36:52.166474 - hc: Supervision Violation Admissions by Type, South Dakota
+2023-09-12 21:36:52.274389 - hc: Supervision Violation Admissions by Type, Tennessee
+2023-09-12 21:36:52.383115 - hc: Supervision Violation Admissions by Type, Texas
+2023-09-12 21:36:52.475809 - hc: Supervision Violation Admissions by Type, Utah
+2023-09-12 21:36:52.572507 - hc: Supervision Violation Admissions by Type, Vermont
+2023-09-12 21:36:52.675765 - hc: Supervision Violation Admissions by Type, Virginia
+2023-09-12 21:36:52.76691 - hc: Supervision Violation Admissions by Type, Washington
+2023-09-12 21:36:52.938791 - hc: Supervision Violation Admissions by Type, West Virginia
+2023-09-12 21:36:53.03615 - hc: Supervision Violation Admissions by Type, Wisconsin
+2023-09-12 21:36:53.149959 - hc: Supervision Violation Admissions by Type, Wyoming
 
 > # set names of charts
 > all_state_bar_adm <- setNames(all_state_bar_adm, states)
@@ -316,56 +316,56 @@
 > # generate list of state highcharts to call in app (population)
 > all_state_bar_pop <- map(.x = states,  .f = function(x) {
 +   df1 <- adm_pop_long  .... [TRUNCATED] 
-2023-08-28 17:13:20 - hc: Supervision Violation Population by Type, Alabama
-2023-08-28 17:13:21 - hc: Supervision Violation Population by Type, Alaska
-2023-08-28 17:13:21 - hc: Supervision Violation Population by Type, Arizona
-2023-08-28 17:13:21 - hc: Supervision Violation Population by Type, Arkansas
-2023-08-28 17:13:21 - hc: Supervision Violation Population by Type, California
-2023-08-28 17:13:21 - hc: Supervision Violation Population by Type, Colorado
-2023-08-28 17:13:21 - hc: Supervision Violation Population by Type, Connecticut
-2023-08-28 17:13:21 - hc: Supervision Violation Population by Type, Delaware
-2023-08-28 17:13:21 - hc: Supervision Violation Population by Type, Florida
-2023-08-28 17:13:21 - hc: Supervision Violation Population by Type, Georgia
-2023-08-28 17:13:21 - hc: Supervision Violation Population by Type, Hawaii
-2023-08-28 17:13:21 - hc: Supervision Violation Population by Type, Idaho
-2023-08-28 17:13:21 - hc: Supervision Violation Population by Type, Illinois
-2023-08-28 17:13:22 - hc: Supervision Violation Population by Type, Indiana
-2023-08-28 17:13:22 - hc: Supervision Violation Population by Type, Iowa
-2023-08-28 17:13:22 - hc: Supervision Violation Population by Type, Kansas
-2023-08-28 17:13:22 - hc: Supervision Violation Population by Type, Kentucky
-2023-08-28 17:13:22 - hc: Supervision Violation Population by Type, Louisiana
-2023-08-28 17:13:22 - hc: Supervision Violation Population by Type, Maine
-2023-08-28 17:13:22 - hc: Supervision Violation Population by Type, Maryland
-2023-08-28 17:13:22 - hc: Supervision Violation Population by Type, Massachusetts
-2023-08-28 17:13:22 - hc: Supervision Violation Population by Type, Michigan
-2023-08-28 17:13:22 - hc: Supervision Violation Population by Type, Minnesota
-2023-08-28 17:13:22 - hc: Supervision Violation Population by Type, Mississippi
-2023-08-28 17:13:22 - hc: Supervision Violation Population by Type, Missouri
-2023-08-28 17:13:23 - hc: Supervision Violation Population by Type, Montana
-2023-08-28 17:13:23 - hc: Supervision Violation Population by Type, Nebraska
-2023-08-28 17:13:23 - hc: Supervision Violation Population by Type, Nevada
-2023-08-28 17:13:23 - hc: Supervision Violation Population by Type, New Hampshire
-2023-08-28 17:13:23 - hc: Supervision Violation Population by Type, New Jersey
-2023-08-28 17:13:23 - hc: Supervision Violation Population by Type, New Mexico
-2023-08-28 17:13:23 - hc: Supervision Violation Population by Type, New York
-2023-08-28 17:13:23 - hc: Supervision Violation Population by Type, North Carolina
-2023-08-28 17:13:23 - hc: Supervision Violation Population by Type, North Dakota
-2023-08-28 17:13:23 - hc: Supervision Violation Population by Type, Ohio
-2023-08-28 17:13:23 - hc: Supervision Violation Population by Type, Oklahoma
-2023-08-28 17:13:23 - hc: Supervision Violation Population by Type, Oregon
-2023-08-28 17:13:24 - hc: Supervision Violation Population by Type, Pennsylvania
-2023-08-28 17:13:24 - hc: Supervision Violation Population by Type, Rhode Island
-2023-08-28 17:13:24 - hc: Supervision Violation Population by Type, South Carolina
-2023-08-28 17:13:24 - hc: Supervision Violation Population by Type, South Dakota
-2023-08-28 17:13:24 - hc: Supervision Violation Population by Type, Tennessee
-2023-08-28 17:13:24 - hc: Supervision Violation Population by Type, Texas
-2023-08-28 17:13:24 - hc: Supervision Violation Population by Type, Utah
-2023-08-28 17:13:24 - hc: Supervision Violation Population by Type, Vermont
-2023-08-28 17:13:24 - hc: Supervision Violation Population by Type, Virginia
-2023-08-28 17:13:24 - hc: Supervision Violation Population by Type, Washington
-2023-08-28 17:13:24 - hc: Supervision Violation Population by Type, West Virginia
-2023-08-28 17:13:24 - hc: Supervision Violation Population by Type, Wisconsin
-2023-08-28 17:13:25 - hc: Supervision Violation Population by Type, Wyoming
+2023-09-12 21:36:53.315494 - hc: Supervision Violation Population by Type, Alabama
+2023-09-12 21:36:53.427917 - hc: Supervision Violation Population by Type, Alaska
+2023-09-12 21:36:53.542129 - hc: Supervision Violation Population by Type, Arizona
+2023-09-12 21:36:53.629886 - hc: Supervision Violation Population by Type, Arkansas
+2023-09-12 21:36:53.806542 - hc: Supervision Violation Population by Type, California
+2023-09-12 21:36:53.939918 - hc: Supervision Violation Population by Type, Colorado
+2023-09-12 21:36:54.092207 - hc: Supervision Violation Population by Type, Connecticut
+2023-09-12 21:36:54.186791 - hc: Supervision Violation Population by Type, Delaware
+2023-09-12 21:36:54.279026 - hc: Supervision Violation Population by Type, Florida
+2023-09-12 21:36:54.389096 - hc: Supervision Violation Population by Type, Georgia
+2023-09-12 21:36:54.487997 - hc: Supervision Violation Population by Type, Hawaii
+2023-09-12 21:36:54.594681 - hc: Supervision Violation Population by Type, Idaho
+2023-09-12 21:36:54.691601 - hc: Supervision Violation Population by Type, Illinois
+2023-09-12 21:36:54.785108 - hc: Supervision Violation Population by Type, Indiana
+2023-09-12 21:36:54.898643 - hc: Supervision Violation Population by Type, Iowa
+2023-09-12 21:36:54.994824 - hc: Supervision Violation Population by Type, Kansas
+2023-09-12 21:36:55.097127 - hc: Supervision Violation Population by Type, Kentucky
+2023-09-12 21:36:55.201086 - hc: Supervision Violation Population by Type, Louisiana
+2023-09-12 21:36:55.316596 - hc: Supervision Violation Population by Type, Maine
+2023-09-12 21:36:55.405244 - hc: Supervision Violation Population by Type, Maryland
+2023-09-12 21:36:55.563707 - hc: Supervision Violation Population by Type, Massachusetts
+2023-09-12 21:36:55.663644 - hc: Supervision Violation Population by Type, Michigan
+2023-09-12 21:36:55.776287 - hc: Supervision Violation Population by Type, Minnesota
+2023-09-12 21:36:55.88057 - hc: Supervision Violation Population by Type, Mississippi
+2023-09-12 21:36:55.984923 - hc: Supervision Violation Population by Type, Missouri
+2023-09-12 21:36:56.082186 - hc: Supervision Violation Population by Type, Montana
+2023-09-12 21:36:56.199373 - hc: Supervision Violation Population by Type, Nebraska
+2023-09-12 21:36:56.29372 - hc: Supervision Violation Population by Type, Nevada
+2023-09-12 21:36:56.39994 - hc: Supervision Violation Population by Type, New Hampshire
+2023-09-12 21:36:56.492901 - hc: Supervision Violation Population by Type, New Jersey
+2023-09-12 21:36:56.607241 - hc: Supervision Violation Population by Type, New Mexico
+2023-09-12 21:36:56.695468 - hc: Supervision Violation Population by Type, New York
+2023-09-12 21:36:56.794775 - hc: Supervision Violation Population by Type, North Carolina
+2023-09-12 21:36:56.898385 - hc: Supervision Violation Population by Type, North Dakota
+2023-09-12 21:36:56.990425 - hc: Supervision Violation Population by Type, Ohio
+2023-09-12 21:36:57.132967 - hc: Supervision Violation Population by Type, Oklahoma
+2023-09-12 21:36:57.257218 - hc: Supervision Violation Population by Type, Oregon
+2023-09-12 21:36:57.376375 - hc: Supervision Violation Population by Type, Pennsylvania
+2023-09-12 21:36:57.475007 - hc: Supervision Violation Population by Type, Rhode Island
+2023-09-12 21:36:57.56538 - hc: Supervision Violation Population by Type, South Carolina
+2023-09-12 21:36:57.708055 - hc: Supervision Violation Population by Type, South Dakota
+2023-09-12 21:36:57.835883 - hc: Supervision Violation Population by Type, Tennessee
+2023-09-12 21:36:57.968668 - hc: Supervision Violation Population by Type, Texas
+2023-09-12 21:36:58.075948 - hc: Supervision Violation Population by Type, Utah
+2023-09-12 21:36:58.184382 - hc: Supervision Violation Population by Type, Vermont
+2023-09-12 21:36:58.279556 - hc: Supervision Violation Population by Type, Virginia
+2023-09-12 21:36:58.372769 - hc: Supervision Violation Population by Type, Washington
+2023-09-12 21:36:58.483325 - hc: Supervision Violation Population by Type, West Virginia
+2023-09-12 21:36:58.57657 - hc: Supervision Violation Population by Type, Wisconsin
+2023-09-12 21:36:58.862532 - hc: Supervision Violation Population by Type, Wyoming
 
 > # set names of charts
 > all_state_bar_pop <- setNames(all_state_bar_pop, states)
@@ -376,56 +376,56 @@
 > 
 > # generate list of state highcharts to call in app (admissions)
 > parole_bar_a .... [TRUNCATED] 
-2023-08-28 17:13:25 - hc: Parole Violation Admissions by Type, Alabama
-2023-08-28 17:13:25 - hc: Parole Violation Admissions by Type, Alaska
-2023-08-28 17:13:25 - hc: Parole Violation Admissions by Type, Arizona
-2023-08-28 17:13:25 - hc: Parole Violation Admissions by Type, Arkansas
-2023-08-28 17:13:25 - hc: Parole Violation Admissions by Type, California
-2023-08-28 17:13:25 - hc: Parole Violation Admissions by Type, Colorado
-2023-08-28 17:13:25 - hc: Parole Violation Admissions by Type, Connecticut
-2023-08-28 17:13:25 - hc: Parole Violation Admissions by Type, Delaware
-2023-08-28 17:13:26 - hc: Parole Violation Admissions by Type, Florida
-2023-08-28 17:13:26 - hc: Parole Violation Admissions by Type, Georgia
-2023-08-28 17:13:26 - hc: Parole Violation Admissions by Type, Hawaii
-2023-08-28 17:13:26 - hc: Parole Violation Admissions by Type, Idaho
-2023-08-28 17:13:26 - hc: Parole Violation Admissions by Type, Illinois
-2023-08-28 17:13:26 - hc: Parole Violation Admissions by Type, Indiana
-2023-08-28 17:13:26 - hc: Parole Violation Admissions by Type, Iowa
-2023-08-28 17:13:26 - hc: Parole Violation Admissions by Type, Kansas
-2023-08-28 17:13:26 - hc: Parole Violation Admissions by Type, Kentucky
-2023-08-28 17:13:26 - hc: Parole Violation Admissions by Type, Louisiana
-2023-08-28 17:13:27 - hc: Parole Violation Admissions by Type, Maine
-2023-08-28 17:13:27 - hc: Parole Violation Admissions by Type, Maryland
-2023-08-28 17:13:27 - hc: Parole Violation Admissions by Type, Massachusetts
-2023-08-28 17:13:27 - hc: Parole Violation Admissions by Type, Michigan
-2023-08-28 17:13:27 - hc: Parole Violation Admissions by Type, Minnesota
-2023-08-28 17:13:27 - hc: Parole Violation Admissions by Type, Mississippi
-2023-08-28 17:13:27 - hc: Parole Violation Admissions by Type, Missouri
-2023-08-28 17:13:27 - hc: Parole Violation Admissions by Type, Montana
-2023-08-28 17:13:27 - hc: Parole Violation Admissions by Type, Nebraska
-2023-08-28 17:13:27 - hc: Parole Violation Admissions by Type, Nevada
-2023-08-28 17:13:28 - hc: Parole Violation Admissions by Type, New Hampshire
-2023-08-28 17:13:28 - hc: Parole Violation Admissions by Type, New Jersey
-2023-08-28 17:13:28 - hc: Parole Violation Admissions by Type, New Mexico
-2023-08-28 17:13:28 - hc: Parole Violation Admissions by Type, New York
-2023-08-28 17:13:28 - hc: Parole Violation Admissions by Type, North Carolina
-2023-08-28 17:13:28 - hc: Parole Violation Admissions by Type, North Dakota
-2023-08-28 17:13:28 - hc: Parole Violation Admissions by Type, Ohio
-2023-08-28 17:13:28 - hc: Parole Violation Admissions by Type, Oklahoma
-2023-08-28 17:13:28 - hc: Parole Violation Admissions by Type, Oregon
-2023-08-28 17:13:28 - hc: Parole Violation Admissions by Type, Pennsylvania
-2023-08-28 17:13:28 - hc: Parole Violation Admissions by Type, Rhode Island
-2023-08-28 17:13:29 - hc: Parole Violation Admissions by Type, South Carolina
-2023-08-28 17:13:29 - hc: Parole Violation Admissions by Type, South Dakota
-2023-08-28 17:13:29 - hc: Parole Violation Admissions by Type, Tennessee
-2023-08-28 17:13:29 - hc: Parole Violation Admissions by Type, Texas
-2023-08-28 17:13:29 - hc: Parole Violation Admissions by Type, Utah
-2023-08-28 17:13:29 - hc: Parole Violation Admissions by Type, Vermont
-2023-08-28 17:13:29 - hc: Parole Violation Admissions by Type, Virginia
-2023-08-28 17:13:29 - hc: Parole Violation Admissions by Type, Washington
-2023-08-28 17:13:29 - hc: Parole Violation Admissions by Type, West Virginia
-2023-08-28 17:13:29 - hc: Parole Violation Admissions by Type, Wisconsin
-2023-08-28 17:13:29 - hc: Parole Violation Admissions by Type, Wyoming
+2023-09-12 21:36:58.994984 - hc: Parole Violation Admissions by Type, Alabama
+2023-09-12 21:36:59.160311 - hc: Parole Violation Admissions by Type, Alaska
+2023-09-12 21:36:59.271769 - hc: Parole Violation Admissions by Type, Arizona
+2023-09-12 21:36:59.409513 - hc: Parole Violation Admissions by Type, Arkansas
+2023-09-12 21:36:59.517401 - hc: Parole Violation Admissions by Type, California
+2023-09-12 21:36:59.628513 - hc: Parole Violation Admissions by Type, Colorado
+2023-09-12 21:36:59.726927 - hc: Parole Violation Admissions by Type, Connecticut
+2023-09-12 21:36:59.844659 - hc: Parole Violation Admissions by Type, Delaware
+2023-09-12 21:36:59.953245 - hc: Parole Violation Admissions by Type, Florida
+2023-09-12 21:37:00.068896 - hc: Parole Violation Admissions by Type, Georgia
+2023-09-12 21:37:00.184858 - hc: Parole Violation Admissions by Type, Hawaii
+2023-09-12 21:37:00.29565 - hc: Parole Violation Admissions by Type, Idaho
+2023-09-12 21:37:00.399691 - hc: Parole Violation Admissions by Type, Illinois
+2023-09-12 21:37:00.518552 - hc: Parole Violation Admissions by Type, Indiana
+2023-09-12 21:37:00.624094 - hc: Parole Violation Admissions by Type, Iowa
+2023-09-12 21:37:00.745844 - hc: Parole Violation Admissions by Type, Kansas
+2023-09-12 21:37:00.857491 - hc: Parole Violation Admissions by Type, Kentucky
+2023-09-12 21:37:00.952285 - hc: Parole Violation Admissions by Type, Louisiana
+2023-09-12 21:37:01.062541 - hc: Parole Violation Admissions by Type, Maine
+2023-09-12 21:37:01.160333 - hc: Parole Violation Admissions by Type, Maryland
+2023-09-12 21:37:01.272507 - hc: Parole Violation Admissions by Type, Massachusetts
+2023-09-12 21:37:01.369193 - hc: Parole Violation Admissions by Type, Michigan
+2023-09-12 21:37:01.476467 - hc: Parole Violation Admissions by Type, Minnesota
+2023-09-12 21:37:01.603155 - hc: Parole Violation Admissions by Type, Mississippi
+2023-09-12 21:37:01.699452 - hc: Parole Violation Admissions by Type, Missouri
+2023-09-12 21:37:01.817734 - hc: Parole Violation Admissions by Type, Montana
+2023-09-12 21:37:01.936742 - hc: Parole Violation Admissions by Type, Nebraska
+2023-09-12 21:37:02.044675 - hc: Parole Violation Admissions by Type, Nevada
+2023-09-12 21:37:02.145346 - hc: Parole Violation Admissions by Type, New Hampshire
+2023-09-12 21:37:02.264768 - hc: Parole Violation Admissions by Type, New Jersey
+2023-09-12 21:37:02.365611 - hc: Parole Violation Admissions by Type, New Mexico
+2023-09-12 21:37:02.480532 - hc: Parole Violation Admissions by Type, New York
+2023-09-12 21:37:02.586552 - hc: Parole Violation Admissions by Type, North Carolina
+2023-09-12 21:37:02.705324 - hc: Parole Violation Admissions by Type, North Dakota
+2023-09-12 21:37:02.821353 - hc: Parole Violation Admissions by Type, Ohio
+2023-09-12 21:37:02.938208 - hc: Parole Violation Admissions by Type, Oklahoma
+2023-09-12 21:37:03.05093 - hc: Parole Violation Admissions by Type, Oregon
+2023-09-12 21:37:03.164931 - hc: Parole Violation Admissions by Type, Pennsylvania
+2023-09-12 21:37:03.292169 - hc: Parole Violation Admissions by Type, Rhode Island
+2023-09-12 21:37:03.406222 - hc: Parole Violation Admissions by Type, South Carolina
+2023-09-12 21:37:03.519817 - hc: Parole Violation Admissions by Type, South Dakota
+2023-09-12 21:37:03.628201 - hc: Parole Violation Admissions by Type, Tennessee
+2023-09-12 21:37:03.758776 - hc: Parole Violation Admissions by Type, Texas
+2023-09-12 21:37:03.871913 - hc: Parole Violation Admissions by Type, Utah
+2023-09-12 21:37:03.990582 - hc: Parole Violation Admissions by Type, Vermont
+2023-09-12 21:37:04.091346 - hc: Parole Violation Admissions by Type, Virginia
+2023-09-12 21:37:04.197474 - hc: Parole Violation Admissions by Type, Washington
+2023-09-12 21:37:04.305509 - hc: Parole Violation Admissions by Type, West Virginia
+2023-09-12 21:37:04.434141 - hc: Parole Violation Admissions by Type, Wisconsin
+2023-09-12 21:37:04.542729 - hc: Parole Violation Admissions by Type, Wyoming
 
 > # set names of charts
 > parole_bar_adm <- setNames(parole_bar_adm,states)
@@ -433,56 +433,56 @@
 > # generate list of state highcharts to call in app (population)
 > parole_bar_pop <- map(.x = states,  .f = function(x) {
 +   df1 <- adm_pop_long %>% .... [TRUNCATED] 
-2023-08-28 17:13:30 - hc: Parole Violations Population by Type, Alabama
-2023-08-28 17:13:30 - hc: Parole Violations Population by Type, Alaska
-2023-08-28 17:13:30 - hc: Parole Violations Population by Type, Arizona
-2023-08-28 17:13:30 - hc: Parole Violations Population by Type, Arkansas
-2023-08-28 17:13:30 - hc: Parole Violations Population by Type, California
-2023-08-28 17:13:30 - hc: Parole Violations Population by Type, Colorado
-2023-08-28 17:13:30 - hc: Parole Violations Population by Type, Connecticut
-2023-08-28 17:13:30 - hc: Parole Violations Population by Type, Delaware
-2023-08-28 17:13:30 - hc: Parole Violations Population by Type, Florida
-2023-08-28 17:13:30 - hc: Parole Violations Population by Type, Georgia
-2023-08-28 17:13:31 - hc: Parole Violations Population by Type, Hawaii
-2023-08-28 17:13:31 - hc: Parole Violations Population by Type, Idaho
-2023-08-28 17:13:31 - hc: Parole Violations Population by Type, Illinois
-2023-08-28 17:13:31 - hc: Parole Violations Population by Type, Indiana
-2023-08-28 17:13:31 - hc: Parole Violations Population by Type, Iowa
-2023-08-28 17:13:31 - hc: Parole Violations Population by Type, Kansas
-2023-08-28 17:13:31 - hc: Parole Violations Population by Type, Kentucky
-2023-08-28 17:13:31 - hc: Parole Violations Population by Type, Louisiana
-2023-08-28 17:13:31 - hc: Parole Violations Population by Type, Maine
-2023-08-28 17:13:31 - hc: Parole Violations Population by Type, Maryland
-2023-08-28 17:13:31 - hc: Parole Violations Population by Type, Massachusetts
-2023-08-28 17:13:32 - hc: Parole Violations Population by Type, Michigan
-2023-08-28 17:13:32 - hc: Parole Violations Population by Type, Minnesota
-2023-08-28 17:13:32 - hc: Parole Violations Population by Type, Mississippi
-2023-08-28 17:13:32 - hc: Parole Violations Population by Type, Missouri
-2023-08-28 17:13:32 - hc: Parole Violations Population by Type, Montana
-2023-08-28 17:13:32 - hc: Parole Violations Population by Type, Nebraska
-2023-08-28 17:13:32 - hc: Parole Violations Population by Type, Nevada
-2023-08-28 17:13:33 - hc: Parole Violations Population by Type, New Hampshire
-2023-08-28 17:13:33 - hc: Parole Violations Population by Type, New Jersey
-2023-08-28 17:13:33 - hc: Parole Violations Population by Type, New Mexico
-2023-08-28 17:13:33 - hc: Parole Violations Population by Type, New York
-2023-08-28 17:13:33 - hc: Parole Violations Population by Type, North Carolina
-2023-08-28 17:13:33 - hc: Parole Violations Population by Type, North Dakota
-2023-08-28 17:13:33 - hc: Parole Violations Population by Type, Ohio
-2023-08-28 17:13:33 - hc: Parole Violations Population by Type, Oklahoma
-2023-08-28 17:13:33 - hc: Parole Violations Population by Type, Oregon
-2023-08-28 17:13:34 - hc: Parole Violations Population by Type, Pennsylvania
-2023-08-28 17:13:34 - hc: Parole Violations Population by Type, Rhode Island
-2023-08-28 17:13:34 - hc: Parole Violations Population by Type, South Carolina
-2023-08-28 17:13:34 - hc: Parole Violations Population by Type, South Dakota
-2023-08-28 17:13:34 - hc: Parole Violations Population by Type, Tennessee
-2023-08-28 17:13:34 - hc: Parole Violations Population by Type, Texas
-2023-08-28 17:13:34 - hc: Parole Violations Population by Type, Utah
-2023-08-28 17:13:34 - hc: Parole Violations Population by Type, Vermont
-2023-08-28 17:13:34 - hc: Parole Violations Population by Type, Virginia
-2023-08-28 17:13:34 - hc: Parole Violations Population by Type, Washington
-2023-08-28 17:13:35 - hc: Parole Violations Population by Type, West Virginia
-2023-08-28 17:13:35 - hc: Parole Violations Population by Type, Wisconsin
-2023-08-28 17:13:35 - hc: Parole Violations Population by Type, Wyoming
+2023-09-12 21:37:04.672342 - hc: Parole Violations Population by Type, Alabama
+2023-09-12 21:37:04.797674 - hc: Parole Violations Population by Type, Alaska
+2023-09-12 21:37:04.906822 - hc: Parole Violations Population by Type, Arizona
+2023-09-12 21:37:05.008212 - hc: Parole Violations Population by Type, Arkansas
+2023-09-12 21:37:05.154273 - hc: Parole Violations Population by Type, California
+2023-09-12 21:37:05.260627 - hc: Parole Violations Population by Type, Colorado
+2023-09-12 21:37:05.354979 - hc: Parole Violations Population by Type, Connecticut
+2023-09-12 21:37:05.486544 - hc: Parole Violations Population by Type, Delaware
+2023-09-12 21:37:05.599808 - hc: Parole Violations Population by Type, Florida
+2023-09-12 21:37:05.728151 - hc: Parole Violations Population by Type, Georgia
+2023-09-12 21:37:05.827969 - hc: Parole Violations Population by Type, Hawaii
+2023-09-12 21:37:05.954758 - hc: Parole Violations Population by Type, Idaho
+2023-09-12 21:37:06.053832 - hc: Parole Violations Population by Type, Illinois
+2023-09-12 21:37:06.194622 - hc: Parole Violations Population by Type, Indiana
+2023-09-12 21:37:06.298385 - hc: Parole Violations Population by Type, Iowa
+2023-09-12 21:37:06.415859 - hc: Parole Violations Population by Type, Kansas
+2023-09-12 21:37:06.51189 - hc: Parole Violations Population by Type, Kentucky
+2023-09-12 21:37:06.644999 - hc: Parole Violations Population by Type, Louisiana
+2023-09-12 21:37:06.7554 - hc: Parole Violations Population by Type, Maine
+2023-09-12 21:37:06.872726 - hc: Parole Violations Population by Type, Maryland
+2023-09-12 21:37:07.018828 - hc: Parole Violations Population by Type, Massachusetts
+2023-09-12 21:37:07.141061 - hc: Parole Violations Population by Type, Michigan
+2023-09-12 21:37:07.251765 - hc: Parole Violations Population by Type, Minnesota
+2023-09-12 21:37:07.354618 - hc: Parole Violations Population by Type, Mississippi
+2023-09-12 21:37:07.466396 - hc: Parole Violations Population by Type, Missouri
+2023-09-12 21:37:07.577862 - hc: Parole Violations Population by Type, Montana
+2023-09-12 21:37:07.707427 - hc: Parole Violations Population by Type, Nebraska
+2023-09-12 21:37:07.823389 - hc: Parole Violations Population by Type, Nevada
+2023-09-12 21:37:07.964991 - hc: Parole Violations Population by Type, New Hampshire
+2023-09-12 21:37:08.062869 - hc: Parole Violations Population by Type, New Jersey
+2023-09-12 21:37:08.219219 - hc: Parole Violations Population by Type, New Mexico
+2023-09-12 21:37:08.335781 - hc: Parole Violations Population by Type, New York
+2023-09-12 21:37:08.452531 - hc: Parole Violations Population by Type, North Carolina
+2023-09-12 21:37:08.56373 - hc: Parole Violations Population by Type, North Dakota
+2023-09-12 21:37:08.685103 - hc: Parole Violations Population by Type, Ohio
+2023-09-12 21:37:08.783153 - hc: Parole Violations Population by Type, Oklahoma
+2023-09-12 21:37:08.8933 - hc: Parole Violations Population by Type, Oregon
+2023-09-12 21:37:09.02839 - hc: Parole Violations Population by Type, Pennsylvania
+2023-09-12 21:37:09.134946 - hc: Parole Violations Population by Type, Rhode Island
+2023-09-12 21:37:09.269982 - hc: Parole Violations Population by Type, South Carolina
+2023-09-12 21:37:09.379477 - hc: Parole Violations Population by Type, South Dakota
+2023-09-12 21:37:09.544111 - hc: Parole Violations Population by Type, Tennessee
+2023-09-12 21:37:09.694613 - hc: Parole Violations Population by Type, Texas
+2023-09-12 21:37:09.824709 - hc: Parole Violations Population by Type, Utah
+2023-09-12 21:37:09.920836 - hc: Parole Violations Population by Type, Vermont
+2023-09-12 21:37:10.041157 - hc: Parole Violations Population by Type, Virginia
+2023-09-12 21:37:10.150577 - hc: Parole Violations Population by Type, Washington
+2023-09-12 21:37:10.292319 - hc: Parole Violations Population by Type, West Virginia
+2023-09-12 21:37:10.405616 - hc: Parole Violations Population by Type, Wisconsin
+2023-09-12 21:37:10.51027 - hc: Parole Violations Population by Type, Wyoming
 
 > # set names of charts
 > parole_bar_pop <- setNames(parole_bar_pop,states)
@@ -493,56 +493,56 @@
 > 
 > # generate list of state highcharts to call in app (admissions)
 > probation .... [TRUNCATED] 
-2023-08-28 17:13:35 - hc: Probation Violation Admissions by Type, Alabama
-2023-08-28 17:13:35 - hc: Probation Violation Admissions by Type, Alaska
-2023-08-28 17:13:35 - hc: Probation Violation Admissions by Type, Arizona
-2023-08-28 17:13:35 - hc: Probation Violation Admissions by Type, Arkansas
-2023-08-28 17:13:35 - hc: Probation Violation Admissions by Type, California
-2023-08-28 17:13:35 - hc: Probation Violation Admissions by Type, Colorado
-2023-08-28 17:13:36 - hc: Probation Violation Admissions by Type, Connecticut
-2023-08-28 17:13:36 - hc: Probation Violation Admissions by Type, Delaware
-2023-08-28 17:13:36 - hc: Probation Violation Admissions by Type, Florida
-2023-08-28 17:13:36 - hc: Probation Violation Admissions by Type, Georgia
-2023-08-28 17:13:36 - hc: Probation Violation Admissions by Type, Hawaii
-2023-08-28 17:13:36 - hc: Probation Violation Admissions by Type, Idaho
-2023-08-28 17:13:36 - hc: Probation Violation Admissions by Type, Illinois
-2023-08-28 17:13:36 - hc: Probation Violation Admissions by Type, Indiana
-2023-08-28 17:13:36 - hc: Probation Violation Admissions by Type, Iowa
-2023-08-28 17:13:36 - hc: Probation Violation Admissions by Type, Kansas
-2023-08-28 17:13:37 - hc: Probation Violation Admissions by Type, Kentucky
-2023-08-28 17:13:37 - hc: Probation Violation Admissions by Type, Louisiana
-2023-08-28 17:13:37 - hc: Probation Violation Admissions by Type, Maine
-2023-08-28 17:13:37 - hc: Probation Violation Admissions by Type, Maryland
-2023-08-28 17:13:37 - hc: Probation Violation Admissions by Type, Massachusetts
-2023-08-28 17:13:37 - hc: Probation Violation Admissions by Type, Michigan
-2023-08-28 17:13:37 - hc: Probation Violation Admissions by Type, Minnesota
-2023-08-28 17:13:37 - hc: Probation Violation Admissions by Type, Mississippi
-2023-08-28 17:13:37 - hc: Probation Violation Admissions by Type, Missouri
-2023-08-28 17:13:37 - hc: Probation Violation Admissions by Type, Montana
-2023-08-28 17:13:38 - hc: Probation Violation Admissions by Type, Nebraska
-2023-08-28 17:13:38 - hc: Probation Violation Admissions by Type, Nevada
-2023-08-28 17:13:38 - hc: Probation Violation Admissions by Type, New Hampshire
-2023-08-28 17:13:38 - hc: Probation Violation Admissions by Type, New Jersey
-2023-08-28 17:13:38 - hc: Probation Violation Admissions by Type, New Mexico
-2023-08-28 17:13:38 - hc: Probation Violation Admissions by Type, New York
-2023-08-28 17:13:38 - hc: Probation Violation Admissions by Type, North Carolina
-2023-08-28 17:13:38 - hc: Probation Violation Admissions by Type, North Dakota
-2023-08-28 17:13:38 - hc: Probation Violation Admissions by Type, Ohio
-2023-08-28 17:13:39 - hc: Probation Violation Admissions by Type, Oklahoma
-2023-08-28 17:13:39 - hc: Probation Violation Admissions by Type, Oregon
-2023-08-28 17:13:39 - hc: Probation Violation Admissions by Type, Pennsylvania
-2023-08-28 17:13:39 - hc: Probation Violation Admissions by Type, Rhode Island
-2023-08-28 17:13:39 - hc: Probation Violation Admissions by Type, South Carolina
-2023-08-28 17:13:39 - hc: Probation Violation Admissions by Type, South Dakota
-2023-08-28 17:13:39 - hc: Probation Violation Admissions by Type, Tennessee
-2023-08-28 17:13:39 - hc: Probation Violation Admissions by Type, Texas
-2023-08-28 17:13:39 - hc: Probation Violation Admissions by Type, Utah
-2023-08-28 17:13:39 - hc: Probation Violation Admissions by Type, Vermont
-2023-08-28 17:13:40 - hc: Probation Violation Admissions by Type, Virginia
-2023-08-28 17:13:40 - hc: Probation Violation Admissions by Type, Washington
-2023-08-28 17:13:40 - hc: Probation Violation Admissions by Type, West Virginia
-2023-08-28 17:13:40 - hc: Probation Violation Admissions by Type, Wisconsin
-2023-08-28 17:13:40 - hc: Probation Violation Admissions by Type, Wyoming
+2023-09-12 21:37:10.681749 - hc: Probation Violation Admissions by Type, Alabama
+2023-09-12 21:37:10.824111 - hc: Probation Violation Admissions by Type, Alaska
+2023-09-12 21:37:10.951967 - hc: Probation Violation Admissions by Type, Arizona
+2023-09-12 21:37:11.085357 - hc: Probation Violation Admissions by Type, Arkansas
+2023-09-12 21:37:11.231978 - hc: Probation Violation Admissions by Type, California
+2023-09-12 21:37:11.353079 - hc: Probation Violation Admissions by Type, Colorado
+2023-09-12 21:37:11.469473 - hc: Probation Violation Admissions by Type, Connecticut
+2023-09-12 21:37:11.590722 - hc: Probation Violation Admissions by Type, Delaware
+2023-09-12 21:37:11.688185 - hc: Probation Violation Admissions by Type, Florida
+2023-09-12 21:37:11.815166 - hc: Probation Violation Admissions by Type, Georgia
+2023-09-12 21:37:11.943892 - hc: Probation Violation Admissions by Type, Hawaii
+2023-09-12 21:37:12.053257 - hc: Probation Violation Admissions by Type, Idaho
+2023-09-12 21:37:12.179856 - hc: Probation Violation Admissions by Type, Illinois
+2023-09-12 21:37:12.275157 - hc: Probation Violation Admissions by Type, Indiana
+2023-09-12 21:37:12.426727 - hc: Probation Violation Admissions by Type, Iowa
+2023-09-12 21:37:12.535516 - hc: Probation Violation Admissions by Type, Kansas
+2023-09-12 21:37:12.652866 - hc: Probation Violation Admissions by Type, Kentucky
+2023-09-12 21:37:12.779437 - hc: Probation Violation Admissions by Type, Louisiana
+2023-09-12 21:37:12.888139 - hc: Probation Violation Admissions by Type, Maine
+2023-09-12 21:37:12.985795 - hc: Probation Violation Admissions by Type, Maryland
+2023-09-12 21:37:13.100637 - hc: Probation Violation Admissions by Type, Massachusetts
+2023-09-12 21:37:13.199593 - hc: Probation Violation Admissions by Type, Michigan
+2023-09-12 21:37:13.305932 - hc: Probation Violation Admissions by Type, Minnesota
+2023-09-12 21:37:13.44261 - hc: Probation Violation Admissions by Type, Mississippi
+2023-09-12 21:37:13.581523 - hc: Probation Violation Admissions by Type, Missouri
+2023-09-12 21:37:13.687055 - hc: Probation Violation Admissions by Type, Montana
+2023-09-12 21:37:13.810898 - hc: Probation Violation Admissions by Type, Nebraska
+2023-09-12 21:37:13.942107 - hc: Probation Violation Admissions by Type, Nevada
+2023-09-12 21:37:14.059099 - hc: Probation Violation Admissions by Type, New Hampshire
+2023-09-12 21:37:14.168703 - hc: Probation Violation Admissions by Type, New Jersey
+2023-09-12 21:37:14.303428 - hc: Probation Violation Admissions by Type, New Mexico
+2023-09-12 21:37:14.404215 - hc: Probation Violation Admissions by Type, New York
+2023-09-12 21:37:14.54636 - hc: Probation Violation Admissions by Type, North Carolina
+2023-09-12 21:37:14.644865 - hc: Probation Violation Admissions by Type, North Dakota
+2023-09-12 21:37:14.749304 - hc: Probation Violation Admissions by Type, Ohio
+2023-09-12 21:37:14.900813 - hc: Probation Violation Admissions by Type, Oklahoma
+2023-09-12 21:37:15.02302 - hc: Probation Violation Admissions by Type, Oregon
+2023-09-12 21:37:15.136191 - hc: Probation Violation Admissions by Type, Pennsylvania
+2023-09-12 21:37:15.259024 - hc: Probation Violation Admissions by Type, Rhode Island
+2023-09-12 21:37:15.366144 - hc: Probation Violation Admissions by Type, South Carolina
+2023-09-12 21:37:15.460198 - hc: Probation Violation Admissions by Type, South Dakota
+2023-09-12 21:37:15.581627 - hc: Probation Violation Admissions by Type, Tennessee
+2023-09-12 21:37:15.691419 - hc: Probation Violation Admissions by Type, Texas
+2023-09-12 21:37:15.861398 - hc: Probation Violation Admissions by Type, Utah
+2023-09-12 21:37:15.990437 - hc: Probation Violation Admissions by Type, Vermont
+2023-09-12 21:37:16.10046 - hc: Probation Violation Admissions by Type, Virginia
+2023-09-12 21:37:16.213459 - hc: Probation Violation Admissions by Type, Washington
+2023-09-12 21:37:16.335249 - hc: Probation Violation Admissions by Type, West Virginia
+2023-09-12 21:37:16.473728 - hc: Probation Violation Admissions by Type, Wisconsin
+2023-09-12 21:37:16.590838 - hc: Probation Violation Admissions by Type, Wyoming
 
 > # set names of charts
 > probation_bar_adm <- setNames(probation_bar_adm, states)
@@ -550,56 +550,56 @@
 > # generate list of state highcharts to call in app (population)
 > probation_bar_pop <- map(.x = states,  .f = function(x) {
 +   df1 <- adm_pop_long  .... [TRUNCATED] 
-2023-08-28 17:13:40 - hc: Probation Violation Population by Type, Alabama
-2023-08-28 17:13:40 - hc: Probation Violation Population by Type, Alaska
-2023-08-28 17:13:40 - hc: Probation Violation Population by Type, Arizona
-2023-08-28 17:13:40 - hc: Probation Violation Population by Type, Arkansas
-2023-08-28 17:13:40 - hc: Probation Violation Population by Type, California
-2023-08-28 17:13:41 - hc: Probation Violation Population by Type, Colorado
-2023-08-28 17:13:41 - hc: Probation Violation Population by Type, Connecticut
-2023-08-28 17:13:41 - hc: Probation Violation Population by Type, Delaware
-2023-08-28 17:13:41 - hc: Probation Violation Population by Type, Florida
-2023-08-28 17:13:41 - hc: Probation Violation Population by Type, Georgia
-2023-08-28 17:13:41 - hc: Probation Violation Population by Type, Hawaii
-2023-08-28 17:13:41 - hc: Probation Violation Population by Type, Idaho
-2023-08-28 17:13:41 - hc: Probation Violation Population by Type, Illinois
-2023-08-28 17:13:41 - hc: Probation Violation Population by Type, Indiana
-2023-08-28 17:13:42 - hc: Probation Violation Population by Type, Iowa
-2023-08-28 17:13:42 - hc: Probation Violation Population by Type, Kansas
-2023-08-28 17:13:42 - hc: Probation Violation Population by Type, Kentucky
-2023-08-28 17:13:42 - hc: Probation Violation Population by Type, Louisiana
-2023-08-28 17:13:42 - hc: Probation Violation Population by Type, Maine
-2023-08-28 17:13:42 - hc: Probation Violation Population by Type, Maryland
-2023-08-28 17:13:42 - hc: Probation Violation Population by Type, Massachusetts
-2023-08-28 17:13:42 - hc: Probation Violation Population by Type, Michigan
-2023-08-28 17:13:42 - hc: Probation Violation Population by Type, Minnesota
-2023-08-28 17:13:42 - hc: Probation Violation Population by Type, Mississippi
-2023-08-28 17:13:43 - hc: Probation Violation Population by Type, Missouri
-2023-08-28 17:13:43 - hc: Probation Violation Population by Type, Montana
-2023-08-28 17:13:43 - hc: Probation Violation Population by Type, Nebraska
-2023-08-28 17:13:43 - hc: Probation Violation Population by Type, Nevada
-2023-08-28 17:13:43 - hc: Probation Violation Population by Type, New Hampshire
-2023-08-28 17:13:43 - hc: Probation Violation Population by Type, New Jersey
-2023-08-28 17:13:43 - hc: Probation Violation Population by Type, New Mexico
-2023-08-28 17:13:43 - hc: Probation Violation Population by Type, New York
-2023-08-28 17:13:43 - hc: Probation Violation Population by Type, North Carolina
-2023-08-28 17:13:43 - hc: Probation Violation Population by Type, North Dakota
-2023-08-28 17:13:44 - hc: Probation Violation Population by Type, Ohio
-2023-08-28 17:13:44 - hc: Probation Violation Population by Type, Oklahoma
-2023-08-28 17:13:44 - hc: Probation Violation Population by Type, Oregon
-2023-08-28 17:13:44 - hc: Probation Violation Population by Type, Pennsylvania
-2023-08-28 17:13:44 - hc: Probation Violation Population by Type, Rhode Island
-2023-08-28 17:13:44 - hc: Probation Violation Population by Type, South Carolina
-2023-08-28 17:13:44 - hc: Probation Violation Population by Type, South Dakota
-2023-08-28 17:13:44 - hc: Probation Violation Population by Type, Tennessee
-2023-08-28 17:13:44 - hc: Probation Violation Population by Type, Texas
-2023-08-28 17:13:44 - hc: Probation Violation Population by Type, Utah
-2023-08-28 17:13:45 - hc: Probation Violation Population by Type, Vermont
-2023-08-28 17:13:45 - hc: Probation Violation Population by Type, Virginia
-2023-08-28 17:13:45 - hc: Probation Violation Population by Type, Washington
-2023-08-28 17:13:45 - hc: Probation Violation Population by Type, West Virginia
-2023-08-28 17:13:45 - hc: Probation Violation Population by Type, Wisconsin
-2023-08-28 17:13:45 - hc: Probation Violation Population by Type, Wyoming
+2023-09-12 21:37:16.713975 - hc: Probation Violation Population by Type, Alabama
+2023-09-12 21:37:16.835274 - hc: Probation Violation Population by Type, Alaska
+2023-09-12 21:37:16.934577 - hc: Probation Violation Population by Type, Arizona
+2023-09-12 21:37:17.047647 - hc: Probation Violation Population by Type, Arkansas
+2023-09-12 21:37:17.155457 - hc: Probation Violation Population by Type, California
+2023-09-12 21:37:17.295915 - hc: Probation Violation Population by Type, Colorado
+2023-09-12 21:37:17.397459 - hc: Probation Violation Population by Type, Connecticut
+2023-09-12 21:37:17.503999 - hc: Probation Violation Population by Type, Delaware
+2023-09-12 21:37:17.650158 - hc: Probation Violation Population by Type, Florida
+2023-09-12 21:37:17.768751 - hc: Probation Violation Population by Type, Georgia
+2023-09-12 21:37:17.882805 - hc: Probation Violation Population by Type, Hawaii
+2023-09-12 21:37:17.99353 - hc: Probation Violation Population by Type, Idaho
+2023-09-12 21:37:18.124413 - hc: Probation Violation Population by Type, Illinois
+2023-09-12 21:37:18.229761 - hc: Probation Violation Population by Type, Indiana
+2023-09-12 21:37:18.409749 - hc: Probation Violation Population by Type, Iowa
+2023-09-12 21:37:18.530349 - hc: Probation Violation Population by Type, Kansas
+2023-09-12 21:37:18.668171 - hc: Probation Violation Population by Type, Kentucky
+2023-09-12 21:37:18.783819 - hc: Probation Violation Population by Type, Louisiana
+2023-09-12 21:37:18.907353 - hc: Probation Violation Population by Type, Maine
+2023-09-12 21:37:19.044804 - hc: Probation Violation Population by Type, Maryland
+2023-09-12 21:37:19.163828 - hc: Probation Violation Population by Type, Massachusetts
+2023-09-12 21:37:19.315936 - hc: Probation Violation Population by Type, Michigan
+2023-09-12 21:37:19.439969 - hc: Probation Violation Population by Type, Minnesota
+2023-09-12 21:37:19.543994 - hc: Probation Violation Population by Type, Mississippi
+2023-09-12 21:37:19.656815 - hc: Probation Violation Population by Type, Missouri
+2023-09-12 21:37:19.759443 - hc: Probation Violation Population by Type, Montana
+2023-09-12 21:37:19.904513 - hc: Probation Violation Population by Type, Nebraska
+2023-09-12 21:37:20.003808 - hc: Probation Violation Population by Type, Nevada
+2023-09-12 21:37:20.111119 - hc: Probation Violation Population by Type, New Hampshire
+2023-09-12 21:37:20.211324 - hc: Probation Violation Population by Type, New Jersey
+2023-09-12 21:37:20.345769 - hc: Probation Violation Population by Type, New Mexico
+2023-09-12 21:37:20.455629 - hc: Probation Violation Population by Type, New York
+2023-09-12 21:37:20.574435 - hc: Probation Violation Population by Type, North Carolina
+2023-09-12 21:37:20.689971 - hc: Probation Violation Population by Type, North Dakota
+2023-09-12 21:37:20.791413 - hc: Probation Violation Population by Type, Ohio
+2023-09-12 21:37:20.920986 - hc: Probation Violation Population by Type, Oklahoma
+2023-09-12 21:37:21.029864 - hc: Probation Violation Population by Type, Oregon
+2023-09-12 21:37:21.138481 - hc: Probation Violation Population by Type, Pennsylvania
+2023-09-12 21:37:21.235287 - hc: Probation Violation Population by Type, Rhode Island
+2023-09-12 21:37:21.35861 - hc: Probation Violation Population by Type, South Carolina
+2023-09-12 21:37:21.474816 - hc: Probation Violation Population by Type, South Dakota
+2023-09-12 21:37:21.626537 - hc: Probation Violation Population by Type, Tennessee
+2023-09-12 21:37:21.749406 - hc: Probation Violation Population by Type, Texas
+2023-09-12 21:37:21.866237 - hc: Probation Violation Population by Type, Utah
+2023-09-12 21:37:21.995088 - hc: Probation Violation Population by Type, Vermont
+2023-09-12 21:37:22.1036 - hc: Probation Violation Population by Type, Virginia
+2023-09-12 21:37:22.239148 - hc: Probation Violation Population by Type, Washington
+2023-09-12 21:37:22.367782 - hc: Probation Violation Population by Type, West Virginia
+2023-09-12 21:37:22.47408 - hc: Probation Violation Population by Type, Wisconsin
+2023-09-12 21:37:22.619476 - hc: Probation Violation Population by Type, Wyoming
 
 > # set names of charts
 > probation_bar_pop <- setNames(probation_bar_pop, states)
@@ -620,12 +620,3 @@
 +   save(adm_pop_maps,           file=file.path(folder, "adm_pop_maps.rds"))
 + 
 +   save(all_state_area_adm,     fi .... [TRUNCATED] 
-Warning messages:
-1: package ‘rlang’ was built under R version 4.2.3
-2: package ‘jsonlite’ was built under R version 4.2.3
-3: package ‘readxl’ was built under R version 4.2.3
-4: package ‘sf’ was built under R version 4.2.3
-5: package ‘showtext’ was built under R version 4.2.3
-6: package ‘htmltools’ was built under R version 4.2.3
-7: package ‘openxlsx’ was built under R version 4.2.3
-8: package ‘scales’ was built under R version 4.2.3
