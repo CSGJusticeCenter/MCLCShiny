@@ -199,7 +199,7 @@ server <- function(input, output, session) {
                                 minWidth = 110,
                                 name = select_column_name,
                                 style = list(fontWeight = "bold"),
-                                format = colFormat(percent = TRUE, digits = 1)),
+                                format = colFormat(percent = TRUE, digits = 0)),
                 # add 4 Year trend graphs to each row
                 total_new  =
                   colDef(na = "–",
@@ -625,7 +625,8 @@ server <- function(input, output, session) {
                 text            = colDef(name = "Metric",
                                          align = "left",
                                          minWidth = 275,
-                                         style = list(fontWeight = "bold")),
+                                         style = list(fontWeight = "bold")
+                                         ),
                 `2018`          = colDef(na = "–", minWidth = 95),
                 `2019`          = colDef(na = "–", minWidth = 95),
                 `2020`          = colDef(na = "–", minWidth = 95),
@@ -634,7 +635,7 @@ server <- function(input, output, session) {
                                          name = "2018-2021 Change",
                                          style = list(fontWeight = "bold"),
                                          format = colFormat(percent = TRUE,
-                                                            digits = 1)),
+                                                            digits = 0)),
                 # Add 4 Year trend graphs to each row
                 total_new = colDef(minWidth = 110,
                                    name = "Trend Line",
@@ -818,7 +819,7 @@ server <- function(input, output, session) {
                                          name = "2018-2021 Change",
                                          style = list(fontWeight = "bold"),
                                          format = colFormat(percent = TRUE,
-                                                            digits = 1)),
+                                                            digits = 0)),
                 # add 4 Year trend graphs to each row
                 total_new = colDef(minWidth = 110,
                                    name = "Trend Line",
@@ -1013,7 +1014,7 @@ server <- function(input, output, session) {
                                          name = "2018-2021 Change",
                                          style = list(fontWeight = "bold"),
                                          format = colFormat(percent = TRUE,
-                                                            digits = 1)),
+                                                            digits = 0)),
                 # add 4 Year trend graphs to each row
                 total_new = colDef(minWidth = 110,
                                    name = "Trend Line",

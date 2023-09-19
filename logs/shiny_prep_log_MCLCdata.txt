@@ -9,18 +9,14 @@
 
 > library(rlang)
 
+Attaching package: ‘rlang’
+
+The following objects are masked from ‘package:purrr’:
+
+    %@%, flatten, flatten_chr, flatten_dbl, flatten_int, flatten_lgl, flatten_raw, invoke, splice
+
+
 > library(dplyr)
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-
 
 > library(tidyr)
 
@@ -43,11 +39,19 @@ The following objects are masked from ‘package:rlang’:
 
     flatten, unbox
 
+The following object is masked from ‘package:purrr’:
+
+    flatten
+
+The following object is masked from ‘package:shiny’:
+
+    validate
+
 
 > library(readxl)
 
 > library(sf)
-Linking to GEOS 3.11.2, GDAL 3.6.2, PROJ 9.2.0; sf_use_s2() is TRUE
+Linking to GEOS 3.9.1, GDAL 3.4.3, PROJ 7.2.1; sf_use_s2() is TRUE
 
 > library(showtext)
 Loading required package: sysfonts
@@ -56,8 +60,6 @@ Loading required package: showtextdb
 > library(sysfonts)
 
 > library(highcharter)
-Highcharts (www.highcharts.com) is a Highsoft software product which is
-not free for commercial and Governmental use
 
 > library(extrafont)
 Registering fonts with R
@@ -81,42 +83,28 @@ The following object is masked from ‘package:showtextdb’:
 
 > library(purrr)
 
-Attaching package: ‘purrr’
-
-The following object is masked from ‘package:jsonlite’:
-
-    flatten
-
-The following objects are masked from ‘package:rlang’:
-
-    %@%, flatten, flatten_chr, flatten_dbl, flatten_int, flatten_lgl, flatten_raw, invoke, splice
-
-
 > library(dataui)
 
 > library(scales)
 
 Attaching package: ‘scales’
 
-The following object is masked from ‘package:purrr’:
-
-    discard
-
 The following object is masked from ‘package:readr’:
 
     col_factor
+
+The following objects are masked from ‘package:formattable’:
+
+    comma, percent, scientific
+
+The following object is masked from ‘package:purrr’:
+
+    discard
 
 
 > library(webshot2)
 
 > library(formattable)
-
-Attaching package: ‘formattable’
-
-The following objects are masked from ‘package:scales’:
-
-    comma, percent, scientific
-
 
 > box::use(prep/box/admin)
 
@@ -254,6 +242,13 @@ The following objects are masked from ‘package:scales’:
 > 
 > # Reactable table with 4 Year trend line in last column
 > fnc_reat .... [TRUNCATED] 
+Warning messages:
+1: package ‘geojsonsf’ was built under R version 4.2.3 
+2: In .Call("_units_ud_init", PACKAGE = "units", path) :
+  closing unused connection 3 (logs/shiny_prep_log_MCLCdata.txt)
+3: package ‘showtext’ was built under R version 4.2.3 
+4: package ‘sysfonts’ was built under R version 4.2.3 
+5: package ‘showtextdb’ was built under R version 4.2.3 
 
 > #######################################
 > # Project: MCLCShiny
@@ -591,3 +586,13 @@ The following objects are masked from ‘package:scales’:
 + 
 +   save(disparities_definitions,     file=file.path(folder, "disparities_definitions.rds"))
 +   save(adm_pop_long, .... [TRUNCATED] 
+Warning message:
+In left_join(., probation_or_parole_info, by = c("state", "year",  :
+  Each row in `x` is expected to match at most 1 row in `y`.
+ℹ Row 9 of `x` matches multiple rows.
+ℹ If multiple matches are expected, set `multiple = "all"` to silence this warning.
+Warning message:
+In left_join(., probation_or_parole_info, by = c("state",  ... :
+  Each row in `x` is expected to match at most 1 row in `y`.
+ℹ Row 9 of `x` matches multiple rows.
+ℹ If multiple matches are expected, set `multiple = "all"` to silence this warning.
