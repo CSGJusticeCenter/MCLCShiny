@@ -8,7 +8,7 @@
 #######################################
 
 server <- function(input, output, session) {
-
+  
   # Change URL depending on tab selection in navbar
   observeEvent(input$navbarID, {
 
@@ -244,7 +244,7 @@ server <- function(input, output, session) {
   #######
   # State page title
   #######
-
+  
   # Title of state based on user input
   output$selected_state <- renderText({
     if (input$adm_pop_report == "Admissions") {
@@ -741,7 +741,7 @@ server <- function(input, output, session) {
   output$state_additional_notes <- renderUI({
     HTML(df_additional_notes()$notes)
   })
-
+  
   #######
   # Parole Tab
   #######
@@ -1467,5 +1467,5 @@ server <- function(input, output, session) {
                                 minWidth = 110,
                                 filterable = FALSE)))
   })
-
+  
 }

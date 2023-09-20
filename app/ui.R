@@ -118,7 +118,8 @@ ui <- fluidPage(
                            div(id = "hex-map",
                                highchartOutput("hex_map",
                                                height = 550,
-                                               width = "100%"))),
+                                               width = "100%") %>% withSpinner()
+                               )),
                   ),
                   br(), br(),
 
@@ -142,6 +143,8 @@ ui <- fluidPage(
                   br(), br()
 
               ) # end div
+              
+              
      ), # end tabPanel
 
      ############################################################################################################################## State Reports
@@ -211,11 +214,11 @@ ui <- fluidPage(
                                            ),
                                     column(width = 3,
                                            valueBoxOutput("sup_change",
-                                                          width = "100%")
+                                                          width = "100%") %>% withSpinner()
                                            ),
                                     column(width = 3,
                                            valueBoxOutput("tech_change",
-                                                          width = "100%")
+                                                          width = "100%") %>% withSpinner()
                                            ),
                                     column(width = 3,
                                            valueBoxOutput("new_off_change",
@@ -244,12 +247,12 @@ ui <- fluidPage(
                                              # Area graph and download button
                                              fluidRow(column(width = 5,
                                                              align = "center",
-                                                             uiOutput("state_area")),
+                                                             uiOutput("state_area") %>% withSpinner()),
                                                       column(width = 1, align = "center",
                                                              uiOutput("state_area_button")),
                                              # Supervision violation graph and download button
                                                       column(width = 5, align = "center",
-                                                             uiOutput("state_nt")),
+                                                             uiOutput("state_nt") %>% withSpinner()),
                                                       column(width = 1, align = "center",
                                                              uiOutput("state_nt_button"))),
                                              br(), br(), br(),
@@ -257,7 +260,7 @@ ui <- fluidPage(
                                              # State overview table
                                              fluidRow(column(width = 12,
                                                              align = "center",
-                                                             reactableOutput("state_table"))),
+                                                             reactableOutput("state_table") %>% withSpinner())),
 
                                              br(),
 
