@@ -8,7 +8,7 @@
 #######################################
 
 server <- function(input, output, session) {
-  
+
   # Change URL depending on tab selection in navbar
   observeEvent(input$navbarID, {
 
@@ -244,7 +244,7 @@ server <- function(input, output, session) {
   #######
   # State page title
   #######
-  
+
   # Title of state based on user input
   output$selected_state <- renderText({
     if (input$adm_pop_report == "Admissions") {
@@ -741,7 +741,7 @@ server <- function(input, output, session) {
   output$state_additional_notes <- renderUI({
     HTML(df_additional_notes()$notes)
   })
-  
+
   #######
   # Parole Tab
   #######
@@ -1158,33 +1158,59 @@ server <- function(input, output, session) {
 
   ############################################################################################################################################ tooltip
 
+  # REMOVE MODAL FOR NOW
   # When Race/Ethinicity tab is selected, show pop up about how data is not MCLC
   # This will only occur once per session automatically, see localsession
+  # localsession <- TRUE
+  # observeEvent(input$tabsetpanel, {
+  #   if (input$tabsetpanel == 4 & localsession)  {
+  #     localsession <<- FALSE
+  #     re_modal()
+  #     observeEvent(input$close_modal, {
+  #       removeModal()
+  #       dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
+  #
+  #       if (dataavail == 0) {
+  #         first_guide$init()
+  #         first_guide$remove(step = c("#infopanel-id", "ip1"))
+  #       } else {
+  #         first_guide$init()
+  #         first_guide$remove(step = c("#infopanel-id", "ip2"))
+  #       }
+  #
+  #       first_guide$start()
+  #     })
+  #   }
+  # })
+  #
+  # observeEvent(input$show_guide, {
+  #   re_modal()
+  # })
+
+  # Intiate guide when Race and Ethnicity tab are selected.
   localsession <- TRUE
   observeEvent(input$tabsetpanel, {
     if (input$tabsetpanel == 4 & localsession)  {
       localsession <<- FALSE
-      re_modal()
-      observeEvent(input$close_modal, {
-        removeModal()
-        dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
+      dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
 
-        if (dataavail == 0) {
-          first_guide$init()
-          first_guide$remove(step = c("#infopanel-id", "ip1"))
-        } else {
-          first_guide$init()
-          first_guide$remove(step = c("#infopanel-id", "ip2"))
-        }
+      if (dataavail == 0) {
+        first_guide$init()
+        first_guide$remove(step = c("#infopanel-id", "ip1"))
+      } else {
+        first_guide$init()
+        first_guide$remove(step = c("#infopanel-id", "ip2"))
+      }
 
-        first_guide$start()
-      })
+      first_guide$start()
     }
   })
 
   observeEvent(input$show_guide, {
-    re_modal()
+    first_guide$init()
+    first_guide$start()
   })
+
 
   output$retitleend <- renderText({
     case_when(
@@ -1467,5 +1493,5 @@ server <- function(input, output, session) {
                                 minWidth = 110,
                                 filterable = FALSE)))
   })
-  
+
 }
