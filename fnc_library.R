@@ -15,12 +15,6 @@
 # https://csgorg.sharepoint.com/:f:/s/Team-JC-Research/EhdvImKN2rdPnmHQ2TrKlooBdYqnnWc0SUXBNuh9C7d41g?e=NCsh8I
 # In your Renviron (usethis::edit_r_environ()), set CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"
 
-# Define personal library path
-personal_lib_path <- "C:/Users/mroberts/r-library/4.1"
-
-# Set the personal library path
-.libPaths(personal_lib_path)
-
 # # highcharter download instructions:
 # # remove the existing highcharter package from your R session: remove.packages("highcharter")
 # # restart your R session

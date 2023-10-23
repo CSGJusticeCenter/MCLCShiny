@@ -115,9 +115,10 @@ ui <- fluidPage(
                   fluidRow(
                     column(width = 12,
                            align = "center",
-                           div(id = "hex-map",
+                           div(class = "hidden-xs hidden-sm",
+                               #id = "hex-map",
                                highchartOutput("hex_map",
-                                               height = 550,
+                                               height = 600,
                                                width = "100%") %>% withSpinner()
                                )),
                   ),
@@ -137,7 +138,7 @@ ui <- fluidPage(
                   tags$head(tags$style(HTML("thead{color: #004270; font-size: 16px}"))),
                   fluidRow(
                     column(width = 12, align = "left",
-                           div(id = "table-map",
+                           div(id = "reactable-table",
                                reactableOutput("table_map"))),
                   ),
                   br(), br()
@@ -260,7 +261,9 @@ ui <- fluidPage(
                                              # State overview table
                                              fluidRow(column(width = 12,
                                                              align = "center",
-                                                             reactableOutput("state_table") %>% withSpinner())),
+                                                             div(id = "reactable-table",
+                                                                 reactableOutput("state_table") %>% withSpinner()
+                                                             ))),
 
                                              br(),
 
@@ -308,7 +311,9 @@ ui <- fluidPage(
                                              # Parole reactable table
                                              fluidRow(column(width = 12,
                                                              align = "center",
-                                                             reactableOutput("parole_table"))),
+                                                             div(id = "reactable-table",
+                                                                 reactableOutput("parole_table") %>% withSpinner()
+                                                             ))),
                                              br(), br()
 
                                     ), # end tabPanel
@@ -322,7 +327,9 @@ ui <- fluidPage(
                                              # Probation reactable table
                                              fluidRow(column(width = 12,
                                                              align = "center",
-                                                             reactableOutput("probation_table"))),
+                                                             div(id = "reactable-table",
+                                                                 reactableOutput("probation_table") %>% withSpinner()
+                                                             ))),
                                              br(), br()
 
                                     ), # end tabPanel
