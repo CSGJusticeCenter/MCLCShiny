@@ -519,13 +519,6 @@ ui <- fluidPage(
                   br(),
 
                   fluidRow(column(width = 2),
-                           column(width = 8, div(id = "download-data-title",
-                                                 "More Community, Less Confinement (2022)")),
-                           column(width = 2)),
-
-                  br(),
-
-                  fluidRow(column(width = 2),
                            column(width = 8, div(id = "download-info",
                                                  "To understand the impact of community supervision
                                                  (i.e., probation, parole, post-release supervision) on state prison populations,
