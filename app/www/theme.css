@@ -212,18 +212,16 @@ Table
   font-size: 30px;
   font-family: Graphik !important;
   font-weight: bold;
-  /* Align text with search bar */
-  /*position: relative; top: 30px;*/
 }
 
 /* Table under map settings */
-#table-map {
-  text-align: center; /* not working */
-  /*white-space: nowrap;*/
+#reactable-table {
+  text-align: center;
+  overflow-x: auto;
 }
 
-/* Change search bar appearance */
-#table-map input {
+/* Change search bar appearance
+#reactable-table input {
   border-radius: 0px;
   border: 3px;
   color: #004270;
@@ -232,7 +230,7 @@ Table
   background: #FFFFFF;
   position: relative; bottom: 10px;
 }
-
+*/
 
 /*######################################
 STATE REPORTS

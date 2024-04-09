@@ -12,9 +12,6 @@
 # https://csgorg.sharepoint.com/:f:/s/Team-JC-Research/EhdvImKN2rdPnmHQ2TrKlooBdYqnnWc0SUXBNuh9C7d41g?e=NCsh8I
 # in your Renviron (usethis::edit_r_environ()), set CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"
 
-# define the path to the desktop manually
-temp_folder_path <- "C:/Users/mroberts/OneDrive - The Council of State Governments/Desktop/MCLC_temp_files"
-
 box::use(
   prep/box/admin
   , glue[glue]
@@ -881,12 +878,10 @@ save_map_png <- function(hc_obj, folderpath, id, title){
 
 
 # folders
-theseFOLDERS <- c("tempfolder" = file.path(temp_folder_path),
-                  "sharepoint" = file.path(admin$sp_data, "plots"),
-                  "app" = "app/data/plots")
-tempfolder <- theseFOLDERS[1]
-savefolder <- theseFOLDERS[2]
-copyfolder <- theseFOLDERS[3]
+theseFOLDERS <- c("app" = "app/data/plots",
+                  "sharepoint" = file.path(admin$sp_data, "plots"))
+savefolder <- theseFOLDERS[1]
+copyfolder <- theseFOLDERS[2]
 
 
 # remove pngs from sharepoint and app
@@ -1103,7 +1098,7 @@ walk(
 
 #########################
 
-# copy over pngs from temp folder to app
+# copy over pngs from save folder folder to sharepoint
 walk(
   list.files(savefolder, pattern = "*.png")
   , ~file.copy(
@@ -1112,16 +1107,6 @@ walk(
     , overwrite = TRUE
   )
 )
-
-# # copy over pngs from temp folder to sp
-# walk(
-#   list.files(tempfolder, pattern = "*.png")
-#   , ~file.copy(
-#     from = file.path(tempfolder, .x)
-#     , to = file.path(copyfolder, .x)
-#     , overwrite = TRUE
-#   )
-# )
 
 admin$mylog("!!END SAVING HIGHCHARTS AS PNGS")
 
