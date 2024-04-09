@@ -1160,7 +1160,7 @@ fnc_reatable_table <- function(df){
                                       minWidth = 110,
                                       name = "4 Year Change",
                                       format = colFormat(percent = TRUE,
-                                                         digits = 1)),
+                                                         digits = 0)),
               # add 4 Year trend graphs to each row
               total_new  = colDef(minWidth = 110,
                                   name = "4 Year Trend",

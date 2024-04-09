@@ -11,6 +11,10 @@
 # install.packages("remotes")
 # remotes::install_github("timelyportfolio/dataui")
 
+# Daattali for css shiny loaders
+# install.packages("remotes")
+# remotes::install_github("daattali/shinycssloaders")
+
 # Highcharter download instructions:
 # remove the existing highcharter package from your R session: remove.packages("highcharter")
 # restart your R session
@@ -31,6 +35,7 @@ library(shinyWidgets)
 library(dashboardthemes)
 library(shinydashboard)
 library(shinymeta)
+library(shinycssloaders)
 
 # Tables
 library(reactable)

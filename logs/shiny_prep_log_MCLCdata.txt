@@ -51,15 +51,13 @@ The following object is masked from ‘package:shiny’:
 > library(readxl)
 
 > library(sf)
-Linking to GEOS 3.9.3, GDAL 3.5.2, PROJ 8.2.1; sf_use_s2() is TRUE
+Linking to GEOS 3.9.1, GDAL 3.4.3, PROJ 7.2.1; sf_use_s2() is TRUE
 
 > library(showtext)
 Loading required package: sysfonts
 Loading required package: showtextdb
 
 > library(sysfonts)
-
-> library(utils)
 
 > library(highcharter)
 
@@ -82,8 +80,6 @@ The following object is masked from ‘package:showtextdb’:
 > library(openxlsx)
 
 > library(reactable)
-
-> library(stats)
 
 > library(purrr)
 
@@ -247,14 +243,12 @@ The following object is masked from ‘package:purrr’:
 > # Reactable table with 4 Year trend line in last column
 > fnc_reat .... [TRUNCATED] 
 Warning messages:
-1: package ‘rlang’ was built under R version 4.2.3 
-2: package ‘jsonlite’ was built under R version 4.2.3 
-3: package ‘readxl’ was built under R version 4.2.3 
-4: package ‘sf’ was built under R version 4.2.3 
-5: package ‘showtext’ was built under R version 4.2.3 
-6: package ‘htmltools’ was built under R version 4.2.3 
-7: package ‘openxlsx’ was built under R version 4.2.3 
-8: package ‘scales’ was built under R version 4.2.3 
+1: package ‘geojsonsf’ was built under R version 4.2.3 
+2: In .Call("_units_ud_init", PACKAGE = "units", path) :
+  closing unused connection 3 (logs/shiny_prep_log_MCLCdata.txt)
+3: package ‘showtext’ was built under R version 4.2.3 
+4: package ‘sysfonts’ was built under R version 4.2.3 
+5: package ‘showtextdb’ was built under R version 4.2.3 
 
 > #######################################
 > # Project: MCLCShiny
@@ -277,11 +271,11 @@ Warning messages:
 > # Load admissions data
 > mclc_data <- read_excel(file.path(admin$sp_data_raw, "mclc/mclc_data_2022_v9.xlsx"),
 +                         sheet = "She ..." ... [TRUNCATED] 
--/                                                                                                                                               /                                                                                                                                               -                                                                                                                                               
+
 > # Load info on missing sentence info
 > missingness_sentences <- read_excel(file.path(admin$sp_data_raw, "notes/states_notes_no_data_text.xlsx"),
 +   .... [TRUNCATED] 
--/                                                                                                                                               /                                                                                                                                               -                                                                                                                                               
+
 > # Load states notes
 > notes_raw <- read.xlsx(file.path(admin$sp_data_raw, "notes/states_notes_no_data_text.xlsx"),
 +                        sheet =  .... [TRUNCATED] 
@@ -592,12 +586,13 @@ Warning messages:
 + 
 +   save(disparities_definitions,     file=file.path(folder, "disparities_definitions.rds"))
 +   save(adm_pop_long, .... [TRUNCATED] 
-Warning messages:
-1: package ‘rlang’ was built under R version 4.2.3
-2: package ‘jsonlite’ was built under R version 4.2.3
-3: package ‘readxl’ was built under R version 4.2.3
-4: package ‘sf’ was built under R version 4.2.3
-5: package ‘showtext’ was built under R version 4.2.3
-6: package ‘htmltools’ was built under R version 4.2.3
-7: package ‘openxlsx’ was built under R version 4.2.3
-8: package ‘scales’ was built under R version 4.2.3
+Warning message:
+In left_join(., probation_or_parole_info, by = c("state", "year",  :
+  Each row in `x` is expected to match at most 1 row in `y`.
+ℹ Row 9 of `x` matches multiple rows.
+ℹ If multiple matches are expected, set `multiple = "all"` to silence this warning.
+Warning message:
+In left_join(., probation_or_parole_info, by = c("state",  ... :
+  Each row in `x` is expected to match at most 1 row in `y`.
+ℹ Row 9 of `x` matches multiple rows.
+ℹ If multiple matches are expected, set `multiple = "all"` to silence this warning.

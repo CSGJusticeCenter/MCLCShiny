@@ -44,7 +44,7 @@ ui <- fluidPage(
      ############################################################################################################################## MAP
 
      # Map Explorer Page
-     tabPanel("nationalmaps",
+     tabPanel("nationaltrends",
 
               div(id = "header",
 
@@ -115,10 +115,12 @@ ui <- fluidPage(
                   fluidRow(
                     column(width = 12,
                            align = "center",
-                           div(id = "hex-map",
+                           div(class = "hidden-xs hidden-sm",
+                               #id = "hex-map",
                                highchartOutput("hex_map",
-                                               height = 550,
-                                               width = "100%"))),
+                                               height = 600,
+                                               width = "100%") %>% withSpinner()
+                               )),
                   ),
                   br(), br(),
 
@@ -136,18 +138,20 @@ ui <- fluidPage(
                   tags$head(tags$style(HTML("thead{color: #004270; font-size: 16px}"))),
                   fluidRow(
                     column(width = 12, align = "left",
-                           div(id = "table-map",
+                           div(id = "reactable-table",
                                reactableOutput("table_map"))),
                   ),
                   br(), br()
 
               ) # end div
+
+
      ), # end tabPanel
 
      ############################################################################################################################## State Reports
 
      # State Reports Page
-     tabPanel("statereports",
+     tabPanel("statedashboard",
 
               #######
               # Dropdown and download buttons
@@ -211,11 +215,11 @@ ui <- fluidPage(
                                            ),
                                     column(width = 3,
                                            valueBoxOutput("sup_change",
-                                                          width = "100%")
+                                                          width = "100%") %>% withSpinner()
                                            ),
                                     column(width = 3,
                                            valueBoxOutput("tech_change",
-                                                          width = "100%")
+                                                          width = "100%") %>% withSpinner()
                                            ),
                                     column(width = 3,
                                            valueBoxOutput("new_off_change",
@@ -244,12 +248,12 @@ ui <- fluidPage(
                                              # Area graph and download button
                                              fluidRow(column(width = 5,
                                                              align = "center",
-                                                             uiOutput("state_area")),
+                                                             uiOutput("state_area") %>% withSpinner()),
                                                       column(width = 1, align = "center",
                                                              uiOutput("state_area_button")),
                                              # Supervision violation graph and download button
                                                       column(width = 5, align = "center",
-                                                             uiOutput("state_nt")),
+                                                             uiOutput("state_nt") %>% withSpinner()),
                                                       column(width = 1, align = "center",
                                                              uiOutput("state_nt_button"))),
                                              br(), br(), br(),
@@ -257,7 +261,9 @@ ui <- fluidPage(
                                              # State overview table
                                              fluidRow(column(width = 12,
                                                              align = "center",
-                                                             reactableOutput("state_table"))),
+                                                             div(id = "reactable-table",
+                                                                 reactableOutput("state_table") %>% withSpinner()
+                                                             ))),
 
                                              br(),
 
@@ -305,7 +311,9 @@ ui <- fluidPage(
                                              # Parole reactable table
                                              fluidRow(column(width = 12,
                                                              align = "center",
-                                                             reactableOutput("parole_table"))),
+                                                             div(id = "reactable-table",
+                                                                 reactableOutput("parole_table") %>% withSpinner()
+                                                             ))),
                                              br(), br()
 
                                     ), # end tabPanel
@@ -319,7 +327,9 @@ ui <- fluidPage(
                                              # Probation reactable table
                                              fluidRow(column(width = 12,
                                                              align = "center",
-                                                             reactableOutput("probation_table"))),
+                                                             div(id = "reactable-table",
+                                                                 reactableOutput("probation_table") %>% withSpinner()
+                                                             ))),
                                              br(), br()
 
                                     ), # end tabPanel
@@ -504,13 +514,6 @@ ui <- fluidPage(
                   fluidRow(column(width = 2),
                            column(width = 8, div(id = "download-title",
                                                  "Download Data")),
-                           column(width = 2)),
-
-                  br(),
-
-                  fluidRow(column(width = 2),
-                           column(width = 8, div(id = "download-data-title",
-                                                 "More Community, Less Confinement (2022)")),
                            column(width = 2)),
 
                   br(),

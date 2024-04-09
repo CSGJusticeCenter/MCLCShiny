@@ -418,7 +418,7 @@ mclc_explorer <- mclc_all %>%
                           year == 2020 ~ "2019 - 2020",
                           year == 2021 ~ "2020 - 2021",
                           year == 2022 ~ "2018 - 2021"),
-         change = round(change*100, 1),
+         change = round(change*100, 0),
          tooltip = paste0("<b>", state, "</b><br>",
                           "Change in ",
                           data, "<br>from ",
