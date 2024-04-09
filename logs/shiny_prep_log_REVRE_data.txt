@@ -1,98 +1,98 @@
 [1] "Revocation Counts and Race and Ethnicity"
-[1] "2023-09-12 19:05:18 MDT"
-[1mindexing[0m [34mrevcnt_notes.csv[0m [============================================================] [32m274.70MB/s[0m, eta: [36m 0s[0m                                                                                                                                                2023-09-12 19:05:22.289731 - !!START PREP FOR SHINY - DATA
-2023-09-12 19:05:22.290672 - Import and clean NCRP revocations data
-2023-09-12 19:05:22.291281 - Start - NCRP import for admissions
-2023-09-12 19:05:26.071701 - End   - NCRP import for admissions
-2023-09-12 19:05:26.072508 - Start - NCRP prep
-2023-09-12 19:05:26.07289 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
-2023-09-12 19:05:26.812348 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
-2023-09-12 19:05:29.936665 - End   - NCRP prep
-2023-09-12 19:05:29.937394 - Import and clean BJS-APS for PAROLE population (denominator)
-[1mindexing[0m [34mapars_idyear.csv[0m [=============================================================] [32m30.66MB/s[0m, eta: [36m 0s[0m                                                                                                                                                2023-09-12 19:05:29.973246 - Start - BJS APS (Parole) import for 2010-2018
-2023-09-12 19:05:30.08565 - End   - BJS APS (Parole) import for 2010-2018
-2023-09-12 19:05:30.086549 - STart - APS prep
-2023-09-12 19:05:30.087038 - APS prep - 
+[1] "2024-04-09 16:06:25 CDT"
+[1mindexing[0m [34mrevcnt_notes.csv[0m [==============================================] [32m319.73MB/s[0m, eta: [36m 0s[0m                                                                                                                                  2024-04-09 16:06:26.54216 - !!START PREP FOR SHINY - DATA
+2024-04-09 16:06:26.542879 - Import and clean NCRP revocations data
+2024-04-09 16:06:26.543258 - Start - NCRP import for admissions
+2024-04-09 16:06:28.840255 - End   - NCRP import for admissions
+2024-04-09 16:06:28.840952 - Start - NCRP prep
+2024-04-09 16:06:28.841508 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2024-04-09 16:06:29.309995 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2024-04-09 16:06:31.111215 - End   - NCRP prep
+2024-04-09 16:06:31.111555 - Import and clean BJS-APS for PAROLE population (denominator)
+[1mindexing[0m [34mapars_idyear.csv[0m [===============================================] [32m58.32MB/s[0m, eta: [36m 0s[0m                                                                                                                                  2024-04-09 16:06:31.131701 - Start - BJS APS (Parole) import for 2010-2018
+2024-04-09 16:06:31.194978 - End   - BJS APS (Parole) import for 2010-2018
+2024-04-09 16:06:31.195363 - STart - APS prep
+2024-04-09 16:06:31.195568 - APS prep - 
 -- Drop Federal total row
 -- calculate other race category, pivot longer, recode into single race variable
 -- make new race variable a factor 
 -- drop rows where POPEST is NA (covered in UNKRACE)
 -- add state id columns
-2023-09-12 19:05:30.378407 - Sum accross state and year
-2023-09-12 19:05:30.38702 - End   - APS prep
-2023-09-12 19:05:30.387347 - Calc - rate/RRI calcuations
+2024-04-09 16:06:31.365014 - Sum accross state and year
+2024-04-09 16:06:31.371479 - End   - APS prep
+2024-04-09 16:06:31.371735 - Calc - rate/RRI calcuations
 Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR, OFFGENERAL)`
 Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR)`
-2023-09-12 19:05:30.53361 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
-2023-09-12 19:05:30.657582 - Saved FULL_DF - NCRP_A_REV_BJS.RDS (included a date stamped version)
-2023-09-12 19:05:30.681631 - Import and clean NCRP revocations data
-2023-09-12 19:05:30.698468 - Start - NCRP import for admissions
-2023-09-12 19:05:33.867795 - End   - NCRP import for admissions
-2023-09-12 19:05:33.869563 - Start - NCRP prep
-2023-09-12 19:05:33.870669 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
-2023-09-12 19:05:34.595253 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
-2023-09-12 19:05:41.209124 - End   - NCRP prep
-2023-09-12 19:05:41.215796 - Import and clean PUMS (ACS) for COMMUNITY population (denominator)
-2023-09-12 19:05:41.216297 - Start - PUMS prep
-2023-09-12 19:05:41.271612 - End   - PUMS prep
-2023-09-12 19:05:41.272166 - Calc - rate/RRI calcuations
+2024-04-09 16:06:31.451282 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2024-04-09 16:06:31.522842 - Saved FULL_DF - NCRP_A_REV_BJS.RDS (included a date stamped version)
+2024-04-09 16:06:31.537568 - Import and clean NCRP revocations data
+2024-04-09 16:06:31.548618 - Start - NCRP import for admissions
+2024-04-09 16:06:33.21247 - End   - NCRP import for admissions
+2024-04-09 16:06:33.213124 - Start - NCRP prep
+2024-04-09 16:06:33.213406 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2024-04-09 16:06:33.440772 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2024-04-09 16:06:35.144589 - End   - NCRP prep
+2024-04-09 16:06:35.144926 - Import and clean PUMS (ACS) for COMMUNITY population (denominator)
+2024-04-09 16:06:35.145231 - Start - PUMS prep
+2024-04-09 16:06:35.175855 - End   - PUMS prep
+2024-04-09 16:06:35.176147 - Calc - rate/RRI calcuations
 Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR, OFFGENERAL)`
 Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR)`
-2023-09-12 19:05:41.400328 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
-2023-09-12 19:05:41.537796 - Saved FULL_DF - NCRP_A_REV_PUMS.RDS (included a date stamped version)
-2023-09-12 19:05:41.540014 - A tables, takes ~40-50 seconds
-2023-09-12 19:06:14.438947 - A tables end
-2023-09-12 19:06:14.439425 - Flags A BJS - Start
-[1mwrote[0m [32m832.00B[0m in [36m 0s[0m, [32m14.54MB/s[0m                                                                        [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                        2023-09-12 19:06:20.975572 - Flags A BJS - End
-2023-09-12 19:06:21.000958 - Flags A CEN - Start
-[1mwrote[0m [32m899.00B[0m in [36m 0s[0m, [32m49.61MB/s[0m                                                                        [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                        2023-09-12 19:06:28.491019 - Flags A CEN - End
-2023-09-12 19:06:28.498058 - Import and clean NCRP revocations data
-2023-09-12 19:06:28.498554 - Start - NCRP import for year-end population 
-2023-09-12 19:06:33.819153 - End   - NCRP import for year-end population
-2023-09-12 19:06:33.836194 - Start - NCRP prep
-2023-09-12 19:06:33.836556 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
-2023-09-12 19:06:34.351781 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
-2023-09-12 19:06:37.381755 - End   - NCRP prep
-2023-09-12 19:06:37.382205 - Import and clean BJS-APS for PAROLE population (denominator)
-[1mindexing[0m [34mapars_idyear.csv[0m [=========================] [32m123.77MB/s[0m, eta: [36m 0s[0m                                                                                                             2023-09-12 19:06:37.42834 - Start - BJS APS (Parole) import for 2010-2018
-2023-09-12 19:06:37.529137 - End   - BJS APS (Parole) import for 2010-2018
-2023-09-12 19:06:37.529753 - STart - APS prep
-2023-09-12 19:06:37.53008 - APS prep - 
+2024-04-09 16:06:35.254793 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2024-04-09 16:06:35.325874 - Saved FULL_DF - NCRP_A_REV_PUMS.RDS (included a date stamped version)
+2024-04-09 16:06:35.326474 - A tables, takes ~40-50 seconds
+2024-04-09 16:06:54.728124 - A tables end
+2024-04-09 16:06:54.728489 - Flags A BJS - Start
+[1mwrote[0m [32m832.00B[0m in [36m 0s[0m, [32m55.39MB/s[0m                                                                                             [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                             2024-04-09 16:06:58.747708 - Flags A BJS - End
+2024-04-09 16:06:58.767414 - Flags A CEN - Start
+[1mwrote[0m [32m899.00B[0m in [36m 0s[0m, [32m59.85MB/s[0m                                                                                             [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                             2024-04-09 16:07:03.067559 - Flags A CEN - End
+2024-04-09 16:07:03.072947 - Import and clean NCRP revocations data
+2024-04-09 16:07:03.073329 - Start - NCRP import for year-end population 
+2024-04-09 16:07:06.334405 - End   - NCRP import for year-end population
+2024-04-09 16:07:06.335002 - Start - NCRP prep
+2024-04-09 16:07:06.335286 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2024-04-09 16:07:06.677673 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2024-04-09 16:07:08.585939 - End   - NCRP prep
+2024-04-09 16:07:08.586268 - Import and clean BJS-APS for PAROLE population (denominator)
+[1mindexing[0m [34mapars_idyear.csv[0m [===============================================] [32m53.25MB/s[0m, eta: [36m 0s[0m                                                                                                                                  2024-04-09 16:07:08.621242 - Start - BJS APS (Parole) import for 2010-2018
+2024-04-09 16:07:08.677005 - End   - BJS APS (Parole) import for 2010-2018
+2024-04-09 16:07:08.677406 - STart - APS prep
+2024-04-09 16:07:08.677758 - APS prep - 
 -- Drop Federal total row
 -- calculate other race category, pivot longer, recode into single race variable
 -- make new race variable a factor 
 -- drop rows where POPEST is NA (covered in UNKRACE)
 -- add state id columns
-2023-09-12 19:06:37.847618 - Sum accross state and year
-2023-09-12 19:06:37.856853 - End   - APS prep
-2023-09-12 19:06:37.857455 - Calc - rate/RRI calcuations
+2024-04-09 16:07:08.858204 - Sum accross state and year
+2024-04-09 16:07:08.864877 - End   - APS prep
+2024-04-09 16:07:08.865114 - Calc - rate/RRI calcuations
 Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR, OFFGENERAL)`
 Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR)`
-2023-09-12 19:06:37.98216 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
-2023-09-12 19:06:38.089046 - Saved FULL_DF - NCRP_N_REV_BJS.RDS (included a date stamped version)
-2023-09-12 19:06:38.089871 - Import and clean NCRP revocations data
-2023-09-12 19:06:38.090316 - Start - NCRP import for year-end population 
-2023-09-12 19:06:43.173442 - End   - NCRP import for year-end population
-2023-09-12 19:06:43.174579 - Start - NCRP prep
-2023-09-12 19:06:43.174964 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
-2023-09-12 19:06:43.667821 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
-2023-09-12 19:06:47.780296 - End   - NCRP prep
-2023-09-12 19:06:47.780961 - Import and clean PUMS (ACS) for COMMUNITY population (denominator)
-2023-09-12 19:06:47.826204 - Start - PUMS prep
-2023-09-12 19:06:47.926664 - End   - PUMS prep
-2023-09-12 19:06:47.927853 - Calc - rate/RRI calcuations
+2024-04-09 16:07:08.929818 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2024-04-09 16:07:08.996789 - Saved FULL_DF - NCRP_N_REV_BJS.RDS (included a date stamped version)
+2024-04-09 16:07:08.997357 - Import and clean NCRP revocations data
+2024-04-09 16:07:08.997942 - Start - NCRP import for year-end population 
+2024-04-09 16:07:12.092449 - End   - NCRP import for year-end population
+2024-04-09 16:07:12.093066 - Start - NCRP prep
+2024-04-09 16:07:12.093349 - NCPR prep - Filter data to include reovations and 2015+ and recode RACE
+2024-04-09 16:07:12.415372 - NCRP prep - Create diffrent cross sections by OFFGENERAL and RACE
+2024-04-09 16:07:14.14544 - End   - NCRP prep
+2024-04-09 16:07:14.145767 - Import and clean PUMS (ACS) for COMMUNITY population (denominator)
+2024-04-09 16:07:14.16173 - Start - PUMS prep
+2024-04-09 16:07:14.191478 - End   - PUMS prep
+2024-04-09 16:07:14.191741 - Calc - rate/RRI calcuations
 Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR, OFFGENERAL)`
 Joining with `by = join_by(STATE, FIPS, ABB, RPTYEAR)`
-2023-09-12 19:06:48.218269 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
-2023-09-12 19:06:48.526171 - Saved FULL_DF - NCRP_N_REV_PUMS.RDS (included a date stamped version)
-2023-09-12 19:06:48.527368 - N tables, takes ~40-50 seconds
-2023-09-12 19:08:15.118031 - N tables end
-2023-09-12 19:08:15.120685 - Flags N BJS - Start
-[1mwrote[0m [32m642.00B[0m in [36m 0s[0m, [32m26.66MB/s[0m                                                                                                 [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                 2023-09-12 19:08:37.197013 - Flags N BJS - End
-2023-09-12 19:08:37.198997 - Flags N CEN - Start
-[1mwrote[0m [32m759.00B[0m in [36m 0s[0m, [32m9.74MB/s[0m                                                                                                 [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                                 2023-09-12 19:09:01.110995 - Flags N CEN - End
-2023-09-12 19:09:01.930054 - Saved outtables - NCRP_RRI_tables.RDS (included a date stamped version)
-2023-09-12 19:09:01.945679 - !!END   PREP FOR SHINY - DATA
+2024-04-09 16:07:14.258105 - Calc - add most recent year of data (for a given STATE/RACE cross-section)
+2024-04-09 16:07:14.334831 - Saved FULL_DF - NCRP_N_REV_PUMS.RDS (included a date stamped version)
+2024-04-09 16:07:14.335384 - N tables, takes ~40-50 seconds
+2024-04-09 16:07:34.011801 - N tables end
+2024-04-09 16:07:34.012178 - Flags N BJS - Start
+[1mwrote[0m [32m642.00B[0m in [36m 0s[0m, [32m45.64MB/s[0m                                                                                             [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                             2024-04-09 16:07:37.993193 - Flags N BJS - End
+2024-04-09 16:07:37.993681 - Flags N CEN - Start
+[1mwrote[0m [32m759.00B[0m in [36m 0s[0m, [32m44.21MB/s[0m                                                                                             [1mwrote[0m [32m2.15GB[0m in [36m 0s[0m, [32m2.15GB/s[0m                                                                                             2024-04-09 16:07:42.602674 - Flags N CEN - End
+2024-04-09 16:07:42.747407 - Saved outtables - NCRP_RRI_tables.RDS (included a date stamped version)
+2024-04-09 16:07:42.750678 - !!END   PREP FOR SHINY - DATA
 Warning message:
 There was 1 warning in `mutate()`.
 ℹ In argument: `RACE = fct_explicit_na(RACE, na_level = admin$lev_RACE[5])`.
@@ -101,6 +101,55 @@ Caused by warning:
 ℹ Please use `fct_na_value_to_level()` instead.
 This warning is displayed once every 8 hours.
 Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated. 
+- One or more packages recorded in the lockfile are not installed.
+- Use `renv::status()` for more details.
+
+
+processing file: rri_overview.qmd
+1/13                  
+2/13 [setup]          
+3/13                  
+4/13 [unnamed-chunk-2]
+5/13                  
+6/13 [unnamed-chunk-3]
+7/13                  
+8/13 [unnamed-chunk-4]
+9/13                  
+10/13 [unnamed-chunk-5]
+11/13                  
+12/13 [unnamed-chunk-6]
+13/13                  
+output file: rri_overview.knit.md
+
+pandoc 
+  to: html
+  output-file: rri_overview.html
+  standalone: true
+  self-contained: true
+  section-divs: true
+  html-math-method: mathjax
+  wrap: none
+  default-image-extension: png
+  
+metadata
+  document-css: false
+  link-citations: true
+  lang: en
+  title: RRI Overview
+  description: 'Last User: `r stringr::str_sub(getwd(), 10, stringr::str_locate(stringr::str_sub(getwd(), 10, -1), ''/'')[1]+10-2)`'
+  date: last-modified
+  date-format: 'YYYY-MM-DD HH:mm:ss'
+  published-title: Last Modified
+  doi: '`r Sys.time()`'
+  doi-title: Last Ran
+  editor: source
+  editor_options:
+    chunk_output_type: console
+  page-layout: full
+  fontsize: 0.9em
+  
+Output created: rri_overview.html
+
 Warning message:
 There was 1 warning in `mutate()`.
 ℹ In argument: `RACE = fct_explicit_na(RACE, na_level = admin$lev_RACE[5])`.
