@@ -292,6 +292,16 @@ how_its_calc_txt <- function(DATA, whichRACE, whichSTATE, whichPOP, mult, NCRPLE
       ,    "Further categories will be added in future data collections by the CSG Justice Center. "
       ,    "Additionally, the term Hispanic is used here to maintain consistency with the data source material."
       ,   "</p>"
+      ,    "<p><i>"
+      ,   "Hispanic RRI should be interpreted with caution. Some states do not "
+      ,   "ask for racial self-identification and instead have officers assign "
+      ,   "a race. BJS notes in the NCRP documentation that this leads to an "
+      ,   "undercount of people of Hispanic origin and mixed race in state "
+      ,   "reports when compared with surveys of people in prison’s "
+      ,   "self-identification. Because RRI are calculated with Census race "
+      ,   "self-identification data as the denominator, the RRI for Hispanic "
+      ,   "people may be deflated."
+      ,   "</p></i>"
       ,   note
       ,   anysuppress
       , "</div>"
