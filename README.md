@@ -47,9 +47,11 @@ MCLCShiny
 |
 |-- shiny_prep.R      # run shiny prep 
 |-- shiny_prep_log.txt #log file 
-|-- import.R          # imports MCLC data and shapefiles 
-|-- highchart.R       # create and save highcharts for app
-|-- reactable.R       # create and save reactable tables for app
+|-- 00_fnc_library.R  # loads packages and custom functions 
+|-- 01_import.R       # imports MCLC data and shapefiles 
+|-- 02_highchart_download.R # create and save highcharts with logo and labels for app
+|-- 03_highchart.R    # create and save highcharts for app
+|-- 04_reactable.R    # create and save reactable tables for app
 |-- run_save.R        # shiny prep for R/E infographs & tables
 | 
 |-- prep              # folder for prep data/info for app 
@@ -57,6 +59,7 @@ MCLCShiny
     |-- infographics  # exploration data 
     |...              # various files for exploration/documentation 
 ```
+
 
 # Run App 
 

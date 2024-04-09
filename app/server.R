@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: server.R
 # Authors: Mari Roberts
-# Date last updated: November 30, 2022
+# Date last updated: August 15, 2023 (MAR)
 # Description:
 #    Server for shiny app
 #######################################
@@ -37,214 +37,40 @@ server <- function(input, output, session) {
   ##############################################################################################################################
 
   #######
-  # Hex map title
+  # Hex map
   #######
-
-  # Title of map based on user input
-  output$selected_map <- renderText({paste("Change in ", input$data_map, " ", input$adm_or_pop_map, "from ", input$year_map)})
-
-  #######
-  # Hex map data
-  #######
-
-  # Filter data depending on user input for map explorer
-  # Map data
-  df_map <- reactive({
-    mclc_explorer %>%
-      filter(adm_or_pop == input$adm_or_pop_map,
-             metric     == input$data_map,
-             year       == input$year_map)
-  })
-
-  # Data for table under map
-  df_map_table <- reactive({
-    filter_by <- paste0(input$data_map, " ", input$adm_or_pop_map)
-    select_column = input$year_map
-    df <- mclc_explorer_table[, c('state', 'data', '2018', '2019', '2020', '2021', select_column, 'total_new')]
-    df <- df %>%
-      filter(data == filter_by) %>%
-      arrange(state) %>%
-      rename(State = state,
-             change = 7)
-  })
 
   # Dynamically change name of map
   map_filename <- reactive({
-    temp <- mclc_explorer %>%
+    name <- mclc_explorer %>%
       filter(adm_or_pop == input$adm_or_pop_map,
              metric     == input$data_map,
              year       == input$year_map) %>%
       select(data, year) %>% distinct()
-    temp$year <- gsub(" - ", " ", temp$year)
-    temp <- paste(temp$data, temp$year, sep = '_')
-    temp <- gsub(" ", "_", temp)
-  })
+    name$year <- gsub(" - ", " ", name$year)
+    name <- paste(name$data, name$year, sep = '_')
+    name <- gsub(" ", "_", name)
+  }) %>%
+    bindCache(input$data_map,
+              input$adm_or_pop_map,
+              input$year_map)
 
-
-  #######
-  # Hex map
-  #######
-
-  # Create foundational hex map and store it as a reactive expression
-  # This is necessary to download the map
+  # Select foundational hex map and store it as a reactive expression
+  # This allows the map to be downloaded after the map is changed
+  # Charts were created in highchart.R
   foundational_map <- reactive({
+    map <- adm_pop_maps[[input$adm_or_pop_map]][[input$year_map]][[input$data_map]]
+    map %>%
+      highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
+      highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
+      highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
+      highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+      hc_boost(enabled = TRUE)}) %>%
+    bindCache(input$data_map,
+              input$adm_or_pop_map,
+              input$year_map)
 
-    # Get minimum and maximum value
-    min_map <- min(df_map()$change, na.rm = TRUE)
-    max_map <- max(df_map()$change, na.rm = TRUE)
-
-    # Get absolute value for comparison
-    min_map_abs <- abs(min_map)
-    max_map_abs <- abs(max_map)
-
-    # Get neg or pos sign for min and max
-    min_map_type <- ifelse(min_map >= 0, "positive", "negative")
-    max_map_type <- ifelse(max_map >= 0, "positive", "negative")
-
-    # Generate tile map
-    # Has diverging scales when there are neg and pos values which centers the color gradient at zero
-    # Has a gradient scale when both the min and max are both negative or both positive
-
-    # Determine the new min and max so that zero is centered
-    # For example, If the highest positive value is 20 than the negative value is -20
-    if (min_map_type != max_map_type) {
-
-      NEW_MAX <- case_when(
-        max_map_abs > min_map_abs ~ max_map_abs,
-        max_map_abs < min_map_abs ~ min_map_abs,
-        max_map_abs == min_map_abs ~ max_map_abs)
-      NEW_MIN <- case_when(
-        min_map_abs > max_map_abs ~ min_map_abs,
-        min_map_abs < max_map_abs ~ max_map_abs,
-        min_map_abs == max_map_abs ~ min_map_abs)
-      NEW_MAX <- ifelse(max_map_type == "negative", -abs(NEW_MAX), abs(NEW_MAX))
-      NEW_MIN <- ifelse(min_map_type == "negative", -abs(NEW_MIN), abs(NEW_MIN))
-
-      highchart() %>%
-
-        hc_add_series_map(
-          map = hex_gj,
-          df = df_map(),
-          joinBy = "state_abb",
-          value = "change",
-          dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
-                            style = list(fontSize = "14px",
-                                         fontWeight = "regular",
-                                         fontFamily = "Graphik",
-                                         textOutline = 0)),
-          nullColor = "#e8e8e8") %>%
-
-        hc_colorAxis(min = NEW_MIN,
-                     max = NEW_MAX,
-                     stops = color_stops(7, c(darkorange, orange, lightorange, white, lightblue, regblue, darkblue)),
-                     labels = list(format = "{value}%",
-                                   style = list(fontSize = "14px"))
-        ) %>%
-
-        hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical",
-                  #padding = 10,
-                  symbolHeight = 200,
-                  symbolWidth = 25
-        ) %>%
-
-        hc_add_theme(hc_theme_map_jc) %>%
-
-        hc_xAxis(title = "") %>%
-        hc_yAxis(title = "") %>%
-        hc_title(
-          text = paste0("Change in ", unique(df_map()$metric), " ", unique(df_map()$adm_or_pop), " from ", unique(df_map()$year)),
-          align = "center",
-          style = list(#fontFamily = "Graphik-Bold", # works in view but not in export
-                       fontWeight = "bold",
-                       fontFamily = "Graphik", # works in view and export but is the wrong font
-                       fontSize = "30px",
-                       useHTML = TRUE)
-        ) %>%
-
-        hc_setup() %>%
-        hc_exporting(enabled = FALSE,
-                     filename = map_filename(),
-                     buttons = list(
-                       contextButton = list(
-                         menuItems = list('downloadPNG', 'downloadSVG')
-                       ))) %>%
-
-        hc_plotOptions(series = list(animation = FALSE,
-                                     dataLabels = list(enabled = TRUE),
-                                     cursor = "pointer",
-                                     borderWidth = 3),
-                       accessibility = list(enabled = TRUE,
-                                            keyboardNavigation = list(enabled = TRUE),
-                                            linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
-                                            landmarkVerbosity = "one"),
-                       area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
-        )
-
-    } else {
-
-
-      # Determine the new min and max where all values are negative
-      NEW_MAX <- max_map
-      NEW_MIN <- min_map
-
-      highchart() %>%
-
-        hc_add_series_map(
-          map = hex_gj,
-          df = df_map(),
-          joinBy = "state_abb",
-          value = "change",
-          dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
-                            style = list(fontSize = "14px",
-                                         fontWeight = "regular",
-                                         fontFamily = "Graphik",
-                                         textOutline = 0)),
-          nullColor = "#e8e8e8") %>%
-
-        hc_colorAxis(min = NEW_MIN,
-                     max = NEW_MAX,
-                     stops = color_stops(4, c(darkorange, orange, lightorange, white)),
-                     labels = list(format = "{value}%",
-                                   style = list(fontSize = "14px"))) %>%
-
-        hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical",
-                  #padding = 10,
-                  symbolHeight = 200,
-                  symbolWidth = 25) %>%
-
-        hc_add_theme(hc_theme_map_jc) %>%
-
-
-        hc_xAxis(title = "") %>%
-        hc_yAxis(title = "") %>%
-        hc_title(
-          text = paste0("Change in ", unique(df_map()$metric), " ", unique(df_map()$adm_or_pop), " from ", unique(df_map()$year)),
-          align = "center",
-          style = list(#fontFamily = "Graphik-Bold", # works in view but not in export
-                       fontWeight = "bold",
-                       fontFamily = "Graphik",
-                       fontSize = "30px",
-                       useHTML = TRUE)) %>%
-
-        hc_setup() %>%
-        hc_exporting(enabled = FALSE,
-                     filename = map_filename(),
-                     buttons = list(
-                       contextButton = list(
-                         menuItems = list('downloadPNG', 'downloadSVG')
-                       ))) %>%
-
-        hc_plotOptions(series = list(animation = FALSE, dataLabels = list(enabled = TRUE), cursor = "pointer", borderWidth = 3),
-                       accessibility = list(enabled = TRUE,
-                                            keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
-                                            landmarkVerbosity = "one"),
-                       area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
-        )
-    }
-
-  })
-
-  # output hex map
+  # Output hex map
   output$hex_map <- renderHighchart({
     foundational_map()
   })
@@ -253,333 +79,163 @@ server <- function(input, output, session) {
   # Download map button near dropdowns
   #######
 
+  # Save map
   output$save_map <- downloadHandler(
     filename <- function() {
-      paste("Change_", input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep="")
+      paste("Change_", input$data_map, "_", input$adm_or_pop_map, "_",
+            input$year_map, ".png", sep="")
     },
-
     content <- function(file) {
-      file.copy(paste("data/plots/Change_", input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""), file)
+      file.copy(paste("data/plots/Change_", input$data_map, "_",
+                      input$adm_or_pop_map, "_",
+                      input$year_map, ".png", sep=""), file)
     },
     contentType = "image/png"
   )
-
-  # Links attempting to fix downloadHandler issues and/or highchart export issues
-
-  # https://stackoverflow.com/questions/61347676/datalabels-in-r-highcharter-cannot-be-seen-after-print-as-png-or-jpg
-  # https://stackoverflow.com/questions/26764481/downloading-png-from-shiny-r
-  # https://groups.google.com/g/shiny-discuss/c/u7gwXc8_vyY/m/IZK_o7b7I8gJ
-  # https://stackoverflow.com/questions/27008434/downloading-png-from-shiny-r-pt-2
-  # https://github.com/jbkunst/highcharter/issues/151
-  # https://stackoverflow.com/questions/48432042/r-shiny-downloadhandler-returns-app-html-rather-than-plots-or-data
-  # https://www.highcharts.com/forum/viewtopic.php?f=9&t=45571#p162507
-  # https://github.com/rstudio/shiny-server/issues/197
-
-  # # Custom function that creates the hex map - need this to be called in downloadHandler
-  # fnc_map_highchart <- function(data){
-  #   # Get minimum and maximum value
-  #   min_map <- min(data$change, na.rm = TRUE)
-  #   max_map <- max(data$change, na.rm = TRUE)
-  #
-  #   # Get absolute value for comparison
-  #   min_map_abs <- abs(min_map)
-  #   max_map_abs <- abs(max_map)
-  #
-  #   # Get neg or pos sign for min and max
-  #   min_map_type <- ifelse(min_map >= 0, "positive", "negative")
-  #   max_map_type <- ifelse(max_map >= 0, "positive", "negative")
-  #
-  #   # Generate tile map
-  #   # Has diverging scales when there are neg and pos values which centers the color gradient at zero
-  #   # Has a gradient scale when both the min and max are both negative or both positive
-  #
-  #   # Determine the new min and max so that zero is centered
-  #   # For example, If the highest positive value is 20 than the negative value is -20
-  #   if (min_map_type != max_map_type) {
-  #
-  #     NEW_MAX <- case_when(
-  #       max_map_abs > min_map_abs ~ max_map_abs,
-  #       max_map_abs < min_map_abs ~ min_map_abs,
-  #       max_map_abs == min_map_abs ~ max_map_abs)
-  #     NEW_MIN <- case_when(
-  #       min_map_abs > max_map_abs ~ min_map_abs,
-  #       min_map_abs < max_map_abs ~ max_map_abs,
-  #       min_map_abs == max_map_abs ~ min_map_abs)
-  #     NEW_MAX <- ifelse(max_map_type == "negative", -abs(NEW_MAX), abs(NEW_MAX))
-  #     NEW_MIN <- ifelse(min_map_type == "negative", -abs(NEW_MIN), abs(NEW_MIN))
-  #
-  #     highchart() %>%
-  #
-  #       hc_add_series_map(
-  #         map = hex_gj,
-  #         df = data,
-  #         joinBy = "state_abb",
-  #         value = "change",
-  #         dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
-  #                           style = list(fontSize = "14px",
-  #                                        fontWeight = "regular",
-  #                                        fontFamily = "Graphik",
-  #                                        textOutline = 0)),
-  #         nullColor = "#e8e8e8") %>%
-  #
-  #       hc_colorAxis(min = NEW_MIN,
-  #                    max = NEW_MAX,
-  #                    stops = color_stops(7, c(darkorange, orange, lightorange, white, lightblue, regblue, darkblue)),
-  #                    labels = list(format = "{value}%",
-  #                                  style = list(fontSize = "14px"))
-  #       ) %>%
-  #
-  #       hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical",
-  #                 #padding = 10,
-  #                 symbolHeight = 200,
-  #                 symbolWidth = 25
-  #       ) %>%
-  #
-  #       hc_add_theme(hc_theme_map_jc) %>%
-  #
-  #       hc_xAxis(title = "") %>%
-  #       hc_yAxis(title = "") %>%
-  #       hc_title(
-  #         text = paste0("Change in ", unique(data$metric), " ", unique(data$adm_or_pop), " from ", unique(data$year)),
-  #         align = "center",
-  #         style = list(#fontFamily = "Graphik-Bold", # works in view but not in export
-  #           fontWeight = "bold",
-  #           fontFamily = "Graphik", # works in view and export but is the wrong font
-  #           fontSize = "30px",
-  #           useHTML = TRUE)
-  #       ) %>%
-  #
-  #       hc_setup() %>%
-  #       hc_exporting(enabled = FALSE,
-  #                    filename = map_filename(),
-  #                    buttons = list(
-  #                      contextButton = list(
-  #                        menuItems = list('downloadPNG', 'downloadSVG')
-  #                      ))) %>%
-  #
-  #       hc_plotOptions(series = list(animation = FALSE,
-  #                                    dataLabels = list(enabled = TRUE),
-  #                                    cursor = "pointer",
-  #                                    borderWidth = 3),
-  #                      accessibility = list(enabled = TRUE,
-  #                                           keyboardNavigation = list(enabled = TRUE),
-  #                                           linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
-  #                                           landmarkVerbosity = "one"),
-  #                      area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
-  #       )
-  #
-  #   } else {
-  #
-  #
-  #     # Determine the new min and max where all values are negative
-  #     NEW_MAX <- max_map
-  #     NEW_MIN <- min_map
-  #
-  #     highchart() %>%
-  #
-  #       hc_add_series_map(
-  #         map = hex_gj,
-  #         df = data,
-  #         joinBy = "state_abb",
-  #         value = "change",
-  #         dataLabels = list(enabled = TRUE, format = "{point.datalabel}",
-  #                           style = list(fontSize = "14px",
-  #                                        fontWeight = "regular",
-  #                                        fontFamily = "Graphik",
-  #                                        textOutline = 0)),
-  #         nullColor = "#e8e8e8") %>%
-  #
-  #       hc_colorAxis(min = NEW_MIN,
-  #                    max = NEW_MAX,
-  #                    stops = color_stops(4, c(darkorange, orange, lightorange, white)),
-  #                    labels = list(format = "{value}%",
-  #                                  style = list(fontSize = "14px"))) %>%
-  #
-  #       hc_legend(align = "right", verticalAlign = "bottom", layout = "vertical",
-  #                 #padding = 10,
-  #                 symbolHeight = 200,
-  #                 symbolWidth = 25) %>%
-  #
-  #       hc_add_theme(hc_theme_map_jc) %>%
-  #
-  #
-  #       hc_xAxis(title = "") %>%
-  #       hc_yAxis(title = "") %>%
-  #       hc_title(
-  #         text = paste0("Change in ", unique(data$metric), " ", unique(data$adm_or_pop), " from ", unique(data$year)),
-  #         align = "center",
-  #         style = list(#fontFamily = "Graphik-Bold", # works in view but not in export
-  #           fontWeight = "bold",
-  #           fontFamily = "Graphik",
-  #           fontSize = "30px",
-  #           useHTML = TRUE)) %>%
-  #
-  #       hc_setup() %>%
-  #       hc_exporting(enabled = FALSE,
-  #                    filename = map_filename(),
-  #                    buttons = list(
-  #                      contextButton = list(
-  #                        menuItems = list('downloadPNG', 'downloadSVG')
-  #                      ))) %>%
-  #
-  #       hc_plotOptions(series = list(animation = FALSE, dataLabels = list(enabled = TRUE), cursor = "pointer", borderWidth = 3),
-  #                      accessibility = list(enabled = TRUE,
-  #                                           keyboardNavigation = list(enabled = TRUE), linkedDescription = 'This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year.',
-  #                                           landmarkVerbosity = "one"),
-  #                      area = list(accessibility = list(description = "This map was created by a selected metric of interest regarding prison admissions and population. Image description: A tile map of the United States of America with a diverging color palette to show the change from the year before. The map is interactive, and the user can hover over each state to see the change from the previous year."))
-  #       )
-  #   }
-  # }
-  # output$save_map <- downloadHandler(
-  #   filename = function() {
-  #     paste0("temp.html")
-  #   },
-  #   content = function(file) {
-  #
-  #     owd <- setwd(tempdir())
-  #     on.exit(setwd(owd))
-  #
-  #     data <- df_map()
-  #     finalmap <- fnc_map_highchart(data = data)
-  #
-  #     htmlwidgets::saveWidget(finalmap, file = "temp.html", selfcontained = TRUE)
-  #     file.copy('temp.html', file, overwrite = TRUE)
-  #
-  #   })
-  # # Save map as png - doesn't work
-  # output$save_map <- downloadHandler(
-  #   filename = paste("MCLC_",input$data_map, "_", input$adm_or_pop_map, "_", input$year_map, ".png", sep=""),
-  #   content = function(file) {
-  #
-  #     owd <- setwd(tempdir())
-  #     on.exit(setwd(owd))
-  #
-  #       saveWidget(foundational_map(), "temp.html", selfcontained = TRUE)
-  #       webshot2::webshot(url = "temp.html", file = "temp.png", delay = 2)
-  #     }
-  # )
-
-  ######### GGPLOT EXAMPLE TO SEE IF FONTS WORK - they do with ggplot #########
-  # Plot1 <- reactive({
-  #   ggplot(mtcars, aes(x = wt, y = mpg)) +
-  #     geom_point()+ ggtitle(label = "Effect of Vitamin C on Tooth Growth",
-  #                           subtitle = "Plot of length by dose") +
-  #     theme(plot.title = element_text(face = "bold",
-  #                                     size = 45,
-  #                                     family = "Graphik"),
-  #           plot.subtitle = element_text(family = "GraphikBold",
-  #                                        size = 40))
-  # })
-  # output$plot1 <- renderPlot({
-  #   p <- Plot1()
-  #   print(p)
-  # })
-  #
-  # output$save_map <-downloadHandler(
-  #   filename = function() {
-  #     paste('plot', '.png', sep='')
-  #   },
-  #   content=function(file){
-  #     png(file)
-  #     print(Plot1())
-  #     dev.off()
-  #   },
-  #   contentType='image/png')
 
   #######
   # Table under hex map
   #######
 
-  # Title of table under map based on user input
-  output$selected_map_table <- renderText({paste(input$data_map, " ", input$adm_or_pop_map)})
+  # Title of table under map
+  output$selected_map_table <- renderText({
+    if (input$adm_or_pop_map == "Admissions" & input$data_map == "Total") {
+      paste(input$data_map, " ", input$adm_or_pop_map, " to State Prison", sep = "")
+
+    } else if (input$adm_or_pop_map == "Population" & input$data_map == "Total") {
+      paste(input$data_map, " ", input$adm_or_pop_map, " in State Prison", sep = "")
+
+    } else if (input$adm_or_pop_map == "Admissions" & input$data_map != "Total") {
+      paste("State Prison Admissions for ", input$data_map, "s", sep = "")
+
+    } else if (input$adm_or_pop_map == "Population" & input$data_map != "Total") {
+      paste("People in State Prison for ", input$data_map, "s", sep = "")
+    }
+    }) %>%
+    bindCache(input$data_map,
+              input$adm_or_pop_map)
+
 
   # Reactable table under hex map
   output$table_map <- renderReactable({
 
-    filter_by <- paste0(input$data_map, " ", input$adm_or_pop_map)
-    select_column = input$year_map
-    select_column_name = paste0(select_column, " Change")
-    
-    df <- mclc_explorer_table %>% 
-      select(state, data, `2018`, `2019`, `2020`, `2021`, all_of(select_column), total_new, trend) %>% 
-      filter(data == filter_by) %>% 
-      arrange(state) %>% 
-      rename(State = state, change = all_of(select_column)) %>% 
+    filter_by <- paste0(input$data_map, " ",
+                        input$adm_or_pop_map)
+    select_column <- input$year_map
+    select_column_name <- paste0(select_column, " Change")
+    select_trend_data_column <-
+      if(input$year_map == "2018 - 2021"){
+        paste0("trend_data_18_21")
+      } else if(input$year_map == "2018 - 2019"){
+        paste0("trend_data_18_19")
+      } else if(input$year_map == "2019 - 2020"){
+        paste0("trend_data_19_20")
+      } else if(input$year_map == "2020 - 2021"){
+        paste0("trend_data_20_21")
+      }
+
+    select_trend_column <-
+      if(input$year_map == "2018 - 2021"){
+        paste0("trend_18_21")
+      } else if(input$year_map == "2018 - 2019"){
+        paste0("trend_18_19")
+      } else if(input$year_map == "2019 - 2020"){
+        paste0("trend_19_20")
+      } else if(input$year_map == "2020 - 2021"){
+        paste0("trend_20_21")
+      }
+
+    df <- mclc_explorer_table %>%
+      select(state, data, `2018`, `2019`, `2020`, `2021`,
+             all_of(select_column),
+             all_of(select_trend_data_column),
+             all_of(select_trend_column)) %>%
+      filter(data == filter_by) %>%
+      arrange(state) %>%
+      rename(change = all_of(select_column),
+             total_new = 8,
+             trend     = 9) %>%
       mutate(
         trend = case_when(
-            trend == "negative" ~ orange
-          , trend == "positive" ~ regblue
-          , trend == "same"     ~ "#585858" #grey 35
+          trend == "negative"   ~ regblue
+          , trend == "positive" ~ orange
+          , trend == "same"     ~ "#585858"
         )
-      ) 
-    
+      )
 
     reactable(df,
-              style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
-              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"), # was center
+              style = list(fontFamily = "Graphik, sans-serif",
+                           fontSize = "1.4rem"),
+              theme = reactableTheme(cellStyle = list(display = "flex",
+                                                      flexDirection = "column",
+                                                      justifyContent = "center"),
                                      headerStyle = list(textAlign = "right")
-                                     ),
-              defaultColDef = colDef(format = colFormat(separators = TRUE), align = "right"),
+              ),
+              defaultColDef = colDef(format = colFormat(separators = TRUE),
+                                     align = "right"),
               compact = TRUE,
               fullWidth = FALSE,
               searchable = TRUE,
 
-              language = reactableLang(
-                searchPlaceholder = "Search for Your State"
-                # # Accessible labels for assistive technology, such as screen readers
-                # pagePreviousLabel = "Previous page",
-                # pageNextLabel = "Next page"
-              ),
+              language = reactableLang(searchPlaceholder = "Search for Your State"),
 
               pagination = FALSE,
               columns = list(
-                State           = colDef(name = "State", align = "left", minWidth = 120,
+                state           = colDef(name = "State",
+                                         align = "left",
+                                         minWidth = 120,
                                          style = list(fontWeight = "bold")),
                 data            = colDef(show = F,
-                                         name = "Metric", align = "left", minWidth = 240,
+                                         name = "Metric",
+                                         align = "left",
+                                         minWidth = 240,
                                          style = list(fontWeight = "bold")),
-                `2018`          = colDef(minWidth = 110),
-                `2019`          = colDef(minWidth = 110),
-                `2020`          = colDef(minWidth = 110),
-                `2021`          = colDef(minWidth = 110),
+                `2018`          = colDef(na = "–", minWidth = 110),
+                `2019`          = colDef(na = "–", minWidth = 110),
+                `2020`          = colDef(na = "–", minWidth = 110),
+                `2021`          = colDef(na = "–", minWidth = 110),
 
-                change = colDef(minWidth = 110,
+                change = colDef(na = "–",
+                                minWidth = 110,
                                 name = select_column_name,
                                 style = list(fontWeight = "bold"),
-                                format = colFormat(percent = TRUE, digits = 1)),
+                                format = colFormat(percent = TRUE, digits = 0)),
                 # add 4 Year trend graphs to each row
                 total_new  =
-                  colDef(minWidth = 140,
+                  colDef(na = "–",
+                         minWidth = 140,
                          align = "center",
                          name = "Trend Line",
-                         sortable = FALSE, 
+                         sortable = FALSE,
                          cell = function(value, index) {
                            dui_sparkline(
                              data = value[[1]],
                              height = 60,
-                             #margin = list(top = 30, right = 20, bottom = 30, left = 20),
                              components = list(
-                               dui_sparkpatternlines(
-                                 id = "total",
-                                 height = 4,
-                                 width = 4,
+                               dui_sparkpointseries(
+                                 points =  list("all"),
                                  stroke = df$trend[index],
-                                 strokeWidth = 2.5,
-                                 orientation = "diagonal"),
-
+                                 fill = df$trend[index],
+                                 size = 2
+                               ),
                                dui_sparklineseries(
                                  curve = "linear",
                                  showArea = FALSE,
-                                  fill = df$trend[index],
+                                 fill = df$trend[index],
                                  stroke = df$trend[index]
-                                 )
                                )
-                             )}), 
-                #trend, don't show, used in determing
+                             )
+                           )}),
+                #trend, don't show, used in determining
                 trend = colDef(show = FALSE)
-                ))
+              ))
+    }) %>%
+    bindCache(input$data_map,
+              input$adm_or_pop_map,
+              input$year_map)
 
-  })
+
+
 
   ##############################################################################################################################
   # State Reports
@@ -590,7 +246,17 @@ server <- function(input, output, session) {
   #######
 
   # Title of state based on user input
-  output$selected_state <- renderText({paste(input$adm_pop_report, " Trends in ", input$state_report, sep = "")})
+  output$selected_state <- renderText({
+    if (input$adm_pop_report == "Admissions") {
+      paste("Prison Admission Trends in", input$state_report)
+    } else if (input$adm_pop_report == "Population") {
+      paste("Prison Population Trends in", input$state_report)
+    } else {
+      ""
+    }
+  }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   #######
   # Value boxes
@@ -600,61 +266,59 @@ server <- function(input, output, session) {
   df_vb_total <- reactive({
     vb_adm_pop %>%
       filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report &
-             year == "2021" &
-             metric == "Total")
-  })
+               adm_or_pop == input$adm_pop_report &
+               year == "2021" &
+               metric == "Total")
+  }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
-  # Filter data to sup viols
-  df_vb_sup_viols <- reactive({
+  # Filter data to sup violations
+  df_vb_sup_violations <- reactive({
     vb_adm_pop %>%
       filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report &
-             year == "2021" &
-             metric == "Supervision Violation")
-  })
+               adm_or_pop == input$adm_pop_report &
+               year == "2021" &
+               metric == "Supervision Violation")
+  }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
-  # Filter data to tech viols
+  # Filter data to tech violations
   df_vb_tech <- reactive({
     vb_adm_pop %>%
       filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report &
-             year == "2021" &
-             metric == "Technical Violation")
-  })
+               adm_or_pop == input$adm_pop_report &
+               year == "2021" &
+               metric == "Technical Violation")
+  }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
-  # Filter data to new offense viols
+  # Filter data to new offense violations
   df_vb_new_off <- reactive({
     vb_adm_pop %>%
       filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report &
-             year == "2021" &
-             metric == "New Offense")
-  })
+               adm_or_pop == input$adm_pop_report &
+               year == "2021" &
+               metric == "New Offense Violation")
+  }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   # Value box for change in total admissions or population
   output$total_change <- renderValueBox({
 
-    if (is.na(df_vb_total()$change)) {
-      text <- "No Data"
-    } else if (df_vb_total()$change < 0) {
-      text <- tagList(HTML("&darr;"), paste0(df_vb_total()$change, "% from 2020"))
-    } else {
-      text <- tagList(HTML("&uarr;"), paste0(df_vb_total()$change, "% from 2020"))
-    }
-
-    if (is.na(df_vb_total()$total)) {
-      header <- "No Data"
-    } else {
-      header <- comma(df_vb_total()$total, digits = 0)
-    }
-
-    valueBox2(
-      header,
-      title = paste0("Overall ", input$adm_pop_report, " in 2021"),
-      subtitle = text,
-      color = "black",
-      href = NULL
+    # No subtitle needed regarding no parole or prob data
+    fnc_value_box(
+      title      = paste0("Overall "),
+      adm_or_pop = paste0(input$adm_pop_report, " in 2021"),
+      subtitle   = HTML("<br>"),
+      value      = df_vb_total()$value_shown,
+      finding    = df_vb_total()$text,
+      color      = "black",
+      href       = NULL,
+      width      = 5
     )
 
   })
@@ -662,89 +326,54 @@ server <- function(input, output, session) {
   # Value box for change in supervision violation admissions or population
   output$sup_change <- renderValueBox({
 
-    if (is.na(df_vb_sup_viols()$change)) {
-      text <- "No Data"
-    } else if (df_vb_sup_viols()$change < 0) {
-      text <- tagList(HTML("&darr;"), paste0(df_vb_sup_viols()$change, "% from 2020"))
-    } else {
-      text <- tagList(HTML("&uarr;"), paste0(df_vb_sup_viols()$change, "% from 2020"))
-    }
-
-    if (is.na(df_vb_sup_viols()$total)) {
-      header <- "No Data"
-    } else {
-      header <- comma(df_vb_sup_viols()$total, digits = 0)
-    }
-
-    valueBox2(
-      header,
-      title = paste0("Supervision Violation ", input$adm_pop_report, " in 2021"),
-      subtitle = text,
-      color = "black",
-      href = NULL
+    fnc_value_box(
+      title      = paste0("Supervision Violation "),
+      adm_or_pop = paste0(input$adm_pop_report, " in 2021"),
+      subtitle   = df_vb_sup_violations()$subheader,
+      value      = df_vb_sup_violations()$value_shown,
+      finding    = df_vb_sup_violations()$text,
+      color      = "black",
+      href       = NULL,
+      width      = 5
     )
-
   })
 
   # Value box for change in technical violation admissions or population
   output$tech_change <- renderValueBox({
 
-    if (is.na(df_vb_tech()$change)) {
-      text <- "No Data"
-    } else if (df_vb_tech()$change < 0) {
-      text <- tagList(HTML("&darr;"), paste0(df_vb_tech()$change, "% from 2020"))
-    } else {
-      text <- tagList(HTML("&uarr;"), paste0(df_vb_tech()$change, "% from 2020"))
-    }
-
-    if (is.na(df_vb_tech()$total)) {
-      header <- "No Data"
-    } else {
-      header <- comma(df_vb_tech()$total, digits = 0)
-    }
-
-    valueBox2(
-      header,
-      title = paste0("Technical Violation ", input$adm_pop_report, " in 2021"),
-      subtitle = text,
-      color = "black",
-      href = NULL
+    fnc_value_box(
+      title      = paste0("Technical Violation "),
+      adm_or_pop = paste0(input$adm_pop_report, " in 2021"),
+      subtitle   = df_vb_tech()$subheader,
+      value      = df_vb_tech()$value_shown,
+      finding    = df_vb_tech()$text,
+      color      = "black",
+      href       = NULL,
+      width      = 5
     )
-
   })
 
   # Value box for change in new offense violation admissions or population
   output$new_off_change <- renderValueBox({
 
-    if (is.na(df_vb_new_off()$change)) {
-      text <- "No Data"
-    } else if (df_vb_new_off()$change < 0) {
-      text <- tagList(HTML("&darr;"), paste0(df_vb_new_off()$change, "% from 2020"))
-    } else {
-      text <- tagList(HTML("&uarr;"), paste0(df_vb_new_off()$change, "% from 2020"))
-    }
-
-    if (is.na(df_vb_new_off()$total)) {
-      header <- "No Data"
-    } else {
-      header <- comma(df_vb_new_off()$total, digits = 0)
-    }
-
-    valueBox2(
-      header,
-      title = paste0("New Offense ", input$adm_pop_report, " in 2021"),
-      subtitle = text,
-      color = "black",
-      href = NULL
+    fnc_value_box(
+      title      = paste0("New Offense Violation "),
+      adm_or_pop = paste0(input$adm_pop_report, " in 2021"),
+      subtitle   = df_vb_new_off()$subheader,
+      value      = df_vb_new_off()$value_shown,
+      finding    = df_vb_new_off()$text,
+      color      = "black",
+      href       = NULL,
+      width      = 5
     )
-
   })
 
   #######
   # Area chart
   #######
 
-  # Area chart
+  # Select highchart depending on selector input
+  # Charts were saved in highchart.R
   output$state_area_chart <- renderHighchart({
     if (input$adm_pop_report == "Admissions") {
       all_state_area_adm[[input$state_report]] %>%
@@ -752,48 +381,99 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_exporting(enabled = FALSE,
-                     filename = "Prison_Admissions_Overview",
-                     buttons = list(
-                       contextButton = list(
-                         menuItems = list('downloadPNG', 'downloadSVG')
-                       )))
+        hc_boost(enabled = TRUE)
     } else {
       all_state_area_pop[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_exporting(enabled = FALSE,
-                     filename = "Prison_Population_Overview",
-                     buttons = list(
-                       contextButton = list(
-                         menuItems = list('downloadPNG', 'downloadSVG')
-                       )))
+        hc_boost(enabled = TRUE)
     }
-  })
+    }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
-  # Download button
+  # Download button for state area chart
   output$save_state_area_chart <- downloadHandler(
     filename <- function() {
-      paste(input$state_report, "_Prison_", input$adm_pop_report, ".png", sep="")
+      paste(input$state_report, "_Prison_",
+            input$adm_pop_report, ".png", sep="")
     },
 
     content <- function(file) {
-      file.copy(paste("data/plots/", input$state_report, "_Prison_", input$adm_pop_report, ".png", sep=""), file)
+      file.copy(paste("data/plots/",
+                      input$state_report, "_Prison_",
+                      input$adm_pop_report, ".png", sep=""), file)
     },
     contentType = "image/png"
   )
 
+  # Show download button if data is available
+  output$state_area_button = renderUI({
+
+    # If state is missing new offense violations and technical violations (Admissions)
+    if(!(input$state_report %in% states) &
+       input$adm_pop_report == "Admissions"){
+      textOutput("blank")
+
+      # If state is missing new offense violations and technical violations (Population)
+    } else if(!(input$state_report %in% states) &
+              input$adm_pop_report == "Population"){
+      textOutput("blank")
+
+      # If state has data (Admissions)
+    } else if(input$state_report %in% states &
+              input$adm_pop_report == "Admissions"){
+      downloadButton(outputId = 'save_state_area_chart', "",
+                     class = "download-chart")
+
+      # If state has data (Population)
+    } else if(input$state_report %in% states &
+              input$adm_pop_report == "Population"){
+      downloadButton(outputId = 'save_state_area_chart', "",
+                     class = "download-chart")
+    }
+    }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
+
+  # Show plot if data is available
+  output$state_area = renderUI({
+
+    # If state is missing new offense violations and technical violations (Admissions)
+    if(!(input$state_report %in% states) &
+       input$adm_pop_report == "Admissions"){
+      textOutput("blank")
+
+      # If state is missing new offense violations and technical violations (Population)
+    } else if(!(input$state_report %in% states) &
+              input$adm_pop_report == "Population"){
+      textOutput("blank")
+
+      # If state has data (Admissions)
+    } else if(input$state_report %in% states &
+              input$adm_pop_report == "Admissions"){
+      highchartOutput("state_area_chart",
+                      height = 400, width = 390)
+
+      # If state has data (Population)
+    } else if(input$state_report %in% states &
+              input$adm_pop_report == "Population"){
+      highchartOutput("state_area_chart",
+                      height = 400, width = 390)
+    }
+    }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
+
   #######
   # Bar chart
   #######
 
-  # Bar chart
+  # Select highchart depending on selector input
+  # Charts were saved in highchart.R
   output$state_bar_chart <- renderHighchart({
-
-    # Select highchart depending on selector input
-    # Charts were saved in highchart.R
     if (input$adm_pop_report == "Admissions") {
 
       all_state_bar_adm[[input$state_report]] %>%
@@ -801,127 +481,121 @@ server <- function(input, output, session) {
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_exporting(enabled = FALSE,
-                     filename = "Supervision_Violation_Admissions_by_Type",
-                     buttons = list(
-                       contextButton = list(
-                         menuItems = list('downloadPNG', 'downloadSVG')
-                       )))
+        hc_boost(enabled = TRUE)
     } else {
       all_state_bar_pop[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_exporting(enabled = FALSE,
-                     filename = "Supervision_Violation_Population_by_Type",
-                     buttons = list(
-                       contextButton = list(
-                         menuItems = list('downloadPNG', 'downloadSVG')
-                       )))
+        hc_boost(enabled = TRUE)
     }
-  })
+    }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   # Download button
   output$save_state_bar_chart <- downloadHandler(
     filename <- function() {
-      paste(input$state_report, "_Supervision_Violation_", input$adm_pop_report, "_by_Type.png", sep="")
+      paste(input$state_report, "_Supervision_Violation_",
+            input$adm_pop_report, "_by_Type.png", sep="")
     },
-
     content <- function(file) {
-      file.copy(paste("data/plots/", input$state_report, "_Supervision_Violation_", input$adm_pop_report, "_by_Type.png", sep=""), file)
+      file.copy(paste("data/plots/",
+                      input$state_report, "_Supervision_Violation_",
+                      input$adm_pop_report, "_by_Type.png", sep=""), file)
     },
     contentType = "image/png"
   )
 
+
   #######
   # Supervision Violations Graph - Dynamically change between sentence and graph depending on data availability
+  # Show "Data Unavailable", "Did Not Respond" or "Partial Data Submitted" or chart if required data is available
   #######
 
+  # If data is missing a supervision violation admissions graph
   output$missing_data_nt_adm <- renderUI({
-    out <- paste0(
-        "<h3 class = 'nodata'>No data</h3>"
-      , "<div class = 'notetxt'>"
-      , input$state_report
-      , " did not provide data on prison admissions due to technical and new offense violations."
-      , "</div>"
-    )
+    out <- missingness_sentences %>%
+      filter(state == input$state_report)
+    out <- out$supervision_violation_admissions_graph
     HTML(out)
-  })
+  }) %>%
+    bindCache(input$state_report)
 
+  # If data is missing a supervision violation population graph
   output$missing_data_nt_pop <- renderUI({
-    out <- paste0(
-        "<h3 class = 'nodata'>No data</h3>"
-      , "<div class = 'notetxt'>"
-      , input$state_report
-      , " did not provide data on the number of people in prison due to technical and new offense violations."
-      , "</div>"
-    )
+    out <- missingness_sentences %>%
+      filter(state == input$state_report)
+    out <- out$supervision_violation_population_graph
     HTML(out)
-  })
+  }) %>%
+    bindCache(input$state_report)
 
+  # Remove download button if no graph
   output$missing_data_nt_button <- renderText({
     ""
   })
 
+  # Show graph or missing data sentence depending on state
   output$state_nt = renderUI({
 
-    # If state is missing new offense and technical violations (Admissions)
-    if(input$state_report %in% nt_na_adm & input$adm_pop_report == "Admissions"){
+    # If state is missing new offense violations and technical violations (Admissions)
+    if(input$state_report %in% nt_na_adm &
+       input$adm_pop_report == "Admissions"){
       htmlOutput("missing_data_nt_adm")
 
-      # If state is missing new offense and technical violations (Population)
-    } else if(input$state_report %in% nt_na_pop & input$adm_pop_report == "Population"){
+      # If state is missing new offense violations and technical violations (Population)
+    } else if(input$state_report %in% nt_na_pop &
+              input$adm_pop_report == "Population"){
       htmlOutput("missing_data_nt_pop")
 
       # If state has data (Admissions)
-    } else if(input$state_report %in% nt_not_na_adm & input$adm_pop_report == "Admissions"){
+    } else if(input$state_report %in% nt_not_na_adm &
+              input$adm_pop_report == "Admissions"){
       highchartOutput("state_bar_chart", height = 400, width = 390)
 
       # If state has data (Population)
-    } else if(input$state_report %in% nt_not_na_pop & input$adm_pop_report == "Population"){
+    } else if(input$state_report %in% nt_not_na_pop &
+              input$adm_pop_report == "Population"){
       highchartOutput("state_bar_chart", height = 400, width = 390)
-
     }
+    }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
-  })
-
+  # Show graph download button or no button depending on state
   output$state_nt_button = renderUI({
 
-    # If state is missing new offense and technical violations (Admissions)
-    if(input$state_report %in% nt_na_adm & input$adm_pop_report == "Admissions"){
+    # If state is missing new offense violations and technical violations (Admissions)
+    if(input$state_report %in% nt_na_adm &
+       input$adm_pop_report == "Admissions"){
       textOutput("missing_data_nt_button")
 
-      # If state is missing new offense and technical violations (Population)
-    } else if(input$state_report %in% nt_na_pop & input$adm_pop_report == "Population"){
+      # If state is missing new offense violations and technical violations (Population)
+    } else if(input$state_report %in% nt_na_pop &
+              input$adm_pop_report == "Population"){
       textOutput("missing_data_nt_button")
 
       # If state has data (Admissions)
-    } else if(input$state_report %in% nt_not_na_adm & input$adm_pop_report == "Admissions"){
-      downloadButton(outputId = 'save_state_bar_chart', "", class = "download-chart")
+    } else if(input$state_report %in% nt_not_na_adm &
+              input$adm_pop_report == "Admissions"){
+      downloadButton(outputId = 'save_state_bar_chart', "",
+                     class = "download-chart")
 
       # If state has data (Population)
-    } else if(input$state_report %in% nt_not_na_pop & input$adm_pop_report == "Population"){
-      downloadButton(outputId = 'save_state_bar_chart', "", class = "download-chart")
-
+    } else if(input$state_report %in% nt_not_na_pop &
+              input$adm_pop_report == "Population"){
+      downloadButton(outputId = 'save_state_bar_chart', "",
+                     class = "download-chart")
     }
-
-  })
+    }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   #######
   # Table under state graphs
   #######
-
-  # This won't work because of library issues
-  # output$state_table <- renderReactable({
-  #   # Select reactable depending on selector input
-  #   # tables were saved in reactable.R
-  #   if (input$adm_pop_report == "Admissions") {
-  #     state_reactable_adm[[input$state_report]]
-  #   } else {
-  #     state_reactable_pop[[input$state_report]]
-  #   }
-  # })
 
   # State table
   output$state_table <- renderReactable({
@@ -930,153 +604,181 @@ server <- function(input, output, session) {
     df <- state_table %>%
       filter(state == input$state_report &
              adm_or_pop == input$adm_pop_report) %>%
-      group_by(text) %>%
-      summarise(total_new = list(list(total)))
-    df1 <- state_table_wide %>%
-      filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report) %>%
       arrange(order) %>%
-      select(-adm_or_pop, -state)
-
-    # Merge data
-    df <- merge(df1, df, by = "text")
-    df <- df %>% arrange(order) %>% select(-order)
+      select(-c(state, order, adm_or_pop, metric))
 
     # Create table with 4 Year trend line in last column
     reactable(df,
               style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
-              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"), # was center
+              theme = reactableTheme(cellStyle = list(display = "flex",
+                                                      flexDirection = "column",
+                                                      justifyContent = "center"), # was center
                                      headerStyle = list(textAlign = "right")
               ),
-              defaultColDef = colDef(format = colFormat(separators = TRUE), align = "right"),
+              defaultColDef = colDef(format = colFormat(separators = TRUE),
+                                     align = "right"),
               compact = TRUE,
               fullWidth = FALSE,
               searchable = FALSE,
               pagination = FALSE,
               columns = list(
                 text            = colDef(name = "Metric",
-                                       align = "left",
-                                       minWidth = 275,
-                                       style = list(fontWeight = "bold")),
-                `2018`          = colDef(minWidth = 95),
-                `2019`          = colDef(minWidth = 95),
-                `2020`          = colDef(minWidth = 95),
-                four_yr_change = colDef(minWidth = 110,
-                                        name = "2018-2021 Change",
-                                        style = list(fontWeight = "bold"),
-                                        format = colFormat(percent = TRUE, digits = 1)),
+                                         align = "left",
+                                         minWidth = 275,
+                                         style = list(fontWeight = "bold")
+                                         ),
+                `2018`          = colDef(na = "–", minWidth = 95),
+                `2019`          = colDef(na = "–", minWidth = 95),
+                `2020`          = colDef(na = "–", minWidth = 95),
+                `2021`          = colDef(na = "–", minWidth = 95),
+                four_yr_change  = colDef(na = "–", minWidth = 110,
+                                         name = "2018-2021 Change",
+                                         style = list(fontWeight = "bold"),
+                                         format = colFormat(percent = TRUE,
+                                                            digits = 0)),
                 # Add 4 Year trend graphs to each row
-                total_new  = colDef(minWidth = 110,
-                                    name = "4 Year Trend",
-                                    cell = function(value, index) {
-                                      dui_sparkline(
-                                        data = value[[1]],
-                                        height = 80,
-                                        margin = list(top = 30, right = 20, bottom = 30, left = 20),
+                total_new = colDef(minWidth = 110,
+                                   name = "Trend Line",
+                                   cell = function(value, index) {
+                                     if (!is.null(value[[1]]) && length(value[[1]]) > 0) {
+                                       points_list <- if (length(value[[1]]) >= 4) {
+                                         list("all")
+                                       } else {
+                                         seq(length(value[[1]]) - 1)
+                                       }
 
-                                        components = list(
-                                          dui_sparkpatternlines(
-                                            id = "total",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = total_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
-
-                                          dui_sparkpatternlines(
-                                            id = "sup_viols",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = viol_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
-
-                                          dui_sparkpatternlines(
-                                            id = "technical",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = tech_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
-
-                                          dui_sparkpatternlines(
-                                            id = "new_offense",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = new_o_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
-
-                                          dui_sparklineseries(
-                                            curve = "linear",
-                                            showArea = FALSE,
-                                            fill = colpal_fill[index],
-                                            stroke = colpal_stroke[index])))}))
-    )
-  })
+                                       dui_sparkline(
+                                         data = value[[1]],
+                                         height = 80,
+                                         margin = list(top = 30,
+                                                       right = 20,
+                                                       bottom = 30,
+                                                       left = 20),
+                                         components = list(
+                                           dui_sparkpointseries(
+                                             points = points_list,
+                                             stroke = colpal_fill[index],
+                                             fill = colpal_stroke[index],
+                                             size = 2.5
+                                           ),
+                                           dui_sparklineseries(
+                                             curve = "linear",
+                                             showArea = FALSE,
+                                             fill = colpal_fill[index],
+                                             stroke = colpal_stroke[index]
+                                           )
+                                         )
+                                       )
+                                     } else {
+                                       htmltools::HTML("")  # Return an empty element if no data
+                                     }
+                                   })
+              ))
+    }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   #######
   # State notes
   #######
 
   # Filter data
-  df_notes <- reactive({
-    notes %>%
+  df_parole_asterisks_notes <- reactive({
+    parole_asterisks_notes %>%
       filter(state == input$state_report)
+  }) %>%
+    bindCache(input$state_report)
+
+  # Parole asterisks state notes
+  output$state_parole_asterisks_notes <- renderUI({
+    HTML(df_parole_asterisks_notes()$notes)
   })
 
-  # Title of state based on user input
-  output$selected_state_note <- renderUI({
-    HTML(df_notes()$notes)
+  # Filter data
+  df_probation_asterisks_notes <- reactive({
+    probation_asterisks_notes %>%
+      filter(state == input$state_report)
+  }) %>%
+    bindCache(input$state_report)
+
+  # Probation asterisks state notes
+  output$state_probation_asterisks_notes <- renderUI({
+    HTML(df_probation_asterisks_notes()$notes)
+  })
+
+  # Filter parole data
+  df_parole_notes <- reactive({
+    parole_notes %>%
+      filter(state == input$state_report)
+  }) %>%
+    bindCache(input$state_report)
+
+  # Parole state notes
+  output$state_parole_notes <- renderUI({
+    HTML(df_parole_notes()$notes)
+  })
+
+  # Filter probation data
+  df_probation_notes <- reactive({
+    probation_notes %>%
+      filter(state == input$state_report)
+  }) %>%
+    bindCache(input$state_report)
+
+  # Probation state notes
+  output$state_probation_notes <- renderUI({
+    HTML(df_probation_notes()$notes)
+  })
+
+  # Filter data
+  df_additional_notes <- reactive({
+    additional_notes %>%
+      filter(state == input$state_report)
+  }) %>%
+    bindCache(input$state_report)
+
+  # Additional state notes
+  output$state_additional_notes <- renderUI({
+    HTML(df_additional_notes()$notes)
   })
 
   #######
   # Parole Tab
   #######
 
-  # Bar chart
+  # Select highchart depending on selector input
+  # Charts were saved in highchart.R
   output$parole_bar_chart <- renderHighchart({
-    # Select highchart depending on selector input
-    # Carts were saved in highchart.R
     if (input$adm_pop_report == "Admissions") {
       parole_bar_adm[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_exporting(enabled = FALSE,
-                     filename = "Parole_Violation_Admissions_by_Type",
-                     buttons = list(
-                       contextButton = list(
-                         menuItems = list('downloadPNG', 'downloadSVG')
-                       )))
+        hc_boost(enabled = TRUE)
     } else {
       parole_bar_pop[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_exporting(enabled = FALSE,
-                     filename = "Parole_Violation_Population_by_Type",
-                     buttons = list(
-                       contextButton = list(
-                         menuItems = list('downloadPNG', 'downloadSVG')
-                       )))
+        hc_boost(enabled = TRUE)
     }
-  })
+    }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   # Download button
   output$save_parole_bar_chart <- downloadHandler(
     filename <- function() {
-      paste(input$state_report, "_Parole_Violation_", input$adm_pop_report, "_by_Type.png", sep="")
+      paste(input$state_report, "_Parole_Violation_",
+            input$adm_pop_report, "_by_Type.png", sep="")
     },
 
     content <- function(file) {
-      file.copy(paste("data/plots/", input$state_report, "_Parole_Violation_", input$adm_pop_report, "_by_Type.png", sep=""), file)
+      file.copy(paste("data/plots/",
+                      input$state_report, "_Parole_Violation_",
+                      input$adm_pop_report, "_by_Type.png", sep=""), file)
     },
     contentType = "image/png"
   )
@@ -1088,24 +790,18 @@ server <- function(input, output, session) {
     df <- parole_table %>%
       filter(state == input$state_report &
              adm_or_pop == input$adm_pop_report) %>%
-      group_by(text) %>%
-      summarise(total_new = list(list(total)))
-    df1 <- parole_table_wide %>%
-      filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report) %>%
-      arrange(order)
-
-    # Merge data
-    df <- merge(df1, df, by = "text")
-    df <- df %>% arrange(order) %>% select(-c(order, adm_or_pop, state, prob_vs_parole, metric))
+      select(-c(adm_or_pop, state))
 
     # Create table with 4 Year trend line in last column
     reactable(df,
               style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
-              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"), # was center
+              theme = reactableTheme(cellStyle = list(display = "flex",
+                                                      flexDirection = "column",
+                                                      justifyContent = "center"), # was center
                                      headerStyle = list(textAlign = "right")
               ),
-              defaultColDef = colDef(format = colFormat(separators = TRUE), align = "right"),
+              defaultColDef = colDef(format = colFormat(separators = TRUE),
+                                     align = "right"),
               compact = TRUE,
               fullWidth = FALSE,
               searchable = FALSE,
@@ -1115,216 +811,168 @@ server <- function(input, output, session) {
                                          align = "left",
                                          style = list(fontWeight = "bold"),
                                          minWidth = 275),
-                `2018`          = colDef(minWidth = 95),
-                `2019`          = colDef(minWidth = 95),
-                `2020`          = colDef(minWidth = 95),
-                four_yr_change = colDef(minWidth = 110,
-                                        name = "2018-2021 Change",
-                                        style = list(fontWeight = "bold"),
-                                        format = colFormat(percent = TRUE, digits = 1)),
+                `2018`          = colDef(na = "–", minWidth = 95),
+                `2019`          = colDef(na = "–", minWidth = 95),
+                `2020`          = colDef(na = "–", minWidth = 95),
+                `2021`          = colDef(na = "–", minWidth = 95),
+                four_yr_change  = colDef(na = "–", minWidth = 110,
+                                         name = "2018-2021 Change",
+                                         style = list(fontWeight = "bold"),
+                                         format = colFormat(percent = TRUE,
+                                                            digits = 0)),
                 # add 4 Year trend graphs to each row
-                total_new  = colDef(minWidth = 110,
-                                    name = "4 Year Trend",
-                                    cell = function(value, index) {
-                                      dui_sparkline(
-                                        data = value[[1]],
-                                        height = 80,
-                                        margin = list(top = 30, right = 20, bottom = 30, left = 20),
+                total_new = colDef(minWidth = 110,
+                                   name = "Trend Line",
+                                   cell = function(value, index) {
+                                     if (!is.null(value[[1]]) && length(value[[1]]) > 0) {
+                                       points_list <- if (length(value[[1]]) >= 4) {
+                                         list("all")
+                                       } else {
+                                         seq(length(value[[1]]) - 1)
+                                       }
 
-                                        components = list(
-                                          dui_sparkpatternlines(
-                                            id = "total",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = total_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
-
-                                          dui_sparkpatternlines(
-                                            id = "technical",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = tech_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
-
-                                          dui_sparkpatternlines(
-                                            id = "new_offense",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = new_o_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
-
-                                          dui_sparklineseries(
-                                            curve = "linear",
-                                            showArea = FALSE,
-                                            fill = colpal_fill1[index],
-                                            stroke = colpal_stroke1[index])))}))
-    )
-  })
-
-  # # This won't work because of library issues
-  # output$parole_table <- renderReactable({
-  #   # Select reactable depending on selector input
-  #   # tables were saved in reactable.R
-  #   if (input$adm_pop_report == "Admissions") {
-  #     parole_reactable_adm[[input$state_report]]
-  #   } else {
-  #     parole_reactable_pop[[input$state_report]]
-  #   }
-  # })
+                                       dui_sparkline(
+                                         data = value[[1]],
+                                         height = 80,
+                                         margin = list(top = 30,
+                                                       right = 20,
+                                                       bottom = 30,
+                                                       left = 20),
+                                         components = list(
+                                           dui_sparkpointseries(
+                                             points = points_list,
+                                             stroke = colpal_fill[index],
+                                             fill = colpal_stroke[index],
+                                             size = 2.5
+                                           ),
+                                           dui_sparklineseries(
+                                             curve = "linear",
+                                             showArea = FALSE,
+                                             fill = colpal_fill[index],
+                                             stroke = colpal_stroke[index]
+                                           )
+                                         )
+                                       )
+                                     } else {
+                                       htmltools::HTML("")  # Return an empty element if no data
+                                     }
+                                   })
+              ))
+    }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   #######
   # Parole Graph - Dynamically change between sentence and graph depending on data availability
+  # Show "Data Unavailable", "Did Not Respond" or "Partial Data Submitted" or chart if required data is available
   #######
 
+  # If data is missing a parole violation admissions graph
   output$missing_data_parole_nt_adm <- renderUI({
-    out <- paste0(
-        "<h3 class = 'nodata'>No data</h3>"
-      , "<div class = 'notetxt'>"
-      , input$state_report
-      , " did not provide data on prison admissions due to technical and new offense parole violations."
-      , "</div>"
-    )
+    out <- missingness_sentences %>%
+      filter(state == input$state_report)
+    out <- out$parole_violation_admissions_graph
     HTML(out)
-  })
+  }) %>%
+    bindCache(input$state_report)
 
+  # If data is missing a parole violation population graph
   output$missing_data_parole_nt_pop <- renderUI({
-    out <- paste0(
-        "<h3 class = 'nodata'>No data</h3>"
-      , "<div class = 'notetxt'>"
-      , input$state_report
-      , " did not provide data on the number of people in prison due to technical and new offense parole violations."
-      , "</div>"
-    )
+    out <- missingness_sentences %>%
+      filter(state == input$state_report)
+    out <- out$parole_violation_population_graph
     HTML(out)
-  })
+  }) %>%
+    bindCache(input$state_report)
 
-  output$abolished_parole_adm <- renderUI({
-    out <- paste0(
-        "<h3 class = 'nodata'>No data</h3>"
-      , "<div class = 'notetxt'>"
-      , input$state_report
-      , " abolished parole and therefore did not provide data on prison admissions due to technical and new offense parole violations."
-      , "</div>"
-    )
-    HTML(out)
-  })
-
-  output$abolished_parole_pop <- renderUI({
-    out <- paste0(
-        "<h3 class = 'nodata'>No data</h3>"
-      , "<div class = 'notetxt'>"
-      , input$state_report
-      , " abolished parole and therefore did not provide data on the number of people in prison due to technical and new offense parole violations."
-      , "</div>"
-    )
-    HTML(out)
-  })
-  
+  # Show parole graph or missing data sentence depending on state
   output$parole_nt <- renderUI({
-    
-    # If state is missing new offense and technical violations (Admissions)
-    if(input$state_report %in% parole_na_adm & input$adm_pop_report == "Admissions" & !(input$state_report %in% abolish_prob_parole)){
-      
+
+    # If state is missing new offense violations and technical violations (Admissions)
+    if(input$state_report %in% parole_na_adm &
+       input$adm_pop_report == "Admissions"){
+
       fluidRow(column(width = 3),
-               column(width = 6, align = "center", htmlOutput("missing_data_parole_nt_adm")),
-               column(width = 3)
-      )
-      
-      # If state is missing new offense and technical violations (Population)
-    } else if(input$state_report %in% parole_na_pop & input$adm_pop_report == "Population" & !(input$state_report %in% abolish_prob_parole)){
-      
+               column(width = 6, align = "center",
+                      htmlOutput("missing_data_parole_nt_adm")),
+               column(width = 3))
+
+      # If state is missing new offense violations and technical violations (Population)
+    } else if(input$state_report %in% parole_na_pop &
+              input$adm_pop_report == "Population"){
+
       fluidRow(column(width = 3),
-               column(width = 6, align = "center", htmlOutput("missing_data_parole_nt_pop")),
-               column(width = 3)
-      )
-      
-      # If state is missing new offense and technical violations (Admissions) AND abolished parole
-    } else if(input$state_report %in% parole_na_adm & input$adm_pop_report == "Admissions" & (input$state_report %in% abolish_prob_parole)){
-      
-      fluidRow(column(width = 3),
-               column(width = 6, align = "center", htmlOutput("abolished_parole_adm")),
-               column(width = 3)
-      )
-      
-      # If state is missing new offense and technical violations (Admissions) AND abolished parole
-    } else if(input$state_report %in% parole_na_pop & input$adm_pop_report == "Population" & (input$state_report %in% abolish_prob_parole)){
-      
-      fluidRow(column(width = 3),
-               column(width = 6, align = "center", htmlOutput("abolished_parole_pop")),
-               column(width = 3)
-      )
-      
+               column(width = 6, align = "center",
+                      htmlOutput("missing_data_parole_nt_pop")),
+               column(width = 3))
+
       # If state has data (Admissions)
-    } else if(input$state_report %in% parole_not_na_adm & input$adm_pop_report == "Admissions"){
-      
+    } else if(input$state_report %in% parole_not_na_adm &
+              input$adm_pop_report == "Admissions"){
+
       fluidRow(column(width = 3),
-               column(width = 5, align = "center", highchartOutput("parole_bar_chart", height = 400, width = 390)),
-               column(width = 1, align = "left",   downloadButton(outputId = 'save_parole_bar_chart', "", class = "download-chart")),
-               column(width = 3)
-      )
-      
+               column(width = 5, align = "center",
+                      highchartOutput("parole_bar_chart",
+                                      height = 400,
+                                      width = 390)),
+               column(width = 1, align = "left",
+                      downloadButton(outputId = 'save_parole_bar_chart', "",
+                                     class = "download-chart")),
+               column(width = 3))
+
       # If state has data (Population)
-    } else if(input$state_report %in% parole_not_na_pop & input$adm_pop_report == "Population"){
-      
+    } else if(input$state_report %in% parole_not_na_pop &
+              input$adm_pop_report == "Population"){
+
       fluidRow(column(width = 3),
-               column(width = 5, align = "center", highchartOutput("parole_bar_chart", height = 400, width = 390)),
-               column(width = 1, align = "left",   downloadButton(outputId = 'save_parole_bar_chart', "", class = "download-chart")),
-               column(width = 3)
-      )
-      
+               column(width = 5, align = "center",
+                      highchartOutput("parole_bar_chart",
+                                      height = 400, width = 390)),
+               column(width = 1, align = "left",
+                      downloadButton(outputId = 'save_parole_bar_chart', "",
+                                     class = "download-chart")),
+               column(width = 3))
     }
-    
-  })
+    }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   #######
   # Probation Tab
   #######
 
-  # Bar chart
+  # Select highchart depending on selector input
+  # Charts were saved in highchart.R
   output$probation_bar_chart <- renderHighchart({
-    # Select highchart depending on selector input
-    # Carts were saved in highchart.R
     if (input$adm_pop_report == "Admissions") {
       probation_bar_adm[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_exporting(enabled = FALSE,
-                     filename = "Probation_Violation_Admissions_by_Type",
-                     buttons = list(
-                       contextButton = list(
-                         menuItems = list('downloadPNG', 'downloadSVG')
-                       )))
+        hc_boost(enabled = TRUE)
     } else {
       probation_bar_pop[[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_exporting(enabled = FALSE,
-                     filename = "Probation_Violation_Population_by_Type",
-                     buttons = list(
-                       contextButton = list(
-                         menuItems = list('downloadPNG', 'downloadSVG')
-                       )))
+        hc_boost(enabled = TRUE)
     }
-  })
+    }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   # Download button
   output$save_probation_bar_chart <- downloadHandler(
     filename <- function() {
-      paste(input$state_report, "_Probation_Violation_", input$adm_pop_report, "_by_Type.png", sep="")
+      paste(input$state_report, "_Probation_Violation_",
+            input$adm_pop_report, "_by_Type.png", sep="")
     },
 
     content <- function(file) {
-      file.copy(paste("data/plots/", input$state_report, "_Probation_Violation_", input$adm_pop_report, "_by_Type.png", sep=""), file)
+      file.copy(paste("data/plots/", input$state_report, "_Probation_Violation_",
+                      input$adm_pop_report, "_by_Type.png", sep=""), file)
     },
     contentType = "image/png"
   )
@@ -1336,24 +984,19 @@ server <- function(input, output, session) {
     df <- probation_table %>%
       filter(state == input$state_report &
              adm_or_pop == input$adm_pop_report) %>%
-      group_by(text) %>%
-      summarise(total_new = list(list(total)))
-    df1 <- probation_table_wide %>%
-      filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report) %>%
-      arrange(order)
-
-    # Merge data
-    df <- merge(df1, df, by = "text")
-    df <- df %>% arrange(order) %>% select(-c(order, adm_or_pop, state, prob_vs_parole, metric))
+      select(-c(adm_or_pop, state))
 
     # Create table with 4 Year trend line in last column
     reactable(df,
-              style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
-              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"), # was center
+              style = list(fontFamily = "Graphik, sans-serif",
+                           fontSize = "1.4rem"),
+              theme = reactableTheme(cellStyle = list(display = "flex",
+                                                      flexDirection = "column",
+                                                      justifyContent = "center"), # was center
                                      headerStyle = list(textAlign = "right")
               ),
-              defaultColDef = colDef(format = colFormat(separators = TRUE), align = "right"),
+              defaultColDef = colDef(format = colFormat(separators = TRUE),
+                                     align = "right"),
               compact = TRUE,
               fullWidth = FALSE,
               searchable = FALSE,
@@ -1363,248 +1006,288 @@ server <- function(input, output, session) {
                                          align = "left",
                                          style = list(fontWeight = "bold"),
                                          minWidth = 275),
-                `2018`          = colDef(minWidth = 95),
-                `2019`          = colDef(minWidth = 95),
-                `2020`          = colDef(minWidth = 95),
-                four_yr_change = colDef(minWidth = 110,
-                                        name = "2018-2021 Change",
-                                        style = list(fontWeight = "bold"),
-                                        format = colFormat(percent = TRUE, digits = 1)),
+                `2018`          = colDef(na = "–", minWidth = 95),
+                `2019`          = colDef(na = "–", minWidth = 95),
+                `2020`          = colDef(na = "–", minWidth = 95),
+                `2021`          = colDef(na = "–", minWidth = 95),
+                four_yr_change  = colDef(na = "–", minWidth = 110,
+                                         name = "2018-2021 Change",
+                                         style = list(fontWeight = "bold"),
+                                         format = colFormat(percent = TRUE,
+                                                            digits = 0)),
                 # add 4 Year trend graphs to each row
-                total_new  = colDef(minWidth = 110,
-                                    name = "4 Year Trend",
-                                    cell = function(value, index) {
-                                      dui_sparkline(
-                                        data = value[[1]],
-                                        height = 80,
-                                        margin = list(top = 30, right = 20, bottom = 30, left = 20),
+                total_new = colDef(minWidth = 110,
+                                   name = "Trend Line",
+                                   cell = function(value, index) {
+                                     if (!is.null(value[[1]]) && length(value[[1]]) > 0) {
+                                       points_list <- if (length(value[[1]]) >= 4) {
+                                         list("all")
+                                       } else {
+                                         seq(length(value[[1]]) - 1)
+                                       }
 
-                                        components = list(
-                                          dui_sparkpatternlines(
-                                            id = "total",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = total_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
-
-                                          dui_sparkpatternlines(
-                                            id = "technical",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = tech_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
-
-                                          dui_sparkpatternlines(
-                                            id = "new_offense",
-                                            height = 4,
-                                            width = 4,
-                                            stroke = new_o_co,
-                                            strokeWidth = 2.5,
-                                            orientation = "diagonal"
-                                          ),
-
-                                          dui_sparklineseries(
-                                            curve = "linear",
-                                            showArea = FALSE,
-                                            fill = colpal_fill1[index],
-                                            stroke = colpal_stroke1[index])))}))
-    )
-  })
-
-  # This won't work because of library issues
-  # output$probation_table <- renderReactable({
-  #   # Select reactable depending on selector input
-  #   # tables were saved in reactable.R
-  #   if (input$adm_pop_report == "Admissions") {
-  #     probation_reactable_adm[[input$state_report]]
-  #   } else {
-  #     probation_reactable_pop[[input$state_report]]
-  #   }
-  # })
+                                       dui_sparkline(
+                                         data = value[[1]],
+                                         height = 80,
+                                         margin = list(top = 30,
+                                                       right = 20,
+                                                       bottom = 30,
+                                                       left = 20),
+                                         components = list(
+                                           dui_sparkpointseries(
+                                             points = points_list,
+                                             stroke = colpal_fill[index],
+                                             fill = colpal_stroke[index],
+                                             size = 2.5
+                                           ),
+                                           dui_sparklineseries(
+                                             curve = "linear",
+                                             showArea = FALSE,
+                                             fill = colpal_fill[index],
+                                             stroke = colpal_stroke[index]
+                                           )
+                                         )
+                                       )
+                                     } else {
+                                       htmltools::HTML("")  # Return an empty element if no data
+                                     }
+                                   })
+              ))
+    }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   #######
   # Probation Graph - Dynamically change between sentence and graph depending on data availability
+  # Show "Data Unavailable", "Did Not Respond" or "Partial Data Submitted" or chart if required data is available
   #######
 
+  # If data is missing a probation violation admissions graph
   output$missing_data_probation_nt_adm <- renderUI({
-    out <- paste0(
-      "<h3 class = 'nodata'>No data</h3>"
-      , "<div class = 'notetxt'>"
-      , input$state_report
-      , " did not provide data on prison admissions due to technical and new offense probation violations."
-      , "</div>"
-    )
+    out <- missingness_sentences %>%
+      filter(state == input$state_report)
+    out <- out$probation_violation_admissions_graph
     HTML(out)
-  })
+  }) %>%
+    bindCache(input$state_report)
 
+  # If data is missing a probation violation population graph
   output$missing_data_probation_nt_pop <- renderUI({
-    out <- paste0(
-      "<h3 class = 'nodata'>No data</h3>"
-      , "<div class = 'notetxt'>"
-      , input$state_report
-      , " state did not provide data on the number of people in prison due to technical and new offense probation violations."
-      , "</div>"
-    )
+    out <- missingness_sentences %>%
+      filter(state == input$state_report)
+    out <- out$probation_violation_population_graph
     HTML(out)
-  })
+  }) %>%
+    bindCache(input$state_report)
 
-  output$missing_data_probation_nt_button <- renderText({
-    ""
-  })
-
-  # output$probation_nt = renderUI({
-  # 
-  #   # If state is missing new offense and technical violations (Admissions)
-  #   if(input$state_report %in% probation_na_adm & input$adm_pop_report == "Admissions"){
-  #     htmlOutput("missing_data_probation_nt_adm")
-  # 
-  #     # If state is missing new offense and technical violations (Population)
-  #   } else if(input$state_report %in% probation_na_pop & input$adm_pop_report == "Population"){
-  #     htmlOutput("missing_data_probation_nt_pop")
-  # 
-  #     # If state has data (Admissions)
-  #   } else if(input$state_report %in% probation_not_na_adm & input$adm_pop_report == "Admissions"){
-  #     highchartOutput("probation_bar_chart", height = 400, width = 390)
-  # 
-  #     # If state has data (Population)
-  #   } else if(input$state_report %in% probation_not_na_pop & input$adm_pop_report == "Population"){
-  #     highchartOutput("probation_bar_chart", height = 400, width = 390)
-  # 
-  #   }
-  # 
-  # })
-  # 
-  # output$probation_nt_button = renderUI({
-  # 
-  #   # If state is missing new offense and technical violations (Admissions)
-  #   if(input$state_report %in% probation_na_adm & input$adm_pop_report == "Admissions"){
-  #     textOutput("missing_data_probation_nt_button")
-  # 
-  #     # If state is missing new offense and technical violations (Population)
-  #   } else if(input$state_report %in% probation_na_pop & input$adm_pop_report == "Population"){
-  #     textOutput("missing_data_probation_nt_button")
-  # 
-  #     # If state has data (Admissions)
-  #   } else if(input$state_report %in% probation_not_na_adm & input$adm_pop_report == "Admissions"){
-  #     downloadButton(outputId = 'save_probation_bar_chart', "", class = "download-chart")
-  # 
-  #     # If state has data (Population)
-  #   } else if(input$state_report %in% probation_not_na_pop & input$adm_pop_report == "Population"){
-  #     downloadButton(outputId = 'save_probation_bar_chart', "", class = "download-chart")
-  # 
-  #   }
-  # 
-  # })
-  
+  # Show probation graph or missing data sentence depending on state
   output$probation_nt <- renderUI({
-    
-    # If state is missing new offense and technical violations (Admissions)
-    if(input$state_report %in% probation_na_adm & input$adm_pop_report == "Admissions"){
-      
+
+    # If state is missing new offense violations and technical violations (Admissions)
+    if(input$state_report %in% probation_na_adm &
+       input$adm_pop_report == "Admissions"){
+
       fluidRow(column(width = 3),
-               column(width = 6, align = "center", htmlOutput("missing_data_probation_nt_adm")),
-               column(width = 3)
-      )
-      
-      # If state is missing new offense and technical violations (Population)
-    } else if(input$state_report %in% probation_na_pop & input$adm_pop_report == "Population"){
-      
+               column(width = 6, align = "center",
+                      htmlOutput("missing_data_probation_nt_adm")),
+               column(width = 3))
+
+      # If state is missing new offense violations and technical violations (Population)
+    } else if(input$state_report %in% probation_na_pop &
+              input$adm_pop_report == "Population"){
+
       fluidRow(column(width = 3),
-               column(width = 6, align = "center", htmlOutput("missing_data_probation_nt_pop")),
-               column(width = 3)
-      )
-      
+               column(width = 6,
+                      align = "center",
+                      htmlOutput("missing_data_probation_nt_pop")),
+               column(width = 3))
+
       # If state has data (Admissions)
-    } else if(input$state_report %in% probation_not_na_adm & input$adm_pop_report == "Admissions"){
-      
+    } else if(input$state_report %in% probation_not_na_adm &
+              input$adm_pop_report == "Admissions"){
+
       fluidRow(column(width = 3),
-               column(width = 5, align = "center", highchartOutput("probation_bar_chart", height = 400, width = 390)),
-               column(width = 1, align = "left",   downloadButton(outputId = 'save_probation_bar_chart', "", class = "download-chart")),
-               column(width = 3)
-      )
-      
+               column(width = 5, align = "center",
+                      highchartOutput("probation_bar_chart",
+                                      height = 400, width = 390)),
+               column(width = 1, align = "left",
+                      downloadButton(outputId = 'save_probation_bar_chart', "",
+                                     class = "download-chart")),
+               column(width = 3))
+
       # If state has data (Population)
-    } else if(input$state_report %in% probation_not_na_pop & input$adm_pop_report == "Population"){
-      
+    } else if(input$state_report %in% probation_not_na_pop &
+              input$adm_pop_report == "Population"){
+
       fluidRow(column(width = 3),
-               column(width = 5, align = "center", highchartOutput("probation_bar_chart", height = 400, width = 390)),
-               column(width = 1, align = "left",   downloadButton(outputId = 'save_probation_bar_chart', "", class = "download-chart")),
-               column(width = 3)
-      )
-      
+               column(width = 5, align = "center",
+                      highchartOutput("probation_bar_chart",
+                                      height = 400, width = 390)),
+               column(width = 1, align = "left",
+                      downloadButton(outputId = 'save_probation_bar_chart', "",
+                                     class = "download-chart")),
+               column(width = 3))
     }
-    
-  })
+    }) %>%
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   ####
-  ## RACE/ETHNICITY DISPARITIES MYE HERE
+  ## RACE/ETHNICITY DISPARITIES TAB
   ###
 
+  ############################################################################################################################################ tooltip
+
+  # Generate tooltip depending on Total disparities or Portion of disparities attributable to parole revocations
+  disparities_tooltip <- reactiveValues()
+  observe({
+    disparities_tooltip$a <- ifelse(input$pop_denom =="BJS",
+                    disparities_definitions %>% filter(term == "Portion of Disparities Attributable to Parole Revocations") %>% pull(definition),
+                    disparities_definitions %>% filter(term == "Total Disparities") %>% pull(definition))
+  })
+  output$redefinition_tooltip <- renderUI({
+    mytooltip <- gsub("<b>|</b>|<i>|</i>", "",
+                      disparities_tooltip$a)
+    shiny::tags$span(tipify(el = icon("info-circle",
+                               lib = "font-awesome",
+                               style = "color: #D25E2D; font-size: 0.5em;"),
+                     title = disparities_tooltip$a),
+              "aria-label" = mytooltip
+    )
+  })
+
+  ############################################################################################################################################ tooltip
+
+  # REMOVE MODAL FOR NOW
+  # When Race/Ethinicity tab is selected, show pop up about how data is not MCLC
+  # This will only occur once per session automatically, see localsession
+  # localsession <- TRUE
+  # observeEvent(input$tabsetpanel, {
+  #   if (input$tabsetpanel == 4 & localsession)  {
+  #     localsession <<- FALSE
+  #     re_modal()
+  #     observeEvent(input$close_modal, {
+  #       removeModal()
+  #       dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
+  #
+  #       if (dataavail == 0) {
+  #         first_guide$init()
+  #         first_guide$remove(step = c("#infopanel-id", "ip1"))
+  #       } else {
+  #         first_guide$init()
+  #         first_guide$remove(step = c("#infopanel-id", "ip2"))
+  #       }
+  #
+  #       first_guide$start()
+  #     })
+  #   }
+  # })
+  #
+  # observeEvent(input$show_guide, {
+  #   re_modal()
+  # })
+
+  # Intiate guide when Race and Ethnicity tab are selected.
+  localsession <- TRUE
+  observeEvent(input$tabsetpanel, {
+    if (input$tabsetpanel == 4 & localsession)  {
+      localsession <<- FALSE
+      dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
+
+      if (dataavail == 0) {
+        first_guide$init()
+        first_guide$remove(step = c("#infopanel-id", "ip1"))
+      } else {
+        first_guide$init()
+        first_guide$remove(step = c("#infopanel-id", "ip2"))
+      }
+
+      first_guide$start()
+    }
+  })
+
+  observeEvent(input$show_guide, {
+    first_guide$init()
+    first_guide$start()
+  })
+
+
+  output$retitleend <- renderText({
+    case_when(
+      # Portion of disparities attributable to parole revocations
+      input$adm_pop_report == "Admissions" & input$pop_denom == "BJS" ~ "Racial and ethnic disparities in prison admissions for parole revocations represent the accumulation of disparities across the system. Only a portion of these disparities can be attributed to parole revocations.",
+      input$adm_pop_report == "Population" & input$pop_denom == "BJS" ~ "Racial and ethnic disparities in populations incarcerated for parole revocations represent the accumulation of disparities across the system. Only a portion of these disparities can be attributed to parole revocations.",
+      # Total Disparities
+      input$adm_pop_report == "Admissions" & input$pop_denom == "CEN" ~ "Racial and ethnic disparities in prison admissions for parole revocations represent the accumulation of disparities across the system.",
+      input$adm_pop_report == "Population" & input$pop_denom == "CEN" ~ "Racial and ethnic disparities in populations incarcerated for parole revocations represent the accumulation of disparities across the system."
+    )
+  })
+
+
+
+
+
   output$infogblack <- renderImage({
-
     png_file  <- glue("data/infogs/{input$adm_pop_report}_{input$state_report}_{input$pop_denom}_Black.png")
-
     if (file.exists(png_file)){
       plot <- png_file
       list(
-          src =normalizePath(plot)
+        src =normalizePath(plot)
         , contentType = "image/png"
         , alt = raceethnicity$infograph_alt(rridata, input$adm_pop_report, input$pop_denom, "Black", input$state_report)
-        , width = "100%"
+        , width = "130%"
       )
-    } else { #should not be needed - used as back-up 
+    } else { #should not be needed - used as back-up
       plot <- ggplot2::ggplot() + ggplot2::theme_void()
       file <- tempfile(fileext = ".png")
       ggplot2::ggsave(filename = file, plot = plot, width = 24, height = 0.5)
       list(
-          src =normalizePath(file)
+        src =normalizePath(file)
         , contentType = "image/png"
         , alt = raceethnicity$infograph_alt_noinfog(input$adm_pop_report, input$pop_denom, "Black", input$state_report)
-        , width = "100%"
+        , width = "130%"
       )
     }
   }, deleteFile = FALSE)
 
   output$infoghisp <- renderImage({
-
     png_file  <- glue("data/infogs/{input$adm_pop_report}_{input$state_report}_{input$pop_denom}_Hispanic.png")
-
     if (file.exists(png_file)){
       plot <- png_file
       list(
-          src =normalizePath(plot)
+        src =normalizePath(plot)
         , contentType = "image/png"
         , alt = raceethnicity$infograph_alt(rridata, input$adm_pop_report, input$pop_denom, "Hispanic", input$state_report)
-        , width = "100%"
+        , width = "130%"
       )
-    } else { #should not be needed - used as back-up 
+    } else { #should not be needed - used as back-up
       plot <- ggplot2::ggplot() + ggplot2::theme_void()
       file <- tempfile(fileext = ".png")
       ggplot2::ggsave(filename = file, plot = plot, width = 24, height = 0.5)
       list(
-          src =normalizePath(file)
+        src =normalizePath(file)
         , contentType = "image/png"
         , alt = raceethnicity$infograph_alt_noinfog(input$adm_pop_report, input$pop_denom, "Hispanic", input$state_report)
-        , width = "100%"
+        , width = "130%"
       )
     }
   }, deleteFile = FALSE)
 
-
   output$infogheader <- renderUI({
-
     dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
-
     out <- paste0(
-        raceethnicity$pop_denom_text(input$pop_denom, input$adm_pop_report)
-      , raceethnicity$infographic_header(dataavail, rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$NOTE)
+      raceethnicity$pop_denom_text(input$pop_denom, input$adm_pop_report)
+      , raceethnicity$infographic_header(dataavail, input$pop_denom, input$adm_pop_report, rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$NOTE)
     )
-
     HTML(out)
+  })
+
+  output$renote <- renderText({
+    if(input$pop_denom == "BJS"){
+      "Note that the disparities in parole revocations can either amplify or reduce preexisting disparities."
+    } else if (input$pop_denom == "CEN"){
+      ""
+    }
 
   })
 
@@ -1620,11 +1303,11 @@ server <- function(input, output, session) {
       out <- main
     } else {
       out <- paste0( main
-                    , "<div class = 'retxt'>"
-                    , "Data to calculate relative rate index were not available for "
-                    , input$state_report
-                    , "</div>"
-                    )
+                     , "<div class = 'retxt'>"
+                     , "Data to calculate relative rate index were not available for "
+                     , input$state_report
+                     , ".</div>"
+      )
     }
     HTML(out)
   })
@@ -1635,9 +1318,7 @@ server <- function(input, output, session) {
     if (dataavail == 1){
       raceethnicity$create_reactable(df)
     }
-
   })
-
 
   output$table_rate_header <- renderUI({
     df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "RATE", whichTABLE = "table_suppress")
@@ -1646,11 +1327,10 @@ server <- function(input, output, session) {
       out <- main
     } else {
       out <- paste0(  main
-                    , "<div class = 'retxt'>"
-                    , "Data to calculate rates were not available for "
-                    , input$state_report
-                    , "</div>"
-      )
+                      , "<div class = 'retxt'>"
+                      , "Data to calculate rates were not available for "
+                      , input$state_report
+                      , "</div>")
     }
     HTML(out)
   })
@@ -1662,22 +1342,45 @@ server <- function(input, output, session) {
     }
   })
 
-
+  # output$table_revcnt_header <- renderUI({
+  #   df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")
+  #   main <- "<h4 class='reh4'>Readmissions to Prison from Parole Counts</h4>"
+  #   if (nrow(df) > 0){
+  #     out <- main
+  #   } else {
+  #     out <- paste0(  main
+  #                     , "<div class = 'retxt'>"
+  #                     , "Readmissions to prison from parole data were not available for "
+  #                     , input$state_report
+  #                     , "</div>")
+  #   }
+  #   HTML(out)
+  # })
   output$table_revcnt_header <- renderUI({
+
     df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")
-    main <- "<h4 class='reh4'>Parole Revocations Counts</h4>"
-    if (nrow(df) > 0){
-      out <- main
+
+    if (input$adm_pop_report == "Population") {
+      main_header <- "Number of People Incarcerated for Parole Revocations"
+    } else if (input$adm_pop_report == "Admissions") {
+      main_header <- "Admissions from Parole"
+    }
+
+    if (nrow(df) > 0) {
+      out <- paste0("<h4 class='reh4'>", tools::toTitleCase(main_header), "</h4>")
     } else {
-      out <- paste0(  main
-                    , "<div class = 'retxt'>"
-                    , "Parole revocations data were not available for "
-                    , input$state_report
-                    , "</div>"
+      out <- paste0(
+        "<h4 class='reh4'>", tools::toTitleCase(main_header), "</h4>",
+        "<div class='retxt'>",
+        tools::toTitleCase(main_header), " data were not available for ",
+        input$state_report,
+        "</div>"
       )
     }
+
     HTML(out)
   })
+
 
   output$table_revcnt <- renderUI({
     df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")
@@ -1685,19 +1388,16 @@ server <- function(input, output, session) {
       raceethnicity$create_reactable(df)
     }
   })
-  
-  
-  # conditional panel for tables 
-  
+
+  # conditional panel for tables
   output$showtablepanel <- reactive({ input$showtables })
   outputOptions(output, 'showtablepanel', suspendWhenHidden = FALSE)
-  
-  
-  # conditional panel for infographics 
-  
-  output$showinfogpanel <- reactive({ 
+
+
+  # conditional panel for infographics
+  output$showinfogpanel <- reactive({
     dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
-    ifelse(dataavail == 1, TRUE, FALSE) 
+    ifelse(dataavail == 1, TRUE, FALSE)
   })
   outputOptions(output, 'showinfogpanel', suspendWhenHidden = FALSE)
 
@@ -1745,7 +1445,10 @@ server <- function(input, output, session) {
       filter(state %in% input$download_state) %>%
       filter(metric %in% input$download_metric) %>%
       arrange(state, year)
-  })
+  }) %>%
+    bindCache(input$download_year,
+              input$download_state,
+              input$download_metric)
 
   # Save data as csv
   output$save_data <- downloadHandler(
@@ -1761,36 +1464,34 @@ server <- function(input, output, session) {
   # Reactable table of MCLC data for download
   output$selected_download_table <- renderReactable({
 
-
     df1 <- df_download_table() %>%
       mutate(state = factor(state))
 
     reactable(df1,
-              style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
-              theme = reactableTheme(cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")),
-              defaultColDef = colDef(format = colFormat(separators = TRUE), align = "left"),
+              style = list(fontFamily = "Graphik, sans-serif",
+                           fontSize = "1.4rem"),
+              theme = reactableTheme(cellStyle = list(display = "flex",
+                                                      flexDirection = "column",
+                                                      justifyContent = "center")),
+              defaultColDef = colDef(format = colFormat(separators = TRUE),
+                                     align = "left"),
               compact = TRUE,
               fullWidth = FALSE,
               defaultPageSize = 50,
-              #filterable = TRUE,
-
               columns = list(
                 state  = colDef(name = "State",
                                 align = "left",
                                 style = list(fontWeight = "bold"),
-                                minWidth = 200,
-                                ),
+                                minWidth = 200),
                 metric = colDef(name = "Metric",
                                 minWidth = 370),
                 year   = colDef(name = "Year",
                                 minWidth = 110),
-                total  = colDef(name = "Total",
+                total  = colDef(na = "–",
+                                name = "Total",
                                 align = "right",
                                 minWidth = 110,
-                                filterable = FALSE)
-              )
-              )
-
+                                filterable = FALSE)))
   })
 
 }

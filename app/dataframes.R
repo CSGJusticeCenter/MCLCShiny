@@ -2,7 +2,7 @@
 # Project: MCLCShiny
 # File: dataframes.R
 # Authors: Mari Roberts
-# Date last updated: July 20, 2022
+# Date last updated: July 19, 2023 (MAR)
 # Description:
 #    Load data files created in import.R, assign colors, and fonts
 #######################################
@@ -12,36 +12,40 @@
 # must be in local repo to publish app
 #______________________________________________________
 
-load(file = "data/adm_pop_long.Rda")
-load(file = "data/mclc_explorer.Rda")
-load(file = "data/mclc_explorer_table.Rda")
-load(file = "data/vb_adm_pop.Rda")
-load(file = "data/state_table.Rda")
-load(file = "data/state_table_wide.Rda")
-load(file = "data/parole_table.Rda")
-load(file = "data/parole_table_wide.Rda")
-load(file = "data/probation_table.Rda")
-load(file = "data/probation_table_wide.Rda")
-load(file = "data/hex_gj.Rda")
-load(file = "data/notes.Rda")
-load(file = "data/csg.Rda")
+states <- state.name
 
-load(file = "data/abolish_prob_parole.Rda")
+load(file = "data/adm_pop_long.rds")
+load(file = "data/mclc_explorer.rds")
+load(file = "data/mclc_explorer_table.rds")
+load(file = "data/vb_adm_pop.rds")
+load(file = "data/state_table.rds")
+load(file = "data/parole_table.rds")
+load(file = "data/probation_table.rds")
+load(file = "data/hex_gj.rds")
+load(file = "data/parole_notes.rds")
+load(file = "data/probation_notes.rds")
+load(file = "data/parole_asterisks_notes.rds")
+load(file = "data/probation_asterisks_notes.rds")
+load(file = "data/additional_notes.rds")
+load(file = "data/csg.rds")
 
-load(file = "data/nt_na_adm.Rda")
-load(file = "data/nt_na_pop.Rda")
-load(file = "data/nt_not_na_adm.Rda")
-load(file = "data/nt_not_na_pop.Rda")
+load(file = "data/missingness_sentences.rds")
+load(file = "data/disparities_definitions.rds")
 
-load(file = "data/parole_na_adm.Rda")
-load(file = "data/parole_na_pop.Rda")
-load(file = "data/parole_not_na_adm.Rda")
-load(file = "data/parole_not_na_pop.Rda")
+load(file = "data/nt_na_adm.rds")
+load(file = "data/nt_na_pop.rds")
+load(file = "data/nt_not_na_adm.rds")
+load(file = "data/nt_not_na_pop.rds")
 
-load(file = "data/probation_na_adm.Rda")
-load(file = "data/probation_na_pop.Rda")
-load(file = "data/probation_not_na_adm.Rda")
-load(file = "data/probation_not_na_pop.Rda")
+load(file = "data/parole_na_adm.rds")
+load(file = "data/parole_na_pop.rds")
+load(file = "data/parole_not_na_adm.rds")
+load(file = "data/parole_not_na_pop.rds")
+
+load(file = "data/probation_na_adm.rds")
+load(file = "data/probation_na_pop.rds")
+load(file = "data/probation_not_na_adm.rds")
+load(file = "data/probation_not_na_pop.rds")
 
 rridata <- readRDS("data/NCRP_RRI_tables.RDS")
 
@@ -53,14 +57,16 @@ state_note <- c('Whether an incarceration is the result of a new offense or tech
 # must be in local repo to publish app
 #______________________________________________________
 
-load(file = "data/all_state_area_adm.Rda")
-load(file = "data/all_state_area_pop.Rda")
-load(file = "data/all_state_bar_adm.Rda")
-load(file = "data/all_state_bar_pop.Rda")
-load(file = "data/parole_bar_adm.Rda")
-load(file = "data/parole_bar_pop.Rda")
-load(file = "data/probation_bar_adm.Rda")
-load(file = "data/probation_bar_pop.Rda")
+load(file = "data/adm_pop_maps.rds")
+
+load(file = "data/all_state_area_adm.rds")
+load(file = "data/all_state_area_pop.rds")
+load(file = "data/all_state_bar_adm.rds")
+load(file = "data/all_state_bar_pop.rds")
+load(file = "data/parole_bar_adm.rds")
+load(file = "data/parole_bar_pop.rds")
+load(file = "data/probation_bar_adm.rds")
+load(file = "data/probation_bar_pop.rds")
 
 #______________________________________________________
 # read in reactable tables
@@ -68,12 +74,12 @@ load(file = "data/probation_bar_pop.Rda")
 #______________________________________________________
 
 # not working because of library issue (htmlwidgets)
-# load(file = "data/state_reactable_adm.Rda")
-# load(file = "data/state_reactable_pop.Rda")
-# load(file = "data/parole_reactable_adm.Rda")
-# load(file = "data/parole_reactable_pop.Rda")
-# load(file = "data/probation_reactable_adm.Rda")
-# load(file = "data/probation_reactable_pop.Rda")
+load(file = "data/state_reactable_adm.rds")
+load(file = "data/state_reactable_pop.rds")
+load(file = "data/parole_reactable_adm.rds")
+load(file = "data/parole_reactable_pop.rds")
+load(file = "data/probation_reactable_adm.rds")
+load(file = "data/probation_reactable_pop.rds")
 
 #______________________________________________________
 # colors TBD
@@ -86,4 +92,3 @@ source("colors.R")
 #______________________________________________________
 
 default_fonts <- c("Graphik")
-

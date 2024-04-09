@@ -2,14 +2,29 @@
 # Project: MCLCShiny
 # File: libraries.R
 # Authors: Mari Roberts
-# Last date updated: July 20, 2022
+# Last date updated: May 12, 2023
 # Description:
 #    Load packages
 #######################################
 
-# Data visualizations
+# Dataui for lines in reactable table download instructions
+# install.packages("remotes")
+# remotes::install_github("timelyportfolio/dataui")
+
+# Daattali for css shiny loaders
+# install.packages("remotes")
+# remotes::install_github("daattali/shinycssloaders")
+
+# Highcharter download instructions:
+# remove the existing highcharter package from your R session: remove.packages("highcharter")
+# restart your R session
+# install highcharter with the devtools package (NOT the remotes package):
+# install.packages("devtools")
+# devtools::install_github("mrjoh3/highcharter")
+
 library(dataui)
 library(highcharter)
+options(highcharter.rjson = FALSE) # for hc_boost(enabled = TRUE)
 library(purrr)
 library(htmlwidgets)
 library(glue)
@@ -19,6 +34,8 @@ library(shiny)
 library(shinyWidgets)
 library(dashboardthemes)
 library(shinydashboard)
+library(shinymeta)
+library(shinycssloaders)
 
 # Tables
 library(reactable)
@@ -32,10 +49,14 @@ library(sp)
 library(ggplot2)
 
 # Save highchart
-# Download this! webshot removes font styles when saving so webshot2 is better
+# webshot removes font styles when saving so webshot2 is better
 # remotes::install_github("rstudio/webshot2")
 library(webshot2)
 
+# Guide
+library(conductor)
+library(shinyBS)
+# library(shinyjs)
 
 box::use(
     box/raceethnicity
