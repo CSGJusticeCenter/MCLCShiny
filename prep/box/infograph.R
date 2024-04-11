@@ -12,11 +12,7 @@ box::use(
 
 
 ## set up fonts
-# install.packages("extrafont")
-# remotes::install_version("Rttf2pt1", version = "1.3.8")
-# extrafont::font_import(paths = csgjcr::csg_sp_path("50 State Revocations Project/MCLC Shiny App/background/Fonts/Graphik_ttf"), prompt = FALSE)
-extrafont::loadfonts(device = "win", quiet = TRUE)
-
+csgjcr::csg_font_hoist("Graphik")
 
 ## set up colors
 bg_color      <- "#FFFFFF"
@@ -384,10 +380,8 @@ create_infograph <- function(
     #RRI=1
     , data_type %in% c("A", "Admissions") & as.numeric(display_value) == 1 & suppress == 1 & pop_type == "BJS" ~ glue("{str_to_title(race)} people on parole are equally likely to be admitted to prison for a parole revocation \nas White people. This estimate should be interpreted with caution because one racial or ethnic \ngroup included in its calculation had fewer than 5 people. See data tables below for details.")
     , data_type %in% c("N", "Population") & as.numeric(display_value) == 1 & suppress == 1 & pop_type == "BJS" ~ glue("{str_to_title(race)} people on parole are equally likely to be incarcerated for a parole revocation \nas White people. This estimate should be interpreted with caution because one racial or ethnic \ngroup included in its calculation had fewer than 5 people. See data tables below for details.")
-    
     )
-
-
+  
   title <- ggdraw() +
     draw_label(
       graphic_text
@@ -398,13 +392,18 @@ create_infograph <- function(
       , size = title.size
       , fontfamily = "Graphik Regular"
     ) #+ theme(panel.background = element_rect(color = "red"))
-
-  # display_value <- ifelse(
-  #   race == admin$lev_RACE[1]
-  #   , sprintf(glue("%.0f"),            round(rri_raw, rri_digits))
-  #   , sprintf(glue("%.{rri_digits}f"), round(rri_raw, rri_digits))
-  # )
-
+  
+  subtitle <- ggdraw() +
+    draw_label(
+      "* Hispanic RRI should be interpreted with caution due to inconsistencies in how each state collects and reports data on ethnicity"
+      , x = 0
+      , hjust = 0
+      , vjust = 0.5
+      , color = mclc_dk_grey
+      , size = title.size*0.6
+      , fontfamily = "Graphik Light Italic"
+    ) #+ theme(panel.background = element_rect(color = "green"))
+  
   value <- ggdraw() +
     draw_label(
       display_value
@@ -428,35 +427,45 @@ create_infograph <- function(
     , fillHoriz = FALSE
   )
 
-
   ggtemp_wclient <- plot_grid(
     ggtemp_justpeople
     , title
     , ncol = 1
     , rel_heights = c(1, title.rel/rows)
   )
-
-
-  fullinfog <- plot_grid(
+  
+  
+  maininfo <- plot_grid(
     value
     , ggtemp_wclient
     , nrow = 1
     , rel_widths = c(value.rel, cols)
   )
-
+  
+  if (race == "Hispanic"){
+    fullinfog <- plot_grid(
+      maininfo
+      , plot_grid(ggplot() + theme_void(), subtitle, nrow = 1, rel_widths = c(value.rel, cols))
+      , ncol = 1
+      , rel_heights = c(1 + title.rel/rows, 0.2)
+    )
+  } else {
+    
+    fullinfog <- maininfo 
+  }
 
 
   if (savefile == TRUE){
 
     baseval<- 3
-    h.full <- ((baseval*rows)*(1+title.rel))
+    h.full <- ((baseval*rows)*(1+title.rel)) + ifelse(race == "Hispanic", 0.6, 0)
     w.full <- ((img_ar_wh*baseval))*(cols+value.rel+1)
+    
 
     #ggsave will not save unless specify device = png
     # since this is within a box module need to specify device = grDevices::png
     ggsave(
         file.path(admin$sp_data, "infographs", paste0(label, ".png"))
-      , device = grDevices::png
       , plot = fullinfog
       , height = h.full
       , width = w.full
