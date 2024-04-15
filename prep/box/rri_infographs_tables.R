@@ -303,7 +303,10 @@ how_its_calc_txt <- function(DATA, whichRACE, whichSTATE, whichPOP, mult, NCRPLE
       ,   "allows individuals to self-identify their race and ethnicity "
       ,   "separately. The variation in practices across states and between "
       ,   "state and Federal data reporting systems may result in a deflated "
-      ,   "RRI for Hispanic individuals."
+      ,   "RRI for Hispanic individuals. <b>These differences can result in an "
+      ,   "incomplete count of Hispanic individuals and those of mixed race in "
+      ,   "state reports. Conversely, it can result in an overcount of people "
+      ,   "of other races, especially non-Hispanic White people.</b>"
       ,   "</p></i>"
       ,   note
       ,   anysuppress
