@@ -1,11 +1,15 @@
 # MCLCShiny
 
-Links current live version (vNA): **add after create first production version, v1.0.00**  
+Links current live version: 
 
-- https://csgjc.shinyapps.io/MCLCShiny/#mapexplorer  
-- https://csgjc.shinyapps.io/MCLCShiny/#statereports 
-- https://csgjc.shinyapps.io/MCLCShiny/#downloaddata  
+`mclc_comms`
 
+- https://csgjc.shinyapps.io/mclc_comms/#mapexplorer  
+- https://csgjc.shinyapps.io/mclc_comms/#statereports 
+- https://csgjc.shinyapps.io/mclc_comms/#downloaddata  
+
+
+Website: [Supervision Violations and their Impact on Incarceration](https://projects.csgjusticecenter.org/supervision-violations-impact-on-incarceration/)
 
 # Structure 
 
