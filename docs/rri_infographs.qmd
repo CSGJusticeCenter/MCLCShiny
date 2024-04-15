@@ -1,0 +1,169 @@
+---
+title: "RRI - Suppression"
+format: 
+  html: 
+    embed-resources: true 
+editor: source
+editor_options: 
+  chunk_output_type: console
+execute: 
+  echo: false 
+  eval: TRUE
+---
+
+```{r}
+#| include: false 
+
+library(tidyverse)
+```
+
+
+```{r}
+#| eval: false 
+
+NCRP_A_REV_BJS <- readRDS("C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/NCRP_A_REV_BJS.RDS")
+
+
+REV_BJS$OR |> filter(
+  RACE == "White", 
+  SUPPRESS == 1, 
+  OFFGENERAL != "Other",
+  OFFGENERAL != "missing", 
+  ABB != "DC"
+  )
+
+
+REV_BJS$OR |> 
+  filter(ABB == "ID", RPTYEAR == 2015, OFFGENERAL == "Drugs")
+
+# non-white NOT suppressed, white is suppressed 
+
+REV_BJS$OR |> 
+  filter(
+    !is.na(REVCNT), 
+    SUPPRESS != 1, 
+    WHITERATE != S_WHITERATE, 
+    !OFFGENERAL %in% c("Other", "missing"), 
+    ABB != "DC", 
+    !RACE %in% c("Other", "missing")
+)
+
+
+# non-white is suppressed, white is suppressed 
+
+REV_BJS$OR |> 
+  filter(
+    !is.na(REVCNT), 
+    SUPPRESS == 1, 
+    WHITERATE != S_WHITERATE, 
+    !OFFGENERAL %in% c("Other", "missing"), 
+    ABB != "DC", 
+    !RACE %in% c("Other", "missing")
+)
+
+
+# non-white is suppressed, white is NOT suppressed 
+
+REV_BJS$OR |> 
+  filter(
+    !is.na(REVCNT), 
+    SUPPRESS == 1, 
+    WHITERATE == S_WHITERATE, 
+    !OFFGENERAL %in% c("Other", "missing"), 
+    ABB != "DC", 
+    !RACE %in% c("Other", "missing")
+)
+
+```
+
+## Text for Infographics
+
+```{r}
+#| message: false 
+
+box::use(../prep/box/infograph)
+tables <- readRDS("../app/data/NCRP_RRI_tables.RDS")
+```
+
+
+| # | Options | Meaning | 
+|:--|:------|:--------------------------------|
+| 1 | - Admissions<br>- Population | NCRP data source (prison admissions or prison population) | 
+| 2 | <br>- gt1<br>- lt1<br>- eq1 | rounded RRI is:<br>- greater than 1<br>- less than 1<br>- equal to 1 | 
+| 3 | <br>- 0<br>- 1 | RRI is using suppression<br>- FALSE<br>- TRUE (one of the groups has a count <5) | 
+| 4 | <br>- BJS<br>- CEN | denominator for RRI<br>- parole population, BJS data (disparities attributed to parole revocation)<br>- state population, census data (cumulative disparities across system) |  
+
+```{r}
+opts <- tidyr::crossing(whichNCRP = c("Admissions", "Population"), whichPOP = c("BJS", "CEN"))
+
+ 
+pull_rri_tables <- function(whichNCRP, whichPOP){
+  map(state.name, function(x){
+    if (tables[[whichNCRP]][[whichPOP]][[x]]$INFOGRAPH$DATAAVAIL == 0){
+      tibble()
+    } else {
+      tables[[whichNCRP]][[whichPOP]][[x]]$INFOGRAPH$DF
+    }
+  }
+) |> bind_rows() |> 
+  mutate(
+    NCRP = whichNCRP, 
+    POP  = whichPOP
+  )
+}
+
+
+params_for_loop <- tidyr::expand_grid(
+      NCRP = names(tables)[1:2]
+    , STATE = state.name
+    , POP = c("BJS", "CEN")
+  ) |> 
+  mutate(row = row_number())
+
+rri_table <- map2(opts$whichNCRP, opts$whichPOP, pull_rri_tables) |>
+  bind_rows() |>
+  mutate(rS_RRI = ifelse(S_RRI != 0 & round(S_RRI, 1) == 0, 0.1, round(S_RRI, 1))) |> 
+  rowwise() |> 
+  mutate(titleTextType = infograph$title_text_type(NCRP, rS_RRI, SUPPRESS, POP)) |>
+  ungroup() |> 
+  left_join(params_for_loop, by = join_by("STATE", "NCRP", "POP")) |> 
+  select(STATE, NCRP, POP, RACE, rS_RRI, titleTextType, row)
+
+
+
+order_type <- crossing(
+  x1 = c("Admissions", "Population"), 
+  x2 = c("1gt1", "2lt1", "3eq1"), 
+  x3 = c(0, 1), 
+  x4 = c("BJS", "CEN")
+) |> arrange(x1, x4, x2, x3) |> 
+  rowwise() |> 
+  mutate(type = paste(c(x1, str_sub(x2, 2, -1), x3, x4), collapse = "_")) |> 
+  ungroup() |> 
+  pull(type) 
+
+
+rri_table |> 
+  mutate(titleTextType = factor(titleTextType, order_type)) |> 
+  count(titleTextType)
+
+
+# titleTextType <- "Population_lt1_1_BJS"
+# rri_table |> filter(titleTextType == !!titleTextType)  |> count(row) |> filter(n== 2)
+# rri_table |> filter(titleTextType == !!titleTextType)  |> count(RACE)
+# rri_table |> filter(titleTextType == !!titleTextType, rS_RRI >= 10)  
+# rri_table |> filter(titleTextType == !!titleTextType) |> print(n=20)
+  
+
+print("Loop #'s to get at least 1 of all opts available: ")
+ 
+c(6, 46, 8, 86, 106, 110, 108, 116, 38, 96, 168, 196, 48, 148, 9, 19, 5, 7, 105, 133, 185, 95, 23, 195, 147) |> 
+  sort() |> unique() |> paste(collapse = ", ") |> 
+ str_wrap(width = 90) |> 
+  cat(sep = "\n")
+
+
+```
+
+
+
