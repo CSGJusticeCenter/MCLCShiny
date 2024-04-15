@@ -3,7 +3,7 @@ box::use(
     ./admin
   , png[...]
   , ggplot2[...]
-  , stringr[str_to_title]
+  , stringr[str_to_title, str_detect, str_wrap, str_sub, str_locate, str_replace, str_replace_all]
   , cowplot[plot_grid, ggdraw, draw_label]
   , dplyr[case_when]
   , reshape2[melt]
@@ -12,11 +12,7 @@ box::use(
 
 
 ## set up fonts
-# install.packages("extrafont")
-# remotes::install_version("Rttf2pt1", version = "1.3.8")
-# extrafont::font_import(paths = csgjcr::csg_sp_path("50 State Revocations Project/MCLC Shiny App/background/Fonts/Graphik_ttf"), prompt = FALSE)
-extrafont::loadfonts(device = "win", quiet = TRUE)
-
+csgjcr::csg_font_hoist("Graphik")
 
 ## set up colors
 bg_color      <- "#FFFFFF"
@@ -272,6 +268,111 @@ create_icons <- function(
 
 
 
+#' Short-hand code for what text to display
+#'
+#' @param whichNCRP Admissions or Population NCRP data set
+#' @param RRI Rounded rRRI value 
+#' @param SUPPRESS 0 or 1, whether the data is suppressed due to low counts
+#' @param whichPOP denominator population either BJS or CEN 
+#'
+#' @export
+title_text_type <- function(whichNCRP, rRRI, SUPPRESS, whichPOP){
+  paste(
+    c(
+      whichNCRP, 
+      case_when(
+        rRRI > 1 ~ "gt1", 
+        rRRI < 1 ~ "lt1", 
+        rRRI ==1 ~ "eq1"
+      ), 
+      SUPPRESS, 
+      whichPOP
+    ), 
+    collapse = "_"
+  )
+}
+
+
+#' Create the title in-graphic text for infogrpahic 
+#'
+#' @param titleTextType 
+#' @param race 
+#' @param display_value 
+#'
+#' @return
+#' @export
+#'
+title_text_create <- function(titleTextType, race, display_value){
+
+  n_value <- as.numeric(display_value) 
+  
+  these_people_text <- case_when(
+    str_detect(titleTextType, "CEN") == TRUE ~ paste(str_to_title(race), "people are"), 
+    str_detect(titleTextType, "BJS") == TRUE ~ paste(str_to_title(race), "people on parole are")
+  )
+  
+  compare_val_text <- case_when(
+    str_detect(titleTextType, "gt1") == TRUE ~ paste0(display_value, " times more likely"), 
+    str_detect(titleTextType, "lt1") == TRUE ~ paste0((1-n_value)*100, "% less likely"), 
+    str_detect(titleTextType, "eq1") == TRUE ~ "equally likely"
+  )
+  
+  preposition <- case_when(
+    str_detect(titleTextType, "gt1") == TRUE ~ "than",
+    str_detect(titleTextType, "lt1") == TRUE ~ "than",
+    str_detect(titleTextType, "eq1") == TRUE ~ "as"
+  )
+  
+  situation_text <- case_when(
+    str_detect(titleTextType, "Admissions") == TRUE ~ "to be admitted to prison", 
+    str_detect(titleTextType, "Population") == TRUE ~ "to be incarcerated" 
+  ) |> paste("for a parole revocation", preposition, "White people.")
+  
+  
+  suppress_text <- case_when(
+    str_detect(titleTextType, "_0") == TRUE ~ "", 
+    str_detect(titleTextType, "_1") == TRUE ~ paste(
+        "This estimate should be interpreted with caution because one",
+        "racial or ethnic group included in its calculation had fewer", 
+        "than 5 people. See data tables below for details."
+    )
+  )
+  
+  full_text <- paste(these_people_text, compare_val_text, situation_text, suppress_text)  ## str_replace_all(full_text, c(`White `="White \n", `group `="group \n"))
+  
+  case_when(
+    ##TOTAL DISPARITIES
+    #################################################################################################################### num of infogrpahs| race groups  | test infograph with:  
+      titleTextType == "Admissions_gt1_0_CEN" ~ str_replace(full_text, "admitted to", "admitted \nto")                 # n infographs: 59 | black & hisp | AZ (loop #6) & MN (loop #46)
+    , titleTextType == "Admissions_lt1_0_CEN" ~ str_replace(full_text, "admitted to", "admitted \nto")                 # n infographs: 15 | hisp only    | AR (loop #8) 
+    , titleTextType == "Admissions_eq1_0_CEN" ~ str_replace(full_text, "admitted to", "admitted \nto")                 # n infographs:  1 | hisp only    | TX (loop #86) 
+    , titleTextType == "Population_gt1_0_CEN" ~ str_replace(full_text, "incarcerated for", "incarcerated \nfor")       # n infographs: 57 | black & hisp | AZ (loop #106) & CA (loop #110)
+    , titleTextType == "Population_lt1_0_CEN" ~ str_replace(full_text, "incarcerated for", "incarcerated \nfor")       # n infographs: 14 | hisp only    | AR (loop #108) 
+    , titleTextType == "Population_eq1_0_CEN" ~ str_replace(full_text, "incarcerated for", "incarcerated \nfor")       # n infographs:  3 | hisp only    | DE (loop #116) 
+    , titleTextType == "Admissions_gt1_1_CEN" ~ str_replace_all(full_text, c( White  = "\nWhite",  group  = "\ngroup"))# n infographs:  2 | black only   | ME (loop #38) & WV (loop #96) 
+    , titleTextType == "Population_gt1_1_CEN" ~ str_replace_all(full_text, c( White  = "\nWhite",  group  = "\ngroup"))# n infographs:  2 | black & hisp | ND-hisp (loop #168) & WV-black (loop #196) 
+    , titleTextType == "Admissions_lt1_1_CEN" ~ str_replace_all(full_text, c( White  = "\nWhite",  group  = "\ngroup"))# n infographs:  3 | hisp only    | MS (loop #48)
+    , titleTextType == "Population_lt1_1_CEN" ~ str_replace_all(full_text, c( White  = "\nWhite",  group  = "\ngroup"))# n infographs:  2 | hisp only    | MS (loop #148)
+    , titleTextType == "Admissions_eq1_1_CEN" ~ str_replace_all(full_text, c( White  = "\nWhite",  group  = "\ngroup"))# NO INFOGRAPHICS USE THIS OPTION 
+    , titleTextType == "Population_eq1_1_CEN" ~ str_replace_all(full_text, c( White  = "\nWhite",  group  = "\ngroup"))# NO INFOGRAPHICS USE THIS OPTION 
+    
+    , titleTextType == "Admissions_gt1_0_BJS" ~ str_replace(full_text, "admitted to", "admitted \nto")                 # n infographs: 26 | black & hisp | CA (loop #9)
+    , titleTextType == "Admissions_lt1_0_BJS" ~ str_replace(full_text, "admitted to", "admitted \nto")                 # n infographs: 35 | black & hisp | GA (loop #19) 
+    , titleTextType == "Admissions_eq1_0_BJS" ~ str_replace(full_text, "admitted to", "admitted \nto")                 # n infographs: 11 | black & hisp | AZ-hisp (loop #5) & AR-black (loop #7)
+    , titleTextType == "Population_gt1_0_BJS" ~ str_replace(full_text, "incarcerated for", "incarcerated \nfor")       # n infographs: 35 | black & hisp | AZ (loop #105)
+    , titleTextType == "Population_lt1_0_BJS" ~ str_replace(full_text, "incarcerated for", "incarcerated \nfor")       # n infographs: 22 | black & hisp | KY (loop #133)
+    , titleTextType == "Population_eq1_0_BJS" ~ str_replace(full_text, "incarcerated for", "incarcerated \nfor")       # n infographs: 12 | black & hisp | TX (loop #185)
+    , titleTextType == "Admissions_gt1_1_BJS" ~ str_replace_all(full_text, c(`than W`= "\nthan W", group  = "\ngroup"))# n infographs:  1 | hisp only    | WV-hisp (loop #95)
+    , titleTextType == "Admissions_lt1_1_BJS" ~ str_replace_all(full_text, c(`than W`= "\nthan W", group  = "\ngroup"))# n infographs:  1 | hisp only    | ID-hisp (loop #23) 
+    , titleTextType == "Admissions_eq1_1_BJS" ~ str_replace_all(full_text, c(`than W`= "\nthan W", group  = "\ngroup"))# NO INFOGRAPHICS USE THIS OPTION 
+    , titleTextType == "Population_gt1_1_BJS" ~ str_replace_all(full_text, c( White  = "\nWhite",  group  = "\ngroup"))# n infographs:  1 | black only   | WV-black (loop #195)
+    , titleTextType == "Population_lt1_1_BJS" ~ str_replace_all(full_text, c( White  = "\nWhite",  group  = "\ngroup"))# n infographs:  2 | hisp only    | MS-hisp (loop #147)
+    , titleTextType == "Population_eq1_1_BJS" ~ str_replace_all(full_text, c( White  = "\nWhite",  group  = "\ngroup"))# NO INFOGRAPHICS USE THIS OPTION 
+  )
+
+} 
+
+
 
 
 #' Create and SAVE full info graphic
@@ -309,7 +410,7 @@ create_infograph <- function(
   if (whichimage == "person-2745706-bw"){
     title.rel  <- 0.7
     value.rel  <- 1.8
-    title.size <- 40
+    title.size <- 38
     value.size <- 110
   }
 
@@ -336,58 +437,11 @@ create_infograph <- function(
     , race != admin$lev_RACE[1] & round(rri_raw, rri_digits) > 0 ~ sprintf(glue("%.{rri_digits}f"), round(rri_raw, rri_digits))
 
   )
-
-  graphic_text <- case_when(
-
-    ##TOTAL DISPARITIES
-    #NOT SUPPRESSED
-    #RRI>1
-      data_type %in% c("A", "Admissions") & as.numeric(display_value) > 1 & suppress == 0 & pop_type == "CEN" ~ paste0(glue("{str_to_title(race)} people are "), display_value," times more likely \nto be admitted to prison for a parole revocation than White people.")
-    , data_type %in% c("N", "Population") & as.numeric(display_value) > 1 & suppress == 0 & pop_type == "CEN" ~ paste0(glue("{str_to_title(race)} people are "), display_value," times more likely \nto be incarcerated for a parole revocation than White people.")
-    #RRI<1
-    , data_type %in% c("A", "Admissions") & as.numeric(display_value) < 1 & suppress == 0 & pop_type == "CEN" ~ paste0(glue("{str_to_title(race)} people are "), (1-as.numeric(display_value))*100,"% less likely \nto be admitted to prison for a parole revocation than White people.")
-    , data_type %in% c("N", "Population") & as.numeric(display_value) < 1 & suppress == 0 & pop_type == "CEN" ~ paste0(glue("{str_to_title(race)} people are "), (1-as.numeric(display_value))*100,"% less likely \nto be incarcerated for a parole revocation than White people.")
-    #RRI=1
-    , data_type %in% c("A", "Admissions") & as.numeric(display_value) == 1 & suppress == 0 & pop_type == "CEN" ~ glue("{str_to_title(race)} people are equally likely \nto be admitted to prison for a parole revocation as White people.")
-    , data_type %in% c("N", "Population") & as.numeric(display_value) == 1 & suppress == 0 & pop_type == "CEN" ~ glue("{str_to_title(race)} people are equally likely \nto be incarcerated for a parole revocation as White people.")
-
-    #SUPPRESSED
-    #RRI>1
-    , data_type %in% c("A", "Admissions") & as.numeric(display_value) > 1 & suppress == 1 & pop_type == "CEN" ~ paste0(glue("{str_to_title(race)} people are "), display_value," times more likely to be admitted to prison for a parole revocation \nthan White people. This estimate should be interpreted with caution because one racial or ethnic \ngroup included in its calculation had fewer than 5 people. See data tables below for details.")
-    , data_type %in% c("N", "Population") & as.numeric(display_value) > 1 & suppress == 1 & pop_type == "CEN" ~ paste0(glue("{str_to_title(race)} people are "), display_value," times more likely to be incarcerated for a parole revocation \nthan White people. This estimate should be interpreted with caution because one racial or ethnic \ngroup included in its calculation had fewer than 5 people. See data tables below for details.")
-    #RRI<1
-    , data_type %in% c("A", "Admissions") & as.numeric(display_value) < 1 & suppress == 1 & pop_type == "CEN" ~ paste0(glue("{str_to_title(race)} people are "), (1-as.numeric(display_value))*100,"% less likely to be admitted to prison for a parole revocation \nthan White people. This estimate should be interpreted with caution because one racial or ethnic \ngroup included in its calculation had fewer than 5 people. See data tables below for details.")
-    , data_type %in% c("N", "Population") & as.numeric(display_value) < 1 & suppress == 1 & pop_type == "CEN" ~ paste0(glue("{str_to_title(race)} people are "), (1-as.numeric(display_value))*100,"% less likely to be incarcerated for a parole revocation \nthan White people. This estimate should be interpreted with caution because one racial or ethnic \ngroup included in its calculation had fewer than 5 people. See data tables below for details.")
-    #RRI=1
-    , data_type %in% c("A", "Admissions") & as.numeric(display_value) == 1 & suppress == 1 & pop_type == "CEN" ~ glue("{str_to_title(race)} people are equally likely to be admitted to prison for a parole revocation \nas White people. This estimate should be interpreted with caution because one racial or ethnic \ngroup included in its calculation had fewer than 5 people. See data tables below for details.")
-    , data_type %in% c("N", "Population") & as.numeric(display_value) == 1 & suppress == 1 & pop_type == "CEN" ~ glue("{str_to_title(race)} people are equally likely to be incarcerated for a parole revocation \nas White people. This estimate should be interpreted with caution because one racial or ethnic \ngroup included in its calculation had fewer than 5 people. See data tables below for details.")
-
-    ##PORTION OF DISPARITIES ATTRIBUTABLE TO PAROLE REVOCATIONS
-    #NOT SUPPRESSED
-    #RRI>1
-    , data_type %in% c("A", "Admissions") & as.numeric(display_value) > 1 & suppress == 0 & pop_type == "BJS" ~ paste0(glue("{str_to_title(race)} people on parole are "), display_value," times more likely \nto be admitted to prison for a parole revocation than White people.")
-    , data_type %in% c("N", "Population") & as.numeric(display_value) > 1 & suppress == 0 & pop_type == "BJS" ~ paste0(glue("{str_to_title(race)} people on parole are "), display_value," times more likely \nto be incarcerated for a parole revocation than White people.")
-    #RRI<1
-    , data_type %in% c("A", "Admissions") & as.numeric(display_value) < 1 & suppress == 0 & pop_type == "BJS" ~ paste0(glue("{str_to_title(race)} people on parole are "), (1-as.numeric(display_value))*100,"% less likely \nto be admitted to prison for a parole revocation than White people.")
-    , data_type %in% c("N", "Population") & as.numeric(display_value) < 1 & suppress == 0 & pop_type == "BJS" ~ paste0(glue("{str_to_title(race)} people on parole are "), (1-as.numeric(display_value))*100,"% less likely \nto be incarcerated for a parole revocation than White people.")
-    #RRI=1
-    , data_type %in% c("A", "Admissions") & as.numeric(display_value) == 1 & suppress == 0 & pop_type == "BJS" ~ glue("{str_to_title(race)} people on parole are equally likely \nto be admitted to prison for a parole revocation as White people.")
-    , data_type %in% c("N", "Population") & as.numeric(display_value) == 1 & suppress == 0 & pop_type == "BJS" ~ glue("{str_to_title(race)} people on parole are equally likely \nto be incarcerated for a parole revocation as White people.")
-    
-    #SUPPRESSED
-    #RRI>1
-    , data_type %in% c("A", "Admissions") & as.numeric(display_value) > 1 & suppress == 1 & pop_type == "BJS" ~ paste0(glue("{str_to_title(race)} people on parole are "), display_value," times more likely to be admitted to prison for a parole revocation \nthan White people. This estimate should be interpreted with caution because one racial or ethnic \ngroup included in its calculation had fewer than 5 people. See data tables below for details.")
-    , data_type %in% c("N", "Population") & as.numeric(display_value) > 1 & suppress == 1 & pop_type == "BJS" ~ paste0(glue("{str_to_title(race)} people on parole are "), display_value," times more likely to be incarcerated for a parole revocation \nthan White people. This estimate should be interpreted with caution because one racial or ethnic \ngroup included in its calculation had fewer than 5 people. See data tables below for details.")
-    #RRI<1
-    , data_type %in% c("A", "Admissions") & as.numeric(display_value) < 1 & suppress == 1 & pop_type == "BJS" ~ paste0(glue("{str_to_title(race)} people on parole are "), (1-as.numeric(display_value))*100,"% less likely to be admitted to prison for a parole revocation \nthan White people. This estimate should be interpreted with caution because one racial or ethnic \ngroup included in its calculation had fewer than 5 people. See data tables below for details.")
-    , data_type %in% c("N", "Population") & as.numeric(display_value) < 1 & suppress == 1 & pop_type == "BJS" ~ paste0(glue("{str_to_title(race)} people on parole are "), (1-as.numeric(display_value))*100,"% less likely to be incarcerated for a parole revocation \nthan White people. This estimate should be interpreted with caution because one racial or ethnic \ngroup included in its calculation had fewer than 5 people. See data tables below for details.")
-    #RRI=1
-    , data_type %in% c("A", "Admissions") & as.numeric(display_value) == 1 & suppress == 1 & pop_type == "BJS" ~ glue("{str_to_title(race)} people on parole are equally likely to be admitted to prison for a parole revocation \nas White people. This estimate should be interpreted with caution because one racial or ethnic \ngroup included in its calculation had fewer than 5 people. See data tables below for details.")
-    , data_type %in% c("N", "Population") & as.numeric(display_value) == 1 & suppress == 1 & pop_type == "BJS" ~ glue("{str_to_title(race)} people on parole are equally likely to be incarcerated for a parole revocation \nas White people. This estimate should be interpreted with caution because one racial or ethnic \ngroup included in its calculation had fewer than 5 people. See data tables below for details.")
-    
-    )
-
-
+  
+  titleTextType <- title_text_type(data_type, as.numeric(display_value), suppress, pop_type)
+  
+  graphic_text <- title_text_create(titleTextType, race, display_value)
+  
   title <- ggdraw() +
     draw_label(
       graphic_text
@@ -398,13 +452,18 @@ create_infograph <- function(
       , size = title.size
       , fontfamily = "Graphik Regular"
     ) #+ theme(panel.background = element_rect(color = "red"))
-
-  # display_value <- ifelse(
-  #   race == admin$lev_RACE[1]
-  #   , sprintf(glue("%.0f"),            round(rri_raw, rri_digits))
-  #   , sprintf(glue("%.{rri_digits}f"), round(rri_raw, rri_digits))
-  # )
-
+  
+  subtitle <- ggdraw() +
+    draw_label(
+      "* Hispanic RRI should be interpreted with caution due to inconsistencies in how each state collects and reports data on ethnicity"
+      , x = 0
+      , hjust = 0
+      , vjust = 0.5
+      , color = mclc_dk_grey
+      , size = title.size*0.75
+      , fontfamily = "Graphik Light Italic"
+    ) #+ theme(panel.background = element_rect(color = "green"))
+  
   value <- ggdraw() +
     draw_label(
       display_value
@@ -428,35 +487,45 @@ create_infograph <- function(
     , fillHoriz = FALSE
   )
 
-
   ggtemp_wclient <- plot_grid(
     ggtemp_justpeople
     , title
     , ncol = 1
     , rel_heights = c(1, title.rel/rows)
   )
-
-
-  fullinfog <- plot_grid(
+  
+  
+  maininfo <- plot_grid(
     value
     , ggtemp_wclient
     , nrow = 1
     , rel_widths = c(value.rel, cols)
   )
-
+  
+  if (race == "Hispanic"){
+    fullinfog <- plot_grid(
+      maininfo
+      , plot_grid(ggplot() + theme_void(), subtitle, nrow = 1, rel_widths = c(value.rel, cols))
+      , ncol = 1
+      , rel_heights = c(1 + title.rel/rows, 0.2)
+    )
+  } else {
+    
+    fullinfog <- maininfo 
+  }
 
 
   if (savefile == TRUE){
 
     baseval<- 3
-    h.full <- ((baseval*rows)*(1+title.rel))
+    h.full <- ((baseval*rows)*(1+title.rel)) + ifelse(race == "Hispanic", 0.6, 0)
     w.full <- ((img_ar_wh*baseval))*(cols+value.rel+1)
+    
 
     #ggsave will not save unless specify device = png
     # since this is within a box module need to specify device = grDevices::png
     ggsave(
         file.path(admin$sp_data, "infographs", paste0(label, ".png"))
-      , device = grDevices::png
       , plot = fullinfog
       , height = h.full
       , width = w.full
