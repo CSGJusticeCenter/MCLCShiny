@@ -61,7 +61,8 @@ disparities_definitions <- read.xlsx(file.path(admin$sp_data_raw, "notes/states_
 # Reformat hex data
 hex_gj <- hex %>%
   st_transform(3857) %>%
-  sf_geojson() %>%
+  
+sf_geojson() %>%
   fromJSON(simplifyVector = FALSE)
 
 
