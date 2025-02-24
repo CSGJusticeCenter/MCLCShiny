@@ -11,19 +11,30 @@ Links current live version:
 
 Website: [Supervision Violations and their Impact on Incarceration](https://projects.csgjusticecenter.org/supervision-violations-impact-on-incarceration/)
 
+
+# Reports and Previous Names  
+
+- Supervision Violations and their Impact on Incarceration 
+  * https://projects.csgjusticecenter.org/supervision-violations-impact-on-incarceration/
+  * Published Spring 2024 
+  * Includes 2018-2021 data 
+  * Shiny app: [MCLCShiny](https://github.com/CSGJusticeCenter/MCLCShiny/releases) repository
+- More Community Less Confinement (MCLC) 
+  * https://csgjusticecenter.org/publications/more-community-less-confinement/
+  * Includes 2018-2020 data 
+- 2019 - Confined and Costly 
+  * https://csgjusticecenter.org/publications/confined-costly/
+  * Includes 2017 data 
+
 # Structure 
 
-## Branches (proposed)
+## Branching Structure 
 
 ```
-trunk                     # production branch 
-|
-|-- develop              # development branch 
-    |
-    |-- taskbranch1      # working branch 
-    |-- taskbranch2      # working branch 
-        |
-        |--taskbranch2_b # working branch 
+trunk                    # production branch 
+└── develop              # development branch 
+    ├── taskbranch1      # working branch 
+    └── taskbranch2      # working branch 
 ```
 
 
@@ -31,36 +42,32 @@ trunk                     # production branch
 
 ```
 MCLCShiny 
+├── app
+|   ├──  box          # box modules 
+|   ├── data          # data for shiny app 
+|   |   └── infogs    # infographs png files 
+|   ├── www             
+|   |   └── theme.R   # custom CSS for app  
+|   ├── app.R         # run app  
+|   ├── colors. R     # assigned colors
+|   ├── dataframes.R  # loads converted data, fonts  
+|   ├── functions.R   # custom functions  
+|   ├── library.R     # load packages  
+|   ├── ui.R          # user interface  
+|   └── server.R      # server  
 |
-|-- app
-|   |-- box           # box modules 
-|   |
-|   |-- data          # data for shiny app 
-|   |   |-- infogs    # infographs png files 
-|   |
-|   |-- www             
-|   |   |-- theme.R   # custom CSS for app  
-|   |
-|   |-- app.R         # run app  
-|   |-- colors. R     # assigned colors
-|   |-- dataframes.R  # loads converted data, fonts  
-|   |-- functions.R   # custom functions  
-|   |-- library.R     # load packages  
-|   |-- ui.R          # user interface  
-|   |-- server.R      # server  
-|
-|-- shiny_prep.R      # run shiny prep 
-|-- shiny_prep_log.txt #log file 
-|-- 00_fnc_library.R  # loads packages and custom functions 
-|-- 01_import.R       # imports MCLC data and shapefiles 
-|-- 02_highchart_download.R # create and save highcharts with logo and labels for app
-|-- 03_highchart.R    # create and save highcharts for app
-|-- 04_reactable.R    # create and save reactable tables for app
-|-- run_save.R        # shiny prep for R/E infographs & tables
+├── shiny_prep.R      # run shiny prep 
+├── shiny_prep_log.txt #log file 
+├── 00_fnc_library.R  # loads packages and custom functions 
+├── 01_import.R       # imports MCLC data and shapefiles 
+├── 02_highchart_download.R # create and save highcharts with logo and labels for app
+├── 03_highchart.R    # create and save highcharts for app
+├── 04_reactable.R    # create and save reactable tables for app
+├── run_save.R        # shiny prep for R/E infographs & tables
 | 
-|-- prep              # folder for prep data/info for app 
-    |-- box           # box modules for preping R/E data 
-    |-- infographics  # exploration data 
+└── prep              # folder for prep data/info for app 
+    ├── box           # box modules for preping R/E data 
+    ├── infographics  # exploration data 
     |...              # various files for exploration/documentation 
 ```
 
@@ -75,34 +82,51 @@ After creating a clone, there are a few other steps you will need to take in ord
 1. Run the `shiny_prep.R` file to create the data 
     * *Note:* You may need to change your root folder variable depending on how you sync your SharePoint folder
     * Open the `prep/box/ROOT.R` file, and edit the `sp` string to reflect your root folder 
-    * The root folder should be the string you would entere into the `csgjc::csg_sp_path()` function to get the pathway to the `MCLC Shiny App` folder on SharePoint 
+    * The root folder should be the string you would enter into the `csgjc::csg_sp_path()` function to get the pathway to the `MCLC Shiny App` folder on SharePoint 
     * This will take ~15 minutes to run this folder (majority of the time is creating the infographic pngs) 
-    * runnig this script will produce a log txt file 
+    * Runnig this script will produce a log txt file 
     
 After completing these steps you can run the app, either by opening `app.R`/`ui.R`/`server.R` and click the **Run App** button OR by entering `shiny::runApp()` into the console.
 
+**Notes**
 
-# Shiny
+- Must download csgjcr package. If you run into issues, make sure in your Renviron that CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here" 
 
-## Shiny Releases 
+
+# Shiny Releases 
 
 Releases are made up of 3 values and shown in the format of v0.0.00
 
-**First Number: `1`.0.00** - indicates verion that is 'live' (e.g. shipped to client, publicly available on website)  
+**First Number: `1`.0.00** - indicates version that is 'live' (e.g. shipped to client, publicly available on website)  
 **Second Number: 0.`1`.00** - indicates a version that was shared with the broader external working group  
 **Third Number: 0.0.`01`** - any time a new version is pushed to the R Shiny servers, but is not shared externally from research or live  
 
 # Data
 
-## MCLC Survey 
 
-[MCLC](https://github.com/CSGJusticeCenter/cc_survey)   
-[Research Sharepoint](https://csgorg.sharepoint.com/:f:/s/Team-JC-Research/EhdvImKN2rdPnmHQ2TrKlooBdYqnnWc0SUXBNuh9C7d41g?e=NCsh8I)  
+## Data Collection Cycles 
+
+- [50 State Survey (2024)](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282024%29&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98)
+  * request 2022-2023 data 
+  * ask states to submit data via email in format of their choosing 
+  * Survey code: [50_state_revocations/2024_survey](https://github.com/CSGJusticeCenter/50_state_revocations/tree/main/2024_survey)
+- [50 State Survey (2022)](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282022%29&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98)
+  * request 2021 data 
+  * states submit data via Google Sheet (a few states emailed Excel workbooks)
+  * Survey code: [MCLC_Survey](https://github.com/CSGJusticeCenter/MCLC_survey) repository 
+  * App code: [MCLCShiny](https://github.com/CSGJusticeCenter/MCLCShiny) repository
+- [50 State Survey (2021)](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282021%29&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98) 
+  * request 2020 data (?) 
+- [50 State Survey (2020)](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282020%29&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98)
+  * request 2018-2019 data, partial 2020 data 
+  * online survey 
 
 
-## Racial and Ethnic Disparites in Revocations 
+## ARCHIVE: Data for Racial and Ethnic Disparites in Revocations 
 
-Additional documention can be found here: [~/50 State Revocations Project/MCLC Shiny App/products/General_Documentation.html](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2FMCLC%20Shiny%20App%2Fproducts%2FGeneral%5FDocumentation%2Ehtml&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98&parent=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2FMCLC%20Shiny%20App%2Fproducts)
+**This data is no longer used.** 
+
+Additional documentation can be found here: [~/50 State Revocations Project/MCLC Shiny App/products/General_Documentation.html](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2FMCLC%20Shiny%20App%2Fproducts%2FGeneral%5FDocumentation%2Ehtml&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98&parent=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2FMCLC%20Shiny%20App%2Fproducts)
 
 ### NCRP (National Corrections Reporting Progam)
 
@@ -178,15 +202,6 @@ Public Use Microdata Sample (PUMS).  Data is pulled from PUMS API using the `{ti
   * Note that `TOTRACE` == `TOTEND` (total at year end) in all instances for Parole/Probation 2013-2018
   * `RPTYEAR` year of survey (added variable during import)
   
-
-
-## Proposed Layout
-
-[Version 1](https://csgorg.sharepoint.com/:b:/s/Team-JC-Research/ETqrxyp6YxtNukNUEUFb7AgB9vSEH1ruToRtqsqWkVPSrQ?e=VxK02R)   
-
-## Notes
-
-- Must download csgjcr package. If you run into issues, make sure in your Renviron that CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"  
 
 
   
