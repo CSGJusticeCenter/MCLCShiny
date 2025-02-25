@@ -38,5 +38,6 @@
 *.lst
 *.geojson
 .Rproj.user
+*.html
 
 !shiny_prep_log**.txt
