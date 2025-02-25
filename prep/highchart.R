@@ -383,7 +383,8 @@ adm_pop_maps <- list(
 )
 
 
-theseFOLDERS <- c("sharepoint" = admin$sp_data, "app" = "app/data")
+theseFOLDERS <- c(#"sharepoint" = admin$sp_data, 
+                  "app" = "app/data")
 
 for (folder in theseFOLDERS){
 

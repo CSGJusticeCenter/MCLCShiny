@@ -1058,6 +1058,13 @@ walk(
     , id = .x
     , title = "Probation_Violation_Admissions_by_Type")
 )
+# 
+# 2025-02-24 15:48:28.423388 - Save plot: Admissions_2018 - 2019 for Technical Violation
+# Error in `map()`:
+#   ℹ In index: 5.
+# Caused by error in `s$close()`:
+#   ! attempt to apply non-function
+# Run `rlang::last_trace()` to see where the error occurred.
 
 
 admin$mylog("PROBATION VIOLATION POPULATIONS")
@@ -1069,6 +1076,13 @@ walk(
     , id = .x
     , title = "Probation_Violation_Population_by_Type")
 )
+
+# 2025-02-24 15:54:14.734775 - Save plot: Probation_Violation_Population_by_Type for Connecticut
+# Error in `map()`:
+#   ℹ In index: 7.
+# Caused by error in `s$close()`:
+#   ! attempt to apply non-function
+# Run `rlang::last_trace()` to see where the error occurred.
 
 
 
@@ -1099,14 +1113,14 @@ walk(
 #########################
 
 # copy over pngs from save folder folder to sharepoint
-walk(
-  list.files(savefolder, pattern = "*.png")
-  , ~file.copy(
-    from = file.path(savefolder, .x)
-    , to = file.path(copyfolder, .x)
-    , overwrite = TRUE
-  )
-)
+# walk(
+#   list.files(savefolder, pattern = "*.png")
+#   , ~file.copy(
+#     from = file.path(savefolder, .x)
+#     , to = file.path(copyfolder, .x)
+#     , overwrite = TRUE
+#   )
+# )
 
 admin$mylog("!!END SAVING HIGHCHARTS AS PNGS")
 
