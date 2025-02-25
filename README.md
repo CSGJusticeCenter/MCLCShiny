@@ -61,11 +61,11 @@ MCLCShiny
 ├── logs # folder with log txt files 
 |
 ├── prep # folder for prep data/charts/imgs for app 
-|  ├── fnc_library.R     # loads packages and custom functions 
-|  ├── import.R          # imports MCLC data and shapefiles 
-|  ├── highchart_download.R # create and save highcharts with logo and labels for app
-|  ├── highchart.R    # create and save highcharts for app
-|  └── shiny_prep.R   # run shiny prep
+|  ├── 0_shiny_prep.R   # run shiny prep
+|  ├── 1_fnc_library.R     # loads packages and custom functions 
+|  ├── 2_import.R          # imports MCLC data and shapefiles 
+|  ├── 3_highchart.R    # create and save highcharts for app
+|  └── 4_highchart_download.R # create and save highcharts with logo and labels for app
 |
 | # THIS FOLDER HAS NOT HAD PATHWAYS UPDATED; WILL NOT RUN AS IS 
 └── prep_rri          # folder for prep data/info for rri (race/ethnicity) infographics 
