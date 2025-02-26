@@ -1,25 +1,31 @@
 
 
 #############################################################
-## MCLC Data Prep
+## Data Prep 
 
-Sys.time() #takes ~ 2-4 min
+start <- Sys.time() #takes ~<1 min 
+paste("Should be done by:", format(start, "%X"))
 
-my_log <- file("logs/shiny_prep_log_MCLCdata.txt") # File name of output log
+my_log <- file("logs/shiny_prep_log_dataprep.txt") # File name of output log
 
 sink(my_log, append = FALSE, type = "output") # Writing console output to log file
 sink(my_log, append = FALSE, type = "message")
 
-print("MCLC Data Prep")
+print("== DATA PREP ==========================================================")
 
-source("fnc_library.R", echo = TRUE)
-source("import.R", echo = TRUE)
+print("-- 2a_import_survey ---------------------------------------------------")
+source("prep/2a_import_survey.R", echo = TRUE)
+print("-- 2b_import_text -----------------------------------------------------")
+source("prep/2b_import_text.R", echo = TRUE)
+print("-- 2c_import_hex0 -----------------------------------------------------")
+source("prep/2c_import_hex.R", echo = TRUE)
 
 warnings()
 
 closeAllConnections() # Close connection to log file
 
-Sys.time()
+end <- Sys.time()
+end - start 
 
 
 #############################################################

@@ -1,0 +1,355 @@
+[1] "== DATA PREP =========================================================="
+[1] "-- 2a_import_survey ---------------------------------------------------"
+
+> box::use(
++   ./box/admin, 
++   dplyr[...], 
++   forcats[fct_recode, fct_reorder],
++   htmltools[...], 
++   janitor[clean_names], 
++   purrr[pmap, r .... [TRUNCATED] 
+
+> display_metric_natl <- c("total", "supervision", "tech", "new", "prob", "par") 
+
+> display_metric_par  <- c("new par" , "tech par" , "par")
+
+> display_metric_prob <- c("new prob", "tech prob", "prob")
+
+> # **svii_agg** | all aggregate data ---------------------------------------------------
+> 
+> svii_prep <- readRDS(file.path(admin$sp_survey, "Data/r ..." ... [TRUNCATED] 
+
+> # if total is equal to probation or parole, then indicate that the total only includes
+> #   probation or parole
+> svii_only_prob_par <- svii_prep | .... [TRUNCATED] 
+
+> # 6000 rows 
+> # 50 states
+> #  6 years 
+> #  2 types (adm/pop) 
+> # 10 metric 
+> 
+> svii_agg <- full_join(
++   svii_prep, 
++   svii_only_prob_par,  .... [TRUNCATED] 
+
+> admin$save_rds_twice(svii_agg)
+2025-02-26 14:05:42 CST-- export svii_agg to: app/data/svii_agg.rds
+
+> # **svii_yr** | create df's that determine trend from year to year; and from min year to max year ----
+> 
+> svii_yr <- tibble(
++   str_yr = c(seq(mi .... [TRUNCATED] 
+
+> admin$save_rds_twice(svii_yr)
+2025-02-26 14:05:42 CST-- export svii_yr to: app/data/svii_yr.rds
+
+> # **svii_explorer_table** | table with counts, year-to-year changes, trend vec and category -----
+> 
+> 
+> # each table should have 1000 rows 
+> # 50 .... [TRUNCATED] 
+
+> # wide table of yearly changes 
+> df_chg1yr <- svii_agg |> 
++   select(-n) |> 
++   filter(year != min(year)) |> 
++   mutate(time = paste(year - 1, " ..." ... [TRUNCATED] 
+
+> df_chgrng <- svii_agg |> 
++   filter(year %in% range(year)) |> 
++   group_by(state_name, metric_abbr) |> 
++   mutate(
++     chgrng = (n - lag(n))/la .... [TRUNCATED] 
+
+> create_df_trend <- function(str_yr, end_yr, trend_data_name, trend_name){
++   svii_agg |> 
++     filter(between(year, str_yr, end_yr)) |> 
++     gro .... [TRUNCATED] 
+
+> df_trend_lst <- pmap(svii_yr[,1:4] |> as.list(), create_df_trend)
+
+> df_addlcols <- svii_agg |> 
++   # remove numeric columns; also remove probation_or_parole b/c based on year data 
++   select(-where(is.numeric), -pr .... [TRUNCATED] 
+
+> ##TABLE 600 x 38 
+> ##ROWS: 600 = 50 * 12
+> # - states (50)
+> # - data (12) = metric (6) * type (2)
+> ##COLUMNS: 38 = 14 + 6*4
+> # - id variable col .... [TRUNCATED] 
+
+> svii_explorer_table <- svii_explorer_table0 |> 
++   filter(word(metric_abbr, 2, -1) %in% display_metric_natl)
+
+> admin$save_rds_twice(svii_explorer_table)
+2025-02-26 14:05:44 CST-- export svii_explorer_table to: app/data/svii_explorer_table.rds
+
+> # **svii_explorer** | data for hex maps --------------------------------------------
+> # data for hex map; create year range and min/max values for  .... [TRUNCATED] 
+
+> # full year range change 
+> map_df_rng <- svii_explorer_table0 |> 
++   select(
++     # keep numeric column that shows the year-to-year change (min/m .... [TRUNCATED] 
+
+> # svii_explorer0 includes all metrics  
+> # svii_explorer is filtered to included display metrics  
+> svii_explorer0 <- bind_rows(
++   map_df_1yr, 
+ .... [TRUNCATED] 
+
+> svii_explorer <- svii_explorer0 |> 
++   filter(word(metric_abbr, 2, -1) %in% display_metric_natl)
+
+> admin$save_rds_twice(svii_explorer)
+2025-02-26 14:05:44 CST-- export svii_explorer to: app/data/svii_explorer.rds
+
+> # **svii_table** | data for table under hex map -------------------------------------
+> # select variables
+> # sum by type
+> # remove probation, par .... [TRUNCATED] 
+
+> admin$save_rds_twice(svii_table)
+2025-02-26 14:05:44 CST-- export svii_table to: app/data/svii_table.rds
+
+> # prob_par_tables ----------------------------------------------------------
+> 
+> 
+> svii_prob_par_tables <- svii_explorer_table0 |> 
++   filter(wor .... [TRUNCATED] 
+
+> # **svii_par** | data for table under hex map ------------------------------------
+> 
+> svii_par <- svii_prob_par_tables |> 
++   filter(supervision_ .... [TRUNCATED] 
+
+> admin$save_rds_twice(svii_par)
+2025-02-26 14:05:44 CST-- export svii_par to: app/data/svii_par.rds
+
+> # **svii_prob** | data for table under hex map ----------------------------
+> 
+> svii_prob <- svii_prob_par_tables |> 
++   filter(supervision_type = .... [TRUNCATED] 
+
+> admin$save_rds_twice(svii_prob)
+2025-02-26 14:05:44 CST-- export svii_prob to: app/data/svii_prob.rds
+
+> # **svii_valbox** | value boxes for state dashboards ---------------------------
+> 
+> # create subheader for valuebox
+> # get information on whether .... [TRUNCATED] 
+
+> admin$save_rds_twice(svii_valbox)
+2025-02-26 14:05:45 CST-- export svii_valbox to: app/data/svii_valbox.rds
+
+> # **svii_download** | downloadable data  -------------------------------------------------
+> 
+> svii_download <- svii_agg |> 
++   filter(
++     word .... [TRUNCATED] 
+
+> admin$save_rds_twice(svii_download)
+2025-02-26 14:05:45 CST-- export svii_download to: app/data/svii_download.rds
+[1] "-- 2b_import_text -----------------------------------------------------"
+
+> box::use(
++   ./box/admin, 
++   dplyr[...], 
++   janitor[clean_names], 
++   openxlsx[read.xlsx], 
++   readxl[read_excel], 
++   stringr[str_replace,  .... [TRUNCATED] 
+
+> # SHOULD BE ABLE TO REMOVE THIS; THIS IS USED IN THE R/E THAT IS BEING REMOVED 
+> # Load definitions for disparities
+> disparities_definitions <- re .... [TRUNCATED] 
+
+> admin$save_rds_twice(disparities_definitions)
+2025-02-26 14:05:45 CST-- export disparities_definitions to: app/data/disparities_definitions.rds
+
+> # STATE NOTES (DISPLALY FORMATED NOTES) ----------------------------------------
+> 
+> notes <- openxlsx::read.xlsx( # need to use openxlsx; formatti .... [TRUNCATED] 
+
+> # get probation related notes
+> probation_notes <- notes |>
++   group_by(state) |>
++   summarize(note_lst = list(probation_metrics)) |>
++   ungroup( .... [TRUNCATED] 
+
+> # get parole related notes
+> parole_notes <- notes |>
++   group_by(state) |>
++   summarize(note_lst = list(parole_metrics)) |>
++   ungroup() |>
++    .... [TRUNCATED] 
+
+> # get parole asteriks notes
+> # make asteriks bold
+> parole_asterisks_notes <- notes |>
++   mutate(parole_asterisks = str_replace_all(parole_asteris .... [TRUNCATED] 
+
+> # get probation asteriks notes
+> # make asteriks bold
+> probation_asterisks_notes <- notes |>
++   mutate(probation_asterisks = str_replace_all(proba .... [TRUNCATED] 
+
+> # get additional notes
+> additional_notes <- notes |>
++   mutate(
++     cy_or_fy_notes   = ifelse(is.na(cy_or_fy_notes), "", cy_or_fy_notes),
++      .... [TRUNCATED] 
+
+> admin$save_rds_twice(parole_notes)
+2025-02-26 14:05:45 CST-- export parole_notes to: app/data/parole_notes.rds
+
+> admin$save_rds_twice(probation_notes)
+2025-02-26 14:05:45 CST-- export probation_notes to: app/data/probation_notes.rds
+
+> admin$save_rds_twice(parole_asterisks_notes)
+2025-02-26 14:05:45 CST-- export parole_asterisks_notes to: app/data/parole_asterisks_notes.rds
+
+> admin$save_rds_twice(probation_asterisks_notes)
+2025-02-26 14:05:45 CST-- export probation_asterisks_notes to: app/data/probation_asterisks_notes.rds
+
+> admin$save_rds_twice(additional_notes)
+2025-02-26 14:05:45 CST-- export additional_notes to: app/data/additional_notes.rds
+
+> # MISSING-NESS NOTES -----------------------------------------------------------
+> # Reformat data about probation and parole being abolished
+> # Lo .... [TRUNCATED] 
+
+> # states that don't have graphs because of missing data
+> 
+> # states that are missing data and will not have a graph showing technical and new offe .... [TRUNCATED] 
+
+> nt_na_adm <- nt_na_adm1$state
+
+> # states that are missing data and will not have a graph showing technical and new offense violations
+> # pop
+> nt_na_pop1 <- missingness_sentences  .... [TRUNCATED] 
+
+> nt_na_pop <- nt_na_pop1$state
+
+> # states that are NOT missing data and will have a graph showing technical and new offense violations
+> # adm
+> nt_not_na_adm1 <- missingness_senten .... [TRUNCATED] 
+
+> nt_not_na_adm <- nt_not_na_adm1$state
+
+> # states that are NOT missing data and will have a graph showing technical and new offense violations
+> # pop
+> nt_not_na_pop1 <- missingness_senten .... [TRUNCATED] 
+
+> nt_not_na_pop <- nt_not_na_pop1$state
+
+> # states that are missing data and will not have a parole graph
+> # adm
+> parole_na_adm1 <- missingness_sentences |>
++   filter(!is.na(parole_violat .... [TRUNCATED] 
+
+> parole_na_adm <- parole_na_adm1$state
+
+> # states that are missing data and will not have a parole graph
+> # pop
+> parole_na_pop1 <- missingness_sentences |>
++   filter(!is.na(parole_violat .... [TRUNCATED] 
+
+> parole_na_pop <- parole_na_pop1$state
+
+> # states that are NOT missing data and will have a graph showing technical and new offense parole violations
+> # adm
+> parole_not_na_adm1 <- missing .... [TRUNCATED] 
+
+> parole_not_na_adm <- parole_not_na_adm1$state
+
+> # states that are NOT missing data and will have a graph showing technical and new offense parole violations
+> # pop
+> parole_not_na_pop1 <- missing .... [TRUNCATED] 
+
+> parole_not_na_pop <- parole_not_na_pop1$state
+
+> # states that are missing data and will not have a probation graph
+> # adm
+> probation_na_adm1 <- missingness_sentences |>
++   filter(!is.na(probati .... [TRUNCATED] 
+
+> probation_na_adm <- probation_na_adm1$state
+
+> # states that are missing data and will not have a probation graph
+> # pop
+> probation_na_pop1 <- missingness_sentences |>
++   filter(!is.na(probati .... [TRUNCATED] 
+
+> probation_na_pop <- probation_na_pop1$state
+
+> # states that are NOT missing data and will have a graph showing technical and new offense probation violations
+> # adm
+> probation_not_na_adm1 <- m .... [TRUNCATED] 
+
+> probation_not_na_adm <- probation_not_na_adm1$state
+
+> # states that are NOT missing data and will have a graph showing technical and new offense probation violations
+> # pop
+> probation_not_na_pop1 <- m .... [TRUNCATED] 
+
+> probation_not_na_pop <- probation_not_na_pop1$state
+
+> admin$save_rds_twice(missingness_sentences)
+2025-02-26 14:05:45 CST-- export missingness_sentences to: app/data/missingness_sentences.rds
+
+> admin$save_rds_twice(nt_na_adm)
+2025-02-26 14:05:45 CST-- export nt_na_adm to: app/data/nt_na_adm.rds
+
+> admin$save_rds_twice(nt_na_pop)
+2025-02-26 14:05:45 CST-- export nt_na_pop to: app/data/nt_na_pop.rds
+
+> admin$save_rds_twice(nt_not_na_adm)
+2025-02-26 14:05:45 CST-- export nt_not_na_adm to: app/data/nt_not_na_adm.rds
+
+> admin$save_rds_twice(nt_not_na_pop) 
+2025-02-26 14:05:45 CST-- export nt_not_na_pop to: app/data/nt_not_na_pop.rds
+
+> admin$save_rds_twice(parole_na_adm) 
+2025-02-26 14:05:45 CST-- export parole_na_adm to: app/data/parole_na_adm.rds
+
+> admin$save_rds_twice(parole_na_pop)
+2025-02-26 14:05:45 CST-- export parole_na_pop to: app/data/parole_na_pop.rds
+
+> admin$save_rds_twice(parole_not_na_adm)
+2025-02-26 14:05:45 CST-- export parole_not_na_adm to: app/data/parole_not_na_adm.rds
+
+> admin$save_rds_twice(parole_not_na_pop) 
+2025-02-26 14:05:45 CST-- export parole_not_na_pop to: app/data/parole_not_na_pop.rds
+
+> admin$save_rds_twice(probation_na_adm)
+2025-02-26 14:05:45 CST-- export probation_na_adm to: app/data/probation_na_adm.rds
+
+> admin$save_rds_twice(probation_na_pop)
+2025-02-26 14:05:45 CST-- export probation_na_pop to: app/data/probation_na_pop.rds
+
+> admin$save_rds_twice(probation_not_na_adm)
+2025-02-26 14:05:45 CST-- export probation_not_na_adm to: app/data/probation_not_na_adm.rds
+
+> admin$save_rds_twice(probation_not_na_pop) 
+2025-02-26 14:05:45 CST-- export probation_not_na_pop to: app/data/probation_not_na_pop.rds
+[1] "-- 2c_import_hex0 -----------------------------------------------------"
+
+> box::use(
++   ./box/admin, 
++   dplyr[...], 
++   geojsonsf[sf_geojson], 
++   jsonlite[fromJSON], 
++   sf[read_sf, st_transform] 
++ )
+
+> hex_gj <- read_sf(file.path(admin$sp_data_raw, "us_states_hexgrid.geojson")) |> 
++   select(state_abb = iso3166_2) |> 
++   filter(state_abb != "DC") .... [TRUNCATED] 
+
+> admin$save_rds_twice(hex_gj)
+2025-02-26 14:05:45 CST-- export hex_gj to: app/data/hex_gj.rds
+Warning message:
+tz(): Don't know how to compute timezone for object of class numeric; returning "UTC".

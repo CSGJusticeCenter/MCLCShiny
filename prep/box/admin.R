@@ -3,13 +3,12 @@ box::use(
     ./ROOT
   , glue[glue]
   , dplyr[...]
-  , tidyr[pivot_longer]
   , scales[comma]
 )
 
 
 #' @export
-sp_survey <- csgjcr::csg_sp_path(file.path(ROOT$sp, "50 State Survey (2022)"))
+sp_survey <- csgjcr::csg_sp_path(file.path(ROOT$sp, "50 State Survey (2024)"))
 
 #' @export
 sp_data <- csgjcr::csg_sp_path(file.path(ROOT$sp, "MCLC Shiny App/data/analysis"))
@@ -21,42 +20,40 @@ sp_data_del <- csgjcr::csg_sp_path(file.path(ROOT$sp, "MCLC Shiny App/data/deliv
 sp_data_raw <- csgjcr::csg_sp_path(file.path(ROOT$sp, "MCLC Shiny App/data/raw"))
 
 #' Log Message
+#' \code{log_info(text)},logger outputs, DO NOT show in knitted RMD
 #'
 #' @param text string
 #'
 #' @return log message
 #' @export
 mylog <- function(text){
-  #log_info(text) #logger outputs DO NOT show in knitted RMD
-  message(paste0(format(Sys.time(), "%Y-%m-%d %H:%M:%S %Z"), "-- ", text)) #use this if want to show in knitted rmd
+  message(paste0(format(Sys.time(), "%Y-%m-%d %H:%M:%S %Z"), "-- ", text)) 
 }
 
 
-
-#' Save RDS on SP, overwrite and date stamp 
+#' Save RDS within repo and on sharepoint 
 #'
-#' @param SP_PATH
-#' @param IN
-#' @param OUT
+#' @param obj object in r to save as rds; will be saved with obj name 
 #'
-#' @return
 #' @export
-#'
-#' @examples
-SPsaveRDS <- function(IN, OUT){
-
-  SP_PATH <- sp_data
-
-  datestamp <- gsub("-", "", Sys.Date())
-  outfile1 <- file.path(SP_PATH, "datestamp", paste0(datestamp, "_", OUT))
-  outfile2 <- file.path(SP_PATH,                        OUT )
-
-  saveRDS(IN, file=outfile1)
-  saveRDS(IN, file=outfile2)
-  mylog(glue("Saved {deparse(substitute(IN))} - {OUT} (included a date stamped version)"))
-
-
+save_rds_twice <- function(obj){
+  
+  obj_name <- deparse(substitute(obj))
+  
+  # save on sharepoint 
+  # sp_path <-- file.path("<sp path>", paste0(obj_name, ".rds"))
+  # saveRDS(obj, sp_path)
+  # mylog(paste("export", obj_name, "to:", sp_path))
+  
+  # save in repo 
+  repo_path <- file.path("app/data", paste0(obj_name, ".rds"))
+  # repo_path <- file.path("test_data", paste0(obj_name, ".rds"))
+  saveRDS(obj, repo_path)
+  mylog(paste("export", obj_name, "to:", repo_path))
+  
+  
 }
+
 
 #' Rounded Value 
 #'
