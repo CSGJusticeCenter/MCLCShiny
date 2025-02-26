@@ -295,10 +295,12 @@ svii_explorer0 <- bind_rows(
 ) |> 
   select(state_name, state_abbr, year, year_chg, data, chg_raw = chg, metric, type, metric_abbr) |> 
   mutate(
-    chg_rnd = round(chg_raw*100, 1), 
+    chg_rnd = round(chg_raw*100, 0), 
     chg_label = ifelse(
       is.na(chg_raw), 
       "-", 
+      # use roundedval func with accuracy of 1 so that if value is <0.5% and != 0
+      # lable will be <1% instead of 0% 
       paste0(admin$roundedval(chg_raw*100, 1), "%")
     ), 
     tooltip = paste0("<b>", state_name, "</b><br>",
@@ -321,8 +323,24 @@ svii_explorer0 <- bind_rows(
     min_map_abs = abs(min_map),
     max_map_abs = abs(max_map),
     min_map_type = ifelse(min_map >= 0, "positive", "negative"),
-    max_map_type = ifelse(max_map >= 0, "positive", "negative")
-  )
+    max_map_type = ifelse(max_map >= 0, "positive", "negative"), 
+    # Has diverging scales when there are neg and pos values which centers the color gradient at zero
+    # Has a gradient scale when both the min and max are both negative or both positive
+    # Determine the new min and max so that zero is centered
+    # For example, If the highest positive value is 20 than the negative value is -20
+    # TODO: round to the nearest 5 (instead the nearest 1) ??
+    NEW_MAX = case_when(
+      min_map_type != max_map_type & max_map_type == "negative" ~ -max(min_map_abs, max_map_abs), 
+      min_map_type != max_map_type & max_map_type == "positive" ~  max(min_map_abs, max_map_abs), 
+      min_map_type == max_map_type                              ~  max_map 
+    ), 
+    NEW_MIN = case_when(
+      min_map_type != max_map_type & min_map_type == "negative" ~ -max(min_map_abs, max_map_abs), 
+      min_map_type != max_map_type & min_map_type == "positive" ~  max(min_map_abs, max_map_abs), 
+      min_map_type == max_map_type                              ~  min_map 
+    ), 
+  ) |> 
+  ungroup() 
 
 
 svii_explorer <- svii_explorer0 |> 
