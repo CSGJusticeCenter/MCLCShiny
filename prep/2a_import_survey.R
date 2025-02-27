@@ -33,13 +33,25 @@ svii_prep <- readRDS(file.path(admin$sp_survey, "Data/raw/combined/svii_main.rds
   # create new columns (data and metric) to match previous iteration 
   mutate(metric_long = metric, .before = metric) |> 
   mutate(
+    # create simple metric -- part 1
+    # remove total from supervision/new/tech 
     metric = ifelse(
       metric_short == "Total Prison", 
       "Total", 
-      str_remove(metric_short, "Total ")
+      str_remove(metric_short, "Total ") 
+    ), 
+    # create simple metric -- part 2
+    # remove par/prob tech from new/tech par/prob 
+    metric = ifelse(
+      word(metric, 1) %in% c("New", "Technical"), 
+      str_remove_all(metric, "Parole |Probation "), 
+      metric
     ), 
     metric = fct_reorder(factor(metric), as.numeric(metric_short), .na_rm = FALSE),
-    data = paste(metric, type),
+    data = paste(
+      ifelse(metric_short == "Total Prison", "Total", str_remove(metric_short, "Total ")), 
+      type
+    ),
     data = fct_reorder(factor(data), as.numeric(metric_long), .na_rm = FALSE), 
   ) |> 
   select(starts_with("state"), year, data, metric, type, n, starts_with("metric_")) |> 
@@ -110,7 +122,7 @@ svii_only_prob_par <- svii_prep |>
 # 50 states
 #  6 years 
 #  2 types (adm/pop) 
-# 10 metric 
+# 10 metrics
 
 svii_agg <- full_join(
   svii_prep, 
@@ -216,8 +228,11 @@ df_trend_lst <- pmap(svii_yr[,1:4] |> as.list(), create_df_trend)
 
 
 df_addlcols <- svii_agg |> 
-  # remove numeric columns; also remove probation_or_parole b/c based on year data 
-  select(-where(is.numeric), -probation_or_parole) |> 
+  select(
+    # remove numeric columns
+    -where(is.numeric),
+    # also remove vars that are based on a specific year  
+    -probation_or_parole, -tooltip) |> 
   distinct() 
 
 ##TABLE 600 x 38 
@@ -240,12 +255,13 @@ df_addlcols <- svii_agg |>
 
 # svii_explorer_table0 includes all metrics  
 # svii_explorer_table is filtered to included display metrics 
+
+
 svii_explorer_table0 <- reduce(
     c(list(df_n), list(df_chg1yr), list(df_chgrng), df_trend_lst, list(df_addlcols)
       ), 
     full_join, by = c("state_name", "data")
   )
-
 svii_explorer_table <- svii_explorer_table0 |> 
   filter(word(metric_abbr, 2, -1) %in% display_metric_natl)
 admin$save_rds_twice(svii_explorer_table)
@@ -342,7 +358,11 @@ svii_explorer0 <- bind_rows(
   ) |> 
   ungroup() 
 
-
+## 3600 rows 
+# 50 states 
+#  6 year changes nrow(svii_yr)
+#  6 metrics 
+#  2 types 
 svii_explorer <- svii_explorer0 |> 
   filter(word(metric_abbr, 2, -1) %in% display_metric_natl)
 
