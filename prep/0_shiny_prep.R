@@ -4,7 +4,7 @@
 ## Data Prep 
 
 start <- Sys.time() #takes ~<1 min 
-paste("Should be done by:", format(start, "%X"))
+paste("Should be done by:", format(start+1*60, "%X"))
 
 my_log <- file("logs/shiny_prep_log_dataprep.txt") # File name of output log
 
@@ -29,31 +29,37 @@ end - start
 
 
 #############################################################
-## MCLC Plot Prep, Creation, and PNGs
+## Aggregate Plot Prep and Creation 
 
-Sys.time() #takes ~2 min
+start <- Sys.time() #takes ~2 min
+paste("Should be done by:", format(start+2*60, "%X"))
 
-my_log <- file("logs/shiny_prep_log_MCLCplot.txt") # File name of output log
+my_log <- file("logs/shiny_prep_log_highchart.txt") # File name of output log
 
 sink(my_log, append = FALSE, type = "output") # Writing console output to log file
 sink(my_log, append = FALSE, type = "message")
 
-print("MCLC Plot Prep, Creation, and PNGs")
+print("== CREATE HIGHCHART OBJECTS ===========================================")
 
-source("highchart.R", echo = TRUE)
+print("-- 3a_highchart_fnc ---------------------------------------------------")
+source("prep/3a_highchart_fnc.R", echo = TRUE)
+print("-- 3b_highchart_create ------------------------------------------------")
+source("prep/3b_highchart_create.R", echo = TRUE)
 
 warnings()
 
 closeAllConnections() # Close connection to log file
 
-Sys.time()
+end <- Sys.time()
+end - start 
 
 
 
 #############################################################
 ## MCLC Plot Prep, Creation, and PNGs
 
-Sys.time() #takes ~15-20 min
+start <- Sys.time() #takes ~15-20 min
+paste("Should be done by:", format(start+20*60, "%X"))
 
 my_log <- file("logs/shiny_prep_log_MCLCplotpngs.txt") # File name of output log
 
@@ -68,4 +74,5 @@ warnings()
 
 closeAllConnections() # Close connection to log file
 
-Sys.time()
+end <- Sys.time()
+end - start 

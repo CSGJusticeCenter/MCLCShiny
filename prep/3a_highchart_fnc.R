@@ -246,7 +246,29 @@ fnc_hc_hex_map <- function(this_type, this_year_chg, this_metric){
 }
 
 
-# area charts -----------------------------------------------------------------
+# add series (for area and bar charts) -----------------------------------------
+
+.fnc_hc_add_series <- function(hc, hctype, df0, metric0, color0){
+  
+  hc |> 
+    hc_add_series(
+      data = subset(df0, metric == metric0),
+      name = metric0,
+      type = hctype,
+      hcaes(x = year, y = n),
+      color = color0,
+      accessibility = list(
+        enabled = TRUE,
+        keyboardNavigation = list(enabled = TRUE),
+        point = list(
+          valueDescriptionFormat =
+            "{point.state}, {point.year}, {point.metric}, {point.type}, {point.total:,.0f}"))
+    )
+  
+}
+
+
+# area chart -------------------------------------------------------------------
 
 area_opts <- crossing(
   type = c("Admissions", "Population"), 
@@ -256,25 +278,6 @@ area_opts <- crossing(
   mutate(across(everything(), as.character)) |> 
   mutate(n = 1:n(), .before = 1)
 
-
-.fnc_hc_add_series <- function(hc, df0, metric0, color0){
-  
-  hc |> 
-  hc_add_series(
-    data = subset(df0, metric == metric0),
-    name = metric0,
-    type = "area",
-    hcaes(x = year, y = n),
-    color = color0,
-    accessibility = list(
-      enabled = TRUE,
-      keyboardNavigation = list(enabled = TRUE),
-      point = list(
-        valueDescriptionFormat =
-          "{point.state}, {point.year}, {point.metric}, {point.type}, {point.total:,.0f}"))
-  )
-  
-}
 
 fnc_hc_area <- function(this_type, this_state){
   
@@ -319,10 +322,10 @@ fnc_hc_area <- function(this_type, this_state){
     
   highchart() |> 
     hc_chart(type = "area") |> 
-    .fnc_hc_add_series(this_df, "Total", total_co) |> 
-    .fnc_hc_add_series(this_df, "Supervision Violation", viol_co) |> 
-    .fnc_hc_add_series(this_df, "Technical Violation", tech_co) |> 
-    .fnc_hc_add_series(this_df, "New Offense Violation", new_o_co) |> 
+    .fnc_hc_add_series("area", this_df, "Total", total_co) |> 
+    .fnc_hc_add_series("area", this_df, "Supervision Violation", viol_co) |> 
+    .fnc_hc_add_series("area", this_df, "Technical Violation", tech_co) |> 
+    .fnc_hc_add_series("area", this_df, "New Offense Violation", new_o_co) |> 
     hc_xAxis(tickPositions = c(svii_yr$min_yr[1]:svii_yr$max_yr[1])) |> 
     hc_yAxis(labels=list(format="{value:,.0f}")) |> 
     hc_title(text = paste("Prison", this_type)) |> 
@@ -343,8 +346,95 @@ fnc_hc_area <- function(this_type, this_state){
       ),
       area = list(accessibility = list(description = access_text))
     )
-
-  
-  
-  
 }
+
+
+# bar chart 0-------------------------------------------------------------------
+
+bar_opts <- crossing(
+  type = c("Admissions", "Population"), 
+  supervision_type = c("Both", "Parole", "Probation"), 
+  state_name = state.name
+) |> 
+  arrange(type, supervision_type, state_name) |> 
+  mutate(across(everything(), as.character)) |> 
+  mutate(n = 1:n(), .before = 1)
+
+fnc_hc_bar <- function(this_type, this_supervision, this_state){
+  
+  which_opt <- bar_opts |> 
+    filter(
+      type == this_type, 
+      supervision_type == this_supervision, 
+      state_name == this_state, 
+    ) |> pull(n)
+  
+  message(glue("BAR CHART {str_pad(which_opt, 2)}/{nrow(bar_opts)} -- \\
+               {this_type}, {this_supervision}, {this_state}"))
+  
+  this_df <- svii_agg |> 
+    filter(
+      state_name == this_state, 
+      supervision_type == this_supervision, 
+      type == this_type, 
+      word(metric_abbr, 2) %in% c("new", "tech")
+    ) |> 
+    mutate(
+      n = ifelse(n == 0, NA, n), 
+      tooltip = paste0("<b>", state_name, " - ", year, "</b><br>",
+                       metric, " ",
+                       type, "<br>",
+                       formattable::comma(n, digits = 0), "<br>")
+    ) |> 
+    mutate(state = state_name) # hc has issues with _ in var names 
+  
+  
+  title_name <- case_when(
+    this_supervision == "Both" ~ paste0("Supervision Violation ", this_type, " by Type"), 
+    this_supervision != "Both" ~ paste0(this_supervision, " Violation ", this_type, " by Type")
+  )
+  
+  subtitle_name <- case_when(
+    this_supervision == "Both" ~ filter(this_df, metric == "Technical Violation")$probation_or_parole |> unique(), 
+    this_supervision != "Both" ~ NA_character_
+  )
+  
+  access_text <- paste0(
+    "This is a bar chart for the state of ", 
+    this_state, 
+    " displaying the total prison ", 
+    tolower(this_type), 
+    " due to ", 
+    ifelse(this_supervision == "Both", "supervision", tolower(this_supervision)), 
+    " violations, ", 
+    "subset by technical violations and new offense violations.")
+  
+  
+  highchart() |> 
+    hc_chart(type = "column") |> 
+    .fnc_hc_add_series("column", this_df, "Technical Violation", tech_co) |> 
+    .fnc_hc_add_series("column", this_df, "New Offense Violation", new_o_co) |> 
+    hc_xAxis(tickPositions = c(svii_yr$min_yr[1]:svii_yr$max_yr[1])) |> 
+    hc_yAxis(labels=list(format="{value:,.0f}")) |> 
+    hc_title(text = title_name) |> 
+    hc_subtitle(text = subtitle_name) |> 
+    hc_add_theme(hc_theme_jc) |> 
+    hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) |> 
+    hc_plotOptions(
+      series = list(
+        animation = FALSE,
+        cursor = "pointer",
+        borderWidth = 3, 
+        midPointLength = 4
+      ),
+      accessibility = list(
+        enabled = TRUE,
+        keyboardNavigation = list(enabled = TRUE),
+        linkedDescription = access_text,
+        landmarkVerbosity = "one"
+      ),
+      column = list(accessibility = list(description = access_text))
+    )
+}
+
+
