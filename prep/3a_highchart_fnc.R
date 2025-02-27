@@ -13,15 +13,64 @@ library(rjson)
 
 # load data frames -------------------------------------------------------------
 
-for (x in c("svii_yr")){
+for (x in c("svii_agg", "svii_explorer", "svii_yr")){
   df <- readRDS(paste0("app/data/", x, ".rds")) |> tibble::as_tibble()
   assign(x, df)
   rm(df)
   rm(x)
 }
 
+# assign colors for visualizations ---------------------------------------------
+source("app/colors.R")
+
+# lists metrics for functions --------------------------------------------------
+
+metrics <- c("New Offense Violation",
+             "Parole Violation",
+             "Probation Violation",
+             "Supervision Violation",
+             "Technical Violation",
+             "Total")
 
 # themes -----------------------------------------------------------------------
+
+# Highcharts theme for hex map
+hc_theme_map_jc <-
+  hc_theme_merge(
+    hc_theme_smpl(),
+    hc_theme(
+      chart = list(
+        marginTop = 75,
+        style = list(fontFamily = "Graphik",
+                     align = "center")
+      ),
+      title = list(align = "center",
+                   style = list(fontFamily = "Graphik",
+                                fontWeight = "bold",
+                                color = "black",
+                                fontSize   = "30px")),
+      subtitle = list(align = "center",
+                      style = list(fontFamily = "Graphik",
+                                   fontWeight = "bold",
+                                   color = "black",
+                                   fontSize   = "30px")),
+      caption = list(align = "center", y = 15),
+      xAxis = list(
+        labels = list(
+          style = list(fontSize = "15px"),
+          staggerLines = 2
+        ),
+        gridLineColor = "transparent"
+      ),
+      plotOptions = list(
+        series = list(states = list(inactive = list(opacity = 1))),
+        line = list(marker = list(enabled = TRUE)),
+        spline = list(marker = list(enabled = TRUE)),
+        area = list(marker = list(enabled = TRUE)),
+        areaspline = list(marker = list(enabled = TRUE))
+      )
+    )
+  )
 
 hc_theme_jc <- hc_theme(
   colors = c("#D25E2D", "#EDB799", "#C7E8F5", "#236ca7", "#D6C246", "#dcdcdc"),
@@ -86,6 +135,22 @@ hcoptslang$thousandsSep <- ","
 options(highcharter.lang = hcoptslang)
 
 
+# csg logo ---------------------------------------------------------------------
+
+render_image <- JS("
+  function(){
+    this.renderer.image('https://csg-state-violent-crime.netlify.app/img/csgjc-logo.png', 30, this.chartHeight - 37, 140.1, 30)
+    .add();
+  }")
+
+fnc_hc_csg_logo <- function(hc){
+  hc |> 
+    hc_chart(
+      events = list(render = render_image), 
+      marginBottom = 80
+    )
+}
+
 # hex map -----------------------------------------------------------------------
 
 # saved version of hex doesn't work; need to re-import 
@@ -97,6 +162,9 @@ hex_map_opts <- crossing(
   year_chg = factor(svii_yr$change_name, levels = svii_yr$change_name), 
   metric = factor(metrics, levels = metrics),
 ) |> 
+  mutate(
+    filename = paste("Change", metric, type, year_chg, sep = "_")
+  ) |> 
   arrange(type, year_chg, metric) |> 
   mutate(across(everything(), as.character)) |> 
   mutate(n = 1:n(), .before = 1)
@@ -200,7 +268,8 @@ fnc_hc_hex_map <- function(this_type, this_year_chg, this_metric){
         style = list(fontSize = "14px")
         )
     ) |> 
-    # legend 
+    # theme and legend 
+    hc_add_theme(hc_theme_map_jc) |> 
     hc_legend(
       align = "right",
       verticalAlign = "bottom",
@@ -214,7 +283,7 @@ fnc_hc_hex_map <- function(this_type, this_year_chg, this_metric){
     hc_xAxis(title = "") |> 
     hc_yAxis(title = "") |> 
     hc_title(text = this_title) |> 
-    hc_subtitle(text = this_df$year_chg[1]) |> 
+    hc_subtitle(text = this_year_chg) |> 
     # tooltips 
     hc_tooltip(
       formatter = JS("function() {
@@ -349,13 +418,23 @@ fnc_hc_area <- function(this_type, this_state){
 }
 
 
-# bar chart 0-------------------------------------------------------------------
+# bar chart --------------------------------------------------------------------
 
 bar_opts <- crossing(
   type = c("Admissions", "Population"), 
   supervision_type = c("Both", "Parole", "Probation"), 
   state_name = state.name
 ) |> 
+  mutate(
+    filename = paste(
+      state_name, 
+      ifelse(supervision_type == "Both", "Supervision", supervision_type), 
+      "Violation", 
+      type, 
+      "by_Type", 
+      sep = "_"
+    )
+  ) |> 
   arrange(type, supervision_type, state_name) |> 
   mutate(across(everything(), as.character)) |> 
   mutate(n = 1:n(), .before = 1)

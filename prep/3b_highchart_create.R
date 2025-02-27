@@ -1,38 +1,9 @@
 
 box::use(
   ./box/admin
-  , dplyr[...], 
-  , glue[glue], 
-  , purrr[map, walk]
-  , stringr[str_remove]
 )
 
-
-# load data frames -------------------------------------------------------------
-
-for (x in c("svii_agg", "svii_explorer", "svii_yr")){
-  df <- readRDS(paste0("app/data/", x, ".rds")) |> tibble::as_tibble()
-  assign(x, df)
-  rm(df)
-  rm(x)
-}
-
-
-
-# assign colors for visualizations ---------------------------------------------
-source("app/colors.R")
-# source("fnc_library.R")
-
-# lists metrics for functions --------------------------------------------------
-
-# list of metrics for function
-metrics <- c("New Offense Violation",
-             "Parole Violation",
-             "Probation Violation",
-             "Supervision Violation",
-             "Technical Violation",
-             "Total")
-
+# assumes 3a_highchart_fnc has been run 
 
 # NATL - HEX MAPS ##############################################################
 natl_hex_lst  <- 
