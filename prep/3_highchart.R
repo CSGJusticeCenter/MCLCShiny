@@ -21,65 +21,6 @@ box::use(
 
 
 
-
-############
-# STATE REPORTS - State area chart
-############
-
-# set options so that y axis has comma separator
-hcoptslang <- getOption("highcharter.lang")
-hcoptslang$thousandsSep <- ","
-options(highcharter.lang = hcoptslang)
-
-# generate list of state highcharts to call in app (admissions)
-all_state_area_adm <- map(.x = states,  .f = function(x) {
-  df1 <- adm_pop_long %>%
-    filter(state == x &
-             adm_or_pop == "Admissions" &
-             (metric == "Total" |
-                metric == "Supervision Violation" |
-                metric == "New Offense Violation" |
-                metric == "Technical Violation")) %>%
-    group_by(state, year, metric, adm_or_pop, probation_or_parole) %>%
-    summarise(total = sum(total, na.rm = TRUE), .groups = "keep") %>%
-    ungroup() %>%
-    mutate(total = ifelse(total == 0, NA, total),
-           tooltip = paste0("<b>", state, " - ", year, "</b><br>",
-                            metric, " ",
-                            adm_or_pop, "<br>",
-                            formattable::comma(total, digits = 0), "<br>"))
-  admin$mylog(glue("hc: Prison Admissions, {x}"))
-  highcharts <- fnc_highchart_state_areachart(df1, "Prison Admissions", x, "admissions")
-  return(highcharts)
-})
-
-all_state_area_adm <- setNames(all_state_area_adm, states)
-
-# generate list of state highcharts to call in app (population)
-all_state_area_pop <- map(.x = states,  .f = function(x) {
-  df1 <- adm_pop_long %>%
-    filter(state == x &
-             adm_or_pop == "Population" &
-             (metric == "Total" |
-                metric == "Supervision Violation" |
-                metric == "New Offense Violation" |
-                metric == "Technical Violation")) %>%
-    group_by(state, year, metric, adm_or_pop, probation_or_parole) %>%
-    summarise(total = sum(total, na.rm = TRUE), .groups = "keep") %>%
-    ungroup() %>%
-    mutate(total = ifelse(total == 0, NA, total),
-           tooltip = paste0("<b>", state, " - ", year, "</b><br>",
-                            metric, " ",
-                            adm_or_pop, "<br>",
-                            formattable::comma(total, digits = 0), "<br>"))
-  admin$mylog(glue("hc: Prison Population, {x}"))
-  highcharts <- fnc_highchart_state_areachart(df1, "Prison Population", x, "population")
-  return(highcharts)
-})
-
-# set names of charts
-all_state_area_pop <- setNames(all_state_area_pop, states)
-
 ############
 # STATE REPORTS - State bar chart
 ############

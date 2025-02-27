@@ -9,23 +9,88 @@ library(scales)
 library(rjson)
 
 # can't use box for these func; need to use library for func otherwise highchart won't render 
-# don't have time to explore reasoning at the moment 
+# don't have time to explore reasoning at the moment
+
+# load data frames -------------------------------------------------------------
+
+for (x in c("svii_yr")){
+  df <- readRDS(paste0("app/data/", x, ".rds")) |> tibble::as_tibble()
+  assign(x, df)
+  rm(df)
+  rm(x)
+}
+
+
+# themes -----------------------------------------------------------------------
+
+hc_theme_jc <- hc_theme(
+  colors = c("#D25E2D", "#EDB799", "#C7E8F5", "#236ca7", "#D6C246", "#dcdcdc"),
+  chart = list(
+    style = list(
+      fontFamily = "Graphik",
+      color      = "#666666"
+      )
+  ),
+  title = list(
+    align = "center",
+    style = list(
+      fontFamily = "Graphik",
+      fontWeight = "bold",
+      color = "black",
+      fontSize   = "16px"
+      )
+  ),
+  subtitle = list(
+    align = "center",
+    style = list(
+      fontFamily = "Graphik",
+      fontWeight = "bold",
+      color = "black",
+      fontSize   = "14px"
+      )
+  ),
+  legend = list(
+    align         = "center",
+    verticalAlign = "top"
+  ),
+  xAxis = list(
+    gridLineColor      = "transparent",
+    lineColor          = "transparent",
+    minorGridLineColor = "transparent",
+    tickColor          = "transparent"
+  ),
+  yAxis = list(
+    labels = list(enabled = TRUE),
+    gridLineColor      = "transparent",
+    lineColor          = "transparent",
+    majorGridLineColor = "transparent",
+    minorGridLineColor = "transparent",
+    tickColor          = "transparent"
+  ),
+  plotOptions = list(
+    line       = list(marker = list(enabled = FALSE)),
+    spline     = list(marker = list(enabled = FALSE)),
+    area       = list(marker = list(enabled = FALSE)),
+    areaspline = list(marker = list(enabled = FALSE)),
+    arearange  = list(marker = list(enabled = FALSE)),
+    bubble     = list(maxSize = "10%")
+  )
+)
+
+# set thousands sepeartor to a comma -------------------------------------------
+
+# this sets the thousands separator to a comma 
+# so 1000 will be displayed as "1,000"
+hcoptslang <- getOption("highcharter.lang")
+hcoptslang$thousandsSep <- ","
+options(highcharter.lang = hcoptslang)
+
+
+# hex map -----------------------------------------------------------------------
 
 # saved version of hex doesn't work; need to re-import 
 hex_url <- "https://github.com/CSGJusticeCenter/va_data/raw/main/model_code/violation_admissions/us_hex_map.json"
 hex <- fromJSON(file = hex_url)
-
-# map_theme <- hc_theme(
-#   chart = list(style = list(fontFamily = "Arial", color = "#666666")),
-#   title = list(
-#     style = list(
-#       fontFamily = "Arial",
-#       fontWeight = "bold",
-#       color = "black",
-#       fontSize   = "30px"
-#     )
-#   )
-# )
 
 hex_map_opts <- crossing(
   type = c("Admissions", "Population"), 
@@ -47,7 +112,7 @@ fnc_hc_hex_map <- function(this_type, this_year_chg, this_metric){
       metric == this_metric
    ) |> pull(n)
   
-  message(glue("{str_pad(which_opt, 2)}/{nrow(hex_map_opts)} -- \\
+  message(glue("HEX MAP {str_pad(which_opt, 2)}/{nrow(hex_map_opts)} -- \\
                {this_type}, {this_year_chg}, {this_metric}"))
   
   this_df <- svii_explorer |> 
@@ -177,5 +242,109 @@ fnc_hc_hex_map <- function(this_type, this_year_chg, this_metric){
         landmarkVerbosity = "one"
       )
     )
+  
+}
+
+
+# area charts -----------------------------------------------------------------
+
+area_opts <- crossing(
+  type = c("Admissions", "Population"), 
+  state_name = state.name
+) |> 
+  arrange(type, state_name) |> 
+  mutate(across(everything(), as.character)) |> 
+  mutate(n = 1:n(), .before = 1)
+
+
+.fnc_hc_add_series <- function(hc, df0, metric0, color0){
+  
+  hc |> 
+  hc_add_series(
+    data = subset(df0, metric == metric0),
+    name = metric0,
+    type = "area",
+    hcaes(x = year, y = n),
+    color = color0,
+    accessibility = list(
+      enabled = TRUE,
+      keyboardNavigation = list(enabled = TRUE),
+      point = list(
+        valueDescriptionFormat =
+          "{point.state}, {point.year}, {point.metric}, {point.type}, {point.total:,.0f}"))
+  )
+  
+}
+
+fnc_hc_area <- function(this_type, this_state){
+  
+  which_opt <- area_opts |> 
+    filter(
+      type == this_type, 
+      state_name == this_state, 
+    ) |> pull(n)
+  
+  message(glue("AREA CHART {str_pad(which_opt, 2)}/{nrow(area_opts)} -- \\
+               {this_type}, {this_state}"))
+  
+  this_df <- svii_agg |> 
+    filter(
+      state_name == this_state, 
+      type == this_type, 
+      word(metric_abbr, 2, -1) %in% c("total", "supervision", "new", "tech")
+    ) |> 
+    mutate(
+      n = ifelse(n == 0, NA, n), 
+      tooltip = paste0("<b>", state_name, " - ", year, "</b><br>",
+                       metric, " ",
+                       type, "<br>",
+                       formattable::comma(n, digits = 0), "<br>")
+    ) |> 
+    mutate(state = state_name) # hc has issues with _ in var names 
+  
+  
+  subtitle_name <- this_df |> 
+    filter(metric == "Supervision Violation") |> 
+    distinct(probation_or_parole) |> 
+    pull(probation_or_parole)
+  
+  access_text <- paste0(
+     "This is an area chart for the state of ", 
+     this_state, 
+     " displaying the total prison ", 
+     tolower(this_type), 
+     " due to supervision violations, ", 
+     "subset by technical violations and new offense violations.")
+
+    
+  highchart() |> 
+    hc_chart(type = "area") |> 
+    .fnc_hc_add_series(this_df, "Total", total_co) |> 
+    .fnc_hc_add_series(this_df, "Supervision Violation", viol_co) |> 
+    .fnc_hc_add_series(this_df, "Technical Violation", tech_co) |> 
+    .fnc_hc_add_series(this_df, "New Offense Violation", new_o_co) |> 
+    hc_xAxis(tickPositions = c(svii_yr$min_yr[1]:svii_yr$max_yr[1])) |> 
+    hc_yAxis(labels=list(format="{value:,.0f}")) |> 
+    hc_title(text = paste("Prison", this_type)) |> 
+    hc_subtitle(text = subtitle_name) |> 
+    hc_add_theme(hc_theme_jc) |> 
+    hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) |> 
+    hc_plotOptions(
+      series = list(
+        animation = FALSE,
+        cursor = "pointer",
+        borderWidth = 3
+      ),
+      accessibility = list(
+        enabled = TRUE,
+        keyboardNavigation = list(enabled = TRUE),
+        linkedDescription = access_text,
+        landmarkVerbosity = "one"
+      ),
+      area = list(accessibility = list(description = access_text))
+    )
+
+  
+  
   
 }

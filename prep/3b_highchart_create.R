@@ -19,13 +19,11 @@ for (x in c("svii_agg", "svii_explorer", "svii_yr")){
 
 
 
-# assign colors for visualizations ----------------------------------------------
+# assign colors for visualizations ---------------------------------------------
 source("app/colors.R")
 # source("fnc_library.R")
 
-# lists of states and metrics for functions ------------------------------------
-# list of states for function
-state_names <- state.name
+# lists metrics for functions --------------------------------------------------
 
 # list of metrics for function
 metrics <- c("New Offense Violation",
@@ -55,3 +53,23 @@ adm_pop_maps <-
     }) #end of lev2
   }) #end of lev1
 
+
+# STATE - OVERVIEW AREA ########################################################
+
+area_lst <-     
+map(#lev1 type
+  c("Admissions", "Population") |> set_names(), 
+  ~{type <- .x
+  map(#lev2 state 
+    state.name |> set_names(), 
+    ~{state <- .x
+    #FUNCTION TO CREATE HIGHCHART 
+    fnc_hc_area(type, state)
+    #paste(type, state) # <-- if want to test nested list structure 
+    }) #end of lev2
+  }) #end of lev2=1
+
+
+
+all_state_area_adm <- area_lst$Admissions
+all_state_area_pop <- area_lst$Population
