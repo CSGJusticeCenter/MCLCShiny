@@ -135,7 +135,7 @@ hcoptslang$thousandsSep <- ","
 options(highcharter.lang = hcoptslang)
 
 
-# csg logo ---------------------------------------------------------------------
+# adj to PNGs (downloaded images) ----------------------------------------------
 
 render_image <- JS("
   function(){
@@ -143,12 +143,57 @@ render_image <- JS("
     .add();
   }")
 
-fnc_hc_csg_logo <- function(hc){
+fnc_hc_csg_logo <- function(hc, margR = NA){
   hc |> 
     hc_chart(
       events = list(render = render_image), 
-      marginBottom = 80
+      marginBottom = 80, 
+      marginRight = margR
     )
+}
+
+fnc_add_datalabels <- function(hc){
+  hc |> 
+    hc_plotOptions(
+      series = list(
+        dataLabels = list(
+          enabled = TRUE,
+          allowOverlap = TRUE
+        )
+      )
+    )
+}
+
+fnc_add_state_title <- function(hc, this_state = NA){
+  
+  org_title <- hc$x$hc_opts$title$text
+  thisstate <- ifelse(
+    !is.na(this_state), 
+    this_state, 
+    hc$x$hc_opts$series[[1]]$data[[1]]$state
+  )
+  
+  new_title <- paste0(thisstate, " ", org_title)
+  
+  hc |> 
+    hc_title(text = new_title)
+  
+}
+
+
+fnc_adj_map_legend <- function(hc){
+  # to match image outputs of last time 
+  hc |> 
+    hc_legend(
+      align = "right",
+      layout = "vertical",
+      verticalAlign = "top",
+      y = 300, 
+      x = NA, 
+      symbolHeight = NA,
+      symbolWidth = NA
+    )
+  
 }
 
 # hex map -----------------------------------------------------------------------
@@ -317,7 +362,7 @@ fnc_hc_hex_map <- function(this_type, this_year_chg, this_metric){
 
 # add series (for area and bar charts) -----------------------------------------
 
-.fnc_hc_add_series <- function(hc, hctype, df0, metric0, color0){
+.fnc_hc_add_series <- function(hc, hctype, df0, metric0, color0, y0 = 0){
   
   hc |> 
     hc_add_series(
@@ -330,8 +375,11 @@ fnc_hc_hex_map <- function(this_type, this_year_chg, this_metric){
         enabled = TRUE,
         keyboardNavigation = list(enabled = TRUE),
         point = list(
-          valueDescriptionFormat =
-            "{point.state}, {point.year}, {point.metric}, {point.type}, {point.total:,.0f}"))
+            valueDescriptionFormat =
+            "{point.state}, {point.year}, {point.metric}, {point.type}, {point.total:,.0f}"
+        )
+      ), 
+      dataLabels = list(y = y0)
     )
   
 }
@@ -343,12 +391,17 @@ area_opts <- crossing(
   type = c("Admissions", "Population"), 
   state_name = state.name
 ) |> 
+  mutate(
+    filename = paste(state_name, "Prison", type, sep = "_")
+  ) |> 
   arrange(type, state_name) |> 
   mutate(across(everything(), as.character)) |> 
-  mutate(n = 1:n(), .before = 1)
+  mutate(n = 1:n(), .before = 1) 
 
 
-fnc_hc_area <- function(this_type, this_state){
+fnc_hc_area <- function(this_type, this_state, 
+                  # adjustments for data labels for pngs 
+                  adj_y_sup = 0, adj_y_tech = 0, adj_y_new = 0){
   
   which_opt <- area_opts |> 
     filter(
@@ -392,9 +445,9 @@ fnc_hc_area <- function(this_type, this_state){
   highchart() |> 
     hc_chart(type = "area") |> 
     .fnc_hc_add_series("area", this_df, "Total", total_co) |> 
-    .fnc_hc_add_series("area", this_df, "Supervision Violation", viol_co) |> 
-    .fnc_hc_add_series("area", this_df, "Technical Violation", tech_co) |> 
-    .fnc_hc_add_series("area", this_df, "New Offense Violation", new_o_co) |> 
+    .fnc_hc_add_series("area", this_df, "Supervision Violation", viol_co,  adj_y_sup) |> 
+    .fnc_hc_add_series("area", this_df, "Technical Violation"  , tech_co,  adj_y_tech) |> 
+    .fnc_hc_add_series("area", this_df, "New Offense Violation", new_o_co, adj_y_new) |> 
     hc_xAxis(tickPositions = c(svii_yr$min_yr[1]:svii_yr$max_yr[1])) |> 
     hc_yAxis(labels=list(format="{value:,.0f}")) |> 
     hc_title(text = paste("Prison", this_type)) |> 
@@ -414,9 +467,8 @@ fnc_hc_area <- function(this_type, this_state){
         landmarkVerbosity = "one"
       ),
       area = list(accessibility = list(description = access_text))
-    )
+    ) 
 }
-
 
 # bar chart --------------------------------------------------------------------
 
