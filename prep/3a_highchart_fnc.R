@@ -10,6 +10,8 @@ library(rjson)
 # can't use box for these func; need to use library for func otherwise highchart won't render 
 # don't have time to explore reasoning at the moment
 
+# remotes::install_github("rstudio/webshot2")
+
 box::use(
   ./box/admin, 
   , glue[glue]
