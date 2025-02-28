@@ -7,7 +7,7 @@ box::use(
   janitor[clean_names], 
   purrr[pmap, reduce], 
   rlang[set_names], 
-  stringr[str_detect, str_remove, str_replace_all, word], 
+  stringr[str_detect, str_remove, str_replace_all, str_remove_all, word], 
   tidyr[pivot_longer, pivot_wider]
 )
 
