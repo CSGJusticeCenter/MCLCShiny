@@ -1,109 +1,4 @@
-# Description: Create and save highcharts WITH LOGO (pngs) so the app loads faster
-# path to data on research div sharepoint
-# make sure sharepoint folder is synced locally
-# https://csgorg.sharepoint.com/:f:/s/Team-JC-Research/EhdvImKN2rdPnmHQ2TrKlooBdYqnnWc0SUXBNuh9C7d41g?e=NCsh8I
-# in your Renviron (usethis::edit_r_environ()), set CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here"
 
-# remotes::install_github("rstudio/webshot2")
-# issues with getting proper height/width -- try downloading development version 
-
-box::use(
-   ./box/admin, 
-  , glue[glue]
-  , htmlwidgets[saveWidget]
-  , webshot2[...]
-)
-
-# assumes 3a_highchart_fnc has been run 
-
-# functions for saving plots ---------------------------------------------------
-
-
-##hex map testing 
-# this_filename <- "Change_Total_Admissions_2018 - 2019"
-# this_hc <- hex_map_lst[[this_filename]] 
-# stateplot <- FALSE 
-# lst <- list(names(hex_map_lst))
-
-##area map testing 
-this_filename <- "Alabama_Prison_Admissions"
-this_hc <- state_area_lst[[this_filename]]
-stateplot <- TRUE
-lst <- list(names(state_area_lst))
-
-save_hc_png <- function(this_hc, this_filename, stateplot = FALSE, lst = NA){
-  
-  if (!is.na(lst)){
-    n <- which(lst[[1]] == this_filename)
-    N <- length(lst[[1]]) 
-    prefix <- glue("{str_pad(n, width = nchar(N))}/{N} ")
-  } else {
-    prefix <- ""
-  }
-  
-  message(glue("{format(Sys.time(), '%X')} SAVE HC to PNG {prefix}-- {this_filename}"))
-  
-  if (stateplot == FALSE){
-    #NATIONAL PLOT, use default values; ?webshot2::webshot
-    # outputs are saved 992 x 744
-    this_vwidth = 992 #default 
-    this_vheight = 744
-    this_zoom = 1
-  } else {
-    # STATE PLOT, adj values 
-    # outputs are saved as 1000 x 1000
-    # 1000 = 500 (h/w) * 2 (zoom) 
-    this_vwidth = 500 
-    this_vheight = 500
-    this_zoom = 2 
-    # old version had zoom of 4; change to 2 so state pngs are ~ savem width as hex pngs 
-  }
-  
-  filename_ext <- paste0(this_filename, ".png")
-  save_plots_to <- file.path(      "app/data/plots", filename_ext) 
-  # copy_plots_to <- file.path(admin$sp_data, "plots", filename_ext)
-  
-  # save widget takes the longest 
-  # ~30 seconds for an area chart
-  saveWidget(this_hc, file = "temp.html", selfcontained = TRUE) 
-  webshot2::webshot(
-    url = "temp.html", 
-    file = save_plots_to, 
-    vwidth = this_vwidth,
-    vheight = this_vheight,
-    delay = 1, 
-    zoom = this_zoom
-  )
-  #file.copy(from = save_plots_to, to = copy_plots_to)
-}
-
-
-
-# NATL - HEX MAPS (WITH LOGO) ##################################################
-
-hex_map_lst <- pmap(
-  # created in 3a_highchart_fnc.R file 
-  hex_map_opts |> 
-    select(type, year_chg,  metric) |> 
-    as.list()
-  , 
-  function(type, year_chg, metric)
-    fnc_hc_hex_map(type, year_chg, metric) |> 
-      fnc_adj_map_legend() |> 
-      fnc_hc_csg_logo()
-) |> 
-  set_names(hex_map_opts$filename)
-
-
-walk(
-  names(hex_map_lst), 
-  ~save_hc_png(
-    hex_map_lst[[.x]], 
-    .x, 
-    stateplot = FALSE, 
-    lst = list(names(hex_map_lst))
-  )
-)
 
 # STATE AREA CHARTS ############################################################
 
@@ -197,7 +92,9 @@ state_area_lst <- pmap(
 ) |> 
   set_names(area_opts_print$filename)
 
-
+# 15:28 - 
+# ~30 min to save area pngs 
+# avg ~18 sec per chart
 walk(
   names(state_area_lst),
   ~save_hc_png(
@@ -207,5 +104,3 @@ walk(
     lst = list(names(state_area_lst))
   )
 )
-
-

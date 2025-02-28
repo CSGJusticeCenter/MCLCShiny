@@ -1,5 +1,4 @@
 
-
 library(tidyverse)
 library(highcharter) 
 library(sf)
@@ -10,6 +9,13 @@ library(rjson)
 
 # can't use box for these func; need to use library for func otherwise highchart won't render 
 # don't have time to explore reasoning at the moment
+
+box::use(
+  ./box/admin, 
+  , glue[glue]
+  , htmlwidgets[saveWidget]
+  , webshot2[...]
+)
 
 # load data frames -------------------------------------------------------------
 
@@ -152,13 +158,16 @@ fnc_hc_csg_logo <- function(hc, margR = NA){
     )
 }
 
-fnc_add_datalabels <- function(hc){
+fnc_add_datalabels <- function(hc, label_fontSize = NA){
   hc |> 
     hc_plotOptions(
       series = list(
         dataLabels = list(
           enabled = TRUE,
-          allowOverlap = TRUE
+          allowOverlap = TRUE, 
+          # last version did not specify font size 
+          # default is ~11px 
+          style = list(fontSize = label_fontSize)
         )
       )
     )
@@ -225,7 +234,9 @@ fnc_hc_hex_map <- function(this_type, this_year_chg, this_metric){
       metric == this_metric
    ) |> pull(n)
   
-  message(glue("HEX MAP {str_pad(which_opt, 2)}/{nrow(hex_map_opts)} -- \\
+  message(glue("{format(Sys.time(), '%H:%M:%S')} \\
+               HEX MAP \\
+               {str_pad(which_opt, nchar(nrow(hex_map_opts)))}/{nrow(hex_map_opts)} -- \\
                {this_type}, {this_year_chg}, {this_metric}"))
   
   this_df <- svii_explorer |> 
@@ -409,7 +420,9 @@ fnc_hc_area <- function(this_type, this_state,
       state_name == this_state, 
     ) |> pull(n)
   
-  message(glue("AREA CHART {str_pad(which_opt, 2)}/{nrow(area_opts)} -- \\
+  message(glue("{format(Sys.time(), '%H:%M:%S')} \\
+               AREA CHART \\
+               {str_pad(which_opt, nchar(nrow(area_opts)))}/{nrow(area_opts)} -- \\
                {this_type}, {this_state}"))
   
   this_df <- svii_agg |> 
@@ -500,7 +513,9 @@ fnc_hc_bar <- function(this_type, this_supervision, this_state){
       state_name == this_state, 
     ) |> pull(n)
   
-  message(glue("BAR CHART {str_pad(which_opt, 2)}/{nrow(bar_opts)} -- \\
+  message(glue("{format(Sys.time(), '%H:%M:%S')} \\
+               BAR CHART \\
+               {str_pad(which_opt, nchar(nrow(bar_opts)))}/{nrow(bar_opts)} -- \\
                {this_type}, {this_supervision}, {this_state}"))
   
   this_df <- svii_agg |> 
@@ -568,4 +583,70 @@ fnc_hc_bar <- function(this_type, this_supervision, this_state){
     )
 }
 
+
+# functions for saving plots ---------------------------------------------------
+
+
+##hex map testing 
+# this_filename <- "Change_Total_Admissions_2018 - 2019"
+# this_hc <- hex_map_lst[[this_filename]] 
+# stateplot <- FALSE 
+# lst <- list(names(hex_map_lst))
+
+##area map testing 
+# this_filename <- "Alabama_Prison_Admissions"
+# this_hc <- state_area_lst[[this_filename]]
+# stateplot <- TRUE
+
+##bar map testing 
+# this_filename <- "Alabama_Parole_Violation_Admissions_by_Type"
+# this_hc <- state_bar_lst[[this_filename]]
+# stateplot <- TRUE
+# lst <- list(names(state_bar_lst))
+
+save_hc_png <- function(this_hc, this_filename, stateplot = FALSE, lst = NA){
+  
+  if (!is.na(lst)){
+    n <- which(lst[[1]] == this_filename)
+    N <- length(lst[[1]]) 
+    prefix <- glue("{str_pad(n, width = nchar(N))}/{N} ")
+  } else {
+    prefix <- ""
+  }
+  
+  message(glue("{format(Sys.time(), '%H:%M:%S')} \\
+               SAVE HC to PNG {prefix}-- {this_filename}"))
+  
+  if (stateplot == FALSE){
+    #NATIONAL PLOT, use default values; ?webshot2::webshot
+    # outputs are saved 992 x 744
+    this_vwidth = 992 #default 
+    this_vheight = 744
+    this_zoom = 1
+  } else {
+    # STATE PLOT, adj values 
+    # outputs are saved as 1000 x 1000
+    # 1000 = 500 (h/w) * 2 (zoom) 
+    this_vwidth = 500 
+    this_vheight = 500
+    this_zoom = 2 
+    # old version had zoom of 4; change to 2 so state pngs are ~ savem width as hex pngs 
+  }
+  
+  filename_ext <- paste0(this_filename, ".png")
+  save_plots_to <- file.path(      "app/data/plots", filename_ext) 
+  # copy_plots_to <- file.path(admin$sp_data, "plots", filename_ext)
+  
+  # save widget/png is the step that takes the most time 15-30 sec per chart 
+  saveWidget(this_hc, file = "temp.html", selfcontained = TRUE) 
+  webshot2::webshot(
+    url = "temp.html", 
+    file = save_plots_to, 
+    vwidth = this_vwidth,
+    vheight = this_vheight,
+    delay = 0.5, 
+    zoom = this_zoom
+  )
+  #file.copy(from = save_plots_to, to = copy_plots_to)
+}
 
