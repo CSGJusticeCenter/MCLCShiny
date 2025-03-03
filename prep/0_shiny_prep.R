@@ -65,8 +65,8 @@ print("== CREATE PNGs FOR DOWNLOAD: HEX MAPS =================================")
 print(paste("Last run", format(Sys.time(), "%a %b %e, %Y at %H:%M:%S %Z")))
 
 # need to run 3a if haven't done so already 
-print("-- 3a_highchart_fnc ---------------------------------------------------")
-source("prep/3a_highchart_fnc.R", echo = TRUE)
+# print("-- 3a_highchart_fnc ---------------------------------------------------")
+# source("prep/3a_highchart_fnc.R", echo = TRUE)
 print("-- 3c_highchart_png_hex -----------------------------------------------")
 source("prep/3c_highchart_html.R", echo = TRUE)
 
@@ -92,8 +92,8 @@ print("== CREATE PNGs FOR DOWNLOAD: HEX MAPS =================================")
 print(paste("Last run", format(Sys.time(), "%a %b %e, %Y at %H:%M:%S %Z")))
 
 # need to run 3a if haven't done so already 
-print("-- 3a_highchart_fnc ---------------------------------------------------")
-source("prep/3a_highchart_fnc.R", echo = TRUE)
+# print("-- 3a_highchart_fnc ---------------------------------------------------")
+# source("prep/3a_highchart_fnc.R", echo = TRUE)
 print("-- 3c_highchart_png_hex -----------------------------------------------")
 source("prep/3d_highchart_png.R", echo = TRUE)
 
