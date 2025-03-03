@@ -591,9 +591,8 @@ fnc_hc_bar <- function(this_type, this_supervision, this_state){
 
 ##hex map testing 
 # this_filename <- "Change_Total_Admissions_2018 - 2019"
-# this_hc <- hex_map_lst[[this_filename]] 
-# stateplot <- FALSE 
-# lst <- list(names(hex_map_lst))
+# this_hc <- natl_hex_lst_html[[this_filename]]
+# lst <- list(names(natl_hex_lst_html))
 
 ##area map testing 
 # this_filename <- "Alabama_Prison_Admissions"
@@ -606,7 +605,7 @@ fnc_hc_bar <- function(this_type, this_supervision, this_state){
 # stateplot <- TRUE
 # lst <- list(names(state_bar_lst))
 
-save_hc_png <- function(this_hc, this_filename, stateplot = FALSE, lst = NA){
+save_hc_to_html <- function(this_hc, this_filename, lst = NA){
   
   if (!is.na(lst)){
     n <- which(lst[[1]] == this_filename)
@@ -617,9 +616,42 @@ save_hc_png <- function(this_hc, this_filename, stateplot = FALSE, lst = NA){
   }
   
   message(glue("{format(Sys.time(), '%H:%M:%S')} \\
-               SAVE HC to PNG {prefix}-- {this_filename}"))
+               SAVE HC to HTML {prefix}-- {this_filename}"))
   
-  if (stateplot == FALSE){
+  saveWidget(
+    this_hc, 
+    file = "temp.html", 
+    # file = paste0("temp/", this_filename, ".html"), 
+    selfcontained = TRUE
+  ) 
+  
+  # copy file to temp folder with new name 
+  file.copy(
+    from = "temp.html", 
+    to = paste0("temp/", this_filename, ".html")
+  )
+  
+  # remove temp file 
+  file.remove("temp.html")
+  
+}
+
+
+save_hchtml_to_png <- function(this_filename, lst = NA){
+  
+  if (!is.na(lst)){
+    n <- which(lst[[1]] == this_filename)
+    N <- length(lst[[1]]) 
+    prefix <- glue("{str_pad(n, width = nchar(N))}/{N} ")
+  } else {
+    prefix <- ""
+  }
+  
+  message(glue("{format(Sys.time(), '%H:%M:%S')} \\
+               SAVE HC HTML to PNG {prefix}-- {this_filename}"))
+  
+  if (substr(this_filename, 1, 6) == "Change"){
+    # if file name starts with 'Change' then it's a hex map 
     #NATIONAL PLOT, use default values; ?webshot2::webshot
     # outputs are saved 992 x 744
     this_vwidth = 992 #default 
@@ -639,10 +671,8 @@ save_hc_png <- function(this_hc, this_filename, stateplot = FALSE, lst = NA){
   save_plots_to <- file.path(      "app/data/plots", filename_ext) 
   # copy_plots_to <- file.path(admin$sp_data, "plots", filename_ext)
   
-  # save widget/png is the step that takes the most time 15-30 sec per chart 
-  saveWidget(this_hc, file = "temp.html", selfcontained = TRUE) 
   webshot2::webshot(
-    url = "temp.html", 
+    url = paste0("temp/", this_filename, ".html"), 
     file = save_plots_to, 
     vwidth = this_vwidth,
     vheight = this_vheight,
@@ -651,4 +681,3 @@ save_hc_png <- function(this_hc, this_filename, stateplot = FALSE, lst = NA){
   )
   #file.copy(from = save_plots_to, to = copy_plots_to)
 }
-

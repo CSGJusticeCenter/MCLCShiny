@@ -1,7 +1,35 @@
 
 
-# STATE AREA CHARTS ############################################################
+# NATL HEX MAPS HTML DOWNLOAD ##################################################
 
+natl_hex_html_lst <- pmap(
+  # created in 3a_highchart_fnc.R file 
+  hex_map_opts |> 
+    select(type, year_chg,  metric) |> 
+    as.list()
+  , 
+  function(type, year_chg, metric)
+    fnc_hc_hex_map(type, year_chg, metric) |> 
+    fnc_adj_map_legend() |> 
+    fnc_hc_csg_logo()
+) |> 
+  set_names(hex_map_opts$filename)
+
+# ~25 min 
+# ~avg 20 seconds per chart, 72 charts 
+paste("Hopefully done by:", format(Sys.time()+25*60, "%X"))
+walk(
+  names(natl_hex_html_lst), 
+  ~save_hc_to_html(
+    natl_hex_html_lst[[.x]], 
+    .x, 
+    lst = list(names(natl_hex_html_lst))
+  )
+)
+
+
+
+# STATE AREA HTML DOWNLOAD #####################################################
 
 adj_area_adm_grp <- c(
   "Alabama",
@@ -78,8 +106,7 @@ area_opts_print <- area_opts |>
   ) 
 
 
-state_area_lst <- pmap(
-  # created in 3a_highchart_fnc.R file 
+state_area_html_lst <- pmap(
   area_opts_print |> 
     select(type, state_name, adj_y_sup, adj_y_tech, adj_y_new) |> 
     as.list()
@@ -92,15 +119,47 @@ state_area_lst <- pmap(
 ) |> 
   set_names(area_opts_print$filename)
 
-# 15:28 - 
-# ~30 min to save area pngs 
-# avg ~18 sec per chart
+
+# ~40 min 
+# avg ~24 sec per chart, 100 charts
+paste("Hopefully done by:", format(Sys.time()+45*60, "%X"))
 walk(
-  names(state_area_lst),
-  ~save_hc_png(
-    state_area_lst[[.x]], 
+  names(state_area_html_lst),
+  ~save_hc_to_html(
+    state_area_html_lst[[.x]], 
     .x, 
-    stateplot = TRUE, 
-    lst = list(names(state_area_lst))
+    lst = list(names(state_area_html_lst))
+  )
+)
+
+
+
+# STATE BAR HTML DOWNLOAD ######################################################
+
+state_bar_html_lst <- pmap(
+  # created in 3a_highchart_fnc.R file 
+  bar_opts |> 
+    select(type, supervision_type, state_name) |> 
+    as.list()
+  , 
+  function(type, supervision_type, state_name)
+    fnc_hc_bar(type, supervision_type, state_name) |>
+    fnc_add_state_title() |> 
+    fnc_hc_csg_logo(margR = 30) |> 
+    # last version used default (11px); but have 2 more years so bars are smaller
+    fnc_add_datalabels(label_fontSize = "9px")
+) |> 
+  set_names(bar_opts$filename)
+
+
+# ~30 min
+# avg ~6 sec per chart (early charts take 30-60 sec), 300 charts
+paste("Hopefully done by:", format(Sys.time()+90*60, "%X"))
+walk(
+  names(state_bar_html_lst),
+  ~save_hc_to_html(
+    state_bar_html_lst[[.x]], 
+    .x, 
+    lst = list(names(state_bar_html_lst))
   )
 )

@@ -16,8 +16,6 @@ print("-- 2a_import_survey ---------------------------------------------------")
 source("prep/2a_import_survey.R", echo = TRUE)
 print("-- 2b_import_text -----------------------------------------------------")
 source("prep/2b_import_text.R", echo = TRUE)
-print("-- 2c_import_hex0 -----------------------------------------------------")
-source("prep/2c_import_hex.R", echo = TRUE)
 
 warnings()
 
@@ -32,7 +30,7 @@ end - start
 start <- Sys.time() #takes ~2 min
 paste("Should be done by:", format(start+2*60, "%X"))
 
-my_log <- file("logs/shiny_prep_log_highchart.txt") # File name of output log
+my_log <- file("logs/shiny_prep_log_hc_create.txt") # File name of output log
 
 sink(my_log, append = FALSE, type = "output") # Writing console output to log file
 sink(my_log, append = FALSE, type = "message")
@@ -53,13 +51,12 @@ end <- Sys.time()
 end - start 
 
 
-
-## Aggregate Plot PNGS for download: hex maps ##################################
+## Aggregate Plots HTMLs (used to created pngs for download) ###################
 # create pngs for users to download 
-start <- Sys.time() #takes ~30 min 
-paste("Should be done by:", format(start+30*60, "%X"))
+start <- Sys.time() #takes ~100 min (1 hr + 40 min)
+paste("Should be done by:", format(start+100*60, "%X"))
 
-my_log <- file("logs/shiny_prep_log_pngs_hex.txt") # File name of output log
+my_log <- file("logs/shiny_prep_log_hc_html.txt") # File name of output log
 
 sink(my_log, append = FALSE, type = "output") # Writing console output to log file
 sink(my_log, append = FALSE, type = "message")
@@ -71,7 +68,7 @@ print(paste("Last run", format(Sys.time(), "%a %b %e, %Y at %H:%M:%S %Z")))
 print("-- 3a_highchart_fnc ---------------------------------------------------")
 source("prep/3a_highchart_fnc.R", echo = TRUE)
 print("-- 3c_highchart_png_hex -----------------------------------------------")
-source("prep/3c_highchart_png_hex.R", echo = TRUE)
+source("prep/3c_highchart_html.R", echo = TRUE)
 
 warnings()
 
@@ -81,52 +78,24 @@ end <- Sys.time()
 end - start 
 
 
-## Aggregate Plot PNGS for download: area ######################################
+## Aggregate Plot PNGS for download ############################################
+# create pngs for users to download 
+start <- Sys.time() #takes ~15 min (if updating all plots) 
+paste("Should be done by:", format(start+15*60, "%X"))
 
-start <- Sys.time() #takes ~30 min 
-paste("Should be done by:", format(start+30*60, "%X"))
-
-my_log <- file("logs/shiny_prep_log_pngs_area.txt") # File name of output log
+my_log <- file("logs/shiny_prep_log_hc_pngs.txt") # File name of output log
 
 sink(my_log, append = FALSE, type = "output") # Writing console output to log file
 sink(my_log, append = FALSE, type = "message")
 
-print("== CREATE PNGs FOR DOWNLOAD: AREA =====================================")
+print("== CREATE PNGs FOR DOWNLOAD: HEX MAPS =================================")
 print(paste("Last run", format(Sys.time(), "%a %b %e, %Y at %H:%M:%S %Z")))
 
 # need to run 3a if haven't done so already 
 print("-- 3a_highchart_fnc ---------------------------------------------------")
 source("prep/3a_highchart_fnc.R", echo = TRUE)
-print("-- 3d_highchart_png_area ----------------------------------------------")
-source("prep/3c_highchart_png_area.R", echo = TRUE)
-
-warnings()
-
-closeAllConnections() # Close connection to log file
-
-end <- Sys.time()
-end - start 
-
-
-
-## Aggregate Plot PNGS for download: bar ######################################
-
-start <- Sys.time() #takes ~90 min 
-paste("Should be done by:", format(start+30*90, "%X"))
-
-my_log <- file("logs/shiny_prep_log_pngs_bar.txt") # File name of output log
-
-sink(my_log, append = FALSE, type = "output") # Writing console output to log file
-sink(my_log, append = FALSE, type = "message")
-
-print("== CREATE PNGs FOR DOWNLOAD: BAR ======================================")
-print(paste("Last run", format(Sys.time(), "%a %b %e, %Y at %H:%M:%S %Z")))
-
-# need to run 3a if haven't done so already 
-print("-- 3a_highchart_fnc ---------------------------------------------------")
-source("prep/3a_highchart_fnc.R", echo = TRUE)
-print("-- 3c_highchart_png_bar -----------------------------------------------")
-source("prep/3e_highchart_png_bar.R", echo = TRUE)
+print("-- 3c_highchart_png_hex -----------------------------------------------")
+source("prep/3d_highchart_png.R", echo = TRUE)
 
 warnings()
 
