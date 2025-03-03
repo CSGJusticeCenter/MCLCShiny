@@ -7,7 +7,6 @@
 #    User interface for shiny app
 #######################################
 
-source("library.R")
 source("colors.R")
 source("dataframes.R")
 source("functions.R")
