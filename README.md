@@ -5,7 +5,7 @@ Links current live version:
 `mclc_comms`
 
 - https://csgjc.shinyapps.io/mclc_comms/#mapexplorer  
-- https://csgjc.shinyapps.io/mclc_comms/#statereports 
+- https://csgjc.shinyapps.io/mclc_comms/#statedashboard 
 - https://csgjc.shinyapps.io/mclc_comms/#downloaddata  
 
 
@@ -56,18 +56,23 @@ MCLCShiny
 |   ├── ui.R          # user interface  
 |   └── server.R      # server  
 |
-├── shiny_prep.R      # run shiny prep 
-├── shiny_prep_log.txt #log file 
-├── 00_fnc_library.R  # loads packages and custom functions 
-├── 01_import.R       # imports MCLC data and shapefiles 
-├── 02_highchart_download.R # create and save highcharts with logo and labels for app
-├── 03_highchart.R    # create and save highcharts for app
-├── 04_reactable.R    # create and save reactable tables for app
-├── run_save.R        # shiny prep for R/E infographs & tables
-| 
-└── prep              # folder for prep data/info for app 
+├── docs # folder with documentation files 
+|
+├── logs # folder with log txt files 
+|
+├── prep # folder for prep data/charts/imgs for app 
+|  ├── 0_shiny_prep.R   # run shiny prep
+|  ├── 1_fnc_library.R     # loads packages and custom functions 
+|  ├── 2_import.R          # imports MCLC data and shapefiles 
+|  ├── 3_highchart.R    # create and save highcharts for app
+|  └── 4_highchart_download.R # create and save highcharts with logo and labels for app
+|
+| # THIS FOLDER HAS NOT HAD PATHWAYS UPDATED; WILL NOT RUN AS IS 
+└── prep_rri          # folder for prep data/info for rri (race/ethnicity) infographics 
     ├── box           # box modules for preping R/E data 
     ├── infographics  # exploration data 
+    ├── run_save.R    # shiny prep for R/E infographs & tables
+    ├── shiny_prep.R  # run shiny prep (for rri info only) 
     |...              # various files for exploration/documentation 
 ```
 
