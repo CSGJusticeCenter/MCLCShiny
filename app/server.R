@@ -42,13 +42,13 @@ server <- function(input, output, session) {
 
   # Dynamically change name of map
   map_filename <- reactive({
-    name <- mclc_explorer %>%
-      filter(adm_or_pop == input$adm_or_pop_map,
-             metric     == input$data_map,
-             year       == input$year_map) %>%
-      select(data, year) %>% distinct()
-    name$year <- gsub(" - ", " ", name$year)
-    name <- paste(name$data, name$year, sep = '_')
+    name <- svii_explorer %>%
+      filter(type     == input$adm_or_pop_map,
+             metric   == input$data_map,
+             year_chg == input$year_map) %>%
+      select(data, year_chg) %>% distinct()
+    name$year <- gsub(" - ", " ", name$year_chg)
+    name <- paste(name$data, name$year_chg, sep = '_')
     name <- gsub(" ", "_", name)
   }) %>%
     bindCache(input$data_map,
@@ -59,7 +59,7 @@ server <- function(input, output, session) {
   # This allows the map to be downloaded after the map is changed
   # Charts were created in highchart.R
   foundational_map <- reactive({
-    map <- adm_pop_maps[[input$adm_or_pop_map]][[input$year_map]][[input$data_map]]
+    map <- natl_hex_lst[[input$adm_or_pop_map]][[input$year_map]][[input$data_map]]
     map %>%
       highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
       highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
@@ -124,8 +124,8 @@ server <- function(input, output, session) {
     select_column <- input$year_map
     select_column_name <- paste0(select_column, " Change")
     select_trend_data_column <-
-      if(input$year_map == "2018 - 2021"){
-        paste0("trend_data_18_21")
+      if(input$year_map == "2018 - 2023"){
+        paste0("trend_data_18_23")
       } else if(input$year_map == "2018 - 2019"){
         paste0("trend_data_18_19")
       } else if(input$year_map == "2019 - 2020"){
@@ -135,8 +135,8 @@ server <- function(input, output, session) {
       }
 
     select_trend_column <-
-      if(input$year_map == "2018 - 2021"){
-        paste0("trend_18_21")
+      if(input$year_map == "2018 - 2023"){
+        paste0("trend_18_23")
       } else if(input$year_map == "2018 - 2019"){
         paste0("trend_18_19")
       } else if(input$year_map == "2019 - 2020"){
@@ -145,8 +145,8 @@ server <- function(input, output, session) {
         paste0("trend_20_21")
       }
 
-    df <- mclc_explorer_table %>%
-      select(state, data, `2018`, `2019`, `2020`, `2021`,
+    df <- svii_explorer_table %>%
+      select(state = state_name, data, `2018`, `2019`, `2020`, `2021`, 
              all_of(select_column),
              all_of(select_trend_data_column),
              all_of(select_trend_column)) %>%
@@ -264,9 +264,9 @@ server <- function(input, output, session) {
 
   # Filter data to totals
   df_vb_total <- reactive({
-    vb_adm_pop %>%
-      filter(state == input$state_report &
-               adm_or_pop == input$adm_pop_report &
+    svii_valbox %>%
+      filter(state_name == input$state_report &
+               type == input$adm_pop_report &
                year == "2021" &
                metric == "Total")
   }) %>%
@@ -275,9 +275,9 @@ server <- function(input, output, session) {
 
   # Filter data to sup violations
   df_vb_sup_violations <- reactive({
-    vb_adm_pop %>%
-      filter(state == input$state_report &
-               adm_or_pop == input$adm_pop_report &
+    svii_valbox %>%
+      filter(state_name == input$state_report &
+               type == input$adm_pop_report &
                year == "2021" &
                metric == "Supervision Violation")
   }) %>%
@@ -286,9 +286,9 @@ server <- function(input, output, session) {
 
   # Filter data to tech violations
   df_vb_tech <- reactive({
-    vb_adm_pop %>%
-      filter(state == input$state_report &
-               adm_or_pop == input$adm_pop_report &
+    svii_valbox %>%
+      filter(state_name == input$state_report &
+               type == input$adm_pop_report &
                year == "2021" &
                metric == "Technical Violation")
   }) %>%
@@ -297,9 +297,9 @@ server <- function(input, output, session) {
 
   # Filter data to new offense violations
   df_vb_new_off <- reactive({
-    vb_adm_pop %>%
-      filter(state == input$state_report &
-               adm_or_pop == input$adm_pop_report &
+    svii_valbox %>%
+      filter(state_name == input$state_report &
+               type == input$adm_pop_report &
                year == "2021" &
                metric == "New Offense Violation")
   }) %>%
@@ -376,14 +376,14 @@ server <- function(input, output, session) {
   # Charts were saved in highchart.R
   output$state_area_chart <- renderHighchart({
     if (input$adm_pop_report == "Admissions") {
-      all_state_area_adm[[input$state_report]] %>%
+      state_area_lst[["Admissions"]][[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
         hc_boost(enabled = TRUE)
     } else {
-      all_state_area_pop[[input$state_report]] %>%
+      state_area_lst[["Population"]][[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
@@ -476,14 +476,14 @@ server <- function(input, output, session) {
   output$state_bar_chart <- renderHighchart({
     if (input$adm_pop_report == "Admissions") {
 
-      all_state_bar_adm[[input$state_report]] %>%
+      state_bar_lst[["Admissions"]][["Both"]][[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
         hc_boost(enabled = TRUE)
     } else {
-      all_state_bar_pop[[input$state_report]] %>%
+      state_bar_lst[["Population"]][["Both"]][[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
@@ -601,11 +601,11 @@ server <- function(input, output, session) {
   output$state_table <- renderReactable({
 
     # Filter data
-    df <- state_table %>%
-      filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report) %>%
-      arrange(order) %>%
-      select(-c(state, order, adm_or_pop, metric))
+    df <- svii_table %>%
+      filter(state_name == input$state_report &
+             type       == input$adm_pop_report) %>%
+      arrange(text) %>%
+      select(text, `2018`, `2019`, `2021`, `2018 - 2023`, trend_data_18_23)
 
     # Create table with 4 Year trend line in last column
     reactable(df,
@@ -631,13 +631,13 @@ server <- function(input, output, session) {
                 `2019`          = colDef(na = "–", minWidth = 95),
                 `2020`          = colDef(na = "–", minWidth = 95),
                 `2021`          = colDef(na = "–", minWidth = 95),
-                four_yr_change  = colDef(na = "–", minWidth = 110,
+                `2018 - 2023`   = colDef(na = "–", minWidth = 110,
                                          name = "2018-2021 Change",
                                          style = list(fontWeight = "bold"),
                                          format = colFormat(percent = TRUE,
                                                             digits = 0)),
                 # Add 4 Year trend graphs to each row
-                total_new = colDef(minWidth = 110,
+                trend_data_18_23 = colDef(minWidth = 110,
                                    name = "Trend Line",
                                    cell = function(value, index) {
                                      if (!is.null(value[[1]]) && length(value[[1]]) > 0) {
@@ -750,14 +750,14 @@ server <- function(input, output, session) {
   # Charts were saved in highchart.R
   output$parole_bar_chart <- renderHighchart({
     if (input$adm_pop_report == "Admissions") {
-      parole_bar_adm[[input$state_report]] %>%
+      state_bar_lst[["Admissions"]][["Parole"]][[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
         hc_boost(enabled = TRUE)
     } else {
-      parole_bar_pop[[input$state_report]] %>%
+      state_bar_lst[["Population"]][["Parole"]][[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
@@ -787,10 +787,10 @@ server <- function(input, output, session) {
   output$parole_table <- renderReactable({
 
     # Filter data
-    df <- parole_table %>%
-      filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report) %>%
-      select(-c(adm_or_pop, state))
+    df <- svii_par %>%
+      filter(state_name == input$state_report &
+             type == input$adm_pop_report) %>%
+      select(text, `2018`, `2019`, `2020`, `2021`, `2018 - 2023`, trend_data_18_23)
 
     # Create table with 4 Year trend line in last column
     reactable(df,
@@ -815,13 +815,13 @@ server <- function(input, output, session) {
                 `2019`          = colDef(na = "–", minWidth = 95),
                 `2020`          = colDef(na = "–", minWidth = 95),
                 `2021`          = colDef(na = "–", minWidth = 95),
-                four_yr_change  = colDef(na = "–", minWidth = 110,
+                `2018 - 2023`   = colDef(na = "–", minWidth = 110,
                                          name = "2018-2021 Change",
                                          style = list(fontWeight = "bold"),
                                          format = colFormat(percent = TRUE,
                                                             digits = 0)),
                 # add 4 Year trend graphs to each row
-                total_new = colDef(minWidth = 110,
+                trend_data_18_23 = colDef(minWidth = 110,
                                    name = "Trend Line",
                                    cell = function(value, index) {
                                      if (!is.null(value[[1]]) && length(value[[1]]) > 0) {
@@ -945,14 +945,14 @@ server <- function(input, output, session) {
   # Charts were saved in highchart.R
   output$probation_bar_chart <- renderHighchart({
     if (input$adm_pop_report == "Admissions") {
-      probation_bar_adm[[input$state_report]] %>%
+      state_bar_lst[["Admissions"]][["Probation"]][[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
         highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
         hc_boost(enabled = TRUE)
     } else {
-      probation_bar_pop[[input$state_report]] %>%
+      state_bar_lst[["Population"]][["Probation"]][[input$state_report]] %>%
         highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
         highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
         highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
@@ -981,10 +981,10 @@ server <- function(input, output, session) {
   output$probation_table <- renderReactable({
 
     # Filter data
-    df <- probation_table %>%
-      filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report) %>%
-      select(-c(adm_or_pop, state))
+    df <- svii_prob %>%
+      filter(state_name == input$state_report &
+               type == input$adm_pop_report) %>%
+      select(text, `2018`, `2019`, `2020`, `2021`, `2018 - 2023`, trend_data_18_23)
 
     # Create table with 4 Year trend line in last column
     reactable(df,
@@ -1010,13 +1010,13 @@ server <- function(input, output, session) {
                 `2019`          = colDef(na = "–", minWidth = 95),
                 `2020`          = colDef(na = "–", minWidth = 95),
                 `2021`          = colDef(na = "–", minWidth = 95),
-                four_yr_change  = colDef(na = "–", minWidth = 110,
+                `2018 - 2023`   = colDef(na = "–", minWidth = 110,
                                          name = "2018-2021 Change",
                                          style = list(fontWeight = "bold"),
                                          format = colFormat(percent = TRUE,
                                                             digits = 0)),
                 # add 4 Year trend graphs to each row
-                total_new = colDef(minWidth = 110,
+                trend_data_18_23 = colDef(minWidth = 110,
                                    name = "Trend Line",
                                    cell = function(value, index) {
                                      if (!is.null(value[[1]]) && length(value[[1]]) > 0) {
@@ -1132,274 +1132,6 @@ server <- function(input, output, session) {
     bindCache(input$state_report,
               input$adm_pop_report)
 
-  ####
-  ## RACE/ETHNICITY DISPARITIES TAB
-  ###
-
-  ############################################################################################################################################ tooltip
-
-  # Generate tooltip depending on Total disparities or Portion of disparities attributable to parole revocations
-  disparities_tooltip <- reactiveValues()
-  observe({
-    disparities_tooltip$a <- ifelse(input$pop_denom =="BJS",
-                    disparities_definitions %>% filter(term == "Portion of Disparities Attributable to Parole Revocations") %>% pull(definition),
-                    disparities_definitions %>% filter(term == "Total Disparities") %>% pull(definition))
-  })
-  output$redefinition_tooltip <- renderUI({
-    mytooltip <- gsub("<b>|</b>|<i>|</i>", "",
-                      disparities_tooltip$a)
-    shiny::tags$span(tipify(el = icon("info-circle",
-                               lib = "font-awesome",
-                               style = "color: #D25E2D; font-size: 0.5em;"),
-                     title = disparities_tooltip$a),
-              "aria-label" = mytooltip
-    )
-  })
-
-  ############################################################################################################################################ tooltip
-
-  # REMOVE MODAL FOR NOW
-  # When Race/Ethinicity tab is selected, show pop up about how data is not MCLC
-  # This will only occur once per session automatically, see localsession
-  # localsession <- TRUE
-  # observeEvent(input$tabsetpanel, {
-  #   if (input$tabsetpanel == 4 & localsession)  {
-  #     localsession <<- FALSE
-  #     re_modal()
-  #     observeEvent(input$close_modal, {
-  #       removeModal()
-  #       dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
-  #
-  #       if (dataavail == 0) {
-  #         first_guide$init()
-  #         first_guide$remove(step = c("#infopanel-id", "ip1"))
-  #       } else {
-  #         first_guide$init()
-  #         first_guide$remove(step = c("#infopanel-id", "ip2"))
-  #       }
-  #
-  #       first_guide$start()
-  #     })
-  #   }
-  # })
-  #
-  # observeEvent(input$show_guide, {
-  #   re_modal()
-  # })
-
-  # Intiate guide when Race and Ethnicity tab are selected.
-  localsession <- TRUE
-  observeEvent(input$tabsetpanel, {
-    if (input$tabsetpanel == 4 & localsession)  {
-      localsession <<- FALSE
-      dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
-
-      if (dataavail == 0) {
-        first_guide$init()
-        first_guide$remove(step = c("#infopanel-id", "ip1"))
-      } else {
-        first_guide$init()
-        first_guide$remove(step = c("#infopanel-id", "ip2"))
-      }
-
-      first_guide$start()
-    }
-  })
-
-  observeEvent(input$show_guide, {
-    first_guide$init()
-    first_guide$start()
-  })
-
-
-  output$retitleend <- renderText({
-    case_when(
-      # Portion of disparities attributable to parole revocations
-      input$adm_pop_report == "Admissions" & input$pop_denom == "BJS" ~ "Racial and ethnic disparities in prison admissions for parole revocations represent the accumulation of disparities across the system. Only a portion of these disparities can be attributed to parole revocations.",
-      input$adm_pop_report == "Population" & input$pop_denom == "BJS" ~ "Racial and ethnic disparities in populations incarcerated for parole revocations represent the accumulation of disparities across the system. Only a portion of these disparities can be attributed to parole revocations.",
-      # Total Disparities
-      input$adm_pop_report == "Admissions" & input$pop_denom == "CEN" ~ "Racial and ethnic disparities in prison admissions for parole revocations represent the accumulation of disparities across the system.",
-      input$adm_pop_report == "Population" & input$pop_denom == "CEN" ~ "Racial and ethnic disparities in populations incarcerated for parole revocations represent the accumulation of disparities across the system."
-    )
-  })
-
-
-
-
-
-  output$infogblack <- renderImage({
-    png_file  <- glue("data/infogs/{input$adm_pop_report}_{input$state_report}_{input$pop_denom}_Black.png")
-    if (file.exists(png_file)){
-      plot <- png_file
-      list(
-        src =normalizePath(plot)
-        , contentType = "image/png"
-        , alt = raceethnicity$infograph_alt(rridata, input$adm_pop_report, input$pop_denom, "Black", input$state_report)
-        , width = "130%"
-      )
-    } else { #should not be needed - used as back-up
-      plot <- ggplot2::ggplot() + ggplot2::theme_void()
-      file <- tempfile(fileext = ".png")
-      ggplot2::ggsave(filename = file, plot = plot, width = 24, height = 0.5)
-      list(
-        src =normalizePath(file)
-        , contentType = "image/png"
-        , alt = raceethnicity$infograph_alt_noinfog(input$adm_pop_report, input$pop_denom, "Black", input$state_report)
-        , width = "130%"
-      )
-    }
-  }, deleteFile = FALSE)
-
-  output$infoghisp <- renderImage({
-    png_file  <- glue("data/infogs/{input$adm_pop_report}_{input$state_report}_{input$pop_denom}_Hispanic.png")
-    if (file.exists(png_file)){
-      plot <- png_file
-      list(
-        src =normalizePath(plot)
-        , contentType = "image/png"
-        , alt = raceethnicity$infograph_alt(rridata, input$adm_pop_report, input$pop_denom, "Hispanic", input$state_report)
-        , width = "130%"
-      )
-    } else { #should not be needed - used as back-up
-      plot <- ggplot2::ggplot() + ggplot2::theme_void()
-      file <- tempfile(fileext = ".png")
-      ggplot2::ggsave(filename = file, plot = plot, width = 24, height = 0.5)
-      list(
-        src =normalizePath(file)
-        , contentType = "image/png"
-        , alt = raceethnicity$infograph_alt_noinfog(input$adm_pop_report, input$pop_denom, "Hispanic", input$state_report)
-        , width = "130%"
-      )
-    }
-  }, deleteFile = FALSE)
-
-  output$infogheader <- renderUI({
-    dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
-    out <- paste0(
-      raceethnicity$pop_denom_text(input$pop_denom, input$adm_pop_report)
-      , raceethnicity$infographic_header(dataavail, input$pop_denom, input$adm_pop_report, rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$NOTE)
-    )
-    HTML(out)
-  })
-
-  output$renote <- renderText({
-    if(input$pop_denom == "BJS"){
-      "Note that the disparities in parole revocations can either amplify or reduce preexisting disparities."
-    } else if (input$pop_denom == "CEN"){
-      ""
-    }
-
-  })
-
-  output$howitscalculated <- renderUI({
-    out <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$CALCTXT
-    HTML(out)
-  })
-
-  output$table_rri_header <- renderUI({
-    df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "RRI", whichTABLE = "table_suppress")
-    main <- "<h4 class='reh4'> Relative Rate Index (White Reference Group)</h4>"
-    if (nrow(df) > 0){
-      out <- main
-    } else {
-      out <- paste0( main
-                     , "<div class = 'retxt'>"
-                     , "Data to calculate relative rate index were not available for "
-                     , input$state_report
-                     , ".</div>"
-      )
-    }
-    HTML(out)
-  })
-
-  output$table_rri <- renderUI({
-    df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "RRI", whichTABLE = "table_suppress")
-    dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
-    if (dataavail == 1){
-      raceethnicity$create_reactable(df)
-    }
-  })
-
-  output$table_rate_header <- renderUI({
-    df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "RATE", whichTABLE = "table_suppress")
-    main <- raceethnicity$rate_table_header(input$pop_denom, input$adm_pop_report, rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]][["RATE"]]$mult)
-    if (nrow(df) > 0){
-      out <- main
-    } else {
-      out <- paste0(  main
-                      , "<div class = 'retxt'>"
-                      , "Data to calculate rates were not available for "
-                      , input$state_report
-                      , "</div>")
-    }
-    HTML(out)
-  })
-
-  output$table_rate <- renderUI({
-    df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "RATE", whichTABLE = "table_suppress")
-    if (nrow(df) > 1){
-      raceethnicity$create_reactable(df)
-    }
-  })
-
-  # output$table_revcnt_header <- renderUI({
-  #   df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")
-  #   main <- "<h4 class='reh4'>Readmissions to Prison from Parole Counts</h4>"
-  #   if (nrow(df) > 0){
-  #     out <- main
-  #   } else {
-  #     out <- paste0(  main
-  #                     , "<div class = 'retxt'>"
-  #                     , "Readmissions to prison from parole data were not available for "
-  #                     , input$state_report
-  #                     , "</div>")
-  #   }
-  #   HTML(out)
-  # })
-  output$table_revcnt_header <- renderUI({
-
-    df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")
-
-    if (input$adm_pop_report == "Population") {
-      main_header <- "Number of People Incarcerated for Parole Revocations"
-    } else if (input$adm_pop_report == "Admissions") {
-      main_header <- "Admissions from Parole"
-    }
-
-    if (nrow(df) > 0) {
-      out <- paste0("<h4 class='reh4'>", tools::toTitleCase(main_header), "</h4>")
-    } else {
-      out <- paste0(
-        "<h4 class='reh4'>", tools::toTitleCase(main_header), "</h4>",
-        "<div class='retxt'>",
-        tools::toTitleCase(main_header), " data were not available for ",
-        input$state_report,
-        "</div>"
-      )
-    }
-
-    HTML(out)
-  })
-
-
-  output$table_revcnt <- renderUI({
-    df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")
-    if (nrow(df) > 1){
-      raceethnicity$create_reactable(df)
-    }
-  })
-
-  # conditional panel for tables
-  output$showtablepanel <- reactive({ input$showtables })
-  outputOptions(output, 'showtablepanel', suspendWhenHidden = FALSE)
-
-
-  # conditional panel for infographics
-  output$showinfogpanel <- reactive({
-    dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
-    ifelse(dataavail == 1, TRUE, FALSE)
-  })
-  outputOptions(output, 'showinfogpanel', suspendWhenHidden = FALSE)
 
   ##############################################################################################################################
   # Download
@@ -1407,7 +1139,7 @@ server <- function(input, output, session) {
 
   # Select multiple years
   filteredYears <- reactive({
-    unique(csg$year)
+    unique(svii_download$year)
   })
   observeEvent(filteredYears(), {
     updatePickerInput(session, inputId = 'download_year',
@@ -1418,7 +1150,7 @@ server <- function(input, output, session) {
 
   # Select multiple state
   filteredState <- reactive({
-    unique(csg$state)
+    unique(svii_download$state)
   })
   observeEvent(filteredState(), {
     updatePickerInput(session, inputId = 'download_state',
@@ -1429,7 +1161,7 @@ server <- function(input, output, session) {
 
   # Select multiple metrics
   filteredMetric <- reactive({
-    unique(csg$metric)
+    unique(svii_download$metric)
   })
   observeEvent(filteredMetric(), {
     updatePickerInput(session, inputId = 'download_metric',
@@ -1440,7 +1172,7 @@ server <- function(input, output, session) {
 
   # Filter data depending on user input
   df_download_table <- reactive({
-    csg %>%
+    svii_download %>%
       filter(year %in% input$download_year) %>%
       filter(state %in% input$download_state) %>%
       filter(metric %in% input$download_metric) %>%

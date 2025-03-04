@@ -50,12 +50,10 @@ library(conductor)
 library(shinyBS)
 # library(shinyjs)
 
-box::use(
-  box/raceethnicity
-  , glue[glue]
-)
 
-# Fonts ########################################################################
+# Format #######################################################################
+
+source("colors.R") # unsure if this is needed as hc are pre-generated 
 
 # add fonts to shiny linux server
 if (Sys.info()[['sysname']] == 'Linux') {
@@ -68,6 +66,15 @@ if (Sys.info()[['sysname']] == 'Linux') {
   system('fc-cache -f ~/.fonts')
 }
 
+# import data ##################################################################
+
+source("dataframes.R")
+source("functions.R")
+source("modals.R")
+
+
+# run UI and server ############################################################
+
 # run ui and server code
 source("ui.R")
 source("server.R")
@@ -76,4 +83,6 @@ source("server.R")
 profvis::profvis({
   shinyApp(ui = ui, server = server)
 })
+
+
 

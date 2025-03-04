@@ -7,12 +7,6 @@
 #    User interface for shiny app
 #######################################
 
-source("colors.R")
-source("dataframes.R")
-source("functions.R")
-source("modals.R")
-source("guides.R")
-
 ui <- fluidPage(
 
   # include custom CSS
@@ -29,9 +23,9 @@ ui <- fluidPage(
                         ".container-fluid .navbar-header .navbar-brand {margin-left: 0px;}"),
 
              # Hide errors on user-end
-             tags$style(type="text/css",
-                        ".shiny-output-error { visibility: hidden; }",
-                        ".shiny-output-error:before { visibility: visible; content: ''; }"),
+             # tags$style(type="text/css",
+             #            ".shiny-output-error { visibility: hidden; }",
+             #            ".shiny-output-error:before { visibility: visible; content: ''; }"),
 
              # App title - Accessible
              # tags$head(tags$title("More Community, Less Confinement Dashboard")),
@@ -87,7 +81,7 @@ ui <- fluidPage(
                                                                             choices = c('2018 - 2019, 1 year' = "2018 - 2019",
                                                                                         '2019 - 2020, 1 year' = "2019 - 2020",
                                                                                         '2020 - 2021, 1 year' = "2020 - 2021",
-                                                                                        '2018 - 2021, 4 years' = "2018 - 2021"),
+                                                                                        '2018 - 2023, 6 years' = "2018 - 2023"),
                                                                             selected = "2018 - 2021",
                                                                             multiple = FALSE))),
                                            # Download Map
@@ -169,7 +163,7 @@ ui <- fluidPage(
                                                   div(id = 'state-selector',
                                                        selectInput('state_report',
                                                                    label = "Select State",
-                                                                   choices = unique(adm_pop_long$state),
+                                                                   choices = state.name,
                                                                    multiple = FALSE)))),
 
                                            # Drop Down - Select Admissions or Population
@@ -332,107 +326,6 @@ ui <- fluidPage(
                                              br(), br()
 
                                     ), # end tabPanel
-
-                                    tabPanel(value="4","Race and Ethnicity",
-                                             br(),
-                                             fluidRow(column(width = 12,
-                                                             align = "center",
-                                               div(id = "denominator-picker",
-                                                   class = "retitle",
-                                                   style = "margin-bottom: 12px;",
-                                                   pickerInput('pop_denom',
-                                                               label = NULL,
-                                                               width = "fit",
-                                                               choices = c("Total Disparities" = "CEN",
-                                                                           "Portion of Disparities Attributable to Parole Revocations" = "BJS"),
-                                                               options = list(style = "re-picker",
-                                                                              class = "retitle"),
-                                                               selected = "CEN",
-                                                               inline = TRUE),
-
-                                                   # Add tooltip depending on pop_denom selection/tabindex = 0 for screenreader
-                                                   tagAppendAttributes(uiOutput("redefinition_tooltip",
-                                                                                inline = TRUE), tabindex = 0)
-
-                                                )
-                                             )),
-                                             fluidRow(column(width = 2),
-                                                      column(width = 8,
-                                                             align = "center",
-                                                             div(id = "re-explanation", textOutput("retitleend")),
-                                                             br(), br()),
-                                                      column(width = 2)),
-                                             fluidRow(
-                                               column(width = 2),
-                                               column(width = 8, align = "center", id = "infopanel-id",
-                                                 htmlOutput("infogheader"),
-                                                 conditionalPanel(condition = "output.showinfogpanel",
-                                                    div(imageOutput("infogblack", height = "100%", ), style = "margin-bottom: 0.5em;"),
-                                                    imageOutput("infoghisp", height = "100%"), br(),
-                                                    div(id = "re-note", textOutput("renote")), br(),
-                                                    htmlOutput("howitscalculated"),
-                                                 ), # end conditional panel
-                                                 div(id = "showtables-id",
-                                                     checkboxInput("showtables", "Show Additional Data Tables", value = FALSE),
-                                                     align = "left"),
-                                                 conditionalPanel(condition = "output.showtablepanel",
-                                                    htmlOutput("table_rri_header")   ,
-                                                    htmlOutput("table_rri")          ,
-                                                    htmlOutput("table_rate_header")  ,
-                                                    htmlOutput("table_rate")         ,
-                                                    htmlOutput("table_revcnt_header"),
-                                                    htmlOutput("table_revcnt")       ,
-                                                    br(),
-                                                    div(html("&#10033; Asterisk indicates that counts of readmissions to prison from parole are less than 5. In these instances, the actual count values are suppressed, counts are shown with a value of 5, and rates are calculated using a count value of 5.")
-                                                        , class = "retxt", align = "left", style = "font-size: 0.95em !important;")
-                                                 ), #end conditional Panel
-                                               ), #end column width=8
-                                               column(width = 2),
-                                               tags$button(
-                                                 class = "floating-button",
-                                                 `aria-label` = "info button",
-                                                 alt = "This button calls the information modal and app guide",
-                                                 id = "guide-button",
-                                                 onclick = "Shiny.setInputValue(\"show_guide\", true, {priority: \"event\"})",
-                                                 icon("info", class = "centered-icon", id = "centered-icon")
-                                                 ),
-                                                 tags$script(
-                                                       HTML(
-                                                              "
-                                                              var observedElement = document.body;
-                                                              var prevClassState = observedElement.classList.contains('modal-open')
-                                                              var observer = new MutationObserver(function(mutations) {
-                                                                     mutations.forEach(function(mutation) {
-                                                                            if (mutation.attributeName == 'class') {
-                                                                                   var currentClassState = mutation.target.classList.contains('modal-open');
-                                                                                   if(prevClassState !== currentClassState) {
-                                                                                          prevClassState = currentClassState;
-                                                                                          if(currentClassState) {
-                                                                                                 document.body.setAttribute('aria-hidden', false)
-                                                                                                 document.getElementsByClassName('modal-content')[0].setAttribute('aria-hidden', false)
-                                                                                                 document.getElementsByClassName('modal-body')[0].setAttribute('aria-hidden', false)
-                                                                                                 document.getElementsByClassName('tab-content')[0].setAttribute('aria-hidden', true)
-                                                                                          } else {
-                                                                                                 document.body.setAttribute('aria-hidden', false)
-                                                                                                 document.getElementsByClassName('tab-content')[0].setAttribute('aria-hidden', false)
-                                                                                          }
-                                                                                   }
-                                                                            }
-                                                                     })
-                                                              })
-                                                              observer.observe(observedElement, {attributes: true})
-                                                              "
-                                                       )
-                                                 )
-                                             ), #end fluidRow
-                                             br(),
-                                             fluidRow(column(width = 2),
-                                                      column(width = 8,
-                                                             imageOutput("RE_infographic.img")),
-                                                      column(width = 2)),
-                                             br()
-                                    ) # end tabPanel
-                                    #### END  RACE/ETHNICITY TAB
 
                                   ) # end tabsetPanel
                            ), # end column
