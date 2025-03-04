@@ -24,16 +24,15 @@ ui <- fluidPage(
     # English - Accessible
     tags$html(lang="en"),
              
-    # NATL TRENDS HEX MAP  #######################################################
+    # NATL TRENDS HEX MAP  #####################################################
     tabPanel("nationaltrends",
-      # header with dropdowns and download button ------------------------------
+      # natl trends header -----------------------------------------------------
       div(
         id = "header",
         fluidRow(
           column(width = 3),
           column(width = 6,fluidRow(
-            # Select Metric
-            column(
+            column(# Select Metric
               width = 3,
               align = "center",
               class = "input-col",
@@ -50,8 +49,7 @@ ui <- fluidPage(
                 )
               )
             ),
-            # Select Adm or Pop
-            column(
+            column(# Select Type (Adm or Pop)
               width = 3,
               align = "center",
               class = "input-col",
@@ -63,8 +61,7 @@ ui <- fluidPage(
                 )
               )
             ),
-            # Select Year Change
-            column(
+            column(# Select Year Change
               width = 3,
               align = "center",
               class = "input-col",
@@ -80,8 +77,7 @@ ui <- fluidPage(
                 )
               )
             ),
-            # Download Map
-            column(
+            column( # Download Map
               width = 3,
               align = "center",
               class = "input-col",
@@ -98,27 +94,25 @@ ui <- fluidPage(
       ), # end div header
       br(), # end header with dropdowns and download button 
       
-      # body with hex map and table  ------------------------------
+      # natl trends app body ---------------------------------------------------
       div(id = "app-body",
-        # HEx MAP 
-        fluidRow(column(
+        fluidRow(column( # HEx MAP 
           width = 12,
           align = "center",
           div(class = "hidden-xs hidden-sm",
             #id = "hex-map",
             highchartOutput("hex_map", height = 600, width = "100%") |> withSpinner()
-          )
-        )),
+          ) # end div 
+        )), # end column<fluidRow HEX MAP 
         br(), br(),
-        # HEX MAP TABLE
-        fluidRow(column(
+        fluidRow(column( # HEX MAP TABLE
           width = 12,
           align = "center",
           div(
             id = "selected-map-table",
             textOutput("selected_map_table")
-          )
-        )),
+          ) # end div 
+        )), # end column<fluidRow HEX MAP TABLE 
         br(),
         tags$head(tags$style(HTML("thead{color: #004270; font-size: 16px}"))),
         fluidRow(column(
@@ -132,300 +126,315 @@ ui <- fluidPage(
         br(), br()
       ) # end div app-body 
     ), # end tabPanel END NATL TRENDS HEX MAP 
-
-     ############################################################################################################################## State Reports
-
-     # State Reports Page
-     tabPanel("statedashboard",
-
-              #######
-              # Dropdown and download buttons
-              #######
-
-              div(id = "app-header",
-                  fluidRow(column(width = 3),
-                           column(width = 6,
-                                  fluidRow(column(width = 2),
-
-                                           # Drop Down - Select State
-                                           column(width = 4,
-                                                  align = "center",
-                                                  class = "input-col",
-                                                  labeled_input('input-btn', "",
-                                                  div(id = 'state-selector',
-                                                       selectInput('state_report',
-                                                                   label = "Select State",
-                                                                   choices = state.name,
-                                                                   multiple = FALSE)))),
-
-                                           # Drop Down - Select Admissions or Population
-                                           column(width = 4,
-                                                  align = "center",
-                                                  class = "input-col",
-                                                  labeled_input('input-btn', "",
-                                                  div(id = "type-selector",
-                                                       selectInput('adm_pop_report',
-                                                                   label = "Select Type",
-                                                                   choices = c("Admissions", "Population"),
-                                                                   selected = "Admissions",
-                                                                   multiple = FALSE)))),
-                                           column(width = 2))),
-                           column(width = 3)
-
-                           ) # fluidRow
-              ), # end div header
-
-              br(),
-
-              div(id = "app-body",
-
-                  # State title
-                  fluidRow(column(width = 1),
-                           column(width = 10,
-                                  div(id = "selected-state",
-                                      textOutput("selected_state"),
-                                      "aria-label" = "Selected State")),
-                           column(width = 1)),
-                  br(),
-
-                  #######
-                  # Value boxes
-                  #######
-                  fluidRow(column(width = 1),
-                           column(width = 10,
-                                  fluidRow(
-                                    column(width = 3,
-                                           valueBoxOutput("total_change",
-                                                          width = "100%")
-                                           ),
-                                    column(width = 3,
-                                           valueBoxOutput("sup_change",
-                                                          width = "100%") |> withSpinner()
-                                           ),
-                                    column(width = 3,
-                                           valueBoxOutput("tech_change",
-                                                          width = "100%") |> withSpinner()
-                                           ),
-                                    column(width = 3,
-                                           valueBoxOutput("new_off_change",
-                                                          width = "100%")
-                                           )
-                                    )
-                                  ),
-                           column(width = 1)),
+    
+    
+    # STATE DASHBOARDS #########################################################
+    
+    tabPanel("statedashboard",
+      # state dashboard header -------------------------------------------------
+      div(id = "app-header",
+        fluidRow(
+          column(width = 3),
+          column(width = 6,
+            fluidRow(
+              column(width = 2),
+              column( # SELECT STATE 
+                width = 4,
+                align = "center",
+                class = "input-col",
+                labeled_input('input-btn', "",
+                  div(
+                    id = 'state-selector',
+                    selectInput('state_report',
+                      label = "Select State",
+                      choices = state.name,
+                      multiple = FALSE
+                    ) # end select input 
+                  ) # end div 
+                ) # end labeled_input
+              ), # end column: SELECT STATE 
+              column( # SELECT TYPE (ADM OR POP) 
+                width = 4,
+                align = "center",
+                class = "input-col",
+                labeled_input('input-btn', "",
+                  div(
+                    id = "type-selector",
+                    selectInput('adm_pop_report',
+                      label = "Select Type",
+                      choices = c("Admissions", "Population"),
+                      selected = "Admissions",
+                      multiple = FALSE
+                    ) # end select input 
+                  ) # end div 
+                ) # end labeled_input
+              ), # end column: SELECT TYPE (ADM OR POP) 
+              column(width = 2)
+            ) # end fluid row 
+          ), #end column width 6 
+          column(width = 3)
+        ) # fluidRow
+      ), # end div app-header
+      br(),
+      # state header app body -------------------------------------------------
+      div(id = "app-body",
+        # 0 state title --------------------------------------------------------
+        fluidRow(
+          column(width = 1),
+          column(
+            width = 10,
+            div(id = "selected-state",
+            textOutput("selected_state"), "aria-label" = "Selected State")
+          ),
+          column(width = 1)
+        ), # end fluidRow title 
+        br(),
+        
+        # 0 value boxes --------------------------------------------------------
+        fluidRow(
+          column(width = 1),
+          column(
+            width = 10,
+            fluidRow( # TODO: add spinners to all boxes? 
+              column(width = 3, valueBoxOutput("total_change",  width = "100%")),
+              column(width = 3, valueBoxOutput("sup_change",    width = "100%") |> withSpinner()),
+              column(width = 3, valueBoxOutput("tech_change",   width = "100%") |> withSpinner()),
+              column(width = 3, valueBoxOutput("new_off_change",width = "100%"))
+            )
+          ),
+          column(width = 1)
+        ), #end fluidRow value boxes 
+        br(), br(),
+        
+        # START PANELS (STATE TABS) --------------------------------------------
+        fluidRow(
+          column(width = 1),
+          column(width = 10,
+            tabsetPanel( # STATE TABS 
+              selected = "1", 
+              type = "tabs", 
+              id = "tabsetpanel",
+              # 1 overview -----------------------------------------------------
+              tabPanel(
+                value="1",
+                "Overview",
+                br(),
+                fluidRow( # SIDE BY SIDE PLOTS 
+                  column( # area chart  
+                    width = 5,
+                    align = "center",
+                    uiOutput("state_area") |> withSpinner()
+                  ),
+                  column( # area chart download button 
+                    width = 1, 
+                    align = "center",
+                    uiOutput("state_area_button")
+                  ),
+                  column( # supervision bar chart 
+                    width = 5, 
+                    align = "center",
+                    uiOutput("state_nt") |> withSpinner()
+                  ),
+                  column( # supervision bar chart download button 
+                    width = 1, 
+                    align = "center",
+                    uiOutput("state_nt_button")
+                  )
+                ), # end fluidrow END SIDE BY SIDE PLOTS 
+                br(), br(), br(),
+                fluidRow(column( # State overview table
+                  width = 12,
+                  align = "center",
+                  div(id = "reactable-table", reactableOutput("state_table") |> withSpinner())
+                )), # end column<fluidRow state overview table 
+                br(), 
+                # STATE NOTES 
+                div(id = "state-note-section",
+                  fluidRow(column( # state notes title 
+                    width = 12,
+                    align = "center",
+                    div(id = "selected-state-note-title", "State Notes")
+                  )), # end column<fluidRow state notes title 
                   br(), br(),
-
-                  #######
-                  # Panels for Overview, Parole, Probation, and Race/Ethnic Disparities
-                  #######
-
-                  fluidRow(column(width = 1),
-                           column(width = 10,
-
-                                  tabsetPanel(selected = "1",
-                                              type = "tabs",
-                                              id = "tabsetpanel",
-
-                                    tabPanel(value="1","Overview",
-
-                                             br(),
-
-                                             # Area graph and download button
-                                             fluidRow(column(width = 5,
-                                                             align = "center",
-                                                             uiOutput("state_area") |> withSpinner()),
-                                                      column(width = 1, align = "center",
-                                                             uiOutput("state_area_button")),
-                                             # Supervision violation graph and download button
-                                                      column(width = 5, align = "center",
-                                                             uiOutput("state_nt") |> withSpinner()),
-                                                      column(width = 1, align = "center",
-                                                             uiOutput("state_nt_button"))),
-                                             br(), br(), br(),
-
-                                             # State overview table
-                                             fluidRow(column(width = 12,
-                                                             align = "center",
-                                                             div(id = "reactable-table",
-                                                                 reactableOutput("state_table") |> withSpinner()
-                                                             ))),
-
-                                             br(),
-
-                                             # States notes
-                                             div(id = "state-note-section",
-                                                 fluidRow(column(width = 12,
-                                                                 align = "center",
-                                                                 div(id = "selected-state-note-title",
-                                                                     "State Notes"))),
-                                                 br(), br(),
-
-                                                 fluidRow(column(width = 1),
-                                                          column(width = 5,
-                                                                 div(id = "selected-state-note-subtitle",
-                                                                     "Probation Metrics"),
-                                                                 div(id = "selected-state-note",
-                                                                     htmlOutput("state_probation_notes"),
-                                                                     htmlOutput("state_probation_asterisks_notes"))),
-                                                          column(width = 5,
-                                                                 div(id = "selected-state-note-subtitle",
-                                                                     "Parole/Post-Incarceration Metrics"),
-                                                                 div(id = "selected-state-note",
-                                                                     htmlOutput("state_parole_notes"),
-                                                                     htmlOutput("state_parole_asterisks_notes"))),
-                                                          column(width = 1)),
-
-                                                 fluidRow(column(width = 1),
-                                                          column(width = 10,
-                                                                 align = "left",
-                                                                 div(id = "selected-state-note",
-                                                                     htmlOutput("state_additional_notes"))),
-                                                          column(width = 1)),
-                                             ),
-
-                                             br(), br()
-
-                                    ), # end tabPanel
-
-                                    tabPanel(value="2","Parole",
-
-                                             br(),
-                                             # Parole graph and download button depending on data availability
-                                             uiOutput("parole_nt"),
-                                             br(), br(), br(),
-                                             # Parole reactable table
-                                             fluidRow(column(width = 12,
-                                                             align = "center",
-                                                             div(id = "reactable-table",
-                                                                 reactableOutput("parole_table") |> withSpinner()
-                                                             ))),
-                                             br(), br()
-
-                                    ), # end tabPanel
-
-                                    tabPanel(value="3","Probation",
-
-                                             br(),
-                                             # Probation graph and download button depending on data availability
-                                             uiOutput("probation_nt"),
-                                             br(), br(), br(),
-                                             # Probation reactable table
-                                             fluidRow(column(width = 12,
-                                                             align = "center",
-                                                             div(id = "reactable-table",
-                                                                 reactableOutput("probation_table") |> withSpinner()
-                                                             ))),
-                                             br(), br()
-
-                                    ), # end tabPanel
-
-                                  ) # end tabsetPanel
-                           ), # end column
-                           column(width = 1)
-                  ), # end fluidRow
-
-                  br(), br()
-
-              ) # end div
-
-     ), # end tabPanel
-
-     ############################################################################################################################## Download Data
-
-     # Download data page
-     tabPanel("downloaddata",
-
-              #######
-              # Dropdowns
-              #######
-
-              div(id = "app-header",
-
-                  fluidRow(column(width = 3),
-                           column(width = 6,
-
-                                  fluidRow(# Select State(s)
-                                           column(width = 3, align = "center", class = "input-col",
-                                                  labeled_input('input-btn', "",
-                                                                pickerInput(inputId = 'download_state',
-                                                                            width = "100%",
-                                                                            choices = NULL,
-                                                                            selected = NULL,
-                                                                            multiple = TRUE,
-                                                                            div(style = "font-weight: bold", "Select State(s)"),
-                                                                            options = list(`actions-box` = TRUE,
-                                                                                           style = "picker-style")))),
-
-                                           # Select Metric(s)
-                                           column(width = 3, align = "center", class = "input-col",
-                                                  labeled_input('input-btn', "",
-                                                                pickerInput(inputId = 'download_metric',
-                                                                            width = "100%",
-                                                                            choices = NULL,
-                                                                            selected = NULL,
-                                                                            multiple = TRUE,
-                                                                            div(style = "font-weight: bold", "Select Metric(s)"),
-                                                                            options = list(`actions-box` = TRUE,
-                                                                                           style = "picker-style")))),
-                                           # Select Year(s)
-                                           column(width = 3, align = "center", class = "input-col",
-                                                  labeled_input('input-btn', "",
-                                                                pickerInput(inputId = 'download_year',
-                                                                            width = "100%",
-                                                                            choices = NULL,
-                                                                            selected = NULL,
-                                                                            multiple = TRUE,
-                                                                            div(style = "font-weight: bold", "Select Year(s)"),
-                                                                            options = list(`actions-box` = TRUE,
-                                                                                           style = "picker-style")))),
-                                           # Download Data
-                                           column(width = 3, align = "center", class = "input-col",
-                                                                downloadButton(outputId = 'save_data', "Download Data",
-                                                                               class = "download-btn-lg")))),
-                           column(width = 3)
-
-                  ) # fluidRow
-              ), # end div header
-
-              br(),
-
-              #######
-              # Download table
-              #######
-
-              div(id = "app-body",
-
-                  fluidRow(column(width = 2),
-                           column(width = 8, div(id = "download-title",
-                                                 "Download Data")),
-                           column(width = 2)),
-
-                  br(),
-
-                  fluidRow(column(width = 2),
-                           column(width = 8, div(id = "download-info",
-                                                 "To understand the impact of community supervision
-                                                 (i.e., probation, parole, post-release supervision) on state prison populations,
-                                                 The Council of State Governments (CSG) Justice Center surveyed corrections
-                                                 leaders in all 50 states. This project was supported by Arnold Ventures and
-                                                 produced in partnership with the Correctional Leaders Association (CLA).
-                                                 The resulting data spans 4 years—from 2018 to 2021—and demonstrate how the number
-                                                 of people sent to prison for supervision violations changed.")),
-                           column(width = 2)),
-                  br(),
-
-                  fluidRow(column(width = 2),
-                           column(width = 8,
-                                  align = "center",
-                                  div(id = "selected-download-table",
-                                      reactableOutput("selected_download_table"))),
-                           column(width = 2)),
-
-                  br(), br()
-
-              ) # end div
-
-     ) # end tabPanel
+                  fluidRow(
+                    column(width = 1),
+                    column( # probation title, notes (check boxes) and asterisks notes  
+                      width = 5, 
+                      div(id = "selected-state-note-subtitle", "Probation Metrics"),
+                      div(
+                        id = "selected-state-note", 
+                        htmlOutput("state_probation_notes"), 
+                        htmlOutput("state_probation_asterisks_notes")
+                        )
+                    ), # end column: probation title, notes (check boxes) and asterisks notes 
+                    column( # parole title, notes (check boxes) and asterisks notes
+                      width = 5, 
+                      div(id = "selected-state-note-subtitle", "Parole/Post-Incarceration Metrics"),
+                      div(
+                        id = "selected-state-note", 
+                        htmlOutput("state_parole_notes"),
+                        htmlOutput("state_parole_asterisks_notes")
+                      )
+                    ), # end column: parole title, notes (check boxes) and asterisks notes
+                    column(width = 1)
+                  ), #end fluidRow
+                  fluidRow( # addl notes for states 
+                    column(width = 1),
+                    column( 
+                      width = 10,
+                      align = "left",
+                      div(id = "selected-state-note", htmlOutput("state_additional_notes"))
+                    ), 
+                    column(width = 1)
+                  ) # end fluidRow: addl notes for states  
+                ), #end div: STATE NOTES  
+                br(), br()
+              ), # end tabPanel: overview 
+              
+              # 2 Parole -------------------------------------------------------
+              tabPanel(
+                value="2",
+                "Parole",
+                br(),
+                # Parole graph and download button depending on data availability
+                uiOutput("parole_nt"),
+                br(), br(), br(),
+                fluidRow(column( # Parole reactable table
+                  width = 12,
+                  align = "center",
+                  div(id = "reactable-table", reactableOutput("parole_table") |> withSpinner() )
+                )), # end column<fluidRow: parole reactable table 
+                br(), br()
+              ), # end tabPanel: parole 
+              
+              # 3 Probation ----------------------------------------------------
+              tabPanel(
+                value="3",
+                "Probation",
+                br(),
+                # Probation graph and download button depending on data availability
+                uiOutput("probation_nt"),
+                br(), br(), br(),
+                fluidRow(column( # Probation reactable table
+                  width = 12,
+                  align = "center",
+                  div(id = "reactable-table", reactableOutput("probation_table") |> withSpinner() )
+                )), #end column<fluidRow: Probation reactable table
+                br(), br()
+              ), # end tabPanel
+            ) # end tabsetPanel: STATE TABS 
+          ), # end column
+        column(width = 1)
+      ), # end fluidRow
+      
+      # END PANELS (STATE TABS) --------------------------------------------
+      br(), br()
+      ) # end div
+    ), # end tabPanel: STATE TABS 
+    
+    # DOWNLOAD DATA ############################################################
+    tabPanel("downloaddata",
+      # download data header ---------------------------------------------------
+      div(id = "app-header",
+        fluidRow(
+          column(width = 3),
+          column(width = 6,
+            fluidRow(
+              column( # SELECT STATE(S)
+                width = 3, 
+                align = "center",
+                class = "input-col",
+                labeled_input('input-btn', "",
+                  pickerInput(inputId = 'download_state',
+                    width = "100%",
+                    choices = NULL,
+                    selected = NULL,
+                    multiple = TRUE,
+                    div(style = "font-weight: bold", "Select State(s)"),
+                    options = list(`actions-box` = TRUE, style = "picker-style")
+                  )
+                )
+              ), # end column: SELECT STATES
+              column( # SELECT METRIC(S)
+                width = 3, 
+                align = "center", 
+                class = "input-col",
+                labeled_input('input-btn', "",
+                  pickerInput(inputId = 'download_metric',
+                    width = "100%",
+                    choices = NULL,
+                    selected = NULL,
+                    multiple = TRUE,
+                    div(style = "font-weight: bold", "Select Metric(s)"),
+                    options = list(`actions-box` = TRUE, style = "picker-style")
+                  )
+                )
+              ), # end column: SELECT METRIC(S)
+              column( # SELECT YEAR(S)
+                width = 3, 
+                align = "center", 
+                class = "input-col",
+                labeled_input('input-btn', "",
+                  pickerInput(inputId = 'download_year',
+                    width = "100%",
+                    choices = NULL,
+                    selected = NULL,
+                    multiple = TRUE,
+                    div(style = "font-weight: bold", "Select Year(s)"), 
+                    options = list(`actions-box` = TRUE, style = "picker-style")
+                  )
+                )
+              ), # end column: SELECT YEAR(S)
+              column( # DOWNLOAD DATA BUTTON 
+                width = 3, 
+                align = "center", 
+                class = "input-col",
+                downloadButton(outputId = 'save_data', "Download Data", class = "download-btn-lg")
+              ) # end column: DOWNLOAD DATA BUTTON 
+            ) #end fluidRow 
+          ), # end column 
+          column(width = 3)
+        ) # fluidRow
+      ), # end div header
+      br(),
+      
+      # download data app body ---------------------------------------------------
+      div(id = "app-body",
+        fluidRow(
+          column(width = 2),
+          column(width = 8, div(id = "download-title", "Download Data")),
+          column(width = 2)
+        ),
+        br(),
+        fluidRow(
+          column(width = 2),
+          column(
+            width = 8, 
+            div(
+              id = "download-info",
+              "To understand the impact of community supervision
+              (i.e., probation, parole, post-release supervision) on state prison populations,
+              The Council of State Governments (CSG) Justice Center surveyed corrections
+              leaders in all 50 states. This project was supported by Arnold Ventures and
+              produced in partnership with the Correctional Leaders Association (CLA).
+              resulting data spans 4 years—from 2018 to 2021—and demonstrate how the number
+              of people sent to prison for supervision violations changed."
+            )
+          ),
+          column(width = 2)
+        ),
+        br(),
+        fluidRow( # download table 
+          column(width = 2),
+          column(width = 8, 
+                 align = "center",
+                 div(id = "selected-download-table", reactableOutput("selected_download_table"))
+          ),
+          column(width = 2)
+        ), # end fluidRow: download table 
+        br(), br()
+      ) # end div: app body 
+    ) # end tabPanel: download data 
 
 # GLOBAL END (FOOTER) ######################################################
 )) # end navbarPage<fluidPage
