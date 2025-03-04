@@ -5,11 +5,9 @@
 
 
 # Dataui for lines in reactable table download instructions
-# install.packages("remotes")
 # remotes::install_github("timelyportfolio/dataui")
 
 # Daattali for css shiny loaders
-# install.packages("remotes")
 # remotes::install_github("daattali/shinycssloaders")
 
 # Highcharter download instructions:
@@ -19,36 +17,46 @@
 # install.packages("devtools")
 # devtools::install_github("mrjoh3/highcharter")
 
-library(dataui)
-library(highcharter)
-options(highcharter.rjson = FALSE) # for hc_boost(enabled = TRUE)
-library(purrr)
-library(htmlwidgets)
-library(glue)
-
 # Shiny
-library(shiny)
+# library(shiny)
+library(shinycssloaders) # loading screen 
+library(shinyWidgets) # inputs 
+# library(shinyjs)# show/hide/toggle 
+library(shinydashboard) #used to create custom URL's for each tab 
+library(shinyBS) # tipify(), create tool tips
 library(shinyWidgets)
 library(dashboardthemes)
-library(shinydashboard)
 library(shinymeta)
-library(shinycssloaders)
+
+# visualizations 
+library(highcharter)
+options(highcharter.rjson = FALSE) # for hc_boost(enabled = TRUE)
+
+library(dataui)
+library(htmlwidgets)
+
 
 # Tables
 library(reactable)
 library(DT)
 library(reactablefmtr)
 library(formattable)
-library(dplyr)
+
+# general 
 
 # Maps
-library(sp)
-library(ggplot2)
+# library(sp)
+# library(ggplot2)
 
 # Guide
-library(conductor)
-library(shinyBS)
+# library(conductor)
 # library(shinyjs)
+
+box::use(
+  dplyr[...], 
+  glue[glue],
+  purrr[set_names]
+)
 
 
 # Format #######################################################################
@@ -73,16 +81,12 @@ source("functions.R")
 source("modals.R")
 
 
-# run UI and server ############################################################
-
-# run ui and server code
-source("ui.R")
-source("server.R")
-
-# launch shiny app
-profvis::profvis({
-  shinyApp(ui = ui, server = server)
-})
-
+metric_opts <- levels(unique(svii_explorer$metric))
+type_opts   <- sort(unique(svii_explorer$type))
+# choices = purrr::set_names(value to be used in the back-end of app, names to be displayed in dropdown)
+yrchg_opts <- purrr::set_names(
+  svii_yr$change_name, 
+  mutate(svii_yr, display = glue("{str_yr} - {end_yr}, {end_yr-str_yr} year{ifelse(end_yr-str_yr != 1, 's', '')}"))$display
+  )
 
 

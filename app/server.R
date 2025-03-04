@@ -42,15 +42,15 @@ server <- function(input, output, session) {
 
   # Dynamically change name of map
   map_filename <- reactive({
-    name <- svii_explorer %>%
+    name <- svii_explorer |>
       filter(type     == input$adm_or_pop_map,
              metric   == input$data_map,
-             year_chg == input$year_map) %>%
-      select(data, year_chg) %>% distinct()
+             year_chg == input$year_map) |>
+      select(data, year_chg) |> distinct()
     name$year <- gsub(" - ", " ", name$year_chg)
     name <- paste(name$data, name$year_chg, sep = '_')
     name <- gsub(" ", "_", name)
-  }) %>%
+  }) |>
     bindCache(input$data_map,
               input$adm_or_pop_map,
               input$year_map)
@@ -60,12 +60,12 @@ server <- function(input, output, session) {
   # Charts were created in highchart.R
   foundational_map <- reactive({
     map <- natl_hex_lst[[input$adm_or_pop_map]][[input$year_map]][[input$data_map]]
-    map %>%
-      highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-      highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-      highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-      highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-      hc_boost(enabled = TRUE)}) %>%
+    map |>
+      highcharter::hc_add_dependency(name = "plugins/series-label.js") |>
+      highcharter::hc_add_dependency(name = "plugins/accessibility.js") |>
+      highcharter::hc_add_dependency(name = "plugins/exporting.js") |>
+      highcharter::hc_add_dependency(name = "plugins/export-data.js") |>
+      hc_boost(enabled = TRUE)}) |>
     bindCache(input$data_map,
               input$adm_or_pop_map,
               input$year_map)
@@ -111,7 +111,7 @@ server <- function(input, output, session) {
     } else if (input$adm_or_pop_map == "Population" & input$data_map != "Total") {
       paste("People in State Prison for ", input$data_map, "s", sep = "")
     }
-    }) %>%
+    }) |>
     bindCache(input$data_map,
               input$adm_or_pop_map)
 
@@ -145,16 +145,16 @@ server <- function(input, output, session) {
         paste0("trend_20_21")
       }
 
-    df <- svii_explorer_table %>%
+    df <- svii_explorer_table |>
       select(state = state_name, data, `2018`, `2019`, `2020`, `2021`, 
              all_of(select_column),
              all_of(select_trend_data_column),
-             all_of(select_trend_column)) %>%
-      filter(data == filter_by) %>%
-      arrange(state) %>%
+             all_of(select_trend_column)) |>
+      filter(data == filter_by) |>
+      arrange(state) |>
       rename(change = all_of(select_column),
              total_new = 8,
-             trend     = 9) %>%
+             trend     = 9) |>
       mutate(
         trend = case_when(
           trend == "negative"   ~ regblue
@@ -229,7 +229,7 @@ server <- function(input, output, session) {
                 #trend, don't show, used in determining
                 trend = colDef(show = FALSE)
               ))
-    }) %>%
+    }) |>
     bindCache(input$data_map,
               input$adm_or_pop_map,
               input$year_map)
@@ -254,7 +254,7 @@ server <- function(input, output, session) {
     } else {
       ""
     }
-  }) %>%
+  }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -264,45 +264,45 @@ server <- function(input, output, session) {
 
   # Filter data to totals
   df_vb_total <- reactive({
-    svii_valbox %>%
+    svii_valbox |>
       filter(state_name == input$state_report &
                type == input$adm_pop_report &
                year == "2021" &
                metric == "Total")
-  }) %>%
+  }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
   # Filter data to sup violations
   df_vb_sup_violations <- reactive({
-    svii_valbox %>%
+    svii_valbox |>
       filter(state_name == input$state_report &
                type == input$adm_pop_report &
                year == "2021" &
                metric == "Supervision Violation")
-  }) %>%
+  }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
   # Filter data to tech violations
   df_vb_tech <- reactive({
-    svii_valbox %>%
+    svii_valbox |>
       filter(state_name == input$state_report &
                type == input$adm_pop_report &
                year == "2021" &
                metric == "Technical Violation")
-  }) %>%
+  }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
   # Filter data to new offense violations
   df_vb_new_off <- reactive({
-    svii_valbox %>%
+    svii_valbox |>
       filter(state_name == input$state_report &
                type == input$adm_pop_report &
                year == "2021" &
                metric == "New Offense Violation")
-  }) %>%
+  }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -376,21 +376,21 @@ server <- function(input, output, session) {
   # Charts were saved in highchart.R
   output$state_area_chart <- renderHighchart({
     if (input$adm_pop_report == "Admissions") {
-      state_area_lst[["Admissions"]][[input$state_report]] %>%
-        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+      state_area_lst[["Admissions"]][[input$state_report]] |>
+        highcharter::hc_add_dependency(name = "plugins/series-label.js") |>
+        highcharter::hc_add_dependency(name = "plugins/accessibility.js") |>
+        highcharter::hc_add_dependency(name = "plugins/exporting.js") |>
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") |>
         hc_boost(enabled = TRUE)
     } else {
-      state_area_lst[["Population"]][[input$state_report]] %>%
-        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+      state_area_lst[["Population"]][[input$state_report]] |>
+        highcharter::hc_add_dependency(name = "plugins/series-label.js") |>
+        highcharter::hc_add_dependency(name = "plugins/accessibility.js") |>
+        highcharter::hc_add_dependency(name = "plugins/exporting.js") |>
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") |>
         hc_boost(enabled = TRUE)
     }
-    }) %>%
+    }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -434,7 +434,7 @@ server <- function(input, output, session) {
       downloadButton(outputId = 'save_state_area_chart', "",
                      class = "download-chart")
     }
-    }) %>%
+    }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -463,7 +463,7 @@ server <- function(input, output, session) {
       highchartOutput("state_area_chart",
                       height = 400, width = 390)
     }
-    }) %>%
+    }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -476,21 +476,21 @@ server <- function(input, output, session) {
   output$state_bar_chart <- renderHighchart({
     if (input$adm_pop_report == "Admissions") {
 
-      state_bar_lst[["Admissions"]][["Both"]][[input$state_report]] %>%
-        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+      state_bar_lst[["Admissions"]][["Both"]][[input$state_report]] |>
+        highcharter::hc_add_dependency(name = "plugins/series-label.js") |>
+        highcharter::hc_add_dependency(name = "plugins/accessibility.js") |>
+        highcharter::hc_add_dependency(name = "plugins/exporting.js") |>
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") |>
         hc_boost(enabled = TRUE)
     } else {
-      state_bar_lst[["Population"]][["Both"]][[input$state_report]] %>%
-        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+      state_bar_lst[["Population"]][["Both"]][[input$state_report]] |>
+        highcharter::hc_add_dependency(name = "plugins/series-label.js") |>
+        highcharter::hc_add_dependency(name = "plugins/accessibility.js") |>
+        highcharter::hc_add_dependency(name = "plugins/exporting.js") |>
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") |>
         hc_boost(enabled = TRUE)
     }
-    }) %>%
+    }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -516,20 +516,20 @@ server <- function(input, output, session) {
 
   # If data is missing a supervision violation admissions graph
   output$missing_data_nt_adm <- renderUI({
-    out <- missingness_sentences %>%
+    out <- missingness_sentences |>
       filter(state == input$state_report)
     out <- out$supervision_violation_admissions_graph
     HTML(out)
-  }) %>%
+  }) |>
     bindCache(input$state_report)
 
   # If data is missing a supervision violation population graph
   output$missing_data_nt_pop <- renderUI({
-    out <- missingness_sentences %>%
+    out <- missingness_sentences |>
       filter(state == input$state_report)
     out <- out$supervision_violation_population_graph
     HTML(out)
-  }) %>%
+  }) |>
     bindCache(input$state_report)
 
   # Remove download button if no graph
@@ -560,7 +560,7 @@ server <- function(input, output, session) {
               input$adm_pop_report == "Population"){
       highchartOutput("state_bar_chart", height = 400, width = 390)
     }
-    }) %>%
+    }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -589,7 +589,7 @@ server <- function(input, output, session) {
       downloadButton(outputId = 'save_state_bar_chart', "",
                      class = "download-chart")
     }
-    }) %>%
+    }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -601,10 +601,10 @@ server <- function(input, output, session) {
   output$state_table <- renderReactable({
 
     # Filter data
-    df <- svii_table %>%
+    df <- svii_table |>
       filter(state_name == input$state_report &
-             type       == input$adm_pop_report) %>%
-      arrange(text) %>%
+             type       == input$adm_pop_report) |>
+      arrange(text) |>
       select(text, `2018`, `2019`, `2021`, `2018 - 2023`, trend_data_18_23)
 
     # Create table with 4 Year trend line in last column
@@ -674,7 +674,7 @@ server <- function(input, output, session) {
                                      }
                                    })
               ))
-    }) %>%
+    }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -684,9 +684,9 @@ server <- function(input, output, session) {
 
   # Filter data
   df_parole_asterisks_notes <- reactive({
-    parole_asterisks_notes %>%
+    parole_asterisks_notes |>
       filter(state == input$state_report)
-  }) %>%
+  }) |>
     bindCache(input$state_report)
 
   # Parole asterisks state notes
@@ -696,9 +696,9 @@ server <- function(input, output, session) {
 
   # Filter data
   df_probation_asterisks_notes <- reactive({
-    probation_asterisks_notes %>%
+    probation_asterisks_notes |>
       filter(state == input$state_report)
-  }) %>%
+  }) |>
     bindCache(input$state_report)
 
   # Probation asterisks state notes
@@ -708,9 +708,9 @@ server <- function(input, output, session) {
 
   # Filter parole data
   df_parole_notes <- reactive({
-    parole_notes %>%
+    parole_notes |>
       filter(state == input$state_report)
-  }) %>%
+  }) |>
     bindCache(input$state_report)
 
   # Parole state notes
@@ -720,9 +720,9 @@ server <- function(input, output, session) {
 
   # Filter probation data
   df_probation_notes <- reactive({
-    probation_notes %>%
+    probation_notes |>
       filter(state == input$state_report)
-  }) %>%
+  }) |>
     bindCache(input$state_report)
 
   # Probation state notes
@@ -732,9 +732,9 @@ server <- function(input, output, session) {
 
   # Filter data
   df_additional_notes <- reactive({
-    additional_notes %>%
+    additional_notes |>
       filter(state == input$state_report)
-  }) %>%
+  }) |>
     bindCache(input$state_report)
 
   # Additional state notes
@@ -750,21 +750,21 @@ server <- function(input, output, session) {
   # Charts were saved in highchart.R
   output$parole_bar_chart <- renderHighchart({
     if (input$adm_pop_report == "Admissions") {
-      state_bar_lst[["Admissions"]][["Parole"]][[input$state_report]] %>%
-        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+      state_bar_lst[["Admissions"]][["Parole"]][[input$state_report]] |>
+        highcharter::hc_add_dependency(name = "plugins/series-label.js") |>
+        highcharter::hc_add_dependency(name = "plugins/accessibility.js") |>
+        highcharter::hc_add_dependency(name = "plugins/exporting.js") |>
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") |>
         hc_boost(enabled = TRUE)
     } else {
-      state_bar_lst[["Population"]][["Parole"]][[input$state_report]] %>%
-        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+      state_bar_lst[["Population"]][["Parole"]][[input$state_report]] |>
+        highcharter::hc_add_dependency(name = "plugins/series-label.js") |>
+        highcharter::hc_add_dependency(name = "plugins/accessibility.js") |>
+        highcharter::hc_add_dependency(name = "plugins/exporting.js") |>
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") |>
         hc_boost(enabled = TRUE)
     }
-    }) %>%
+    }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -787,9 +787,9 @@ server <- function(input, output, session) {
   output$parole_table <- renderReactable({
 
     # Filter data
-    df <- svii_par %>%
+    df <- svii_par |>
       filter(state_name == input$state_report &
-             type == input$adm_pop_report) %>%
+             type == input$adm_pop_report) |>
       select(text, `2018`, `2019`, `2020`, `2021`, `2018 - 2023`, trend_data_18_23)
 
     # Create table with 4 Year trend line in last column
@@ -858,7 +858,7 @@ server <- function(input, output, session) {
                                      }
                                    })
               ))
-    }) %>%
+    }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -869,20 +869,20 @@ server <- function(input, output, session) {
 
   # If data is missing a parole violation admissions graph
   output$missing_data_parole_nt_adm <- renderUI({
-    out <- missingness_sentences %>%
+    out <- missingness_sentences |>
       filter(state == input$state_report)
     out <- out$parole_violation_admissions_graph
     HTML(out)
-  }) %>%
+  }) |>
     bindCache(input$state_report)
 
   # If data is missing a parole violation population graph
   output$missing_data_parole_nt_pop <- renderUI({
-    out <- missingness_sentences %>%
+    out <- missingness_sentences |>
       filter(state == input$state_report)
     out <- out$parole_violation_population_graph
     HTML(out)
-  }) %>%
+  }) |>
     bindCache(input$state_report)
 
   # Show parole graph or missing data sentence depending on state
@@ -933,7 +933,7 @@ server <- function(input, output, session) {
                                      class = "download-chart")),
                column(width = 3))
     }
-    }) %>%
+    }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -945,21 +945,21 @@ server <- function(input, output, session) {
   # Charts were saved in highchart.R
   output$probation_bar_chart <- renderHighchart({
     if (input$adm_pop_report == "Admissions") {
-      state_bar_lst[["Admissions"]][["Probation"]][[input$state_report]] %>%
-        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+      state_bar_lst[["Admissions"]][["Probation"]][[input$state_report]] |>
+        highcharter::hc_add_dependency(name = "plugins/series-label.js") |>
+        highcharter::hc_add_dependency(name = "plugins/accessibility.js") |>
+        highcharter::hc_add_dependency(name = "plugins/exporting.js") |>
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") |>
         hc_boost(enabled = TRUE)
     } else {
-      state_bar_lst[["Population"]][["Probation"]][[input$state_report]] %>%
-        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
+      state_bar_lst[["Population"]][["Probation"]][[input$state_report]] |>
+        highcharter::hc_add_dependency(name = "plugins/series-label.js") |>
+        highcharter::hc_add_dependency(name = "plugins/accessibility.js") |>
+        highcharter::hc_add_dependency(name = "plugins/exporting.js") |>
+        highcharter::hc_add_dependency(name = "plugins/export-data.js") |>
         hc_boost(enabled = TRUE)
     }
-    }) %>%
+    }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -981,9 +981,9 @@ server <- function(input, output, session) {
   output$probation_table <- renderReactable({
 
     # Filter data
-    df <- svii_prob %>%
+    df <- svii_prob |>
       filter(state_name == input$state_report &
-               type == input$adm_pop_report) %>%
+               type == input$adm_pop_report) |>
       select(text, `2018`, `2019`, `2020`, `2021`, `2018 - 2023`, trend_data_18_23)
 
     # Create table with 4 Year trend line in last column
@@ -1053,7 +1053,7 @@ server <- function(input, output, session) {
                                      }
                                    })
               ))
-    }) %>%
+    }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -1064,20 +1064,20 @@ server <- function(input, output, session) {
 
   # If data is missing a probation violation admissions graph
   output$missing_data_probation_nt_adm <- renderUI({
-    out <- missingness_sentences %>%
+    out <- missingness_sentences |>
       filter(state == input$state_report)
     out <- out$probation_violation_admissions_graph
     HTML(out)
-  }) %>%
+  }) |>
     bindCache(input$state_report)
 
   # If data is missing a probation violation population graph
   output$missing_data_probation_nt_pop <- renderUI({
-    out <- missingness_sentences %>%
+    out <- missingness_sentences |>
       filter(state == input$state_report)
     out <- out$probation_violation_population_graph
     HTML(out)
-  }) %>%
+  }) |>
     bindCache(input$state_report)
 
   # Show probation graph or missing data sentence depending on state
@@ -1128,7 +1128,7 @@ server <- function(input, output, session) {
                                      class = "download-chart")),
                column(width = 3))
     }
-    }) %>%
+    }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -1172,12 +1172,12 @@ server <- function(input, output, session) {
 
   # Filter data depending on user input
   df_download_table <- reactive({
-    svii_download %>%
-      filter(year %in% input$download_year) %>%
-      filter(state %in% input$download_state) %>%
-      filter(metric %in% input$download_metric) %>%
+    svii_download |>
+      filter(year %in% input$download_year) |>
+      filter(state %in% input$download_state) |>
+      filter(metric %in% input$download_metric) |>
       arrange(state, year)
-  }) %>%
+  }) |>
     bindCache(input$download_year,
               input$download_state,
               input$download_metric)
@@ -1196,7 +1196,7 @@ server <- function(input, output, session) {
   # Reactable table of MCLC data for download
   output$selected_download_table <- renderReactable({
 
-    df1 <- df_download_table() %>%
+    df1 <- df_download_table() |>
       mutate(state = factor(state))
 
     reactable(df1,

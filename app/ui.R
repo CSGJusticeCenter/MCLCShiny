@@ -1,145 +1,137 @@
-#######################################
-# Project: MCLCShiny
-# File: ui.R
-# Authors: Mari Roberts
-# Date last updated: August 21, 2023 (MAR)
-# Description:
-#    User interface for shiny app
-#######################################
 
 ui <- fluidPage(
+  
+  # GLOBAL START (HEADER) ######################################################
+  
+  includeCSS("www/theme.css"), # include custom CSS
+  navbarPage(
+    id = "navbarID",
+    
+    # Formats light blue header
+    tags$style(type = "text/css",".container-fluid {padding-left:0px; padding-right:0px;}"),
+    tags$style(type = "text/css",".navbar {margin-bottom: .5px;}"),
+    tags$style(type = "text/css",".container-fluid .navbar-header .navbar-brand {margin-left: 0px;}"),
+    
+    # Hide errors on user-end
+    # tags$style(type="text/css",
+    #   ".shiny-output-error { visibility: hidden; }",
+    #   ".shiny-output-error:before { visibility: visible; content: ''; }"),
 
-  # include custom CSS
-  includeCSS("www/theme.css"),
-  useConductor(),
-  navbarPage(id = "navbarID",
-
-             # Formats light blue header
-             tags$style(type = "text/css",
-                        ".container-fluid {padding-left:0px; padding-right:0px;}"),
-             tags$style(type = "text/css",
-                        ".navbar {margin-bottom: .5px;}"),
-             tags$style(type = "text/css",
-                        ".container-fluid .navbar-header .navbar-brand {margin-left: 0px;}"),
-
-             # Hide errors on user-end
-             # tags$style(type="text/css",
-             #            ".shiny-output-error { visibility: hidden; }",
-             #            ".shiny-output-error:before { visibility: visible; content: ''; }"),
-
-             # App title - Accessible
-             # tags$head(tags$title("More Community, Less Confinement Dashboard")),
-             title = "More Community, Less Confinement Dashboard",
-
-             # English - Accessible
-             tags$html(lang="en"),
-
-     ############################################################################################################################## MAP
-
-     # Map Explorer Page
-     tabPanel("nationaltrends",
-
-              div(id = "header",
-
-                  #######
-                  # Dropdown and download buttons
-                  #######
-
-                  fluidRow(column(width = 3),
-                           column(width = 6,
-                                  fluidRow(# Select Metric
-                                           column(width = 3,
-                                                  align = "center",
-                                                  class = "input-col",
-                                                  labeled_input('input-btn', "",
-                                                                selectInput('data_map',
-                                                                            label = "Select Metric",
-                                                                            choices = c("Total",
-                                                                                        "New Offense Violation",
-                                                                                        "Supervision Violation",
-                                                                                        "Probation Violation",
-                                                                                        "Parole Violation",
-                                                                                        "Technical Violation"),
-                                                                            multiple = FALSE))),
-                                           # Select Adm or Pop
-                                           column(width = 3,
-                                                  align = "center",
-                                                  class = "input-col",
-                                                  labeled_input('input-btn', "",
-                                                                selectInput('adm_or_pop_map',
-                                                                            label = "Select Metric Type",
-                                                                            choices = c("Admissions",
-                                                                                        "Population"),
-                                                                            multiple = FALSE))),
-                                           # Select Year Change
-                                           column(width = 3,
-                                                  align = "center",
-                                                  class = "input-col",
-                                                  labeled_input('input-btn', "",
-                                                                selectInput('year_map',
-                                                                            label = "Select Year Change",
-                                                                            choices = c('2018 - 2019, 1 year' = "2018 - 2019",
-                                                                                        '2019 - 2020, 1 year' = "2019 - 2020",
-                                                                                        '2020 - 2021, 1 year' = "2020 - 2021",
-                                                                                        '2018 - 2023, 6 years' = "2018 - 2023"),
-                                                                            selected = "2018 - 2021",
-                                                                            multiple = FALSE))),
-                                           # Download Map
-                                           column(width = 3,
-                                                  align = "center",
-                                                  class = "input-col",
-                                                  labeled_input('save-map-btn', "",
-                                                                downloadButton(outputId = 'save_map',
-                                                                               label = "Download Map",
-                                                                               class = "download-btn-lg")))
-                                  ) # end fluidRow
-                           ),
-                           column(width = 3)
-                  ) # end fluidRow
-              ), # end div header
-              br(),
-
-              div(id = "app-body",
-
-                  #######
-                  # Hex map
-                  #######
-
-                  fluidRow(
-                    column(width = 12,
-                           align = "center",
-                           div(class = "hidden-xs hidden-sm",
-                               #id = "hex-map",
-                               highchartOutput("hex_map",
-                                               height = 600,
-                                               width = "100%") %>% withSpinner()
-                               )),
-                  ),
-                  br(), br(),
-
-                  #######
-                  # Hex map table
-                  #######
-
-                  fluidRow(
-                    column(width = 12,
-                           align = "center",
-                           div(id = "selected-map-table",
-                               textOutput("selected_map_table"))),
-                  ),
-                  br(),
-                  tags$head(tags$style(HTML("thead{color: #004270; font-size: 16px}"))),
-                  fluidRow(
-                    column(width = 12, align = "left",
-                           div(id = "reactable-table",
-                               reactableOutput("table_map"))),
-                  ),
-                  br(), br()
-
-              ) # end div
-
-
-     ), # end tabPanel
+    # App title - Accessible
+    # tags$head(tags$title("More Community, Less Confinement Dashboard")),
+    title = "More Community, Less Confinement Dashboard",
+    
+    # English - Accessible
+    tags$html(lang="en"),
+             
+    # NATL TRENDS HEX MAP  #######################################################
+    tabPanel("nationaltrends",
+      # header with dropdowns and download button ------------------------------
+      div(
+        id = "header",
+        fluidRow(
+          column(width = 3),
+          column(width = 6,fluidRow(
+            # Select Metric
+            column(
+              width = 3,
+              align = "center",
+              class = "input-col",
+              labeled_input('input-btn', "",
+                selectInput('data_map',
+                  label = "Select Metric",
+                  choices = c("Total",
+                              "New Offense Violation",
+                              "Supervision Violation",
+                              "Probation Violation",
+                              "Parole Violation",
+                              "Technical Violation"),
+                  multiple = FALSE
+                )
+              )
+            ),
+            # Select Adm or Pop
+            column(
+              width = 3,
+              align = "center",
+              class = "input-col",
+              labeled_input('input-btn', "",
+                selectInput('adm_or_pop_map',
+                  label = "Select Metric Type",
+                  choices = c("Admissions", "Population"),
+                  multiple = FALSE
+                )
+              )
+            ),
+            # Select Year Change
+            column(
+              width = 3,
+              align = "center",
+              class = "input-col",
+              labeled_input('input-btn', "",
+                selectInput('year_map',
+                  label = "Select Year Change",
+                  choices = c('2018 - 2019, 1 year' = "2018 - 2019",
+                              '2019 - 2020, 1 year' = "2019 - 2020",
+                              '2020 - 2021, 1 year' = "2020 - 2021",
+                              '2018 - 2023, 6 years' = "2018 - 2023"),
+                  selected = "2018 - 2021",
+                  multiple = FALSE
+                )
+              )
+            ),
+            # Download Map
+            column(
+              width = 3,
+              align = "center",
+              class = "input-col",
+              labeled_input('save-map-btn', "",
+                downloadButton(outputId = 'save_map',
+                  label = "Download Map",
+                  class = "download-btn-lg"
+                )
+              )
+            )
+          )), # end fluidRow<column 
+          column(width = 3)
+        ) # end fluidRow with columns 
+      ), # end div header
+      br(), # end header with dropdowns and download button 
+      
+      # body with hex map and table  ------------------------------
+      div(id = "app-body",
+        # HEx MAP 
+        fluidRow(column(
+          width = 12,
+          align = "center",
+          div(class = "hidden-xs hidden-sm",
+            #id = "hex-map",
+            highchartOutput("hex_map", height = 600, width = "100%") |> withSpinner()
+          )
+        )),
+        br(), br(),
+        # HEX MAP TABLE
+        fluidRow(column(
+          width = 12,
+          align = "center",
+          div(
+            id = "selected-map-table",
+            textOutput("selected_map_table")
+          )
+        )),
+        br(),
+        tags$head(tags$style(HTML("thead{color: #004270; font-size: 16px}"))),
+        fluidRow(column(
+          width = 12, 
+          align = "left",
+          div(
+            id = "reactable-table",
+            reactableOutput("table_map")
+          )
+        )),
+        br(), br()
+      ) # end div app-body 
+    ), # end tabPanel END NATL TRENDS HEX MAP 
 
      ############################################################################################################################## State Reports
 
@@ -208,11 +200,11 @@ ui <- fluidPage(
                                            ),
                                     column(width = 3,
                                            valueBoxOutput("sup_change",
-                                                          width = "100%") %>% withSpinner()
+                                                          width = "100%") |> withSpinner()
                                            ),
                                     column(width = 3,
                                            valueBoxOutput("tech_change",
-                                                          width = "100%") %>% withSpinner()
+                                                          width = "100%") |> withSpinner()
                                            ),
                                     column(width = 3,
                                            valueBoxOutput("new_off_change",
@@ -241,12 +233,12 @@ ui <- fluidPage(
                                              # Area graph and download button
                                              fluidRow(column(width = 5,
                                                              align = "center",
-                                                             uiOutput("state_area") %>% withSpinner()),
+                                                             uiOutput("state_area") |> withSpinner()),
                                                       column(width = 1, align = "center",
                                                              uiOutput("state_area_button")),
                                              # Supervision violation graph and download button
                                                       column(width = 5, align = "center",
-                                                             uiOutput("state_nt") %>% withSpinner()),
+                                                             uiOutput("state_nt") |> withSpinner()),
                                                       column(width = 1, align = "center",
                                                              uiOutput("state_nt_button"))),
                                              br(), br(), br(),
@@ -255,7 +247,7 @@ ui <- fluidPage(
                                              fluidRow(column(width = 12,
                                                              align = "center",
                                                              div(id = "reactable-table",
-                                                                 reactableOutput("state_table") %>% withSpinner()
+                                                                 reactableOutput("state_table") |> withSpinner()
                                                              ))),
 
                                              br(),
@@ -305,7 +297,7 @@ ui <- fluidPage(
                                              fluidRow(column(width = 12,
                                                              align = "center",
                                                              div(id = "reactable-table",
-                                                                 reactableOutput("parole_table") %>% withSpinner()
+                                                                 reactableOutput("parole_table") |> withSpinner()
                                                              ))),
                                              br(), br()
 
@@ -321,7 +313,7 @@ ui <- fluidPage(
                                              fluidRow(column(width = 12,
                                                              align = "center",
                                                              div(id = "reactable-table",
-                                                                 reactableOutput("probation_table") %>% withSpinner()
+                                                                 reactableOutput("probation_table") |> withSpinner()
                                                              ))),
                                              br(), br()
 
@@ -434,4 +426,6 @@ ui <- fluidPage(
               ) # end div
 
      ) # end tabPanel
-))
+
+# GLOBAL END (FOOTER) ######################################################
+)) # end navbarPage<fluidPage

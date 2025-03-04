@@ -13,6 +13,7 @@ obj_names <-  c(
   "svii_prob",           #probation_table
   "svii_valbox",         #vb_adm_pop 
   "svii_download",       #csg 
+  "svii_yr", 
   # text - state overview notes 
   "parole_notes", 
   "probation_notes", 
