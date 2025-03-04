@@ -50,14 +50,14 @@ Navigation Bar
 ########################################*/
 
 /* Hide navigation bar menu items*/
-#navbarID{
+/*#navbarID{
   display:none;
-}
+} */ 
 
 /* Hide navigation bar*/
-.navbar{
+/*.navbar{
   display:none !important;
-}
+} */ 
 
 /*######################################
 Header, global drop down options, tooltips
