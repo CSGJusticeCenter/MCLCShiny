@@ -39,12 +39,7 @@ ui <- fluidPage(
               labeled_input('input-btn', "",
                 selectInput('data_map',
                   label = "Select Metric",
-                  choices = c("Total",
-                              "New Offense Violation",
-                              "Supervision Violation",
-                              "Probation Violation",
-                              "Parole Violation",
-                              "Technical Violation"),
+                  choices = metric_opts,
                   multiple = FALSE
                 )
               )
@@ -56,7 +51,7 @@ ui <- fluidPage(
               labeled_input('input-btn', "",
                 selectInput('adm_or_pop_map',
                   label = "Select Metric Type",
-                  choices = c("Admissions", "Population"),
+                  choices = type_opts,
                   multiple = FALSE
                 )
               )
@@ -68,11 +63,8 @@ ui <- fluidPage(
               labeled_input('input-btn', "",
                 selectInput('year_map',
                   label = "Select Year Change",
-                  choices = c('2018 - 2019, 1 year' = "2018 - 2019",
-                              '2019 - 2020, 1 year' = "2019 - 2020",
-                              '2020 - 2021, 1 year' = "2020 - 2021",
-                              '2018 - 2023, 6 years' = "2018 - 2023"),
-                  selected = "2018 - 2021",
+                  choices = yrchg_opts,
+                  selected = "2018 - 2023",
                   multiple = FALSE
                 )
               )
@@ -162,7 +154,7 @@ ui <- fluidPage(
                     id = "type-selector",
                     selectInput('adm_pop_report',
                       label = "Select Type",
-                      choices = c("Admissions", "Population"),
+                      choices = type_opts,
                       selected = "Admissions",
                       multiple = FALSE
                     ) # end select input 

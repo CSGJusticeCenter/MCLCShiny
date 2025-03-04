@@ -245,7 +245,7 @@ server <- function(input, output, session) {
     svii_valbox |>
       filter(state_name == input$state_report &
                type == input$adm_pop_report &
-               year == "2021" &
+               year == svii_yr$max_yr[1] &
                metric == "Total")
   }) |>
     bindCache(input$state_report,
@@ -256,7 +256,7 @@ server <- function(input, output, session) {
     svii_valbox |>
       filter(state_name == input$state_report &
                type == input$adm_pop_report &
-               year == "2021" &
+               year == svii_yr$max_yr[1] &
                metric == "Supervision Violation")
   }) |>
     bindCache(input$state_report,
@@ -267,7 +267,7 @@ server <- function(input, output, session) {
     svii_valbox |>
       filter(state_name == input$state_report &
                type == input$adm_pop_report &
-               year == "2021" &
+               year == svii_yr$max_yr[1] &
                metric == "Technical Violation")
   }) |>
     bindCache(input$state_report,
@@ -278,7 +278,7 @@ server <- function(input, output, session) {
     svii_valbox |>
       filter(state_name == input$state_report &
                type == input$adm_pop_report &
-               year == "2021" &
+               year == svii_yr$max_yr[1] &
                metric == "New Offense Violation")
   }) |>
     bindCache(input$state_report,
@@ -290,7 +290,7 @@ server <- function(input, output, session) {
     # No subtitle needed regarding no parole or prob data
     fnc_value_box(
       title      = paste0("Overall "),
-      adm_or_pop = paste0(input$adm_pop_report, " in 2021"),
+      adm_or_pop = paste0(input$adm_pop_report, " in ", svii_yr$max_yr[1]),
       subtitle   = HTML("<br>"),
       value      = df_vb_total()$value_shown,
       finding    = df_vb_total()$text,
@@ -306,7 +306,7 @@ server <- function(input, output, session) {
 
     fnc_value_box(
       title      = paste0("Supervision Violation "),
-      adm_or_pop = paste0(input$adm_pop_report, " in 2021"),
+      adm_or_pop = paste0(input$adm_pop_report, " in ", svii_yr$max_yr[1]),
       subtitle   = df_vb_sup_violations()$subheader,
       value      = df_vb_sup_violations()$value_shown,
       finding    = df_vb_sup_violations()$text,
@@ -321,7 +321,7 @@ server <- function(input, output, session) {
 
     fnc_value_box(
       title      = paste0("Technical Violation "),
-      adm_or_pop = paste0(input$adm_pop_report, " in 2021"),
+      adm_or_pop = paste0(input$adm_pop_report, " in ", svii_yr$max_yr[1]),
       subtitle   = df_vb_tech()$subheader,
       value      = df_vb_tech()$value_shown,
       finding    = df_vb_tech()$text,
@@ -336,7 +336,7 @@ server <- function(input, output, session) {
 
     fnc_value_box(
       title      = paste0("New Offense Violation "),
-      adm_or_pop = paste0(input$adm_pop_report, " in 2021"),
+      adm_or_pop = paste0(input$adm_pop_report, " in ", svii_yr$max_yr[1]),
       subtitle   = df_vb_new_off()$subheader,
       value      = df_vb_new_off()$value_shown,
       finding    = df_vb_new_off()$text,
@@ -352,21 +352,12 @@ server <- function(input, output, session) {
   # Select highchart depending on selector input
   # Charts were saved in highchart.R
   output$state_area_chart <- renderHighchart({
-    if (input$adm_pop_report == "Admissions") {
-      state_area_lst[["Admissions"]][[input$state_report]] |>
-        highcharter::hc_add_dependency(name = "plugins/series-label.js") |>
-        highcharter::hc_add_dependency(name = "plugins/accessibility.js") |>
-        highcharter::hc_add_dependency(name = "plugins/exporting.js") |>
-        highcharter::hc_add_dependency(name = "plugins/export-data.js") |>
-        hc_boost(enabled = TRUE)
-    } else {
-      state_area_lst[["Population"]][[input$state_report]] |>
-        highcharter::hc_add_dependency(name = "plugins/series-label.js") |>
-        highcharter::hc_add_dependency(name = "plugins/accessibility.js") |>
-        highcharter::hc_add_dependency(name = "plugins/exporting.js") |>
-        highcharter::hc_add_dependency(name = "plugins/export-data.js") |>
-        hc_boost(enabled = TRUE)
-    }
+    state_area_lst[[input$adm_pop_report]][[input$state_report]] |>
+      highcharter::hc_add_dependency(name = "plugins/series-label.js") |>
+      highcharter::hc_add_dependency(name = "plugins/accessibility.js") |>
+      highcharter::hc_add_dependency(name = "plugins/exporting.js") |>
+      highcharter::hc_add_dependency(name = "plugins/export-data.js") |>
+      hc_boost(enabled = TRUE)
     }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
@@ -448,22 +439,12 @@ server <- function(input, output, session) {
   # Select highchart depending on selector input
   # Charts were saved in highchart.R
   output$state_bar_chart <- renderHighchart({
-    if (input$adm_pop_report == "Admissions") {
-
-      state_bar_lst[["Admissions"]][["Both"]][[input$state_report]] |>
-        highcharter::hc_add_dependency(name = "plugins/series-label.js") |>
-        highcharter::hc_add_dependency(name = "plugins/accessibility.js") |>
-        highcharter::hc_add_dependency(name = "plugins/exporting.js") |>
-        highcharter::hc_add_dependency(name = "plugins/export-data.js") |>
-        hc_boost(enabled = TRUE)
-    } else {
-      state_bar_lst[["Population"]][["Both"]][[input$state_report]] |>
-        highcharter::hc_add_dependency(name = "plugins/series-label.js") |>
-        highcharter::hc_add_dependency(name = "plugins/accessibility.js") |>
-        highcharter::hc_add_dependency(name = "plugins/exporting.js") |>
-        highcharter::hc_add_dependency(name = "plugins/export-data.js") |>
-        hc_boost(enabled = TRUE)
-    }
+    state_bar_lst[[input$adm_pop_report]][["Both"]][[input$state_report]] |>
+      highcharter::hc_add_dependency(name = "plugins/series-label.js") |>
+      highcharter::hc_add_dependency(name = "plugins/accessibility.js") |>
+      highcharter::hc_add_dependency(name = "plugins/exporting.js") |>
+      highcharter::hc_add_dependency(name = "plugins/export-data.js") |>
+      hc_boost(enabled = TRUE)
     }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
@@ -513,56 +494,41 @@ server <- function(input, output, session) {
 
   # Show graph or missing data sentence depending on state
   output$state_nt = renderUI({
-
-    # If state is missing new offense violations and technical violations (Admissions)
-    if(input$state_report %in% nt_na_adm &
-       input$adm_pop_report == "Admissions"){
+    
+    miss_text <- missingness_sentences |> 
+     filter(state == input$state_report) |> 
+     pull(paste0("supervision_violation_", tolower(input$adm_pop_report), "_graph"))
+    
+    if (is.na(miss_text)){
+      # if 'miss_text' == NA --> data to plot 
+      highchartOutput("state_bar_chart", height = 400, width = 390)
+    } else {
+      # if 'miss_text' != NA --> show sentence instead 
       htmlOutput("missing_data_nt_adm")
-
-      # If state is missing new offense violations and technical violations (Population)
-    } else if(input$state_report %in% nt_na_pop &
-              input$adm_pop_report == "Population"){
-      htmlOutput("missing_data_nt_pop")
-
-      # If state has data (Admissions)
-    } else if(input$state_report %in% nt_not_na_adm &
-              input$adm_pop_report == "Admissions"){
-      highchartOutput("state_bar_chart", height = 400, width = 390)
-
-      # If state has data (Population)
-    } else if(input$state_report %in% nt_not_na_pop &
-              input$adm_pop_report == "Population"){
-      highchartOutput("state_bar_chart", height = 400, width = 390)
     }
+    
     }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
   # Show graph download button or no button depending on state
   output$state_nt_button = renderUI({
-
-    # If state is missing new offense violations and technical violations (Admissions)
-    if(input$state_report %in% nt_na_adm &
-       input$adm_pop_report == "Admissions"){
+    
+    downloadButton(outputId = 'save_state_bar_chart', "",
+                   class = "download-chart")
+    
+    miss_text <- missingness_sentences |> 
+      filter(state == input$state_report) |> 
+      pull(paste0("supervision_violation_", tolower(input$adm_pop_report), "_graph"))
+    
+    if (is.na(miss_text)){
+      # if 'miss_text' == NA --> data to plot --> ADD DOWNLOAD BUTTON  
+      downloadButton(outputId = 'save_state_bar_chart', "", class = "download-chart")
+    } else {
+      # if 'miss_text' != NA --> show sentence instead --> NO DOWNLOAD BUTTON 
       textOutput("missing_data_nt_button")
-
-      # If state is missing new offense violations and technical violations (Population)
-    } else if(input$state_report %in% nt_na_pop &
-              input$adm_pop_report == "Population"){
-      textOutput("missing_data_nt_button")
-
-      # If state has data (Admissions)
-    } else if(input$state_report %in% nt_not_na_adm &
-              input$adm_pop_report == "Admissions"){
-      downloadButton(outputId = 'save_state_bar_chart', "",
-                     class = "download-chart")
-
-      # If state has data (Population)
-    } else if(input$state_report %in% nt_not_na_pop &
-              input$adm_pop_report == "Population"){
-      downloadButton(outputId = 'save_state_bar_chart', "",
-                     class = "download-chart")
     }
+    
     }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
@@ -577,7 +543,7 @@ server <- function(input, output, session) {
       filter(state_name == input$state_report &
              type       == input$adm_pop_report) |>
       arrange(text) |>
-      select(text, `2018`, `2019`, `2021`, `2018 - 2023`, trend_data_18_23)
+      select(text, `2018`, `2019`, `2021`, `2022`, `2023`, `2018 - 2023`, trend_data_18_23)
 
     # Create table with 4 Year trend line in last column
     reactable(df,
@@ -603,8 +569,10 @@ server <- function(input, output, session) {
                 `2019`          = colDef(na = "–", minWidth = 95),
                 `2020`          = colDef(na = "–", minWidth = 95),
                 `2021`          = colDef(na = "–", minWidth = 95),
+                `2022`          = colDef(na = "–", minWidth = 95),
+                `2023`          = colDef(na = "–", minWidth = 95),
                 `2018 - 2023`   = colDef(na = "–", minWidth = 110,
-                                         name = "2018-2021 Change",
+                                         name = "2018-2023 Change",
                                          style = list(fontWeight = "bold"),
                                          format = colFormat(percent = TRUE,
                                                             digits = 0)),
@@ -654,8 +622,9 @@ server <- function(input, output, session) {
 
   # Filter data
   df_parole_asterisks_notes <- reactive({
-    parole_asterisks_notes |>
-      filter(state == input$state_report)
+    formatted_notes |> 
+      filter(state == input$state_report) |> 
+      select(state, notes = parole_asterisks)
   }) |>
     bindCache(input$state_report)
 
@@ -666,8 +635,9 @@ server <- function(input, output, session) {
 
   # Filter data
   df_probation_asterisks_notes <- reactive({
-    probation_asterisks_notes |>
-      filter(state == input$state_report)
+    formatted_notes |> 
+      filter(state == input$state_report) |> 
+      select(state, notes = probation_asterisks)
   }) |>
     bindCache(input$state_report)
 
@@ -678,8 +648,9 @@ server <- function(input, output, session) {
 
   # Filter parole data
   df_parole_notes <- reactive({
-    parole_notes |>
-      filter(state == input$state_report)
+    formatted_notes |> 
+      filter(state == input$state_report) |> 
+      select(state, notes = parole_metrics)
   }) |>
     bindCache(input$state_report)
 
@@ -690,8 +661,9 @@ server <- function(input, output, session) {
 
   # Filter probation data
   df_probation_notes <- reactive({
-    probation_notes |>
-      filter(state == input$state_report)
+    formatted_notes |> 
+      filter(state == input$state_report) |> 
+      select(state, notes = probation_metrics)
   }) |>
     bindCache(input$state_report)
 
@@ -702,8 +674,9 @@ server <- function(input, output, session) {
 
   # Filter data
   df_additional_notes <- reactive({
-    additional_notes |>
-      filter(state == input$state_report)
+    formatted_notes |> 
+      filter(state == input$state_report) |> 
+      select(state, notes = additional_notes)
   }) |>
     bindCache(input$state_report)
 

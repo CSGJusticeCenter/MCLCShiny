@@ -15,25 +15,25 @@ obj_names <-  c(
   "svii_download",       #csg 
   "svii_yr", 
   # text - state overview notes 
-  "parole_notes", 
-  "probation_notes", 
-  "parole_asterisks_notes", 
-  "probation_asterisks_notes", 
-  "additional_notes", 
-  # text - aother 
-  "missingness_sentences", 
-  "nt_na_adm", 
-  "nt_na_pop", 
-  "nt_not_na_adm", 
-  "nt_not_na_pop", 
-  "parole_na_adm", 
-  "parole_na_pop", 
-  "parole_not_na_adm", 
-  "parole_not_na_pop", 
-  "probation_na_adm", 
-  "probation_na_pop", 
-  "probation_not_na_adm", 
-  "probation_not_na_pop" 
+  "formatted_notes", 
+  # "parole_notes", 
+  # "probation_notes", 
+  # "parole_asterisks_notes", 
+  # "probation_asterisks_notes", 
+  # "additional_notes", 
+  "missingness_sentences"
+  # "nt_na_adm",
+  # "nt_na_pop",
+  # "nt_not_na_adm",
+  # "nt_not_na_pop",
+  # "parole_na_adm",
+  # "parole_na_pop",
+  # "parole_not_na_adm",
+  # "parole_not_na_pop",
+  # "probation_na_adm",
+  # "probation_na_pop",
+  # "probation_not_na_adm",
+  # "probation_not_na_pop"
 )
 
 for (x in obj_names){
