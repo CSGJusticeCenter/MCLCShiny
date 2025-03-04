@@ -1,15 +1,6 @@
-#######################################
-# Project: MCLCShiny
-# File: server.R
-# Authors: Mari Roberts
-# Date last updated: August 15, 2023 (MAR)
-# Description:
-#    Server for shiny app
-#######################################
 
 server <- function(input, output, session) {
-
-  # Change URL depending on tab selection in navbar
+  # Change URL depending on tab selection in navbar ############################
   observeEvent(input$navbarID, {
 
     newURL <- paste0(
@@ -32,14 +23,12 @@ server <- function(input, output, session) {
     }
   })
 
-  ##############################################################################################################################
-  # MAP EXPLORER
-  ##############################################################################################################################
 
-  #######
-  # Hex map
-  #######
-
+  # NATL TRENDS HEX MAP EXPLORER ###############################################
+  
+  # Natl Trends Hex Map --------------------------------------------------------
+  
+  # DETERMINE FILE NAME FOR DOWNLOADING MAP PNG 
   # Dynamically change name of map
   map_filename <- reactive({
     name <- svii_explorer |>
@@ -55,6 +44,8 @@ server <- function(input, output, session) {
               input$adm_or_pop_map,
               input$year_map)
 
+  
+  # SELECT HEX MAP OBJECT 
   # Select foundational hex map and store it as a reactive expression
   # This allows the map to be downloaded after the map is changed
   # Charts were created in highchart.R
@@ -74,11 +65,8 @@ server <- function(input, output, session) {
   output$hex_map <- renderHighchart({
     foundational_map()
   })
-
-  #######
-  # Download map button near dropdowns
-  #######
-
+  
+  # DOWNLOAD HEX MAP PNG 
   # Save map
   output$save_map <- downloadHandler(
     filename <- function() {
@@ -93,11 +81,9 @@ server <- function(input, output, session) {
     contentType = "image/png"
   )
 
-  #######
-  # Table under hex map
-  #######
+  # natl trends hex map table --------------------------------------------------
 
-  # Title of table under map
+  # TITLE OF TABLE UNDER MAP 
   output$selected_map_table <- renderText({
     if (input$adm_or_pop_map == "Admissions" & input$data_map == "Total") {
       paste(input$data_map, " ", input$adm_or_pop_map, " to State Prison", sep = "")
@@ -116,7 +102,7 @@ server <- function(input, output, session) {
               input$adm_or_pop_map)
 
 
-  # Reactable table under hex map
+  # REACTABLE TABLE UNDER HEX MAP 
   output$table_map <- renderReactable({
 
     filter_by <- paste0(input$data_map, " ",
@@ -237,14 +223,9 @@ server <- function(input, output, session) {
 
 
 
-  ##############################################################################################################################
-  # State Reports
-  ##############################################################################################################################
+  # STATE DASHBOARDS ###########################################################
 
-  #######
-  # State page title
-  #######
-
+  # 0 state title --------------------------------------------------------------
   # Title of state based on user input
   output$selected_state <- renderText({
     if (input$adm_pop_report == "Admissions") {
@@ -258,10 +239,7 @@ server <- function(input, output, session) {
     bindCache(input$state_report,
               input$adm_pop_report)
 
-  #######
-  # Value boxes
-  #######
-
+  # 0 value boxes --------------------------------------------------------------
   # Filter data to totals
   df_vb_total <- reactive({
     svii_valbox |>
@@ -368,10 +346,9 @@ server <- function(input, output, session) {
     )
   })
 
-  #######
-  # Area chart
-  #######
-
+  # 1 OVERVIEW -----------------------------------------------------------------
+  
+  # 1 AREA CHART ---------------------------------------------------------------
   # Select highchart depending on selector input
   # Charts were saved in highchart.R
   output$state_area_chart <- renderHighchart({
@@ -393,7 +370,7 @@ server <- function(input, output, session) {
     }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
-
+  
   # Download button for state area chart
   output$save_state_area_chart <- downloadHandler(
     filename <- function() {
@@ -467,10 +444,7 @@ server <- function(input, output, session) {
     bindCache(input$state_report,
               input$adm_pop_report)
 
-  #######
-  # Bar chart
-  #######
-
+  # 1 BAR CHART (supervision/both)----------------------------------------------
   # Select highchart depending on selector input
   # Charts were saved in highchart.R
   output$state_bar_chart <- renderHighchart({
@@ -493,7 +467,8 @@ server <- function(input, output, session) {
     }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
-
+  
+  # BAR CHART DOWNLOAD 
   # Download button
   output$save_state_bar_chart <- downloadHandler(
     filename <- function() {
@@ -509,10 +484,9 @@ server <- function(input, output, session) {
   )
 
 
-  #######
+  # 1 BAR CHART change between graph/sentence ---------------------------------
   # Supervision Violations Graph - Dynamically change between sentence and graph depending on data availability
   # Show "Data Unavailable", "Did Not Respond" or "Partial Data Submitted" or chart if required data is available
-  #######
 
   # If data is missing a supervision violation admissions graph
   output$missing_data_nt_adm <- renderUI({
@@ -593,10 +567,8 @@ server <- function(input, output, session) {
     bindCache(input$state_report,
               input$adm_pop_report)
 
-  #######
-  # Table under state graphs
-  #######
 
+  # 1 TABLE (overview) ---------------------------------------------------------
   # State table
   output$state_table <- renderReactable({
 
@@ -678,9 +650,7 @@ server <- function(input, output, session) {
     bindCache(input$state_report,
               input$adm_pop_report)
 
-  #######
-  # State notes
-  #######
+  # 1 STATE NOTES --------------------------------------------------------------
 
   # Filter data
   df_parole_asterisks_notes <- reactive({
@@ -742,10 +712,10 @@ server <- function(input, output, session) {
     HTML(df_additional_notes()$notes)
   })
 
-  #######
-  # Parole Tab
-  #######
 
+  # 2 PAROLE -------------------------------------------------------------------
+
+  # 2 bar chart (parole) -------------------------------------------------------
   # Select highchart depending on selector input
   # Charts were saved in highchart.R
   output$parole_bar_chart <- renderHighchart({
@@ -783,7 +753,7 @@ server <- function(input, output, session) {
     contentType = "image/png"
   )
 
-  # Parole table
+  # 2 table (parole) -----------------------------------------------------------
   output$parole_table <- renderReactable({
 
     # Filter data
@@ -862,10 +832,9 @@ server <- function(input, output, session) {
     bindCache(input$state_report,
               input$adm_pop_report)
 
-  #######
+  # 2 BAR CHART change between graph/sentence ----------------------------------
   # Parole Graph - Dynamically change between sentence and graph depending on data availability
   # Show "Data Unavailable", "Did Not Respond" or "Partial Data Submitted" or chart if required data is available
-  #######
 
   # If data is missing a parole violation admissions graph
   output$missing_data_parole_nt_adm <- renderUI({
@@ -937,10 +906,10 @@ server <- function(input, output, session) {
     bindCache(input$state_report,
               input$adm_pop_report)
 
-  #######
-  # Probation Tab
-  #######
 
+  # 3 PROBATION ----------------------------------------------------------------
+  
+  # 3 bar chart (probation) ------------------------------------------------------
   # Select highchart depending on selector input
   # Charts were saved in highchart.R
   output$probation_bar_chart <- renderHighchart({
@@ -977,7 +946,7 @@ server <- function(input, output, session) {
     contentType = "image/png"
   )
 
-  # Probation table
+  # 3 table (Probation) 
   output$probation_table <- renderReactable({
 
     # Filter data
@@ -1057,10 +1026,9 @@ server <- function(input, output, session) {
     bindCache(input$state_report,
               input$adm_pop_report)
 
-  #######
+  # 3 BAR CHART change between graph/sentence 
   # Probation Graph - Dynamically change between sentence and graph depending on data availability
   # Show "Data Unavailable", "Did Not Respond" or "Partial Data Submitted" or chart if required data is available
-  #######
 
   # If data is missing a probation violation admissions graph
   output$missing_data_probation_nt_adm <- renderUI({
@@ -1133,9 +1101,7 @@ server <- function(input, output, session) {
               input$adm_pop_report)
 
 
-  ##############################################################################################################################
-  # Download
-  ##############################################################################################################################
+  # DOWNLOAD DATA ##############################################################
 
   # Select multiple years
   filteredYears <- reactive({
@@ -1226,4 +1192,4 @@ server <- function(input, output, session) {
                                 filterable = FALSE)))
   })
 
-}
+} # END SERVER 
