@@ -56,7 +56,7 @@ box::use(
   dplyr[...], 
   glue[glue],
   purrr[set_names], 
-  stringr[str_detect, str_remove_all]
+  stringr[str_detect, str_remove_all, word]
 )
 
 

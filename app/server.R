@@ -105,117 +105,105 @@ server <- function(input, output, session) {
   # REACTABLE TABLE UNDER HEX MAP 
   output$table_map <- renderReactable({
 
-    filter_by <- paste0(input$data_map, " ",
+    this_data <- paste0(input$data_map, " ",
                         input$adm_or_pop_map)
-    select_column <- input$year_map
-    select_column_name <- paste0(select_column, " Change")
-    select_trend_data_column <-
-      if(input$year_map == "2018 - 2023"){
-        paste0("trend_data_18_23")
-      } else if(input$year_map == "2018 - 2019"){
-        paste0("trend_data_18_19")
-      } else if(input$year_map == "2019 - 2020"){
-        paste0("trend_data_19_20")
-      } else if(input$year_map == "2020 - 2021"){
-        paste0("trend_data_20_21")
-      }
-
-    select_trend_column <-
-      if(input$year_map == "2018 - 2023"){
-        paste0("trend_18_23")
-      } else if(input$year_map == "2018 - 2019"){
-        paste0("trend_18_19")
-      } else if(input$year_map == "2019 - 2020"){
-        paste0("trend_19_20")
-      } else if(input$year_map == "2020 - 2021"){
-        paste0("trend_20_21")
-      }
-
+    this_yrchg <- input$year_map
+    this_yrchg_name <- paste0(this_yrchg, " Change")
+    this_trend_data <- paste0(
+      "trend_data_", 
+      substr(word(this_yrchg,  1), 3, 4), "_", 
+      substr(word(this_yrchg, -1), 3, 4)
+    )
+    this_trend <- paste0(
+      "trend_", 
+      substr(word(this_yrchg,  1), 3, 4), "_", 
+      substr(word(this_yrchg, -1), 3, 4)
+    )
+    
     df <- svii_explorer_table |>
-      select(state = state_name, data, `2018`, `2019`, `2020`, `2021`, 
-             all_of(select_column),
-             all_of(select_trend_data_column),
-             all_of(select_trend_column)) |>
-      filter(data == filter_by) |>
+      select(
+        state = state_name, 
+        data, 
+        all_of(as.character(svii_yr$min_yr[1]:svii_yr$max_yr[1])),
+        change     = all_of(this_yrchg), 
+        trend_data = all_of(this_trend_data), 
+        trend      = all_of(this_trend)
+      ) |>
+      filter(data == this_data) |>
+      select(-data) |> 
       arrange(state) |>
-      rename(change = all_of(select_column),
-             total_new = 8,
-             trend     = 9) |>
       mutate(
         trend = case_when(
-          trend == "negative"   ~ regblue
-          , trend == "positive" ~ orange
-          , trend == "same"     ~ "#585858"
+          trend == "negative" ~ regblue, 
+          trend == "positive" ~ orange, 
+          trend == "same"     ~ "#585858"
         )
       )
-
-    reactable(df,
-              style = list(fontFamily = "Graphik, sans-serif",
-                           fontSize = "1.4rem"),
-              theme = reactableTheme(cellStyle = list(display = "flex",
-                                                      flexDirection = "column",
-                                                      justifyContent = "center"),
-                                     headerStyle = list(textAlign = "right")
-              ),
-              defaultColDef = colDef(format = colFormat(separators = TRUE),
-                                     align = "right"),
-              compact = TRUE,
-              fullWidth = FALSE,
-              searchable = TRUE,
-
-              language = reactableLang(searchPlaceholder = "Search for Your State"),
-
-              pagination = FALSE,
-              columns = list(
-                state           = colDef(name = "State",
-                                         align = "left",
-                                         minWidth = 120,
-                                         style = list(fontWeight = "bold")),
-                data            = colDef(show = F,
-                                         name = "Metric",
-                                         align = "left",
-                                         minWidth = 240,
-                                         style = list(fontWeight = "bold")),
-                `2018`          = colDef(na = "–", minWidth = 110),
-                `2019`          = colDef(na = "–", minWidth = 110),
-                `2020`          = colDef(na = "–", minWidth = 110),
-                `2021`          = colDef(na = "–", minWidth = 110),
-
-                change = colDef(na = "–",
-                                minWidth = 110,
-                                name = select_column_name,
-                                style = list(fontWeight = "bold"),
-                                format = colFormat(percent = TRUE, digits = 0)),
-                # add 4 Year trend graphs to each row
-                total_new  =
-                  colDef(na = "–",
-                         minWidth = 140,
-                         align = "center",
-                         name = "Trend Line",
-                         sortable = FALSE,
-                         cell = function(value, index) {
-                           dui_sparkline(
-                             data = value[[1]],
-                             height = 60,
-                             components = list(
-                               dui_sparkpointseries(
-                                 points =  list("all"),
-                                 stroke = df$trend[index],
-                                 fill = df$trend[index],
-                                 size = 2
-                               ),
-                               dui_sparklineseries(
-                                 curve = "linear",
-                                 showArea = FALSE,
-                                 fill = df$trend[index],
-                                 stroke = df$trend[index]
-                               )
-                             )
-                           )}),
-                #trend, don't show, used in determining
-                trend = colDef(show = FALSE)
-              ))
-    }) |>
+    
+    # need width of reactable to be <= 995
+    # text (275) + yr cnt (6*95) + change (110) + trend (110) = 1065
+    
+    
+    reactable(
+      df,
+      style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
+      theme = reactableTheme(
+        cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"),
+        headerStyle = list(textAlign = "right")
+      ),
+      compact = TRUE,
+      fullWidth = FALSE, 
+      searchable = TRUE,
+      language = reactableLang(searchPlaceholder = "Search for Your State"),
+      pagination = FALSE,
+      defaultColDef = colDef(
+        format = colFormat(separators = TRUE), 
+        minWidth = 90, 
+        align = "right", 
+        na = "-"
+      ),
+      columns = list(
+        state = colDef(
+          name = "State",
+          align = "left",
+          minWidth = 130, #120 to fit states; 130 to have NH on single line
+          style = list(fontWeight = "bold")
+        ),
+        change = colDef(
+          minWidth = 110,
+          name = this_yrchg_name,
+          style = list(fontWeight = "bold"),
+          format = colFormat(percent = TRUE, digits = 0)
+        ),
+        trend_data  = colDef(
+          minWidth = 140,
+          align = "center",
+          name = "Trend Line",
+          sortable = FALSE,
+          cell = function(value, index) {
+            dui_sparkline(
+              data = value[[1]],
+              height = 60,
+              components = list(
+                dui_sparkpointseries(
+                  points =  list("all"),
+                  stroke = df$trend[index],
+                  fill = df$trend[index],
+                  size = 2
+                ),
+                dui_sparklineseries(
+                  curve = "linear",
+                  showArea = FALSE,
+                  fill = df$trend[index],
+                  stroke = df$trend[index]
+                )
+              )
+            )}
+        ),
+        trend = colDef(show = FALSE)
+      )
+    )
+  }) |>
     bindCache(input$data_map,
               input$adm_or_pop_map,
               input$year_map)
