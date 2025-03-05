@@ -55,20 +55,8 @@ labeled_input <- function(id, label, input){
 }
 
 
-# testing 
 
-df <- svii_table |>
-  filter(state_name == "Vermont" & type == "Admissions") |>
-  arrange(text) |>
-  select(
-    text, 
-    all_of(as.character(svii_yr$min_yr[1]:svii_yr$max_yr[1])), 
-    `2018 - 2023`, 
-    trend_data_18_23
-  )
-
-
-fnc_reactable <- function(df, these_col_fill = colpal_fill, these_col_stroke = colpal_stroke) {
+state_reactable <- function(df, these_col_fill = colpal_fill, these_col_stroke = colpal_stroke) {
   
   # function results in warning for each row 
   #> `bindFillRole()` only works on htmltools::tag() objects (e.g., div(), p(), etc.), not objects of type 'shiny.tag.list'

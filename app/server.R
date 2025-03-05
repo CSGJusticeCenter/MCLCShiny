@@ -469,20 +469,12 @@ server <- function(input, output, session) {
   # Supervision Violations Graph - Dynamically change between sentence and graph depending on data availability
   # Show "Data Unavailable", "Did Not Respond" or "Partial Data Submitted" or chart if required data is available
 
-  # If data is missing a supervision violation admissions graph
-  output$missing_data_nt_adm <- renderUI({
+  # If data is missing a supervision violation
+  output$missing_data_nt <- renderUI({
     out <- missingness_sentences |>
-      filter(state == input$state_report)
-    out <- out$supervision_violation_admissions_graph
-    HTML(out)
-  }) |>
-    bindCache(input$state_report)
-
-  # If data is missing a supervision violation population graph
-  output$missing_data_nt_pop <- renderUI({
-    out <- missingness_sentences |>
-      filter(state == input$state_report)
-    out <- out$supervision_violation_population_graph
+      filter(state == input$state_report) |> 
+      rename(thiscol = paste0("supervision_violation_", tolower(input$adm_pop_report), "_graph"))
+    out <- out$thiscol
     HTML(out)
   }) |>
     bindCache(input$state_report)
@@ -504,7 +496,7 @@ server <- function(input, output, session) {
       highchartOutput("state_bar_chart", height = 400, width = 390)
     } else {
       # if 'miss_text' != NA --> show sentence instead 
-      htmlOutput("missing_data_nt_adm")
+      htmlOutput("missing_data_nt")
     }
     
     }) |>
@@ -630,22 +622,13 @@ server <- function(input, output, session) {
   # Select highchart depending on selector input
   # Charts were saved in highchart.R
   output$parole_bar_chart <- renderHighchart({
-    if (input$adm_pop_report == "Admissions") {
-      state_bar_lst[["Admissions"]][["Parole"]][[input$state_report]] |>
-        highcharter::hc_add_dependency(name = "plugins/series-label.js") |>
-        highcharter::hc_add_dependency(name = "plugins/accessibility.js") |>
-        highcharter::hc_add_dependency(name = "plugins/exporting.js") |>
-        highcharter::hc_add_dependency(name = "plugins/export-data.js") |>
-        hc_boost(enabled = TRUE)
-    } else {
-      state_bar_lst[["Population"]][["Parole"]][[input$state_report]] |>
-        highcharter::hc_add_dependency(name = "plugins/series-label.js") |>
-        highcharter::hc_add_dependency(name = "plugins/accessibility.js") |>
-        highcharter::hc_add_dependency(name = "plugins/exporting.js") |>
-        highcharter::hc_add_dependency(name = "plugins/export-data.js") |>
-        hc_boost(enabled = TRUE)
-    }
-    }) |>
+    state_bar_lst[[input$adm_pop_report]][["Parole"]][[input$state_report]] |>
+      highcharter::hc_add_dependency(name = "plugins/series-label.js") |>
+      highcharter::hc_add_dependency(name = "plugins/accessibility.js") |>
+      highcharter::hc_add_dependency(name = "plugins/exporting.js") |>
+      highcharter::hc_add_dependency(name = "plugins/export-data.js") |>
+      hc_boost(enabled = TRUE)
+  }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -670,75 +653,20 @@ server <- function(input, output, session) {
     # Filter data
     df <- svii_par |>
       filter(state_name == input$state_report &
-             type == input$adm_pop_report) |>
-      select(text, `2018`, `2019`, `2020`, `2021`, `2018 - 2023`, trend_data_18_23)
-
-    # Create table with 4 Year trend line in last column
-    reactable(df,
-              style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
-              theme = reactableTheme(cellStyle = list(display = "flex",
-                                                      flexDirection = "column",
-                                                      justifyContent = "center"), # was center
-                                     headerStyle = list(textAlign = "right")
-              ),
-              defaultColDef = colDef(format = colFormat(separators = TRUE),
-                                     align = "right"),
-              compact = TRUE,
-              fullWidth = FALSE,
-              searchable = FALSE,
-              pagination = FALSE,
-              columns = list(
-                text            = colDef(name = "Metric",
-                                         align = "left",
-                                         style = list(fontWeight = "bold"),
-                                         minWidth = 275),
-                `2018`          = colDef(na = "–", minWidth = 95),
-                `2019`          = colDef(na = "–", minWidth = 95),
-                `2020`          = colDef(na = "–", minWidth = 95),
-                `2021`          = colDef(na = "–", minWidth = 95),
-                `2018 - 2023`   = colDef(na = "–", minWidth = 110,
-                                         name = "2018-2021 Change",
-                                         style = list(fontWeight = "bold"),
-                                         format = colFormat(percent = TRUE,
-                                                            digits = 0)),
-                # add 4 Year trend graphs to each row
-                trend_data_18_23 = colDef(minWidth = 110,
-                                   name = "Trend Line",
-                                   cell = function(value, index) {
-                                     if (!is.null(value[[1]]) && length(value[[1]]) > 0) {
-                                       points_list <- if (length(value[[1]]) >= 4) {
-                                         list("all")
-                                       } else {
-                                         seq(length(value[[1]]) - 1)
-                                       }
-
-                                       dui_sparkline(
-                                         data = value[[1]],
-                                         height = 80,
-                                         margin = list(top = 30,
-                                                       right = 20,
-                                                       bottom = 30,
-                                                       left = 20),
-                                         components = list(
-                                           dui_sparkpointseries(
-                                             points = points_list,
-                                             stroke = colpal_fill[index],
-                                             fill = colpal_stroke[index],
-                                             size = 2.5
-                                           ),
-                                           dui_sparklineseries(
-                                             curve = "linear",
-                                             showArea = FALSE,
-                                             fill = colpal_fill[index],
-                                             stroke = colpal_stroke[index]
-                                           )
-                                         )
-                                       )
-                                     } else {
-                                       htmltools::HTML("")  # Return an empty element if no data
-                                     }
-                                   })
-              ))
+               type       == input$adm_pop_report) |>
+      arrange(text) |>
+      select(
+        text, 
+        all_of(as.character(svii_yr$min_yr[1]:svii_yr$max_yr[1])), 
+        `2018 - 2023`, 
+        trend_data_18_23
+      )
+    state_reactable(
+      df, 
+      these_col_fill = colpal_fill[2:4], 
+      these_col_stroke = colpal_stroke[2:4]
+    )
+    
     }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
@@ -748,71 +676,47 @@ server <- function(input, output, session) {
   # Show "Data Unavailable", "Did Not Respond" or "Partial Data Submitted" or chart if required data is available
 
   # If data is missing a parole violation admissions graph
-  output$missing_data_parole_nt_adm <- renderUI({
+  output$missing_data_parole_nt <- renderUI({
     out <- missingness_sentences |>
-      filter(state == input$state_report)
+      filter(state == input$state_report) |> 
+      rename(thiscol = paste0("parole_violation_", tolower(input$adm_pop_report), "_graph"))
     out <- out$parole_violation_admissions_graph
-    HTML(out)
-  }) |>
-    bindCache(input$state_report)
-
-  # If data is missing a parole violation population graph
-  output$missing_data_parole_nt_pop <- renderUI({
-    out <- missingness_sentences |>
-      filter(state == input$state_report)
-    out <- out$parole_violation_population_graph
     HTML(out)
   }) |>
     bindCache(input$state_report)
 
   # Show parole graph or missing data sentence depending on state
   output$parole_nt <- renderUI({
-
-    # If state is missing new offense violations and technical violations (Admissions)
-    if(input$state_report %in% parole_na_adm &
-       input$adm_pop_report == "Admissions"){
-
-      fluidRow(column(width = 3),
-               column(width = 6, align = "center",
-                      htmlOutput("missing_data_parole_nt_adm")),
-               column(width = 3))
-
-      # If state is missing new offense violations and technical violations (Population)
-    } else if(input$state_report %in% parole_na_pop &
-              input$adm_pop_report == "Population"){
-
-      fluidRow(column(width = 3),
-               column(width = 6, align = "center",
-                      htmlOutput("missing_data_parole_nt_pop")),
-               column(width = 3))
-
-      # If state has data (Admissions)
-    } else if(input$state_report %in% parole_not_na_adm &
-              input$adm_pop_report == "Admissions"){
-
-      fluidRow(column(width = 3),
-               column(width = 5, align = "center",
-                      highchartOutput("parole_bar_chart",
-                                      height = 400,
-                                      width = 390)),
-               column(width = 1, align = "left",
-                      downloadButton(outputId = 'save_parole_bar_chart', "",
-                                     class = "download-chart")),
-               column(width = 3))
-
-      # If state has data (Population)
-    } else if(input$state_report %in% parole_not_na_pop &
-              input$adm_pop_report == "Population"){
-
-      fluidRow(column(width = 3),
-               column(width = 5, align = "center",
-                      highchartOutput("parole_bar_chart",
-                                      height = 400, width = 390)),
-               column(width = 1, align = "left",
-                      downloadButton(outputId = 'save_parole_bar_chart', "",
-                                     class = "download-chart")),
-               column(width = 3))
+    
+    miss_text <- missingness_sentences |> 
+      filter(state == input$state_report) |> 
+      pull(paste0("parole_violation_", tolower(input$adm_pop_report), "_graph"))
+    
+    if (is.na(miss_text)){
+      # if 'miss_text' == NA --> data to plot
+      fluidRow(
+        column(width = 3),
+        column(
+          width = 5,
+          align = "center",
+          highchartOutput("parole_bar_chart", height = 400, width = 390)
+        ),
+        column(
+          width = 1,
+          align = "left",
+          downloadButton(outputId = 'save_parole_bar_chart', "", class = "download-chart")
+        ),
+        column(width = 3)
+      )
+    } else {
+      # if 'miss_text' != NA --> show sentence instead
+      fluidRow(
+        column(width = 3),
+        column(width = 6, align = "center", htmlOutput("missing_data_parole_nt")),
+        column(width = 3)
+      )
     }
+    
     }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
