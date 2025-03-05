@@ -86,7 +86,17 @@ type_opts   <- sort(unique(svii_explorer$type))
 # choices = purrr::set_names(value to be used in the back-end of app, names to be displayed in dropdown)
 yrchg_opts <- purrr::set_names(
   svii_yr$change_name, 
-  mutate(svii_yr, display = glue("{str_yr} - {end_yr}, {end_yr-str_yr} year{ifelse(end_yr-str_yr != 1, 's', '')}"))$display
+  svii_yr |> 
+    mutate(
+      n_yrs = end_yr - str_yr, 
+      display = paste0(
+        str_yr, " - ", end_yr, ", ", 
+        ifelse(n_yrs == 1, 1, n_yrs+1), 
+        " year", ifelse(n_yrs == 1, '', 's')
+      )
+    ) |> 
+    pull(display)
   )
 
 
+  
