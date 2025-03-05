@@ -543,77 +543,15 @@ server <- function(input, output, session) {
       filter(state_name == input$state_report &
              type       == input$adm_pop_report) |>
       arrange(text) |>
-      select(text, `2018`, `2019`, `2021`, `2022`, `2023`, `2018 - 2023`, trend_data_18_23)
-
-    # Create table with 4 Year trend line in last column
-    reactable(df,
-              style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
-              theme = reactableTheme(cellStyle = list(display = "flex",
-                                                      flexDirection = "column",
-                                                      justifyContent = "center"), # was center
-                                     headerStyle = list(textAlign = "right")
-              ),
-              defaultColDef = colDef(format = colFormat(separators = TRUE),
-                                     align = "right"),
-              compact = TRUE,
-              fullWidth = FALSE,
-              searchable = FALSE,
-              pagination = FALSE,
-              columns = list(
-                text            = colDef(name = "Metric",
-                                         align = "left",
-                                         minWidth = 275,
-                                         style = list(fontWeight = "bold")
-                                         ),
-                `2018`          = colDef(na = "–", minWidth = 95),
-                `2019`          = colDef(na = "–", minWidth = 95),
-                `2020`          = colDef(na = "–", minWidth = 95),
-                `2021`          = colDef(na = "–", minWidth = 95),
-                `2022`          = colDef(na = "–", minWidth = 95),
-                `2023`          = colDef(na = "–", minWidth = 95),
-                `2018 - 2023`   = colDef(na = "–", minWidth = 110,
-                                         name = "2018-2023 Change",
-                                         style = list(fontWeight = "bold"),
-                                         format = colFormat(percent = TRUE,
-                                                            digits = 0)),
-                # Add 4 Year trend graphs to each row
-                trend_data_18_23 = colDef(minWidth = 110,
-                                   name = "Trend Line",
-                                   cell = function(value, index) {
-                                     if (!is.null(value[[1]]) && length(value[[1]]) > 0) {
-                                       points_list <- if (length(value[[1]]) >= 4) {
-                                         list("all")
-                                       } else {
-                                         seq(length(value[[1]]) - 1)
-                                       }
-
-                                       dui_sparkline(
-                                         data = value[[1]],
-                                         height = 80,
-                                         margin = list(top = 30,
-                                                       right = 20,
-                                                       bottom = 30,
-                                                       left = 20),
-                                         components = list(
-                                           dui_sparkpointseries(
-                                             points = points_list,
-                                             stroke = colpal_fill[index],
-                                             fill = colpal_stroke[index],
-                                             size = 2.5
-                                           ),
-                                           dui_sparklineseries(
-                                             curve = "linear",
-                                             showArea = FALSE,
-                                             fill = colpal_fill[index],
-                                             stroke = colpal_stroke[index]
-                                           )
-                                         )
-                                       )
-                                     } else {
-                                       htmltools::HTML("")  # Return an empty element if no data
-                                     }
-                                   })
-              ))
+      select(
+        text, 
+        all_of(as.character(svii_yr$min_yr[1]:svii_yr$max_yr[1])), 
+        `2018 - 2023`, 
+        trend_data_18_23
+      )
+    
+    state_reactable(df)
+    
     }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
