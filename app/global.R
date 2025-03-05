@@ -55,7 +55,8 @@ library(formattable)
 box::use(
   dplyr[...], 
   glue[glue],
-  purrr[set_names]
+  purrr[set_names], 
+  stringr[str_detect, str_remove_all]
 )
 
 
@@ -78,7 +79,6 @@ if (Sys.info()[['sysname']] == 'Linux') {
 
 source("dataframes.R")
 source("functions.R")
-source("modals.R")
 
 
 metric_opts <- levels(unique(svii_explorer$metric))
