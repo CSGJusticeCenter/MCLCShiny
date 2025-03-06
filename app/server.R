@@ -181,12 +181,13 @@ server <- function(input, output, session) {
           name = "Trend Line",
           sortable = FALSE,
           cell = function(value, index) {
+            points_list <- which(!is.na(value[[1]]))-1
             dui_sparkline(
               data = value[[1]],
               height = 60,
               components = list(
                 dui_sparkpointseries(
-                  points =  list("all"),
+                  points =  points_list,
                   stroke = df$trend[index],
                   fill = df$trend[index],
                   size = 2
