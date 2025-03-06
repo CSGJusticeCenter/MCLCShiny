@@ -107,34 +107,26 @@ state_reactable <- function(df, these_col_fill = colpal_fill, these_col_stroke =
         minWidth = 110,
         name = "Trend Line",
         cell = function(value, index) {
-          if (!is.null(value[[1]]) && length(value[[1]]) > 0) {
-            points_list <- if (length(value[[1]]) >= 4) {
-                list("all")
-              } else {
-                seq(length(value[[1]]) - 1)
-              }
-            dui_sparkline(
-              data = value[[1]],
-              height = 80,
-              margin = list(top = 30, right = 20, bottom = 30, left = 20),
-              components = list(
-                dui_sparkpointseries(
-                  points = points_list,
-                  stroke = these_col_fill[index],
-                  fill = these_col_stroke[index],
-                  size = 2.5
-                ),
-                dui_sparklineseries(
-                  curve = "linear",
-                  showArea = FALSE,
-                  fill = these_col_fill[index],
-                  stroke = these_col_stroke[index]
-                )
+          points_list <- which(!is.na(value[[1]]))-1
+          dui_sparkline(
+            data = value[[1]],
+            height = 80,
+            margin = list(top = 30, right = 20, bottom = 30, left = 20),
+            components = list(
+              dui_sparkpointseries(
+                points = points_list,
+                stroke = these_col_fill[index],
+                fill = these_col_stroke[index],
+                size = 2.5
+              ),
+              dui_sparklineseries(
+                curve = "linear",
+                showArea = FALSE,
+                fill = these_col_fill[index],
+                stroke = these_col_stroke[index]
               )
             )
-          } else {
-            htmltools::HTML("")  # Return an empty element if no data
-          }
+          )
         }
       )
     )
