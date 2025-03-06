@@ -28,7 +28,13 @@ svii_prep <- readRDS(file.path(admin$sp_survey, "Data/raw/combined/svii_main.rds
   # remove columns that aren't relevant 
   select(-c(group, group_cat, time_period, FY_end)) |> 
   # replace all zeros with NA - no states should have zeros (this is carry over from last app) 
-  mutate(n = ifelse(n == 0, NA_real_, n)) |> 
+  # don't do this for Indiana Adm Parole New Offense (have non-zero vals in 2021 & 2023)
+  mutate(
+    n = case_when(
+      state_abbr == "IN" & year == 2022 & metric_abbr == "a new par" ~ n, 
+      TRUE ~ ifelse(n == 0, NA_real_, n)
+    )
+  ) |> 
   # create new metric_long column; metric will be the 'displayed' 
   # create new columns (data and metric) to match previous iteration 
   mutate(metric_long = metric, .before = metric) |> 
@@ -47,7 +53,12 @@ svii_prep <- readRDS(file.path(admin$sp_survey, "Data/raw/combined/svii_main.rds
       str_remove_all(metric, "Parole |Probation "), 
       metric
     ), 
-    metric = fct_reorder(factor(metric), as.numeric(metric_short), .na_rm = FALSE),
+    metric = factor(
+      metric, 
+      levels = c("Total", "Supervision Violation", 
+                 "Technical Violation", "New Offense Violation", 
+                 "Probation Violation", "Parole Violation" )
+    ),
     data = paste(
       ifelse(metric_short == "Total Prison", "Total", str_remove(metric_short, "Total ")), 
       type
