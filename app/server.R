@@ -136,12 +136,12 @@ server <- function(input, output, session) {
         trend = case_when(
           trend == "negative" ~ regblue, 
           trend == "positive" ~ orange, 
-          trend == "same"     ~ "#585858"
+          trend == "same"     ~ "#585858", 
+          # w/o this the 'color' is NA and table won't render 
+          # this is for cases where there is no trend (i.e. NA to NA) 
+          is.na(trend)        ~ "white" 
         )
       )
-    
-    # need width of reactable to be <= 995
-    # text (275) + yr cnt (6*95) + change (110) + trend (110) = 1065
     
     
     reactable(
