@@ -152,7 +152,8 @@ svii_agg <- full_join(
   )
 
 
-admin$save_rds_twice(svii_agg)
+# save version on sp but don't save on repo; don't need to use in app 
+admin$save_rds_twice(svii_agg, save_to_repo = FALSE)
 
 
 # **svii_yr** | create df's that determine trend from year to year; and from min year to max year ----

@@ -61,13 +61,13 @@ my_log <- file("logs/shiny_prep_log_hc_html.txt") # File name of output log
 sink(my_log, append = FALSE, type = "output") # Writing console output to log file
 sink(my_log, append = FALSE, type = "message")
 
-print("== CREATE PNGs FOR DOWNLOAD: HEX MAPS =================================")
+print("== CREATE HTMLS =======================================================")
 print(paste("Last run", format(Sys.time(), "%a %b %e, %Y at %H:%M:%S %Z")))
 
 # need to run 3a if haven't done so already 
 # print("-- 3a_highchart_fnc ---------------------------------------------------")
 # source("prep/3a_highchart_fnc.R", echo = TRUE)
-print("-- 3c_highchart_png_hex -----------------------------------------------")
+print("-- 3c_highchart_html -----------------------------------------------")
 source("prep/3c_highchart_html.R", echo = TRUE)
 
 warnings()
@@ -88,13 +88,13 @@ my_log <- file("logs/shiny_prep_log_hc_pngs.txt") # File name of output log
 sink(my_log, append = FALSE, type = "output") # Writing console output to log file
 sink(my_log, append = FALSE, type = "message")
 
-print("== CREATE PNGs FOR DOWNLOAD: HEX MAPS =================================")
+print("== CREATE PNGs FOR DOWNLOAD ===========================================")
 print(paste("Last run", format(Sys.time(), "%a %b %e, %Y at %H:%M:%S %Z")))
 
 # need to run 3a if haven't done so already 
 # print("-- 3a_highchart_fnc ---------------------------------------------------")
 # source("prep/3a_highchart_fnc.R", echo = TRUE)
-print("-- 3c_highchart_png_hex -----------------------------------------------")
+print("-- 3d_highchart_png ---------------------------------------------------")
 source("prep/3d_highchart_png.R", echo = TRUE)
 
 warnings()
