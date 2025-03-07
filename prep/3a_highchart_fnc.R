@@ -621,9 +621,13 @@ save_hc_to_html <- function(this_hc, this_filename, lst = NA){
   saveWidget(
     this_hc, 
     file = "temp.html", 
-    # file = paste0("temp/", this_filename, ".html"), 
     selfcontained = TRUE
   ) 
+  
+  # remove old version (if it exists)
+  if (file.exists(paste0("temp/", this_filename, ".html"))){
+    file.remove(paste0("temp/", this_filename, ".html"))
+  }
   
   # copy file to temp folder with new name 
   file.copy(
@@ -669,7 +673,7 @@ save_hchtml_to_png <- function(this_filename, lst = NA){
   
   filename_ext <- paste0(this_filename, ".png")
   save_plots_to <- file.path(      "app/data/plots", filename_ext) 
-  # copy_plots_to <- file.path(admin$sp_data, "plots", filename_ext)
+  copy_plots_to <- file.path(admin$sp_data, "plots", filename_ext)
   
   webshot2::webshot(
     url = paste0("temp/", this_filename, ".html"), 
@@ -679,5 +683,5 @@ save_hchtml_to_png <- function(this_filename, lst = NA){
     delay = 0.5, 
     zoom = this_zoom
   )
-  #file.copy(from = save_plots_to, to = copy_plots_to)
+  file.copy(from = save_plots_to, to = copy_plots_to)
 }
