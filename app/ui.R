@@ -27,7 +27,7 @@ ui <- fluidPage(
     tabPanel("nationaltrends",
       # natl trends header -----------------------------------------------------
       div(
-        id = "header",
+        class = "header", 
         fluidRow(
           column(width = 3),
           column(width = 6,fluidRow(
@@ -86,34 +86,34 @@ ui <- fluidPage(
       br(), # end header with dropdowns and download button 
       
       # natl trends app body ---------------------------------------------------
-      div(id = "app-body",
-        fluidRow(column( # HEx MAP 
+      div(class = "row app-body", # fluidRow("x") == <div class="row">x</div> == div(class == "row")
+        column( # HEx MAP 
           width = 12,
           align = "center",
           div(class = "hidden-xs hidden-sm",
             #id = "hex-map",
             highchartOutput("hex_map", height = 600, width = "100%") |> withSpinner()
           ) # end div 
-        )), # end column<fluidRow HEX MAP 
+        ), # end column HEX MAP 
         br(), br(),
-        fluidRow(column( # HEX MAP TABLE
+        column( # HEX MAP TABLE
           width = 12,
           align = "center",
           div(
             id = "selected-map-table",
             textOutput("selected_map_table")
           ) # end div 
-        )), # end column<fluidRow HEX MAP TABLE 
+        ), # end column HEX MAP TABLE 
         br(),
         tags$head(tags$style(HTML("thead{color: #004270; font-size: 16px}"))),
-        fluidRow(column(
+        column(
           width = 12, 
           align = "left",
           div(
             id = "reactable-table",
             reactableOutput("table_map")
           )
-        )),
+        ),
         br(), br()
       ) # end div app-body 
     ), # end tabPanel END NATL TRENDS HEX MAP 
@@ -123,7 +123,7 @@ ui <- fluidPage(
     
     tabPanel("statedashboard",
       # state dashboard header -------------------------------------------------
-      div(id = "app-header",
+      div(class = "header",
         fluidRow(
           column(width = 3),
           column(width = 6,
@@ -165,10 +165,10 @@ ui <- fluidPage(
           ), #end column width 6 
           column(width = 3)
         ) # fluidRow
-      ), # end div app-header
+      ), # end div header
       br(),
       # state header app body -------------------------------------------------
-      div(id = "app-body",
+      div(class = "app-body",
         # 0 state title --------------------------------------------------------
         fluidRow(
           column(width = 1),
@@ -337,7 +337,7 @@ ui <- fluidPage(
     # DOWNLOAD DATA ############################################################
     tabPanel("downloaddata",
       # download data header ---------------------------------------------------
-      div(id = "app-header",
+      div(class = "header",
         fluidRow(
           column(width = 3),
           column(width = 6,
@@ -401,7 +401,7 @@ ui <- fluidPage(
       br(),
       
       # download data app body ---------------------------------------------------
-      div(id = "app-body",
+      div(class = "app-body",
         fluidRow(
           column(width = 2),
           column(width = 8, div(id = "download-title", "Download Data")),

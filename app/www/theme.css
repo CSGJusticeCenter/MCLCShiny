@@ -25,7 +25,14 @@ Layout
 ###############################################################################*/
 
 /* Center and limit the width of the main content area */
-#app-body {
+.app-body {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* max width of stuff in the app */ 
+.fixwidth {
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
@@ -44,20 +51,16 @@ Layout
 }
 
 /* Hide navigation bar menu items*/
-/*#navbarID{
-  display:none;
-} */ 
+/*#navbarID{ display:none; } */ 
 
 /* Hide navigation bar*/
-/*.navbar{
-  display:none !important;
-} */ 
+/*.navbar{ display:none !important;} */ 
 
 
-/* Styling for the top section of the page containing controls and info */
-/* You can adjust the background color of the header here */
-#header {
-  background-color:#DDE3E9 !important;
+/* Top of page is a small grid of controls and info*/
+/* Can change background of header here background-color:#DEF0F6; */
+.header {
+  background-color: var(--accent_lite) !important; 
   min-height: 7.0em;
   display: absolute; /* without this the blue part of the header disappears */
   left: 50%;
@@ -71,18 +74,6 @@ elements on the page.*/
   overflow:visible;
 }
 
-/* Center align labels for header inputs */
-#header > * > span {
-  text-align: center;
-}
-
-/* Format state header, same as map explorer header and download data header */
-#app-header {
-  background-color:#DDE3E9 !important;
-  min-height: 7.0em;
-  margin-left: auto;
-  margin-right: auto;
-}
 
 /*##############################################################################
 select/seletize/dropdown inputs  
