@@ -308,57 +308,57 @@ ui <- fluidPage(
       # download data header ---------------------------------------------------
       div(class = "header",
         div(class = "row fixwidth", # this is REQUIRED to remove extra spacing
-              column( # SELECT STATE(S)
-                width = 3, 
-                align = "center",
-                class = "input-col",
-                labeled_input('input-btn', "",
-                  pickerInput(inputId = 'download_state',
-                    width = "100%",
-                    choices = NULL,
-                    selected = NULL,
-                    multiple = TRUE,
-                    div(style = "font-weight: bold", "Select State(s)"),
-                    options = list(`actions-box` = TRUE, style = "picker-style")
-                  )
-                )
-              ), # column: SELECT STATES
-              column( # SELECT METRIC(S)
-                width = 3, 
-                align = "center", 
-                class = "input-col",
-                labeled_input('input-btn', "",
-                  pickerInput(inputId = 'download_metric',
-                    width = "100%",
-                    choices = NULL,
-                    selected = NULL,
-                    multiple = TRUE,
-                    div(style = "font-weight: bold", "Select Metric(s)"),
-                    options = list(`actions-box` = TRUE, style = "picker-style")
-                  )
-                )
-              ), # column: SELECT METRIC(S)
-              column( # SELECT YEAR(S)
-                width = 3, 
-                align = "center", 
-                class = "input-col",
-                labeled_input('input-btn', "",
-                  pickerInput(inputId = 'download_year',
-                    width = "100%",
-                    choices = NULL,
-                    selected = NULL,
-                    multiple = TRUE,
-                    div(style = "font-weight: bold", "Select Year(s)"), 
-                    options = list(`actions-box` = TRUE, style = "picker-style")
-                  )
-                )
-              ), # column: SELECT YEAR(S)
-              column( # DOWNLOAD DATA BUTTON 
-                width = 3, 
-                align = "center", 
-                class = "input-col",
-                downloadButton(outputId = 'save_data', "Download Data", class = "download-btn-lg")
-              ) # column: DOWNLOAD DATA BUTTON 
+          column( # SELECT STATE(S)
+            width = 3, 
+            align = "center",
+            class = "input-col",
+            labeled_input('input-btn', "",
+              pickerInput(inputId = 'download_state',
+                width = "100%",
+                choices = NULL,
+                selected = NULL,
+                multiple = TRUE,
+                div(style = "font-weight: bold", "Select State(s)"),
+                options = list(`actions-box` = TRUE, style = "picker-style")
+              ) #pickerInput
+            ) # labeled_input 
+          ), # column: SELECT STATES
+          column( # SELECT METRIC(S)
+            width = 3, 
+            align = "center", 
+            class = "input-col",
+            labeled_input('input-btn', "",
+              pickerInput(inputId = 'download_metric',
+                width = "100%",
+                choices = NULL,
+                selected = NULL,
+                multiple = TRUE,
+                div(style = "font-weight: bold", "Select Metric(s)"),
+                options = list(`actions-box` = TRUE, style = "picker-style")
+              ) #pickerInput 
+            ) #labeled_input
+          ), # column: SELECT METRIC(S)
+          column( # SELECT YEAR(S)
+            width = 3, 
+            align = "center", 
+            class = "input-col",
+            labeled_input('input-btn', "",
+              pickerInput(inputId = 'download_year',
+                width = "100%",
+                choices = NULL,
+                selected = NULL,
+                multiple = TRUE,
+                div(style = "font-weight: bold", "Select Year(s)"), 
+                options = list(`actions-box` = TRUE, style = "picker-style")
+              ) #pickerInput
+            ) #labeled_input 
+          ), # column: SELECT YEAR(S)
+          column( # DOWNLOAD DATA BUTTON 
+            width = 3, 
+            align = "center", 
+            class = "input-col",
+            downloadButton(outputId = 'save_data', "Download Data", class = "download-btn-lg")
+          ) # column: DOWNLOAD DATA BUTTON 
         ) # div row fixwidth
       ), # div header
       br(),
