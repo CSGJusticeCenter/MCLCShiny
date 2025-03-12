@@ -278,7 +278,18 @@ ui <- fluidPage(
                       div(id = "selected-state-note", htmlOutput("state_additional_notes"))
                     ), 
                     column(width = 1)
-                  ) # end fluidRow: addl notes for states  
+                  ), # end fluidRow: addl notes for states  
+                  fluidRow( # standard text for states - prompting questions 
+                    column(width = 1),
+                    column( 
+                      width = 10,
+                      align = "left",
+                      br(), 
+                      div(id = "selected-state-note-subtitle", standard_state_note_header),
+                      div(id = "selected-state-note", HTML(standard_state_note_text))
+                    ), 
+                    column(width = 1)
+                  ) # end fluidRow: standard text for states - prompting questions  
                 ), #end div: STATE NOTES  
                 br(), br()
               ), # end tabPanel: overview 
