@@ -28,44 +28,45 @@ ui <- fluidPage(
       # natl trends header -----------------------------------------------------
       div(
         class = "header", 
-        div(class = "row fixwidth", # this is REQUIRED to remove extra spacing 
-            column(# Select Metric
-              width = 3,
-              align = "center",
-              class = "input-col",
-              labeled_input('input-btn', "",
-                selectInput('data_map',
-                  label = "Select Metric",
-                  choices = metric_opts,
-                  multiple = FALSE
-                )
-              )
-            ),
-            column(# Select Type (Adm or Pop)
-              width = 3,
-              align = "center",
-              class = "input-col",
-              labeled_input('input-btn', "",
-                selectInput('adm_or_pop_map',
-                  label = "Select Metric Type",
-                  choices = type_opts,
-                  multiple = FALSE
-                )
-              )
-            ),
-            column(# Select Year Change
-              width = 3,
-              align = "center",
-              class = "input-col",
-              labeled_input('input-btn', "",
-                selectInput('year_map',
-                  label = "Select Year Change",
-                  choices = yrchg_opts,
-                  selected = "2018 - 2023",
-                  multiple = FALSE
-                )
-              )
-            ),
+        # fluidRow("x") == <div class="row">x</div> == div(class == "row")
+        div(class = "row fixwidth", # this is REQUIRED to remove extra spacing
+          column(# Select Metric
+            width = 3,
+            align = "center",
+            class = "input-col",
+            labeled_input('input-btn', "",
+              selectInput('data_map',
+                label = "Select Metric",
+                choices = metric_opts,
+                multiple = FALSE
+              ) # selectInput
+            ) # labeled_input 
+          ), # column: select metric 
+          column(# Select Type (Adm or Pop)
+            width = 3,
+            align = "center",
+            class = "input-col",
+            labeled_input('input-btn', "",
+              selectInput('adm_or_pop_map',
+                label = "Select Metric Type",
+                choices = type_opts,
+                multiple = FALSE
+              ) # selectInput 
+            ) # labeled_input
+          ), #column: select type 
+          column(# Select Year Change
+            width = 3,
+            align = "center",
+            class = "input-col",
+            labeled_input('input-btn', "",
+              selectInput('year_map',
+                label = "Select Year Change",
+                choices = yrchg_opts,
+                selected = "2018 - 2023",
+                multiple = FALSE
+              ) # selectInput
+            ) # labeled_input
+          ),
             column( # Download Map
               width = 3,
               align = "center",
@@ -82,7 +83,7 @@ ui <- fluidPage(
       br(), # end header with dropdowns and download button 
       
       # natl trends app body ---------------------------------------------------
-      div(class = "row app-body", # fluidRow("x") == <div class="row">x</div> == div(class == "row")
+      div(class = "row app-body", 
         column( # HEx MAP 
           width = 12,
           align = "center",
@@ -120,215 +121,187 @@ ui <- fluidPage(
     tabPanel("statedashboard",
       # state dashboard header -------------------------------------------------
       div(class = "header",
-        fluidRow(
-          column(width = 3),
-          column(width = 6,
-            fluidRow(
-              column(width = 2),
-              column( # SELECT STATE 
-                width = 4,
-                align = "center",
-                class = "input-col",
-                labeled_input('input-btn', "",
-                  div(
-                    id = 'state-selector',
-                    selectInput('state_report',
-                      label = "Select State",
-                      choices = state.name,
-                      multiple = FALSE
-                    ) # end select input 
-                  ) # end div 
-                ) # end labeled_input
-              ), # end column: SELECT STATE 
-              column( # SELECT TYPE (ADM OR POP) 
-                width = 4,
-                align = "center",
-                class = "input-col",
-                labeled_input('input-btn', "",
-                  div(
-                    id = "type-selector",
-                    selectInput('adm_pop_report',
-                      label = "Select Type",
-                      choices = type_opts,
-                      selected = "Admissions",
-                      multiple = FALSE
-                    ) # end select input 
-                  ) # end div 
-                ) # end labeled_input
-              ), # end column: SELECT TYPE (ADM OR POP) 
-              column(width = 2)
-            ) # end fluid row 
-          ), #end column width 6 
-          column(width = 3)
-        ) # fluidRow
-      ), # end div header
+        div(class = "row fixwidth", # this is REQUIRED to remove extra spacing
+          column(width = 2),
+          column( # SELECT STATE 
+            width = 4,
+            align = "center",
+            class = "input-col",
+            labeled_input('input-btn', "",
+              div(
+                id = 'state-selector',
+                selectInput('state_report',
+                  label = "Select State",
+                  choices = state.name,
+                  multiple = FALSE
+                ) # select input 
+              ) # div 
+            ) # labeled_input
+          ), # column: SELECT STATE 
+          column( # SELECT TYPE (ADM OR POP) 
+            width = 4,
+            align = "center",
+            class = "input-col",
+            labeled_input('input-btn', "",
+              div(
+                id = "type-selector",
+                selectInput('adm_pop_report',
+                  label = "Select Type",
+                  choices = type_opts,
+                  selected = "Admissions",
+                  multiple = FALSE
+                ) # select input 
+              ) # div 
+            ) # labeled_input
+          ), # column: SELECT TYPE (ADM OR POP) 
+          column(width = 2)
+        ) # div row fixwidth 
+      ), # div header
       br(),
       # state header app body -------------------------------------------------
-      div(class = "app-body",
+      div(class = "row app-body", 
+      div(class = "row fixwidth", 
         # 0 state title --------------------------------------------------------
-        fluidRow(
-          column(width = 1),
-          column(
-            width = 10,
-            div(id = "selected-state",
-            textOutput("selected_state"), "aria-label" = "Selected State")
-          ),
-          column(width = 1)
-        ), # end fluidRow title 
+        div(id = "selected-state", textOutput("selected_state"), "aria-label" = "Selected State"), 
         br(),
         
         # 0 value boxes --------------------------------------------------------
-        fluidRow(
-          column(width = 1),
-          column(
-            width = 10,
-            fluidRow( # TODO: add spinners to all boxes? 
-              column(width = 3, valueBoxOutput("total_change",  width = "100%")),
-              column(width = 3, valueBoxOutput("sup_change",    width = "100%") |> withSpinner()),
-              column(width = 3, valueBoxOutput("tech_change",   width = "100%") |> withSpinner()),
-              column(width = 3, valueBoxOutput("new_off_change",width = "100%"))
-            )
-          ),
-          column(width = 1)
-        ), #end fluidRow value boxes 
+        fluidRow( # TODO: add spinners to all boxes? 
+          column(width = 3, valueBoxOutput("total_change",  width = "100%")),
+          column(width = 3, valueBoxOutput("sup_change",    width = "100%") |> withSpinner()),
+          column(width = 3, valueBoxOutput("tech_change",   width = "100%") |> withSpinner()),
+          column(width = 3, valueBoxOutput("new_off_change",width = "100%"))
+        ), 
         br(), br(),
         
         # START PANELS (STATE TABS) --------------------------------------------
-        fluidRow(
-          column(width = 1),
-          column(width = 10,
-            tabsetPanel( # STATE TABS 
-              selected = "1", 
-              type = "tabs", 
-              id = "tabsetpanel",
-              # 1 overview -----------------------------------------------------
-              tabPanel(
-                value="1",
-                "Overview",
-                br(),
-                fluidRow( # SIDE BY SIDE PLOTS 
-                  column( # area chart  
-                    width = 5,
-                    align = "center",
-                    uiOutput("state_area") |> withSpinner()
-                  ),
-                  column( # area chart download button 
-                    width = 1, 
-                    align = "center",
-                    uiOutput("state_area_button")
-                  ),
-                  column( # supervision bar chart 
-                    width = 5, 
-                    align = "center",
-                    uiOutput("state_nt") |> withSpinner()
-                  ),
-                  column( # supervision bar chart download button 
-                    width = 1, 
-                    align = "center",
-                    uiOutput("state_nt_button")
+        tabsetPanel( # STATE TABS 
+          selected = "1", 
+          type = "tabs", 
+          id = "tabsetpanel",
+          # 1 overview -----------------------------------------------------
+          tabPanel(
+            value="1",
+            "Overview",
+            br(),
+            fluidRow( # SIDE BY SIDE PLOTS 
+              column( # area chart  
+                width = 5,
+                align = "center",
+                uiOutput("state_area") |> withSpinner()
+              ),
+              column( # area chart download button 
+                width = 1, 
+                align = "center",
+                uiOutput("state_area_button")
+              ),
+              column( # supervision bar chart 
+                width = 5, 
+                align = "center",
+                uiOutput("state_nt") |> withSpinner()
+              ),
+              column( # supervision bar chart download button 
+                width = 1, 
+                align = "center",
+                uiOutput("state_nt_button")
+              )
+            ), # fluidrow END SIDE BY SIDE PLOTS 
+            br(), br(), br(),
+            fluidRow(column( # State overview table
+              width = 12,
+              align = "center",
+              div(id = "reactable-table", reactableOutput("state_table") |> withSpinner())
+            )), # column<fluidRow state overview table 
+            br(), 
+            # STATE NOTES 
+            div(id = "state-note-section",
+              fluidRow(column( # state notes title 
+                width = 12,
+                align = "center",
+                div(id = "selected-state-note-title", "State Notes")
+              )), # column<fluidRow state notes title 
+              br(), br(),
+              fluidRow(
+                column(width = 1),
+                column( # probation title, notes (check boxes) and asterisks notes  
+                  width = 5, 
+                  div(id = "selected-state-note-subtitle", "Probation Metrics"),
+                  div(
+                    id = "selected-state-note", 
+                    htmlOutput("state_probation_notes"), 
+                    htmlOutput("state_probation_asterisks_notes")
+                    )
+                ), # column: probation title, notes (check boxes) and asterisks notes 
+                column( # parole title, notes (check boxes) and asterisks notes
+                  width = 5, 
+                  div(id = "selected-state-note-subtitle", "Parole/Post-Incarceration Metrics"),
+                  div(
+                    id = "selected-state-note", 
+                    htmlOutput("state_parole_notes"),
+                    htmlOutput("state_parole_asterisks_notes")
                   )
-                ), # end fluidrow END SIDE BY SIDE PLOTS 
-                br(), br(), br(),
-                fluidRow(column( # State overview table
-                  width = 12,
-                  align = "center",
-                  div(id = "reactable-table", reactableOutput("state_table") |> withSpinner())
-                )), # end column<fluidRow state overview table 
-                br(), 
-                # STATE NOTES 
-                div(id = "state-note-section",
-                  fluidRow(column( # state notes title 
-                    width = 12,
-                    align = "center",
-                    div(id = "selected-state-note-title", "State Notes")
-                  )), # end column<fluidRow state notes title 
-                  br(), br(),
-                  fluidRow(
-                    column(width = 1),
-                    column( # probation title, notes (check boxes) and asterisks notes  
-                      width = 5, 
-                      div(id = "selected-state-note-subtitle", "Probation Metrics"),
-                      div(
-                        id = "selected-state-note", 
-                        htmlOutput("state_probation_notes"), 
-                        htmlOutput("state_probation_asterisks_notes")
-                        )
-                    ), # end column: probation title, notes (check boxes) and asterisks notes 
-                    column( # parole title, notes (check boxes) and asterisks notes
-                      width = 5, 
-                      div(id = "selected-state-note-subtitle", "Parole/Post-Incarceration Metrics"),
-                      div(
-                        id = "selected-state-note", 
-                        htmlOutput("state_parole_notes"),
-                        htmlOutput("state_parole_asterisks_notes")
-                      )
-                    ), # end column: parole title, notes (check boxes) and asterisks notes
-                    column(width = 1)
-                  ), #end fluidRow
-                  fluidRow( # addl notes for states 
-                    column(width = 1),
-                    column( 
-                      width = 10,
-                      align = "left",
-                      div(id = "selected-state-note", htmlOutput("state_additional_notes"))
-                    ), 
-                    column(width = 1)
-                  ), # end fluidRow: addl notes for states  
-                  fluidRow( # standard text for states - prompting questions 
-                    column(width = 1),
-                    column( 
-                      width = 10,
-                      align = "left",
-                      br(), 
-                      div(id = "selected-state-note-subtitle", standard_state_note_header),
-                      div(id = "selected-state-note", HTML(standard_state_note_text))
-                    ), 
-                    column(width = 1)
-                  ) # end fluidRow: standard text for states - prompting questions  
-                ), #end div: STATE NOTES  
-                br(), br()
-              ), # end tabPanel: overview 
-              
-              # 2 Parole -------------------------------------------------------
-              tabPanel(
-                value="2",
-                "Parole",
-                br(),
-                # Parole graph and download button depending on data availability
-                uiOutput("parole_nt"),
-                br(), br(), br(),
-                fluidRow(column( # Parole reactable table
-                  width = 12,
-                  align = "center",
-                  div(id = "reactable-table", reactableOutput("parole_table") |> withSpinner() )
-                )), # end column<fluidRow: parole reactable table 
-                br(), br()
-              ), # end tabPanel: parole 
-              
-              # 3 Probation ----------------------------------------------------
-              tabPanel(
-                value="3",
-                "Probation",
-                br(),
-                # Probation graph and download button depending on data availability
-                uiOutput("probation_nt"),
-                br(), br(), br(),
-                fluidRow(column( # Probation reactable table
-                  width = 12,
-                  align = "center",
-                  div(id = "reactable-table", reactableOutput("probation_table") |> withSpinner() )
-                )), #end column<fluidRow: Probation reactable table
-                br(), br()
-              ), # end tabPanel
-            ) # end tabsetPanel: STATE TABS 
-          ), # end column
-        column(width = 1)
-      ), # end fluidRow
-      
-      # END PANELS (STATE TABS) --------------------------------------------
-      br(), br()
-      ) # end div
-    ), # end tabPanel: STATE TABS 
+                ), # end column: parole title, notes (check boxes) and asterisks notes
+                column(width = 1)
+              ), #end fluidRow
+              fluidRow( # addl notes for states 
+                column(width = 1),
+                column( 
+                  width = 10,
+                  align = "left",
+                  div(id = "selected-state-note", htmlOutput("state_additional_notes"))
+                ), 
+                column(width = 1)
+              ), # end fluidRow: addl notes for states  
+              fluidRow( # standard text for states - prompting questions 
+                column(width = 1),
+                column( 
+                  width = 10,
+                  align = "left",
+                  br(), 
+                  div(id = "selected-state-note-subtitle", standard_state_note_header),
+                  div(id = "selected-state-note", HTML(standard_state_note_text))
+                ), 
+                column(width = 1)
+              ) # end fluidRow: standard text for states - prompting questions  
+            ), #end div: STATE NOTES  
+            br(), br()
+          ), # end tabPanel: overview 
+          
+          # 2 Parole -------------------------------------------------------
+          tabPanel(
+            value="2",
+            "Parole",
+            br(),
+            # Parole graph and download button depending on data availability
+            uiOutput("parole_nt"),
+            br(), br(), br(),
+            fluidRow(column( # Parole reactable table
+              width = 12,
+              align = "center",
+              div(id = "reactable-table", reactableOutput("parole_table") |> withSpinner() )
+            )), # end column<fluidRow: parole reactable table 
+            br(), br()
+          ), # end tabPanel: parole 
+          
+          # 3 Probation ----------------------------------------------------
+          tabPanel(
+            value="3",
+            "Probation",
+            br(),
+            # Probation graph and download button depending on data availability
+            uiOutput("probation_nt"),
+            br(), br(), br(),
+            fluidRow(column( # Probation reactable table
+              width = 12,
+              align = "center",
+              div(id = "reactable-table", reactableOutput("probation_table") |> withSpinner() )
+            )), # column<fluidRow: Probation reactable table
+            br(), br()
+          ), # tabPanel
+        ) # tabsetPanel: STATE TABS 
+      ), # div row fix width 
+      ) # div row app-body 
+    ), # tabPanel: STATE TABS 
     
     # DOWNLOAD DATA ############################################################
     tabPanel("downloaddata",
