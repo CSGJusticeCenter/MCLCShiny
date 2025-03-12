@@ -28,9 +28,7 @@ ui <- fluidPage(
       # natl trends header -----------------------------------------------------
       div(
         class = "header", 
-        fluidRow(
-          column(width = 3),
-          column(width = 6,fluidRow(
+        div(class = "row fixwidth", # this is REQUIRED to remove extra spacing 
             column(# Select Metric
               width = 3,
               align = "center",
@@ -79,9 +77,7 @@ ui <- fluidPage(
                 )
               )
             )
-          )), # end fluidRow<column 
-          column(width = 3)
-        ) # end fluidRow with columns 
+        ) # end div (row fixwidth) with columns 
       ), # end div header
       br(), # end header with dropdowns and download button 
       
