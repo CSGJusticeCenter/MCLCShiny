@@ -307,10 +307,7 @@ ui <- fluidPage(
     tabPanel("downloaddata",
       # download data header ---------------------------------------------------
       div(class = "header",
-        fluidRow(
-          column(width = 3),
-          column(width = 6,
-            fluidRow(
+        div(class = "row fixwidth", # this is REQUIRED to remove extra spacing
               column( # SELECT STATE(S)
                 width = 3, 
                 align = "center",
@@ -325,7 +322,7 @@ ui <- fluidPage(
                     options = list(`actions-box` = TRUE, style = "picker-style")
                   )
                 )
-              ), # end column: SELECT STATES
+              ), # column: SELECT STATES
               column( # SELECT METRIC(S)
                 width = 3, 
                 align = "center", 
@@ -340,7 +337,7 @@ ui <- fluidPage(
                     options = list(`actions-box` = TRUE, style = "picker-style")
                   )
                 )
-              ), # end column: SELECT METRIC(S)
+              ), # column: SELECT METRIC(S)
               column( # SELECT YEAR(S)
                 width = 3, 
                 align = "center", 
@@ -355,18 +352,15 @@ ui <- fluidPage(
                     options = list(`actions-box` = TRUE, style = "picker-style")
                   )
                 )
-              ), # end column: SELECT YEAR(S)
+              ), # column: SELECT YEAR(S)
               column( # DOWNLOAD DATA BUTTON 
                 width = 3, 
                 align = "center", 
                 class = "input-col",
                 downloadButton(outputId = 'save_data', "Download Data", class = "download-btn-lg")
-              ) # end column: DOWNLOAD DATA BUTTON 
-            ) #end fluidRow 
-          ), # end column 
-          column(width = 3)
-        ) # fluidRow
-      ), # end div header
+              ) # column: DOWNLOAD DATA BUTTON 
+        ) # div row fixwidth
+      ), # div header
       br(),
       
       # download data app body ---------------------------------------------------
