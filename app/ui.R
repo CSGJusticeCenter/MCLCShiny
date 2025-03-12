@@ -364,41 +364,28 @@ ui <- fluidPage(
       br(),
       
       # download data app body ---------------------------------------------------
-      div(class = "app-body",
-        fluidRow(
-          column(width = 2),
-          column(width = 8, div(id = "download-title", "Download Data")),
-          column(width = 2)
-        ),
-        br(),
-        fluidRow(
-          column(width = 2),
-          column(
-            width = 8, 
-            div(
-              id = "download-info",
-              "To understand the impact of community supervision
-              (i.e., probation, parole, post-release supervision) on state prison populations,
-              The Council of State Governments (CSG) Justice Center surveyed corrections
-              leaders in all 50 states. This project was supported by Arnold Ventures and
-              produced in partnership with the Correctional Leaders Association (CLA).
-              resulting data spans 6 years—from 2018 to 2023—and demonstrate how the number
-              of people sent to prison for supervision violations changed."
-            )
-          ),
-          column(width = 2)
-        ),
-        br(),
-        fluidRow( # download table 
-          column(width = 2),
-          column(width = 8, 
-                 align = "center",
-                 div(id = "selected-download-table", reactableOutput("selected_download_table"))
-          ),
-          column(width = 2)
-        ), # end fluidRow: download table 
+      div(class = "row app-body", 
+        div(
+          class = "row fixwidth", 
+          align="center", 
+          style = "max-width: 790px !important;", # table has a min width of 790px 
+          div(id = "download-title", "Download Data"), 
+          br(),
+          div(
+            id = "download-info",
+            "To understand the impact of community supervision
+            (i.e., probation, parole, post-release supervision) on state prison populations,
+            The Council of State Governments (CSG) Justice Center surveyed corrections
+            leaders in all 50 states. This project was supported by Arnold Ventures and
+            produced in partnership with the Correctional Leaders Association (CLA).
+            resulting data spans 6 years—from 2018 to 2023—and demonstrate how the number
+            of people sent to prison for supervision violations changed."
+          ), 
+          br(),
+          div(id = "selected-download-table", reactableOutput("selected_download_table"))
+        ), # end div row fixwidth 
         br(), br()
-      ) # end div: app body 
+      ) # end div: row app body 
     ) # end tabPanel: download data 
 
 # GLOBAL END (FOOTER) ######################################################
