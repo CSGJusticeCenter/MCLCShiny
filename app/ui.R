@@ -7,6 +7,12 @@ ui <- fluidPage(
   navbarPage(
     id = "navbarID",
     
+    # Accessibility tags 
+    tags$head(tags$title("Supervision Violations and Their Impact on Incarceration")),
+    tags$html(lang="en"),
+    
+    #title = "Supervision Violations and Their Impact on Incarceration", # title for navigaton bar, navbar is hidden so not applicable 
+    
     # Formats light blue header
     tags$style(type = "text/css",".container-fluid {padding-left:0px; padding-right:0px;}"),
     tags$style(type = "text/css",".navbar {margin-bottom: .5px;}"),
@@ -16,13 +22,6 @@ ui <- fluidPage(
     # tags$style(type="text/css",
     #   ".shiny-output-error { visibility: hidden; }",
     #   ".shiny-output-error:before { visibility: visible; content: ''; }"),
-
-    # App title - Accessible
-    # tags$head(tags$title("More Community, Less Confinement Dashboard")),
-    title = "More Community, Less Confinement Dashboard",
-    
-    # English - Accessible
-    tags$html(lang="en"),
              
     # NATL TRENDS HEX MAP  #####################################################
     tabPanel("nationaltrends",
@@ -420,7 +419,7 @@ ui <- fluidPage(
               The Council of State Governments (CSG) Justice Center surveyed corrections
               leaders in all 50 states. This project was supported by Arnold Ventures and
               produced in partnership with the Correctional Leaders Association (CLA).
-              resulting data spans 4 years—from 2018 to 2021—and demonstrate how the number
+              resulting data spans 6 years—from 2018 to 2023—and demonstrate how the number
               of people sent to prison for supervision violations changed."
             )
           ),
