@@ -2,8 +2,8 @@
 ui <- fluidPage(
   
   # GLOBAL START (HEADER) ######################################################
-  
-  includeCSS("www/theme.css"), # include custom CSS
+  theme = "theme.css", 
+  # includeCSS("www/theme.css"), # include custom CSS
   navbarPage(
     id = "navbarID",
     

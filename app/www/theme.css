@@ -1,6 +1,28 @@
-/*######################################
-Overall Settings
-########################################*/
+/*##############################################################################
+General Styling (fonts and colors)
+##############################################################################*/
+
+/* Add fonts*/
+@font-face {
+    font-family: "Graphik";
+    src: local('Graphik'), url("fonts/Graphik.ttf");
+}
+@font-face {
+    font-family: "Graphik";
+    src: local('Graphik'), url("fonts/GraphikBold.ttf");
+    font-weight: bold;
+}
+
+
+:root {
+ --accent_lite: #DDE3E9;
+ --accent_blue: #004270;
+}
+
+
+/*##############################################################################
+Layout 
+###############################################################################*/
 
 /* Center and limit the width of the main content area */
 #app-body {
@@ -21,34 +43,6 @@ Overall Settings
   margin-right: auto;
 }
 
-/*######################################
-Font size and style
-########################################*/
-
-/* Add fonts*/
-@font-face {
-    font-family: "Graphik";
-    src: local('Graphik'), url("fonts/Graphik.ttf");
-}
-@font-face {
-    font-family: "Graphik";
-    src: local('Graphik'), url("fonts/GraphikBold.ttf");
-    font-weight: bold;
-}
-
-/*######################################
-Colors
-########################################*/
-
-:root {
- --accent_lite: #DDE3E9;
- --accent_blue: #004270;
-}
-
-/*######################################
-Navigation Bar
-########################################*/
-
 /* Hide navigation bar menu items*/
 /*#navbarID{
   display:none;
@@ -59,9 +53,40 @@ Navigation Bar
   display:none !important;
 } */ 
 
-/*######################################
-Header, global drop down options, tooltips
-########################################*/
+
+/* Styling for the top section of the page containing controls and info */
+/* You can adjust the background color of the header here */
+#header {
+  background-color:#DDE3E9 !important;
+  min-height: 7.0em;
+  display: absolute; /* without this the blue part of the header disappears */
+  left: 50%;
+}
+
+/* The overflow property controls how content that exceeds the dimensions of an
+element is handled. By setting it to visible, any content that extends beyond
+the boundaries of the <div> elements will be visible and may overlap with other
+elements on the page.*/
+.shiny-split-layout > div {
+  overflow:visible;
+}
+
+/* Center align labels for header inputs */
+#header > * > span {
+  text-align: center;
+}
+
+/* Format state header, same as map explorer header and download data header */
+#app-header {
+  background-color:#DDE3E9 !important;
+  min-height: 7.0em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/*##############################################################################
+select/seletize/dropdown inputs  
+##############################################################################*/
 
 /* Adjust appearance of drop-downs and set text color */
 .selectize-input, .selectize-input.dropdown-active, .selectize-dropdown, .selectize-dropdown-content .active {
@@ -89,43 +114,12 @@ Header, global drop down options, tooltips
   background-color: #f5f5f5;
 }
 
-
-/* Styling for the top section of the page containing controls and info */
-/* You can adjust the background color of the header here */
-#header {
-  background-color:#DDE3E9 !important;
-  min-height: 7.0em;
-  display: absolute; /* without this the blue part of the header disappears */
-  left: 50%;
-}
-
-/* The overflow property controls how content that exceeds the dimensions of an
-element is handled. By setting it to visible, any content that extends beyond
-the boundaries of the <div> elements will be visible and may overlap with other
-elements on the page.*/
-.shiny-split-layout > div {
-  overflow:visible;
-}
-
 /* Ensure normal text wrapping for download buttons */
 button > div {
   -o-text-overflow: visible;
   text-overflow: visible;
   overflow: visible;
   white-space: visible;
-}
-
-/* Center align labels for header inputs */
-#header > * > span {
-  text-align: center;
-}
-
-/* Format state header, same as map explorer header and download data header */
-#app-header {
-  background-color:#DDE3E9 !important;
-  min-height: 7.0em;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 /* Styling for tooltips */
@@ -138,10 +132,11 @@ button > div {
 }
 
 
-/*######################################
-MAP EXPLORER
-Dropdowns and buttons
-########################################*/
+/*##############################################################################
+NATL MAP EXPLORER
+##############################################################################*/
+
+/* NATL - Downloads and buttons ***********************************************/
 
 /* Style for selector input */
 #input-btn {
@@ -172,10 +167,7 @@ Dropdowns and buttons
   font-family: Graphik;
 }
 
-/*######################################
-MAP EXPLORER
-Hex map
-########################################*/
+/* NATL - hex map *************************************************************/
 
 /* Margins and font style for map select input */
 .form-group.shiny-input-container, .selectize-control {
@@ -201,10 +193,7 @@ Hex map
   text-align: center;
 }
 
-/*######################################
-MAP EXPLORER
-Table
-########################################*/
+/* NATL - Table ***************************************************************/
 
 /* Title of table under map settings */
 #selected-map-table{
@@ -232,10 +221,9 @@ Table
 }
 */
 
-/*######################################
+/*##############################################################################
 STATE REPORTS
-Dropdowns
-########################################*/
+###############################################################################*/
 
 /* Style for download chart button */
 .download-chart {
@@ -249,10 +237,7 @@ Dropdowns
   font-family: Graphik;
 }
 
-/*######################################
-STATE REPORTS
-Title and value boxes
-########################################*/
+/* STATE DASHBOARD: Title and value boxes *************************************/
 
 /* Title of state settings */
 #selected-state {
@@ -280,10 +265,7 @@ Title and value boxes
   min-height: 15em;
 }
 
-/*######################################
-STATE REPORTS
-Tabset Panels
-########################################*/
+/* STATE DASHBOARD: Tabset Panels *********************************************/
 
 /* Adjust modal width for pop-up */
 .modal-dialog {
@@ -387,6 +369,8 @@ p.statetxt {
   font-style: italic;
   font-family: Graphik;
 }
+
+/* STATE DASHBOARD: other *****************************************************/
 
 /* Various title and subtitle styles */
 div.retxt {
@@ -493,10 +477,9 @@ input[type=checkbox] {
 }
 
 
-/*######################################
+/*##############################################################################
 DOWNLOAD DATA
-Dropdowns
-########################################*/
+##############################################################################*/
 
 /*.dropdown-menu span {text-align: left; width: 100%;}*/
 
@@ -549,6 +532,11 @@ Dropdowns
   text-align: left;
   font-family: Graphik;
 }
+
+
+/*##############################################################################
+MODAL/CONDUCTOR/GUIDE STYLING FOR R/E TAB  DATA
+##############################################################################*/
 
 /* Modal Look */
 .modal{
