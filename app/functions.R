@@ -46,6 +46,14 @@ fnc_value_box <- function(
   )
 }
 
+# global spinner style for charts 
+svii_spinner <- function(uiobj){
+  withSpinner(
+    uiobj, 
+    color = lightblue, 
+  )
+}
+
 
 # add a nicely styled label above selection box
 labeled_input <- function(id, label, input){

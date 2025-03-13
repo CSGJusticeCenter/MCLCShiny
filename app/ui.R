@@ -21,7 +21,7 @@ ui <- fluidPage(
     # Hide errors on user-end
     # tags$style(type="text/css",
     #   ".shiny-output-error { visibility: hidden; }",
-    #   ".shiny-output-error:before { visibility: visible; content: ''; }"),
+    #   ".shiny-output-error:before { visibility: visible; content: ''; }"),x
              
     # NATL TRENDS HEX MAP  #####################################################
     tabPanel("nationaltrends",
@@ -89,7 +89,7 @@ ui <- fluidPage(
           align = "center",
           div(class = "hidden-xs hidden-sm",
             #id = "hex-map",
-            highchartOutput("hex_map", height = 600, width = "100%") |> withSpinner()
+            highchartOutput("hex_map", height = 600, width = "100%") |> svii_spinner()
           ) # end div 
         ), # end column HEX MAP 
         br(), br(),
@@ -166,11 +166,11 @@ ui <- fluidPage(
         br(),
         
         # 0 value boxes --------------------------------------------------------
-        fluidRow( # TODO: add spinners to all boxes? 
-          column(width = 3, valueBoxOutput("total_change",  width = "100%")),
-          column(width = 3, valueBoxOutput("sup_change",    width = "100%") |> withSpinner()),
-          column(width = 3, valueBoxOutput("tech_change",   width = "100%") |> withSpinner()),
-          column(width = 3, valueBoxOutput("new_off_change",width = "100%"))
+        fluidRow( 
+          column(width = 3, valueBoxOutput("total_change",  width = "100%") |> svii_spinner()),
+          column(width = 3, valueBoxOutput("sup_change",    width = "100%") |> svii_spinner()),
+          column(width = 3, valueBoxOutput("tech_change",   width = "100%") |> svii_spinner()),
+          column(width = 3, valueBoxOutput("new_off_change",width = "100%") |> svii_spinner())
         ), 
         br(), br(),
         
@@ -188,7 +188,7 @@ ui <- fluidPage(
               column( # area chart  
                 width = 5,
                 align = "center",
-                uiOutput("state_area") |> withSpinner()
+                uiOutput("state_area") |> svii_spinner()
               ),
               column( # area chart download button 
                 width = 1, 
@@ -198,7 +198,7 @@ ui <- fluidPage(
               column( # supervision bar chart 
                 width = 5, 
                 align = "center",
-                uiOutput("state_nt") |> withSpinner()
+                uiOutput("state_nt") |> svii_spinner()
               ),
               column( # supervision bar chart download button 
                 width = 1, 
@@ -210,7 +210,7 @@ ui <- fluidPage(
             fluidRow(column( # State overview table
               width = 12,
               align = "center",
-              div(id = "reactable-table", reactableOutput("state_table") |> withSpinner())
+              div(id = "reactable-table", reactableOutput("state_table") |> svii_spinner())
             )), # column<fluidRow state overview table 
             br(), 
             # STATE NOTES 
@@ -278,7 +278,7 @@ ui <- fluidPage(
             fluidRow(column( # Parole reactable table
               width = 12,
               align = "center",
-              div(id = "reactable-table", reactableOutput("parole_table") |> withSpinner() )
+              div(id = "reactable-table", reactableOutput("parole_table") |> svii_spinner() )
             )), # end column<fluidRow: parole reactable table 
             br(), br()
           ), # end tabPanel: parole 
@@ -294,7 +294,7 @@ ui <- fluidPage(
             fluidRow(column( # Probation reactable table
               width = 12,
               align = "center",
-              div(id = "reactable-table", reactableOutput("probation_table") |> withSpinner() )
+              div(id = "reactable-table", reactableOutput("probation_table") |> svii_spinner() )
             )), # column<fluidRow: Probation reactable table
             br(), br()
           ), # tabPanel
