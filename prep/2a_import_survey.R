@@ -105,28 +105,37 @@ svii_prep <- readRDS(file.path(admin$sp_survey, "Data/raw/combined/svii_main.rds
 
 # if total is equal to probation or parole, then indicate that the total only includes
 #   probation or parole
+# want to apply this to supervision, new, and tech metrics 
+# (these are the metircs where subtitels should be noted)
+# subtitles for value boxes and subtitles for area/bar charts 
 svii_only_prob_par <- svii_prep |> 
   filter(word(metric_abbr, 2, -1) %in% c("supervision", "par", "prob")) |> 
   select(state_name, year, type, metric_abbr, n) |> 
   mutate(metric_abbr = word(metric_abbr, 2, -1)) |> 
   pivot_wider(names_from = metric_abbr, values_from = n) |> 
   mutate(
-    probation_or_parole = case_when(
+    probation_or_parole = case_when( # yearly designation, this is for the value boxes 
       supervision == prob ~ "(No Parole Data Available)", 
       supervision == par  ~ "(No Probation Data Available)"
     ), 
-    metric_abbr = paste0(tolower(substr(type, 1, 1)), " supervision")
+    metric_abbr1 = paste0(tolower(substr(type, 1, 1)), " supervision"), 
+    metric_abbr2 = paste0(tolower(substr(type, 1, 1)), " tech"), 
+    metric_abbr3 = paste0(tolower(substr(type, 1, 1)), " new")
   ) |> 
   group_by(state_name, type) |> 
   mutate(
-    probation_or_parole_grp = case_when(
+    probation_or_parole_grp = case_when( # grouped designation, this is for the charts 
       all( is.na(probation_or_parole)) ~ NA_character_, 
       all(!is.na(probation_or_parole)) ~ probation_or_parole[1], 
-      any(!is.na(probation_or_parole)) ~ str_replace_all(probation_or_parole[!is.na(probation_or_parole)][1], c(No = "Some", Available = "Unavailable"))
+      any(!is.na(probation_or_parole)) ~ str_replace_all(probation_or_parole[!is.na(probation_or_parole)][1], c(`No ` = "", Available = "Unavailable for Some Years"))
     ) 
   ) |> 
   ungroup() |> 
-  select(state_name, year, probation_or_parole, probation_or_parole_grp, metric_abbr)
+  select(state_name, year, probation_or_parole, probation_or_parole_grp, starts_with("metric_abbr")) |> 
+  pivot_longer(cols = starts_with("metric_abbr"), names_to = "name", values_to = "metric_abbr") |> 
+  select(-name) 
+
+
 
 
 # 6000 rows 
