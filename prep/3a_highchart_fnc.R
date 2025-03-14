@@ -10,13 +10,11 @@ library(rjson)
 # can't use box for these func; need to use library for func otherwise highchart won't render 
 # don't have time to explore reasoning at the moment
 
-# remotes::install_github("rstudio/webshot2")
-
 box::use(
   ./box/admin, 
   , glue[glue]
   , htmlwidgets[saveWidget]
-  , webshot2[...]
+  , pagedown[chrome_print]
 )
 
 # load data frames -------------------------------------------------------------
@@ -656,33 +654,30 @@ save_hchtml_to_png <- function(this_filename, lst = NA){
   
   if (substr(this_filename, 1, 6) == "Change"){
     # if file name starts with 'Change' then it's a hex map 
-    #NATIONAL PLOT, use default values; ?webshot2::webshot
-    # orginally saved as default 992 x 744
-    # expand width so title is on 1 line (needed for Supervision Violatioin maps)
-    this_vwidth = 1000 
-    this_vheight = 744
-    this_zoom = 1
+    # area/bar charts 
+    # img_w: (1026-16)*1 = 1010 | 1026 --> 1010 # need to be 1010 to fit title on 1 line 
+    # img_h: ( 853-95)*1 =  758 |  853 -->  758
+    this_window_size <- c("--window-size=1016,853") 
+    this_scale <- 1
   } else {
-    # STATE PLOT, adj values 
-    # outputs are saved as 1000 x 1000
-    # 1000 = 500 (h/w) * 2 (zoom) 
-    this_vwidth = 500 
-    this_vheight = 500
-    this_zoom = 2 
-    # old version had zoom of 4; change to 2 so state pngs are ~ savem width as hex pngs 
+    # area/bar charts 
+    # img_w: (516-16)*2 = 1000 | 516 --> 1000
+    # img_h: (595-95)*2 = 1000 | 595 --> 1000
+    this_window_size <- c("--window-size=516,595") 
+    this_scale <- 2
   }
   
   filename_ext <- paste0(this_filename, ".png")
   save_plots_to <- file.path(      "app/data/plots", filename_ext) 
   copy_plots_to <- file.path(admin$sp_data, "plots", filename_ext)
   
-  webshot2::webshot(
-    url = paste0("temp/", this_filename, ".html"), 
-    file = save_plots_to, 
-    vwidth = this_vwidth,
-    vheight = this_vheight,
-    delay = 0.5, 
-    zoom = this_zoom
+  pagedown::chrome_print(
+    input = paste0("temp/", this_filename, ".html"), 
+    output = save_plots_to, 
+    format = "png", 
+    scale = this_scale, 
+    extra_args = this_window_size, 
+    verbose = 1
   )
   file.copy(from = save_plots_to, to = copy_plots_to)
 }

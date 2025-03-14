@@ -92,9 +92,9 @@ end - start
 
 ## Aggregate Plot PNGS for download ############################################
 # create pngs for users to download 
-start <- Sys.time() #takes ~15 min  
+start <- Sys.time() #takes ~30 min  
 start
-paste("Should be done by:", format(start+15*60, "%X"))
+paste("Should be done by:", format(start+30*60, "%X"))
 my_log <- file("logs/shiny_prep_log_hc_pngs.txt") # File name of output log
 
 
