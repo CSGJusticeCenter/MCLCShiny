@@ -657,8 +657,9 @@ save_hchtml_to_png <- function(this_filename, lst = NA){
   if (substr(this_filename, 1, 6) == "Change"){
     # if file name starts with 'Change' then it's a hex map 
     #NATIONAL PLOT, use default values; ?webshot2::webshot
-    # outputs are saved 992 x 744
-    this_vwidth = 992 #default 
+    # orginally saved as default 992 x 744
+    # expand width so title is on 1 line (needed for Supervision Violatioin maps)
+    this_vwidth = 1000 
     this_vheight = 744
     this_zoom = 1
   } else {
