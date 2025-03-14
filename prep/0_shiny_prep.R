@@ -63,9 +63,9 @@ end - start
 # hex   72 items, ~10-30 min 
 # area 100 items, ~20-60 min [10-30 min per 50 items, adm/pop]
 # bar  300 items, ~15-90 min [ 5-30 min per 50 items, supervision/par/prob]
-start <- Sys.time() #takes ~45-90 min 
+start <- Sys.time() #takes ~45 min-3 hours 
 start
-paste("Should be done by:", format(start+60*60, "%X"))
+paste("Should be done by:", format(start+120*60, "%X"))
 my_log <- file("logs/shiny_prep_log_hc_html.txt") # File name of output log
 
 
@@ -74,8 +74,8 @@ sink(my_log, append = FALSE, type = "message")
 print("== CREATE HTMLS =======================================================")
 print(paste("Last run", format(Sys.time(), "%a %b %e, %Y at %H:%M:%S %Z")))
 # need to run 3a if haven't done so already 
-# print("-- 3a_highchart_fnc ---------------------------------------------------")
-# source("prep/3a_highchart_fnc.R", echo = TRUE)
+print("-- 3a_highchart_fnc ---------------------------------------------------")
+source("prep/3a_highchart_fnc.R", echo = TRUE)
 print("-- 3c_highchart_html -----------------------------------------------")
 source("prep/3c_highchart_html.R", echo = TRUE)
 warnings()
