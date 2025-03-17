@@ -164,6 +164,10 @@ svii_agg <- full_join(
 # save version on sp but don't save on repo; don't need to use in app 
 admin$save_rds_twice(svii_agg, save_to_repo = FALSE)
 
+# save in prep folder as it's needed to create highcharts 
+saveRDS(svii_agg, "prep/svii_agg.rds")
+
+
 
 # **svii_yr** | create df's that determine trend from year to year; and from min year to max year ----
 

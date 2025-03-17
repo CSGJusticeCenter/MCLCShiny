@@ -19,12 +19,18 @@ box::use(
 
 # load data frames -------------------------------------------------------------
 
-for (x in c("svii_agg", "svii_explorer", "svii_yr")){
+# data frames used within app  
+for (x in c("svii_explorer", "svii_yr")){
   df <- readRDS(paste0("app/data/", x, ".rds")) |> tibble::as_tibble()
   assign(x, df)
   rm(df)
   rm(x)
 }
+
+# svii_agg is not needed on repo, but is for creation of plots 
+# this data is saved in prep folder because it's needed for plots 
+svii_agg <- readRDS("prep/svii_agg.rds")
+
 
 # assign colors for visualizations ---------------------------------------------
 source("app/colors.R")
