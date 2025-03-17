@@ -127,7 +127,7 @@ svii_only_prob_par <- svii_prep |>
     probation_or_parole_grp = case_when( # grouped designation, this is for the charts 
       all( is.na(probation_or_parole)) ~ NA_character_, 
       all(!is.na(probation_or_parole)) ~ probation_or_parole[1], 
-      any(!is.na(probation_or_parole)) ~ str_replace_all(probation_or_parole[!is.na(probation_or_parole)][1], c(`No ` = "", Available = "Unavailable for Some Years"))
+      any(!is.na(probation_or_parole)) ~ str_replace_all(probation_or_parole[!is.na(probation_or_parole)][1], c(`No` = "Partial"))
     ) 
   ) |> 
   ungroup() |> 
