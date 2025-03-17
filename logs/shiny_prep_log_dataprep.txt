@@ -1,5 +1,5 @@
 [1] "== DATA PREP =========================================================="
-[1] "Last run Fri Mar 14, 2025 at 11:07:28 CDT"
+[1] "Last run Mon Mar 17, 2025 at 11:38:30 CDT"
 [1] "-- 2a_import_survey ---------------------------------------------------"
 
 > box::use(
@@ -36,7 +36,7 @@
 
 > # save version on sp but don't save on repo; don't need to use in app 
 > admin$save_rds_twice(svii_agg, save_to_repo = FALSE)
-2025-03-14 11:07:29 CDT-- export svii_agg to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_agg.rds
+2025-03-17 11:38:32 CDT-- export svii_agg to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_agg.rds
 
 > # **svii_yr** | create df's that determine trend from year to year; and from min year to max year ----
 > 
@@ -44,8 +44,8 @@
 +   str_yr = c(seq(mi .... [TRUNCATED] 
 
 > admin$save_rds_twice(svii_yr)
-2025-03-14 11:07:29 CDT-- export svii_yr to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_yr.rds
-2025-03-14 11:07:29 CDT-- export svii_yr to: app/data/svii_yr.rds
+2025-03-17 11:38:32 CDT-- export svii_yr to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_yr.rds
+2025-03-17 11:38:32 CDT-- export svii_yr to: app/data/svii_yr.rds
 
 > # **svii_explorer_table** | table with counts, year-to-year changes, trend vec and category -----
 > 
@@ -89,8 +89,8 @@
 +   filter(word(metric_abbr, 2, -1) %in% display_metric_natl)
 
 > admin$save_rds_twice(svii_explorer_table)
-2025-03-14 11:07:31 CDT-- export svii_explorer_table to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_explorer_table.rds
-2025-03-14 11:07:31 CDT-- export svii_explorer_table to: app/data/svii_explorer_table.rds
+2025-03-17 11:38:33 CDT-- export svii_explorer_table to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_explorer_table.rds
+2025-03-17 11:38:33 CDT-- export svii_explorer_table to: app/data/svii_explorer_table.rds
 
 > # **svii_explorer** | data for hex maps --------------------------------------------
 > # data for hex map; create year range and min/max values for  .... [TRUNCATED] 
@@ -115,8 +115,8 @@
 +   filter(word(m .... [TRUNCATED] 
 
 > admin$save_rds_twice(svii_explorer)
-2025-03-14 11:07:31 CDT-- export svii_explorer to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_explorer.rds
-2025-03-14 11:07:31 CDT-- export svii_explorer to: app/data/svii_explorer.rds
+2025-03-17 11:38:33 CDT-- export svii_explorer to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_explorer.rds
+2025-03-17 11:38:34 CDT-- export svii_explorer to: app/data/svii_explorer.rds
 
 > # **svii_table** | data for table under hex map -------------------------------------
 > # select variables
@@ -124,8 +124,8 @@
 > # remove probation, par .... [TRUNCATED] 
 
 > admin$save_rds_twice(svii_table)
-2025-03-14 11:07:31 CDT-- export svii_table to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_table.rds
-2025-03-14 11:07:31 CDT-- export svii_table to: app/data/svii_table.rds
+2025-03-17 11:38:34 CDT-- export svii_table to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_table.rds
+2025-03-17 11:38:34 CDT-- export svii_table to: app/data/svii_table.rds
 
 > # prob_par_tables ----------------------------------------------------------
 > 
@@ -139,8 +139,8 @@
 +   filter(supervision_ .... [TRUNCATED] 
 
 > admin$save_rds_twice(svii_par)
-2025-03-14 11:07:31 CDT-- export svii_par to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_par.rds
-2025-03-14 11:07:31 CDT-- export svii_par to: app/data/svii_par.rds
+2025-03-17 11:38:34 CDT-- export svii_par to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_par.rds
+2025-03-17 11:38:34 CDT-- export svii_par to: app/data/svii_par.rds
 
 > # **svii_prob** | data for table under hex map ----------------------------
 > 
@@ -148,8 +148,8 @@
 +   filter(supervision_type = .... [TRUNCATED] 
 
 > admin$save_rds_twice(svii_prob)
-2025-03-14 11:07:31 CDT-- export svii_prob to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_prob.rds
-2025-03-14 11:07:31 CDT-- export svii_prob to: app/data/svii_prob.rds
+2025-03-17 11:38:34 CDT-- export svii_prob to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_prob.rds
+2025-03-17 11:38:34 CDT-- export svii_prob to: app/data/svii_prob.rds
 
 > # **svii_valbox** | value boxes for state dashboards ---------------------------
 > 
@@ -157,8 +157,8 @@
 > # get information on whether .... [TRUNCATED] 
 
 > admin$save_rds_twice(svii_valbox)
-2025-03-14 11:07:32 CDT-- export svii_valbox to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_valbox.rds
-2025-03-14 11:07:32 CDT-- export svii_valbox to: app/data/svii_valbox.rds
+2025-03-17 11:38:34 CDT-- export svii_valbox to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_valbox.rds
+2025-03-17 11:38:34 CDT-- export svii_valbox to: app/data/svii_valbox.rds
 
 > # **svii_download** | downloadable data  -------------------------------------------------
 > 
@@ -167,8 +167,8 @@
 +     word .... [TRUNCATED] 
 
 > admin$save_rds_twice(svii_download)
-2025-03-14 11:07:32 CDT-- export svii_download to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_download.rds
-2025-03-14 11:07:32 CDT-- export svii_download to: app/data/svii_download.rds
+2025-03-17 11:38:34 CDT-- export svii_download to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_download.rds
+2025-03-17 11:38:34 CDT-- export svii_download to: app/data/svii_download.rds
 [1] "-- 2b_import_text -----------------------------------------------------"
 
 > box::use(
@@ -192,8 +192,8 @@
 +     ~paste0("<p class = 'statet ..." ... [TRUNCATED] 
 
 > admin$save_rds_twice(formatted_notes)
-2025-03-14 11:07:32 CDT-- export formatted_notes to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/formatted_notes.rds
-2025-03-14 11:07:32 CDT-- export formatted_notes to: app/data/formatted_notes.rds
+2025-03-17 11:38:35 CDT-- export formatted_notes to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/formatted_notes.rds
+2025-03-17 11:38:35 CDT-- export formatted_notes to: app/data/formatted_notes.rds
 
 > # admin$save_rds_twice(parole_notes)
 > # admin$save_rds_twice(probation_notes)
@@ -203,12 +203,12 @@ New names:
 • `` -> `...9`
 
 > admin$save_rds_twice(missingness_sentences)
-2025-03-14 11:07:33 CDT-- export missingness_sentences to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/missingness_sentences.rds
-2025-03-14 11:07:33 CDT-- export missingness_sentences to: app/data/missingness_sentences.rds
+2025-03-17 11:38:35 CDT-- export missingness_sentences to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/missingness_sentences.rds
+2025-03-17 11:38:35 CDT-- export missingness_sentences to: app/data/missingness_sentences.rds
 
 > # admin$save_rds_twice(nt_na_adm)
 > # admin$save_rds_twice(nt_na_pop)
 > # admin$save_rds_twice(nt_not_na_adm)
 > # admin$save_rds_twice(nt_not_na_pop .... [TRUNCATED] 
-[1] "End run Fri Mar 14, 2025 at 11:07:33 CDT"
-Time difference of 5.024922 secs
+[1] "End run Mon Mar 17, 2025 at 11:38:35 CDT"
+Time difference of 4.310982 secs

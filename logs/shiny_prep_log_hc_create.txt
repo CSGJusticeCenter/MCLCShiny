@@ -1,15 +1,15 @@
 [1] "== CREATE HIGHCHART OBJECTS ==========================================="
-[1] "Last run Fri Mar 14, 2025 at 11:07:33 CDT"
+[1] "Last run Mon Mar 17, 2025 at 11:38:35 CDT"
 [1] "-- 3a_highchart_fnc ---------------------------------------------------"
 
 > library(tidyverse)
-── Attaching core tidyverse packages ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 2.0.0 ──
+── Attaching core tidyverse packages ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 2.0.0 ──
 ✔ dplyr     1.1.4     ✔ readr     2.1.5
 ✔ forcats   1.0.0     ✔ stringr   1.5.1
 ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
 ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
 ✔ purrr     1.0.4     
-── Conflicts ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+── Conflicts ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ✖ dplyr::filter() masks stats::filter()
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
@@ -193,502 +193,502 @@ Warning messages:
 > # NATL HEX MAPS DISPLAY ########################################################
 > natl_hex_lst  <- 
 + .... [TRUNCATED] 
-11:07:35 HEX MAP  1/72 -- Admissions, 2018 - 2019, New Offense Violation
-11:07:35 HEX MAP  2/72 -- Admissions, 2018 - 2019, Parole Violation
-11:07:35 HEX MAP  3/72 -- Admissions, 2018 - 2019, Probation Violation
-11:07:36 HEX MAP  4/72 -- Admissions, 2018 - 2019, Supervision Violation
-11:07:36 HEX MAP  5/72 -- Admissions, 2018 - 2019, Technical Violation
-11:07:36 HEX MAP  6/72 -- Admissions, 2018 - 2019, Total
-11:07:36 HEX MAP  7/72 -- Admissions, 2019 - 2020, New Offense Violation
-11:07:36 HEX MAP  8/72 -- Admissions, 2019 - 2020, Parole Violation
-11:07:36 HEX MAP  9/72 -- Admissions, 2019 - 2020, Probation Violation
-11:07:36 HEX MAP 10/72 -- Admissions, 2019 - 2020, Supervision Violation
-11:07:36 HEX MAP 11/72 -- Admissions, 2019 - 2020, Technical Violation
-11:07:36 HEX MAP 12/72 -- Admissions, 2019 - 2020, Total
-11:07:36 HEX MAP 13/72 -- Admissions, 2020 - 2021, New Offense Violation
-11:07:36 HEX MAP 14/72 -- Admissions, 2020 - 2021, Parole Violation
-11:07:36 HEX MAP 15/72 -- Admissions, 2020 - 2021, Probation Violation
-11:07:36 HEX MAP 16/72 -- Admissions, 2020 - 2021, Supervision Violation
-11:07:36 HEX MAP 17/72 -- Admissions, 2020 - 2021, Technical Violation
-11:07:36 HEX MAP 18/72 -- Admissions, 2020 - 2021, Total
-11:07:36 HEX MAP 19/72 -- Admissions, 2021 - 2022, New Offense Violation
-11:07:36 HEX MAP 20/72 -- Admissions, 2021 - 2022, Parole Violation
-11:07:36 HEX MAP 21/72 -- Admissions, 2021 - 2022, Probation Violation
-11:07:36 HEX MAP 22/72 -- Admissions, 2021 - 2022, Supervision Violation
-11:07:36 HEX MAP 23/72 -- Admissions, 2021 - 2022, Technical Violation
-11:07:36 HEX MAP 24/72 -- Admissions, 2021 - 2022, Total
-11:07:36 HEX MAP 25/72 -- Admissions, 2022 - 2023, New Offense Violation
-11:07:36 HEX MAP 26/72 -- Admissions, 2022 - 2023, Parole Violation
-11:07:36 HEX MAP 27/72 -- Admissions, 2022 - 2023, Probation Violation
-11:07:36 HEX MAP 28/72 -- Admissions, 2022 - 2023, Supervision Violation
-11:07:36 HEX MAP 29/72 -- Admissions, 2022 - 2023, Technical Violation
-11:07:37 HEX MAP 30/72 -- Admissions, 2022 - 2023, Total
-11:07:37 HEX MAP 31/72 -- Admissions, 2018 - 2023, New Offense Violation
-11:07:37 HEX MAP 32/72 -- Admissions, 2018 - 2023, Parole Violation
-11:07:37 HEX MAP 33/72 -- Admissions, 2018 - 2023, Probation Violation
-11:07:37 HEX MAP 34/72 -- Admissions, 2018 - 2023, Supervision Violation
-11:07:37 HEX MAP 35/72 -- Admissions, 2018 - 2023, Technical Violation
-11:07:37 HEX MAP 36/72 -- Admissions, 2018 - 2023, Total
-11:07:37 HEX MAP 37/72 -- Population, 2018 - 2019, New Offense Violation
-11:07:37 HEX MAP 38/72 -- Population, 2018 - 2019, Parole Violation
-11:07:37 HEX MAP 39/72 -- Population, 2018 - 2019, Probation Violation
-11:07:37 HEX MAP 40/72 -- Population, 2018 - 2019, Supervision Violation
-11:07:37 HEX MAP 41/72 -- Population, 2018 - 2019, Technical Violation
-11:07:37 HEX MAP 42/72 -- Population, 2018 - 2019, Total
-11:07:37 HEX MAP 43/72 -- Population, 2019 - 2020, New Offense Violation
-11:07:37 HEX MAP 44/72 -- Population, 2019 - 2020, Parole Violation
-11:07:37 HEX MAP 45/72 -- Population, 2019 - 2020, Probation Violation
-11:07:37 HEX MAP 46/72 -- Population, 2019 - 2020, Supervision Violation
-11:07:37 HEX MAP 47/72 -- Population, 2019 - 2020, Technical Violation
-11:07:37 HEX MAP 48/72 -- Population, 2019 - 2020, Total
-11:07:37 HEX MAP 49/72 -- Population, 2020 - 2021, New Offense Violation
-11:07:37 HEX MAP 50/72 -- Population, 2020 - 2021, Parole Violation
-11:07:37 HEX MAP 51/72 -- Population, 2020 - 2021, Probation Violation
-11:07:37 HEX MAP 52/72 -- Population, 2020 - 2021, Supervision Violation
-11:07:37 HEX MAP 53/72 -- Population, 2020 - 2021, Technical Violation
-11:07:37 HEX MAP 54/72 -- Population, 2020 - 2021, Total
-11:07:38 HEX MAP 55/72 -- Population, 2021 - 2022, New Offense Violation
-11:07:38 HEX MAP 56/72 -- Population, 2021 - 2022, Parole Violation
-11:07:38 HEX MAP 57/72 -- Population, 2021 - 2022, Probation Violation
-11:07:38 HEX MAP 58/72 -- Population, 2021 - 2022, Supervision Violation
-11:07:38 HEX MAP 59/72 -- Population, 2021 - 2022, Technical Violation
-11:07:38 HEX MAP 60/72 -- Population, 2021 - 2022, Total
-11:07:38 HEX MAP 61/72 -- Population, 2022 - 2023, New Offense Violation
-11:07:38 HEX MAP 62/72 -- Population, 2022 - 2023, Parole Violation
-11:07:38 HEX MAP 63/72 -- Population, 2022 - 2023, Probation Violation
-11:07:38 HEX MAP 64/72 -- Population, 2022 - 2023, Supervision Violation
-11:07:38 HEX MAP 65/72 -- Population, 2022 - 2023, Technical Violation
-11:07:38 HEX MAP 66/72 -- Population, 2022 - 2023, Total
-11:07:38 HEX MAP 67/72 -- Population, 2018 - 2023, New Offense Violation
-11:07:38 HEX MAP 68/72 -- Population, 2018 - 2023, Parole Violation
-11:07:38 HEX MAP 69/72 -- Population, 2018 - 2023, Probation Violation
-11:07:38 HEX MAP 70/72 -- Population, 2018 - 2023, Supervision Violation
-11:07:38 HEX MAP 71/72 -- Population, 2018 - 2023, Technical Violation
-11:07:38 HEX MAP 72/72 -- Population, 2018 - 2023, Total
+11:38:37 HEX MAP  1/72 -- Admissions, 2018 - 2019, New Offense Violation
+11:38:37 HEX MAP  2/72 -- Admissions, 2018 - 2019, Parole Violation
+11:38:37 HEX MAP  3/72 -- Admissions, 2018 - 2019, Probation Violation
+11:38:37 HEX MAP  4/72 -- Admissions, 2018 - 2019, Supervision Violation
+11:38:37 HEX MAP  5/72 -- Admissions, 2018 - 2019, Technical Violation
+11:38:37 HEX MAP  6/72 -- Admissions, 2018 - 2019, Total
+11:38:37 HEX MAP  7/72 -- Admissions, 2019 - 2020, New Offense Violation
+11:38:37 HEX MAP  8/72 -- Admissions, 2019 - 2020, Parole Violation
+11:38:38 HEX MAP  9/72 -- Admissions, 2019 - 2020, Probation Violation
+11:38:38 HEX MAP 10/72 -- Admissions, 2019 - 2020, Supervision Violation
+11:38:38 HEX MAP 11/72 -- Admissions, 2019 - 2020, Technical Violation
+11:38:38 HEX MAP 12/72 -- Admissions, 2019 - 2020, Total
+11:38:38 HEX MAP 13/72 -- Admissions, 2020 - 2021, New Offense Violation
+11:38:38 HEX MAP 14/72 -- Admissions, 2020 - 2021, Parole Violation
+11:38:38 HEX MAP 15/72 -- Admissions, 2020 - 2021, Probation Violation
+11:38:38 HEX MAP 16/72 -- Admissions, 2020 - 2021, Supervision Violation
+11:38:38 HEX MAP 17/72 -- Admissions, 2020 - 2021, Technical Violation
+11:38:38 HEX MAP 18/72 -- Admissions, 2020 - 2021, Total
+11:38:38 HEX MAP 19/72 -- Admissions, 2021 - 2022, New Offense Violation
+11:38:38 HEX MAP 20/72 -- Admissions, 2021 - 2022, Parole Violation
+11:38:38 HEX MAP 21/72 -- Admissions, 2021 - 2022, Probation Violation
+11:38:38 HEX MAP 22/72 -- Admissions, 2021 - 2022, Supervision Violation
+11:38:38 HEX MAP 23/72 -- Admissions, 2021 - 2022, Technical Violation
+11:38:38 HEX MAP 24/72 -- Admissions, 2021 - 2022, Total
+11:38:38 HEX MAP 25/72 -- Admissions, 2022 - 2023, New Offense Violation
+11:38:38 HEX MAP 26/72 -- Admissions, 2022 - 2023, Parole Violation
+11:38:38 HEX MAP 27/72 -- Admissions, 2022 - 2023, Probation Violation
+11:38:38 HEX MAP 28/72 -- Admissions, 2022 - 2023, Supervision Violation
+11:38:38 HEX MAP 29/72 -- Admissions, 2022 - 2023, Technical Violation
+11:38:38 HEX MAP 30/72 -- Admissions, 2022 - 2023, Total
+11:38:38 HEX MAP 31/72 -- Admissions, 2018 - 2023, New Offense Violation
+11:38:38 HEX MAP 32/72 -- Admissions, 2018 - 2023, Parole Violation
+11:38:38 HEX MAP 33/72 -- Admissions, 2018 - 2023, Probation Violation
+11:38:38 HEX MAP 34/72 -- Admissions, 2018 - 2023, Supervision Violation
+11:38:39 HEX MAP 35/72 -- Admissions, 2018 - 2023, Technical Violation
+11:38:39 HEX MAP 36/72 -- Admissions, 2018 - 2023, Total
+11:38:39 HEX MAP 37/72 -- Population, 2018 - 2019, New Offense Violation
+11:38:39 HEX MAP 38/72 -- Population, 2018 - 2019, Parole Violation
+11:38:39 HEX MAP 39/72 -- Population, 2018 - 2019, Probation Violation
+11:38:39 HEX MAP 40/72 -- Population, 2018 - 2019, Supervision Violation
+11:38:39 HEX MAP 41/72 -- Population, 2018 - 2019, Technical Violation
+11:38:39 HEX MAP 42/72 -- Population, 2018 - 2019, Total
+11:38:39 HEX MAP 43/72 -- Population, 2019 - 2020, New Offense Violation
+11:38:39 HEX MAP 44/72 -- Population, 2019 - 2020, Parole Violation
+11:38:39 HEX MAP 45/72 -- Population, 2019 - 2020, Probation Violation
+11:38:39 HEX MAP 46/72 -- Population, 2019 - 2020, Supervision Violation
+11:38:39 HEX MAP 47/72 -- Population, 2019 - 2020, Technical Violation
+11:38:39 HEX MAP 48/72 -- Population, 2019 - 2020, Total
+11:38:39 HEX MAP 49/72 -- Population, 2020 - 2021, New Offense Violation
+11:38:39 HEX MAP 50/72 -- Population, 2020 - 2021, Parole Violation
+11:38:39 HEX MAP 51/72 -- Population, 2020 - 2021, Probation Violation
+11:38:39 HEX MAP 52/72 -- Population, 2020 - 2021, Supervision Violation
+11:38:39 HEX MAP 53/72 -- Population, 2020 - 2021, Technical Violation
+11:38:39 HEX MAP 54/72 -- Population, 2020 - 2021, Total
+11:38:39 HEX MAP 55/72 -- Population, 2021 - 2022, New Offense Violation
+11:38:39 HEX MAP 56/72 -- Population, 2021 - 2022, Parole Violation
+11:38:39 HEX MAP 57/72 -- Population, 2021 - 2022, Probation Violation
+11:38:39 HEX MAP 58/72 -- Population, 2021 - 2022, Supervision Violation
+11:38:39 HEX MAP 59/72 -- Population, 2021 - 2022, Technical Violation
+11:38:40 HEX MAP 60/72 -- Population, 2021 - 2022, Total
+11:38:40 HEX MAP 61/72 -- Population, 2022 - 2023, New Offense Violation
+11:38:40 HEX MAP 62/72 -- Population, 2022 - 2023, Parole Violation
+11:38:40 HEX MAP 63/72 -- Population, 2022 - 2023, Probation Violation
+11:38:40 HEX MAP 64/72 -- Population, 2022 - 2023, Supervision Violation
+11:38:40 HEX MAP 65/72 -- Population, 2022 - 2023, Technical Violation
+11:38:40 HEX MAP 66/72 -- Population, 2022 - 2023, Total
+11:38:40 HEX MAP 67/72 -- Population, 2018 - 2023, New Offense Violation
+11:38:40 HEX MAP 68/72 -- Population, 2018 - 2023, Parole Violation
+11:38:40 HEX MAP 69/72 -- Population, 2018 - 2023, Probation Violation
+11:38:40 HEX MAP 70/72 -- Population, 2018 - 2023, Supervision Violation
+11:38:40 HEX MAP 71/72 -- Population, 2018 - 2023, Technical Violation
+11:38:40 HEX MAP 72/72 -- Population, 2018 - 2023, Total
 
 > admin$save_rds_twice(natl_hex_lst)
-2025-03-14 11:07:38 CDT-- export natl_hex_lst to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/natl_hex_lst.rds
-2025-03-14 11:07:38 CDT-- export natl_hex_lst to: app/data/natl_hex_lst.rds
+2025-03-17 11:38:40 CDT-- export natl_hex_lst to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/natl_hex_lst.rds
+2025-03-17 11:38:40 CDT-- export natl_hex_lst to: app/data/natl_hex_lst.rds
 
 > # STATE AREA DISPLAY ###########################################################
 > 
 > state_area_lst <-     
 +   map(#lev1 type
 +     c("Admissions" .... [TRUNCATED] 
-11:07:38 AREA CHART   1/100 -- Admissions, Alabama
-11:07:39 AREA CHART   2/100 -- Admissions, Alaska
-11:07:39 AREA CHART   3/100 -- Admissions, Arizona
-11:07:39 AREA CHART   4/100 -- Admissions, Arkansas
-11:07:39 AREA CHART   5/100 -- Admissions, California
-11:07:39 AREA CHART   6/100 -- Admissions, Colorado
-11:07:39 AREA CHART   7/100 -- Admissions, Connecticut
-11:07:39 AREA CHART   8/100 -- Admissions, Delaware
-11:07:39 AREA CHART   9/100 -- Admissions, Florida
-11:07:40 AREA CHART  10/100 -- Admissions, Georgia
-11:07:40 AREA CHART  11/100 -- Admissions, Hawaii
-11:07:40 AREA CHART  12/100 -- Admissions, Idaho
-11:07:40 AREA CHART  13/100 -- Admissions, Illinois
-11:07:40 AREA CHART  14/100 -- Admissions, Indiana
-11:07:40 AREA CHART  15/100 -- Admissions, Iowa
-11:07:40 AREA CHART  16/100 -- Admissions, Kansas
-11:07:40 AREA CHART  17/100 -- Admissions, Kentucky
-11:07:40 AREA CHART  18/100 -- Admissions, Louisiana
-11:07:41 AREA CHART  19/100 -- Admissions, Maine
-11:07:41 AREA CHART  20/100 -- Admissions, Maryland
-11:07:41 AREA CHART  21/100 -- Admissions, Massachusetts
-11:07:41 AREA CHART  22/100 -- Admissions, Michigan
-11:07:41 AREA CHART  23/100 -- Admissions, Minnesota
-11:07:41 AREA CHART  24/100 -- Admissions, Mississippi
-11:07:41 AREA CHART  25/100 -- Admissions, Missouri
-11:07:41 AREA CHART  26/100 -- Admissions, Montana
-11:07:42 AREA CHART  27/100 -- Admissions, Nebraska
-11:07:42 AREA CHART  28/100 -- Admissions, Nevada
-11:07:42 AREA CHART  29/100 -- Admissions, New Hampshire
-11:07:42 AREA CHART  30/100 -- Admissions, New Jersey
-11:07:42 AREA CHART  31/100 -- Admissions, New Mexico
-11:07:42 AREA CHART  32/100 -- Admissions, New York
-11:07:42 AREA CHART  33/100 -- Admissions, North Carolina
-11:07:43 AREA CHART  34/100 -- Admissions, North Dakota
-11:07:43 AREA CHART  35/100 -- Admissions, Ohio
-11:07:43 AREA CHART  36/100 -- Admissions, Oklahoma
-11:07:43 AREA CHART  37/100 -- Admissions, Oregon
-11:07:43 AREA CHART  38/100 -- Admissions, Pennsylvania
-11:07:43 AREA CHART  39/100 -- Admissions, Rhode Island
-11:07:43 AREA CHART  40/100 -- Admissions, South Carolina
-11:07:44 AREA CHART  41/100 -- Admissions, South Dakota
-11:07:44 AREA CHART  42/100 -- Admissions, Tennessee
-11:07:44 AREA CHART  43/100 -- Admissions, Texas
-11:07:44 AREA CHART  44/100 -- Admissions, Utah
-11:07:44 AREA CHART  45/100 -- Admissions, Vermont
-11:07:44 AREA CHART  46/100 -- Admissions, Virginia
-11:07:44 AREA CHART  47/100 -- Admissions, Washington
-11:07:45 AREA CHART  48/100 -- Admissions, West Virginia
-11:07:45 AREA CHART  49/100 -- Admissions, Wisconsin
-11:07:45 AREA CHART  50/100 -- Admissions, Wyoming
-11:07:45 AREA CHART  51/100 -- Population, Alabama
-11:07:45 AREA CHART  52/100 -- Population, Alaska
-11:07:45 AREA CHART  53/100 -- Population, Arizona
-11:07:45 AREA CHART  54/100 -- Population, Arkansas
-11:07:46 AREA CHART  55/100 -- Population, California
-11:07:46 AREA CHART  56/100 -- Population, Colorado
-11:07:46 AREA CHART  57/100 -- Population, Connecticut
-11:07:47 AREA CHART  58/100 -- Population, Delaware
-11:07:47 AREA CHART  59/100 -- Population, Florida
-11:07:47 AREA CHART  60/100 -- Population, Georgia
-11:07:47 AREA CHART  61/100 -- Population, Hawaii
-11:07:47 AREA CHART  62/100 -- Population, Idaho
-11:07:47 AREA CHART  63/100 -- Population, Illinois
-11:07:47 AREA CHART  64/100 -- Population, Indiana
-11:07:47 AREA CHART  65/100 -- Population, Iowa
-11:07:48 AREA CHART  66/100 -- Population, Kansas
-11:07:48 AREA CHART  67/100 -- Population, Kentucky
-11:07:48 AREA CHART  68/100 -- Population, Louisiana
-11:07:48 AREA CHART  69/100 -- Population, Maine
-11:07:48 AREA CHART  70/100 -- Population, Maryland
-11:07:48 AREA CHART  71/100 -- Population, Massachusetts
-11:07:48 AREA CHART  72/100 -- Population, Michigan
-11:07:48 AREA CHART  73/100 -- Population, Minnesota
-11:07:48 AREA CHART  74/100 -- Population, Mississippi
-11:07:49 AREA CHART  75/100 -- Population, Missouri
-11:07:49 AREA CHART  76/100 -- Population, Montana
-11:07:49 AREA CHART  77/100 -- Population, Nebraska
-11:07:49 AREA CHART  78/100 -- Population, Nevada
-11:07:49 AREA CHART  79/100 -- Population, New Hampshire
-11:07:49 AREA CHART  80/100 -- Population, New Jersey
-11:07:49 AREA CHART  81/100 -- Population, New Mexico
-11:07:49 AREA CHART  82/100 -- Population, New York
-11:07:50 AREA CHART  83/100 -- Population, North Carolina
-11:07:50 AREA CHART  84/100 -- Population, North Dakota
-11:07:50 AREA CHART  85/100 -- Population, Ohio
-11:07:50 AREA CHART  86/100 -- Population, Oklahoma
-11:07:50 AREA CHART  87/100 -- Population, Oregon
-11:07:50 AREA CHART  88/100 -- Population, Pennsylvania
-11:07:50 AREA CHART  89/100 -- Population, Rhode Island
-11:07:50 AREA CHART  90/100 -- Population, South Carolina
-11:07:51 AREA CHART  91/100 -- Population, South Dakota
-11:07:51 AREA CHART  92/100 -- Population, Tennessee
-11:07:51 AREA CHART  93/100 -- Population, Texas
-11:07:51 AREA CHART  94/100 -- Population, Utah
-11:07:51 AREA CHART  95/100 -- Population, Vermont
-11:07:51 AREA CHART  96/100 -- Population, Virginia
-11:07:51 AREA CHART  97/100 -- Population, Washington
-11:07:52 AREA CHART  98/100 -- Population, West Virginia
-11:07:52 AREA CHART  99/100 -- Population, Wisconsin
-11:07:52 AREA CHART 100/100 -- Population, Wyoming
+11:38:40 AREA CHART   1/100 -- Admissions, Alabama
+11:38:41 AREA CHART   2/100 -- Admissions, Alaska
+11:38:41 AREA CHART   3/100 -- Admissions, Arizona
+11:38:41 AREA CHART   4/100 -- Admissions, Arkansas
+11:38:41 AREA CHART   5/100 -- Admissions, California
+11:38:41 AREA CHART   6/100 -- Admissions, Colorado
+11:38:41 AREA CHART   7/100 -- Admissions, Connecticut
+11:38:41 AREA CHART   8/100 -- Admissions, Delaware
+11:38:41 AREA CHART   9/100 -- Admissions, Florida
+11:38:41 AREA CHART  10/100 -- Admissions, Georgia
+11:38:41 AREA CHART  11/100 -- Admissions, Hawaii
+11:38:42 AREA CHART  12/100 -- Admissions, Idaho
+11:38:42 AREA CHART  13/100 -- Admissions, Illinois
+11:38:42 AREA CHART  14/100 -- Admissions, Indiana
+11:38:42 AREA CHART  15/100 -- Admissions, Iowa
+11:38:42 AREA CHART  16/100 -- Admissions, Kansas
+11:38:42 AREA CHART  17/100 -- Admissions, Kentucky
+11:38:42 AREA CHART  18/100 -- Admissions, Louisiana
+11:38:42 AREA CHART  19/100 -- Admissions, Maine
+11:38:42 AREA CHART  20/100 -- Admissions, Maryland
+11:38:43 AREA CHART  21/100 -- Admissions, Massachusetts
+11:38:43 AREA CHART  22/100 -- Admissions, Michigan
+11:38:43 AREA CHART  23/100 -- Admissions, Minnesota
+11:38:43 AREA CHART  24/100 -- Admissions, Mississippi
+11:38:43 AREA CHART  25/100 -- Admissions, Missouri
+11:38:43 AREA CHART  26/100 -- Admissions, Montana
+11:38:43 AREA CHART  27/100 -- Admissions, Nebraska
+11:38:43 AREA CHART  28/100 -- Admissions, Nevada
+11:38:43 AREA CHART  29/100 -- Admissions, New Hampshire
+11:38:44 AREA CHART  30/100 -- Admissions, New Jersey
+11:38:44 AREA CHART  31/100 -- Admissions, New Mexico
+11:38:44 AREA CHART  32/100 -- Admissions, New York
+11:38:44 AREA CHART  33/100 -- Admissions, North Carolina
+11:38:44 AREA CHART  34/100 -- Admissions, North Dakota
+11:38:44 AREA CHART  35/100 -- Admissions, Ohio
+11:38:44 AREA CHART  36/100 -- Admissions, Oklahoma
+11:38:44 AREA CHART  37/100 -- Admissions, Oregon
+11:38:44 AREA CHART  38/100 -- Admissions, Pennsylvania
+11:38:45 AREA CHART  39/100 -- Admissions, Rhode Island
+11:38:45 AREA CHART  40/100 -- Admissions, South Carolina
+11:38:45 AREA CHART  41/100 -- Admissions, South Dakota
+11:38:45 AREA CHART  42/100 -- Admissions, Tennessee
+11:38:45 AREA CHART  43/100 -- Admissions, Texas
+11:38:45 AREA CHART  44/100 -- Admissions, Utah
+11:38:45 AREA CHART  45/100 -- Admissions, Vermont
+11:38:45 AREA CHART  46/100 -- Admissions, Virginia
+11:38:45 AREA CHART  47/100 -- Admissions, Washington
+11:38:45 AREA CHART  48/100 -- Admissions, West Virginia
+11:38:46 AREA CHART  49/100 -- Admissions, Wisconsin
+11:38:46 AREA CHART  50/100 -- Admissions, Wyoming
+11:38:46 AREA CHART  51/100 -- Population, Alabama
+11:38:46 AREA CHART  52/100 -- Population, Alaska
+11:38:46 AREA CHART  53/100 -- Population, Arizona
+11:38:46 AREA CHART  54/100 -- Population, Arkansas
+11:38:46 AREA CHART  55/100 -- Population, California
+11:38:46 AREA CHART  56/100 -- Population, Colorado
+11:38:47 AREA CHART  57/100 -- Population, Connecticut
+11:38:47 AREA CHART  58/100 -- Population, Delaware
+11:38:47 AREA CHART  59/100 -- Population, Florida
+11:38:47 AREA CHART  60/100 -- Population, Georgia
+11:38:47 AREA CHART  61/100 -- Population, Hawaii
+11:38:47 AREA CHART  62/100 -- Population, Idaho
+11:38:47 AREA CHART  63/100 -- Population, Illinois
+11:38:48 AREA CHART  64/100 -- Population, Indiana
+11:38:48 AREA CHART  65/100 -- Population, Iowa
+11:38:48 AREA CHART  66/100 -- Population, Kansas
+11:38:48 AREA CHART  67/100 -- Population, Kentucky
+11:38:48 AREA CHART  68/100 -- Population, Louisiana
+11:38:48 AREA CHART  69/100 -- Population, Maine
+11:38:49 AREA CHART  70/100 -- Population, Maryland
+11:38:49 AREA CHART  71/100 -- Population, Massachusetts
+11:38:49 AREA CHART  72/100 -- Population, Michigan
+11:38:49 AREA CHART  73/100 -- Population, Minnesota
+11:38:49 AREA CHART  74/100 -- Population, Mississippi
+11:38:49 AREA CHART  75/100 -- Population, Missouri
+11:38:49 AREA CHART  76/100 -- Population, Montana
+11:38:49 AREA CHART  77/100 -- Population, Nebraska
+11:38:49 AREA CHART  78/100 -- Population, Nevada
+11:38:49 AREA CHART  79/100 -- Population, New Hampshire
+11:38:49 AREA CHART  80/100 -- Population, New Jersey
+11:38:49 AREA CHART  81/100 -- Population, New Mexico
+11:38:50 AREA CHART  82/100 -- Population, New York
+11:38:50 AREA CHART  83/100 -- Population, North Carolina
+11:38:50 AREA CHART  84/100 -- Population, North Dakota
+11:38:50 AREA CHART  85/100 -- Population, Ohio
+11:38:50 AREA CHART  86/100 -- Population, Oklahoma
+11:38:50 AREA CHART  87/100 -- Population, Oregon
+11:38:50 AREA CHART  88/100 -- Population, Pennsylvania
+11:38:50 AREA CHART  89/100 -- Population, Rhode Island
+11:38:50 AREA CHART  90/100 -- Population, South Carolina
+11:38:51 AREA CHART  91/100 -- Population, South Dakota
+11:38:51 AREA CHART  92/100 -- Population, Tennessee
+11:38:51 AREA CHART  93/100 -- Population, Texas
+11:38:51 AREA CHART  94/100 -- Population, Utah
+11:38:51 AREA CHART  95/100 -- Population, Vermont
+11:38:51 AREA CHART  96/100 -- Population, Virginia
+11:38:51 AREA CHART  97/100 -- Population, Washington
+11:38:51 AREA CHART  98/100 -- Population, West Virginia
+11:38:51 AREA CHART  99/100 -- Population, Wisconsin
+11:38:51 AREA CHART 100/100 -- Population, Wyoming
 
 > admin$save_rds_twice(state_area_lst)
-2025-03-14 11:07:52 CDT-- export state_area_lst to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/state_area_lst.rds
-2025-03-14 11:07:52 CDT-- export state_area_lst to: app/data/state_area_lst.rds
+2025-03-17 11:38:52 CDT-- export state_area_lst to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/state_area_lst.rds
+2025-03-17 11:38:52 CDT-- export state_area_lst to: app/data/state_area_lst.rds
 
 > # STATE BAR DISPLAY ############################################################
 > 
 > state_bar_lst <-     
 +   map(#lev1 type 
 +     c("Admissions" .... [TRUNCATED] 
-11:07:52 BAR CHART   1/300 -- Admissions, Both, Alabama
-11:07:52 BAR CHART   2/300 -- Admissions, Both, Alaska
-11:07:53 BAR CHART   3/300 -- Admissions, Both, Arizona
-11:07:53 BAR CHART   4/300 -- Admissions, Both, Arkansas
-11:07:53 BAR CHART   5/300 -- Admissions, Both, California
-11:07:53 BAR CHART   6/300 -- Admissions, Both, Colorado
-11:07:53 BAR CHART   7/300 -- Admissions, Both, Connecticut
-11:07:53 BAR CHART   8/300 -- Admissions, Both, Delaware
-11:07:53 BAR CHART   9/300 -- Admissions, Both, Florida
-11:07:53 BAR CHART  10/300 -- Admissions, Both, Georgia
-11:07:54 BAR CHART  11/300 -- Admissions, Both, Hawaii
-11:07:54 BAR CHART  12/300 -- Admissions, Both, Idaho
-11:07:54 BAR CHART  13/300 -- Admissions, Both, Illinois
-11:07:54 BAR CHART  14/300 -- Admissions, Both, Indiana
-11:07:54 BAR CHART  15/300 -- Admissions, Both, Iowa
-11:07:54 BAR CHART  16/300 -- Admissions, Both, Kansas
-11:07:54 BAR CHART  17/300 -- Admissions, Both, Kentucky
-11:07:54 BAR CHART  18/300 -- Admissions, Both, Louisiana
-11:07:54 BAR CHART  19/300 -- Admissions, Both, Maine
-11:07:54 BAR CHART  20/300 -- Admissions, Both, Maryland
-11:07:55 BAR CHART  21/300 -- Admissions, Both, Massachusetts
-11:07:55 BAR CHART  22/300 -- Admissions, Both, Michigan
-11:07:55 BAR CHART  23/300 -- Admissions, Both, Minnesota
-11:07:55 BAR CHART  24/300 -- Admissions, Both, Mississippi
-11:07:55 BAR CHART  25/300 -- Admissions, Both, Missouri
-11:07:55 BAR CHART  26/300 -- Admissions, Both, Montana
-11:07:55 BAR CHART  27/300 -- Admissions, Both, Nebraska
-11:07:55 BAR CHART  28/300 -- Admissions, Both, Nevada
-11:07:55 BAR CHART  29/300 -- Admissions, Both, New Hampshire
-11:07:55 BAR CHART  30/300 -- Admissions, Both, New Jersey
-11:07:55 BAR CHART  31/300 -- Admissions, Both, New Mexico
-11:07:56 BAR CHART  32/300 -- Admissions, Both, New York
-11:07:56 BAR CHART  33/300 -- Admissions, Both, North Carolina
-11:07:56 BAR CHART  34/300 -- Admissions, Both, North Dakota
-11:07:56 BAR CHART  35/300 -- Admissions, Both, Ohio
-11:07:56 BAR CHART  36/300 -- Admissions, Both, Oklahoma
-11:07:56 BAR CHART  37/300 -- Admissions, Both, Oregon
-11:07:56 BAR CHART  38/300 -- Admissions, Both, Pennsylvania
-11:07:56 BAR CHART  39/300 -- Admissions, Both, Rhode Island
-11:07:56 BAR CHART  40/300 -- Admissions, Both, South Carolina
-11:07:56 BAR CHART  41/300 -- Admissions, Both, South Dakota
-11:07:57 BAR CHART  42/300 -- Admissions, Both, Tennessee
-11:07:57 BAR CHART  43/300 -- Admissions, Both, Texas
-11:07:57 BAR CHART  44/300 -- Admissions, Both, Utah
-11:07:57 BAR CHART  45/300 -- Admissions, Both, Vermont
-11:07:57 BAR CHART  46/300 -- Admissions, Both, Virginia
-11:07:57 BAR CHART  47/300 -- Admissions, Both, Washington
-11:07:58 BAR CHART  48/300 -- Admissions, Both, West Virginia
-11:07:58 BAR CHART  49/300 -- Admissions, Both, Wisconsin
-11:07:58 BAR CHART  50/300 -- Admissions, Both, Wyoming
-11:07:58 BAR CHART  51/300 -- Admissions, Parole, Alabama
-11:07:58 BAR CHART  52/300 -- Admissions, Parole, Alaska
-11:07:58 BAR CHART  53/300 -- Admissions, Parole, Arizona
-11:07:58 BAR CHART  54/300 -- Admissions, Parole, Arkansas
-11:07:58 BAR CHART  55/300 -- Admissions, Parole, California
-11:07:59 BAR CHART  56/300 -- Admissions, Parole, Colorado
-11:07:59 BAR CHART  57/300 -- Admissions, Parole, Connecticut
-11:07:59 BAR CHART  58/300 -- Admissions, Parole, Delaware
-11:07:59 BAR CHART  59/300 -- Admissions, Parole, Florida
-11:07:59 BAR CHART  60/300 -- Admissions, Parole, Georgia
-11:07:59 BAR CHART  61/300 -- Admissions, Parole, Hawaii
-11:07:59 BAR CHART  62/300 -- Admissions, Parole, Idaho
-11:07:59 BAR CHART  63/300 -- Admissions, Parole, Illinois
-11:08:00 BAR CHART  64/300 -- Admissions, Parole, Indiana
-11:08:00 BAR CHART  65/300 -- Admissions, Parole, Iowa
-11:08:00 BAR CHART  66/300 -- Admissions, Parole, Kansas
-11:08:00 BAR CHART  67/300 -- Admissions, Parole, Kentucky
-11:08:00 BAR CHART  68/300 -- Admissions, Parole, Louisiana
-11:08:00 BAR CHART  69/300 -- Admissions, Parole, Maine
-11:08:00 BAR CHART  70/300 -- Admissions, Parole, Maryland
-11:08:00 BAR CHART  71/300 -- Admissions, Parole, Massachusetts
-11:08:01 BAR CHART  72/300 -- Admissions, Parole, Michigan
-11:08:01 BAR CHART  73/300 -- Admissions, Parole, Minnesota
-11:08:01 BAR CHART  74/300 -- Admissions, Parole, Mississippi
-11:08:01 BAR CHART  75/300 -- Admissions, Parole, Missouri
-11:08:01 BAR CHART  76/300 -- Admissions, Parole, Montana
-11:08:01 BAR CHART  77/300 -- Admissions, Parole, Nebraska
-11:08:01 BAR CHART  78/300 -- Admissions, Parole, Nevada
-11:08:01 BAR CHART  79/300 -- Admissions, Parole, New Hampshire
-11:08:01 BAR CHART  80/300 -- Admissions, Parole, New Jersey
-11:08:01 BAR CHART  81/300 -- Admissions, Parole, New Mexico
-11:08:01 BAR CHART  82/300 -- Admissions, Parole, New York
-11:08:02 BAR CHART  83/300 -- Admissions, Parole, North Carolina
-11:08:02 BAR CHART  84/300 -- Admissions, Parole, North Dakota
-11:08:02 BAR CHART  85/300 -- Admissions, Parole, Ohio
-11:08:02 BAR CHART  86/300 -- Admissions, Parole, Oklahoma
-11:08:02 BAR CHART  87/300 -- Admissions, Parole, Oregon
-11:08:02 BAR CHART  88/300 -- Admissions, Parole, Pennsylvania
-11:08:02 BAR CHART  89/300 -- Admissions, Parole, Rhode Island
-11:08:02 BAR CHART  90/300 -- Admissions, Parole, South Carolina
-11:08:02 BAR CHART  91/300 -- Admissions, Parole, South Dakota
-11:08:03 BAR CHART  92/300 -- Admissions, Parole, Tennessee
-11:08:03 BAR CHART  93/300 -- Admissions, Parole, Texas
-11:08:03 BAR CHART  94/300 -- Admissions, Parole, Utah
-11:08:03 BAR CHART  95/300 -- Admissions, Parole, Vermont
-11:08:03 BAR CHART  96/300 -- Admissions, Parole, Virginia
-11:08:03 BAR CHART  97/300 -- Admissions, Parole, Washington
-11:08:03 BAR CHART  98/300 -- Admissions, Parole, West Virginia
-11:08:03 BAR CHART  99/300 -- Admissions, Parole, Wisconsin
-11:08:03 BAR CHART 100/300 -- Admissions, Parole, Wyoming
-11:08:04 BAR CHART 101/300 -- Admissions, Probation, Alabama
-11:08:04 BAR CHART 102/300 -- Admissions, Probation, Alaska
-11:08:04 BAR CHART 103/300 -- Admissions, Probation, Arizona
-11:08:04 BAR CHART 104/300 -- Admissions, Probation, Arkansas
-11:08:04 BAR CHART 105/300 -- Admissions, Probation, California
-11:08:04 BAR CHART 106/300 -- Admissions, Probation, Colorado
-11:08:04 BAR CHART 107/300 -- Admissions, Probation, Connecticut
-11:08:04 BAR CHART 108/300 -- Admissions, Probation, Delaware
-11:08:05 BAR CHART 109/300 -- Admissions, Probation, Florida
-11:08:05 BAR CHART 110/300 -- Admissions, Probation, Georgia
-11:08:05 BAR CHART 111/300 -- Admissions, Probation, Hawaii
-11:08:05 BAR CHART 112/300 -- Admissions, Probation, Idaho
-11:08:05 BAR CHART 113/300 -- Admissions, Probation, Illinois
-11:08:05 BAR CHART 114/300 -- Admissions, Probation, Indiana
-11:08:05 BAR CHART 115/300 -- Admissions, Probation, Iowa
-11:08:05 BAR CHART 116/300 -- Admissions, Probation, Kansas
-11:08:05 BAR CHART 117/300 -- Admissions, Probation, Kentucky
-11:08:05 BAR CHART 118/300 -- Admissions, Probation, Louisiana
-11:08:06 BAR CHART 119/300 -- Admissions, Probation, Maine
-11:08:06 BAR CHART 120/300 -- Admissions, Probation, Maryland
-11:08:06 BAR CHART 121/300 -- Admissions, Probation, Massachusetts
-11:08:06 BAR CHART 122/300 -- Admissions, Probation, Michigan
-11:08:06 BAR CHART 123/300 -- Admissions, Probation, Minnesota
-11:08:06 BAR CHART 124/300 -- Admissions, Probation, Mississippi
-11:08:06 BAR CHART 125/300 -- Admissions, Probation, Missouri
-11:08:06 BAR CHART 126/300 -- Admissions, Probation, Montana
-11:08:06 BAR CHART 127/300 -- Admissions, Probation, Nebraska
-11:08:07 BAR CHART 128/300 -- Admissions, Probation, Nevada
-11:08:07 BAR CHART 129/300 -- Admissions, Probation, New Hampshire
-11:08:07 BAR CHART 130/300 -- Admissions, Probation, New Jersey
-11:08:07 BAR CHART 131/300 -- Admissions, Probation, New Mexico
-11:08:07 BAR CHART 132/300 -- Admissions, Probation, New York
-11:08:07 BAR CHART 133/300 -- Admissions, Probation, North Carolina
-11:08:07 BAR CHART 134/300 -- Admissions, Probation, North Dakota
-11:08:07 BAR CHART 135/300 -- Admissions, Probation, Ohio
-11:08:07 BAR CHART 136/300 -- Admissions, Probation, Oklahoma
-11:08:08 BAR CHART 137/300 -- Admissions, Probation, Oregon
-11:08:08 BAR CHART 138/300 -- Admissions, Probation, Pennsylvania
-11:08:08 BAR CHART 139/300 -- Admissions, Probation, Rhode Island
-11:08:08 BAR CHART 140/300 -- Admissions, Probation, South Carolina
-11:08:08 BAR CHART 141/300 -- Admissions, Probation, South Dakota
-11:08:08 BAR CHART 142/300 -- Admissions, Probation, Tennessee
-11:08:08 BAR CHART 143/300 -- Admissions, Probation, Texas
-11:08:08 BAR CHART 144/300 -- Admissions, Probation, Utah
-11:08:09 BAR CHART 145/300 -- Admissions, Probation, Vermont
-11:08:09 BAR CHART 146/300 -- Admissions, Probation, Virginia
-11:08:09 BAR CHART 147/300 -- Admissions, Probation, Washington
-11:08:09 BAR CHART 148/300 -- Admissions, Probation, West Virginia
-11:08:09 BAR CHART 149/300 -- Admissions, Probation, Wisconsin
-11:08:10 BAR CHART 150/300 -- Admissions, Probation, Wyoming
-11:08:10 BAR CHART 151/300 -- Population, Both, Alabama
-11:08:10 BAR CHART 152/300 -- Population, Both, Alaska
-11:08:10 BAR CHART 153/300 -- Population, Both, Arizona
-11:08:10 BAR CHART 154/300 -- Population, Both, Arkansas
-11:08:10 BAR CHART 155/300 -- Population, Both, California
-11:08:11 BAR CHART 156/300 -- Population, Both, Colorado
-11:08:11 BAR CHART 157/300 -- Population, Both, Connecticut
-11:08:11 BAR CHART 158/300 -- Population, Both, Delaware
-11:08:11 BAR CHART 159/300 -- Population, Both, Florida
-11:08:11 BAR CHART 160/300 -- Population, Both, Georgia
-11:08:11 BAR CHART 161/300 -- Population, Both, Hawaii
-11:08:11 BAR CHART 162/300 -- Population, Both, Idaho
-11:08:11 BAR CHART 163/300 -- Population, Both, Illinois
-11:08:11 BAR CHART 164/300 -- Population, Both, Indiana
-11:08:12 BAR CHART 165/300 -- Population, Both, Iowa
-11:08:12 BAR CHART 166/300 -- Population, Both, Kansas
-11:08:12 BAR CHART 167/300 -- Population, Both, Kentucky
-11:08:12 BAR CHART 168/300 -- Population, Both, Louisiana
-11:08:12 BAR CHART 169/300 -- Population, Both, Maine
-11:08:12 BAR CHART 170/300 -- Population, Both, Maryland
-11:08:12 BAR CHART 171/300 -- Population, Both, Massachusetts
-11:08:12 BAR CHART 172/300 -- Population, Both, Michigan
-11:08:12 BAR CHART 173/300 -- Population, Both, Minnesota
-11:08:13 BAR CHART 174/300 -- Population, Both, Mississippi
-11:08:13 BAR CHART 175/300 -- Population, Both, Missouri
-11:08:13 BAR CHART 176/300 -- Population, Both, Montana
-11:08:13 BAR CHART 177/300 -- Population, Both, Nebraska
-11:08:13 BAR CHART 178/300 -- Population, Both, Nevada
-11:08:13 BAR CHART 179/300 -- Population, Both, New Hampshire
-11:08:13 BAR CHART 180/300 -- Population, Both, New Jersey
-11:08:13 BAR CHART 181/300 -- Population, Both, New Mexico
-11:08:14 BAR CHART 182/300 -- Population, Both, New York
-11:08:14 BAR CHART 183/300 -- Population, Both, North Carolina
-11:08:14 BAR CHART 184/300 -- Population, Both, North Dakota
-11:08:14 BAR CHART 185/300 -- Population, Both, Ohio
-11:08:14 BAR CHART 186/300 -- Population, Both, Oklahoma
-11:08:14 BAR CHART 187/300 -- Population, Both, Oregon
-11:08:14 BAR CHART 188/300 -- Population, Both, Pennsylvania
-11:08:15 BAR CHART 189/300 -- Population, Both, Rhode Island
-11:08:15 BAR CHART 190/300 -- Population, Both, South Carolina
-11:08:15 BAR CHART 191/300 -- Population, Both, South Dakota
-11:08:15 BAR CHART 192/300 -- Population, Both, Tennessee
-11:08:15 BAR CHART 193/300 -- Population, Both, Texas
-11:08:15 BAR CHART 194/300 -- Population, Both, Utah
-11:08:15 BAR CHART 195/300 -- Population, Both, Vermont
-11:08:16 BAR CHART 196/300 -- Population, Both, Virginia
-11:08:16 BAR CHART 197/300 -- Population, Both, Washington
-11:08:16 BAR CHART 198/300 -- Population, Both, West Virginia
-11:08:16 BAR CHART 199/300 -- Population, Both, Wisconsin
-11:08:16 BAR CHART 200/300 -- Population, Both, Wyoming
-11:08:16 BAR CHART 201/300 -- Population, Parole, Alabama
-11:08:16 BAR CHART 202/300 -- Population, Parole, Alaska
-11:08:16 BAR CHART 203/300 -- Population, Parole, Arizona
-11:08:16 BAR CHART 204/300 -- Population, Parole, Arkansas
-11:08:16 BAR CHART 205/300 -- Population, Parole, California
-11:08:16 BAR CHART 206/300 -- Population, Parole, Colorado
-11:08:16 BAR CHART 207/300 -- Population, Parole, Connecticut
-11:08:17 BAR CHART 208/300 -- Population, Parole, Delaware
-11:08:17 BAR CHART 209/300 -- Population, Parole, Florida
-11:08:17 BAR CHART 210/300 -- Population, Parole, Georgia
-11:08:17 BAR CHART 211/300 -- Population, Parole, Hawaii
-11:08:17 BAR CHART 212/300 -- Population, Parole, Idaho
-11:08:17 BAR CHART 213/300 -- Population, Parole, Illinois
-11:08:17 BAR CHART 214/300 -- Population, Parole, Indiana
-11:08:17 BAR CHART 215/300 -- Population, Parole, Iowa
-11:08:17 BAR CHART 216/300 -- Population, Parole, Kansas
-11:08:17 BAR CHART 217/300 -- Population, Parole, Kentucky
-11:08:17 BAR CHART 218/300 -- Population, Parole, Louisiana
-11:08:17 BAR CHART 219/300 -- Population, Parole, Maine
-11:08:18 BAR CHART 220/300 -- Population, Parole, Maryland
-11:08:18 BAR CHART 221/300 -- Population, Parole, Massachusetts
-11:08:18 BAR CHART 222/300 -- Population, Parole, Michigan
-11:08:18 BAR CHART 223/300 -- Population, Parole, Minnesota
-11:08:18 BAR CHART 224/300 -- Population, Parole, Mississippi
-11:08:19 BAR CHART 225/300 -- Population, Parole, Missouri
-11:08:19 BAR CHART 226/300 -- Population, Parole, Montana
-11:08:19 BAR CHART 227/300 -- Population, Parole, Nebraska
-11:08:19 BAR CHART 228/300 -- Population, Parole, Nevada
-11:08:19 BAR CHART 229/300 -- Population, Parole, New Hampshire
-11:08:19 BAR CHART 230/300 -- Population, Parole, New Jersey
-11:08:19 BAR CHART 231/300 -- Population, Parole, New Mexico
-11:08:19 BAR CHART 232/300 -- Population, Parole, New York
-11:08:19 BAR CHART 233/300 -- Population, Parole, North Carolina
-11:08:19 BAR CHART 234/300 -- Population, Parole, North Dakota
-11:08:19 BAR CHART 235/300 -- Population, Parole, Ohio
-11:08:19 BAR CHART 236/300 -- Population, Parole, Oklahoma
-11:08:20 BAR CHART 237/300 -- Population, Parole, Oregon
-11:08:20 BAR CHART 238/300 -- Population, Parole, Pennsylvania
-11:08:20 BAR CHART 239/300 -- Population, Parole, Rhode Island
-11:08:20 BAR CHART 240/300 -- Population, Parole, South Carolina
-11:08:20 BAR CHART 241/300 -- Population, Parole, South Dakota
-11:08:20 BAR CHART 242/300 -- Population, Parole, Tennessee
-11:08:20 BAR CHART 243/300 -- Population, Parole, Texas
-11:08:20 BAR CHART 244/300 -- Population, Parole, Utah
-11:08:20 BAR CHART 245/300 -- Population, Parole, Vermont
-11:08:20 BAR CHART 246/300 -- Population, Parole, Virginia
-11:08:20 BAR CHART 247/300 -- Population, Parole, Washington
-11:08:20 BAR CHART 248/300 -- Population, Parole, West Virginia
-11:08:21 BAR CHART 249/300 -- Population, Parole, Wisconsin
-11:08:21 BAR CHART 250/300 -- Population, Parole, Wyoming
-11:08:21 BAR CHART 251/300 -- Population, Probation, Alabama
-11:08:21 BAR CHART 252/300 -- Population, Probation, Alaska
-11:08:21 BAR CHART 253/300 -- Population, Probation, Arizona
-11:08:21 BAR CHART 254/300 -- Population, Probation, Arkansas
-11:08:21 BAR CHART 255/300 -- Population, Probation, California
-11:08:21 BAR CHART 256/300 -- Population, Probation, Colorado
-11:08:21 BAR CHART 257/300 -- Population, Probation, Connecticut
-11:08:21 BAR CHART 258/300 -- Population, Probation, Delaware
-11:08:21 BAR CHART 259/300 -- Population, Probation, Florida
-11:08:22 BAR CHART 260/300 -- Population, Probation, Georgia
-11:08:22 BAR CHART 261/300 -- Population, Probation, Hawaii
-11:08:22 BAR CHART 262/300 -- Population, Probation, Idaho
-11:08:22 BAR CHART 263/300 -- Population, Probation, Illinois
-11:08:22 BAR CHART 264/300 -- Population, Probation, Indiana
-11:08:22 BAR CHART 265/300 -- Population, Probation, Iowa
-11:08:22 BAR CHART 266/300 -- Population, Probation, Kansas
-11:08:22 BAR CHART 267/300 -- Population, Probation, Kentucky
-11:08:22 BAR CHART 268/300 -- Population, Probation, Louisiana
-11:08:22 BAR CHART 269/300 -- Population, Probation, Maine
-11:08:22 BAR CHART 270/300 -- Population, Probation, Maryland
-11:08:23 BAR CHART 271/300 -- Population, Probation, Massachusetts
-11:08:23 BAR CHART 272/300 -- Population, Probation, Michigan
-11:08:23 BAR CHART 273/300 -- Population, Probation, Minnesota
-11:08:23 BAR CHART 274/300 -- Population, Probation, Mississippi
-11:08:23 BAR CHART 275/300 -- Population, Probation, Missouri
-11:08:23 BAR CHART 276/300 -- Population, Probation, Montana
-11:08:23 BAR CHART 277/300 -- Population, Probation, Nebraska
-11:08:23 BAR CHART 278/300 -- Population, Probation, Nevada
-11:08:23 BAR CHART 279/300 -- Population, Probation, New Hampshire
-11:08:24 BAR CHART 280/300 -- Population, Probation, New Jersey
-11:08:24 BAR CHART 281/300 -- Population, Probation, New Mexico
-11:08:24 BAR CHART 282/300 -- Population, Probation, New York
-11:08:24 BAR CHART 283/300 -- Population, Probation, North Carolina
-11:08:24 BAR CHART 284/300 -- Population, Probation, North Dakota
-11:08:24 BAR CHART 285/300 -- Population, Probation, Ohio
-11:08:24 BAR CHART 286/300 -- Population, Probation, Oklahoma
-11:08:24 BAR CHART 287/300 -- Population, Probation, Oregon
-11:08:24 BAR CHART 288/300 -- Population, Probation, Pennsylvania
-11:08:24 BAR CHART 289/300 -- Population, Probation, Rhode Island
-11:08:25 BAR CHART 290/300 -- Population, Probation, South Carolina
-11:08:25 BAR CHART 291/300 -- Population, Probation, South Dakota
-11:08:25 BAR CHART 292/300 -- Population, Probation, Tennessee
-11:08:25 BAR CHART 293/300 -- Population, Probation, Texas
-11:08:25 BAR CHART 294/300 -- Population, Probation, Utah
-11:08:25 BAR CHART 295/300 -- Population, Probation, Vermont
-11:08:25 BAR CHART 296/300 -- Population, Probation, Virginia
-11:08:25 BAR CHART 297/300 -- Population, Probation, Washington
-11:08:25 BAR CHART 298/300 -- Population, Probation, West Virginia
-11:08:26 BAR CHART 299/300 -- Population, Probation, Wisconsin
-11:08:26 BAR CHART 300/300 -- Population, Probation, Wyoming
+11:38:52 BAR CHART   1/300 -- Admissions, Both, Alabama
+11:38:52 BAR CHART   2/300 -- Admissions, Both, Alaska
+11:38:52 BAR CHART   3/300 -- Admissions, Both, Arizona
+11:38:52 BAR CHART   4/300 -- Admissions, Both, Arkansas
+11:38:52 BAR CHART   5/300 -- Admissions, Both, California
+11:38:52 BAR CHART   6/300 -- Admissions, Both, Colorado
+11:38:52 BAR CHART   7/300 -- Admissions, Both, Connecticut
+11:38:52 BAR CHART   8/300 -- Admissions, Both, Delaware
+11:38:53 BAR CHART   9/300 -- Admissions, Both, Florida
+11:38:53 BAR CHART  10/300 -- Admissions, Both, Georgia
+11:38:53 BAR CHART  11/300 -- Admissions, Both, Hawaii
+11:38:53 BAR CHART  12/300 -- Admissions, Both, Idaho
+11:38:53 BAR CHART  13/300 -- Admissions, Both, Illinois
+11:38:53 BAR CHART  14/300 -- Admissions, Both, Indiana
+11:38:53 BAR CHART  15/300 -- Admissions, Both, Iowa
+11:38:53 BAR CHART  16/300 -- Admissions, Both, Kansas
+11:38:53 BAR CHART  17/300 -- Admissions, Both, Kentucky
+11:38:53 BAR CHART  18/300 -- Admissions, Both, Louisiana
+11:38:54 BAR CHART  19/300 -- Admissions, Both, Maine
+11:38:54 BAR CHART  20/300 -- Admissions, Both, Maryland
+11:38:54 BAR CHART  21/300 -- Admissions, Both, Massachusetts
+11:38:54 BAR CHART  22/300 -- Admissions, Both, Michigan
+11:38:54 BAR CHART  23/300 -- Admissions, Both, Minnesota
+11:38:54 BAR CHART  24/300 -- Admissions, Both, Mississippi
+11:38:54 BAR CHART  25/300 -- Admissions, Both, Missouri
+11:38:54 BAR CHART  26/300 -- Admissions, Both, Montana
+11:38:54 BAR CHART  27/300 -- Admissions, Both, Nebraska
+11:38:54 BAR CHART  28/300 -- Admissions, Both, Nevada
+11:38:55 BAR CHART  29/300 -- Admissions, Both, New Hampshire
+11:38:55 BAR CHART  30/300 -- Admissions, Both, New Jersey
+11:38:55 BAR CHART  31/300 -- Admissions, Both, New Mexico
+11:38:55 BAR CHART  32/300 -- Admissions, Both, New York
+11:38:55 BAR CHART  33/300 -- Admissions, Both, North Carolina
+11:38:55 BAR CHART  34/300 -- Admissions, Both, North Dakota
+11:38:55 BAR CHART  35/300 -- Admissions, Both, Ohio
+11:38:55 BAR CHART  36/300 -- Admissions, Both, Oklahoma
+11:38:55 BAR CHART  37/300 -- Admissions, Both, Oregon
+11:38:56 BAR CHART  38/300 -- Admissions, Both, Pennsylvania
+11:38:56 BAR CHART  39/300 -- Admissions, Both, Rhode Island
+11:38:56 BAR CHART  40/300 -- Admissions, Both, South Carolina
+11:38:56 BAR CHART  41/300 -- Admissions, Both, South Dakota
+11:38:56 BAR CHART  42/300 -- Admissions, Both, Tennessee
+11:38:56 BAR CHART  43/300 -- Admissions, Both, Texas
+11:38:56 BAR CHART  44/300 -- Admissions, Both, Utah
+11:38:56 BAR CHART  45/300 -- Admissions, Both, Vermont
+11:38:56 BAR CHART  46/300 -- Admissions, Both, Virginia
+11:38:56 BAR CHART  47/300 -- Admissions, Both, Washington
+11:38:57 BAR CHART  48/300 -- Admissions, Both, West Virginia
+11:38:57 BAR CHART  49/300 -- Admissions, Both, Wisconsin
+11:38:57 BAR CHART  50/300 -- Admissions, Both, Wyoming
+11:38:57 BAR CHART  51/300 -- Admissions, Parole, Alabama
+11:38:57 BAR CHART  52/300 -- Admissions, Parole, Alaska
+11:38:57 BAR CHART  53/300 -- Admissions, Parole, Arizona
+11:38:57 BAR CHART  54/300 -- Admissions, Parole, Arkansas
+11:38:57 BAR CHART  55/300 -- Admissions, Parole, California
+11:38:57 BAR CHART  56/300 -- Admissions, Parole, Colorado
+11:38:58 BAR CHART  57/300 -- Admissions, Parole, Connecticut
+11:38:58 BAR CHART  58/300 -- Admissions, Parole, Delaware
+11:38:58 BAR CHART  59/300 -- Admissions, Parole, Florida
+11:38:58 BAR CHART  60/300 -- Admissions, Parole, Georgia
+11:38:58 BAR CHART  61/300 -- Admissions, Parole, Hawaii
+11:38:58 BAR CHART  62/300 -- Admissions, Parole, Idaho
+11:38:58 BAR CHART  63/300 -- Admissions, Parole, Illinois
+11:38:59 BAR CHART  64/300 -- Admissions, Parole, Indiana
+11:38:59 BAR CHART  65/300 -- Admissions, Parole, Iowa
+11:38:59 BAR CHART  66/300 -- Admissions, Parole, Kansas
+11:38:59 BAR CHART  67/300 -- Admissions, Parole, Kentucky
+11:38:59 BAR CHART  68/300 -- Admissions, Parole, Louisiana
+11:38:59 BAR CHART  69/300 -- Admissions, Parole, Maine
+11:38:59 BAR CHART  70/300 -- Admissions, Parole, Maryland
+11:38:59 BAR CHART  71/300 -- Admissions, Parole, Massachusetts
+11:38:59 BAR CHART  72/300 -- Admissions, Parole, Michigan
+11:38:59 BAR CHART  73/300 -- Admissions, Parole, Minnesota
+11:38:59 BAR CHART  74/300 -- Admissions, Parole, Mississippi
+11:38:59 BAR CHART  75/300 -- Admissions, Parole, Missouri
+11:39:00 BAR CHART  76/300 -- Admissions, Parole, Montana
+11:39:00 BAR CHART  77/300 -- Admissions, Parole, Nebraska
+11:39:00 BAR CHART  78/300 -- Admissions, Parole, Nevada
+11:39:00 BAR CHART  79/300 -- Admissions, Parole, New Hampshire
+11:39:00 BAR CHART  80/300 -- Admissions, Parole, New Jersey
+11:39:00 BAR CHART  81/300 -- Admissions, Parole, New Mexico
+11:39:00 BAR CHART  82/300 -- Admissions, Parole, New York
+11:39:00 BAR CHART  83/300 -- Admissions, Parole, North Carolina
+11:39:00 BAR CHART  84/300 -- Admissions, Parole, North Dakota
+11:39:00 BAR CHART  85/300 -- Admissions, Parole, Ohio
+11:39:00 BAR CHART  86/300 -- Admissions, Parole, Oklahoma
+11:39:00 BAR CHART  87/300 -- Admissions, Parole, Oregon
+11:39:00 BAR CHART  88/300 -- Admissions, Parole, Pennsylvania
+11:39:01 BAR CHART  89/300 -- Admissions, Parole, Rhode Island
+11:39:01 BAR CHART  90/300 -- Admissions, Parole, South Carolina
+11:39:01 BAR CHART  91/300 -- Admissions, Parole, South Dakota
+11:39:01 BAR CHART  92/300 -- Admissions, Parole, Tennessee
+11:39:01 BAR CHART  93/300 -- Admissions, Parole, Texas
+11:39:01 BAR CHART  94/300 -- Admissions, Parole, Utah
+11:39:01 BAR CHART  95/300 -- Admissions, Parole, Vermont
+11:39:01 BAR CHART  96/300 -- Admissions, Parole, Virginia
+11:39:01 BAR CHART  97/300 -- Admissions, Parole, Washington
+11:39:01 BAR CHART  98/300 -- Admissions, Parole, West Virginia
+11:39:01 BAR CHART  99/300 -- Admissions, Parole, Wisconsin
+11:39:02 BAR CHART 100/300 -- Admissions, Parole, Wyoming
+11:39:02 BAR CHART 101/300 -- Admissions, Probation, Alabama
+11:39:02 BAR CHART 102/300 -- Admissions, Probation, Alaska
+11:39:02 BAR CHART 103/300 -- Admissions, Probation, Arizona
+11:39:02 BAR CHART 104/300 -- Admissions, Probation, Arkansas
+11:39:02 BAR CHART 105/300 -- Admissions, Probation, California
+11:39:02 BAR CHART 106/300 -- Admissions, Probation, Colorado
+11:39:02 BAR CHART 107/300 -- Admissions, Probation, Connecticut
+11:39:02 BAR CHART 108/300 -- Admissions, Probation, Delaware
+11:39:02 BAR CHART 109/300 -- Admissions, Probation, Florida
+11:39:02 BAR CHART 110/300 -- Admissions, Probation, Georgia
+11:39:03 BAR CHART 111/300 -- Admissions, Probation, Hawaii
+11:39:03 BAR CHART 112/300 -- Admissions, Probation, Idaho
+11:39:03 BAR CHART 113/300 -- Admissions, Probation, Illinois
+11:39:03 BAR CHART 114/300 -- Admissions, Probation, Indiana
+11:39:03 BAR CHART 115/300 -- Admissions, Probation, Iowa
+11:39:03 BAR CHART 116/300 -- Admissions, Probation, Kansas
+11:39:03 BAR CHART 117/300 -- Admissions, Probation, Kentucky
+11:39:03 BAR CHART 118/300 -- Admissions, Probation, Louisiana
+11:39:03 BAR CHART 119/300 -- Admissions, Probation, Maine
+11:39:03 BAR CHART 120/300 -- Admissions, Probation, Maryland
+11:39:04 BAR CHART 121/300 -- Admissions, Probation, Massachusetts
+11:39:04 BAR CHART 122/300 -- Admissions, Probation, Michigan
+11:39:04 BAR CHART 123/300 -- Admissions, Probation, Minnesota
+11:39:04 BAR CHART 124/300 -- Admissions, Probation, Mississippi
+11:39:04 BAR CHART 125/300 -- Admissions, Probation, Missouri
+11:39:04 BAR CHART 126/300 -- Admissions, Probation, Montana
+11:39:04 BAR CHART 127/300 -- Admissions, Probation, Nebraska
+11:39:04 BAR CHART 128/300 -- Admissions, Probation, Nevada
+11:39:04 BAR CHART 129/300 -- Admissions, Probation, New Hampshire
+11:39:04 BAR CHART 130/300 -- Admissions, Probation, New Jersey
+11:39:05 BAR CHART 131/300 -- Admissions, Probation, New Mexico
+11:39:05 BAR CHART 132/300 -- Admissions, Probation, New York
+11:39:05 BAR CHART 133/300 -- Admissions, Probation, North Carolina
+11:39:05 BAR CHART 134/300 -- Admissions, Probation, North Dakota
+11:39:05 BAR CHART 135/300 -- Admissions, Probation, Ohio
+11:39:05 BAR CHART 136/300 -- Admissions, Probation, Oklahoma
+11:39:05 BAR CHART 137/300 -- Admissions, Probation, Oregon
+11:39:05 BAR CHART 138/300 -- Admissions, Probation, Pennsylvania
+11:39:05 BAR CHART 139/300 -- Admissions, Probation, Rhode Island
+11:39:06 BAR CHART 140/300 -- Admissions, Probation, South Carolina
+11:39:06 BAR CHART 141/300 -- Admissions, Probation, South Dakota
+11:39:06 BAR CHART 142/300 -- Admissions, Probation, Tennessee
+11:39:06 BAR CHART 143/300 -- Admissions, Probation, Texas
+11:39:06 BAR CHART 144/300 -- Admissions, Probation, Utah
+11:39:06 BAR CHART 145/300 -- Admissions, Probation, Vermont
+11:39:06 BAR CHART 146/300 -- Admissions, Probation, Virginia
+11:39:06 BAR CHART 147/300 -- Admissions, Probation, Washington
+11:39:06 BAR CHART 148/300 -- Admissions, Probation, West Virginia
+11:39:07 BAR CHART 149/300 -- Admissions, Probation, Wisconsin
+11:39:07 BAR CHART 150/300 -- Admissions, Probation, Wyoming
+11:39:07 BAR CHART 151/300 -- Population, Both, Alabama
+11:39:07 BAR CHART 152/300 -- Population, Both, Alaska
+11:39:07 BAR CHART 153/300 -- Population, Both, Arizona
+11:39:07 BAR CHART 154/300 -- Population, Both, Arkansas
+11:39:07 BAR CHART 155/300 -- Population, Both, California
+11:39:07 BAR CHART 156/300 -- Population, Both, Colorado
+11:39:07 BAR CHART 157/300 -- Population, Both, Connecticut
+11:39:07 BAR CHART 158/300 -- Population, Both, Delaware
+11:39:07 BAR CHART 159/300 -- Population, Both, Florida
+11:39:07 BAR CHART 160/300 -- Population, Both, Georgia
+11:39:07 BAR CHART 161/300 -- Population, Both, Hawaii
+11:39:08 BAR CHART 162/300 -- Population, Both, Idaho
+11:39:08 BAR CHART 163/300 -- Population, Both, Illinois
+11:39:08 BAR CHART 164/300 -- Population, Both, Indiana
+11:39:08 BAR CHART 165/300 -- Population, Both, Iowa
+11:39:08 BAR CHART 166/300 -- Population, Both, Kansas
+11:39:08 BAR CHART 167/300 -- Population, Both, Kentucky
+11:39:08 BAR CHART 168/300 -- Population, Both, Louisiana
+11:39:08 BAR CHART 169/300 -- Population, Both, Maine
+11:39:08 BAR CHART 170/300 -- Population, Both, Maryland
+11:39:08 BAR CHART 171/300 -- Population, Both, Massachusetts
+11:39:08 BAR CHART 172/300 -- Population, Both, Michigan
+11:39:08 BAR CHART 173/300 -- Population, Both, Minnesota
+11:39:09 BAR CHART 174/300 -- Population, Both, Mississippi
+11:39:09 BAR CHART 175/300 -- Population, Both, Missouri
+11:39:09 BAR CHART 176/300 -- Population, Both, Montana
+11:39:09 BAR CHART 177/300 -- Population, Both, Nebraska
+11:39:09 BAR CHART 178/300 -- Population, Both, Nevada
+11:39:09 BAR CHART 179/300 -- Population, Both, New Hampshire
+11:39:09 BAR CHART 180/300 -- Population, Both, New Jersey
+11:39:09 BAR CHART 181/300 -- Population, Both, New Mexico
+11:39:09 BAR CHART 182/300 -- Population, Both, New York
+11:39:09 BAR CHART 183/300 -- Population, Both, North Carolina
+11:39:09 BAR CHART 184/300 -- Population, Both, North Dakota
+11:39:10 BAR CHART 185/300 -- Population, Both, Ohio
+11:39:10 BAR CHART 186/300 -- Population, Both, Oklahoma
+11:39:10 BAR CHART 187/300 -- Population, Both, Oregon
+11:39:10 BAR CHART 188/300 -- Population, Both, Pennsylvania
+11:39:10 BAR CHART 189/300 -- Population, Both, Rhode Island
+11:39:10 BAR CHART 190/300 -- Population, Both, South Carolina
+11:39:10 BAR CHART 191/300 -- Population, Both, South Dakota
+11:39:10 BAR CHART 192/300 -- Population, Both, Tennessee
+11:39:10 BAR CHART 193/300 -- Population, Both, Texas
+11:39:10 BAR CHART 194/300 -- Population, Both, Utah
+11:39:10 BAR CHART 195/300 -- Population, Both, Vermont
+11:39:11 BAR CHART 196/300 -- Population, Both, Virginia
+11:39:11 BAR CHART 197/300 -- Population, Both, Washington
+11:39:11 BAR CHART 198/300 -- Population, Both, West Virginia
+11:39:11 BAR CHART 199/300 -- Population, Both, Wisconsin
+11:39:11 BAR CHART 200/300 -- Population, Both, Wyoming
+11:39:11 BAR CHART 201/300 -- Population, Parole, Alabama
+11:39:11 BAR CHART 202/300 -- Population, Parole, Alaska
+11:39:11 BAR CHART 203/300 -- Population, Parole, Arizona
+11:39:11 BAR CHART 204/300 -- Population, Parole, Arkansas
+11:39:12 BAR CHART 205/300 -- Population, Parole, California
+11:39:12 BAR CHART 206/300 -- Population, Parole, Colorado
+11:39:12 BAR CHART 207/300 -- Population, Parole, Connecticut
+11:39:12 BAR CHART 208/300 -- Population, Parole, Delaware
+11:39:12 BAR CHART 209/300 -- Population, Parole, Florida
+11:39:12 BAR CHART 210/300 -- Population, Parole, Georgia
+11:39:12 BAR CHART 211/300 -- Population, Parole, Hawaii
+11:39:12 BAR CHART 212/300 -- Population, Parole, Idaho
+11:39:12 BAR CHART 213/300 -- Population, Parole, Illinois
+11:39:12 BAR CHART 214/300 -- Population, Parole, Indiana
+11:39:13 BAR CHART 215/300 -- Population, Parole, Iowa
+11:39:13 BAR CHART 216/300 -- Population, Parole, Kansas
+11:39:13 BAR CHART 217/300 -- Population, Parole, Kentucky
+11:39:13 BAR CHART 218/300 -- Population, Parole, Louisiana
+11:39:13 BAR CHART 219/300 -- Population, Parole, Maine
+11:39:13 BAR CHART 220/300 -- Population, Parole, Maryland
+11:39:13 BAR CHART 221/300 -- Population, Parole, Massachusetts
+11:39:13 BAR CHART 222/300 -- Population, Parole, Michigan
+11:39:13 BAR CHART 223/300 -- Population, Parole, Minnesota
+11:39:14 BAR CHART 224/300 -- Population, Parole, Mississippi
+11:39:14 BAR CHART 225/300 -- Population, Parole, Missouri
+11:39:14 BAR CHART 226/300 -- Population, Parole, Montana
+11:39:14 BAR CHART 227/300 -- Population, Parole, Nebraska
+11:39:14 BAR CHART 228/300 -- Population, Parole, Nevada
+11:39:14 BAR CHART 229/300 -- Population, Parole, New Hampshire
+11:39:14 BAR CHART 230/300 -- Population, Parole, New Jersey
+11:39:14 BAR CHART 231/300 -- Population, Parole, New Mexico
+11:39:15 BAR CHART 232/300 -- Population, Parole, New York
+11:39:15 BAR CHART 233/300 -- Population, Parole, North Carolina
+11:39:15 BAR CHART 234/300 -- Population, Parole, North Dakota
+11:39:15 BAR CHART 235/300 -- Population, Parole, Ohio
+11:39:15 BAR CHART 236/300 -- Population, Parole, Oklahoma
+11:39:15 BAR CHART 237/300 -- Population, Parole, Oregon
+11:39:15 BAR CHART 238/300 -- Population, Parole, Pennsylvania
+11:39:15 BAR CHART 239/300 -- Population, Parole, Rhode Island
+11:39:15 BAR CHART 240/300 -- Population, Parole, South Carolina
+11:39:15 BAR CHART 241/300 -- Population, Parole, South Dakota
+11:39:15 BAR CHART 242/300 -- Population, Parole, Tennessee
+11:39:15 BAR CHART 243/300 -- Population, Parole, Texas
+11:39:16 BAR CHART 244/300 -- Population, Parole, Utah
+11:39:16 BAR CHART 245/300 -- Population, Parole, Vermont
+11:39:16 BAR CHART 246/300 -- Population, Parole, Virginia
+11:39:16 BAR CHART 247/300 -- Population, Parole, Washington
+11:39:16 BAR CHART 248/300 -- Population, Parole, West Virginia
+11:39:16 BAR CHART 249/300 -- Population, Parole, Wisconsin
+11:39:16 BAR CHART 250/300 -- Population, Parole, Wyoming
+11:39:16 BAR CHART 251/300 -- Population, Probation, Alabama
+11:39:16 BAR CHART 252/300 -- Population, Probation, Alaska
+11:39:16 BAR CHART 253/300 -- Population, Probation, Arizona
+11:39:16 BAR CHART 254/300 -- Population, Probation, Arkansas
+11:39:16 BAR CHART 255/300 -- Population, Probation, California
+11:39:17 BAR CHART 256/300 -- Population, Probation, Colorado
+11:39:17 BAR CHART 257/300 -- Population, Probation, Connecticut
+11:39:17 BAR CHART 258/300 -- Population, Probation, Delaware
+11:39:17 BAR CHART 259/300 -- Population, Probation, Florida
+11:39:17 BAR CHART 260/300 -- Population, Probation, Georgia
+11:39:17 BAR CHART 261/300 -- Population, Probation, Hawaii
+11:39:17 BAR CHART 262/300 -- Population, Probation, Idaho
+11:39:17 BAR CHART 263/300 -- Population, Probation, Illinois
+11:39:17 BAR CHART 264/300 -- Population, Probation, Indiana
+11:39:17 BAR CHART 265/300 -- Population, Probation, Iowa
+11:39:17 BAR CHART 266/300 -- Population, Probation, Kansas
+11:39:18 BAR CHART 267/300 -- Population, Probation, Kentucky
+11:39:18 BAR CHART 268/300 -- Population, Probation, Louisiana
+11:39:18 BAR CHART 269/300 -- Population, Probation, Maine
+11:39:18 BAR CHART 270/300 -- Population, Probation, Maryland
+11:39:18 BAR CHART 271/300 -- Population, Probation, Massachusetts
+11:39:18 BAR CHART 272/300 -- Population, Probation, Michigan
+11:39:18 BAR CHART 273/300 -- Population, Probation, Minnesota
+11:39:18 BAR CHART 274/300 -- Population, Probation, Mississippi
+11:39:18 BAR CHART 275/300 -- Population, Probation, Missouri
+11:39:18 BAR CHART 276/300 -- Population, Probation, Montana
+11:39:19 BAR CHART 277/300 -- Population, Probation, Nebraska
+11:39:19 BAR CHART 278/300 -- Population, Probation, Nevada
+11:39:19 BAR CHART 279/300 -- Population, Probation, New Hampshire
+11:39:19 BAR CHART 280/300 -- Population, Probation, New Jersey
+11:39:19 BAR CHART 281/300 -- Population, Probation, New Mexico
+11:39:19 BAR CHART 282/300 -- Population, Probation, New York
+11:39:19 BAR CHART 283/300 -- Population, Probation, North Carolina
+11:39:19 BAR CHART 284/300 -- Population, Probation, North Dakota
+11:39:19 BAR CHART 285/300 -- Population, Probation, Ohio
+11:39:19 BAR CHART 286/300 -- Population, Probation, Oklahoma
+11:39:20 BAR CHART 287/300 -- Population, Probation, Oregon
+11:39:20 BAR CHART 288/300 -- Population, Probation, Pennsylvania
+11:39:20 BAR CHART 289/300 -- Population, Probation, Rhode Island
+11:39:20 BAR CHART 290/300 -- Population, Probation, South Carolina
+11:39:20 BAR CHART 291/300 -- Population, Probation, South Dakota
+11:39:20 BAR CHART 292/300 -- Population, Probation, Tennessee
+11:39:20 BAR CHART 293/300 -- Population, Probation, Texas
+11:39:20 BAR CHART 294/300 -- Population, Probation, Utah
+11:39:20 BAR CHART 295/300 -- Population, Probation, Vermont
+11:39:21 BAR CHART 296/300 -- Population, Probation, Virginia
+11:39:21 BAR CHART 297/300 -- Population, Probation, Washington
+11:39:21 BAR CHART 298/300 -- Population, Probation, West Virginia
+11:39:21 BAR CHART 299/300 -- Population, Probation, Wisconsin
+11:39:21 BAR CHART 300/300 -- Population, Probation, Wyoming
 
 > admin$save_rds_twice(state_bar_lst)
-2025-03-14 11:08:26 CDT-- export state_bar_lst to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/state_bar_lst.rds
-2025-03-14 11:08:26 CDT-- export state_bar_lst to: app/data/state_bar_lst.rds
+2025-03-17 11:39:21 CDT-- export state_bar_lst to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/state_bar_lst.rds
+2025-03-17 11:39:21 CDT-- export state_bar_lst to: app/data/state_bar_lst.rds
 Warning messages:
 1: package ‘purrr’ was built under R version 4.4.2
 2: package ‘lubridate’ was built under R version 4.4.2
@@ -696,5 +696,5 @@ Warning messages:
 4: package ‘sf’ was built under R version 4.4.2
 5: package ‘jsonlite’ was built under R version 4.4.2
 6: package ‘geojsonsf’ was built under R version 4.4.2
-[1] "End run Fri Mar 14, 2025 at 11:08:26 CDT"
-Time difference of 52.97026 secs
+[1] "End run Mon Mar 17, 2025 at 11:39:21 CDT"
+Time difference of 46.30215 secs
