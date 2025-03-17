@@ -108,13 +108,16 @@ svii_prep <- readRDS(file.path(admin$sp_survey, "Data/raw/combined/svii_main.rds
 # want to apply this to supervision, new, and tech metrics 
 # (these are the metircs where subtitels should be noted)
 # subtitles for value boxes and subtitles for area/bar charts 
-svii_only_prob_par <- svii_prep |> 
+# subtitle_vb for supervision/tech/new are subtitles for the VALUE BOXES  
+# subtitle_areabar for supervision is the subtitle for the AREA chart 
+# subtitle_areabar for tech is the subtitle for the BAR chart 
+svii_subtitles <- svii_prep |> 
   filter(word(metric_abbr, 2, -1) %in% c("supervision", "par", "prob")) |> 
   select(state_name, year, type, metric_abbr, n) |> 
   mutate(metric_abbr = word(metric_abbr, 2, -1)) |> 
   pivot_wider(names_from = metric_abbr, values_from = n) |> 
   mutate(
-    probation_or_parole = case_when( # yearly designation, this is for the value boxes 
+    subtitle_vb = case_when( # yearly designation, this is for the value boxes 
       supervision == prob ~ "(No Parole Data Available)", 
       supervision == par  ~ "(No Probation Data Available)"
     ), 
@@ -124,14 +127,14 @@ svii_only_prob_par <- svii_prep |>
   ) |> 
   group_by(state_name, type) |> 
   mutate(
-    probation_or_parole_grp = case_when( # grouped designation, this is for the charts 
-      all( is.na(probation_or_parole)) ~ NA_character_, 
-      all(!is.na(probation_or_parole)) ~ probation_or_parole[1], 
-      any(!is.na(probation_or_parole)) ~ str_replace_all(probation_or_parole[!is.na(probation_or_parole)][1], c(`No` = "Partial"))
+    subtitle_areabar = case_when( # grouped designation, this is for the charts 
+      all( is.na(subtitle_vb)) ~ NA_character_, 
+      all(!is.na(subtitle_vb)) ~ subtitle_vb[1], 
+      any(!is.na(subtitle_vb)) ~ str_replace_all(subtitle_vb[!is.na(subtitle_vb)][1], c(`No` = "Partial"))
     ) 
   ) |> 
   ungroup() |> 
-  select(state_name, year, probation_or_parole, probation_or_parole_grp, starts_with("metric_abbr")) |> 
+  select(state_name, year, subtitle_vb, subtitle_areabar, starts_with("metric_abbr")) |> 
   pivot_longer(cols = starts_with("metric_abbr"), names_to = "name", values_to = "metric_abbr") |> 
   select(-name) 
 
@@ -146,7 +149,7 @@ svii_only_prob_par <- svii_prep |>
 
 svii_agg <- full_join(
   svii_prep, 
-  svii_only_prob_par, 
+  svii_subtitles, 
   by = c("state_name", "year", "metric_abbr")
 ) |> 
   select(
@@ -155,7 +158,7 @@ svii_agg <- full_join(
     data, 
     n, chg1yr, 
     text, type, supervision_type, violation_type, 
-    probation_or_parole, probation_or_parole_grp,  
+    subtitle_vb, subtitle_areabar,  
     tooltip, 
     contains("metric")
   )
@@ -257,7 +260,7 @@ df_addlcols <- svii_agg |>
     # remove numeric columns
     -where(is.numeric),
     # also remove vars that are based on a specific year  
-    -probation_or_parole, -tooltip) |> 
+    -subtitle_vb, -tooltip) |> 
   distinct() 
 
 ##TABLE 600 x 38 
@@ -267,7 +270,7 @@ df_addlcols <- svii_agg |>
 ##COLUMNS: 38 = 14 + 6*4
 # - id variable columns (9)
 #     state_name, state_abbr, state_fips, 
-#     data, text, type, supervision_type, violation_type, probation_or_parole_grp
+#     data, text, type, supervision_type, violation_type, subtitle_areabar
 #     metric, metric_abbr, metric_short, metric_long 
 # - yearly count (6)
 #     2018, 2019, 2020, 2021, 2022, 2023
@@ -491,7 +494,7 @@ svii_valbox <- svii_agg |>
     ), 
     chg_type = ifelse(chg_rnd > 0, "increase", "decrease")
   ) |> 
-  rename(subheader = probation_or_parole) |> 
+  rename(subheader = subtitle_vb) |> 
   #drop metric text col to add other text col 
   select(-text) |> 
   mutate(

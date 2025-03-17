@@ -449,8 +449,8 @@ fnc_hc_area <- function(this_type, this_state,
   
   subtitle_name <- this_df |> 
     filter(metric == "Supervision Violation") |> 
-    distinct(probation_or_parole_grp) |> 
-    pull(probation_or_parole_grp)
+    distinct(subtitle_areabar) |> 
+    pull(subtitle_areabar)
   
   access_text <- paste0(
      "This is an area chart for the state of ", 
@@ -547,7 +547,7 @@ fnc_hc_bar <- function(this_type, this_supervision, this_state){
   )
   
   subtitle_name <- case_when(
-    this_supervision == "Both" ~ filter(this_df, metric == "Technical Violation")$probation_or_parole_grp[1], 
+    this_supervision == "Both" ~ filter(this_df, metric == "Technical Violation")$subtitle_areabar[1], 
     this_supervision != "Both" ~ NA_character_
   )
   
