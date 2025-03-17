@@ -46,7 +46,7 @@ for (x in hc_obj){
 # standard state note to display for all states ###############################
 
 
-standard_state_note_header <- "Prompting Questions"
+standard_state_note_header <- "Key Questions to Consider"
 
 standard_state_note_text <- paste0(
   "<br>", # match break before checked/unchecked boxes 

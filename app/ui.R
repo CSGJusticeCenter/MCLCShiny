@@ -185,7 +185,7 @@ ui <- fluidPage(
             "Overview",
             br(),
             fluidRow( # SIDE BY SIDE PLOTS 
-              column( # area chart  
+              column( #1a area chart ----------------------------------------  
                 width = 5,
                 align = "center",
                 uiOutput("state_area") |> svii_spinner()
@@ -195,7 +195,7 @@ ui <- fluidPage(
                 align = "center",
                 uiOutput("state_area_button")
               ),
-              column( # supervision bar chart 
+              column( #1b supervision bar chart --------------------------------
                 width = 5, 
                 align = "center",
                 uiOutput("state_nt") |> svii_spinner()
@@ -213,7 +213,26 @@ ui <- fluidPage(
               div(id = "reactable-table", reactableOutput("state_table") |> svii_spinner())
             )), # column<fluidRow state overview table 
             br(), 
-            # STATE NOTES 
+            # 1c key questions to consider notes ------------------------------------------------------
+            div(id = "state-note-section",
+                fluidRow(column( # state notes title 
+                  width = 12,
+                  align = "center",
+                  div(id = "selected-state-note-title", standard_state_note_header) # obj created in dataframes.R 
+                )), # column<fluidRow state notes title 
+                br(), br(),
+                fluidRow( # standard text for states - prompting questions 
+                  column(width = 1),
+                  column( 
+                    width = 10,
+                    align = "left",
+                    div(id = "selected-state-note", HTML(standard_state_note_text)), # obj created in dataframes.R 
+                    br(), br(), 
+                  ), 
+                  column(width = 1)
+                ) # end fluidRow: standard text for states - prompting questions  
+            ), #end div: KEY QUESTIONS TO CONSIDER 
+            # 1d state notes ------------------------------------------------------
             div(id = "state-note-section",
               fluidRow(column( # state notes title 
                 width = 12,
@@ -252,17 +271,6 @@ ui <- fluidPage(
                 ), 
                 column(width = 1)
               ), # end fluidRow: addl notes for states  
-              fluidRow( # standard text for states - prompting questions 
-                column(width = 1),
-                column( 
-                  width = 10,
-                  align = "left",
-                  br(), 
-                  div(id = "selected-state-note-subtitle", standard_state_note_header),
-                  div(id = "selected-state-note", HTML(standard_state_note_text))
-                ), 
-                column(width = 1)
-              ) # end fluidRow: standard text for states - prompting questions  
             ), #end div: STATE NOTES  
             br(), br()
           ), # end tabPanel: overview 
