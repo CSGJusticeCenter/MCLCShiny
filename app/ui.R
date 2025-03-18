@@ -84,28 +84,28 @@ ui <- fluidPage(
       
       # natl trends app body ---------------------------------------------------
       div(class = "row app-body", 
-        column( # HEx MAP 
-          width = 12,
+        div( # HEx MAP 
+          class = "row",
           align = "center",
           div(class = "hidden-xs hidden-sm",
             #id = "hex-map",
             highchartOutput("hex_map", height = 600, width = "100%") |> svii_spinner()
           ) # end div 
         ), # end column HEX MAP 
-        br(), br(),
-        column( # HEX MAP TABLE
-          width = 12,
+        div( # HEX MAP TABLE TITLE/HEADER
+          class = "row",
           align = "center",
           div(
             id = "selected-map-table",
+            br(),  
             textOutput("selected_map_table")
           ) # end div 
         ), # end column HEX MAP TABLE 
         br(),
-        tags$head(tags$style(HTML("thead{color: #004270; font-size: 16px}"))),
-        column(
-          width = 12, 
-          align = "left",
+        # tags$head(tags$style(HTML("thead{color: #004270; font-size: 16px}"))),
+        div(# HEX MAP TABLE 
+          class = "row", 
+          align = "center",
           div(
             id = "reactable-table",
             reactableOutput("table_map")
