@@ -42,6 +42,16 @@ for (x in hc_obj){
   rm(x)
 }
 
+# hex map notes ################################################################
+
+hex_map_note <- glue(
+  "Use caution when comparing years and states. In some states, data between \\
+  different years cannot be compared due to changes in data availability, \\
+  definitions, or methods. In some states, metrics represent only partial data. \\
+  For instance, no probation data is included in the count of total technical violations. \\
+  See state reports for details about the data used for each state."
+)
+
 
 # standard state note to display for all states ###############################
 

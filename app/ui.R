@@ -92,6 +92,11 @@ ui <- fluidPage(
             highchartOutput("hex_map", height = 600, width = "100%") |> svii_spinner()
           ) # end div 
         ), # end column HEX MAP 
+        div( # HEx MAP NOTE
+          class = "row fixwidth",
+          align = "left",
+          div(style = "font-family: Graphik;", HTML(hex_map_note)) # obj created in dataframes.R 
+        ), # end column HEX MAP NOTE
         div( # HEX MAP TABLE TITLE/HEADER
           class = "row",
           align = "center",
