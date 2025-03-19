@@ -1,4 +1,7 @@
 
+save_RDS_to_sharepoint <- FALSE 
+
+
 box::use(
   ./box/admin, 
   dplyr[...], 
@@ -230,7 +233,7 @@ svii_agg <- full_join(
 
 
 # save version on sp but don't save on repo; don't need to use in app 
-admin$save_rds_twice(svii_agg, save_to_repo = FALSE)
+admin$save_rds_twice(svii_agg, save_to_repo = FALSE, save_to_sp = save_RDS_to_sharepoint)
 
 # save in prep folder as it's needed to create highcharts 
 saveRDS(svii_agg, "prep/svii_agg.rds")
@@ -250,7 +253,7 @@ svii_yr <- tibble(
     min_yr = min(svii_agg$year), 
     max_yr = max(svii_agg$year)
   )
-admin$save_rds_twice(svii_yr)
+admin$save_rds_twice(svii_yr, save_to_sp = save_RDS_to_sharepoint)
 
 # **svii_explorer_table** | table with counts, year-to-year changes, trend vec and category -----
 
@@ -357,7 +360,7 @@ svii_explorer_table0 <- reduce(
   )
 svii_explorer_table <- svii_explorer_table0 |> 
   filter(word(metric_abbr, 2, -1) %in% display_metric_natl)
-admin$save_rds_twice(svii_explorer_table)
+admin$save_rds_twice(svii_explorer_table, save_to_sp = save_RDS_to_sharepoint)
 
 
 # **svii_explorer** | data for hex maps --------------------------------------------
@@ -459,7 +462,7 @@ svii_explorer0 <- bind_rows(
 svii_explorer <- svii_explorer0 |> 
   filter(word(metric_abbr, 2, -1) %in% display_metric_natl)
 
-admin$save_rds_twice(svii_explorer)
+admin$save_rds_twice(svii_explorer, save_to_sp = save_RDS_to_sharepoint)
 
 
 # **svii_table** | data for table under hex map -------------------------------------
@@ -498,7 +501,7 @@ svii_table <- svii_explorer_table |>
     )
   )
 
-admin$save_rds_twice(svii_table)
+admin$save_rds_twice(svii_table, save_to_sp = save_RDS_to_sharepoint)
 
 
 
@@ -531,13 +534,13 @@ svii_prob_par_tables <- svii_explorer_table0 |>
 
 svii_par <- svii_prob_par_tables |> 
   filter(supervision_type == "Parole") 
-admin$save_rds_twice(svii_par)
+admin$save_rds_twice(svii_par, save_to_sp = save_RDS_to_sharepoint)
 
 # **svii_prob** | data for table under hex map ----------------------------
 
 svii_prob <- svii_prob_par_tables |> 
   filter(supervision_type == "Probation") 
-admin$save_rds_twice(svii_prob)
+admin$save_rds_twice(svii_prob, save_to_sp = save_RDS_to_sharepoint)
 
 # **svii_valbox** | value boxes for state dashboards ---------------------------
 
@@ -579,7 +582,7 @@ svii_valbox <- svii_agg |>
     )
   ) 
   
-admin$save_rds_twice(svii_valbox)
+admin$save_rds_twice(svii_valbox, save_to_sp = save_RDS_to_sharepoint)
 
 
 # **svii_download** | downloadable data  -------------------------------------------------
@@ -597,4 +600,4 @@ svii_download <- svii_agg |>
   ) |> 
   mutate(across(c(state, year), as.character)) 
 
-admin$save_rds_twice(svii_download)
+admin$save_rds_twice(svii_download, save_to_sp = save_RDS_to_sharepoint)
