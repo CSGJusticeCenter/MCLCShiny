@@ -261,7 +261,7 @@ fnc_hc_hex_map <- function(this_type, this_year_chg, this_metric){
   
   this_title <- case_when(
     this_metric != "Total" & this_type == "Admissions" ~ paste0("Change in Admissions to State Prison for ", this_metric, "s"), 
-    this_metric != "Total" & this_type == "Population" ~ paste0("Change in State Prison Population  for "  , this_metric, "s"),
+    this_metric != "Total" & this_type == "Population" ~ paste0("Change in State Prison Population for "  , this_metric, "s"),
     this_metric == "Total" & this_type == "Admissions" ~ "Change in Total Admissions to State Prison", 
     this_metric == "Total" & this_type == "Population" ~ "Change in Total Population in State Prison"
   )
