@@ -7,7 +7,7 @@ box::use(
   janitor[clean_names], 
   purrr[pmap, reduce], 
   rlang[set_names], 
-  stringr[str_detect, str_remove, str_replace_all, str_remove_all, word], 
+  stringr[str_detect, str_remove, str_replace_all, str_remove_all, word, str_sub], 
   tidyr[pivot_longer, pivot_wider]
 )
 
@@ -109,36 +109,101 @@ svii_prep <- readRDS(file.path(admin$sp_survey, "Data/raw/combined/svii_main.rds
 # (these are the metircs where subtitels should be noted)
 # subtitles for value boxes and subtitles for area/bar charts 
 # subtitle_vb for supervision/tech/new are subtitles for the VALUE BOXES  
-# subtitle_areabar for supervision is the subtitle for the AREA chart 
-# subtitle_areabar for tech is the subtitle for the BAR chart 
-svii_subtitles <- svii_prep |> 
-  filter(word(metric_abbr, 2, -1) %in% c("supervision", "par", "prob")) |> 
+# subtitle_areabar is the subtitle for the area and bar chart on the overview tab of the state dashboard 
+
+subtext_no_par <- "(No Parole Data Available)"
+subtext_no_prob <- "(No Probation Data Available)"
+subtext_nodata <- "no data" 
+subtext_gen_partial <- "(Partial Data Available)"
+
+svii_subtitle_vb <- svii_prep |> 
   select(state_name, year, type, metric_abbr, n) |> 
   mutate(metric_abbr = word(metric_abbr, 2, -1)) |> 
   pivot_wider(names_from = metric_abbr, values_from = n) |> 
+  janitor::clean_names() |> 
   mutate(
-    subtitle_vb = case_when( # yearly designation, this is for the value boxes 
-      supervision == prob ~ "(No Parole Data Available)", 
-      supervision == par  ~ "(No Probation Data Available)"
+    txt_supervision  = case_when( # yearly designation, this is for the value boxes 
+      !is.na(prob) & !is.na(par) ~ NA_character_, 
+      is.na(prob) &  is.na(par) ~ subtext_nodata, 
+      !is.na(prob) &  is.na(par) ~ subtext_no_par, 
+      is.na(prob) & !is.na(par) ~ subtext_no_prob
     ), 
-    metric_abbr1 = paste0(tolower(substr(type, 1, 1)), " supervision"), 
-    metric_abbr2 = paste0(tolower(substr(type, 1, 1)), " tech"), 
-    metric_abbr3 = paste0(tolower(substr(type, 1, 1)), " new")
+    txt_tech  = case_when( # yearly designation, this is for the value boxes 
+      !is.na(tech_prob) & !is.na(tech_par) ~ NA_character_, 
+      is.na(tech_prob) &  is.na(tech_par) ~ subtext_nodata, 
+      !is.na(tech_prob) &  is.na(tech_par) ~ subtext_no_par, 
+      is.na(tech_prob) & !is.na(tech_par) ~ subtext_no_prob
+    ), 
+    txt_new  = case_when( # yearly designation, this is for the value boxes 
+      !is.na(new_prob) & !is.na(new_par) ~ NA_character_,  
+      is.na(new_prob) &  is.na(new_par) ~ subtext_nodata, 
+      !is.na(new_prob) &  is.na(new_par) ~ subtext_no_par, 
+      is.na(new_prob) & !is.na(new_par) ~ subtext_no_prob
+    )
   ) |> 
-  group_by(state_name, type) |> 
+  # drop count values
+  select(state_name, year, type, starts_with("txt_")) |>
+  pivot_longer(c(txt_supervision, txt_tech, txt_new), names_to = "metric_abbr", values_to = "subtitle_vb") |>
+  mutate(metric_abbr = paste(tolower(str_sub(type, 1, 1)), str_sub(metric_abbr, 5, -1))) 
+
+svii_subtitle_areabar <- svii_subtitle_vb |> 
+  group_by(state_name, type, metric_abbr) |> 
+  summarise(
+    vec = list(subtitle_vb), 
+    n_notna    = length(subtitle_vb[!is.na(subtitle_vb)]), 
+    n_unique = length(unique(subtitle_vb)), 
+    n_unique_notna = length(unique(subtitle_vb[!is.na(subtitle_vb)])), 
+    # vec_view = paste(subtitle_vb, collapse = " | "), 
+    vec_unique_view = paste(unique(sort(subtitle_vb, na.last = TRUE)), collapse = " | "), 
+    .groups = "drop"
+  ) |> 
+  rowwise() |> 
   mutate(
-    subtitle_areabar = case_when( # grouped designation, this is for the charts 
-      all( is.na(subtitle_vb)) ~ NA_character_, 
-      all(!is.na(subtitle_vb)) ~ subtitle_vb[1], 
-      any(!is.na(subtitle_vb)) ~ str_replace_all(subtitle_vb[!is.na(subtitle_vb)][1], c(`No` = "Partial"))
-    ) 
+    grouped_text = case_when(
+      ## all cells are NA --> NA 
+      n_notna == 0 ~ NA_character_, 
+      ## all cells have text; only one type of text --> unique text 
+      n_notna == length(vec) & n_unique_notna == 1 ~  vec[1], 
+      ## mix of text and NA
+      # NA & unique txt == subtext_nodata --> adj label 
+      n_unique == 2 & str_sub(vec_unique_view, 1, nchar(subtext_nodata)) != subtext_nodata ~ str_replace_all(sort(vec[!is.na(vec)])[1], c(`No` = "Partial")),
+      # NA & unique txt == subtext_nodata --> PARTIAL DATA AVAILABLE
+      n_unique == 2 & str_sub(vec_unique_view, 1, nchar(subtext_nodata)) == subtext_nodata ~ subtext_gen_partial, 
+      # all other cases 
+      TRUE ~ subtext_gen_partial
+    )
   ) |> 
   ungroup() |> 
-  select(state_name, year, subtitle_vb, subtitle_areabar, starts_with("metric_abbr")) |> 
-  pivot_longer(cols = starts_with("metric_abbr"), names_to = "name", values_to = "metric_abbr") |> 
-  select(-name) 
+  mutate(
+    letter = word(metric_abbr, 1), 
+    metric_sh = word(metric_abbr, 2)
+  ) |> 
+  select(state_name, type, metric_sh, grouped_text) |> 
+  pivot_wider(names_from = metric_sh, values_from = grouped_text) |> 
+  rowwise() |> 
+  mutate(
+    subtitle_areabar = case_when(
+      all(is.na(c(supervision, tech, new))) ~ NA_character_, 
+      supervision == tech & tech == new ~ supervision, 
+      any(c(supervision, tech, new) == subtext_nodata)      ~ subtext_gen_partial, 
+      any(c(supervision, tech, new) == subtext_gen_partial) ~ subtext_gen_partial, 
+      TRUE ~ subtext_gen_partial
+    )
+  ) |> 
+  ungroup() |> 
+  select(state_name, type, subtitle_areabar)
 
-
+svii_subtitles <- full_join(
+  svii_subtitle_vb, 
+  svii_subtitle_areabar, 
+  by = c("state_name", "type")
+) |> 
+  # remove place holder text for when there is not data 
+  mutate(across(
+    c(subtitle_vb, subtitle_areabar), 
+    ~ifelse(.x == subtext_nodata, NA_character_, .x)
+  )) |> 
+  select(state_name, year, metric_abbr, starts_with("subtitle"))
 
 
 # 6000 rows 
