@@ -29,6 +29,18 @@ end
 end - start 
 
 
+# Documentation ################################################################
+
+csgjcr::csg_render_ds(
+  input = "docs/gen_documentation.qmd", 
+  save_ds_version = FALSE, 
+  output_file = csgjcr::csg_sp_path(
+    "50 State Revocations Project/MCLC Shiny App", 
+    "SVII_Shiny_Documentation.html"
+  ) 
+)
+
+
 ## Aggregate Plot Prep and Creation ############################################
 # data frames and plots used in the app 
 start <- Sys.time() #takes ~2 min

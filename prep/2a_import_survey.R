@@ -1,5 +1,5 @@
 
-save_RDS_to_sharepoint <- FALSE 
+save_RDS_to_sharepoint <- TRUE 
 
 
 box::use(
@@ -30,14 +30,6 @@ svii_prep <- readRDS(file.path(admin$sp_survey, "Data/raw/combined/svii_main.rds
   filter(word(metric_abbr, 2, -1) %in% c(display_metric_natl, display_metric_par, display_metric_prob)) |> 
   # remove columns that aren't relevant 
   select(-c(group, group_cat, time_period, FY_end)) |> 
-  # replace all zeros with NA - no states should have zeros (this is carry over from last app) 
-  # don't do this for Indiana Adm Parole New Offense (have non-zero vals in 2021 & 2023)
-  mutate(
-    n = case_when(
-      state_abbr == "IN" & year == 2022 & metric_abbr == "a new par" ~ n, 
-      TRUE ~ ifelse(n == 0, NA_real_, n)
-    )
-  ) |> 
   # create new metric_long column; metric will be the 'displayed' 
   # create new columns (data and metric) to match previous iteration 
   mutate(metric_long = metric, .before = metric) |> 
