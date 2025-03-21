@@ -1,4 +1,7 @@
 
+save_RDS_to_sharepoint <- TRUE 
+
+
 box::use(
   ./box/admin, 
   dplyr[...], 
@@ -7,7 +10,7 @@ box::use(
   janitor[clean_names], 
   purrr[pmap, reduce], 
   rlang[set_names], 
-  stringr[str_detect, str_remove, str_replace_all, str_remove_all, word], 
+  stringr[str_detect, str_remove, str_replace_all, str_remove_all, word, str_sub], 
   tidyr[pivot_longer, pivot_wider]
 )
 
@@ -27,8 +30,6 @@ svii_prep <- readRDS(file.path(admin$sp_survey, "Data/raw/combined/svii_main.rds
   filter(word(metric_abbr, 2, -1) %in% c(display_metric_natl, display_metric_par, display_metric_prob)) |> 
   # remove columns that aren't relevant 
   select(-c(group, group_cat, time_period, FY_end)) |> 
-  # replace all zeros with NA - no states should have zeros (this is carry over from last app) 
-  mutate(n = ifelse(n == 0, NA_real_, n)) |> 
   # create new metric_long column; metric will be the 'displayed' 
   # create new columns (data and metric) to match previous iteration 
   mutate(metric_long = metric, .before = metric) |> 
@@ -47,7 +48,12 @@ svii_prep <- readRDS(file.path(admin$sp_survey, "Data/raw/combined/svii_main.rds
       str_remove_all(metric, "Parole |Probation "), 
       metric
     ), 
-    metric = fct_reorder(factor(metric), as.numeric(metric_short), .na_rm = FALSE),
+    metric = factor(
+      metric, 
+      levels = c("Total", "Supervision Violation", 
+                 "Technical Violation", "New Offense Violation", 
+                 "Probation Violation", "Parole Violation" )
+    ),
     data = paste(
       ifelse(metric_short == "Total Prison", "Total", str_remove(metric_short, "Total ")), 
       type
@@ -94,28 +100,105 @@ svii_prep <- readRDS(file.path(admin$sp_survey, "Data/raw/combined/svii_main.rds
 
 # if total is equal to probation or parole, then indicate that the total only includes
 #   probation or parole
-svii_only_prob_par <- svii_prep |> 
-  filter(word(metric_abbr, 2, -1) %in% c("supervision", "par", "prob")) |> 
+# want to apply this to supervision, new, and tech metrics 
+# (these are the metircs where subtitels should be noted)
+# subtitles for value boxes and subtitles for area/bar charts 
+# subtitle_vb for supervision/tech/new are subtitles for the VALUE BOXES  
+# subtitle_areabar is the subtitle for the area and bar chart on the overview tab of the state dashboard 
+
+subtext_no_par <- "(No Parole Data Available)"
+subtext_no_prob <- "(No Probation Data Available)"
+subtext_nodata <- "no data" 
+subtext_gen_partial <- "(Partial Data Available)"
+
+svii_subtitle_vb <- svii_prep |> 
   select(state_name, year, type, metric_abbr, n) |> 
   mutate(metric_abbr = word(metric_abbr, 2, -1)) |> 
   pivot_wider(names_from = metric_abbr, values_from = n) |> 
+  janitor::clean_names() |> 
   mutate(
-    probation_or_parole = case_when(
-      supervision == prob ~ "(No Parole Data Available)", 
-      supervision == par  ~ "(No Probation Data Available)"
+    txt_supervision  = case_when( # yearly designation, this is for the value boxes 
+      !is.na(prob) & !is.na(par) ~ NA_character_, 
+      is.na(prob) &  is.na(par) ~ subtext_nodata, 
+      !is.na(prob) &  is.na(par) ~ subtext_no_par, 
+      is.na(prob) & !is.na(par) ~ subtext_no_prob
     ), 
-    metric_abbr = paste0(tolower(substr(type, 1, 1)), " supervision")
+    txt_tech  = case_when( # yearly designation, this is for the value boxes 
+      !is.na(tech_prob) & !is.na(tech_par) ~ NA_character_, 
+      is.na(tech_prob) &  is.na(tech_par) ~ subtext_nodata, 
+      !is.na(tech_prob) &  is.na(tech_par) ~ subtext_no_par, 
+      is.na(tech_prob) & !is.na(tech_par) ~ subtext_no_prob
+    ), 
+    txt_new  = case_when( # yearly designation, this is for the value boxes 
+      !is.na(new_prob) & !is.na(new_par) ~ NA_character_,  
+      is.na(new_prob) &  is.na(new_par) ~ subtext_nodata, 
+      !is.na(new_prob) &  is.na(new_par) ~ subtext_no_par, 
+      is.na(new_prob) & !is.na(new_par) ~ subtext_no_prob
+    )
   ) |> 
-  group_by(state_name, type) |> 
+  # drop count values
+  select(state_name, year, type, starts_with("txt_")) |>
+  pivot_longer(c(txt_supervision, txt_tech, txt_new), names_to = "metric_abbr", values_to = "subtitle_vb") |>
+  mutate(metric_abbr = paste(tolower(str_sub(type, 1, 1)), str_sub(metric_abbr, 5, -1))) 
+
+svii_subtitle_areabar <- svii_subtitle_vb |> 
+  group_by(state_name, type, metric_abbr) |> 
+  summarise(
+    vec = list(subtitle_vb), 
+    n_notna    = length(subtitle_vb[!is.na(subtitle_vb)]), 
+    n_unique = length(unique(subtitle_vb)), 
+    n_unique_notna = length(unique(subtitle_vb[!is.na(subtitle_vb)])), 
+    # vec_view = paste(subtitle_vb, collapse = " | "), 
+    vec_unique_view = paste(unique(sort(subtitle_vb, na.last = TRUE)), collapse = " | "), 
+    .groups = "drop"
+  ) |> 
+  rowwise() |> 
   mutate(
-    probation_or_parole_grp = case_when(
-      all( is.na(probation_or_parole)) ~ NA_character_, 
-      all(!is.na(probation_or_parole)) ~ probation_or_parole[1], 
-      any(!is.na(probation_or_parole)) ~ str_replace_all(probation_or_parole[!is.na(probation_or_parole)][1], c(No = "Some", Available = "Unavailable"))
-    ) 
+    grouped_text = case_when(
+      ## all cells are NA --> NA 
+      n_notna == 0 ~ NA_character_, 
+      ## all cells have text; only one type of text --> unique text 
+      n_notna == length(vec) & n_unique_notna == 1 ~  vec[1], 
+      ## mix of text and NA
+      # NA & unique txt == subtext_nodata --> adj label 
+      n_unique == 2 & str_sub(vec_unique_view, 1, nchar(subtext_nodata)) != subtext_nodata ~ str_replace_all(sort(vec[!is.na(vec)])[1], c(`No` = "Partial")),
+      # NA & unique txt == subtext_nodata --> PARTIAL DATA AVAILABLE
+      n_unique == 2 & str_sub(vec_unique_view, 1, nchar(subtext_nodata)) == subtext_nodata ~ subtext_gen_partial, 
+      # all other cases 
+      TRUE ~ subtext_gen_partial
+    )
   ) |> 
   ungroup() |> 
-  select(state_name, year, probation_or_parole, probation_or_parole_grp, metric_abbr)
+  mutate(
+    letter = word(metric_abbr, 1), 
+    metric_sh = word(metric_abbr, 2)
+  ) |> 
+  select(state_name, type, metric_sh, grouped_text) |> 
+  pivot_wider(names_from = metric_sh, values_from = grouped_text) |> 
+  rowwise() |> 
+  mutate(
+    subtitle_areabar = case_when(
+      all(is.na(c(supervision, tech, new))) ~ NA_character_, 
+      supervision == tech & tech == new ~ supervision, 
+      any(c(supervision, tech, new) == subtext_nodata)      ~ subtext_gen_partial, 
+      any(c(supervision, tech, new) == subtext_gen_partial) ~ subtext_gen_partial, 
+      TRUE ~ subtext_gen_partial
+    )
+  ) |> 
+  ungroup() |> 
+  select(state_name, type, subtitle_areabar)
+
+svii_subtitles <- full_join(
+  svii_subtitle_vb, 
+  svii_subtitle_areabar, 
+  by = c("state_name", "type")
+) |> 
+  # remove place holder text for when there is not data 
+  mutate(across(
+    c(subtitle_vb, subtitle_areabar), 
+    ~ifelse(.x == subtext_nodata, NA_character_, .x)
+  )) |> 
+  select(state_name, year, metric_abbr, starts_with("subtitle"))
 
 
 # 6000 rows 
@@ -126,7 +209,7 @@ svii_only_prob_par <- svii_prep |>
 
 svii_agg <- full_join(
   svii_prep, 
-  svii_only_prob_par, 
+  svii_subtitles, 
   by = c("state_name", "year", "metric_abbr")
 ) |> 
   select(
@@ -135,13 +218,18 @@ svii_agg <- full_join(
     data, 
     n, chg1yr, 
     text, type, supervision_type, violation_type, 
-    probation_or_parole, probation_or_parole_grp,  
+    subtitle_vb, subtitle_areabar,  
     tooltip, 
     contains("metric")
   )
 
 
-admin$save_rds_twice(svii_agg)
+# save version on sp but don't save on repo; don't need to use in app 
+admin$save_rds_twice(svii_agg, save_to_repo = FALSE, save_to_sp = save_RDS_to_sharepoint)
+
+# save in prep folder as it's needed to create highcharts 
+saveRDS(svii_agg, "prep/svii_agg.rds")
+
 
 
 # **svii_yr** | create df's that determine trend from year to year; and from min year to max year ----
@@ -157,7 +245,7 @@ svii_yr <- tibble(
     min_yr = min(svii_agg$year), 
     max_yr = max(svii_agg$year)
   )
-admin$save_rds_twice(svii_yr)
+admin$save_rds_twice(svii_yr, save_to_sp = save_RDS_to_sharepoint)
 
 # **svii_explorer_table** | table with counts, year-to-year changes, trend vec and category -----
 
@@ -232,7 +320,7 @@ df_addlcols <- svii_agg |>
     # remove numeric columns
     -where(is.numeric),
     # also remove vars that are based on a specific year  
-    -probation_or_parole, -tooltip) |> 
+    -subtitle_vb, -tooltip) |> 
   distinct() 
 
 ##TABLE 600 x 38 
@@ -242,7 +330,7 @@ df_addlcols <- svii_agg |>
 ##COLUMNS: 38 = 14 + 6*4
 # - id variable columns (9)
 #     state_name, state_abbr, state_fips, 
-#     data, text, type, supervision_type, violation_type, probation_or_parole_grp
+#     data, text, type, supervision_type, violation_type, subtitle_areabar
 #     metric, metric_abbr, metric_short, metric_long 
 # - yearly count (6)
 #     2018, 2019, 2020, 2021, 2022, 2023
@@ -264,7 +352,7 @@ svii_explorer_table0 <- reduce(
   )
 svii_explorer_table <- svii_explorer_table0 |> 
   filter(word(metric_abbr, 2, -1) %in% display_metric_natl)
-admin$save_rds_twice(svii_explorer_table)
+admin$save_rds_twice(svii_explorer_table, save_to_sp = save_RDS_to_sharepoint)
 
 
 # **svii_explorer** | data for hex maps --------------------------------------------
@@ -366,7 +454,7 @@ svii_explorer0 <- bind_rows(
 svii_explorer <- svii_explorer0 |> 
   filter(word(metric_abbr, 2, -1) %in% display_metric_natl)
 
-admin$save_rds_twice(svii_explorer)
+admin$save_rds_twice(svii_explorer, save_to_sp = save_RDS_to_sharepoint)
 
 
 # **svii_table** | data for table under hex map -------------------------------------
@@ -405,7 +493,7 @@ svii_table <- svii_explorer_table |>
     )
   )
 
-admin$save_rds_twice(svii_table)
+admin$save_rds_twice(svii_table, save_to_sp = save_RDS_to_sharepoint)
 
 
 
@@ -438,13 +526,13 @@ svii_prob_par_tables <- svii_explorer_table0 |>
 
 svii_par <- svii_prob_par_tables |> 
   filter(supervision_type == "Parole") 
-admin$save_rds_twice(svii_par)
+admin$save_rds_twice(svii_par, save_to_sp = save_RDS_to_sharepoint)
 
 # **svii_prob** | data for table under hex map ----------------------------
 
 svii_prob <- svii_prob_par_tables |> 
   filter(supervision_type == "Probation") 
-admin$save_rds_twice(svii_prob)
+admin$save_rds_twice(svii_prob, save_to_sp = save_RDS_to_sharepoint)
 
 # **svii_valbox** | value boxes for state dashboards ---------------------------
 
@@ -466,7 +554,7 @@ svii_valbox <- svii_agg |>
     ), 
     chg_type = ifelse(chg_rnd > 0, "increase", "decrease")
   ) |> 
-  rename(subheader = probation_or_parole) |> 
+  rename(subheader = subtitle_vb) |> 
   #drop metric text col to add other text col 
   select(-text) |> 
   mutate(
@@ -486,7 +574,7 @@ svii_valbox <- svii_agg |>
     )
   ) 
   
-admin$save_rds_twice(svii_valbox)
+admin$save_rds_twice(svii_valbox, save_to_sp = save_RDS_to_sharepoint)
 
 
 # **svii_download** | downloadable data  -------------------------------------------------
@@ -504,4 +592,4 @@ svii_download <- svii_agg |>
   ) |> 
   mutate(across(c(state, year), as.character)) 
 
-admin$save_rds_twice(svii_download)
+admin$save_rds_twice(svii_download, save_to_sp = save_RDS_to_sharepoint)

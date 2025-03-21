@@ -1,15 +1,6 @@
-#######################################
-# Project: MCLCShiny
-# File: server.R
-# Authors: Mari Roberts
-# Date last updated: August 15, 2023 (MAR)
-# Description:
-#    Server for shiny app
-#######################################
 
 server <- function(input, output, session) {
-
-  # Change URL depending on tab selection in navbar
+  # Change URL depending on tab selection in navbar ############################
   observeEvent(input$navbarID, {
 
     newURL <- paste0(
@@ -32,40 +23,40 @@ server <- function(input, output, session) {
     }
   })
 
-  ##############################################################################################################################
-  # MAP EXPLORER
-  ##############################################################################################################################
 
-  #######
-  # Hex map
-  #######
-
+  # NATL TRENDS HEX MAP EXPLORER ###############################################
+  
+  # Natl Trends Hex Map --------------------------------------------------------
+  
+  # DETERMINE FILE NAME FOR DOWNLOADING MAP PNG 
   # Dynamically change name of map
   map_filename <- reactive({
-    name <- mclc_explorer %>%
-      filter(adm_or_pop == input$adm_or_pop_map,
-             metric     == input$data_map,
-             year       == input$year_map) %>%
-      select(data, year) %>% distinct()
-    name$year <- gsub(" - ", " ", name$year)
-    name <- paste(name$data, name$year, sep = '_')
+    name <- svii_explorer |>
+      filter(type     == input$adm_or_pop_map,
+             metric   == input$data_map,
+             year_chg == input$year_map) |>
+      select(data, year_chg) |> distinct()
+    name$year <- gsub(" - ", " ", name$year_chg)
+    name <- paste(name$data, name$year_chg, sep = '_')
     name <- gsub(" ", "_", name)
-  }) %>%
+  }) |>
     bindCache(input$data_map,
               input$adm_or_pop_map,
               input$year_map)
 
+  
+  # SELECT HEX MAP OBJECT 
   # Select foundational hex map and store it as a reactive expression
   # This allows the map to be downloaded after the map is changed
   # Charts were created in highchart.R
   foundational_map <- reactive({
-    map <- adm_pop_maps[[input$adm_or_pop_map]][[input$year_map]][[input$data_map]]
-    map %>%
-      highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-      highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-      highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-      highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-      hc_boost(enabled = TRUE)}) %>%
+    map <- natl_hex_lst[[input$adm_or_pop_map]][[input$year_map]][[input$data_map]]
+    map |>
+      highcharter::hc_add_dependency(name = "plugins/series-label.js") |>
+      highcharter::hc_add_dependency(name = "plugins/accessibility.js") |>
+      highcharter::hc_add_dependency(name = "plugins/exporting.js") |>
+      highcharter::hc_add_dependency(name = "plugins/export-data.js") |>
+      hc_boost(enabled = TRUE)}) |>
     bindCache(input$data_map,
               input$adm_or_pop_map,
               input$year_map)
@@ -74,11 +65,8 @@ server <- function(input, output, session) {
   output$hex_map <- renderHighchart({
     foundational_map()
   })
-
-  #######
-  # Download map button near dropdowns
-  #######
-
+  
+  # DOWNLOAD HEX MAP PNG 
   # Save map
   output$save_map <- downloadHandler(
     filename <- function() {
@@ -93,11 +81,9 @@ server <- function(input, output, session) {
     contentType = "image/png"
   )
 
-  #######
-  # Table under hex map
-  #######
+  # natl trends hex map table --------------------------------------------------
 
-  # Title of table under map
+  # TITLE OF TABLE UNDER MAP 
   output$selected_map_table <- renderText({
     if (input$adm_or_pop_map == "Admissions" & input$data_map == "Total") {
       paste(input$data_map, " ", input$adm_or_pop_map, " to State Prison", sep = "")
@@ -111,125 +97,114 @@ server <- function(input, output, session) {
     } else if (input$adm_or_pop_map == "Population" & input$data_map != "Total") {
       paste("People in State Prison for ", input$data_map, "s", sep = "")
     }
-    }) %>%
+    }) |>
     bindCache(input$data_map,
               input$adm_or_pop_map)
 
 
-  # Reactable table under hex map
+  # REACTABLE TABLE UNDER HEX MAP 
   output$table_map <- renderReactable({
 
-    filter_by <- paste0(input$data_map, " ",
+    this_data <- paste0(input$data_map, " ",
                         input$adm_or_pop_map)
-    select_column <- input$year_map
-    select_column_name <- paste0(select_column, " Change")
-    select_trend_data_column <-
-      if(input$year_map == "2018 - 2021"){
-        paste0("trend_data_18_21")
-      } else if(input$year_map == "2018 - 2019"){
-        paste0("trend_data_18_19")
-      } else if(input$year_map == "2019 - 2020"){
-        paste0("trend_data_19_20")
-      } else if(input$year_map == "2020 - 2021"){
-        paste0("trend_data_20_21")
-      }
-
-    select_trend_column <-
-      if(input$year_map == "2018 - 2021"){
-        paste0("trend_18_21")
-      } else if(input$year_map == "2018 - 2019"){
-        paste0("trend_18_19")
-      } else if(input$year_map == "2019 - 2020"){
-        paste0("trend_19_20")
-      } else if(input$year_map == "2020 - 2021"){
-        paste0("trend_20_21")
-      }
-
-    df <- mclc_explorer_table %>%
-      select(state, data, `2018`, `2019`, `2020`, `2021`,
-             all_of(select_column),
-             all_of(select_trend_data_column),
-             all_of(select_trend_column)) %>%
-      filter(data == filter_by) %>%
-      arrange(state) %>%
-      rename(change = all_of(select_column),
-             total_new = 8,
-             trend     = 9) %>%
+    this_yrchg <- input$year_map
+    this_yrchg_name <- paste0(this_yrchg, " Change")
+    this_trend_data <- paste0(
+      "trend_data_", 
+      substr(word(this_yrchg,  1), 3, 4), "_", 
+      substr(word(this_yrchg, -1), 3, 4)
+    )
+    this_trend <- paste0(
+      "trend_", 
+      substr(word(this_yrchg,  1), 3, 4), "_", 
+      substr(word(this_yrchg, -1), 3, 4)
+    )
+    
+    df <- svii_explorer_table |>
+      select(
+        state = state_name, 
+        data, 
+        all_of(as.character(svii_yr$min_yr[1]:svii_yr$max_yr[1])),
+        change     = all_of(this_yrchg), 
+        trend_data = all_of(this_trend_data), 
+        trend      = all_of(this_trend)
+      ) |>
+      filter(data == this_data) |>
+      select(-data) |> 
+      arrange(state) |>
       mutate(
         trend = case_when(
-          trend == "negative"   ~ regblue
-          , trend == "positive" ~ orange
-          , trend == "same"     ~ "#585858"
+          trend == "negative" ~ regblue, 
+          trend == "positive" ~ orange, 
+          trend == "same"     ~ "#585858", 
+          # w/o this the 'color' is NA and table won't render 
+          # this is for cases where there is no trend (i.e. NA to NA) 
+          is.na(trend)        ~ "white" 
         )
       )
-
-    reactable(df,
-              style = list(fontFamily = "Graphik, sans-serif",
-                           fontSize = "1.4rem"),
-              theme = reactableTheme(cellStyle = list(display = "flex",
-                                                      flexDirection = "column",
-                                                      justifyContent = "center"),
-                                     headerStyle = list(textAlign = "right")
-              ),
-              defaultColDef = colDef(format = colFormat(separators = TRUE),
-                                     align = "right"),
-              compact = TRUE,
-              fullWidth = FALSE,
-              searchable = TRUE,
-
-              language = reactableLang(searchPlaceholder = "Search for Your State"),
-
-              pagination = FALSE,
-              columns = list(
-                state           = colDef(name = "State",
-                                         align = "left",
-                                         minWidth = 120,
-                                         style = list(fontWeight = "bold")),
-                data            = colDef(show = F,
-                                         name = "Metric",
-                                         align = "left",
-                                         minWidth = 240,
-                                         style = list(fontWeight = "bold")),
-                `2018`          = colDef(na = "–", minWidth = 110),
-                `2019`          = colDef(na = "–", minWidth = 110),
-                `2020`          = colDef(na = "–", minWidth = 110),
-                `2021`          = colDef(na = "–", minWidth = 110),
-
-                change = colDef(na = "–",
-                                minWidth = 110,
-                                name = select_column_name,
-                                style = list(fontWeight = "bold"),
-                                format = colFormat(percent = TRUE, digits = 0)),
-                # add 4 Year trend graphs to each row
-                total_new  =
-                  colDef(na = "–",
-                         minWidth = 140,
-                         align = "center",
-                         name = "Trend Line",
-                         sortable = FALSE,
-                         cell = function(value, index) {
-                           dui_sparkline(
-                             data = value[[1]],
-                             height = 60,
-                             components = list(
-                               dui_sparkpointseries(
-                                 points =  list("all"),
-                                 stroke = df$trend[index],
-                                 fill = df$trend[index],
-                                 size = 2
-                               ),
-                               dui_sparklineseries(
-                                 curve = "linear",
-                                 showArea = FALSE,
-                                 fill = df$trend[index],
-                                 stroke = df$trend[index]
-                               )
-                             )
-                           )}),
-                #trend, don't show, used in determining
-                trend = colDef(show = FALSE)
-              ))
-    }) %>%
+    
+    
+    reactable(
+      df,
+      style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
+      theme = reactableTheme(
+        cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"),
+        headerStyle = list(textAlign = "right")
+      ),
+      compact = TRUE,
+      fullWidth = FALSE, 
+      searchable = TRUE,
+      language = reactableLang(searchPlaceholder = "Search for Your State"),
+      pagination = FALSE,
+      defaultColDef = colDef(
+        format = colFormat(separators = TRUE), 
+        minWidth = 90, 
+        align = "right", 
+        na = "-"
+      ),
+      columns = list(
+        state = colDef(
+          name = "State",
+          align = "left",
+          minWidth = 130, #120 to fit states; 130 to have NH on single line
+          style = list(fontWeight = "bold")
+        ),
+        change = colDef(
+          minWidth = 110,
+          name = this_yrchg_name,
+          style = list(fontWeight = "bold"),
+          format = colFormat(percent = TRUE, digits = 0)
+        ),
+        trend_data  = colDef(
+          minWidth = 140,
+          align = "center",
+          name = "Trend Line",
+          sortable = FALSE,
+          cell = function(value, index) {
+            points_list <- which(!is.na(value[[1]]))-1
+            dui_sparkline(
+              data = value[[1]],
+              height = 60,
+              components = list(
+                dui_sparkpointseries(
+                  points =  points_list,
+                  stroke = df$trend[index],
+                  fill = df$trend[index],
+                  size = 2
+                ),
+                dui_sparklineseries(
+                  curve = "linear",
+                  showArea = FALSE,
+                  fill = df$trend[index],
+                  stroke = df$trend[index]
+                )
+              )
+            )}
+        ),
+        trend = colDef(show = FALSE)
+      )
+    )
+  }) |>
     bindCache(input$data_map,
               input$adm_or_pop_map,
               input$year_map)
@@ -237,14 +212,9 @@ server <- function(input, output, session) {
 
 
 
-  ##############################################################################################################################
-  # State Reports
-  ##############################################################################################################################
+  # STATE DASHBOARDS ###########################################################
 
-  #######
-  # State page title
-  #######
-
+  # 0 state title --------------------------------------------------------------
   # Title of state based on user input
   output$selected_state <- renderText({
     if (input$adm_pop_report == "Admissions") {
@@ -254,55 +224,52 @@ server <- function(input, output, session) {
     } else {
       ""
     }
-  }) %>%
+  }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
-  #######
-  # Value boxes
-  #######
-
+  # 0 value boxes --------------------------------------------------------------
   # Filter data to totals
   df_vb_total <- reactive({
-    vb_adm_pop %>%
-      filter(state == input$state_report &
-               adm_or_pop == input$adm_pop_report &
-               year == "2021" &
+    svii_valbox |>
+      filter(state_name == input$state_report &
+               type == input$adm_pop_report &
+               year == svii_yr$max_yr[1] &
                metric == "Total")
-  }) %>%
+  }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
   # Filter data to sup violations
   df_vb_sup_violations <- reactive({
-    vb_adm_pop %>%
-      filter(state == input$state_report &
-               adm_or_pop == input$adm_pop_report &
-               year == "2021" &
+    svii_valbox |>
+      filter(state_name == input$state_report &
+               type == input$adm_pop_report &
+               year == svii_yr$max_yr[1] &
                metric == "Supervision Violation")
-  }) %>%
+  }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
   # Filter data to tech violations
   df_vb_tech <- reactive({
-    vb_adm_pop %>%
-      filter(state == input$state_report &
-               adm_or_pop == input$adm_pop_report &
-               year == "2021" &
+    svii_valbox |>
+      filter(state_name == input$state_report &
+               type == input$adm_pop_report &
+               year == svii_yr$max_yr[1] &
                metric == "Technical Violation")
-  }) %>%
+  }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
   # Filter data to new offense violations
   df_vb_new_off <- reactive({
-    vb_adm_pop %>%
-      filter(state == input$state_report &
-               adm_or_pop == input$adm_pop_report &
-               year == "2021" &
+    svii_valbox |>
+      filter(state_name == input$state_report &
+               type == input$adm_pop_report &
+               year == svii_yr$max_yr[1] &
                metric == "New Offense Violation")
-  }) %>%
+  }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -312,7 +279,7 @@ server <- function(input, output, session) {
     # No subtitle needed regarding no parole or prob data
     fnc_value_box(
       title      = paste0("Overall "),
-      adm_or_pop = paste0(input$adm_pop_report, " in 2021"),
+      adm_or_pop = paste0(input$adm_pop_report, " in ", svii_yr$max_yr[1]),
       subtitle   = HTML("<br>"),
       value      = df_vb_total()$value_shown,
       finding    = df_vb_total()$text,
@@ -328,7 +295,7 @@ server <- function(input, output, session) {
 
     fnc_value_box(
       title      = paste0("Supervision Violation "),
-      adm_or_pop = paste0(input$adm_pop_report, " in 2021"),
+      adm_or_pop = paste0(input$adm_pop_report, " in ", svii_yr$max_yr[1]),
       subtitle   = df_vb_sup_violations()$subheader,
       value      = df_vb_sup_violations()$value_shown,
       finding    = df_vb_sup_violations()$text,
@@ -343,7 +310,7 @@ server <- function(input, output, session) {
 
     fnc_value_box(
       title      = paste0("Technical Violation "),
-      adm_or_pop = paste0(input$adm_pop_report, " in 2021"),
+      adm_or_pop = paste0(input$adm_pop_report, " in ", svii_yr$max_yr[1]),
       subtitle   = df_vb_tech()$subheader,
       value      = df_vb_tech()$value_shown,
       finding    = df_vb_tech()$text,
@@ -358,7 +325,7 @@ server <- function(input, output, session) {
 
     fnc_value_box(
       title      = paste0("New Offense Violation "),
-      adm_or_pop = paste0(input$adm_pop_report, " in 2021"),
+      adm_or_pop = paste0(input$adm_pop_report, " in ", svii_yr$max_yr[1]),
       subtitle   = df_vb_new_off()$subheader,
       value      = df_vb_new_off()$value_shown,
       finding    = df_vb_new_off()$text,
@@ -368,32 +335,22 @@ server <- function(input, output, session) {
     )
   })
 
-  #######
-  # Area chart
-  #######
-
+  # 1 OVERVIEW -----------------------------------------------------------------
+  
+  # 1 AREA CHART ---------------------------------------------------------------
   # Select highchart depending on selector input
   # Charts were saved in highchart.R
   output$state_area_chart <- renderHighchart({
-    if (input$adm_pop_report == "Admissions") {
-      all_state_area_adm[[input$state_report]] %>%
-        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_boost(enabled = TRUE)
-    } else {
-      all_state_area_pop[[input$state_report]] %>%
-        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_boost(enabled = TRUE)
-    }
-    }) %>%
+    state_area_lst[[input$adm_pop_report]][[input$state_report]] |>
+      highcharter::hc_add_dependency(name = "plugins/series-label.js") |>
+      highcharter::hc_add_dependency(name = "plugins/accessibility.js") |>
+      highcharter::hc_add_dependency(name = "plugins/exporting.js") |>
+      highcharter::hc_add_dependency(name = "plugins/export-data.js") |>
+      hc_boost(enabled = TRUE)
+    }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
-
+  
   # Download button for state area chart
   output$save_state_area_chart <- downloadHandler(
     filename <- function() {
@@ -434,7 +391,7 @@ server <- function(input, output, session) {
       downloadButton(outputId = 'save_state_area_chart', "",
                      class = "download-chart")
     }
-    }) %>%
+    }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -463,37 +420,25 @@ server <- function(input, output, session) {
       highchartOutput("state_area_chart",
                       height = 400, width = 390)
     }
-    }) %>%
+    }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
-  #######
-  # Bar chart
-  #######
-
+  # 1 BAR CHART (supervision/both)----------------------------------------------
   # Select highchart depending on selector input
   # Charts were saved in highchart.R
   output$state_bar_chart <- renderHighchart({
-    if (input$adm_pop_report == "Admissions") {
-
-      all_state_bar_adm[[input$state_report]] %>%
-        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_boost(enabled = TRUE)
-    } else {
-      all_state_bar_pop[[input$state_report]] %>%
-        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_boost(enabled = TRUE)
-    }
-    }) %>%
+    state_bar_lst[[input$adm_pop_report]][["Both"]][[input$state_report]] |>
+      highcharter::hc_add_dependency(name = "plugins/series-label.js") |>
+      highcharter::hc_add_dependency(name = "plugins/accessibility.js") |>
+      highcharter::hc_add_dependency(name = "plugins/exporting.js") |>
+      highcharter::hc_add_dependency(name = "plugins/export-data.js") |>
+      hc_boost(enabled = TRUE)
+    }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
-
+  
+  # BAR CHART DOWNLOAD 
   # Download button
   output$save_state_bar_chart <- downloadHandler(
     filename <- function() {
@@ -509,27 +454,18 @@ server <- function(input, output, session) {
   )
 
 
-  #######
+  # 1 BAR CHART change between graph/sentence ---------------------------------
   # Supervision Violations Graph - Dynamically change between sentence and graph depending on data availability
   # Show "Data Unavailable", "Did Not Respond" or "Partial Data Submitted" or chart if required data is available
-  #######
 
-  # If data is missing a supervision violation admissions graph
-  output$missing_data_nt_adm <- renderUI({
-    out <- missingness_sentences %>%
-      filter(state == input$state_report)
-    out <- out$supervision_violation_admissions_graph
+  # If data is missing a supervision violation
+  output$missing_data_nt <- renderUI({
+    out <- missingness_sentences |>
+      filter(state == input$state_report) |> 
+      rename(thiscol = paste0("supervision_violation_", tolower(input$adm_pop_report), "_graph"))
+    out <- out$thiscol
     HTML(out)
-  }) %>%
-    bindCache(input$state_report)
-
-  # If data is missing a supervision violation population graph
-  output$missing_data_nt_pop <- renderUI({
-    out <- missingness_sentences %>%
-      filter(state == input$state_report)
-    out <- out$supervision_violation_population_graph
-    HTML(out)
-  }) %>%
+  }) |>
     bindCache(input$state_report)
 
   # Remove download button if no graph
@@ -539,154 +475,76 @@ server <- function(input, output, session) {
 
   # Show graph or missing data sentence depending on state
   output$state_nt = renderUI({
-
-    # If state is missing new offense violations and technical violations (Admissions)
-    if(input$state_report %in% nt_na_adm &
-       input$adm_pop_report == "Admissions"){
-      htmlOutput("missing_data_nt_adm")
-
-      # If state is missing new offense violations and technical violations (Population)
-    } else if(input$state_report %in% nt_na_pop &
-              input$adm_pop_report == "Population"){
-      htmlOutput("missing_data_nt_pop")
-
-      # If state has data (Admissions)
-    } else if(input$state_report %in% nt_not_na_adm &
-              input$adm_pop_report == "Admissions"){
+    
+    miss_text <- missingness_sentences |> 
+     filter(state == input$state_report) |> 
+     pull(paste0("supervision_violation_", tolower(input$adm_pop_report), "_graph"))
+    
+    if (is.na(miss_text)){
+      # if 'miss_text' == NA --> data to plot 
       highchartOutput("state_bar_chart", height = 400, width = 390)
-
-      # If state has data (Population)
-    } else if(input$state_report %in% nt_not_na_pop &
-              input$adm_pop_report == "Population"){
-      highchartOutput("state_bar_chart", height = 400, width = 390)
+    } else {
+      # if 'miss_text' != NA --> show sentence instead 
+      htmlOutput("missing_data_nt")
     }
-    }) %>%
+    
+    }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
   # Show graph download button or no button depending on state
   output$state_nt_button = renderUI({
-
-    # If state is missing new offense violations and technical violations (Admissions)
-    if(input$state_report %in% nt_na_adm &
-       input$adm_pop_report == "Admissions"){
+    
+    downloadButton(outputId = 'save_state_bar_chart', "",
+                   class = "download-chart")
+    
+    miss_text <- missingness_sentences |> 
+      filter(state == input$state_report) |> 
+      pull(paste0("supervision_violation_", tolower(input$adm_pop_report), "_graph"))
+    
+    if (is.na(miss_text)){
+      # if 'miss_text' == NA --> data to plot --> ADD DOWNLOAD BUTTON  
+      downloadButton(outputId = 'save_state_bar_chart', "", class = "download-chart")
+    } else {
+      # if 'miss_text' != NA --> show sentence instead --> NO DOWNLOAD BUTTON 
       textOutput("missing_data_nt_button")
-
-      # If state is missing new offense violations and technical violations (Population)
-    } else if(input$state_report %in% nt_na_pop &
-              input$adm_pop_report == "Population"){
-      textOutput("missing_data_nt_button")
-
-      # If state has data (Admissions)
-    } else if(input$state_report %in% nt_not_na_adm &
-              input$adm_pop_report == "Admissions"){
-      downloadButton(outputId = 'save_state_bar_chart', "",
-                     class = "download-chart")
-
-      # If state has data (Population)
-    } else if(input$state_report %in% nt_not_na_pop &
-              input$adm_pop_report == "Population"){
-      downloadButton(outputId = 'save_state_bar_chart', "",
-                     class = "download-chart")
     }
-    }) %>%
+    
+    }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
-  #######
-  # Table under state graphs
-  #######
 
+  # 1 TABLE (overview) ---------------------------------------------------------
   # State table
   output$state_table <- renderReactable({
 
     # Filter data
-    df <- state_table %>%
-      filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report) %>%
-      arrange(order) %>%
-      select(-c(state, order, adm_or_pop, metric))
-
-    # Create table with 4 Year trend line in last column
-    reactable(df,
-              style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
-              theme = reactableTheme(cellStyle = list(display = "flex",
-                                                      flexDirection = "column",
-                                                      justifyContent = "center"), # was center
-                                     headerStyle = list(textAlign = "right")
-              ),
-              defaultColDef = colDef(format = colFormat(separators = TRUE),
-                                     align = "right"),
-              compact = TRUE,
-              fullWidth = FALSE,
-              searchable = FALSE,
-              pagination = FALSE,
-              columns = list(
-                text            = colDef(name = "Metric",
-                                         align = "left",
-                                         minWidth = 275,
-                                         style = list(fontWeight = "bold")
-                                         ),
-                `2018`          = colDef(na = "–", minWidth = 95),
-                `2019`          = colDef(na = "–", minWidth = 95),
-                `2020`          = colDef(na = "–", minWidth = 95),
-                `2021`          = colDef(na = "–", minWidth = 95),
-                four_yr_change  = colDef(na = "–", minWidth = 110,
-                                         name = "2018-2021 Change",
-                                         style = list(fontWeight = "bold"),
-                                         format = colFormat(percent = TRUE,
-                                                            digits = 0)),
-                # Add 4 Year trend graphs to each row
-                total_new = colDef(minWidth = 110,
-                                   name = "Trend Line",
-                                   cell = function(value, index) {
-                                     if (!is.null(value[[1]]) && length(value[[1]]) > 0) {
-                                       points_list <- if (length(value[[1]]) >= 4) {
-                                         list("all")
-                                       } else {
-                                         seq(length(value[[1]]) - 1)
-                                       }
-
-                                       dui_sparkline(
-                                         data = value[[1]],
-                                         height = 80,
-                                         margin = list(top = 30,
-                                                       right = 20,
-                                                       bottom = 30,
-                                                       left = 20),
-                                         components = list(
-                                           dui_sparkpointseries(
-                                             points = points_list,
-                                             stroke = colpal_fill[index],
-                                             fill = colpal_stroke[index],
-                                             size = 2.5
-                                           ),
-                                           dui_sparklineseries(
-                                             curve = "linear",
-                                             showArea = FALSE,
-                                             fill = colpal_fill[index],
-                                             stroke = colpal_stroke[index]
-                                           )
-                                         )
-                                       )
-                                     } else {
-                                       htmltools::HTML("")  # Return an empty element if no data
-                                     }
-                                   })
-              ))
-    }) %>%
+    df <- svii_table |>
+      filter(state_name == input$state_report &
+             type       == input$adm_pop_report) |>
+      arrange(text) |>
+      select(
+        text, 
+        all_of(as.character(svii_yr$min_yr[1]:svii_yr$max_yr[1])), 
+        `2018 - 2023`, 
+        trend_data_18_23
+      )
+    
+    state_reactable(df)
+    
+    }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
-  #######
-  # State notes
-  #######
+  # 1 STATE NOTES --------------------------------------------------------------
 
   # Filter data
   df_parole_asterisks_notes <- reactive({
-    parole_asterisks_notes %>%
-      filter(state == input$state_report)
-  }) %>%
+    formatted_notes |> 
+      filter(state == input$state_report) |> 
+      select(state, notes = parole_asterisks)
+  }) |>
     bindCache(input$state_report)
 
   # Parole asterisks state notes
@@ -696,9 +554,10 @@ server <- function(input, output, session) {
 
   # Filter data
   df_probation_asterisks_notes <- reactive({
-    probation_asterisks_notes %>%
-      filter(state == input$state_report)
-  }) %>%
+    formatted_notes |> 
+      filter(state == input$state_report) |> 
+      select(state, notes = probation_asterisks)
+  }) |>
     bindCache(input$state_report)
 
   # Probation asterisks state notes
@@ -708,9 +567,10 @@ server <- function(input, output, session) {
 
   # Filter parole data
   df_parole_notes <- reactive({
-    parole_notes %>%
-      filter(state == input$state_report)
-  }) %>%
+    formatted_notes |> 
+      filter(state == input$state_report) |> 
+      select(state, notes = parole_metrics)
+  }) |>
     bindCache(input$state_report)
 
   # Parole state notes
@@ -720,9 +580,10 @@ server <- function(input, output, session) {
 
   # Filter probation data
   df_probation_notes <- reactive({
-    probation_notes %>%
-      filter(state == input$state_report)
-  }) %>%
+    formatted_notes |> 
+      filter(state == input$state_report) |> 
+      select(state, notes = probation_metrics)
+  }) |>
     bindCache(input$state_report)
 
   # Probation state notes
@@ -732,9 +593,10 @@ server <- function(input, output, session) {
 
   # Filter data
   df_additional_notes <- reactive({
-    additional_notes %>%
-      filter(state == input$state_report)
-  }) %>%
+    formatted_notes |> 
+      filter(state == input$state_report) |> 
+      select(state, notes = additional_notes)
+  }) |>
     bindCache(input$state_report)
 
   # Additional state notes
@@ -742,29 +604,20 @@ server <- function(input, output, session) {
     HTML(df_additional_notes()$notes)
   })
 
-  #######
-  # Parole Tab
-  #######
 
+  # 2 PAROLE -------------------------------------------------------------------
+
+  # 2 BAR CHART (parole) -------------------------------------------------------
   # Select highchart depending on selector input
   # Charts were saved in highchart.R
   output$parole_bar_chart <- renderHighchart({
-    if (input$adm_pop_report == "Admissions") {
-      parole_bar_adm[[input$state_report]] %>%
-        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_boost(enabled = TRUE)
-    } else {
-      parole_bar_pop[[input$state_report]] %>%
-        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_boost(enabled = TRUE)
-    }
-    }) %>%
+    state_bar_lst[[input$adm_pop_report]][["Parole"]][[input$state_report]] |>
+      highcharter::hc_add_dependency(name = "plugins/series-label.js") |>
+      highcharter::hc_add_dependency(name = "plugins/accessibility.js") |>
+      highcharter::hc_add_dependency(name = "plugins/exporting.js") |>
+      highcharter::hc_add_dependency(name = "plugins/export-data.js") |>
+      hc_boost(enabled = TRUE)
+  }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -783,183 +636,94 @@ server <- function(input, output, session) {
     contentType = "image/png"
   )
 
-  # Parole table
+  # 2 table (parole) -----------------------------------------------------------
   output$parole_table <- renderReactable({
 
     # Filter data
-    df <- parole_table %>%
-      filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report) %>%
-      select(-c(adm_or_pop, state))
-
-    # Create table with 4 Year trend line in last column
-    reactable(df,
-              style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"),
-              theme = reactableTheme(cellStyle = list(display = "flex",
-                                                      flexDirection = "column",
-                                                      justifyContent = "center"), # was center
-                                     headerStyle = list(textAlign = "right")
-              ),
-              defaultColDef = colDef(format = colFormat(separators = TRUE),
-                                     align = "right"),
-              compact = TRUE,
-              fullWidth = FALSE,
-              searchable = FALSE,
-              pagination = FALSE,
-              columns = list(
-                text            = colDef(name = "Metric",
-                                         align = "left",
-                                         style = list(fontWeight = "bold"),
-                                         minWidth = 275),
-                `2018`          = colDef(na = "–", minWidth = 95),
-                `2019`          = colDef(na = "–", minWidth = 95),
-                `2020`          = colDef(na = "–", minWidth = 95),
-                `2021`          = colDef(na = "–", minWidth = 95),
-                four_yr_change  = colDef(na = "–", minWidth = 110,
-                                         name = "2018-2021 Change",
-                                         style = list(fontWeight = "bold"),
-                                         format = colFormat(percent = TRUE,
-                                                            digits = 0)),
-                # add 4 Year trend graphs to each row
-                total_new = colDef(minWidth = 110,
-                                   name = "Trend Line",
-                                   cell = function(value, index) {
-                                     if (!is.null(value[[1]]) && length(value[[1]]) > 0) {
-                                       points_list <- if (length(value[[1]]) >= 4) {
-                                         list("all")
-                                       } else {
-                                         seq(length(value[[1]]) - 1)
-                                       }
-
-                                       dui_sparkline(
-                                         data = value[[1]],
-                                         height = 80,
-                                         margin = list(top = 30,
-                                                       right = 20,
-                                                       bottom = 30,
-                                                       left = 20),
-                                         components = list(
-                                           dui_sparkpointseries(
-                                             points = points_list,
-                                             stroke = colpal_fill[index],
-                                             fill = colpal_stroke[index],
-                                             size = 2.5
-                                           ),
-                                           dui_sparklineseries(
-                                             curve = "linear",
-                                             showArea = FALSE,
-                                             fill = colpal_fill[index],
-                                             stroke = colpal_stroke[index]
-                                           )
-                                         )
-                                       )
-                                     } else {
-                                       htmltools::HTML("")  # Return an empty element if no data
-                                     }
-                                   })
-              ))
-    }) %>%
+    df <- svii_par |>
+      filter(state_name == input$state_report &
+               type       == input$adm_pop_report) |>
+      arrange(text) |>
+      select(
+        text, 
+        all_of(as.character(svii_yr$min_yr[1]:svii_yr$max_yr[1])), 
+        `2018 - 2023`, 
+        trend_data_18_23
+      )
+    state_reactable(
+      df, 
+      these_col_fill = colpal_fill[2:4], 
+      these_col_stroke = colpal_stroke[2:4]
+    )
+    
+    }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
-  #######
+  # 2 BAR CHART change between graph/sentence ----------------------------------
   # Parole Graph - Dynamically change between sentence and graph depending on data availability
   # Show "Data Unavailable", "Did Not Respond" or "Partial Data Submitted" or chart if required data is available
-  #######
 
   # If data is missing a parole violation admissions graph
-  output$missing_data_parole_nt_adm <- renderUI({
-    out <- missingness_sentences %>%
-      filter(state == input$state_report)
-    out <- out$parole_violation_admissions_graph
+  output$missing_data_parole_nt <- renderUI({
+    out <- missingness_sentences |>
+      filter(state == input$state_report) |> 
+      rename(thiscol = paste0("parole_violation_", tolower(input$adm_pop_report), "_graph"))
+    out <- out$thiscol
     HTML(out)
-  }) %>%
-    bindCache(input$state_report)
-
-  # If data is missing a parole violation population graph
-  output$missing_data_parole_nt_pop <- renderUI({
-    out <- missingness_sentences %>%
-      filter(state == input$state_report)
-    out <- out$parole_violation_population_graph
-    HTML(out)
-  }) %>%
+  }) |>
     bindCache(input$state_report)
 
   # Show parole graph or missing data sentence depending on state
   output$parole_nt <- renderUI({
-
-    # If state is missing new offense violations and technical violations (Admissions)
-    if(input$state_report %in% parole_na_adm &
-       input$adm_pop_report == "Admissions"){
-
-      fluidRow(column(width = 3),
-               column(width = 6, align = "center",
-                      htmlOutput("missing_data_parole_nt_adm")),
-               column(width = 3))
-
-      # If state is missing new offense violations and technical violations (Population)
-    } else if(input$state_report %in% parole_na_pop &
-              input$adm_pop_report == "Population"){
-
-      fluidRow(column(width = 3),
-               column(width = 6, align = "center",
-                      htmlOutput("missing_data_parole_nt_pop")),
-               column(width = 3))
-
-      # If state has data (Admissions)
-    } else if(input$state_report %in% parole_not_na_adm &
-              input$adm_pop_report == "Admissions"){
-
-      fluidRow(column(width = 3),
-               column(width = 5, align = "center",
-                      highchartOutput("parole_bar_chart",
-                                      height = 400,
-                                      width = 390)),
-               column(width = 1, align = "left",
-                      downloadButton(outputId = 'save_parole_bar_chart', "",
-                                     class = "download-chart")),
-               column(width = 3))
-
-      # If state has data (Population)
-    } else if(input$state_report %in% parole_not_na_pop &
-              input$adm_pop_report == "Population"){
-
-      fluidRow(column(width = 3),
-               column(width = 5, align = "center",
-                      highchartOutput("parole_bar_chart",
-                                      height = 400, width = 390)),
-               column(width = 1, align = "left",
-                      downloadButton(outputId = 'save_parole_bar_chart', "",
-                                     class = "download-chart")),
-               column(width = 3))
+    
+    miss_text <- missingness_sentences |> 
+      filter(state == input$state_report) |> 
+      pull(paste0("parole_violation_", tolower(input$adm_pop_report), "_graph"))
+    
+    if (is.na(miss_text)){
+      # if 'miss_text' == NA --> data to plot
+      fluidRow(
+        column(width = 3),
+        column(
+          width = 5,
+          align = "center",
+          highchartOutput("parole_bar_chart", height = 400, width = 390)
+        ),
+        column(
+          width = 1,
+          align = "left",
+          downloadButton(outputId = 'save_parole_bar_chart', "", class = "download-chart")
+        ),
+        column(width = 3)
+      )
+    } else {
+      # if 'miss_text' != NA --> show sentence instead
+      fluidRow(
+        column(width = 3),
+        column(width = 6, align = "center", htmlOutput("missing_data_parole_nt")),
+        column(width = 3)
+      )
     }
-    }) %>%
+    
+    }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
-  #######
-  # Probation Tab
-  #######
 
+  # 3 PROBATION ----------------------------------------------------------------
+  
+  # 3 BAR CHART (probation) ------------------------------------------------------
   # Select highchart depending on selector input
   # Charts were saved in highchart.R
   output$probation_bar_chart <- renderHighchart({
-    if (input$adm_pop_report == "Admissions") {
-      probation_bar_adm[[input$state_report]] %>%
-        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_boost(enabled = TRUE)
-    } else {
-      probation_bar_pop[[input$state_report]] %>%
-        highcharter::hc_add_dependency(name = "plugins/series-label.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/accessibility.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/exporting.js") %>%
-        highcharter::hc_add_dependency(name = "plugins/export-data.js") %>%
-        hc_boost(enabled = TRUE)
-    }
-    }) %>%
+    state_bar_lst[[input$adm_pop_report]][["Probation"]][[input$state_report]] |>
+      highcharter::hc_add_dependency(name = "plugins/series-label.js") |>
+      highcharter::hc_add_dependency(name = "plugins/accessibility.js") |>
+      highcharter::hc_add_dependency(name = "plugins/exporting.js") |>
+      highcharter::hc_add_dependency(name = "plugins/export-data.js") |>
+      hc_boost(enabled = TRUE)
+    })  |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
@@ -977,437 +741,88 @@ server <- function(input, output, session) {
     contentType = "image/png"
   )
 
-  # Probation table
+  # 3 table (Probation) --------------------------------------------------------
   output$probation_table <- renderReactable({
 
     # Filter data
-    df <- probation_table %>%
-      filter(state == input$state_report &
-             adm_or_pop == input$adm_pop_report) %>%
-      select(-c(adm_or_pop, state))
-
-    # Create table with 4 Year trend line in last column
-    reactable(df,
-              style = list(fontFamily = "Graphik, sans-serif",
-                           fontSize = "1.4rem"),
-              theme = reactableTheme(cellStyle = list(display = "flex",
-                                                      flexDirection = "column",
-                                                      justifyContent = "center"), # was center
-                                     headerStyle = list(textAlign = "right")
-              ),
-              defaultColDef = colDef(format = colFormat(separators = TRUE),
-                                     align = "right"),
-              compact = TRUE,
-              fullWidth = FALSE,
-              searchable = FALSE,
-              pagination = FALSE,
-              columns = list(
-                text            = colDef(name = "Metric",
-                                         align = "left",
-                                         style = list(fontWeight = "bold"),
-                                         minWidth = 275),
-                `2018`          = colDef(na = "–", minWidth = 95),
-                `2019`          = colDef(na = "–", minWidth = 95),
-                `2020`          = colDef(na = "–", minWidth = 95),
-                `2021`          = colDef(na = "–", minWidth = 95),
-                four_yr_change  = colDef(na = "–", minWidth = 110,
-                                         name = "2018-2021 Change",
-                                         style = list(fontWeight = "bold"),
-                                         format = colFormat(percent = TRUE,
-                                                            digits = 0)),
-                # add 4 Year trend graphs to each row
-                total_new = colDef(minWidth = 110,
-                                   name = "Trend Line",
-                                   cell = function(value, index) {
-                                     if (!is.null(value[[1]]) && length(value[[1]]) > 0) {
-                                       points_list <- if (length(value[[1]]) >= 4) {
-                                         list("all")
-                                       } else {
-                                         seq(length(value[[1]]) - 1)
-                                       }
-
-                                       dui_sparkline(
-                                         data = value[[1]],
-                                         height = 80,
-                                         margin = list(top = 30,
-                                                       right = 20,
-                                                       bottom = 30,
-                                                       left = 20),
-                                         components = list(
-                                           dui_sparkpointseries(
-                                             points = points_list,
-                                             stroke = colpal_fill[index],
-                                             fill = colpal_stroke[index],
-                                             size = 2.5
-                                           ),
-                                           dui_sparklineseries(
-                                             curve = "linear",
-                                             showArea = FALSE,
-                                             fill = colpal_fill[index],
-                                             stroke = colpal_stroke[index]
-                                           )
-                                         )
-                                       )
-                                     } else {
-                                       htmltools::HTML("")  # Return an empty element if no data
-                                     }
-                                   })
-              ))
-    }) %>%
+    df <- svii_prob |>
+      filter(state_name == input$state_report &
+               type       == input$adm_pop_report) |>
+      arrange(text) |>
+      select(
+        text, 
+        all_of(as.character(svii_yr$min_yr[1]:svii_yr$max_yr[1])), 
+        `2018 - 2023`, 
+        trend_data_18_23
+      )
+    
+    state_reactable(
+      df, 
+      these_col_fill = colpal_fill[2:4], 
+      these_col_stroke = colpal_stroke[2:4]
+    )
+    
+    }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
-  #######
+  # 3 BAR CHART change between graph/sentence ----------------------------------
   # Probation Graph - Dynamically change between sentence and graph depending on data availability
   # Show "Data Unavailable", "Did Not Respond" or "Partial Data Submitted" or chart if required data is available
-  #######
 
   # If data is missing a probation violation admissions graph
-  output$missing_data_probation_nt_adm <- renderUI({
-    out <- missingness_sentences %>%
-      filter(state == input$state_report)
-    out <- out$probation_violation_admissions_graph
+  output$missing_data_probation_nt <- renderUI({
+    out <- missingness_sentences |>
+      filter(state == input$state_report) |> 
+      rename(thiscol = paste0("probation_violation_", tolower(input$adm_pop_report), "_graph"))
+    out <- out$thiscol
     HTML(out)
-  }) %>%
-    bindCache(input$state_report)
-
-  # If data is missing a probation violation population graph
-  output$missing_data_probation_nt_pop <- renderUI({
-    out <- missingness_sentences %>%
-      filter(state == input$state_report)
-    out <- out$probation_violation_population_graph
-    HTML(out)
-  }) %>%
+  }) |>
     bindCache(input$state_report)
 
   # Show probation graph or missing data sentence depending on state
   output$probation_nt <- renderUI({
 
-    # If state is missing new offense violations and technical violations (Admissions)
-    if(input$state_report %in% probation_na_adm &
-       input$adm_pop_report == "Admissions"){
-
-      fluidRow(column(width = 3),
-               column(width = 6, align = "center",
-                      htmlOutput("missing_data_probation_nt_adm")),
-               column(width = 3))
-
-      # If state is missing new offense violations and technical violations (Population)
-    } else if(input$state_report %in% probation_na_pop &
-              input$adm_pop_report == "Population"){
-
-      fluidRow(column(width = 3),
-               column(width = 6,
-                      align = "center",
-                      htmlOutput("missing_data_probation_nt_pop")),
-               column(width = 3))
-
-      # If state has data (Admissions)
-    } else if(input$state_report %in% probation_not_na_adm &
-              input$adm_pop_report == "Admissions"){
-
-      fluidRow(column(width = 3),
-               column(width = 5, align = "center",
-                      highchartOutput("probation_bar_chart",
-                                      height = 400, width = 390)),
-               column(width = 1, align = "left",
-                      downloadButton(outputId = 'save_probation_bar_chart', "",
-                                     class = "download-chart")),
-               column(width = 3))
-
-      # If state has data (Population)
-    } else if(input$state_report %in% probation_not_na_pop &
-              input$adm_pop_report == "Population"){
-
-      fluidRow(column(width = 3),
-               column(width = 5, align = "center",
-                      highchartOutput("probation_bar_chart",
-                                      height = 400, width = 390)),
-               column(width = 1, align = "left",
-                      downloadButton(outputId = 'save_probation_bar_chart', "",
-                                     class = "download-chart")),
-               column(width = 3))
+    miss_text <- missingness_sentences |> 
+      filter(state == input$state_report) |> 
+      pull(paste0("probation_violation_", tolower(input$adm_pop_report), "_graph"))
+    
+    if (is.na(miss_text)){
+      # if 'miss_text' == NA --> data to plot
+      fluidRow(
+        column(width = 3),
+        column(
+          width = 5,
+          align = "center",
+          highchartOutput("probation_bar_chart", height = 400, width = 390)
+        ),
+        column(
+          width = 1,
+          align = "left",
+          downloadButton(outputId = 'save_probation_bar_chart', "", class = "download-chart")
+        ),
+        column(width = 3)
+      )
+    } else {
+      # if 'miss_text' != NA --> show sentence instead
+      fluidRow(
+        column(width = 3),
+        column(width = 6, align = "center", htmlOutput("missing_data_probation_nt")),
+        column(width = 3)
+      )
     }
-    }) %>%
+    
+    
+  }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
 
-  ####
-  ## RACE/ETHNICITY DISPARITIES TAB
-  ###
 
-  ############################################################################################################################################ tooltip
-
-  # Generate tooltip depending on Total disparities or Portion of disparities attributable to parole revocations
-  disparities_tooltip <- reactiveValues()
-  observe({
-    disparities_tooltip$a <- ifelse(input$pop_denom =="BJS",
-                    disparities_definitions %>% filter(term == "Portion of Disparities Attributable to Parole Revocations") %>% pull(definition),
-                    disparities_definitions %>% filter(term == "Total Disparities") %>% pull(definition))
-  })
-  output$redefinition_tooltip <- renderUI({
-    mytooltip <- gsub("<b>|</b>|<i>|</i>", "",
-                      disparities_tooltip$a)
-    shiny::tags$span(tipify(el = icon("info-circle",
-                               lib = "font-awesome",
-                               style = "color: #D25E2D; font-size: 0.5em;"),
-                     title = disparities_tooltip$a),
-              "aria-label" = mytooltip
-    )
-  })
-
-  ############################################################################################################################################ tooltip
-
-  # REMOVE MODAL FOR NOW
-  # When Race/Ethinicity tab is selected, show pop up about how data is not MCLC
-  # This will only occur once per session automatically, see localsession
-  # localsession <- TRUE
-  # observeEvent(input$tabsetpanel, {
-  #   if (input$tabsetpanel == 4 & localsession)  {
-  #     localsession <<- FALSE
-  #     re_modal()
-  #     observeEvent(input$close_modal, {
-  #       removeModal()
-  #       dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
-  #
-  #       if (dataavail == 0) {
-  #         first_guide$init()
-  #         first_guide$remove(step = c("#infopanel-id", "ip1"))
-  #       } else {
-  #         first_guide$init()
-  #         first_guide$remove(step = c("#infopanel-id", "ip2"))
-  #       }
-  #
-  #       first_guide$start()
-  #     })
-  #   }
-  # })
-  #
-  # observeEvent(input$show_guide, {
-  #   re_modal()
-  # })
-
-  # Intiate guide when Race and Ethnicity tab are selected.
-  localsession <- TRUE
-  observeEvent(input$tabsetpanel, {
-    if (input$tabsetpanel == 4 & localsession)  {
-      localsession <<- FALSE
-      dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
-
-      if (dataavail == 0) {
-        first_guide$init()
-        first_guide$remove(step = c("#infopanel-id", "ip1"))
-      } else {
-        first_guide$init()
-        first_guide$remove(step = c("#infopanel-id", "ip2"))
-      }
-
-      first_guide$start()
-    }
-  })
-
-  observeEvent(input$show_guide, {
-    first_guide$init()
-    first_guide$start()
-  })
-
-
-  output$retitleend <- renderText({
-    case_when(
-      # Portion of disparities attributable to parole revocations
-      input$adm_pop_report == "Admissions" & input$pop_denom == "BJS" ~ "Racial and ethnic disparities in prison admissions for parole revocations represent the accumulation of disparities across the system. Only a portion of these disparities can be attributed to parole revocations.",
-      input$adm_pop_report == "Population" & input$pop_denom == "BJS" ~ "Racial and ethnic disparities in populations incarcerated for parole revocations represent the accumulation of disparities across the system. Only a portion of these disparities can be attributed to parole revocations.",
-      # Total Disparities
-      input$adm_pop_report == "Admissions" & input$pop_denom == "CEN" ~ "Racial and ethnic disparities in prison admissions for parole revocations represent the accumulation of disparities across the system.",
-      input$adm_pop_report == "Population" & input$pop_denom == "CEN" ~ "Racial and ethnic disparities in populations incarcerated for parole revocations represent the accumulation of disparities across the system."
-    )
-  })
-
-
-
-
-
-  output$infogblack <- renderImage({
-    png_file  <- glue("data/infogs/{input$adm_pop_report}_{input$state_report}_{input$pop_denom}_Black.png")
-    if (file.exists(png_file)){
-      plot <- png_file
-      list(
-        src =normalizePath(plot)
-        , contentType = "image/png"
-        , alt = raceethnicity$infograph_alt(rridata, input$adm_pop_report, input$pop_denom, "Black", input$state_report)
-        , width = "130%"
-      )
-    } else { #should not be needed - used as back-up
-      plot <- ggplot2::ggplot() + ggplot2::theme_void()
-      file <- tempfile(fileext = ".png")
-      ggplot2::ggsave(filename = file, plot = plot, width = 24, height = 0.5)
-      list(
-        src =normalizePath(file)
-        , contentType = "image/png"
-        , alt = raceethnicity$infograph_alt_noinfog(input$adm_pop_report, input$pop_denom, "Black", input$state_report)
-        , width = "130%"
-      )
-    }
-  }, deleteFile = FALSE)
-
-  output$infoghisp <- renderImage({
-    png_file  <- glue("data/infogs/{input$adm_pop_report}_{input$state_report}_{input$pop_denom}_Hispanic.png")
-    if (file.exists(png_file)){
-      plot <- png_file
-      list(
-        src =normalizePath(plot)
-        , contentType = "image/png"
-        , alt = raceethnicity$infograph_alt(rridata, input$adm_pop_report, input$pop_denom, "Hispanic", input$state_report)
-        , width = "130%"
-      )
-    } else { #should not be needed - used as back-up
-      plot <- ggplot2::ggplot() + ggplot2::theme_void()
-      file <- tempfile(fileext = ".png")
-      ggplot2::ggsave(filename = file, plot = plot, width = 24, height = 0.5)
-      list(
-        src =normalizePath(file)
-        , contentType = "image/png"
-        , alt = raceethnicity$infograph_alt_noinfog(input$adm_pop_report, input$pop_denom, "Hispanic", input$state_report)
-        , width = "130%"
-      )
-    }
-  }, deleteFile = FALSE)
-
-  output$infogheader <- renderUI({
-    dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
-    out <- paste0(
-      raceethnicity$pop_denom_text(input$pop_denom, input$adm_pop_report)
-      , raceethnicity$infographic_header(dataavail, input$pop_denom, input$adm_pop_report, rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$NOTE)
-    )
-    HTML(out)
-  })
-
-  output$renote <- renderText({
-    if(input$pop_denom == "BJS"){
-      "Note that the disparities in parole revocations can either amplify or reduce preexisting disparities."
-    } else if (input$pop_denom == "CEN"){
-      ""
-    }
-
-  })
-
-  output$howitscalculated <- renderUI({
-    out <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$CALCTXT
-    HTML(out)
-  })
-
-  output$table_rri_header <- renderUI({
-    df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "RRI", whichTABLE = "table_suppress")
-    main <- "<h4 class='reh4'> Relative Rate Index (White Reference Group)</h4>"
-    if (nrow(df) > 0){
-      out <- main
-    } else {
-      out <- paste0( main
-                     , "<div class = 'retxt'>"
-                     , "Data to calculate relative rate index were not available for "
-                     , input$state_report
-                     , ".</div>"
-      )
-    }
-    HTML(out)
-  })
-
-  output$table_rri <- renderUI({
-    df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "RRI", whichTABLE = "table_suppress")
-    dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
-    if (dataavail == 1){
-      raceethnicity$create_reactable(df)
-    }
-  })
-
-  output$table_rate_header <- renderUI({
-    df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "RATE", whichTABLE = "table_suppress")
-    main <- raceethnicity$rate_table_header(input$pop_denom, input$adm_pop_report, rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]][["RATE"]]$mult)
-    if (nrow(df) > 0){
-      out <- main
-    } else {
-      out <- paste0(  main
-                      , "<div class = 'retxt'>"
-                      , "Data to calculate rates were not available for "
-                      , input$state_report
-                      , "</div>")
-    }
-    HTML(out)
-  })
-
-  output$table_rate <- renderUI({
-    df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "RATE", whichTABLE = "table_suppress")
-    if (nrow(df) > 1){
-      raceethnicity$create_reactable(df)
-    }
-  })
-
-  # output$table_revcnt_header <- renderUI({
-  #   df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")
-  #   main <- "<h4 class='reh4'>Readmissions to Prison from Parole Counts</h4>"
-  #   if (nrow(df) > 0){
-  #     out <- main
-  #   } else {
-  #     out <- paste0(  main
-  #                     , "<div class = 'retxt'>"
-  #                     , "Readmissions to prison from parole data were not available for "
-  #                     , input$state_report
-  #                     , "</div>")
-  #   }
-  #   HTML(out)
-  # })
-  output$table_revcnt_header <- renderUI({
-
-    df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")
-
-    if (input$adm_pop_report == "Population") {
-      main_header <- "Number of People Incarcerated for Parole Revocations"
-    } else if (input$adm_pop_report == "Admissions") {
-      main_header <- "Admissions from Parole"
-    }
-
-    if (nrow(df) > 0) {
-      out <- paste0("<h4 class='reh4'>", tools::toTitleCase(main_header), "</h4>")
-    } else {
-      out <- paste0(
-        "<h4 class='reh4'>", tools::toTitleCase(main_header), "</h4>",
-        "<div class='retxt'>",
-        tools::toTitleCase(main_header), " data were not available for ",
-        input$state_report,
-        "</div>"
-      )
-    }
-
-    HTML(out)
-  })
-
-
-  output$table_revcnt <- renderUI({
-    df <- raceethnicity$create_tabledf(rridata, input$adm_pop_report, input$pop_denom, input$state_report, "REVCNT", whichTABLE = "table_suppress")
-    if (nrow(df) > 1){
-      raceethnicity$create_reactable(df)
-    }
-  })
-
-  # conditional panel for tables
-  output$showtablepanel <- reactive({ input$showtables })
-  outputOptions(output, 'showtablepanel', suspendWhenHidden = FALSE)
-
-
-  # conditional panel for infographics
-  output$showinfogpanel <- reactive({
-    dataavail <- rridata[[input$adm_pop_report]][[input$pop_denom]][[input$state_report]]$INFOGRAPH$DATAAVAIL
-    ifelse(dataavail == 1, TRUE, FALSE)
-  })
-  outputOptions(output, 'showinfogpanel', suspendWhenHidden = FALSE)
-
-  ##############################################################################################################################
-  # Download
-  ##############################################################################################################################
+  # DOWNLOAD DATA ##############################################################
 
   # Select multiple years
   filteredYears <- reactive({
-    unique(csg$year)
+    unique(svii_download$year)
   })
   observeEvent(filteredYears(), {
     updatePickerInput(session, inputId = 'download_year',
@@ -1418,7 +833,7 @@ server <- function(input, output, session) {
 
   # Select multiple state
   filteredState <- reactive({
-    unique(csg$state)
+    unique(svii_download$state)
   })
   observeEvent(filteredState(), {
     updatePickerInput(session, inputId = 'download_state',
@@ -1429,7 +844,7 @@ server <- function(input, output, session) {
 
   # Select multiple metrics
   filteredMetric <- reactive({
-    unique(csg$metric)
+    unique(svii_download$metric)
   })
   observeEvent(filteredMetric(), {
     updatePickerInput(session, inputId = 'download_metric',
@@ -1440,12 +855,12 @@ server <- function(input, output, session) {
 
   # Filter data depending on user input
   df_download_table <- reactive({
-    csg %>%
-      filter(year %in% input$download_year) %>%
-      filter(state %in% input$download_state) %>%
-      filter(metric %in% input$download_metric) %>%
+    svii_download |>
+      filter(year %in% input$download_year) |>
+      filter(state %in% input$download_state) |>
+      filter(metric %in% input$download_metric) |>
       arrange(state, year)
-  }) %>%
+  }) |>
     bindCache(input$download_year,
               input$download_state,
               input$download_metric)
@@ -1464,7 +879,7 @@ server <- function(input, output, session) {
   # Reactable table of MCLC data for download
   output$selected_download_table <- renderReactable({
 
-    df1 <- df_download_table() %>%
+    df1 <- df_download_table() |>
       mutate(state = factor(state))
 
     reactable(df1,
@@ -1494,4 +909,4 @@ server <- function(input, output, session) {
                                 filterable = FALSE)))
   })
 
-}
+} # END SERVER 

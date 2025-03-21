@@ -308,6 +308,23 @@
       ],
       "Hash": "40415719b5a479b87949f3aa0aee737c"
     },
+    "bookdown": {
+      "Package": "bookdown",
+      "Version": "0.42",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "htmltools",
+        "jquerylib",
+        "knitr",
+        "rmarkdown",
+        "tinytex",
+        "xfun",
+        "yaml"
+      ],
+      "Hash": "90963be120796226223d361b3e6c362a"
+    },
     "box": {
       "Package": "box",
       "Version": "1.2.0",
@@ -487,18 +504,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "14eb0596f987c71535d07c3aff814742"
-    },
-    "conductor": {
-      "Package": "conductor",
-      "Version": "0.1.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R6",
-        "htmltools",
-        "shiny"
-      ],
-      "Hash": "441dd87fadb6d703b8d33ef247117fd4"
     },
     "conflicted": {
       "Package": "conflicted",
@@ -1569,6 +1574,26 @@
       ],
       "Hash": "55ddd2d4a1959535f18393478b0c14a6"
     },
+    "pagedown": {
+      "Package": "pagedown",
+      "Version": "0.22",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "bookdown",
+        "htmltools",
+        "httpuv",
+        "jsonlite",
+        "later",
+        "processx",
+        "rmarkdown",
+        "servr",
+        "websocket",
+        "xfun"
+      ],
+      "Hash": "d8388e1dfd8588f3ebd3f3f905c41930"
+    },
     "patchwork": {
       "Package": "patchwork",
       "Version": "1.3.0",
@@ -2170,6 +2195,20 @@
         "stringr"
       ],
       "Hash": "3838071b66e0c566d55cc26bd6e27bf4"
+    },
+    "servr": {
+      "Package": "servr",
+      "Version": "0.32",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "httpuv",
+        "jsonlite",
+        "mime",
+        "xfun"
+      ],
+      "Hash": "63e4ea2379e79cf18813dd0d8146d27c"
     },
     "sf": {
       "Package": "sf",

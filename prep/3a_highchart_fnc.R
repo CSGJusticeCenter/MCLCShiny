@@ -10,23 +10,27 @@ library(rjson)
 # can't use box for these func; need to use library for func otherwise highchart won't render 
 # don't have time to explore reasoning at the moment
 
-# remotes::install_github("rstudio/webshot2")
-
 box::use(
   ./box/admin, 
   , glue[glue]
   , htmlwidgets[saveWidget]
-  , webshot2[...]
+  , pagedown[chrome_print]
 )
 
 # load data frames -------------------------------------------------------------
 
-for (x in c("svii_agg", "svii_explorer", "svii_yr")){
+# data frames used within app  
+for (x in c("svii_explorer", "svii_yr")){
   df <- readRDS(paste0("app/data/", x, ".rds")) |> tibble::as_tibble()
   assign(x, df)
   rm(df)
   rm(x)
 }
+
+# svii_agg is not needed on repo, but is for creation of plots 
+# this data is saved in prep folder because it's needed for plots 
+svii_agg <- readRDS("prep/svii_agg.rds")
+
 
 # assign colors for visualizations ---------------------------------------------
 source("app/colors.R")
@@ -257,7 +261,7 @@ fnc_hc_hex_map <- function(this_type, this_year_chg, this_metric){
   
   this_title <- case_when(
     this_metric != "Total" & this_type == "Admissions" ~ paste0("Change in Admissions to State Prison for ", this_metric, "s"), 
-    this_metric != "Total" & this_type == "Population" ~ paste0("Change in State Prison Population  for "  , this_metric, "s"),
+    this_metric != "Total" & this_type == "Population" ~ paste0("Change in State Prison Population for "  , this_metric, "s"),
     this_metric == "Total" & this_type == "Admissions" ~ "Change in Total Admissions to State Prison", 
     this_metric == "Total" & this_type == "Population" ~ "Change in Total Population in State Prison"
   )
@@ -445,8 +449,8 @@ fnc_hc_area <- function(this_type, this_state,
   
   subtitle_name <- this_df |> 
     filter(metric == "Supervision Violation") |> 
-    distinct(probation_or_parole) |> 
-    pull(probation_or_parole)
+    distinct(subtitle_areabar) |> 
+    pull(subtitle_areabar)
   
   access_text <- paste0(
      "This is an area chart for the state of ", 
@@ -543,7 +547,7 @@ fnc_hc_bar <- function(this_type, this_supervision, this_state){
   )
   
   subtitle_name <- case_when(
-    this_supervision == "Both" ~ filter(this_df, metric == "Technical Violation")$probation_or_parole |> unique(), 
+    this_supervision == "Both" ~ filter(this_df, metric == "Technical Violation")$subtitle_areabar[1], 
     this_supervision != "Both" ~ NA_character_
   )
   
@@ -621,9 +625,13 @@ save_hc_to_html <- function(this_hc, this_filename, lst = NA){
   saveWidget(
     this_hc, 
     file = "temp.html", 
-    # file = paste0("temp/", this_filename, ".html"), 
     selfcontained = TRUE
   ) 
+  
+  # remove old version (if it exists)
+  if (file.exists(paste0("temp/", this_filename, ".html"))){
+    file.remove(paste0("temp/", this_filename, ".html"))
+  }
   
   # copy file to temp folder with new name 
   file.copy(
@@ -652,32 +660,30 @@ save_hchtml_to_png <- function(this_filename, lst = NA){
   
   if (substr(this_filename, 1, 6) == "Change"){
     # if file name starts with 'Change' then it's a hex map 
-    #NATIONAL PLOT, use default values; ?webshot2::webshot
-    # outputs are saved 992 x 744
-    this_vwidth = 992 #default 
-    this_vheight = 744
-    this_zoom = 1
+    # area/bar charts 
+    # img_w: (1026-16)*1 = 1010 | 1026 --> 1010 # need to be 1010 to fit title on 1 line 
+    # img_h: ( 853-95)*1 =  758 |  853 -->  758
+    this_window_size <- c("--window-size=1016,853") 
+    this_scale <- 1
   } else {
-    # STATE PLOT, adj values 
-    # outputs are saved as 1000 x 1000
-    # 1000 = 500 (h/w) * 2 (zoom) 
-    this_vwidth = 500 
-    this_vheight = 500
-    this_zoom = 2 
-    # old version had zoom of 4; change to 2 so state pngs are ~ savem width as hex pngs 
+    # area/bar charts 
+    # img_w: (516-16)*2 = 1000 | 516 --> 1000
+    # img_h: (595-95)*2 = 1000 | 595 --> 1000
+    this_window_size <- c("--window-size=516,595") 
+    this_scale <- 2
   }
   
   filename_ext <- paste0(this_filename, ".png")
   save_plots_to <- file.path(      "app/data/plots", filename_ext) 
-  # copy_plots_to <- file.path(admin$sp_data, "plots", filename_ext)
+  copy_plots_to <- file.path(admin$sp_data, "plots", filename_ext)
   
-  webshot2::webshot(
-    url = paste0("temp/", this_filename, ".html"), 
-    file = save_plots_to, 
-    vwidth = this_vwidth,
-    vheight = this_vheight,
-    delay = 0.5, 
-    zoom = this_zoom
+  pagedown::chrome_print(
+    input = paste0("temp/", this_filename, ".html"), 
+    output = save_plots_to, 
+    format = "png", 
+    scale = this_scale, 
+    extra_args = this_window_size, 
+    verbose = 1
   )
-  #file.copy(from = save_plots_to, to = copy_plots_to)
+  file.copy(from = save_plots_to, to = copy_plots_to)
 }

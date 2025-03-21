@@ -1,0 +1,312 @@
+---
+title: "SVII Shiny Documentation" 
+date: now
+date-format: "YYYY-MM-DD HH:mm:ss z"
+published-title: "Last run"
+editor: source
+execute: 
+  echo: false 
+self-contained: true 
+format: 
+  html:
+    page-layout: full
+    fig-width: 12
+    toc: true
+    toc-depth: 4
+    toc-location: left
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| include: false 
+library(tidyverse)
+library(csgjcr)
+
+
+svii_agg <- readRDS("../prep/svii_agg.rds")
+```
+
+
+# Input Data 
+
+- source file:  [50 State Revocations Project/50 State Survey (2024)/Data/raw/combined/svii_main.rds](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282024%29%2FData%2Fraw%2Fcombined%2Fsvii%5Fmain%2Erds&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98&parent=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282024%29%2FData%2Fraw%2Fcombined) 
+- documentation on creation of `svii_main.rds` file: [50 State Revocations Project/50 State Survey (2024)/Data/raw/survey_documentation.html](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282024%29%2FData%2Fraw%2Fsurvey%5Fdocumentation%2Ehtml&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98&parent=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282024%29%2FData%2Fraw)
+- repo that creates `svii_main.rds`: [50_state_revocations](https://github.com/CSGJusticeCenter/50_state_revocations)
+- Data from the current survey is added to the data from previous surveys, the output files in the [combined](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282024%29%2FData%2Fraw%2Fcombined&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98) folder include data available from 2018-2023 
+- The previous survey data is pulled from [50 State Revocations Project/MCLC Shiny App/data/raw/mclc/mclc_data_2022_v9.xlsx](https://csgorg.sharepoint.com/:x:/r/sites/Team-JC-Research/_layouts/15/Doc.aspx?sourcedoc=%7B286F1BA7-7E51-42F5-893F-9ABCE4D04451%7D&file=mclc_data_2022_v9.xlsx&action=default&mobileredirect=true). This file was used as it's the the [file imported](https://github.com/CSGJusticeCenter/MCLCShiny/blob/323a8670ca2dac362bc7cc30f48697b9c4eb35de/import.R#L41) in the [v2.0.00 (Apr 2024)](https://github.com/CSGJusticeCenter/MCLCShiny/releases/tag/v2.0.00) of the app. 
+
+
+
+# Data Management 
+
+## True Zeros 
+
+A true value of zero means:  
+
+1. the metric exits (i.e. the state has parole) 
+2. the metric can be measured (i.e. the state's data system allows for pulling parole data) 
+3. the value is 0 
+
+## Values of 0's and NA's 
+
+In v2.0.00 (Apr 2024) of the app, [all 0 values were converted to NA's](https://github.com/CSGJusticeCenter/MCLCShiny/blob/323a8670ca2dac362bc7cc30f48697b9c4eb35de/import.R#L253-L254). This was done for two main reasons: 
+
+1. Make tables/charts easier to read without an excess of 0 values 
+2. Assuming most, if not all, 0 values were not 'true' 0 values 
+
+
+### MCLC Data (2018-2021) - zero values 
+
+In the MCLC era of data collection, data was collected via a google spreadsheet ([template spreadsheet for example](https://docs.google.com/spreadsheets/d/1JgiuQTz-ZLF5xByb3Wftq4GaTNCajsZ-gL79VDDmkPU/edit?gid=2093233864#gid=2093233864)).  States, in a desire to complete the submission, would put a value of '0' into the cell when the data metric was unavailabe (either because it didn't exists, like parole was abolished, or that metric could not be accessed from the data system).  
+
+
+```{r}
+#| label: import-mclc-2022-data
+## code taken from 2024_survey/survey/admin.R file in the 50_state_revocations repo 
+## https://github.com/CSGJusticeCenter/50_state_revocations/blob/cc36061888e519af02beb84fc90f736a99d9709f/2024_survey/survey/admin.R
+
+box::use(
+  readxl[read_excel]
+)
+
+## https://github.com/CSGJusticeCenter/50_state_revocations/blob/cc36061888e519af02beb84fc90f736a99d9709f/2024_survey/survey/admin.R#L19-L23
+pathway_data_raw <- csg_sp_path(
+  "50 State Revocations Project", "50 State Survey (2024)", 
+  "Data", "raw")
+
+## https://github.com/CSGJusticeCenter/50_state_revocations/blob/cc36061888e519af02beb84fc90f736a99d9709f/2024_survey/survey/admin.R#L26-L30
+info_file <- file.path(pathway_data_raw, "survey_metrics_and_categories.xlsx")
+
+main_metrics <- read_excel(info_file, sheet = "main") |> 
+  mutate(sum_of_abbr = ifelse(sum_of_abbr == "NA", NA, str_split(sum_of_abbr, ", ")))
+
+## https://github.com/CSGJusticeCenter/50_state_revocations/blob/cc36061888e519af02beb84fc90f736a99d9709f/2024_survey/survey/admin.R#L78
+main_metric_fct_order <- main_metrics$metric
+
+## https://github.com/CSGJusticeCenter/50_state_revocations/blob/cc36061888e519af02beb84fc90f736a99d9709f/2024_survey/survey/admin.R#L82-L107
+## rm code about converting zeros so can review which values are 0 
+mclc_2022_survey <- read_excel(
+  csg_sp_path("50 State Revocations Project", "MCLC Shiny App", "data", "raw", "mclc", "mclc_data_2022_v9.xlsx"), 
+) |> 
+  pivot_longer(-c(states, year), names_to = "rawmetric", values_to = "n") |> 
+  mutate(
+    metric = str_to_title(str_replace_all(rawmetric, "_", " ")), 
+    metric_short = word(metric, 1, -2), 
+    type = word(metric, -1), 
+    year = as.numeric(year), 
+    n = as.numeric(n) 
+  ) |> 
+  full_join(filter(main_metrics, optional_metric == FALSE), by = c("metric", "metric_short", "type")) |> 
+  mutate(group = "aggregate", group_cat = "aggregate") |> 
+  mutate(
+    metric = factor(metric, main_metric_fct_order), 
+    metric_abbr = factor(metric_abbr, main_metrics$metric_abbr)
+  ) |> 
+  arrange(desc(year), metric) |> 
+  select(state = states, year, metric_abbr, type, group_cat, group, n, metric, metric_short)
+```
+
+
+```{r}
+zero_22_instances <- mclc_2022_survey |> 
+  filter(n == 0) |> 
+  count(state, type, metric_abbr)
+
+zero_22_states <- unique(zero_22_instances$state)
+
+## table data for state 
+# mclc_2022_survey |> filter(state == zero_22_states[3]) |>
+#   select(state, year, metric_abbr, n) |>
+#   arrange(year) |>
+#   pivot_wider(names_from = year, values_from = n) |>
+#   arrange(metric_abbr)
+```
+
+There were `r length(zero_22_states)` states that had 0 values: `r paste(zero_22_states, collapse = ", ")`
+
+
+- **Alabama**
+  * provided 0's for population new offense violation metrics for 2018-2021
+  * AL population data includes only the subset of individuals for technical violations (not new violations) 
+  * ***UPDATE: in 2022-2023, AL provided population new offense violation metrics***
+- **Illinois**
+  * provided 0's for all probation metrics for 2018-2021
+  * IL probation is run by a separate organization (Administrative Office of the Illinois Courts) - DOC is unable to provide probation data 
+  * *Metrics that were 0's in 2018-2021 were not submitted in 2022-2023, NA's for 2018-2023*
+- **Maine**
+  * provided 0's for admissions parole data for 2018-2020
+  * ME provide NA's for metrics in 2021; ME does not have parole (abolished in 1976)
+  * *Metrics that were 0's in 2018-2021 were not submitted in 2022-2023, NA's for 2018-2023*
+- **Michigan**
+  * provided 0's for population probation metrics and population new offense metrics
+  * MI can't provide probation data or new offense data on population - MI only tracks people with technical parole violations in prison populations 
+  * *Metrics that were 0's in 2018-2021 were not submitted in 2022-2023, NA's for 2018-2023*
+- **Minnesota**
+  * provided 0's for `p new prob`, provided NA values for `a new prob`
+  * MN can't provide probation breakdown 
+  * *Metrics that were 0's in 2018-2021 were not submitted in 2022-2023, NA's for 2018-2023*
+- **Washington**
+  * provided 0's for all probation metrics
+  * All "community custody" supervision trends reported in the post-release/parole sections
+  * ***UPDATED: in 2022-2023 WA provided all probation metrics***
+- **West Virginia**
+  * provided 0's for population parole data
+  * prison population does not identify people who were previously on parole 
+  * *WV resubmitted 2018-2021 values as a part of their 2022-2023, structure is consistent population parole metrics are not submitted, NA's for 2018-2023*
+
+
+### SVII Data (2018-2023) - zero values 
+
+
+In the most recent data collection (survey conducted in 2024, collecting data for 2022-2023), states were asked to submit data in whatever format they desired.  This lead to a lot fewer of not true 0's - if a state didn't have our couldn't measure a certain metric, it simply wasn't included in the submission.  
+
+```{r}
+# prep/2a_import_surve.R files 
+svii_raw <- readRDS(csg_sp_path("50 State Revocations Project/50 State Survey (2024)/Data/raw/combined/svii_main.rds")) 
+
+svii_raw |> 
+  filter(group == "aggregate") |> 
+  filter(n == 0) |> 
+  select(state_name, metric_abbr, year, n) |> 
+  print(n = 17)
+```
+
+when looking at **aggregate** data there are only 17 instances of a 0 value.  
+
+- 12 instances are for unknown parole/probation violations
+  * new metric for states who know that an observation is a parole or probation violation, but cannot determine if the observation is a new offense or technical violations 
+  * the unknown metrics are used to help create the 'upper' metrics (i.e. prob = new prob + tech prob + unk prob) and to check sums (see an [individual data summary html](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282024%29%2FData%2Fraw%2Fstate%5Fsurvey&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98), and review the Data Check section )
+  * the unk par/prob metrics are NOT shown in the app, thus these instances of zero can be ignored (they are filtered out of the display data frame)
+  * States: Colorado and Mississippi 
+- 5 instances: Indiana and Massachusetts 
+  * admission data only 
+  * believe these are 'true' zeros because non-zero values were provided in other years or in population table submitted 
+  * These 0 values should be retained 
+  
+**The code that replaced 0's with NA's in the shiny prep has been removed.**  
+
+Originally, code that replaced 0's with NA was a part of the data prep for the shiny app (`2a_import_survey.R`).  This code has been removed because it's not longer needed: (1) converting the necessary 0's to NA's in the old MCLC 2018-2021 data is already completed in [50_state_revocations/2024_survey/survey/admin.R](https://github.com/CSGJusticeCenter/50_state_revocations/blob/cc36061888e519af02beb84fc90f736a99d9709f/2024_survey/survey/admin.R#L82-L107) and (2) values of 0 that will go into the aggregate version of the app have alrady been check (text above).  
+
+::: {.callout-note}
+## Demographic Breakdown App: Need Systematic Review of 0's
+- I remember some state providing a table where sometimes where were blanks and sometimes 0's
+- will want to review data to make sure it 'make sense' for each of the demographic breakdowns 
+- race/ethnicity breakdowns will be the most likely to have issues, as certain categories have very low counts 
+:::
+
+
+### Links 
+
+[MCLC Overview](https://csgorg.sharepoint.com/:x:/r/sites/Team-JC-Research/_layouts/15/Doc.aspx?sourcedoc=%7BF426FDAC-51FA-4DC3-BD33-6867446FD73B%7D&file=MCLC%20Overview.xlsx&action=default&mobileredirect=true) spreadsheet - Missingness 2022 tab: talked about missingness and 0 values for each state.  
+
+
+Slack messages from Mari Roberts (original author of code) on July 19, 2024: 
+
+> Here are the reasons I believe I made this choice [to convert 0's to NA]  
+> Zero values can clutter the chart and make it less readable.  
+> I don't think any states actually had any true "0"s?  
+> Except for the ones that have abolished parole, perhaps.  
+
+[Slack Link 1](https://csgjc.slack.com/archives/D03GCM55S3A/p1721399582244449) 
+[Slack Link 2](https://csgjc.slack.com/archives/D03GCM55S3A/p1721399594922169) 
+[Slack Link 3](https://csgjc.slack.com/archives/D03GCM55S3A/p1721399610265279)
+[Slack Link 4](https://csgjc.slack.com/archives/D03GCM55S3A/p1721399634778509)
+
+
+## Subtitles (State Dashboards) 
+
+Subtitles are placed within in the values boxes and the area/bar charts on the overview tab when there is only probation, only parole, or partial data available.   
+
+### Conditions for Subtitles 
+
+There are 4 values boxes on the state dashboard that represent: 
+
+1. Overall admissions/population in 2023 
+2. Supervision violation admissions/population  in 2023 (supervision)
+3. Technical violation admissions/population in 2023 (tech)
+4. New offense violation admissions/population in 2023 (new)
+
+Only supervision, tech, and new have the option for a subtitle.  The subtitle for the value boxes check on a **yearly** basis.  Check probation/parole breakout for each metric to determine if only probation/only parole data is available for that metric in that year.  
+
+```{r}
+# prep/2a_import_surve.R files -- part of svii_agg creation, above svii_subtitle_vb 
+subtext_no_par <- "(No Parole Data Available)"
+subtext_no_prob <- "(No Probation Data Available)"
+subtext_nodata <- "no data" 
+subtext_gen_partial <- "(Partial Data Available)"
+
+
+subtext_no_probpar <- str_replace(subtext_no_par, "Parole", "[Probation/Parole]")
+```
+
+
+::: {style="font-size:0.8em;"}
+| Supervision | Technical | New Offense |  *Subtitle for Value Boxes*| 
+|:-----:|:-----:|:-----:|:-----:| 
+| `!is.na(prob) & !is.na(par)` | `!is.na(tech_prob) & !is.na(tech_par)` | `!is.na(new_prob) & !is.na(new_par)` | `NA` |  
+| `is.na(prob) & is.na(par)`   | ` is.na(tech_prob) & is.na(tech_par)`  | `is.na(new_prob) & is.na(new_par)`   | `r subtext_nodata` |  
+| `!is.na(prob) &  is.na(par)` | `!is.na(tech_prob) &  is.na(tech_par)` | `!is.na(new_prob) &  is.na(new_par)` | `r subtext_no_par` | 
+| `is.na(prob)  & !is.na(par)` | `is.na(tech_prob)  & !is.na(tech_par)` | `is.na(new_prob)  & !is.na(new_par)` | `r subtext_no_prob`|
+: Conditions for Determining Subtitles for Value Boxes for a Specific Year 
+:::
+
+<br> 
+After the subtitles are completed for the value boxes on a yearly basis, we need to determine the subtitles on a grouped basis (for 2018-2023 instead of for a single year). In order to determine the grouped subtitle, we look at the subtitle for each year of a given group (there should be 6 cells for each group, 1 for each year from 2018-2023).  
+
+::: {style="font-size:0.8em;"}
+| Conditions (same conditions for supervision, tech, and new) |  *grouped text*| 
+|:-------------|:-------|
+| All cells are equal, each cell is `NA` | `NA` |
+| All cells are equal, each cell is "`r subtext_no_probpar`" | `r subtext_no_probpar`|
+| All cells are equal, each cell is "`r subtext_nodata`` | `r subtext_nodata` | 
+| Mix of NA's and text, all cells with text equal to "`r subtext_no_probpar`" | `r str_replace(subtext_no_probpar, 'No', 'Partial')` | 
+| Mix of NA's and text, all cells with text equal to "`r subtext_nodata`" | `r subtext_gen_partial` | 
+| All other situations (mix of different kinds of text) | `r subtext_gen_partial` | 
+: Conditions for Determining Grouped Text (combining years)  
+:::
+
+<br>
+After this step, you now I have a specific grouped text value for each of the 3 metrics in the value boxes (`supervision`, `new`, `tech`).  The final step is using these 3 pieces of text to determine the subtitle for the area and bar chart on the overview tab of the state dashboard.  
+
+
+::: {style="font-size:0.8em;"}
+| Conditions (same conditions for supervision, tech, and new) |  *grouped text*| 
+|:-------------|:-------|
+| `all(is.na(c(supervision, tech, new)))` | `NA` | 
+| `supervision == tech & tech == new`; all three values are the same text | `supervision` | 
+| `any(c(supervision, tech, new) == subtext_nodata)`; at least one is equal to "`r subtext_nodata`" | `r subtext_gen_partial` | 
+| `any(c(supervision, tech, new) == subtext_gen_partial)`; at least one is equal to "`r subtext_gen_partial`" | `r subtext_gen_partial` | 
+| else, any other combination | `r subtext_gen_partial` | 
+: Conditions for Determining Area/Bar Chart Subtitles 
+:::
+
+
+
+The final step is converting "`r subtext_nodata`" to `NA`.  When determining the subtitles, it's required to differentiate between instances where states have data and when they don't.  In the steps above, a state is flagged as not having data using "`r subtext_nodata`".  However, within the actually app we do not want to show a subtitle if a state doesn't have data (instead there will be other text available to indicate this).  
+
+### States with Subtitles 
+
+```{r}
+states_with_subtitles <- svii_agg |> 
+  filter(year == 2023) |> 
+  distinct(state_name, type, metric_abbr, subtitle_vb, subtitle_areabar) |> 
+  filter( !(is.na(subtitle_vb) & is.na(subtitle_areabar)) )
+```
+
+
+There are `r length(unique(states_with_subtitles$state_name))` that have a subtitle for the value boxes and/or a subtitle for the charts.  
+
+Reminder: `subtitle_vb`  is based on 2023 data only; `subtitle_areabar` is based on all years
+
+::: {style="font-size:0.8em;"}
+```{r}
+states_with_subtitles |> 
+  DT::datatable(
+    rownames = FALSE, 
+    options = list(
+      lengthMenu = list(c(10, 25, -1), c('10', '25', 'All'))
+    )
+  )
+```
+:::

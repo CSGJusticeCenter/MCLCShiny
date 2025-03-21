@@ -36,20 +36,23 @@ mylog <- function(text){
 #' @param obj object in r to save as rds; will be saved with obj name 
 #'
 #' @export
-save_rds_twice <- function(obj){
+save_rds_twice <- function(obj, save_to_sp = TRUE, save_to_repo = TRUE){
   
   obj_name <- deparse(substitute(obj))
   
-  # save on sharepoint 
-  # sp_path <-- file.path("<sp path>", paste0(obj_name, ".rds"))
-  # saveRDS(obj, sp_path)
-  # mylog(paste("export", obj_name, "to:", sp_path))
+  if (save_to_sp == TRUE){
+    # save on sharepoint 
+    sp_path <- file.path(sp_data, paste0(obj_name, ".rds"))
+    saveRDS(obj, sp_path)
+    mylog(paste("export", obj_name, "to:", sp_path))
+  }
   
-  # save in repo 
-  repo_path <- file.path("app/data", paste0(obj_name, ".rds"))
-  # repo_path <- file.path("test_data", paste0(obj_name, ".rds"))
-  saveRDS(obj, repo_path)
-  mylog(paste("export", obj_name, "to:", repo_path))
+  if (save_to_repo == TRUE){
+    # save in repo 
+    repo_path <- file.path("app/data", paste0(obj_name, ".rds"))
+    saveRDS(obj, repo_path)
+    mylog(paste("export", obj_name, "to:", repo_path))
+  }
   
   
 }
