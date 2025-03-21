@@ -51,10 +51,10 @@ Layout
 }
 
 /* Hide navigation bar menu items*/
-/*#navbarID{ display:none; } */ 
+#navbarID{ display:none; }  
 
 /* Hide navigation bar*/
-/*.navbar{ display:none !important;} */ 
+.navbar{ display:none !important;}  
 
 
 /* Top of page is a small grid of controls and info*/
