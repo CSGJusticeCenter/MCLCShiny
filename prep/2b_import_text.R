@@ -73,12 +73,6 @@ formatted_notes <- notes |>
 admin$save_rds_twice(formatted_notes)
 
 
-# admin$save_rds_twice(parole_notes)
-# admin$save_rds_twice(probation_notes)
-# admin$save_rds_twice(parole_asterisks_notes)
-# admin$save_rds_twice(probation_asterisks_notes)
-# admin$save_rds_twice(additional_notes)
-
 
 # MISSING-NESS NOTES -----------------------------------------------------------
 # Reformat data about probation and parole being abolished
@@ -110,16 +104,5 @@ missingness_sentences <- read_excel(
 
 
 admin$save_rds_twice(missingness_sentences)
-# admin$save_rds_twice(nt_na_adm)
-# admin$save_rds_twice(nt_na_pop)
-# admin$save_rds_twice(nt_not_na_adm)
-# admin$save_rds_twice(nt_not_na_pop) 
-# admin$save_rds_twice(parole_na_adm) 
-# admin$save_rds_twice(parole_na_pop)
-# admin$save_rds_twice(parole_not_na_adm)
-# admin$save_rds_twice(parole_not_na_pop) 
-# admin$save_rds_twice(probation_na_adm)
-# admin$save_rds_twice(probation_na_pop)
-# admin$save_rds_twice(probation_not_na_adm)
-# admin$save_rds_twice(probation_not_na_pop) 
+
 
