@@ -1,61 +1,20 @@
 [1] "== CREATE HTMLS ======================================================="
-[1] "Last run Mon Mar 17, 2025 at 16:46:28 CDT"
+[1] "Last run Fri Mar 21, 2025 at 11:30:41 CDT"
 [1] "-- 3a_highchart_fnc ---------------------------------------------------"
 
 > library(tidyverse)
-── Attaching core tidyverse packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.4     ✔ readr     2.1.5
-✔ forcats   1.0.0     ✔ stringr   1.5.1
-✔ ggplot2   3.5.1     ✔ tibble    3.2.1
-✔ lubridate 1.9.4     ✔ tidyr     1.3.1
-✔ purrr     1.0.4     
-── Conflicts ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 
 > library(highcharter) 
-Registered S3 method overwritten by 'quantmod':
-  method            from
-  as.zoo.data.frame zoo 
-Highcharts (www.highcharts.com) is a Highsoft software product which is
-not free for commercial and Governmental use
 
 > library(sf)
-Linking to GEOS 3.13.0, GDAL 3.10.1, PROJ 9.5.1; sf_use_s2() is TRUE
 
 > library(jsonlite)
-
-Attaching package: ‘jsonlite’
-
-The following object is masked from ‘package:purrr’:
-
-    flatten
-
 
 > library(geojsonsf)
 
 > library(scales)
 
-Attaching package: ‘scales’
-
-The following object is masked from ‘package:purrr’:
-
-    discard
-
-The following object is masked from ‘package:readr’:
-
-    col_factor
-
-
 > library(rjson)
-
-Attaching package: ‘rjson’
-
-The following objects are masked from ‘package:jsonlite’:
-
-    fromJSON, toJSON
-
 
 > # can't use box for these func; need to use library for func otherwise highchart won't render 
 > # don't have time to explore reasoning at the momen .... [TRUNCATED] 
@@ -185,96 +144,89 @@ The following objects are masked from ‘package:jsonlite’:
 +   if (!is.na(lst)){
 +     n <- which(lst[[1]] == this_filename)
 +     N <- length(ls .... [TRUNCATED] 
-Warning messages:
-1: package ‘purrr’ was built under R version 4.4.2 
-2: package ‘lubridate’ was built under R version 4.4.2 
-3: package ‘highcharter’ was built under R version 4.4.2 
-4: package ‘sf’ was built under R version 4.4.2 
-5: package ‘jsonlite’ was built under R version 4.4.2 
-6: package ‘geojsonsf’ was built under R version 4.4.2 
 [1] "-- 3c_highchart_html -----------------------------------------------"
 
 > # NATL HEX MAPS HTML DOWNLOAD ##################################################
 > 
 > natl_hex_html_lst <- pmap(
 +   # created in 3a_highchart_fnc.R .... [TRUNCATED] 
-16:46:31 HEX MAP  1/72 -- Admissions, 2018 - 2019, New Offense Violation
-16:46:31 HEX MAP  2/72 -- Admissions, 2018 - 2019, Parole Violation
-16:46:31 HEX MAP  3/72 -- Admissions, 2018 - 2019, Probation Violation
-16:46:31 HEX MAP  4/72 -- Admissions, 2018 - 2019, Supervision Violation
-16:46:31 HEX MAP  5/72 -- Admissions, 2018 - 2019, Technical Violation
-16:46:31 HEX MAP  6/72 -- Admissions, 2018 - 2019, Total
-16:46:31 HEX MAP  7/72 -- Admissions, 2019 - 2020, New Offense Violation
-16:46:31 HEX MAP  8/72 -- Admissions, 2019 - 2020, Parole Violation
-16:46:31 HEX MAP  9/72 -- Admissions, 2019 - 2020, Probation Violation
-16:46:31 HEX MAP 10/72 -- Admissions, 2019 - 2020, Supervision Violation
-16:46:31 HEX MAP 11/72 -- Admissions, 2019 - 2020, Technical Violation
-16:46:31 HEX MAP 12/72 -- Admissions, 2019 - 2020, Total
-16:46:32 HEX MAP 13/72 -- Admissions, 2020 - 2021, New Offense Violation
-16:46:32 HEX MAP 14/72 -- Admissions, 2020 - 2021, Parole Violation
-16:46:32 HEX MAP 15/72 -- Admissions, 2020 - 2021, Probation Violation
-16:46:32 HEX MAP 16/72 -- Admissions, 2020 - 2021, Supervision Violation
-16:46:32 HEX MAP 17/72 -- Admissions, 2020 - 2021, Technical Violation
-16:46:32 HEX MAP 18/72 -- Admissions, 2020 - 2021, Total
-16:46:32 HEX MAP 19/72 -- Admissions, 2021 - 2022, New Offense Violation
-16:46:32 HEX MAP 20/72 -- Admissions, 2021 - 2022, Parole Violation
-16:46:32 HEX MAP 21/72 -- Admissions, 2021 - 2022, Probation Violation
-16:46:32 HEX MAP 22/72 -- Admissions, 2021 - 2022, Supervision Violation
-16:46:32 HEX MAP 23/72 -- Admissions, 2021 - 2022, Technical Violation
-16:46:32 HEX MAP 24/72 -- Admissions, 2021 - 2022, Total
-16:46:32 HEX MAP 25/72 -- Admissions, 2022 - 2023, New Offense Violation
-16:46:32 HEX MAP 26/72 -- Admissions, 2022 - 2023, Parole Violation
-16:46:32 HEX MAP 27/72 -- Admissions, 2022 - 2023, Probation Violation
-16:46:32 HEX MAP 28/72 -- Admissions, 2022 - 2023, Supervision Violation
-16:46:32 HEX MAP 29/72 -- Admissions, 2022 - 2023, Technical Violation
-16:46:32 HEX MAP 30/72 -- Admissions, 2022 - 2023, Total
-16:46:32 HEX MAP 31/72 -- Admissions, 2018 - 2023, New Offense Violation
-16:46:32 HEX MAP 32/72 -- Admissions, 2018 - 2023, Parole Violation
-16:46:32 HEX MAP 33/72 -- Admissions, 2018 - 2023, Probation Violation
-16:46:32 HEX MAP 34/72 -- Admissions, 2018 - 2023, Supervision Violation
-16:46:33 HEX MAP 35/72 -- Admissions, 2018 - 2023, Technical Violation
-16:46:33 HEX MAP 36/72 -- Admissions, 2018 - 2023, Total
-16:46:33 HEX MAP 37/72 -- Population, 2018 - 2019, New Offense Violation
-16:46:33 HEX MAP 38/72 -- Population, 2018 - 2019, Parole Violation
-16:46:33 HEX MAP 39/72 -- Population, 2018 - 2019, Probation Violation
-16:46:33 HEX MAP 40/72 -- Population, 2018 - 2019, Supervision Violation
-16:46:33 HEX MAP 41/72 -- Population, 2018 - 2019, Technical Violation
-16:46:33 HEX MAP 42/72 -- Population, 2018 - 2019, Total
-16:46:33 HEX MAP 43/72 -- Population, 2019 - 2020, New Offense Violation
-16:46:33 HEX MAP 44/72 -- Population, 2019 - 2020, Parole Violation
-16:46:33 HEX MAP 45/72 -- Population, 2019 - 2020, Probation Violation
-16:46:33 HEX MAP 46/72 -- Population, 2019 - 2020, Supervision Violation
-16:46:33 HEX MAP 47/72 -- Population, 2019 - 2020, Technical Violation
-16:46:33 HEX MAP 48/72 -- Population, 2019 - 2020, Total
-16:46:33 HEX MAP 49/72 -- Population, 2020 - 2021, New Offense Violation
-16:46:33 HEX MAP 50/72 -- Population, 2020 - 2021, Parole Violation
-16:46:33 HEX MAP 51/72 -- Population, 2020 - 2021, Probation Violation
-16:46:33 HEX MAP 52/72 -- Population, 2020 - 2021, Supervision Violation
-16:46:33 HEX MAP 53/72 -- Population, 2020 - 2021, Technical Violation
-16:46:33 HEX MAP 54/72 -- Population, 2020 - 2021, Total
-16:46:33 HEX MAP 55/72 -- Population, 2021 - 2022, New Offense Violation
-16:46:33 HEX MAP 56/72 -- Population, 2021 - 2022, Parole Violation
-16:46:33 HEX MAP 57/72 -- Population, 2021 - 2022, Probation Violation
-16:46:34 HEX MAP 58/72 -- Population, 2021 - 2022, Supervision Violation
-16:46:34 HEX MAP 59/72 -- Population, 2021 - 2022, Technical Violation
-16:46:34 HEX MAP 60/72 -- Population, 2021 - 2022, Total
-16:46:34 HEX MAP 61/72 -- Population, 2022 - 2023, New Offense Violation
-16:46:34 HEX MAP 62/72 -- Population, 2022 - 2023, Parole Violation
-16:46:34 HEX MAP 63/72 -- Population, 2022 - 2023, Probation Violation
-16:46:34 HEX MAP 64/72 -- Population, 2022 - 2023, Supervision Violation
-16:46:34 HEX MAP 65/72 -- Population, 2022 - 2023, Technical Violation
-16:46:34 HEX MAP 66/72 -- Population, 2022 - 2023, Total
-16:46:34 HEX MAP 67/72 -- Population, 2018 - 2023, New Offense Violation
-16:46:34 HEX MAP 68/72 -- Population, 2018 - 2023, Parole Violation
-16:46:34 HEX MAP 69/72 -- Population, 2018 - 2023, Probation Violation
-16:46:34 HEX MAP 70/72 -- Population, 2018 - 2023, Supervision Violation
-16:46:34 HEX MAP 71/72 -- Population, 2018 - 2023, Technical Violation
-16:46:34 HEX MAP 72/72 -- Population, 2018 - 2023, Total
+11:30:43 HEX MAP  1/72 -- Admissions, 2018 - 2019, New Offense Violation
+11:30:43 HEX MAP  2/72 -- Admissions, 2018 - 2019, Parole Violation
+11:30:43 HEX MAP  3/72 -- Admissions, 2018 - 2019, Probation Violation
+11:30:43 HEX MAP  4/72 -- Admissions, 2018 - 2019, Supervision Violation
+11:30:43 HEX MAP  5/72 -- Admissions, 2018 - 2019, Technical Violation
+11:30:43 HEX MAP  6/72 -- Admissions, 2018 - 2019, Total
+11:30:43 HEX MAP  7/72 -- Admissions, 2019 - 2020, New Offense Violation
+11:30:43 HEX MAP  8/72 -- Admissions, 2019 - 2020, Parole Violation
+11:30:43 HEX MAP  9/72 -- Admissions, 2019 - 2020, Probation Violation
+11:30:43 HEX MAP 10/72 -- Admissions, 2019 - 2020, Supervision Violation
+11:30:43 HEX MAP 11/72 -- Admissions, 2019 - 2020, Technical Violation
+11:30:43 HEX MAP 12/72 -- Admissions, 2019 - 2020, Total
+11:30:43 HEX MAP 13/72 -- Admissions, 2020 - 2021, New Offense Violation
+11:30:43 HEX MAP 14/72 -- Admissions, 2020 - 2021, Parole Violation
+11:30:43 HEX MAP 15/72 -- Admissions, 2020 - 2021, Probation Violation
+11:30:43 HEX MAP 16/72 -- Admissions, 2020 - 2021, Supervision Violation
+11:30:43 HEX MAP 17/72 -- Admissions, 2020 - 2021, Technical Violation
+11:30:43 HEX MAP 18/72 -- Admissions, 2020 - 2021, Total
+11:30:43 HEX MAP 19/72 -- Admissions, 2021 - 2022, New Offense Violation
+11:30:44 HEX MAP 20/72 -- Admissions, 2021 - 2022, Parole Violation
+11:30:44 HEX MAP 21/72 -- Admissions, 2021 - 2022, Probation Violation
+11:30:44 HEX MAP 22/72 -- Admissions, 2021 - 2022, Supervision Violation
+11:30:44 HEX MAP 23/72 -- Admissions, 2021 - 2022, Technical Violation
+11:30:44 HEX MAP 24/72 -- Admissions, 2021 - 2022, Total
+11:30:44 HEX MAP 25/72 -- Admissions, 2022 - 2023, New Offense Violation
+11:30:44 HEX MAP 26/72 -- Admissions, 2022 - 2023, Parole Violation
+11:30:44 HEX MAP 27/72 -- Admissions, 2022 - 2023, Probation Violation
+11:30:44 HEX MAP 28/72 -- Admissions, 2022 - 2023, Supervision Violation
+11:30:44 HEX MAP 29/72 -- Admissions, 2022 - 2023, Technical Violation
+11:30:44 HEX MAP 30/72 -- Admissions, 2022 - 2023, Total
+11:30:44 HEX MAP 31/72 -- Admissions, 2018 - 2023, New Offense Violation
+11:30:44 HEX MAP 32/72 -- Admissions, 2018 - 2023, Parole Violation
+11:30:44 HEX MAP 33/72 -- Admissions, 2018 - 2023, Probation Violation
+11:30:44 HEX MAP 34/72 -- Admissions, 2018 - 2023, Supervision Violation
+11:30:44 HEX MAP 35/72 -- Admissions, 2018 - 2023, Technical Violation
+11:30:44 HEX MAP 36/72 -- Admissions, 2018 - 2023, Total
+11:30:45 HEX MAP 37/72 -- Population, 2018 - 2019, New Offense Violation
+11:30:45 HEX MAP 38/72 -- Population, 2018 - 2019, Parole Violation
+11:30:45 HEX MAP 39/72 -- Population, 2018 - 2019, Probation Violation
+11:30:45 HEX MAP 40/72 -- Population, 2018 - 2019, Supervision Violation
+11:30:45 HEX MAP 41/72 -- Population, 2018 - 2019, Technical Violation
+11:30:45 HEX MAP 42/72 -- Population, 2018 - 2019, Total
+11:30:45 HEX MAP 43/72 -- Population, 2019 - 2020, New Offense Violation
+11:30:45 HEX MAP 44/72 -- Population, 2019 - 2020, Parole Violation
+11:30:45 HEX MAP 45/72 -- Population, 2019 - 2020, Probation Violation
+11:30:45 HEX MAP 46/72 -- Population, 2019 - 2020, Supervision Violation
+11:30:45 HEX MAP 47/72 -- Population, 2019 - 2020, Technical Violation
+11:30:45 HEX MAP 48/72 -- Population, 2019 - 2020, Total
+11:30:45 HEX MAP 49/72 -- Population, 2020 - 2021, New Offense Violation
+11:30:45 HEX MAP 50/72 -- Population, 2020 - 2021, Parole Violation
+11:30:45 HEX MAP 51/72 -- Population, 2020 - 2021, Probation Violation
+11:30:45 HEX MAP 52/72 -- Population, 2020 - 2021, Supervision Violation
+11:30:45 HEX MAP 53/72 -- Population, 2020 - 2021, Technical Violation
+11:30:45 HEX MAP 54/72 -- Population, 2020 - 2021, Total
+11:30:46 HEX MAP 55/72 -- Population, 2021 - 2022, New Offense Violation
+11:30:46 HEX MAP 56/72 -- Population, 2021 - 2022, Parole Violation
+11:30:46 HEX MAP 57/72 -- Population, 2021 - 2022, Probation Violation
+11:30:46 HEX MAP 58/72 -- Population, 2021 - 2022, Supervision Violation
+11:30:46 HEX MAP 59/72 -- Population, 2021 - 2022, Technical Violation
+11:30:46 HEX MAP 60/72 -- Population, 2021 - 2022, Total
+11:30:46 HEX MAP 61/72 -- Population, 2022 - 2023, New Offense Violation
+11:30:46 HEX MAP 62/72 -- Population, 2022 - 2023, Parole Violation
+11:30:46 HEX MAP 63/72 -- Population, 2022 - 2023, Probation Violation
+11:30:46 HEX MAP 64/72 -- Population, 2022 - 2023, Supervision Violation
+11:30:46 HEX MAP 65/72 -- Population, 2022 - 2023, Technical Violation
+11:30:46 HEX MAP 66/72 -- Population, 2022 - 2023, Total
+11:30:46 HEX MAP 67/72 -- Population, 2018 - 2023, New Offense Violation
+11:30:46 HEX MAP 68/72 -- Population, 2018 - 2023, Parole Violation
+11:30:46 HEX MAP 69/72 -- Population, 2018 - 2023, Probation Violation
+11:30:46 HEX MAP 70/72 -- Population, 2018 - 2023, Supervision Violation
+11:30:47 HEX MAP 71/72 -- Population, 2018 - 2023, Technical Violation
+11:30:47 HEX MAP 72/72 -- Population, 2018 - 2023, Total
 
 > # ~25 min 
 > # ~avg 20 seconds per chart, 72 charts 
 > paste("Hopefully done by:", format(Sys.time()+25*60, "%X"))
-[1] "Hopefully done by: 17:11:34"
+[1] "Hopefully done by: 11:55:47"
 
 > walk(
 +   names(natl_hex_html_lst), 
@@ -283,78 +235,78 @@ Warning messages:
 +     .x, 
 +     lst = list(names(natl_hex_html_lst))
 +   .... [TRUNCATED] 
-16:46:34 SAVE HC to HTML  1/72 -- Change_New Offense Violation_Admissions_2018 - 2019
-16:46:37 SAVE HC to HTML  2/72 -- Change_Parole Violation_Admissions_2018 - 2019
-16:46:38 SAVE HC to HTML  3/72 -- Change_Probation Violation_Admissions_2018 - 2019
-16:47:16 SAVE HC to HTML  4/72 -- Change_Supervision Violation_Admissions_2018 - 2019
-16:48:01 SAVE HC to HTML  5/72 -- Change_Technical Violation_Admissions_2018 - 2019
-16:48:34 SAVE HC to HTML  6/72 -- Change_Total_Admissions_2018 - 2019
-16:49:16 SAVE HC to HTML  7/72 -- Change_New Offense Violation_Admissions_2019 - 2020
-16:50:12 SAVE HC to HTML  8/72 -- Change_Parole Violation_Admissions_2019 - 2020
-16:51:03 SAVE HC to HTML  9/72 -- Change_Probation Violation_Admissions_2019 - 2020
-16:51:38 SAVE HC to HTML 10/72 -- Change_Supervision Violation_Admissions_2019 - 2020
-16:52:14 SAVE HC to HTML 11/72 -- Change_Technical Violation_Admissions_2019 - 2020
-16:53:02 SAVE HC to HTML 12/72 -- Change_Total_Admissions_2019 - 2020
-16:53:54 SAVE HC to HTML 13/72 -- Change_New Offense Violation_Admissions_2020 - 2021
-16:54:42 SAVE HC to HTML 14/72 -- Change_Parole Violation_Admissions_2020 - 2021
-16:55:19 SAVE HC to HTML 15/72 -- Change_Probation Violation_Admissions_2020 - 2021
-16:56:11 SAVE HC to HTML 16/72 -- Change_Supervision Violation_Admissions_2020 - 2021
-16:56:54 SAVE HC to HTML 17/72 -- Change_Technical Violation_Admissions_2020 - 2021
-16:57:48 SAVE HC to HTML 18/72 -- Change_Total_Admissions_2020 - 2021
-16:58:35 SAVE HC to HTML 19/72 -- Change_New Offense Violation_Admissions_2021 - 2022
-16:59:29 SAVE HC to HTML 20/72 -- Change_Parole Violation_Admissions_2021 - 2022
-17:00:21 SAVE HC to HTML 21/72 -- Change_Probation Violation_Admissions_2021 - 2022
-17:00:27 SAVE HC to HTML 22/72 -- Change_Supervision Violation_Admissions_2021 - 2022
-17:00:35 SAVE HC to HTML 23/72 -- Change_Technical Violation_Admissions_2021 - 2022
-17:00:40 SAVE HC to HTML 24/72 -- Change_Total_Admissions_2021 - 2022
-17:00:41 SAVE HC to HTML 25/72 -- Change_New Offense Violation_Admissions_2022 - 2023
-17:00:42 SAVE HC to HTML 26/72 -- Change_Parole Violation_Admissions_2022 - 2023
-17:00:46 SAVE HC to HTML 27/72 -- Change_Probation Violation_Admissions_2022 - 2023
-17:00:50 SAVE HC to HTML 28/72 -- Change_Supervision Violation_Admissions_2022 - 2023
-17:00:54 SAVE HC to HTML 29/72 -- Change_Technical Violation_Admissions_2022 - 2023
-17:01:00 SAVE HC to HTML 30/72 -- Change_Total_Admissions_2022 - 2023
-17:01:01 SAVE HC to HTML 31/72 -- Change_New Offense Violation_Admissions_2018 - 2023
-17:01:49 SAVE HC to HTML 32/72 -- Change_Parole Violation_Admissions_2018 - 2023
-17:01:50 SAVE HC to HTML 33/72 -- Change_Probation Violation_Admissions_2018 - 2023
-17:01:51 SAVE HC to HTML 34/72 -- Change_Supervision Violation_Admissions_2018 - 2023
-17:01:55 SAVE HC to HTML 35/72 -- Change_Technical Violation_Admissions_2018 - 2023
-17:02:01 SAVE HC to HTML 36/72 -- Change_Total_Admissions_2018 - 2023
-17:02:08 SAVE HC to HTML 37/72 -- Change_New Offense Violation_Population_2018 - 2019
-17:02:11 SAVE HC to HTML 38/72 -- Change_Parole Violation_Population_2018 - 2019
-17:02:16 SAVE HC to HTML 39/72 -- Change_Probation Violation_Population_2018 - 2019
-17:02:20 SAVE HC to HTML 40/72 -- Change_Supervision Violation_Population_2018 - 2019
-17:02:24 SAVE HC to HTML 41/72 -- Change_Technical Violation_Population_2018 - 2019
-17:02:27 SAVE HC to HTML 42/72 -- Change_Total_Population_2018 - 2019
-17:02:32 SAVE HC to HTML 43/72 -- Change_New Offense Violation_Population_2019 - 2020
-17:02:33 SAVE HC to HTML 44/72 -- Change_Parole Violation_Population_2019 - 2020
-17:02:38 SAVE HC to HTML 45/72 -- Change_Probation Violation_Population_2019 - 2020
-17:02:40 SAVE HC to HTML 46/72 -- Change_Supervision Violation_Population_2019 - 2020
-17:02:41 SAVE HC to HTML 47/72 -- Change_Technical Violation_Population_2019 - 2020
-17:02:42 SAVE HC to HTML 48/72 -- Change_Total_Population_2019 - 2020
-17:02:43 SAVE HC to HTML 49/72 -- Change_New Offense Violation_Population_2020 - 2021
-17:02:45 SAVE HC to HTML 50/72 -- Change_Parole Violation_Population_2020 - 2021
-17:02:46 SAVE HC to HTML 51/72 -- Change_Probation Violation_Population_2020 - 2021
-17:02:47 SAVE HC to HTML 52/72 -- Change_Supervision Violation_Population_2020 - 2021
-17:02:48 SAVE HC to HTML 53/72 -- Change_Technical Violation_Population_2020 - 2021
-17:02:48 SAVE HC to HTML 54/72 -- Change_Total_Population_2020 - 2021
-17:02:49 SAVE HC to HTML 55/72 -- Change_New Offense Violation_Population_2021 - 2022
-17:02:50 SAVE HC to HTML 56/72 -- Change_Parole Violation_Population_2021 - 2022
-17:02:51 SAVE HC to HTML 57/72 -- Change_Probation Violation_Population_2021 - 2022
-17:02:51 SAVE HC to HTML 58/72 -- Change_Supervision Violation_Population_2021 - 2022
-17:02:52 SAVE HC to HTML 59/72 -- Change_Technical Violation_Population_2021 - 2022
-17:02:53 SAVE HC to HTML 60/72 -- Change_Total_Population_2021 - 2022
-17:02:53 SAVE HC to HTML 61/72 -- Change_New Offense Violation_Population_2022 - 2023
-17:02:54 SAVE HC to HTML 62/72 -- Change_Parole Violation_Population_2022 - 2023
-17:02:55 SAVE HC to HTML 63/72 -- Change_Probation Violation_Population_2022 - 2023
-17:02:55 SAVE HC to HTML 64/72 -- Change_Supervision Violation_Population_2022 - 2023
-17:02:56 SAVE HC to HTML 65/72 -- Change_Technical Violation_Population_2022 - 2023
-17:02:57 SAVE HC to HTML 66/72 -- Change_Total_Population_2022 - 2023
-17:02:58 SAVE HC to HTML 67/72 -- Change_New Offense Violation_Population_2018 - 2023
-17:02:58 SAVE HC to HTML 68/72 -- Change_Parole Violation_Population_2018 - 2023
-17:02:59 SAVE HC to HTML 69/72 -- Change_Probation Violation_Population_2018 - 2023
-17:03:00 SAVE HC to HTML 70/72 -- Change_Supervision Violation_Population_2018 - 2023
-17:03:00 SAVE HC to HTML 71/72 -- Change_Technical Violation_Population_2018 - 2023
-17:03:01 SAVE HC to HTML 72/72 -- Change_Total_Population_2018 - 2023
+11:30:47 SAVE HC to HTML  1/72 -- Change_New Offense Violation_Admissions_2018 - 2019
+11:30:48 SAVE HC to HTML  2/72 -- Change_Parole Violation_Admissions_2018 - 2019
+11:30:50 SAVE HC to HTML  3/72 -- Change_Probation Violation_Admissions_2018 - 2019
+11:31:05 SAVE HC to HTML  4/72 -- Change_Supervision Violation_Admissions_2018 - 2019
+11:31:07 SAVE HC to HTML  5/72 -- Change_Technical Violation_Admissions_2018 - 2019
+11:31:08 SAVE HC to HTML  6/72 -- Change_Total_Admissions_2018 - 2019
+11:32:05 SAVE HC to HTML  7/72 -- Change_New Offense Violation_Admissions_2019 - 2020
+11:32:07 SAVE HC to HTML  8/72 -- Change_Parole Violation_Admissions_2019 - 2020
+11:32:08 SAVE HC to HTML  9/72 -- Change_Probation Violation_Admissions_2019 - 2020
+11:32:12 SAVE HC to HTML 10/72 -- Change_Supervision Violation_Admissions_2019 - 2020
+11:32:15 SAVE HC to HTML 11/72 -- Change_Technical Violation_Admissions_2019 - 2020
+11:32:17 SAVE HC to HTML 12/72 -- Change_Total_Admissions_2019 - 2020
+11:32:21 SAVE HC to HTML 13/72 -- Change_New Offense Violation_Admissions_2020 - 2021
+11:32:23 SAVE HC to HTML 14/72 -- Change_Parole Violation_Admissions_2020 - 2021
+11:32:24 SAVE HC to HTML 15/72 -- Change_Probation Violation_Admissions_2020 - 2021
+11:32:27 SAVE HC to HTML 16/72 -- Change_Supervision Violation_Admissions_2020 - 2021
+11:32:28 SAVE HC to HTML 17/72 -- Change_Technical Violation_Admissions_2020 - 2021
+11:32:31 SAVE HC to HTML 18/72 -- Change_Total_Admissions_2020 - 2021
+11:32:35 SAVE HC to HTML 19/72 -- Change_New Offense Violation_Admissions_2021 - 2022
+11:32:39 SAVE HC to HTML 20/72 -- Change_Parole Violation_Admissions_2021 - 2022
+11:32:40 SAVE HC to HTML 21/72 -- Change_Probation Violation_Admissions_2021 - 2022
+11:32:41 SAVE HC to HTML 22/72 -- Change_Supervision Violation_Admissions_2021 - 2022
+11:32:43 SAVE HC to HTML 23/72 -- Change_Technical Violation_Admissions_2021 - 2022
+11:32:45 SAVE HC to HTML 24/72 -- Change_Total_Admissions_2021 - 2022
+11:32:47 SAVE HC to HTML 25/72 -- Change_New Offense Violation_Admissions_2022 - 2023
+11:32:48 SAVE HC to HTML 26/72 -- Change_Parole Violation_Admissions_2022 - 2023
+11:32:51 SAVE HC to HTML 27/72 -- Change_Probation Violation_Admissions_2022 - 2023
+11:32:52 SAVE HC to HTML 28/72 -- Change_Supervision Violation_Admissions_2022 - 2023
+11:32:54 SAVE HC to HTML 29/72 -- Change_Technical Violation_Admissions_2022 - 2023
+11:32:55 SAVE HC to HTML 30/72 -- Change_Total_Admissions_2022 - 2023
+11:32:57 SAVE HC to HTML 31/72 -- Change_New Offense Violation_Admissions_2018 - 2023
+11:32:58 SAVE HC to HTML 32/72 -- Change_Parole Violation_Admissions_2018 - 2023
+11:33:00 SAVE HC to HTML 33/72 -- Change_Probation Violation_Admissions_2018 - 2023
+11:33:01 SAVE HC to HTML 34/72 -- Change_Supervision Violation_Admissions_2018 - 2023
+11:33:05 SAVE HC to HTML 35/72 -- Change_Technical Violation_Admissions_2018 - 2023
+11:33:06 SAVE HC to HTML 36/72 -- Change_Total_Admissions_2018 - 2023
+11:33:08 SAVE HC to HTML 37/72 -- Change_New Offense Violation_Population_2018 - 2019
+11:33:09 SAVE HC to HTML 38/72 -- Change_Parole Violation_Population_2018 - 2019
+11:33:10 SAVE HC to HTML 39/72 -- Change_Probation Violation_Population_2018 - 2019
+11:33:15 SAVE HC to HTML 40/72 -- Change_Supervision Violation_Population_2018 - 2019
+11:33:16 SAVE HC to HTML 41/72 -- Change_Technical Violation_Population_2018 - 2019
+11:33:18 SAVE HC to HTML 42/72 -- Change_Total_Population_2018 - 2019
+11:33:19 SAVE HC to HTML 43/72 -- Change_New Offense Violation_Population_2019 - 2020
+11:33:21 SAVE HC to HTML 44/72 -- Change_Parole Violation_Population_2019 - 2020
+11:33:22 SAVE HC to HTML 45/72 -- Change_Probation Violation_Population_2019 - 2020
+11:33:23 SAVE HC to HTML 46/72 -- Change_Supervision Violation_Population_2019 - 2020
+11:33:24 SAVE HC to HTML 47/72 -- Change_Technical Violation_Population_2019 - 2020
+11:33:27 SAVE HC to HTML 48/72 -- Change_Total_Population_2019 - 2020
+11:33:28 SAVE HC to HTML 49/72 -- Change_New Offense Violation_Population_2020 - 2021
+11:33:29 SAVE HC to HTML 50/72 -- Change_Parole Violation_Population_2020 - 2021
+11:33:31 SAVE HC to HTML 51/72 -- Change_Probation Violation_Population_2020 - 2021
+11:33:34 SAVE HC to HTML 52/72 -- Change_Supervision Violation_Population_2020 - 2021
+11:33:37 SAVE HC to HTML 53/72 -- Change_Technical Violation_Population_2020 - 2021
+11:33:40 SAVE HC to HTML 54/72 -- Change_Total_Population_2020 - 2021
+11:33:44 SAVE HC to HTML 55/72 -- Change_New Offense Violation_Population_2021 - 2022
+11:33:45 SAVE HC to HTML 56/72 -- Change_Parole Violation_Population_2021 - 2022
+11:33:49 SAVE HC to HTML 57/72 -- Change_Probation Violation_Population_2021 - 2022
+11:33:51 SAVE HC to HTML 58/72 -- Change_Supervision Violation_Population_2021 - 2022
+11:33:52 SAVE HC to HTML 59/72 -- Change_Technical Violation_Population_2021 - 2022
+11:33:54 SAVE HC to HTML 60/72 -- Change_Total_Population_2021 - 2022
+11:33:58 SAVE HC to HTML 61/72 -- Change_New Offense Violation_Population_2022 - 2023
+11:33:59 SAVE HC to HTML 62/72 -- Change_Parole Violation_Population_2022 - 2023
+11:34:00 SAVE HC to HTML 63/72 -- Change_Probation Violation_Population_2022 - 2023
+11:34:02 SAVE HC to HTML 64/72 -- Change_Supervision Violation_Population_2022 - 2023
+11:34:35 SAVE HC to HTML 65/72 -- Change_Technical Violation_Population_2022 - 2023
+11:34:38 SAVE HC to HTML 66/72 -- Change_Total_Population_2022 - 2023
+11:34:39 SAVE HC to HTML 67/72 -- Change_New Offense Violation_Population_2018 - 2023
+11:34:41 SAVE HC to HTML 68/72 -- Change_Parole Violation_Population_2018 - 2023
+11:34:42 SAVE HC to HTML 69/72 -- Change_Probation Violation_Population_2018 - 2023
+11:34:44 SAVE HC to HTML 70/72 -- Change_Supervision Violation_Population_2018 - 2023
+11:34:45 SAVE HC to HTML 71/72 -- Change_Technical Violation_Population_2018 - 2023
+11:34:46 SAVE HC to HTML 72/72 -- Change_Total_Population_2018 - 2023
 
 > # STATE AREA HTML DOWNLOAD #####################################################
 > 
@@ -369,111 +321,111 @@ Warning messages:
 +     as.list()
 +   , 
 +   .... [TRUNCATED] 
-17:03:02 AREA CHART   1/100 -- Admissions, Alabama
-17:03:02 AREA CHART   2/100 -- Admissions, Alaska
-17:03:02 AREA CHART   3/100 -- Admissions, Arizona
-17:03:02 AREA CHART   4/100 -- Admissions, Arkansas
-17:03:03 AREA CHART   5/100 -- Admissions, California
-17:03:03 AREA CHART   6/100 -- Admissions, Colorado
-17:03:03 AREA CHART   7/100 -- Admissions, Connecticut
-17:03:03 AREA CHART   8/100 -- Admissions, Delaware
-17:03:03 AREA CHART   9/100 -- Admissions, Florida
-17:03:03 AREA CHART  10/100 -- Admissions, Georgia
-17:03:03 AREA CHART  11/100 -- Admissions, Hawaii
-17:03:03 AREA CHART  12/100 -- Admissions, Idaho
-17:03:04 AREA CHART  13/100 -- Admissions, Illinois
-17:03:04 AREA CHART  14/100 -- Admissions, Indiana
-17:03:04 AREA CHART  15/100 -- Admissions, Iowa
-17:03:04 AREA CHART  16/100 -- Admissions, Kansas
-17:03:04 AREA CHART  17/100 -- Admissions, Kentucky
-17:03:04 AREA CHART  18/100 -- Admissions, Louisiana
-17:03:05 AREA CHART  19/100 -- Admissions, Maine
-17:03:05 AREA CHART  20/100 -- Admissions, Maryland
-17:03:05 AREA CHART  21/100 -- Admissions, Massachusetts
-17:03:05 AREA CHART  22/100 -- Admissions, Michigan
-17:03:05 AREA CHART  23/100 -- Admissions, Minnesota
-17:03:05 AREA CHART  24/100 -- Admissions, Mississippi
-17:03:05 AREA CHART  25/100 -- Admissions, Missouri
-17:03:06 AREA CHART  26/100 -- Admissions, Montana
-17:03:06 AREA CHART  27/100 -- Admissions, Nebraska
-17:03:06 AREA CHART  28/100 -- Admissions, Nevada
-17:03:06 AREA CHART  29/100 -- Admissions, New Hampshire
-17:03:06 AREA CHART  30/100 -- Admissions, New Jersey
-17:03:06 AREA CHART  31/100 -- Admissions, New Mexico
-17:03:07 AREA CHART  32/100 -- Admissions, New York
-17:03:07 AREA CHART  33/100 -- Admissions, North Carolina
-17:03:07 AREA CHART  34/100 -- Admissions, North Dakota
-17:03:07 AREA CHART  35/100 -- Admissions, Ohio
-17:03:07 AREA CHART  36/100 -- Admissions, Oklahoma
-17:03:07 AREA CHART  37/100 -- Admissions, Oregon
-17:03:07 AREA CHART  38/100 -- Admissions, Pennsylvania
-17:03:08 AREA CHART  39/100 -- Admissions, Rhode Island
-17:03:08 AREA CHART  40/100 -- Admissions, South Carolina
-17:03:08 AREA CHART  41/100 -- Admissions, South Dakota
-17:03:08 AREA CHART  42/100 -- Admissions, Tennessee
-17:03:08 AREA CHART  43/100 -- Admissions, Texas
-17:03:08 AREA CHART  44/100 -- Admissions, Utah
-17:03:08 AREA CHART  45/100 -- Admissions, Vermont
-17:03:08 AREA CHART  46/100 -- Admissions, Virginia
-17:03:08 AREA CHART  47/100 -- Admissions, Washington
-17:03:09 AREA CHART  48/100 -- Admissions, West Virginia
-17:03:09 AREA CHART  49/100 -- Admissions, Wisconsin
-17:03:09 AREA CHART  50/100 -- Admissions, Wyoming
-17:03:09 AREA CHART  51/100 -- Population, Alabama
-17:03:09 AREA CHART  52/100 -- Population, Alaska
-17:03:09 AREA CHART  53/100 -- Population, Arizona
-17:03:09 AREA CHART  54/100 -- Population, Arkansas
-17:03:09 AREA CHART  55/100 -- Population, California
-17:03:10 AREA CHART  56/100 -- Population, Colorado
-17:03:10 AREA CHART  57/100 -- Population, Connecticut
-17:03:10 AREA CHART  58/100 -- Population, Delaware
-17:03:10 AREA CHART  59/100 -- Population, Florida
-17:03:10 AREA CHART  60/100 -- Population, Georgia
-17:03:10 AREA CHART  61/100 -- Population, Hawaii
-17:03:10 AREA CHART  62/100 -- Population, Idaho
-17:03:12 AREA CHART  63/100 -- Population, Illinois
-17:03:13 AREA CHART  64/100 -- Population, Indiana
-17:03:13 AREA CHART  65/100 -- Population, Iowa
-17:03:13 AREA CHART  66/100 -- Population, Kansas
-17:03:13 AREA CHART  67/100 -- Population, Kentucky
-17:03:13 AREA CHART  68/100 -- Population, Louisiana
-17:03:13 AREA CHART  69/100 -- Population, Maine
-17:03:13 AREA CHART  70/100 -- Population, Maryland
-17:03:14 AREA CHART  71/100 -- Population, Massachusetts
-17:03:14 AREA CHART  72/100 -- Population, Michigan
-17:03:14 AREA CHART  73/100 -- Population, Minnesota
-17:03:14 AREA CHART  74/100 -- Population, Mississippi
-17:03:14 AREA CHART  75/100 -- Population, Missouri
-17:03:14 AREA CHART  76/100 -- Population, Montana
-17:03:14 AREA CHART  77/100 -- Population, Nebraska
-17:03:15 AREA CHART  78/100 -- Population, Nevada
-17:03:15 AREA CHART  79/100 -- Population, New Hampshire
-17:03:15 AREA CHART  80/100 -- Population, New Jersey
-17:03:15 AREA CHART  81/100 -- Population, New Mexico
-17:03:15 AREA CHART  82/100 -- Population, New York
-17:03:15 AREA CHART  83/100 -- Population, North Carolina
-17:03:16 AREA CHART  84/100 -- Population, North Dakota
-17:03:16 AREA CHART  85/100 -- Population, Ohio
-17:03:16 AREA CHART  86/100 -- Population, Oklahoma
-17:03:16 AREA CHART  87/100 -- Population, Oregon
-17:03:16 AREA CHART  88/100 -- Population, Pennsylvania
-17:03:16 AREA CHART  89/100 -- Population, Rhode Island
-17:03:16 AREA CHART  90/100 -- Population, South Carolina
-17:03:17 AREA CHART  91/100 -- Population, South Dakota
-17:03:17 AREA CHART  92/100 -- Population, Tennessee
-17:03:17 AREA CHART  93/100 -- Population, Texas
-17:03:17 AREA CHART  94/100 -- Population, Utah
-17:03:17 AREA CHART  95/100 -- Population, Vermont
-17:03:17 AREA CHART  96/100 -- Population, Virginia
-17:03:18 AREA CHART  97/100 -- Population, Washington
-17:03:18 AREA CHART  98/100 -- Population, West Virginia
-17:03:18 AREA CHART  99/100 -- Population, Wisconsin
-17:03:18 AREA CHART 100/100 -- Population, Wyoming
+11:34:48 AREA CHART   1/100 -- Admissions, Alabama
+11:34:48 AREA CHART   2/100 -- Admissions, Alaska
+11:34:48 AREA CHART   3/100 -- Admissions, Arizona
+11:34:48 AREA CHART   4/100 -- Admissions, Arkansas
+11:34:49 AREA CHART   5/100 -- Admissions, California
+11:34:49 AREA CHART   6/100 -- Admissions, Colorado
+11:34:49 AREA CHART   7/100 -- Admissions, Connecticut
+11:34:49 AREA CHART   8/100 -- Admissions, Delaware
+11:34:49 AREA CHART   9/100 -- Admissions, Florida
+11:34:49 AREA CHART  10/100 -- Admissions, Georgia
+11:34:49 AREA CHART  11/100 -- Admissions, Hawaii
+11:34:49 AREA CHART  12/100 -- Admissions, Idaho
+11:34:49 AREA CHART  13/100 -- Admissions, Illinois
+11:34:50 AREA CHART  14/100 -- Admissions, Indiana
+11:34:50 AREA CHART  15/100 -- Admissions, Iowa
+11:34:50 AREA CHART  16/100 -- Admissions, Kansas
+11:34:50 AREA CHART  17/100 -- Admissions, Kentucky
+11:34:50 AREA CHART  18/100 -- Admissions, Louisiana
+11:34:50 AREA CHART  19/100 -- Admissions, Maine
+11:34:50 AREA CHART  20/100 -- Admissions, Maryland
+11:34:50 AREA CHART  21/100 -- Admissions, Massachusetts
+11:37:16 AREA CHART  22/100 -- Admissions, Michigan
+11:37:16 AREA CHART  23/100 -- Admissions, Minnesota
+11:37:16 AREA CHART  24/100 -- Admissions, Mississippi
+11:37:16 AREA CHART  25/100 -- Admissions, Missouri
+11:37:17 AREA CHART  26/100 -- Admissions, Montana
+11:37:17 AREA CHART  27/100 -- Admissions, Nebraska
+11:37:17 AREA CHART  28/100 -- Admissions, Nevada
+11:37:17 AREA CHART  29/100 -- Admissions, New Hampshire
+11:37:17 AREA CHART  30/100 -- Admissions, New Jersey
+11:37:17 AREA CHART  31/100 -- Admissions, New Mexico
+11:37:17 AREA CHART  32/100 -- Admissions, New York
+11:37:17 AREA CHART  33/100 -- Admissions, North Carolina
+11:37:18 AREA CHART  34/100 -- Admissions, North Dakota
+11:37:18 AREA CHART  35/100 -- Admissions, Ohio
+11:37:18 AREA CHART  36/100 -- Admissions, Oklahoma
+11:37:18 AREA CHART  37/100 -- Admissions, Oregon
+11:37:18 AREA CHART  38/100 -- Admissions, Pennsylvania
+11:37:18 AREA CHART  39/100 -- Admissions, Rhode Island
+11:37:18 AREA CHART  40/100 -- Admissions, South Carolina
+11:37:18 AREA CHART  41/100 -- Admissions, South Dakota
+11:37:18 AREA CHART  42/100 -- Admissions, Tennessee
+11:37:19 AREA CHART  43/100 -- Admissions, Texas
+11:37:19 AREA CHART  44/100 -- Admissions, Utah
+11:37:19 AREA CHART  45/100 -- Admissions, Vermont
+11:37:19 AREA CHART  46/100 -- Admissions, Virginia
+11:37:19 AREA CHART  47/100 -- Admissions, Washington
+11:37:19 AREA CHART  48/100 -- Admissions, West Virginia
+11:37:19 AREA CHART  49/100 -- Admissions, Wisconsin
+11:37:19 AREA CHART  50/100 -- Admissions, Wyoming
+11:37:20 AREA CHART  51/100 -- Population, Alabama
+11:37:20 AREA CHART  52/100 -- Population, Alaska
+11:37:20 AREA CHART  53/100 -- Population, Arizona
+11:37:20 AREA CHART  54/100 -- Population, Arkansas
+11:37:20 AREA CHART  55/100 -- Population, California
+11:37:20 AREA CHART  56/100 -- Population, Colorado
+11:37:20 AREA CHART  57/100 -- Population, Connecticut
+11:37:20 AREA CHART  58/100 -- Population, Delaware
+11:37:20 AREA CHART  59/100 -- Population, Florida
+11:37:21 AREA CHART  60/100 -- Population, Georgia
+11:37:21 AREA CHART  61/100 -- Population, Hawaii
+11:37:21 AREA CHART  62/100 -- Population, Idaho
+11:37:21 AREA CHART  63/100 -- Population, Illinois
+11:37:21 AREA CHART  64/100 -- Population, Indiana
+11:37:21 AREA CHART  65/100 -- Population, Iowa
+11:37:21 AREA CHART  66/100 -- Population, Kansas
+11:37:21 AREA CHART  67/100 -- Population, Kentucky
+11:37:22 AREA CHART  68/100 -- Population, Louisiana
+11:37:22 AREA CHART  69/100 -- Population, Maine
+11:37:22 AREA CHART  70/100 -- Population, Maryland
+11:37:22 AREA CHART  71/100 -- Population, Massachusetts
+11:37:22 AREA CHART  72/100 -- Population, Michigan
+11:37:22 AREA CHART  73/100 -- Population, Minnesota
+11:37:22 AREA CHART  74/100 -- Population, Mississippi
+11:37:22 AREA CHART  75/100 -- Population, Missouri
+11:37:23 AREA CHART  76/100 -- Population, Montana
+11:37:23 AREA CHART  77/100 -- Population, Nebraska
+11:37:23 AREA CHART  78/100 -- Population, Nevada
+11:37:23 AREA CHART  79/100 -- Population, New Hampshire
+11:37:23 AREA CHART  80/100 -- Population, New Jersey
+11:37:23 AREA CHART  81/100 -- Population, New Mexico
+11:37:23 AREA CHART  82/100 -- Population, New York
+11:37:24 AREA CHART  83/100 -- Population, North Carolina
+11:37:24 AREA CHART  84/100 -- Population, North Dakota
+11:37:24 AREA CHART  85/100 -- Population, Ohio
+11:37:24 AREA CHART  86/100 -- Population, Oklahoma
+11:37:24 AREA CHART  87/100 -- Population, Oregon
+11:37:24 AREA CHART  88/100 -- Population, Pennsylvania
+11:37:24 AREA CHART  89/100 -- Population, Rhode Island
+11:37:25 AREA CHART  90/100 -- Population, South Carolina
+11:37:25 AREA CHART  91/100 -- Population, South Dakota
+11:37:25 AREA CHART  92/100 -- Population, Tennessee
+11:37:25 AREA CHART  93/100 -- Population, Texas
+11:37:25 AREA CHART  94/100 -- Population, Utah
+11:37:25 AREA CHART  95/100 -- Population, Vermont
+11:37:25 AREA CHART  96/100 -- Population, Virginia
+11:37:26 AREA CHART  97/100 -- Population, Washington
+11:37:26 AREA CHART  98/100 -- Population, West Virginia
+11:37:26 AREA CHART  99/100 -- Population, Wisconsin
+11:37:26 AREA CHART 100/100 -- Population, Wyoming
 
 > # ~40 min 
 > # avg ~24 sec per chart, 100 charts
 > paste("Hopefully done by:", format(Sys.time()+45*60, "%X"))
-[1] "Hopefully done by: 5:48:18 PM"
+[1] "Hopefully done by: 12:22:26 PM"
 
 > walk(
 +   names(state_area_html_lst),
@@ -481,416 +433,416 @@ Warning messages:
 +     state_area_html_lst[[.x]], 
 +     .x, 
 +     lst = list(names(state_area_html_lst) .... [TRUNCATED] 
-17:03:18 SAVE HC to HTML   1/100 -- Alabama_Prison_Admissions
-17:03:19 SAVE HC to HTML   2/100 -- Alaska_Prison_Admissions
-17:03:21 SAVE HC to HTML   3/100 -- Arizona_Prison_Admissions
-17:03:22 SAVE HC to HTML   4/100 -- Arkansas_Prison_Admissions
-17:03:24 SAVE HC to HTML   5/100 -- California_Prison_Admissions
-17:03:25 SAVE HC to HTML   6/100 -- Colorado_Prison_Admissions
-17:03:26 SAVE HC to HTML   7/100 -- Connecticut_Prison_Admissions
-17:03:27 SAVE HC to HTML   8/100 -- Delaware_Prison_Admissions
-17:03:27 SAVE HC to HTML   9/100 -- Florida_Prison_Admissions
-17:03:28 SAVE HC to HTML  10/100 -- Georgia_Prison_Admissions
-17:03:29 SAVE HC to HTML  11/100 -- Hawaii_Prison_Admissions
-17:03:29 SAVE HC to HTML  12/100 -- Idaho_Prison_Admissions
-17:03:30 SAVE HC to HTML  13/100 -- Illinois_Prison_Admissions
-17:03:30 SAVE HC to HTML  14/100 -- Indiana_Prison_Admissions
-17:03:31 SAVE HC to HTML  15/100 -- Iowa_Prison_Admissions
-17:03:32 SAVE HC to HTML  16/100 -- Kansas_Prison_Admissions
-17:03:32 SAVE HC to HTML  17/100 -- Kentucky_Prison_Admissions
-17:03:33 SAVE HC to HTML  18/100 -- Louisiana_Prison_Admissions
-17:03:34 SAVE HC to HTML  19/100 -- Maine_Prison_Admissions
-17:03:34 SAVE HC to HTML  20/100 -- Maryland_Prison_Admissions
-17:03:35 SAVE HC to HTML  21/100 -- Massachusetts_Prison_Admissions
-17:03:35 SAVE HC to HTML  22/100 -- Michigan_Prison_Admissions
-17:03:36 SAVE HC to HTML  23/100 -- Minnesota_Prison_Admissions
-17:03:37 SAVE HC to HTML  24/100 -- Mississippi_Prison_Admissions
-17:03:38 SAVE HC to HTML  25/100 -- Missouri_Prison_Admissions
-17:03:38 SAVE HC to HTML  26/100 -- Montana_Prison_Admissions
-17:03:39 SAVE HC to HTML  27/100 -- Nebraska_Prison_Admissions
-17:03:39 SAVE HC to HTML  28/100 -- Nevada_Prison_Admissions
-17:03:40 SAVE HC to HTML  29/100 -- New Hampshire_Prison_Admissions
-17:03:41 SAVE HC to HTML  30/100 -- New Jersey_Prison_Admissions
-17:03:41 SAVE HC to HTML  31/100 -- New Mexico_Prison_Admissions
-17:03:42 SAVE HC to HTML  32/100 -- New York_Prison_Admissions
-17:03:43 SAVE HC to HTML  33/100 -- North Carolina_Prison_Admissions
-17:03:43 SAVE HC to HTML  34/100 -- North Dakota_Prison_Admissions
-17:03:44 SAVE HC to HTML  35/100 -- Ohio_Prison_Admissions
-17:03:45 SAVE HC to HTML  36/100 -- Oklahoma_Prison_Admissions
-17:03:45 SAVE HC to HTML  37/100 -- Oregon_Prison_Admissions
-17:03:46 SAVE HC to HTML  38/100 -- Pennsylvania_Prison_Admissions
-17:03:47 SAVE HC to HTML  39/100 -- Rhode Island_Prison_Admissions
-17:03:47 SAVE HC to HTML  40/100 -- South Carolina_Prison_Admissions
-17:03:48 SAVE HC to HTML  41/100 -- South Dakota_Prison_Admissions
-17:03:48 SAVE HC to HTML  42/100 -- Tennessee_Prison_Admissions
-17:03:49 SAVE HC to HTML  43/100 -- Texas_Prison_Admissions
-17:03:50 SAVE HC to HTML  44/100 -- Utah_Prison_Admissions
-17:03:50 SAVE HC to HTML  45/100 -- Vermont_Prison_Admissions
-17:03:51 SAVE HC to HTML  46/100 -- Virginia_Prison_Admissions
-17:03:51 SAVE HC to HTML  47/100 -- Washington_Prison_Admissions
-17:03:52 SAVE HC to HTML  48/100 -- West Virginia_Prison_Admissions
-17:03:53 SAVE HC to HTML  49/100 -- Wisconsin_Prison_Admissions
-17:03:53 SAVE HC to HTML  50/100 -- Wyoming_Prison_Admissions
-17:03:54 SAVE HC to HTML  51/100 -- Alabama_Prison_Population
-17:03:54 SAVE HC to HTML  52/100 -- Alaska_Prison_Population
-17:03:55 SAVE HC to HTML  53/100 -- Arizona_Prison_Population
-17:03:56 SAVE HC to HTML  54/100 -- Arkansas_Prison_Population
-17:03:56 SAVE HC to HTML  55/100 -- California_Prison_Population
-17:03:57 SAVE HC to HTML  56/100 -- Colorado_Prison_Population
-17:03:58 SAVE HC to HTML  57/100 -- Connecticut_Prison_Population
-17:03:58 SAVE HC to HTML  58/100 -- Delaware_Prison_Population
-17:03:59 SAVE HC to HTML  59/100 -- Florida_Prison_Population
-17:03:59 SAVE HC to HTML  60/100 -- Georgia_Prison_Population
-17:04:00 SAVE HC to HTML  61/100 -- Hawaii_Prison_Population
-17:04:01 SAVE HC to HTML  62/100 -- Idaho_Prison_Population
-17:04:01 SAVE HC to HTML  63/100 -- Illinois_Prison_Population
-17:04:02 SAVE HC to HTML  64/100 -- Indiana_Prison_Population
-17:04:03 SAVE HC to HTML  65/100 -- Iowa_Prison_Population
-17:04:03 SAVE HC to HTML  66/100 -- Kansas_Prison_Population
-17:04:04 SAVE HC to HTML  67/100 -- Kentucky_Prison_Population
-17:04:05 SAVE HC to HTML  68/100 -- Louisiana_Prison_Population
-17:04:05 SAVE HC to HTML  69/100 -- Maine_Prison_Population
-17:04:06 SAVE HC to HTML  70/100 -- Maryland_Prison_Population
-17:04:06 SAVE HC to HTML  71/100 -- Massachusetts_Prison_Population
-17:04:07 SAVE HC to HTML  72/100 -- Michigan_Prison_Population
-17:04:08 SAVE HC to HTML  73/100 -- Minnesota_Prison_Population
-17:04:08 SAVE HC to HTML  74/100 -- Mississippi_Prison_Population
-17:04:09 SAVE HC to HTML  75/100 -- Missouri_Prison_Population
-17:04:10 SAVE HC to HTML  76/100 -- Montana_Prison_Population
-17:04:10 SAVE HC to HTML  77/100 -- Nebraska_Prison_Population
-17:04:35 SAVE HC to HTML  78/100 -- Nevada_Prison_Population
-17:04:37 SAVE HC to HTML  79/100 -- New Hampshire_Prison_Population
-17:04:39 SAVE HC to HTML  80/100 -- New Jersey_Prison_Population
-17:04:40 SAVE HC to HTML  81/100 -- New Mexico_Prison_Population
-17:04:41 SAVE HC to HTML  82/100 -- New York_Prison_Population
-17:04:43 SAVE HC to HTML  83/100 -- North Carolina_Prison_Population
-17:04:45 SAVE HC to HTML  84/100 -- North Dakota_Prison_Population
-17:04:46 SAVE HC to HTML  85/100 -- Ohio_Prison_Population
-17:04:49 SAVE HC to HTML  86/100 -- Oklahoma_Prison_Population
-17:04:50 SAVE HC to HTML  87/100 -- Oregon_Prison_Population
-17:04:52 SAVE HC to HTML  88/100 -- Pennsylvania_Prison_Population
-17:04:52 SAVE HC to HTML  89/100 -- Rhode Island_Prison_Population
-17:04:53 SAVE HC to HTML  90/100 -- South Carolina_Prison_Population
-17:04:53 SAVE HC to HTML  91/100 -- South Dakota_Prison_Population
-17:04:54 SAVE HC to HTML  92/100 -- Tennessee_Prison_Population
-17:04:54 SAVE HC to HTML  93/100 -- Texas_Prison_Population
-17:04:55 SAVE HC to HTML  94/100 -- Utah_Prison_Population
-17:04:56 SAVE HC to HTML  95/100 -- Vermont_Prison_Population
-17:04:56 SAVE HC to HTML  96/100 -- Virginia_Prison_Population
-17:04:57 SAVE HC to HTML  97/100 -- Washington_Prison_Population
-17:04:57 SAVE HC to HTML  98/100 -- West Virginia_Prison_Population
-17:04:58 SAVE HC to HTML  99/100 -- Wisconsin_Prison_Population
-17:04:59 SAVE HC to HTML 100/100 -- Wyoming_Prison_Population
+11:37:26 SAVE HC to HTML   1/100 -- Alabama_Prison_Admissions
+11:37:27 SAVE HC to HTML   2/100 -- Alaska_Prison_Admissions
+11:38:00 SAVE HC to HTML   3/100 -- Arizona_Prison_Admissions
+11:38:02 SAVE HC to HTML   4/100 -- Arkansas_Prison_Admissions
+11:38:04 SAVE HC to HTML   5/100 -- California_Prison_Admissions
+11:38:06 SAVE HC to HTML   6/100 -- Colorado_Prison_Admissions
+11:38:08 SAVE HC to HTML   7/100 -- Connecticut_Prison_Admissions
+11:38:34 SAVE HC to HTML   8/100 -- Delaware_Prison_Admissions
+11:38:54 SAVE HC to HTML   9/100 -- Florida_Prison_Admissions
+11:39:05 SAVE HC to HTML  10/100 -- Georgia_Prison_Admissions
+11:39:13 SAVE HC to HTML  11/100 -- Hawaii_Prison_Admissions
+11:39:17 SAVE HC to HTML  12/100 -- Idaho_Prison_Admissions
+11:39:19 SAVE HC to HTML  13/100 -- Illinois_Prison_Admissions
+11:39:21 SAVE HC to HTML  14/100 -- Indiana_Prison_Admissions
+11:39:22 SAVE HC to HTML  15/100 -- Iowa_Prison_Admissions
+11:39:39 SAVE HC to HTML  16/100 -- Kansas_Prison_Admissions
+11:39:53 SAVE HC to HTML  17/100 -- Kentucky_Prison_Admissions
+11:40:18 SAVE HC to HTML  18/100 -- Louisiana_Prison_Admissions
+11:41:04 SAVE HC to HTML  19/100 -- Maine_Prison_Admissions
+11:41:05 SAVE HC to HTML  20/100 -- Maryland_Prison_Admissions
+11:41:09 SAVE HC to HTML  21/100 -- Massachusetts_Prison_Admissions
+11:41:10 SAVE HC to HTML  22/100 -- Michigan_Prison_Admissions
+11:41:12 SAVE HC to HTML  23/100 -- Minnesota_Prison_Admissions
+11:41:14 SAVE HC to HTML  24/100 -- Mississippi_Prison_Admissions
+11:42:04 SAVE HC to HTML  25/100 -- Missouri_Prison_Admissions
+11:42:10 SAVE HC to HTML  26/100 -- Montana_Prison_Admissions
+11:42:11 SAVE HC to HTML  27/100 -- Nebraska_Prison_Admissions
+11:42:11 SAVE HC to HTML  28/100 -- Nevada_Prison_Admissions
+11:42:12 SAVE HC to HTML  29/100 -- New Hampshire_Prison_Admissions
+11:42:12 SAVE HC to HTML  30/100 -- New Jersey_Prison_Admissions
+11:42:13 SAVE HC to HTML  31/100 -- New Mexico_Prison_Admissions
+11:42:14 SAVE HC to HTML  32/100 -- New York_Prison_Admissions
+11:42:15 SAVE HC to HTML  33/100 -- North Carolina_Prison_Admissions
+11:42:15 SAVE HC to HTML  34/100 -- North Dakota_Prison_Admissions
+11:42:16 SAVE HC to HTML  35/100 -- Ohio_Prison_Admissions
+11:42:17 SAVE HC to HTML  36/100 -- Oklahoma_Prison_Admissions
+11:42:18 SAVE HC to HTML  37/100 -- Oregon_Prison_Admissions
+11:42:18 SAVE HC to HTML  38/100 -- Pennsylvania_Prison_Admissions
+11:42:19 SAVE HC to HTML  39/100 -- Rhode Island_Prison_Admissions
+11:42:19 SAVE HC to HTML  40/100 -- South Carolina_Prison_Admissions
+11:42:20 SAVE HC to HTML  41/100 -- South Dakota_Prison_Admissions
+11:42:21 SAVE HC to HTML  42/100 -- Tennessee_Prison_Admissions
+11:42:21 SAVE HC to HTML  43/100 -- Texas_Prison_Admissions
+11:42:22 SAVE HC to HTML  44/100 -- Utah_Prison_Admissions
+11:42:23 SAVE HC to HTML  45/100 -- Vermont_Prison_Admissions
+11:42:24 SAVE HC to HTML  46/100 -- Virginia_Prison_Admissions
+11:42:24 SAVE HC to HTML  47/100 -- Washington_Prison_Admissions
+11:42:25 SAVE HC to HTML  48/100 -- West Virginia_Prison_Admissions
+11:42:26 SAVE HC to HTML  49/100 -- Wisconsin_Prison_Admissions
+11:42:26 SAVE HC to HTML  50/100 -- Wyoming_Prison_Admissions
+11:42:27 SAVE HC to HTML  51/100 -- Alabama_Prison_Population
+11:42:28 SAVE HC to HTML  52/100 -- Alaska_Prison_Population
+11:42:28 SAVE HC to HTML  53/100 -- Arizona_Prison_Population
+11:42:29 SAVE HC to HTML  54/100 -- Arkansas_Prison_Population
+11:42:29 SAVE HC to HTML  55/100 -- California_Prison_Population
+11:42:30 SAVE HC to HTML  56/100 -- Colorado_Prison_Population
+11:42:31 SAVE HC to HTML  57/100 -- Connecticut_Prison_Population
+11:42:31 SAVE HC to HTML  58/100 -- Delaware_Prison_Population
+11:42:32 SAVE HC to HTML  59/100 -- Florida_Prison_Population
+11:42:32 SAVE HC to HTML  60/100 -- Georgia_Prison_Population
+11:42:33 SAVE HC to HTML  61/100 -- Hawaii_Prison_Population
+11:42:34 SAVE HC to HTML  62/100 -- Idaho_Prison_Population
+11:42:34 SAVE HC to HTML  63/100 -- Illinois_Prison_Population
+11:42:35 SAVE HC to HTML  64/100 -- Indiana_Prison_Population
+11:42:36 SAVE HC to HTML  65/100 -- Iowa_Prison_Population
+11:42:37 SAVE HC to HTML  66/100 -- Kansas_Prison_Population
+11:42:37 SAVE HC to HTML  67/100 -- Kentucky_Prison_Population
+11:42:38 SAVE HC to HTML  68/100 -- Louisiana_Prison_Population
+11:42:39 SAVE HC to HTML  69/100 -- Maine_Prison_Population
+11:42:39 SAVE HC to HTML  70/100 -- Maryland_Prison_Population
+11:42:40 SAVE HC to HTML  71/100 -- Massachusetts_Prison_Population
+11:42:40 SAVE HC to HTML  72/100 -- Michigan_Prison_Population
+11:42:41 SAVE HC to HTML  73/100 -- Minnesota_Prison_Population
+11:42:41 SAVE HC to HTML  74/100 -- Mississippi_Prison_Population
+11:42:42 SAVE HC to HTML  75/100 -- Missouri_Prison_Population
+11:42:43 SAVE HC to HTML  76/100 -- Montana_Prison_Population
+11:42:44 SAVE HC to HTML  77/100 -- Nebraska_Prison_Population
+11:42:44 SAVE HC to HTML  78/100 -- Nevada_Prison_Population
+11:42:45 SAVE HC to HTML  79/100 -- New Hampshire_Prison_Population
+11:42:46 SAVE HC to HTML  80/100 -- New Jersey_Prison_Population
+11:42:47 SAVE HC to HTML  81/100 -- New Mexico_Prison_Population
+11:42:47 SAVE HC to HTML  82/100 -- New York_Prison_Population
+11:42:48 SAVE HC to HTML  83/100 -- North Carolina_Prison_Population
+11:42:48 SAVE HC to HTML  84/100 -- North Dakota_Prison_Population
+11:42:49 SAVE HC to HTML  85/100 -- Ohio_Prison_Population
+11:42:50 SAVE HC to HTML  86/100 -- Oklahoma_Prison_Population
+11:42:50 SAVE HC to HTML  87/100 -- Oregon_Prison_Population
+11:42:51 SAVE HC to HTML  88/100 -- Pennsylvania_Prison_Population
+11:42:51 SAVE HC to HTML  89/100 -- Rhode Island_Prison_Population
+11:42:52 SAVE HC to HTML  90/100 -- South Carolina_Prison_Population
+11:42:53 SAVE HC to HTML  91/100 -- South Dakota_Prison_Population
+11:42:54 SAVE HC to HTML  92/100 -- Tennessee_Prison_Population
+11:42:54 SAVE HC to HTML  93/100 -- Texas_Prison_Population
+11:42:55 SAVE HC to HTML  94/100 -- Utah_Prison_Population
+11:42:56 SAVE HC to HTML  95/100 -- Vermont_Prison_Population
+11:42:57 SAVE HC to HTML  96/100 -- Virginia_Prison_Population
+11:42:57 SAVE HC to HTML  97/100 -- Washington_Prison_Population
+11:42:58 SAVE HC to HTML  98/100 -- West Virginia_Prison_Population
+11:42:59 SAVE HC to HTML  99/100 -- Wisconsin_Prison_Population
+11:43:00 SAVE HC to HTML 100/100 -- Wyoming_Prison_Population
 
 > # STATE BAR HTML DOWNLOAD ######################################################
 > 
 > state_bar_html_lst <- pmap(
 +   # created in 3a_highchart_fnc. .... [TRUNCATED] 
-17:04:59 BAR CHART   1/300 -- Admissions, Both, Alabama
-17:04:59 BAR CHART   2/300 -- Admissions, Both, Alaska
-17:05:00 BAR CHART   3/300 -- Admissions, Both, Arizona
-17:05:00 BAR CHART   4/300 -- Admissions, Both, Arkansas
-17:05:00 BAR CHART   5/300 -- Admissions, Both, California
-17:05:00 BAR CHART   6/300 -- Admissions, Both, Colorado
-17:05:00 BAR CHART   7/300 -- Admissions, Both, Connecticut
-17:05:00 BAR CHART   8/300 -- Admissions, Both, Delaware
-17:05:00 BAR CHART   9/300 -- Admissions, Both, Florida
-17:05:00 BAR CHART  10/300 -- Admissions, Both, Georgia
-17:05:00 BAR CHART  11/300 -- Admissions, Both, Hawaii
-17:05:01 BAR CHART  12/300 -- Admissions, Both, Idaho
-17:05:01 BAR CHART  13/300 -- Admissions, Both, Illinois
-17:05:01 BAR CHART  14/300 -- Admissions, Both, Indiana
-17:05:01 BAR CHART  15/300 -- Admissions, Both, Iowa
-17:05:01 BAR CHART  16/300 -- Admissions, Both, Kansas
-17:05:01 BAR CHART  17/300 -- Admissions, Both, Kentucky
-17:05:01 BAR CHART  18/300 -- Admissions, Both, Louisiana
-17:05:01 BAR CHART  19/300 -- Admissions, Both, Maine
-17:05:02 BAR CHART  20/300 -- Admissions, Both, Maryland
-17:05:02 BAR CHART  21/300 -- Admissions, Both, Massachusetts
-17:05:02 BAR CHART  22/300 -- Admissions, Both, Michigan
-17:05:02 BAR CHART  23/300 -- Admissions, Both, Minnesota
-17:05:02 BAR CHART  24/300 -- Admissions, Both, Mississippi
-17:05:02 BAR CHART  25/300 -- Admissions, Both, Missouri
-17:05:02 BAR CHART  26/300 -- Admissions, Both, Montana
-17:05:02 BAR CHART  27/300 -- Admissions, Both, Nebraska
-17:05:03 BAR CHART  28/300 -- Admissions, Both, Nevada
-17:05:03 BAR CHART  29/300 -- Admissions, Both, New Hampshire
-17:05:03 BAR CHART  30/300 -- Admissions, Both, New Jersey
-17:05:03 BAR CHART  31/300 -- Admissions, Both, New Mexico
-17:05:03 BAR CHART  32/300 -- Admissions, Both, New York
-17:05:03 BAR CHART  33/300 -- Admissions, Both, North Carolina
-17:05:03 BAR CHART  34/300 -- Admissions, Both, North Dakota
-17:05:03 BAR CHART  35/300 -- Admissions, Both, Ohio
-17:05:03 BAR CHART  36/300 -- Admissions, Both, Oklahoma
-17:05:04 BAR CHART  37/300 -- Admissions, Both, Oregon
-17:05:04 BAR CHART  38/300 -- Admissions, Both, Pennsylvania
-17:05:04 BAR CHART  39/300 -- Admissions, Both, Rhode Island
-17:05:04 BAR CHART  40/300 -- Admissions, Both, South Carolina
-17:05:04 BAR CHART  41/300 -- Admissions, Both, South Dakota
-17:05:04 BAR CHART  42/300 -- Admissions, Both, Tennessee
-17:05:04 BAR CHART  43/300 -- Admissions, Both, Texas
-17:05:04 BAR CHART  44/300 -- Admissions, Both, Utah
-17:05:05 BAR CHART  45/300 -- Admissions, Both, Vermont
-17:05:05 BAR CHART  46/300 -- Admissions, Both, Virginia
-17:05:05 BAR CHART  47/300 -- Admissions, Both, Washington
-17:05:05 BAR CHART  48/300 -- Admissions, Both, West Virginia
-17:05:05 BAR CHART  49/300 -- Admissions, Both, Wisconsin
-17:05:05 BAR CHART  50/300 -- Admissions, Both, Wyoming
-17:05:05 BAR CHART  51/300 -- Admissions, Parole, Alabama
-17:05:05 BAR CHART  52/300 -- Admissions, Parole, Alaska
-17:05:06 BAR CHART  53/300 -- Admissions, Parole, Arizona
-17:05:06 BAR CHART  54/300 -- Admissions, Parole, Arkansas
-17:05:06 BAR CHART  55/300 -- Admissions, Parole, California
-17:05:06 BAR CHART  56/300 -- Admissions, Parole, Colorado
-17:05:06 BAR CHART  57/300 -- Admissions, Parole, Connecticut
-17:05:06 BAR CHART  58/300 -- Admissions, Parole, Delaware
-17:05:06 BAR CHART  59/300 -- Admissions, Parole, Florida
-17:05:06 BAR CHART  60/300 -- Admissions, Parole, Georgia
-17:05:07 BAR CHART  61/300 -- Admissions, Parole, Hawaii
-17:05:07 BAR CHART  62/300 -- Admissions, Parole, Idaho
-17:05:07 BAR CHART  63/300 -- Admissions, Parole, Illinois
-17:05:07 BAR CHART  64/300 -- Admissions, Parole, Indiana
-17:05:07 BAR CHART  65/300 -- Admissions, Parole, Iowa
-17:05:07 BAR CHART  66/300 -- Admissions, Parole, Kansas
-17:05:07 BAR CHART  67/300 -- Admissions, Parole, Kentucky
-17:05:08 BAR CHART  68/300 -- Admissions, Parole, Louisiana
-17:05:08 BAR CHART  69/300 -- Admissions, Parole, Maine
-17:05:08 BAR CHART  70/300 -- Admissions, Parole, Maryland
-17:05:08 BAR CHART  71/300 -- Admissions, Parole, Massachusetts
-17:05:08 BAR CHART  72/300 -- Admissions, Parole, Michigan
-17:05:08 BAR CHART  73/300 -- Admissions, Parole, Minnesota
-17:05:08 BAR CHART  74/300 -- Admissions, Parole, Mississippi
-17:05:08 BAR CHART  75/300 -- Admissions, Parole, Missouri
-17:05:09 BAR CHART  76/300 -- Admissions, Parole, Montana
-17:05:09 BAR CHART  77/300 -- Admissions, Parole, Nebraska
-17:05:09 BAR CHART  78/300 -- Admissions, Parole, Nevada
-17:05:09 BAR CHART  79/300 -- Admissions, Parole, New Hampshire
-17:05:09 BAR CHART  80/300 -- Admissions, Parole, New Jersey
-17:05:09 BAR CHART  81/300 -- Admissions, Parole, New Mexico
-17:05:09 BAR CHART  82/300 -- Admissions, Parole, New York
-17:05:09 BAR CHART  83/300 -- Admissions, Parole, North Carolina
-17:05:09 BAR CHART  84/300 -- Admissions, Parole, North Dakota
-17:05:09 BAR CHART  85/300 -- Admissions, Parole, Ohio
-17:05:09 BAR CHART  86/300 -- Admissions, Parole, Oklahoma
-17:05:09 BAR CHART  87/300 -- Admissions, Parole, Oregon
-17:05:10 BAR CHART  88/300 -- Admissions, Parole, Pennsylvania
-17:05:10 BAR CHART  89/300 -- Admissions, Parole, Rhode Island
-17:05:10 BAR CHART  90/300 -- Admissions, Parole, South Carolina
-17:05:10 BAR CHART  91/300 -- Admissions, Parole, South Dakota
-17:05:10 BAR CHART  92/300 -- Admissions, Parole, Tennessee
-17:05:10 BAR CHART  93/300 -- Admissions, Parole, Texas
-17:05:10 BAR CHART  94/300 -- Admissions, Parole, Utah
-17:05:10 BAR CHART  95/300 -- Admissions, Parole, Vermont
-17:05:16 BAR CHART  96/300 -- Admissions, Parole, Virginia
-17:05:16 BAR CHART  97/300 -- Admissions, Parole, Washington
-17:05:16 BAR CHART  98/300 -- Admissions, Parole, West Virginia
-17:05:17 BAR CHART  99/300 -- Admissions, Parole, Wisconsin
-17:05:17 BAR CHART 100/300 -- Admissions, Parole, Wyoming
-17:05:17 BAR CHART 101/300 -- Admissions, Probation, Alabama
-17:05:17 BAR CHART 102/300 -- Admissions, Probation, Alaska
-17:05:17 BAR CHART 103/300 -- Admissions, Probation, Arizona
-17:05:17 BAR CHART 104/300 -- Admissions, Probation, Arkansas
-17:05:17 BAR CHART 105/300 -- Admissions, Probation, California
-17:05:17 BAR CHART 106/300 -- Admissions, Probation, Colorado
-17:05:17 BAR CHART 107/300 -- Admissions, Probation, Connecticut
-17:05:18 BAR CHART 108/300 -- Admissions, Probation, Delaware
-17:05:18 BAR CHART 109/300 -- Admissions, Probation, Florida
-17:05:18 BAR CHART 110/300 -- Admissions, Probation, Georgia
-17:05:18 BAR CHART 111/300 -- Admissions, Probation, Hawaii
-17:05:18 BAR CHART 112/300 -- Admissions, Probation, Idaho
-17:05:18 BAR CHART 113/300 -- Admissions, Probation, Illinois
-17:05:18 BAR CHART 114/300 -- Admissions, Probation, Indiana
-17:05:18 BAR CHART 115/300 -- Admissions, Probation, Iowa
-17:05:19 BAR CHART 116/300 -- Admissions, Probation, Kansas
-17:05:19 BAR CHART 117/300 -- Admissions, Probation, Kentucky
-17:05:19 BAR CHART 118/300 -- Admissions, Probation, Louisiana
-17:05:19 BAR CHART 119/300 -- Admissions, Probation, Maine
-17:05:19 BAR CHART 120/300 -- Admissions, Probation, Maryland
-17:05:19 BAR CHART 121/300 -- Admissions, Probation, Massachusetts
-17:05:19 BAR CHART 122/300 -- Admissions, Probation, Michigan
-17:05:19 BAR CHART 123/300 -- Admissions, Probation, Minnesota
-17:05:20 BAR CHART 124/300 -- Admissions, Probation, Mississippi
-17:05:20 BAR CHART 125/300 -- Admissions, Probation, Missouri
-17:05:20 BAR CHART 126/300 -- Admissions, Probation, Montana
-17:05:20 BAR CHART 127/300 -- Admissions, Probation, Nebraska
-17:05:20 BAR CHART 128/300 -- Admissions, Probation, Nevada
-17:05:20 BAR CHART 129/300 -- Admissions, Probation, New Hampshire
-17:05:20 BAR CHART 130/300 -- Admissions, Probation, New Jersey
-17:05:21 BAR CHART 131/300 -- Admissions, Probation, New Mexico
-17:05:21 BAR CHART 132/300 -- Admissions, Probation, New York
-17:05:21 BAR CHART 133/300 -- Admissions, Probation, North Carolina
-17:05:21 BAR CHART 134/300 -- Admissions, Probation, North Dakota
-17:05:21 BAR CHART 135/300 -- Admissions, Probation, Ohio
-17:05:21 BAR CHART 136/300 -- Admissions, Probation, Oklahoma
-17:05:21 BAR CHART 137/300 -- Admissions, Probation, Oregon
-17:05:22 BAR CHART 138/300 -- Admissions, Probation, Pennsylvania
-17:05:22 BAR CHART 139/300 -- Admissions, Probation, Rhode Island
-17:05:22 BAR CHART 140/300 -- Admissions, Probation, South Carolina
-17:05:22 BAR CHART 141/300 -- Admissions, Probation, South Dakota
-17:05:22 BAR CHART 142/300 -- Admissions, Probation, Tennessee
-17:05:22 BAR CHART 143/300 -- Admissions, Probation, Texas
-17:05:23 BAR CHART 144/300 -- Admissions, Probation, Utah
-17:05:23 BAR CHART 145/300 -- Admissions, Probation, Vermont
-17:05:23 BAR CHART 146/300 -- Admissions, Probation, Virginia
-17:05:23 BAR CHART 147/300 -- Admissions, Probation, Washington
-17:05:23 BAR CHART 148/300 -- Admissions, Probation, West Virginia
-17:05:23 BAR CHART 149/300 -- Admissions, Probation, Wisconsin
-17:05:23 BAR CHART 150/300 -- Admissions, Probation, Wyoming
-17:05:23 BAR CHART 151/300 -- Population, Both, Alabama
-17:05:24 BAR CHART 152/300 -- Population, Both, Alaska
-17:05:24 BAR CHART 153/300 -- Population, Both, Arizona
-17:05:24 BAR CHART 154/300 -- Population, Both, Arkansas
-17:05:24 BAR CHART 155/300 -- Population, Both, California
-17:05:24 BAR CHART 156/300 -- Population, Both, Colorado
-17:05:24 BAR CHART 157/300 -- Population, Both, Connecticut
-17:05:24 BAR CHART 158/300 -- Population, Both, Delaware
-17:05:24 BAR CHART 159/300 -- Population, Both, Florida
-17:05:24 BAR CHART 160/300 -- Population, Both, Georgia
-17:05:24 BAR CHART 161/300 -- Population, Both, Hawaii
-17:05:24 BAR CHART 162/300 -- Population, Both, Idaho
-17:05:25 BAR CHART 163/300 -- Population, Both, Illinois
-17:05:25 BAR CHART 164/300 -- Population, Both, Indiana
-17:05:25 BAR CHART 165/300 -- Population, Both, Iowa
-17:05:25 BAR CHART 166/300 -- Population, Both, Kansas
-17:05:25 BAR CHART 167/300 -- Population, Both, Kentucky
-17:05:25 BAR CHART 168/300 -- Population, Both, Louisiana
-17:05:25 BAR CHART 169/300 -- Population, Both, Maine
-17:05:25 BAR CHART 170/300 -- Population, Both, Maryland
-17:05:25 BAR CHART 171/300 -- Population, Both, Massachusetts
-17:05:26 BAR CHART 172/300 -- Population, Both, Michigan
-17:05:26 BAR CHART 173/300 -- Population, Both, Minnesota
-17:05:26 BAR CHART 174/300 -- Population, Both, Mississippi
-17:05:26 BAR CHART 175/300 -- Population, Both, Missouri
-17:05:26 BAR CHART 176/300 -- Population, Both, Montana
-17:05:26 BAR CHART 177/300 -- Population, Both, Nebraska
-17:05:26 BAR CHART 178/300 -- Population, Both, Nevada
-17:05:26 BAR CHART 179/300 -- Population, Both, New Hampshire
-17:05:26 BAR CHART 180/300 -- Population, Both, New Jersey
-17:05:27 BAR CHART 181/300 -- Population, Both, New Mexico
-17:05:27 BAR CHART 182/300 -- Population, Both, New York
-17:05:27 BAR CHART 183/300 -- Population, Both, North Carolina
-17:05:27 BAR CHART 184/300 -- Population, Both, North Dakota
-17:05:27 BAR CHART 185/300 -- Population, Both, Ohio
-17:05:27 BAR CHART 186/300 -- Population, Both, Oklahoma
-17:05:27 BAR CHART 187/300 -- Population, Both, Oregon
-17:05:27 BAR CHART 188/300 -- Population, Both, Pennsylvania
-17:05:28 BAR CHART 189/300 -- Population, Both, Rhode Island
-17:05:28 BAR CHART 190/300 -- Population, Both, South Carolina
-17:05:28 BAR CHART 191/300 -- Population, Both, South Dakota
-17:05:28 BAR CHART 192/300 -- Population, Both, Tennessee
-17:05:28 BAR CHART 193/300 -- Population, Both, Texas
-17:05:28 BAR CHART 194/300 -- Population, Both, Utah
-17:05:28 BAR CHART 195/300 -- Population, Both, Vermont
-17:05:28 BAR CHART 196/300 -- Population, Both, Virginia
-17:05:29 BAR CHART 197/300 -- Population, Both, Washington
-17:05:29 BAR CHART 198/300 -- Population, Both, West Virginia
-17:05:29 BAR CHART 199/300 -- Population, Both, Wisconsin
-17:05:29 BAR CHART 200/300 -- Population, Both, Wyoming
-17:05:29 BAR CHART 201/300 -- Population, Parole, Alabama
-17:05:29 BAR CHART 202/300 -- Population, Parole, Alaska
-17:05:29 BAR CHART 203/300 -- Population, Parole, Arizona
-17:05:30 BAR CHART 204/300 -- Population, Parole, Arkansas
-17:05:30 BAR CHART 205/300 -- Population, Parole, California
-17:05:30 BAR CHART 206/300 -- Population, Parole, Colorado
-17:05:30 BAR CHART 207/300 -- Population, Parole, Connecticut
-17:05:30 BAR CHART 208/300 -- Population, Parole, Delaware
-17:05:30 BAR CHART 209/300 -- Population, Parole, Florida
-17:05:31 BAR CHART 210/300 -- Population, Parole, Georgia
-17:05:31 BAR CHART 211/300 -- Population, Parole, Hawaii
-17:05:31 BAR CHART 212/300 -- Population, Parole, Idaho
-17:05:31 BAR CHART 213/300 -- Population, Parole, Illinois
-17:05:31 BAR CHART 214/300 -- Population, Parole, Indiana
-17:05:31 BAR CHART 215/300 -- Population, Parole, Iowa
-17:05:32 BAR CHART 216/300 -- Population, Parole, Kansas
-17:05:32 BAR CHART 217/300 -- Population, Parole, Kentucky
-17:05:32 BAR CHART 218/300 -- Population, Parole, Louisiana
-17:05:32 BAR CHART 219/300 -- Population, Parole, Maine
-17:05:32 BAR CHART 220/300 -- Population, Parole, Maryland
-17:05:33 BAR CHART 221/300 -- Population, Parole, Massachusetts
-17:05:33 BAR CHART 222/300 -- Population, Parole, Michigan
-17:05:33 BAR CHART 223/300 -- Population, Parole, Minnesota
-17:05:33 BAR CHART 224/300 -- Population, Parole, Mississippi
-17:05:33 BAR CHART 225/300 -- Population, Parole, Missouri
-17:05:33 BAR CHART 226/300 -- Population, Parole, Montana
-17:05:33 BAR CHART 227/300 -- Population, Parole, Nebraska
-17:05:33 BAR CHART 228/300 -- Population, Parole, Nevada
-17:05:33 BAR CHART 229/300 -- Population, Parole, New Hampshire
-17:05:34 BAR CHART 230/300 -- Population, Parole, New Jersey
-17:05:34 BAR CHART 231/300 -- Population, Parole, New Mexico
-17:05:34 BAR CHART 232/300 -- Population, Parole, New York
-17:05:34 BAR CHART 233/300 -- Population, Parole, North Carolina
-17:05:34 BAR CHART 234/300 -- Population, Parole, North Dakota
-17:05:34 BAR CHART 235/300 -- Population, Parole, Ohio
-17:05:34 BAR CHART 236/300 -- Population, Parole, Oklahoma
-17:05:34 BAR CHART 237/300 -- Population, Parole, Oregon
-17:05:34 BAR CHART 238/300 -- Population, Parole, Pennsylvania
-17:05:34 BAR CHART 239/300 -- Population, Parole, Rhode Island
-17:05:35 BAR CHART 240/300 -- Population, Parole, South Carolina
-17:05:35 BAR CHART 241/300 -- Population, Parole, South Dakota
-17:05:35 BAR CHART 242/300 -- Population, Parole, Tennessee
-17:05:35 BAR CHART 243/300 -- Population, Parole, Texas
-17:05:35 BAR CHART 244/300 -- Population, Parole, Utah
-17:05:35 BAR CHART 245/300 -- Population, Parole, Vermont
-17:05:35 BAR CHART 246/300 -- Population, Parole, Virginia
-17:05:35 BAR CHART 247/300 -- Population, Parole, Washington
-17:05:35 BAR CHART 248/300 -- Population, Parole, West Virginia
-17:05:36 BAR CHART 249/300 -- Population, Parole, Wisconsin
-17:05:36 BAR CHART 250/300 -- Population, Parole, Wyoming
-17:05:36 BAR CHART 251/300 -- Population, Probation, Alabama
-17:05:36 BAR CHART 252/300 -- Population, Probation, Alaska
-17:05:36 BAR CHART 253/300 -- Population, Probation, Arizona
-17:05:36 BAR CHART 254/300 -- Population, Probation, Arkansas
-17:05:36 BAR CHART 255/300 -- Population, Probation, California
-17:05:36 BAR CHART 256/300 -- Population, Probation, Colorado
-17:05:37 BAR CHART 257/300 -- Population, Probation, Connecticut
-17:05:37 BAR CHART 258/300 -- Population, Probation, Delaware
-17:05:37 BAR CHART 259/300 -- Population, Probation, Florida
-17:05:37 BAR CHART 260/300 -- Population, Probation, Georgia
-17:05:37 BAR CHART 261/300 -- Population, Probation, Hawaii
-17:05:37 BAR CHART 262/300 -- Population, Probation, Idaho
-17:05:37 BAR CHART 263/300 -- Population, Probation, Illinois
-17:05:37 BAR CHART 264/300 -- Population, Probation, Indiana
-17:05:38 BAR CHART 265/300 -- Population, Probation, Iowa
-17:05:38 BAR CHART 266/300 -- Population, Probation, Kansas
-17:05:38 BAR CHART 267/300 -- Population, Probation, Kentucky
-17:05:38 BAR CHART 268/300 -- Population, Probation, Louisiana
-17:05:38 BAR CHART 269/300 -- Population, Probation, Maine
-17:05:38 BAR CHART 270/300 -- Population, Probation, Maryland
-17:05:38 BAR CHART 271/300 -- Population, Probation, Massachusetts
-17:05:38 BAR CHART 272/300 -- Population, Probation, Michigan
-17:05:39 BAR CHART 273/300 -- Population, Probation, Minnesota
-17:05:39 BAR CHART 274/300 -- Population, Probation, Mississippi
-17:05:39 BAR CHART 275/300 -- Population, Probation, Missouri
-17:05:39 BAR CHART 276/300 -- Population, Probation, Montana
-17:05:39 BAR CHART 277/300 -- Population, Probation, Nebraska
-17:05:39 BAR CHART 278/300 -- Population, Probation, Nevada
-17:05:39 BAR CHART 279/300 -- Population, Probation, New Hampshire
-17:05:40 BAR CHART 280/300 -- Population, Probation, New Jersey
-17:05:40 BAR CHART 281/300 -- Population, Probation, New Mexico
-17:05:40 BAR CHART 282/300 -- Population, Probation, New York
-17:05:40 BAR CHART 283/300 -- Population, Probation, North Carolina
-17:05:40 BAR CHART 284/300 -- Population, Probation, North Dakota
-17:05:40 BAR CHART 285/300 -- Population, Probation, Ohio
-17:05:41 BAR CHART 286/300 -- Population, Probation, Oklahoma
-17:05:41 BAR CHART 287/300 -- Population, Probation, Oregon
-17:05:41 BAR CHART 288/300 -- Population, Probation, Pennsylvania
-17:05:41 BAR CHART 289/300 -- Population, Probation, Rhode Island
-17:05:41 BAR CHART 290/300 -- Population, Probation, South Carolina
-17:05:41 BAR CHART 291/300 -- Population, Probation, South Dakota
-17:05:41 BAR CHART 292/300 -- Population, Probation, Tennessee
-17:05:42 BAR CHART 293/300 -- Population, Probation, Texas
-17:05:42 BAR CHART 294/300 -- Population, Probation, Utah
-17:05:42 BAR CHART 295/300 -- Population, Probation, Vermont
-17:05:42 BAR CHART 296/300 -- Population, Probation, Virginia
-17:05:42 BAR CHART 297/300 -- Population, Probation, Washington
-17:05:42 BAR CHART 298/300 -- Population, Probation, West Virginia
-17:05:42 BAR CHART 299/300 -- Population, Probation, Wisconsin
-17:05:42 BAR CHART 300/300 -- Population, Probation, Wyoming
+11:43:00 BAR CHART   1/300 -- Admissions, Both, Alabama
+11:43:00 BAR CHART   2/300 -- Admissions, Both, Alaska
+11:43:01 BAR CHART   3/300 -- Admissions, Both, Arizona
+11:43:01 BAR CHART   4/300 -- Admissions, Both, Arkansas
+11:43:01 BAR CHART   5/300 -- Admissions, Both, California
+11:43:01 BAR CHART   6/300 -- Admissions, Both, Colorado
+11:43:01 BAR CHART   7/300 -- Admissions, Both, Connecticut
+11:43:01 BAR CHART   8/300 -- Admissions, Both, Delaware
+11:43:01 BAR CHART   9/300 -- Admissions, Both, Florida
+11:43:01 BAR CHART  10/300 -- Admissions, Both, Georgia
+11:43:01 BAR CHART  11/300 -- Admissions, Both, Hawaii
+11:43:01 BAR CHART  12/300 -- Admissions, Both, Idaho
+11:43:01 BAR CHART  13/300 -- Admissions, Both, Illinois
+11:43:01 BAR CHART  14/300 -- Admissions, Both, Indiana
+11:43:01 BAR CHART  15/300 -- Admissions, Both, Iowa
+11:43:02 BAR CHART  16/300 -- Admissions, Both, Kansas
+11:43:02 BAR CHART  17/300 -- Admissions, Both, Kentucky
+11:43:02 BAR CHART  18/300 -- Admissions, Both, Louisiana
+11:43:02 BAR CHART  19/300 -- Admissions, Both, Maine
+11:43:02 BAR CHART  20/300 -- Admissions, Both, Maryland
+11:43:02 BAR CHART  21/300 -- Admissions, Both, Massachusetts
+11:43:02 BAR CHART  22/300 -- Admissions, Both, Michigan
+11:43:02 BAR CHART  23/300 -- Admissions, Both, Minnesota
+11:43:02 BAR CHART  24/300 -- Admissions, Both, Mississippi
+11:43:03 BAR CHART  25/300 -- Admissions, Both, Missouri
+11:43:03 BAR CHART  26/300 -- Admissions, Both, Montana
+11:43:03 BAR CHART  27/300 -- Admissions, Both, Nebraska
+11:43:03 BAR CHART  28/300 -- Admissions, Both, Nevada
+11:43:03 BAR CHART  29/300 -- Admissions, Both, New Hampshire
+11:43:03 BAR CHART  30/300 -- Admissions, Both, New Jersey
+11:43:03 BAR CHART  31/300 -- Admissions, Both, New Mexico
+11:43:03 BAR CHART  32/300 -- Admissions, Both, New York
+11:43:03 BAR CHART  33/300 -- Admissions, Both, North Carolina
+11:43:03 BAR CHART  34/300 -- Admissions, Both, North Dakota
+11:43:03 BAR CHART  35/300 -- Admissions, Both, Ohio
+11:43:04 BAR CHART  36/300 -- Admissions, Both, Oklahoma
+11:43:04 BAR CHART  37/300 -- Admissions, Both, Oregon
+11:43:04 BAR CHART  38/300 -- Admissions, Both, Pennsylvania
+11:43:04 BAR CHART  39/300 -- Admissions, Both, Rhode Island
+11:43:04 BAR CHART  40/300 -- Admissions, Both, South Carolina
+11:43:04 BAR CHART  41/300 -- Admissions, Both, South Dakota
+11:43:04 BAR CHART  42/300 -- Admissions, Both, Tennessee
+11:43:04 BAR CHART  43/300 -- Admissions, Both, Texas
+11:43:04 BAR CHART  44/300 -- Admissions, Both, Utah
+11:43:04 BAR CHART  45/300 -- Admissions, Both, Vermont
+11:43:05 BAR CHART  46/300 -- Admissions, Both, Virginia
+11:43:05 BAR CHART  47/300 -- Admissions, Both, Washington
+11:43:05 BAR CHART  48/300 -- Admissions, Both, West Virginia
+11:43:05 BAR CHART  49/300 -- Admissions, Both, Wisconsin
+11:43:05 BAR CHART  50/300 -- Admissions, Both, Wyoming
+11:43:05 BAR CHART  51/300 -- Admissions, Parole, Alabama
+11:43:05 BAR CHART  52/300 -- Admissions, Parole, Alaska
+11:43:05 BAR CHART  53/300 -- Admissions, Parole, Arizona
+11:43:05 BAR CHART  54/300 -- Admissions, Parole, Arkansas
+11:43:06 BAR CHART  55/300 -- Admissions, Parole, California
+11:43:06 BAR CHART  56/300 -- Admissions, Parole, Colorado
+11:43:06 BAR CHART  57/300 -- Admissions, Parole, Connecticut
+11:43:06 BAR CHART  58/300 -- Admissions, Parole, Delaware
+11:43:06 BAR CHART  59/300 -- Admissions, Parole, Florida
+11:43:06 BAR CHART  60/300 -- Admissions, Parole, Georgia
+11:43:06 BAR CHART  61/300 -- Admissions, Parole, Hawaii
+11:43:06 BAR CHART  62/300 -- Admissions, Parole, Idaho
+11:43:06 BAR CHART  63/300 -- Admissions, Parole, Illinois
+11:43:06 BAR CHART  64/300 -- Admissions, Parole, Indiana
+11:43:07 BAR CHART  65/300 -- Admissions, Parole, Iowa
+11:43:07 BAR CHART  66/300 -- Admissions, Parole, Kansas
+11:43:07 BAR CHART  67/300 -- Admissions, Parole, Kentucky
+11:43:07 BAR CHART  68/300 -- Admissions, Parole, Louisiana
+11:43:07 BAR CHART  69/300 -- Admissions, Parole, Maine
+11:43:07 BAR CHART  70/300 -- Admissions, Parole, Maryland
+11:43:07 BAR CHART  71/300 -- Admissions, Parole, Massachusetts
+11:43:07 BAR CHART  72/300 -- Admissions, Parole, Michigan
+11:43:07 BAR CHART  73/300 -- Admissions, Parole, Minnesota
+11:43:07 BAR CHART  74/300 -- Admissions, Parole, Mississippi
+11:43:08 BAR CHART  75/300 -- Admissions, Parole, Missouri
+11:43:08 BAR CHART  76/300 -- Admissions, Parole, Montana
+11:43:08 BAR CHART  77/300 -- Admissions, Parole, Nebraska
+11:43:08 BAR CHART  78/300 -- Admissions, Parole, Nevada
+11:43:08 BAR CHART  79/300 -- Admissions, Parole, New Hampshire
+11:43:08 BAR CHART  80/300 -- Admissions, Parole, New Jersey
+11:43:08 BAR CHART  81/300 -- Admissions, Parole, New Mexico
+11:43:08 BAR CHART  82/300 -- Admissions, Parole, New York
+11:43:09 BAR CHART  83/300 -- Admissions, Parole, North Carolina
+11:43:09 BAR CHART  84/300 -- Admissions, Parole, North Dakota
+11:43:09 BAR CHART  85/300 -- Admissions, Parole, Ohio
+11:43:09 BAR CHART  86/300 -- Admissions, Parole, Oklahoma
+11:43:09 BAR CHART  87/300 -- Admissions, Parole, Oregon
+11:43:09 BAR CHART  88/300 -- Admissions, Parole, Pennsylvania
+11:43:09 BAR CHART  89/300 -- Admissions, Parole, Rhode Island
+11:43:09 BAR CHART  90/300 -- Admissions, Parole, South Carolina
+11:43:09 BAR CHART  91/300 -- Admissions, Parole, South Dakota
+11:43:10 BAR CHART  92/300 -- Admissions, Parole, Tennessee
+11:43:10 BAR CHART  93/300 -- Admissions, Parole, Texas
+11:43:10 BAR CHART  94/300 -- Admissions, Parole, Utah
+11:43:10 BAR CHART  95/300 -- Admissions, Parole, Vermont
+11:43:10 BAR CHART  96/300 -- Admissions, Parole, Virginia
+11:43:10 BAR CHART  97/300 -- Admissions, Parole, Washington
+11:43:10 BAR CHART  98/300 -- Admissions, Parole, West Virginia
+11:43:10 BAR CHART  99/300 -- Admissions, Parole, Wisconsin
+11:43:11 BAR CHART 100/300 -- Admissions, Parole, Wyoming
+11:43:11 BAR CHART 101/300 -- Admissions, Probation, Alabama
+11:43:11 BAR CHART 102/300 -- Admissions, Probation, Alaska
+11:43:11 BAR CHART 103/300 -- Admissions, Probation, Arizona
+11:43:11 BAR CHART 104/300 -- Admissions, Probation, Arkansas
+11:43:11 BAR CHART 105/300 -- Admissions, Probation, California
+11:43:11 BAR CHART 106/300 -- Admissions, Probation, Colorado
+11:43:11 BAR CHART 107/300 -- Admissions, Probation, Connecticut
+11:43:12 BAR CHART 108/300 -- Admissions, Probation, Delaware
+11:43:12 BAR CHART 109/300 -- Admissions, Probation, Florida
+11:43:12 BAR CHART 110/300 -- Admissions, Probation, Georgia
+11:43:12 BAR CHART 111/300 -- Admissions, Probation, Hawaii
+11:43:12 BAR CHART 112/300 -- Admissions, Probation, Idaho
+11:43:12 BAR CHART 113/300 -- Admissions, Probation, Illinois
+11:43:12 BAR CHART 114/300 -- Admissions, Probation, Indiana
+11:43:12 BAR CHART 115/300 -- Admissions, Probation, Iowa
+11:43:12 BAR CHART 116/300 -- Admissions, Probation, Kansas
+11:43:12 BAR CHART 117/300 -- Admissions, Probation, Kentucky
+11:43:12 BAR CHART 118/300 -- Admissions, Probation, Louisiana
+11:43:13 BAR CHART 119/300 -- Admissions, Probation, Maine
+11:43:13 BAR CHART 120/300 -- Admissions, Probation, Maryland
+11:43:13 BAR CHART 121/300 -- Admissions, Probation, Massachusetts
+11:43:13 BAR CHART 122/300 -- Admissions, Probation, Michigan
+11:43:13 BAR CHART 123/300 -- Admissions, Probation, Minnesota
+11:43:13 BAR CHART 124/300 -- Admissions, Probation, Mississippi
+11:43:13 BAR CHART 125/300 -- Admissions, Probation, Missouri
+11:43:13 BAR CHART 126/300 -- Admissions, Probation, Montana
+11:43:13 BAR CHART 127/300 -- Admissions, Probation, Nebraska
+11:43:13 BAR CHART 128/300 -- Admissions, Probation, Nevada
+11:43:13 BAR CHART 129/300 -- Admissions, Probation, New Hampshire
+11:43:13 BAR CHART 130/300 -- Admissions, Probation, New Jersey
+11:43:14 BAR CHART 131/300 -- Admissions, Probation, New Mexico
+11:43:14 BAR CHART 132/300 -- Admissions, Probation, New York
+11:43:14 BAR CHART 133/300 -- Admissions, Probation, North Carolina
+11:43:14 BAR CHART 134/300 -- Admissions, Probation, North Dakota
+11:43:14 BAR CHART 135/300 -- Admissions, Probation, Ohio
+11:43:14 BAR CHART 136/300 -- Admissions, Probation, Oklahoma
+11:43:14 BAR CHART 137/300 -- Admissions, Probation, Oregon
+11:43:14 BAR CHART 138/300 -- Admissions, Probation, Pennsylvania
+11:43:14 BAR CHART 139/300 -- Admissions, Probation, Rhode Island
+11:43:14 BAR CHART 140/300 -- Admissions, Probation, South Carolina
+11:43:14 BAR CHART 141/300 -- Admissions, Probation, South Dakota
+11:43:15 BAR CHART 142/300 -- Admissions, Probation, Tennessee
+11:43:15 BAR CHART 143/300 -- Admissions, Probation, Texas
+11:43:15 BAR CHART 144/300 -- Admissions, Probation, Utah
+11:43:15 BAR CHART 145/300 -- Admissions, Probation, Vermont
+11:43:15 BAR CHART 146/300 -- Admissions, Probation, Virginia
+11:43:15 BAR CHART 147/300 -- Admissions, Probation, Washington
+11:43:15 BAR CHART 148/300 -- Admissions, Probation, West Virginia
+11:43:15 BAR CHART 149/300 -- Admissions, Probation, Wisconsin
+11:43:15 BAR CHART 150/300 -- Admissions, Probation, Wyoming
+11:43:15 BAR CHART 151/300 -- Population, Both, Alabama
+11:43:15 BAR CHART 152/300 -- Population, Both, Alaska
+11:43:16 BAR CHART 153/300 -- Population, Both, Arizona
+11:43:16 BAR CHART 154/300 -- Population, Both, Arkansas
+11:43:16 BAR CHART 155/300 -- Population, Both, California
+11:43:16 BAR CHART 156/300 -- Population, Both, Colorado
+11:43:16 BAR CHART 157/300 -- Population, Both, Connecticut
+11:43:16 BAR CHART 158/300 -- Population, Both, Delaware
+11:43:16 BAR CHART 159/300 -- Population, Both, Florida
+11:43:16 BAR CHART 160/300 -- Population, Both, Georgia
+11:43:16 BAR CHART 161/300 -- Population, Both, Hawaii
+11:43:16 BAR CHART 162/300 -- Population, Both, Idaho
+11:43:17 BAR CHART 163/300 -- Population, Both, Illinois
+11:43:17 BAR CHART 164/300 -- Population, Both, Indiana
+11:43:17 BAR CHART 165/300 -- Population, Both, Iowa
+11:43:17 BAR CHART 166/300 -- Population, Both, Kansas
+11:43:17 BAR CHART 167/300 -- Population, Both, Kentucky
+11:43:17 BAR CHART 168/300 -- Population, Both, Louisiana
+11:43:17 BAR CHART 169/300 -- Population, Both, Maine
+11:43:17 BAR CHART 170/300 -- Population, Both, Maryland
+11:43:17 BAR CHART 171/300 -- Population, Both, Massachusetts
+11:43:18 BAR CHART 172/300 -- Population, Both, Michigan
+11:43:18 BAR CHART 173/300 -- Population, Both, Minnesota
+11:43:18 BAR CHART 174/300 -- Population, Both, Mississippi
+11:43:18 BAR CHART 175/300 -- Population, Both, Missouri
+11:43:18 BAR CHART 176/300 -- Population, Both, Montana
+11:43:18 BAR CHART 177/300 -- Population, Both, Nebraska
+11:43:18 BAR CHART 178/300 -- Population, Both, Nevada
+11:43:18 BAR CHART 179/300 -- Population, Both, New Hampshire
+11:43:18 BAR CHART 180/300 -- Population, Both, New Jersey
+11:43:19 BAR CHART 181/300 -- Population, Both, New Mexico
+11:43:19 BAR CHART 182/300 -- Population, Both, New York
+11:43:19 BAR CHART 183/300 -- Population, Both, North Carolina
+11:43:19 BAR CHART 184/300 -- Population, Both, North Dakota
+11:43:19 BAR CHART 185/300 -- Population, Both, Ohio
+11:43:19 BAR CHART 186/300 -- Population, Both, Oklahoma
+11:43:19 BAR CHART 187/300 -- Population, Both, Oregon
+11:43:19 BAR CHART 188/300 -- Population, Both, Pennsylvania
+11:43:19 BAR CHART 189/300 -- Population, Both, Rhode Island
+11:43:20 BAR CHART 190/300 -- Population, Both, South Carolina
+11:43:20 BAR CHART 191/300 -- Population, Both, South Dakota
+11:43:20 BAR CHART 192/300 -- Population, Both, Tennessee
+11:43:20 BAR CHART 193/300 -- Population, Both, Texas
+11:43:20 BAR CHART 194/300 -- Population, Both, Utah
+11:43:20 BAR CHART 195/300 -- Population, Both, Vermont
+11:43:20 BAR CHART 196/300 -- Population, Both, Virginia
+11:43:20 BAR CHART 197/300 -- Population, Both, Washington
+11:43:20 BAR CHART 198/300 -- Population, Both, West Virginia
+11:43:21 BAR CHART 199/300 -- Population, Both, Wisconsin
+11:43:21 BAR CHART 200/300 -- Population, Both, Wyoming
+11:43:21 BAR CHART 201/300 -- Population, Parole, Alabama
+11:43:21 BAR CHART 202/300 -- Population, Parole, Alaska
+11:43:21 BAR CHART 203/300 -- Population, Parole, Arizona
+11:43:21 BAR CHART 204/300 -- Population, Parole, Arkansas
+11:43:21 BAR CHART 205/300 -- Population, Parole, California
+11:43:21 BAR CHART 206/300 -- Population, Parole, Colorado
+11:43:21 BAR CHART 207/300 -- Population, Parole, Connecticut
+11:43:21 BAR CHART 208/300 -- Population, Parole, Delaware
+11:43:22 BAR CHART 209/300 -- Population, Parole, Florida
+11:43:22 BAR CHART 210/300 -- Population, Parole, Georgia
+11:43:22 BAR CHART 211/300 -- Population, Parole, Hawaii
+11:43:22 BAR CHART 212/300 -- Population, Parole, Idaho
+11:43:22 BAR CHART 213/300 -- Population, Parole, Illinois
+11:43:22 BAR CHART 214/300 -- Population, Parole, Indiana
+11:43:22 BAR CHART 215/300 -- Population, Parole, Iowa
+11:43:22 BAR CHART 216/300 -- Population, Parole, Kansas
+11:43:22 BAR CHART 217/300 -- Population, Parole, Kentucky
+11:43:22 BAR CHART 218/300 -- Population, Parole, Louisiana
+11:43:22 BAR CHART 219/300 -- Population, Parole, Maine
+11:43:22 BAR CHART 220/300 -- Population, Parole, Maryland
+11:43:23 BAR CHART 221/300 -- Population, Parole, Massachusetts
+11:43:23 BAR CHART 222/300 -- Population, Parole, Michigan
+11:43:23 BAR CHART 223/300 -- Population, Parole, Minnesota
+11:43:23 BAR CHART 224/300 -- Population, Parole, Mississippi
+11:43:23 BAR CHART 225/300 -- Population, Parole, Missouri
+11:43:23 BAR CHART 226/300 -- Population, Parole, Montana
+11:43:23 BAR CHART 227/300 -- Population, Parole, Nebraska
+11:43:23 BAR CHART 228/300 -- Population, Parole, Nevada
+11:43:23 BAR CHART 229/300 -- Population, Parole, New Hampshire
+11:43:23 BAR CHART 230/300 -- Population, Parole, New Jersey
+11:43:23 BAR CHART 231/300 -- Population, Parole, New Mexico
+11:43:24 BAR CHART 232/300 -- Population, Parole, New York
+11:43:24 BAR CHART 233/300 -- Population, Parole, North Carolina
+11:43:24 BAR CHART 234/300 -- Population, Parole, North Dakota
+11:43:24 BAR CHART 235/300 -- Population, Parole, Ohio
+11:43:24 BAR CHART 236/300 -- Population, Parole, Oklahoma
+11:43:24 BAR CHART 237/300 -- Population, Parole, Oregon
+11:43:24 BAR CHART 238/300 -- Population, Parole, Pennsylvania
+11:43:24 BAR CHART 239/300 -- Population, Parole, Rhode Island
+11:43:24 BAR CHART 240/300 -- Population, Parole, South Carolina
+11:43:24 BAR CHART 241/300 -- Population, Parole, South Dakota
+11:43:24 BAR CHART 242/300 -- Population, Parole, Tennessee
+11:43:25 BAR CHART 243/300 -- Population, Parole, Texas
+11:43:25 BAR CHART 244/300 -- Population, Parole, Utah
+11:43:25 BAR CHART 245/300 -- Population, Parole, Vermont
+11:43:25 BAR CHART 246/300 -- Population, Parole, Virginia
+11:43:25 BAR CHART 247/300 -- Population, Parole, Washington
+11:43:25 BAR CHART 248/300 -- Population, Parole, West Virginia
+11:43:25 BAR CHART 249/300 -- Population, Parole, Wisconsin
+11:43:25 BAR CHART 250/300 -- Population, Parole, Wyoming
+11:43:25 BAR CHART 251/300 -- Population, Probation, Alabama
+11:43:25 BAR CHART 252/300 -- Population, Probation, Alaska
+11:43:26 BAR CHART 253/300 -- Population, Probation, Arizona
+11:43:26 BAR CHART 254/300 -- Population, Probation, Arkansas
+11:43:26 BAR CHART 255/300 -- Population, Probation, California
+11:43:26 BAR CHART 256/300 -- Population, Probation, Colorado
+11:43:26 BAR CHART 257/300 -- Population, Probation, Connecticut
+11:43:26 BAR CHART 258/300 -- Population, Probation, Delaware
+11:43:26 BAR CHART 259/300 -- Population, Probation, Florida
+11:43:26 BAR CHART 260/300 -- Population, Probation, Georgia
+11:43:26 BAR CHART 261/300 -- Population, Probation, Hawaii
+11:43:26 BAR CHART 262/300 -- Population, Probation, Idaho
+11:43:27 BAR CHART 263/300 -- Population, Probation, Illinois
+11:43:27 BAR CHART 264/300 -- Population, Probation, Indiana
+11:43:27 BAR CHART 265/300 -- Population, Probation, Iowa
+11:43:27 BAR CHART 266/300 -- Population, Probation, Kansas
+11:43:27 BAR CHART 267/300 -- Population, Probation, Kentucky
+11:43:27 BAR CHART 268/300 -- Population, Probation, Louisiana
+11:43:27 BAR CHART 269/300 -- Population, Probation, Maine
+11:43:27 BAR CHART 270/300 -- Population, Probation, Maryland
+11:43:27 BAR CHART 271/300 -- Population, Probation, Massachusetts
+11:43:28 BAR CHART 272/300 -- Population, Probation, Michigan
+11:43:28 BAR CHART 273/300 -- Population, Probation, Minnesota
+11:43:28 BAR CHART 274/300 -- Population, Probation, Mississippi
+11:43:28 BAR CHART 275/300 -- Population, Probation, Missouri
+11:43:28 BAR CHART 276/300 -- Population, Probation, Montana
+11:43:28 BAR CHART 277/300 -- Population, Probation, Nebraska
+11:43:28 BAR CHART 278/300 -- Population, Probation, Nevada
+11:43:28 BAR CHART 279/300 -- Population, Probation, New Hampshire
+11:43:28 BAR CHART 280/300 -- Population, Probation, New Jersey
+11:43:29 BAR CHART 281/300 -- Population, Probation, New Mexico
+11:43:29 BAR CHART 282/300 -- Population, Probation, New York
+11:43:29 BAR CHART 283/300 -- Population, Probation, North Carolina
+11:43:29 BAR CHART 284/300 -- Population, Probation, North Dakota
+11:43:29 BAR CHART 285/300 -- Population, Probation, Ohio
+11:43:29 BAR CHART 286/300 -- Population, Probation, Oklahoma
+11:43:29 BAR CHART 287/300 -- Population, Probation, Oregon
+11:43:30 BAR CHART 288/300 -- Population, Probation, Pennsylvania
+11:43:30 BAR CHART 289/300 -- Population, Probation, Rhode Island
+11:43:30 BAR CHART 290/300 -- Population, Probation, South Carolina
+11:43:30 BAR CHART 291/300 -- Population, Probation, South Dakota
+11:43:30 BAR CHART 292/300 -- Population, Probation, Tennessee
+11:43:30 BAR CHART 293/300 -- Population, Probation, Texas
+11:43:30 BAR CHART 294/300 -- Population, Probation, Utah
+11:43:30 BAR CHART 295/300 -- Population, Probation, Vermont
+11:43:30 BAR CHART 296/300 -- Population, Probation, Virginia
+11:43:30 BAR CHART 297/300 -- Population, Probation, Washington
+11:43:30 BAR CHART 298/300 -- Population, Probation, West Virginia
+11:43:30 BAR CHART 299/300 -- Population, Probation, Wisconsin
+11:43:31 BAR CHART 300/300 -- Population, Probation, Wyoming
 
 > # ~30 min
 > # avg ~6 sec per chart (early charts take 30-60 sec), 300 charts
 > paste("Hopefully done by:", format(Sys.time()+90*60, "%X"))
-[1] "Hopefully done by: 6:35:42 PM"
+[1] "Hopefully done by: 1:13:31 PM"
 
 > walk(
 +   names(state_bar_html_lst),
@@ -899,306 +851,306 @@ Warning messages:
 +     .x, 
 +     lst = list(names(state_bar_html_lst))
 + .... [TRUNCATED] 
-17:05:42 SAVE HC to HTML   1/300 -- Alabama_Supervision_Violation_Admissions_by_Type
-17:05:44 SAVE HC to HTML   2/300 -- Alaska_Supervision_Violation_Admissions_by_Type
-17:05:45 SAVE HC to HTML   3/300 -- Arizona_Supervision_Violation_Admissions_by_Type
-17:05:47 SAVE HC to HTML   4/300 -- Arkansas_Supervision_Violation_Admissions_by_Type
-17:05:47 SAVE HC to HTML   5/300 -- California_Supervision_Violation_Admissions_by_Type
-17:05:48 SAVE HC to HTML   6/300 -- Colorado_Supervision_Violation_Admissions_by_Type
-17:05:48 SAVE HC to HTML   7/300 -- Connecticut_Supervision_Violation_Admissions_by_Type
-17:05:49 SAVE HC to HTML   8/300 -- Delaware_Supervision_Violation_Admissions_by_Type
-17:05:49 SAVE HC to HTML   9/300 -- Florida_Supervision_Violation_Admissions_by_Type
-17:05:50 SAVE HC to HTML  10/300 -- Georgia_Supervision_Violation_Admissions_by_Type
-17:05:51 SAVE HC to HTML  11/300 -- Hawaii_Supervision_Violation_Admissions_by_Type
-17:05:51 SAVE HC to HTML  12/300 -- Idaho_Supervision_Violation_Admissions_by_Type
-17:05:52 SAVE HC to HTML  13/300 -- Illinois_Supervision_Violation_Admissions_by_Type
-17:05:52 SAVE HC to HTML  14/300 -- Indiana_Supervision_Violation_Admissions_by_Type
-17:05:53 SAVE HC to HTML  15/300 -- Iowa_Supervision_Violation_Admissions_by_Type
-17:05:54 SAVE HC to HTML  16/300 -- Kansas_Supervision_Violation_Admissions_by_Type
-17:05:54 SAVE HC to HTML  17/300 -- Kentucky_Supervision_Violation_Admissions_by_Type
-17:05:55 SAVE HC to HTML  18/300 -- Louisiana_Supervision_Violation_Admissions_by_Type
-17:05:55 SAVE HC to HTML  19/300 -- Maine_Supervision_Violation_Admissions_by_Type
-17:05:56 SAVE HC to HTML  20/300 -- Maryland_Supervision_Violation_Admissions_by_Type
-17:05:57 SAVE HC to HTML  21/300 -- Massachusetts_Supervision_Violation_Admissions_by_Type
-17:05:57 SAVE HC to HTML  22/300 -- Michigan_Supervision_Violation_Admissions_by_Type
-17:05:58 SAVE HC to HTML  23/300 -- Minnesota_Supervision_Violation_Admissions_by_Type
-17:05:58 SAVE HC to HTML  24/300 -- Mississippi_Supervision_Violation_Admissions_by_Type
-17:05:59 SAVE HC to HTML  25/300 -- Missouri_Supervision_Violation_Admissions_by_Type
-17:06:00 SAVE HC to HTML  26/300 -- Montana_Supervision_Violation_Admissions_by_Type
-17:06:00 SAVE HC to HTML  27/300 -- Nebraska_Supervision_Violation_Admissions_by_Type
-17:06:01 SAVE HC to HTML  28/300 -- Nevada_Supervision_Violation_Admissions_by_Type
-17:06:01 SAVE HC to HTML  29/300 -- New Hampshire_Supervision_Violation_Admissions_by_Type
-17:06:02 SAVE HC to HTML  30/300 -- New Jersey_Supervision_Violation_Admissions_by_Type
-17:06:02 SAVE HC to HTML  31/300 -- New Mexico_Supervision_Violation_Admissions_by_Type
-17:06:03 SAVE HC to HTML  32/300 -- New York_Supervision_Violation_Admissions_by_Type
-17:06:04 SAVE HC to HTML  33/300 -- North Carolina_Supervision_Violation_Admissions_by_Type
-17:06:04 SAVE HC to HTML  34/300 -- North Dakota_Supervision_Violation_Admissions_by_Type
-17:06:05 SAVE HC to HTML  35/300 -- Ohio_Supervision_Violation_Admissions_by_Type
-17:06:05 SAVE HC to HTML  36/300 -- Oklahoma_Supervision_Violation_Admissions_by_Type
-17:06:06 SAVE HC to HTML  37/300 -- Oregon_Supervision_Violation_Admissions_by_Type
-17:06:07 SAVE HC to HTML  38/300 -- Pennsylvania_Supervision_Violation_Admissions_by_Type
-17:06:07 SAVE HC to HTML  39/300 -- Rhode Island_Supervision_Violation_Admissions_by_Type
-17:06:08 SAVE HC to HTML  40/300 -- South Carolina_Supervision_Violation_Admissions_by_Type
-17:06:08 SAVE HC to HTML  41/300 -- South Dakota_Supervision_Violation_Admissions_by_Type
-17:06:09 SAVE HC to HTML  42/300 -- Tennessee_Supervision_Violation_Admissions_by_Type
-17:06:09 SAVE HC to HTML  43/300 -- Texas_Supervision_Violation_Admissions_by_Type
-17:06:10 SAVE HC to HTML  44/300 -- Utah_Supervision_Violation_Admissions_by_Type
-17:06:12 SAVE HC to HTML  45/300 -- Vermont_Supervision_Violation_Admissions_by_Type
-17:06:15 SAVE HC to HTML  46/300 -- Virginia_Supervision_Violation_Admissions_by_Type
-17:06:17 SAVE HC to HTML  47/300 -- Washington_Supervision_Violation_Admissions_by_Type
-17:06:19 SAVE HC to HTML  48/300 -- West Virginia_Supervision_Violation_Admissions_by_Type
-17:06:20 SAVE HC to HTML  49/300 -- Wisconsin_Supervision_Violation_Admissions_by_Type
-17:06:22 SAVE HC to HTML  50/300 -- Wyoming_Supervision_Violation_Admissions_by_Type
-17:06:23 SAVE HC to HTML  51/300 -- Alabama_Parole_Violation_Admissions_by_Type
-17:06:24 SAVE HC to HTML  52/300 -- Alaska_Parole_Violation_Admissions_by_Type
-17:06:26 SAVE HC to HTML  53/300 -- Arizona_Parole_Violation_Admissions_by_Type
-17:06:30 SAVE HC to HTML  54/300 -- Arkansas_Parole_Violation_Admissions_by_Type
-17:06:32 SAVE HC to HTML  55/300 -- California_Parole_Violation_Admissions_by_Type
-17:06:33 SAVE HC to HTML  56/300 -- Colorado_Parole_Violation_Admissions_by_Type
-17:06:34 SAVE HC to HTML  57/300 -- Connecticut_Parole_Violation_Admissions_by_Type
-17:06:36 SAVE HC to HTML  58/300 -- Delaware_Parole_Violation_Admissions_by_Type
-17:06:38 SAVE HC to HTML  59/300 -- Florida_Parole_Violation_Admissions_by_Type
-17:06:39 SAVE HC to HTML  60/300 -- Georgia_Parole_Violation_Admissions_by_Type
-17:06:43 SAVE HC to HTML  61/300 -- Hawaii_Parole_Violation_Admissions_by_Type
-17:06:44 SAVE HC to HTML  62/300 -- Idaho_Parole_Violation_Admissions_by_Type
-17:06:45 SAVE HC to HTML  63/300 -- Illinois_Parole_Violation_Admissions_by_Type
-17:06:47 SAVE HC to HTML  64/300 -- Indiana_Parole_Violation_Admissions_by_Type
-17:06:50 SAVE HC to HTML  65/300 -- Iowa_Parole_Violation_Admissions_by_Type
-17:06:51 SAVE HC to HTML  66/300 -- Kansas_Parole_Violation_Admissions_by_Type
-17:06:53 SAVE HC to HTML  67/300 -- Kentucky_Parole_Violation_Admissions_by_Type
-17:06:54 SAVE HC to HTML  68/300 -- Louisiana_Parole_Violation_Admissions_by_Type
-17:06:55 SAVE HC to HTML  69/300 -- Maine_Parole_Violation_Admissions_by_Type
-17:06:56 SAVE HC to HTML  70/300 -- Maryland_Parole_Violation_Admissions_by_Type
-17:06:57 SAVE HC to HTML  71/300 -- Massachusetts_Parole_Violation_Admissions_by_Type
-17:06:57 SAVE HC to HTML  72/300 -- Michigan_Parole_Violation_Admissions_by_Type
-17:06:58 SAVE HC to HTML  73/300 -- Minnesota_Parole_Violation_Admissions_by_Type
-17:06:59 SAVE HC to HTML  74/300 -- Mississippi_Parole_Violation_Admissions_by_Type
-17:06:59 SAVE HC to HTML  75/300 -- Missouri_Parole_Violation_Admissions_by_Type
-17:07:00 SAVE HC to HTML  76/300 -- Montana_Parole_Violation_Admissions_by_Type
-17:07:00 SAVE HC to HTML  77/300 -- Nebraska_Parole_Violation_Admissions_by_Type
-17:07:01 SAVE HC to HTML  78/300 -- Nevada_Parole_Violation_Admissions_by_Type
-17:07:02 SAVE HC to HTML  79/300 -- New Hampshire_Parole_Violation_Admissions_by_Type
-17:07:02 SAVE HC to HTML  80/300 -- New Jersey_Parole_Violation_Admissions_by_Type
-17:07:03 SAVE HC to HTML  81/300 -- New Mexico_Parole_Violation_Admissions_by_Type
-17:07:03 SAVE HC to HTML  82/300 -- New York_Parole_Violation_Admissions_by_Type
-17:07:04 SAVE HC to HTML  83/300 -- North Carolina_Parole_Violation_Admissions_by_Type
-17:07:05 SAVE HC to HTML  84/300 -- North Dakota_Parole_Violation_Admissions_by_Type
-17:07:05 SAVE HC to HTML  85/300 -- Ohio_Parole_Violation_Admissions_by_Type
-17:07:06 SAVE HC to HTML  86/300 -- Oklahoma_Parole_Violation_Admissions_by_Type
-17:07:06 SAVE HC to HTML  87/300 -- Oregon_Parole_Violation_Admissions_by_Type
-17:07:07 SAVE HC to HTML  88/300 -- Pennsylvania_Parole_Violation_Admissions_by_Type
-17:07:08 SAVE HC to HTML  89/300 -- Rhode Island_Parole_Violation_Admissions_by_Type
-17:07:08 SAVE HC to HTML  90/300 -- South Carolina_Parole_Violation_Admissions_by_Type
-17:07:09 SAVE HC to HTML  91/300 -- South Dakota_Parole_Violation_Admissions_by_Type
-17:07:09 SAVE HC to HTML  92/300 -- Tennessee_Parole_Violation_Admissions_by_Type
-17:07:10 SAVE HC to HTML  93/300 -- Texas_Parole_Violation_Admissions_by_Type
-17:07:13 SAVE HC to HTML  94/300 -- Utah_Parole_Violation_Admissions_by_Type
-17:07:16 SAVE HC to HTML  95/300 -- Vermont_Parole_Violation_Admissions_by_Type
-17:07:17 SAVE HC to HTML  96/300 -- Virginia_Parole_Violation_Admissions_by_Type
-17:07:18 SAVE HC to HTML  97/300 -- Washington_Parole_Violation_Admissions_by_Type
-17:07:19 SAVE HC to HTML  98/300 -- West Virginia_Parole_Violation_Admissions_by_Type
-17:07:20 SAVE HC to HTML  99/300 -- Wisconsin_Parole_Violation_Admissions_by_Type
-17:07:21 SAVE HC to HTML 100/300 -- Wyoming_Parole_Violation_Admissions_by_Type
-17:07:23 SAVE HC to HTML 101/300 -- Alabama_Probation_Violation_Admissions_by_Type
-17:07:24 SAVE HC to HTML 102/300 -- Alaska_Probation_Violation_Admissions_by_Type
-17:07:26 SAVE HC to HTML 103/300 -- Arizona_Probation_Violation_Admissions_by_Type
-17:07:28 SAVE HC to HTML 104/300 -- Arkansas_Probation_Violation_Admissions_by_Type
-17:07:30 SAVE HC to HTML 105/300 -- California_Probation_Violation_Admissions_by_Type
-17:07:31 SAVE HC to HTML 106/300 -- Colorado_Probation_Violation_Admissions_by_Type
-17:07:33 SAVE HC to HTML 107/300 -- Connecticut_Probation_Violation_Admissions_by_Type
-17:07:34 SAVE HC to HTML 108/300 -- Delaware_Probation_Violation_Admissions_by_Type
-17:07:36 SAVE HC to HTML 109/300 -- Florida_Probation_Violation_Admissions_by_Type
-17:07:37 SAVE HC to HTML 110/300 -- Georgia_Probation_Violation_Admissions_by_Type
-17:07:40 SAVE HC to HTML 111/300 -- Hawaii_Probation_Violation_Admissions_by_Type
-17:07:41 SAVE HC to HTML 112/300 -- Idaho_Probation_Violation_Admissions_by_Type
-17:07:43 SAVE HC to HTML 113/300 -- Illinois_Probation_Violation_Admissions_by_Type
-17:07:44 SAVE HC to HTML 114/300 -- Indiana_Probation_Violation_Admissions_by_Type
-17:07:45 SAVE HC to HTML 115/300 -- Iowa_Probation_Violation_Admissions_by_Type
-17:07:46 SAVE HC to HTML 116/300 -- Kansas_Probation_Violation_Admissions_by_Type
-17:07:46 SAVE HC to HTML 117/300 -- Kentucky_Probation_Violation_Admissions_by_Type
-17:07:47 SAVE HC to HTML 118/300 -- Louisiana_Probation_Violation_Admissions_by_Type
-17:07:47 SAVE HC to HTML 119/300 -- Maine_Probation_Violation_Admissions_by_Type
-17:07:48 SAVE HC to HTML 120/300 -- Maryland_Probation_Violation_Admissions_by_Type
-17:07:49 SAVE HC to HTML 121/300 -- Massachusetts_Probation_Violation_Admissions_by_Type
-17:07:49 SAVE HC to HTML 122/300 -- Michigan_Probation_Violation_Admissions_by_Type
-17:07:50 SAVE HC to HTML 123/300 -- Minnesota_Probation_Violation_Admissions_by_Type
-17:07:50 SAVE HC to HTML 124/300 -- Mississippi_Probation_Violation_Admissions_by_Type
-17:07:51 SAVE HC to HTML 125/300 -- Missouri_Probation_Violation_Admissions_by_Type
-17:07:51 SAVE HC to HTML 126/300 -- Montana_Probation_Violation_Admissions_by_Type
-17:07:52 SAVE HC to HTML 127/300 -- Nebraska_Probation_Violation_Admissions_by_Type
-17:07:53 SAVE HC to HTML 128/300 -- Nevada_Probation_Violation_Admissions_by_Type
-17:07:53 SAVE HC to HTML 129/300 -- New Hampshire_Probation_Violation_Admissions_by_Type
-17:07:54 SAVE HC to HTML 130/300 -- New Jersey_Probation_Violation_Admissions_by_Type
-17:07:54 SAVE HC to HTML 131/300 -- New Mexico_Probation_Violation_Admissions_by_Type
-17:07:55 SAVE HC to HTML 132/300 -- New York_Probation_Violation_Admissions_by_Type
-17:07:56 SAVE HC to HTML 133/300 -- North Carolina_Probation_Violation_Admissions_by_Type
-17:07:56 SAVE HC to HTML 134/300 -- North Dakota_Probation_Violation_Admissions_by_Type
-17:07:57 SAVE HC to HTML 135/300 -- Ohio_Probation_Violation_Admissions_by_Type
-17:07:57 SAVE HC to HTML 136/300 -- Oklahoma_Probation_Violation_Admissions_by_Type
-17:07:58 SAVE HC to HTML 137/300 -- Oregon_Probation_Violation_Admissions_by_Type
-17:07:59 SAVE HC to HTML 138/300 -- Pennsylvania_Probation_Violation_Admissions_by_Type
-17:07:59 SAVE HC to HTML 139/300 -- Rhode Island_Probation_Violation_Admissions_by_Type
-17:08:00 SAVE HC to HTML 140/300 -- South Carolina_Probation_Violation_Admissions_by_Type
-17:08:00 SAVE HC to HTML 141/300 -- South Dakota_Probation_Violation_Admissions_by_Type
-17:08:01 SAVE HC to HTML 142/300 -- Tennessee_Probation_Violation_Admissions_by_Type
-17:08:02 SAVE HC to HTML 143/300 -- Texas_Probation_Violation_Admissions_by_Type
-17:08:02 SAVE HC to HTML 144/300 -- Utah_Probation_Violation_Admissions_by_Type
-17:08:03 SAVE HC to HTML 145/300 -- Vermont_Probation_Violation_Admissions_by_Type
-17:08:03 SAVE HC to HTML 146/300 -- Virginia_Probation_Violation_Admissions_by_Type
-17:08:04 SAVE HC to HTML 147/300 -- Washington_Probation_Violation_Admissions_by_Type
-17:08:05 SAVE HC to HTML 148/300 -- West Virginia_Probation_Violation_Admissions_by_Type
-17:08:05 SAVE HC to HTML 149/300 -- Wisconsin_Probation_Violation_Admissions_by_Type
-17:08:06 SAVE HC to HTML 150/300 -- Wyoming_Probation_Violation_Admissions_by_Type
-17:08:06 SAVE HC to HTML 151/300 -- Alabama_Supervision_Violation_Population_by_Type
-17:08:07 SAVE HC to HTML 152/300 -- Alaska_Supervision_Violation_Population_by_Type
-17:08:08 SAVE HC to HTML 153/300 -- Arizona_Supervision_Violation_Population_by_Type
-17:08:08 SAVE HC to HTML 154/300 -- Arkansas_Supervision_Violation_Population_by_Type
-17:08:09 SAVE HC to HTML 155/300 -- California_Supervision_Violation_Population_by_Type
-17:08:09 SAVE HC to HTML 156/300 -- Colorado_Supervision_Violation_Population_by_Type
-17:08:10 SAVE HC to HTML 157/300 -- Connecticut_Supervision_Violation_Population_by_Type
-17:08:12 SAVE HC to HTML 158/300 -- Delaware_Supervision_Violation_Population_by_Type
-17:08:12 SAVE HC to HTML 159/300 -- Florida_Supervision_Violation_Population_by_Type
-17:08:13 SAVE HC to HTML 160/300 -- Georgia_Supervision_Violation_Population_by_Type
-17:08:14 SAVE HC to HTML 161/300 -- Hawaii_Supervision_Violation_Population_by_Type
-17:08:14 SAVE HC to HTML 162/300 -- Idaho_Supervision_Violation_Population_by_Type
-17:08:15 SAVE HC to HTML 163/300 -- Illinois_Supervision_Violation_Population_by_Type
-17:08:15 SAVE HC to HTML 164/300 -- Indiana_Supervision_Violation_Population_by_Type
-17:08:16 SAVE HC to HTML 165/300 -- Iowa_Supervision_Violation_Population_by_Type
-17:08:17 SAVE HC to HTML 166/300 -- Kansas_Supervision_Violation_Population_by_Type
-17:08:17 SAVE HC to HTML 167/300 -- Kentucky_Supervision_Violation_Population_by_Type
-17:08:18 SAVE HC to HTML 168/300 -- Louisiana_Supervision_Violation_Population_by_Type
-17:08:18 SAVE HC to HTML 169/300 -- Maine_Supervision_Violation_Population_by_Type
-17:08:19 SAVE HC to HTML 170/300 -- Maryland_Supervision_Violation_Population_by_Type
-17:08:19 SAVE HC to HTML 171/300 -- Massachusetts_Supervision_Violation_Population_by_Type
-17:08:20 SAVE HC to HTML 172/300 -- Michigan_Supervision_Violation_Population_by_Type
-17:08:21 SAVE HC to HTML 173/300 -- Minnesota_Supervision_Violation_Population_by_Type
-17:08:21 SAVE HC to HTML 174/300 -- Mississippi_Supervision_Violation_Population_by_Type
-17:08:22 SAVE HC to HTML 175/300 -- Missouri_Supervision_Violation_Population_by_Type
-17:08:22 SAVE HC to HTML 176/300 -- Montana_Supervision_Violation_Population_by_Type
-17:08:23 SAVE HC to HTML 177/300 -- Nebraska_Supervision_Violation_Population_by_Type
-17:08:24 SAVE HC to HTML 178/300 -- Nevada_Supervision_Violation_Population_by_Type
-17:08:24 SAVE HC to HTML 179/300 -- New Hampshire_Supervision_Violation_Population_by_Type
-17:08:25 SAVE HC to HTML 180/300 -- New Jersey_Supervision_Violation_Population_by_Type
-17:08:25 SAVE HC to HTML 181/300 -- New Mexico_Supervision_Violation_Population_by_Type
-17:08:26 SAVE HC to HTML 182/300 -- New York_Supervision_Violation_Population_by_Type
-17:08:27 SAVE HC to HTML 183/300 -- North Carolina_Supervision_Violation_Population_by_Type
-17:08:27 SAVE HC to HTML 184/300 -- North Dakota_Supervision_Violation_Population_by_Type
-17:08:28 SAVE HC to HTML 185/300 -- Ohio_Supervision_Violation_Population_by_Type
-17:08:28 SAVE HC to HTML 186/300 -- Oklahoma_Supervision_Violation_Population_by_Type
-17:08:29 SAVE HC to HTML 187/300 -- Oregon_Supervision_Violation_Population_by_Type
-17:08:29 SAVE HC to HTML 188/300 -- Pennsylvania_Supervision_Violation_Population_by_Type
-17:08:30 SAVE HC to HTML 189/300 -- Rhode Island_Supervision_Violation_Population_by_Type
-17:08:30 SAVE HC to HTML 190/300 -- South Carolina_Supervision_Violation_Population_by_Type
-17:08:31 SAVE HC to HTML 191/300 -- South Dakota_Supervision_Violation_Population_by_Type
-17:08:32 SAVE HC to HTML 192/300 -- Tennessee_Supervision_Violation_Population_by_Type
-17:08:32 SAVE HC to HTML 193/300 -- Texas_Supervision_Violation_Population_by_Type
-17:08:33 SAVE HC to HTML 194/300 -- Utah_Supervision_Violation_Population_by_Type
-17:08:33 SAVE HC to HTML 195/300 -- Vermont_Supervision_Violation_Population_by_Type
-17:08:34 SAVE HC to HTML 196/300 -- Virginia_Supervision_Violation_Population_by_Type
-17:08:35 SAVE HC to HTML 197/300 -- Washington_Supervision_Violation_Population_by_Type
-17:08:35 SAVE HC to HTML 198/300 -- West Virginia_Supervision_Violation_Population_by_Type
-17:08:36 SAVE HC to HTML 199/300 -- Wisconsin_Supervision_Violation_Population_by_Type
-17:08:37 SAVE HC to HTML 200/300 -- Wyoming_Supervision_Violation_Population_by_Type
-17:08:37 SAVE HC to HTML 201/300 -- Alabama_Parole_Violation_Population_by_Type
-17:08:38 SAVE HC to HTML 202/300 -- Alaska_Parole_Violation_Population_by_Type
-17:08:38 SAVE HC to HTML 203/300 -- Arizona_Parole_Violation_Population_by_Type
-17:08:39 SAVE HC to HTML 204/300 -- Arkansas_Parole_Violation_Population_by_Type
-17:08:39 SAVE HC to HTML 205/300 -- California_Parole_Violation_Population_by_Type
-17:08:40 SAVE HC to HTML 206/300 -- Colorado_Parole_Violation_Population_by_Type
-17:08:40 SAVE HC to HTML 207/300 -- Connecticut_Parole_Violation_Population_by_Type
-17:08:41 SAVE HC to HTML 208/300 -- Delaware_Parole_Violation_Population_by_Type
-17:08:42 SAVE HC to HTML 209/300 -- Florida_Parole_Violation_Population_by_Type
-17:08:42 SAVE HC to HTML 210/300 -- Georgia_Parole_Violation_Population_by_Type
-17:08:43 SAVE HC to HTML 211/300 -- Hawaii_Parole_Violation_Population_by_Type
-17:08:44 SAVE HC to HTML 212/300 -- Idaho_Parole_Violation_Population_by_Type
-17:08:44 SAVE HC to HTML 213/300 -- Illinois_Parole_Violation_Population_by_Type
-17:08:45 SAVE HC to HTML 214/300 -- Indiana_Parole_Violation_Population_by_Type
-17:08:46 SAVE HC to HTML 215/300 -- Iowa_Parole_Violation_Population_by_Type
-17:08:46 SAVE HC to HTML 216/300 -- Kansas_Parole_Violation_Population_by_Type
-17:08:47 SAVE HC to HTML 217/300 -- Kentucky_Parole_Violation_Population_by_Type
-17:08:47 SAVE HC to HTML 218/300 -- Louisiana_Parole_Violation_Population_by_Type
-17:08:48 SAVE HC to HTML 219/300 -- Maine_Parole_Violation_Population_by_Type
-17:08:49 SAVE HC to HTML 220/300 -- Maryland_Parole_Violation_Population_by_Type
-17:08:49 SAVE HC to HTML 221/300 -- Massachusetts_Parole_Violation_Population_by_Type
-17:08:50 SAVE HC to HTML 222/300 -- Michigan_Parole_Violation_Population_by_Type
-17:08:50 SAVE HC to HTML 223/300 -- Minnesota_Parole_Violation_Population_by_Type
-17:08:51 SAVE HC to HTML 224/300 -- Mississippi_Parole_Violation_Population_by_Type
-17:08:52 SAVE HC to HTML 225/300 -- Missouri_Parole_Violation_Population_by_Type
-17:08:52 SAVE HC to HTML 226/300 -- Montana_Parole_Violation_Population_by_Type
-17:08:52 SAVE HC to HTML 227/300 -- Nebraska_Parole_Violation_Population_by_Type
-17:08:53 SAVE HC to HTML 228/300 -- Nevada_Parole_Violation_Population_by_Type
-17:08:53 SAVE HC to HTML 229/300 -- New Hampshire_Parole_Violation_Population_by_Type
-17:08:54 SAVE HC to HTML 230/300 -- New Jersey_Parole_Violation_Population_by_Type
-17:08:55 SAVE HC to HTML 231/300 -- New Mexico_Parole_Violation_Population_by_Type
-17:08:55 SAVE HC to HTML 232/300 -- New York_Parole_Violation_Population_by_Type
-17:08:56 SAVE HC to HTML 233/300 -- North Carolina_Parole_Violation_Population_by_Type
-17:08:56 SAVE HC to HTML 234/300 -- North Dakota_Parole_Violation_Population_by_Type
-17:08:57 SAVE HC to HTML 235/300 -- Ohio_Parole_Violation_Population_by_Type
-17:08:58 SAVE HC to HTML 236/300 -- Oklahoma_Parole_Violation_Population_by_Type
-17:08:58 SAVE HC to HTML 237/300 -- Oregon_Parole_Violation_Population_by_Type
-17:08:59 SAVE HC to HTML 238/300 -- Pennsylvania_Parole_Violation_Population_by_Type
-17:08:59 SAVE HC to HTML 239/300 -- Rhode Island_Parole_Violation_Population_by_Type
-17:09:00 SAVE HC to HTML 240/300 -- South Carolina_Parole_Violation_Population_by_Type
-17:09:01 SAVE HC to HTML 241/300 -- South Dakota_Parole_Violation_Population_by_Type
-17:09:01 SAVE HC to HTML 242/300 -- Tennessee_Parole_Violation_Population_by_Type
-17:09:02 SAVE HC to HTML 243/300 -- Texas_Parole_Violation_Population_by_Type
-17:09:02 SAVE HC to HTML 244/300 -- Utah_Parole_Violation_Population_by_Type
-17:09:03 SAVE HC to HTML 245/300 -- Vermont_Parole_Violation_Population_by_Type
-17:09:03 SAVE HC to HTML 246/300 -- Virginia_Parole_Violation_Population_by_Type
-17:09:04 SAVE HC to HTML 247/300 -- Washington_Parole_Violation_Population_by_Type
-17:09:04 SAVE HC to HTML 248/300 -- West Virginia_Parole_Violation_Population_by_Type
-17:09:05 SAVE HC to HTML 249/300 -- Wisconsin_Parole_Violation_Population_by_Type
-17:09:06 SAVE HC to HTML 250/300 -- Wyoming_Parole_Violation_Population_by_Type
-17:09:06 SAVE HC to HTML 251/300 -- Alabama_Probation_Violation_Population_by_Type
-17:09:07 SAVE HC to HTML 252/300 -- Alaska_Probation_Violation_Population_by_Type
-17:09:07 SAVE HC to HTML 253/300 -- Arizona_Probation_Violation_Population_by_Type
-17:09:08 SAVE HC to HTML 254/300 -- Arkansas_Probation_Violation_Population_by_Type
-17:09:09 SAVE HC to HTML 255/300 -- California_Probation_Violation_Population_by_Type
-17:09:11 SAVE HC to HTML 256/300 -- Colorado_Probation_Violation_Population_by_Type
-17:12:00 SAVE HC to HTML 257/300 -- Connecticut_Probation_Violation_Population_by_Type
-17:12:35 SAVE HC to HTML 258/300 -- Delaware_Probation_Violation_Population_by_Type
-17:12:37 SAVE HC to HTML 259/300 -- Florida_Probation_Violation_Population_by_Type
-17:13:35 SAVE HC to HTML 260/300 -- Georgia_Probation_Violation_Population_by_Type
-17:13:36 SAVE HC to HTML 261/300 -- Hawaii_Probation_Violation_Population_by_Type
-17:13:38 SAVE HC to HTML 262/300 -- Idaho_Probation_Violation_Population_by_Type
-17:13:43 SAVE HC to HTML 263/300 -- Illinois_Probation_Violation_Population_by_Type
-17:13:45 SAVE HC to HTML 264/300 -- Indiana_Probation_Violation_Population_by_Type
-17:13:46 SAVE HC to HTML 265/300 -- Iowa_Probation_Violation_Population_by_Type
-17:13:47 SAVE HC to HTML 266/300 -- Kansas_Probation_Violation_Population_by_Type
-17:13:49 SAVE HC to HTML 267/300 -- Kentucky_Probation_Violation_Population_by_Type
-17:13:49 SAVE HC to HTML 268/300 -- Louisiana_Probation_Violation_Population_by_Type
-17:13:51 SAVE HC to HTML 269/300 -- Maine_Probation_Violation_Population_by_Type
-17:13:52 SAVE HC to HTML 270/300 -- Maryland_Probation_Violation_Population_by_Type
-17:13:53 SAVE HC to HTML 271/300 -- Massachusetts_Probation_Violation_Population_by_Type
-17:13:53 SAVE HC to HTML 272/300 -- Michigan_Probation_Violation_Population_by_Type
-17:13:54 SAVE HC to HTML 273/300 -- Minnesota_Probation_Violation_Population_by_Type
-17:13:54 SAVE HC to HTML 274/300 -- Mississippi_Probation_Violation_Population_by_Type
-17:13:55 SAVE HC to HTML 275/300 -- Missouri_Probation_Violation_Population_by_Type
-17:13:56 SAVE HC to HTML 276/300 -- Montana_Probation_Violation_Population_by_Type
-17:13:56 SAVE HC to HTML 277/300 -- Nebraska_Probation_Violation_Population_by_Type
-17:13:57 SAVE HC to HTML 278/300 -- Nevada_Probation_Violation_Population_by_Type
-17:13:58 SAVE HC to HTML 279/300 -- New Hampshire_Probation_Violation_Population_by_Type
-17:13:58 SAVE HC to HTML 280/300 -- New Jersey_Probation_Violation_Population_by_Type
-17:13:59 SAVE HC to HTML 281/300 -- New Mexico_Probation_Violation_Population_by_Type
-17:13:59 SAVE HC to HTML 282/300 -- New York_Probation_Violation_Population_by_Type
-17:14:00 SAVE HC to HTML 283/300 -- North Carolina_Probation_Violation_Population_by_Type
-17:14:01 SAVE HC to HTML 284/300 -- North Dakota_Probation_Violation_Population_by_Type
-17:14:01 SAVE HC to HTML 285/300 -- Ohio_Probation_Violation_Population_by_Type
-17:14:02 SAVE HC to HTML 286/300 -- Oklahoma_Probation_Violation_Population_by_Type
-17:14:02 SAVE HC to HTML 287/300 -- Oregon_Probation_Violation_Population_by_Type
-17:14:03 SAVE HC to HTML 288/300 -- Pennsylvania_Probation_Violation_Population_by_Type
-17:14:04 SAVE HC to HTML 289/300 -- Rhode Island_Probation_Violation_Population_by_Type
-17:14:04 SAVE HC to HTML 290/300 -- South Carolina_Probation_Violation_Population_by_Type
-17:14:05 SAVE HC to HTML 291/300 -- South Dakota_Probation_Violation_Population_by_Type
-17:14:06 SAVE HC to HTML 292/300 -- Tennessee_Probation_Violation_Population_by_Type
-17:14:06 SAVE HC to HTML 293/300 -- Texas_Probation_Violation_Population_by_Type
-17:14:07 SAVE HC to HTML 294/300 -- Utah_Probation_Violation_Population_by_Type
-17:14:07 SAVE HC to HTML 295/300 -- Vermont_Probation_Violation_Population_by_Type
-17:14:08 SAVE HC to HTML 296/300 -- Virginia_Probation_Violation_Population_by_Type
-17:14:09 SAVE HC to HTML 297/300 -- Washington_Probation_Violation_Population_by_Type
-17:14:09 SAVE HC to HTML 298/300 -- West Virginia_Probation_Violation_Population_by_Type
-17:14:10 SAVE HC to HTML 299/300 -- Wisconsin_Probation_Violation_Population_by_Type
-17:14:12 SAVE HC to HTML 300/300 -- Wyoming_Probation_Violation_Population_by_Type
+11:43:31 SAVE HC to HTML   1/300 -- Alabama_Supervision_Violation_Admissions_by_Type
+11:43:42 SAVE HC to HTML   2/300 -- Alaska_Supervision_Violation_Admissions_by_Type
+11:43:44 SAVE HC to HTML   3/300 -- Arizona_Supervision_Violation_Admissions_by_Type
+11:43:45 SAVE HC to HTML   4/300 -- Arkansas_Supervision_Violation_Admissions_by_Type
+11:43:47 SAVE HC to HTML   5/300 -- California_Supervision_Violation_Admissions_by_Type
+11:44:41 SAVE HC to HTML   6/300 -- Colorado_Supervision_Violation_Admissions_by_Type
+11:44:43 SAVE HC to HTML   7/300 -- Connecticut_Supervision_Violation_Admissions_by_Type
+11:44:50 SAVE HC to HTML   8/300 -- Delaware_Supervision_Violation_Admissions_by_Type
+11:45:00 SAVE HC to HTML   9/300 -- Florida_Supervision_Violation_Admissions_by_Type
+11:45:11 SAVE HC to HTML  10/300 -- Georgia_Supervision_Violation_Admissions_by_Type
+11:45:13 SAVE HC to HTML  11/300 -- Hawaii_Supervision_Violation_Admissions_by_Type
+11:45:14 SAVE HC to HTML  12/300 -- Idaho_Supervision_Violation_Admissions_by_Type
+11:45:33 SAVE HC to HTML  13/300 -- Illinois_Supervision_Violation_Admissions_by_Type
+11:45:34 SAVE HC to HTML  14/300 -- Indiana_Supervision_Violation_Admissions_by_Type
+11:45:36 SAVE HC to HTML  15/300 -- Iowa_Supervision_Violation_Admissions_by_Type
+11:45:48 SAVE HC to HTML  16/300 -- Kansas_Supervision_Violation_Admissions_by_Type
+11:46:03 SAVE HC to HTML  17/300 -- Kentucky_Supervision_Violation_Admissions_by_Type
+11:46:33 SAVE HC to HTML  18/300 -- Louisiana_Supervision_Violation_Admissions_by_Type
+11:46:54 SAVE HC to HTML  19/300 -- Maine_Supervision_Violation_Admissions_by_Type
+11:46:55 SAVE HC to HTML  20/300 -- Maryland_Supervision_Violation_Admissions_by_Type
+11:47:16 SAVE HC to HTML  21/300 -- Massachusetts_Supervision_Violation_Admissions_by_Type
+11:47:52 SAVE HC to HTML  22/300 -- Michigan_Supervision_Violation_Admissions_by_Type
+11:48:15 SAVE HC to HTML  23/300 -- Minnesota_Supervision_Violation_Admissions_by_Type
+11:48:16 SAVE HC to HTML  24/300 -- Mississippi_Supervision_Violation_Admissions_by_Type
+11:48:46 SAVE HC to HTML  25/300 -- Missouri_Supervision_Violation_Admissions_by_Type
+11:49:18 SAVE HC to HTML  26/300 -- Montana_Supervision_Violation_Admissions_by_Type
+11:49:32 SAVE HC to HTML  27/300 -- Nebraska_Supervision_Violation_Admissions_by_Type
+11:49:33 SAVE HC to HTML  28/300 -- Nevada_Supervision_Violation_Admissions_by_Type
+11:49:36 SAVE HC to HTML  29/300 -- New Hampshire_Supervision_Violation_Admissions_by_Type
+11:49:38 SAVE HC to HTML  30/300 -- New Jersey_Supervision_Violation_Admissions_by_Type
+11:49:58 SAVE HC to HTML  31/300 -- New Mexico_Supervision_Violation_Admissions_by_Type
+11:50:09 SAVE HC to HTML  32/300 -- New York_Supervision_Violation_Admissions_by_Type
+11:50:10 SAVE HC to HTML  33/300 -- North Carolina_Supervision_Violation_Admissions_by_Type
+11:50:28 SAVE HC to HTML  34/300 -- North Dakota_Supervision_Violation_Admissions_by_Type
+11:50:30 SAVE HC to HTML  35/300 -- Ohio_Supervision_Violation_Admissions_by_Type
+11:50:56 SAVE HC to HTML  36/300 -- Oklahoma_Supervision_Violation_Admissions_by_Type
+11:51:14 SAVE HC to HTML  37/300 -- Oregon_Supervision_Violation_Admissions_by_Type
+11:51:22 SAVE HC to HTML  38/300 -- Pennsylvania_Supervision_Violation_Admissions_by_Type
+11:51:52 SAVE HC to HTML  39/300 -- Rhode Island_Supervision_Violation_Admissions_by_Type
+11:52:39 SAVE HC to HTML  40/300 -- South Carolina_Supervision_Violation_Admissions_by_Type
+11:52:42 SAVE HC to HTML  41/300 -- South Dakota_Supervision_Violation_Admissions_by_Type
+11:52:44 SAVE HC to HTML  42/300 -- Tennessee_Supervision_Violation_Admissions_by_Type
+11:52:47 SAVE HC to HTML  43/300 -- Texas_Supervision_Violation_Admissions_by_Type
+11:52:57 SAVE HC to HTML  44/300 -- Utah_Supervision_Violation_Admissions_by_Type
+11:53:17 SAVE HC to HTML  45/300 -- Vermont_Supervision_Violation_Admissions_by_Type
+11:53:18 SAVE HC to HTML  46/300 -- Virginia_Supervision_Violation_Admissions_by_Type
+11:53:20 SAVE HC to HTML  47/300 -- Washington_Supervision_Violation_Admissions_by_Type
+11:53:54 SAVE HC to HTML  48/300 -- West Virginia_Supervision_Violation_Admissions_by_Type
+11:53:56 SAVE HC to HTML  49/300 -- Wisconsin_Supervision_Violation_Admissions_by_Type
+11:53:58 SAVE HC to HTML  50/300 -- Wyoming_Supervision_Violation_Admissions_by_Type
+11:53:59 SAVE HC to HTML  51/300 -- Alabama_Parole_Violation_Admissions_by_Type
+11:54:02 SAVE HC to HTML  52/300 -- Alaska_Parole_Violation_Admissions_by_Type
+11:54:03 SAVE HC to HTML  53/300 -- Arizona_Parole_Violation_Admissions_by_Type
+11:54:44 SAVE HC to HTML  54/300 -- Arkansas_Parole_Violation_Admissions_by_Type
+11:55:16 SAVE HC to HTML  55/300 -- California_Parole_Violation_Admissions_by_Type
+11:55:43 SAVE HC to HTML  56/300 -- Colorado_Parole_Violation_Admissions_by_Type
+11:55:55 SAVE HC to HTML  57/300 -- Connecticut_Parole_Violation_Admissions_by_Type
+11:55:58 SAVE HC to HTML  58/300 -- Delaware_Parole_Violation_Admissions_by_Type
+11:56:14 SAVE HC to HTML  59/300 -- Florida_Parole_Violation_Admissions_by_Type
+11:56:44 SAVE HC to HTML  60/300 -- Georgia_Parole_Violation_Admissions_by_Type
+11:56:51 SAVE HC to HTML  61/300 -- Hawaii_Parole_Violation_Admissions_by_Type
+11:57:13 SAVE HC to HTML  62/300 -- Idaho_Parole_Violation_Admissions_by_Type
+11:57:41 SAVE HC to HTML  63/300 -- Illinois_Parole_Violation_Admissions_by_Type
+11:57:44 SAVE HC to HTML  64/300 -- Indiana_Parole_Violation_Admissions_by_Type
+11:58:29 SAVE HC to HTML  65/300 -- Iowa_Parole_Violation_Admissions_by_Type
+11:58:31 SAVE HC to HTML  66/300 -- Kansas_Parole_Violation_Admissions_by_Type
+11:58:32 SAVE HC to HTML  67/300 -- Kentucky_Parole_Violation_Admissions_by_Type
+11:58:37 SAVE HC to HTML  68/300 -- Louisiana_Parole_Violation_Admissions_by_Type
+11:58:38 SAVE HC to HTML  69/300 -- Maine_Parole_Violation_Admissions_by_Type
+11:58:40 SAVE HC to HTML  70/300 -- Maryland_Parole_Violation_Admissions_by_Type
+11:58:41 SAVE HC to HTML  71/300 -- Massachusetts_Parole_Violation_Admissions_by_Type
+11:58:42 SAVE HC to HTML  72/300 -- Michigan_Parole_Violation_Admissions_by_Type
+11:58:43 SAVE HC to HTML  73/300 -- Minnesota_Parole_Violation_Admissions_by_Type
+11:58:45 SAVE HC to HTML  74/300 -- Mississippi_Parole_Violation_Admissions_by_Type
+11:58:49 SAVE HC to HTML  75/300 -- Missouri_Parole_Violation_Admissions_by_Type
+11:58:52 SAVE HC to HTML  76/300 -- Montana_Parole_Violation_Admissions_by_Type
+11:58:56 SAVE HC to HTML  77/300 -- Nebraska_Parole_Violation_Admissions_by_Type
+11:58:57 SAVE HC to HTML  78/300 -- Nevada_Parole_Violation_Admissions_by_Type
+11:58:58 SAVE HC to HTML  79/300 -- New Hampshire_Parole_Violation_Admissions_by_Type
+11:59:00 SAVE HC to HTML  80/300 -- New Jersey_Parole_Violation_Admissions_by_Type
+11:59:01 SAVE HC to HTML  81/300 -- New Mexico_Parole_Violation_Admissions_by_Type
+11:59:02 SAVE HC to HTML  82/300 -- New York_Parole_Violation_Admissions_by_Type
+11:59:04 SAVE HC to HTML  83/300 -- North Carolina_Parole_Violation_Admissions_by_Type
+11:59:06 SAVE HC to HTML  84/300 -- North Dakota_Parole_Violation_Admissions_by_Type
+11:59:10 SAVE HC to HTML  85/300 -- Ohio_Parole_Violation_Admissions_by_Type
+11:59:11 SAVE HC to HTML  86/300 -- Oklahoma_Parole_Violation_Admissions_by_Type
+11:59:12 SAVE HC to HTML  87/300 -- Oregon_Parole_Violation_Admissions_by_Type
+11:59:14 SAVE HC to HTML  88/300 -- Pennsylvania_Parole_Violation_Admissions_by_Type
+11:59:15 SAVE HC to HTML  89/300 -- Rhode Island_Parole_Violation_Admissions_by_Type
+11:59:15 SAVE HC to HTML  90/300 -- South Carolina_Parole_Violation_Admissions_by_Type
+11:59:16 SAVE HC to HTML  91/300 -- South Dakota_Parole_Violation_Admissions_by_Type
+11:59:17 SAVE HC to HTML  92/300 -- Tennessee_Parole_Violation_Admissions_by_Type
+11:59:17 SAVE HC to HTML  93/300 -- Texas_Parole_Violation_Admissions_by_Type
+11:59:17 SAVE HC to HTML  94/300 -- Utah_Parole_Violation_Admissions_by_Type
+11:59:18 SAVE HC to HTML  95/300 -- Vermont_Parole_Violation_Admissions_by_Type
+11:59:19 SAVE HC to HTML  96/300 -- Virginia_Parole_Violation_Admissions_by_Type
+11:59:19 SAVE HC to HTML  97/300 -- Washington_Parole_Violation_Admissions_by_Type
+11:59:20 SAVE HC to HTML  98/300 -- West Virginia_Parole_Violation_Admissions_by_Type
+11:59:20 SAVE HC to HTML  99/300 -- Wisconsin_Parole_Violation_Admissions_by_Type
+11:59:21 SAVE HC to HTML 100/300 -- Wyoming_Parole_Violation_Admissions_by_Type
+11:59:22 SAVE HC to HTML 101/300 -- Alabama_Probation_Violation_Admissions_by_Type
+11:59:22 SAVE HC to HTML 102/300 -- Alaska_Probation_Violation_Admissions_by_Type
+11:59:23 SAVE HC to HTML 103/300 -- Arizona_Probation_Violation_Admissions_by_Type
+11:59:23 SAVE HC to HTML 104/300 -- Arkansas_Probation_Violation_Admissions_by_Type
+11:59:24 SAVE HC to HTML 105/300 -- California_Probation_Violation_Admissions_by_Type
+11:59:25 SAVE HC to HTML 106/300 -- Colorado_Probation_Violation_Admissions_by_Type
+11:59:25 SAVE HC to HTML 107/300 -- Connecticut_Probation_Violation_Admissions_by_Type
+11:59:26 SAVE HC to HTML 108/300 -- Delaware_Probation_Violation_Admissions_by_Type
+11:59:26 SAVE HC to HTML 109/300 -- Florida_Probation_Violation_Admissions_by_Type
+11:59:27 SAVE HC to HTML 110/300 -- Georgia_Probation_Violation_Admissions_by_Type
+11:59:28 SAVE HC to HTML 111/300 -- Hawaii_Probation_Violation_Admissions_by_Type
+11:59:28 SAVE HC to HTML 112/300 -- Idaho_Probation_Violation_Admissions_by_Type
+11:59:29 SAVE HC to HTML 113/300 -- Illinois_Probation_Violation_Admissions_by_Type
+11:59:29 SAVE HC to HTML 114/300 -- Indiana_Probation_Violation_Admissions_by_Type
+11:59:30 SAVE HC to HTML 115/300 -- Iowa_Probation_Violation_Admissions_by_Type
+11:59:30 SAVE HC to HTML 116/300 -- Kansas_Probation_Violation_Admissions_by_Type
+11:59:31 SAVE HC to HTML 117/300 -- Kentucky_Probation_Violation_Admissions_by_Type
+11:59:31 SAVE HC to HTML 118/300 -- Louisiana_Probation_Violation_Admissions_by_Type
+11:59:32 SAVE HC to HTML 119/300 -- Maine_Probation_Violation_Admissions_by_Type
+11:59:33 SAVE HC to HTML 120/300 -- Maryland_Probation_Violation_Admissions_by_Type
+11:59:33 SAVE HC to HTML 121/300 -- Massachusetts_Probation_Violation_Admissions_by_Type
+11:59:34 SAVE HC to HTML 122/300 -- Michigan_Probation_Violation_Admissions_by_Type
+11:59:34 SAVE HC to HTML 123/300 -- Minnesota_Probation_Violation_Admissions_by_Type
+11:59:35 SAVE HC to HTML 124/300 -- Mississippi_Probation_Violation_Admissions_by_Type
+11:59:36 SAVE HC to HTML 125/300 -- Missouri_Probation_Violation_Admissions_by_Type
+11:59:36 SAVE HC to HTML 126/300 -- Montana_Probation_Violation_Admissions_by_Type
+11:59:37 SAVE HC to HTML 127/300 -- Nebraska_Probation_Violation_Admissions_by_Type
+11:59:37 SAVE HC to HTML 128/300 -- Nevada_Probation_Violation_Admissions_by_Type
+11:59:38 SAVE HC to HTML 129/300 -- New Hampshire_Probation_Violation_Admissions_by_Type
+11:59:39 SAVE HC to HTML 130/300 -- New Jersey_Probation_Violation_Admissions_by_Type
+11:59:39 SAVE HC to HTML 131/300 -- New Mexico_Probation_Violation_Admissions_by_Type
+11:59:40 SAVE HC to HTML 132/300 -- New York_Probation_Violation_Admissions_by_Type
+11:59:40 SAVE HC to HTML 133/300 -- North Carolina_Probation_Violation_Admissions_by_Type
+11:59:41 SAVE HC to HTML 134/300 -- North Dakota_Probation_Violation_Admissions_by_Type
+11:59:42 SAVE HC to HTML 135/300 -- Ohio_Probation_Violation_Admissions_by_Type
+11:59:42 SAVE HC to HTML 136/300 -- Oklahoma_Probation_Violation_Admissions_by_Type
+11:59:43 SAVE HC to HTML 137/300 -- Oregon_Probation_Violation_Admissions_by_Type
+11:59:43 SAVE HC to HTML 138/300 -- Pennsylvania_Probation_Violation_Admissions_by_Type
+11:59:44 SAVE HC to HTML 139/300 -- Rhode Island_Probation_Violation_Admissions_by_Type
+11:59:45 SAVE HC to HTML 140/300 -- South Carolina_Probation_Violation_Admissions_by_Type
+11:59:45 SAVE HC to HTML 141/300 -- South Dakota_Probation_Violation_Admissions_by_Type
+11:59:46 SAVE HC to HTML 142/300 -- Tennessee_Probation_Violation_Admissions_by_Type
+11:59:47 SAVE HC to HTML 143/300 -- Texas_Probation_Violation_Admissions_by_Type
+11:59:47 SAVE HC to HTML 144/300 -- Utah_Probation_Violation_Admissions_by_Type
+11:59:48 SAVE HC to HTML 145/300 -- Vermont_Probation_Violation_Admissions_by_Type
+11:59:48 SAVE HC to HTML 146/300 -- Virginia_Probation_Violation_Admissions_by_Type
+11:59:49 SAVE HC to HTML 147/300 -- Washington_Probation_Violation_Admissions_by_Type
+11:59:50 SAVE HC to HTML 148/300 -- West Virginia_Probation_Violation_Admissions_by_Type
+11:59:50 SAVE HC to HTML 149/300 -- Wisconsin_Probation_Violation_Admissions_by_Type
+11:59:51 SAVE HC to HTML 150/300 -- Wyoming_Probation_Violation_Admissions_by_Type
+11:59:51 SAVE HC to HTML 151/300 -- Alabama_Supervision_Violation_Population_by_Type
+11:59:52 SAVE HC to HTML 152/300 -- Alaska_Supervision_Violation_Population_by_Type
+11:59:53 SAVE HC to HTML 153/300 -- Arizona_Supervision_Violation_Population_by_Type
+11:59:53 SAVE HC to HTML 154/300 -- Arkansas_Supervision_Violation_Population_by_Type
+11:59:54 SAVE HC to HTML 155/300 -- California_Supervision_Violation_Population_by_Type
+11:59:54 SAVE HC to HTML 156/300 -- Colorado_Supervision_Violation_Population_by_Type
+11:59:55 SAVE HC to HTML 157/300 -- Connecticut_Supervision_Violation_Population_by_Type
+11:59:56 SAVE HC to HTML 158/300 -- Delaware_Supervision_Violation_Population_by_Type
+11:59:56 SAVE HC to HTML 159/300 -- Florida_Supervision_Violation_Population_by_Type
+11:59:57 SAVE HC to HTML 160/300 -- Georgia_Supervision_Violation_Population_by_Type
+11:59:57 SAVE HC to HTML 161/300 -- Hawaii_Supervision_Violation_Population_by_Type
+11:59:58 SAVE HC to HTML 162/300 -- Idaho_Supervision_Violation_Population_by_Type
+11:59:59 SAVE HC to HTML 163/300 -- Illinois_Supervision_Violation_Population_by_Type
+11:59:59 SAVE HC to HTML 164/300 -- Indiana_Supervision_Violation_Population_by_Type
+12:00:00 SAVE HC to HTML 165/300 -- Iowa_Supervision_Violation_Population_by_Type
+12:00:01 SAVE HC to HTML 166/300 -- Kansas_Supervision_Violation_Population_by_Type
+12:00:01 SAVE HC to HTML 167/300 -- Kentucky_Supervision_Violation_Population_by_Type
+12:00:02 SAVE HC to HTML 168/300 -- Louisiana_Supervision_Violation_Population_by_Type
+12:00:05 SAVE HC to HTML 169/300 -- Maine_Supervision_Violation_Population_by_Type
+12:00:39 SAVE HC to HTML 170/300 -- Maryland_Supervision_Violation_Population_by_Type
+12:00:40 SAVE HC to HTML 171/300 -- Massachusetts_Supervision_Violation_Population_by_Type
+12:00:42 SAVE HC to HTML 172/300 -- Michigan_Supervision_Violation_Population_by_Type
+12:00:43 SAVE HC to HTML 173/300 -- Minnesota_Supervision_Violation_Population_by_Type
+12:00:44 SAVE HC to HTML 174/300 -- Mississippi_Supervision_Violation_Population_by_Type
+12:00:44 SAVE HC to HTML 175/300 -- Missouri_Supervision_Violation_Population_by_Type
+12:00:45 SAVE HC to HTML 176/300 -- Montana_Supervision_Violation_Population_by_Type
+12:00:45 SAVE HC to HTML 177/300 -- Nebraska_Supervision_Violation_Population_by_Type
+12:00:46 SAVE HC to HTML 178/300 -- Nevada_Supervision_Violation_Population_by_Type
+12:00:47 SAVE HC to HTML 179/300 -- New Hampshire_Supervision_Violation_Population_by_Type
+12:00:47 SAVE HC to HTML 180/300 -- New Jersey_Supervision_Violation_Population_by_Type
+12:00:48 SAVE HC to HTML 181/300 -- New Mexico_Supervision_Violation_Population_by_Type
+12:00:49 SAVE HC to HTML 182/300 -- New York_Supervision_Violation_Population_by_Type
+12:00:49 SAVE HC to HTML 183/300 -- North Carolina_Supervision_Violation_Population_by_Type
+12:00:50 SAVE HC to HTML 184/300 -- North Dakota_Supervision_Violation_Population_by_Type
+12:00:50 SAVE HC to HTML 185/300 -- Ohio_Supervision_Violation_Population_by_Type
+12:00:51 SAVE HC to HTML 186/300 -- Oklahoma_Supervision_Violation_Population_by_Type
+12:00:52 SAVE HC to HTML 187/300 -- Oregon_Supervision_Violation_Population_by_Type
+12:00:52 SAVE HC to HTML 188/300 -- Pennsylvania_Supervision_Violation_Population_by_Type
+12:00:53 SAVE HC to HTML 189/300 -- Rhode Island_Supervision_Violation_Population_by_Type
+12:00:54 SAVE HC to HTML 190/300 -- South Carolina_Supervision_Violation_Population_by_Type
+12:00:54 SAVE HC to HTML 191/300 -- South Dakota_Supervision_Violation_Population_by_Type
+12:00:55 SAVE HC to HTML 192/300 -- Tennessee_Supervision_Violation_Population_by_Type
+12:00:55 SAVE HC to HTML 193/300 -- Texas_Supervision_Violation_Population_by_Type
+12:00:56 SAVE HC to HTML 194/300 -- Utah_Supervision_Violation_Population_by_Type
+12:00:57 SAVE HC to HTML 195/300 -- Vermont_Supervision_Violation_Population_by_Type
+12:00:57 SAVE HC to HTML 196/300 -- Virginia_Supervision_Violation_Population_by_Type
+12:00:58 SAVE HC to HTML 197/300 -- Washington_Supervision_Violation_Population_by_Type
+12:00:58 SAVE HC to HTML 198/300 -- West Virginia_Supervision_Violation_Population_by_Type
+12:00:59 SAVE HC to HTML 199/300 -- Wisconsin_Supervision_Violation_Population_by_Type
+12:01:00 SAVE HC to HTML 200/300 -- Wyoming_Supervision_Violation_Population_by_Type
+12:01:00 SAVE HC to HTML 201/300 -- Alabama_Parole_Violation_Population_by_Type
+12:01:01 SAVE HC to HTML 202/300 -- Alaska_Parole_Violation_Population_by_Type
+12:01:02 SAVE HC to HTML 203/300 -- Arizona_Parole_Violation_Population_by_Type
+12:01:02 SAVE HC to HTML 204/300 -- Arkansas_Parole_Violation_Population_by_Type
+12:01:03 SAVE HC to HTML 205/300 -- California_Parole_Violation_Population_by_Type
+12:01:10 SAVE HC to HTML 206/300 -- Colorado_Parole_Violation_Population_by_Type
+12:01:11 SAVE HC to HTML 207/300 -- Connecticut_Parole_Violation_Population_by_Type
+12:01:11 SAVE HC to HTML 208/300 -- Delaware_Parole_Violation_Population_by_Type
+12:01:12 SAVE HC to HTML 209/300 -- Florida_Parole_Violation_Population_by_Type
+12:01:12 SAVE HC to HTML 210/300 -- Georgia_Parole_Violation_Population_by_Type
+12:01:13 SAVE HC to HTML 211/300 -- Hawaii_Parole_Violation_Population_by_Type
+12:01:14 SAVE HC to HTML 212/300 -- Idaho_Parole_Violation_Population_by_Type
+12:01:14 SAVE HC to HTML 213/300 -- Illinois_Parole_Violation_Population_by_Type
+12:01:15 SAVE HC to HTML 214/300 -- Indiana_Parole_Violation_Population_by_Type
+12:01:15 SAVE HC to HTML 215/300 -- Iowa_Parole_Violation_Population_by_Type
+12:01:16 SAVE HC to HTML 216/300 -- Kansas_Parole_Violation_Population_by_Type
+12:01:17 SAVE HC to HTML 217/300 -- Kentucky_Parole_Violation_Population_by_Type
+12:01:17 SAVE HC to HTML 218/300 -- Louisiana_Parole_Violation_Population_by_Type
+12:01:18 SAVE HC to HTML 219/300 -- Maine_Parole_Violation_Population_by_Type
+12:01:18 SAVE HC to HTML 220/300 -- Maryland_Parole_Violation_Population_by_Type
+12:01:19 SAVE HC to HTML 221/300 -- Massachusetts_Parole_Violation_Population_by_Type
+12:01:20 SAVE HC to HTML 222/300 -- Michigan_Parole_Violation_Population_by_Type
+12:01:20 SAVE HC to HTML 223/300 -- Minnesota_Parole_Violation_Population_by_Type
+12:01:21 SAVE HC to HTML 224/300 -- Mississippi_Parole_Violation_Population_by_Type
+12:01:21 SAVE HC to HTML 225/300 -- Missouri_Parole_Violation_Population_by_Type
+12:01:22 SAVE HC to HTML 226/300 -- Montana_Parole_Violation_Population_by_Type
+12:01:23 SAVE HC to HTML 227/300 -- Nebraska_Parole_Violation_Population_by_Type
+12:01:23 SAVE HC to HTML 228/300 -- Nevada_Parole_Violation_Population_by_Type
+12:01:24 SAVE HC to HTML 229/300 -- New Hampshire_Parole_Violation_Population_by_Type
+12:01:25 SAVE HC to HTML 230/300 -- New Jersey_Parole_Violation_Population_by_Type
+12:01:25 SAVE HC to HTML 231/300 -- New Mexico_Parole_Violation_Population_by_Type
+12:01:26 SAVE HC to HTML 232/300 -- New York_Parole_Violation_Population_by_Type
+12:01:26 SAVE HC to HTML 233/300 -- North Carolina_Parole_Violation_Population_by_Type
+12:01:27 SAVE HC to HTML 234/300 -- North Dakota_Parole_Violation_Population_by_Type
+12:01:28 SAVE HC to HTML 235/300 -- Ohio_Parole_Violation_Population_by_Type
+12:01:28 SAVE HC to HTML 236/300 -- Oklahoma_Parole_Violation_Population_by_Type
+12:01:29 SAVE HC to HTML 237/300 -- Oregon_Parole_Violation_Population_by_Type
+12:01:29 SAVE HC to HTML 238/300 -- Pennsylvania_Parole_Violation_Population_by_Type
+12:01:30 SAVE HC to HTML 239/300 -- Rhode Island_Parole_Violation_Population_by_Type
+12:01:31 SAVE HC to HTML 240/300 -- South Carolina_Parole_Violation_Population_by_Type
+12:01:31 SAVE HC to HTML 241/300 -- South Dakota_Parole_Violation_Population_by_Type
+12:01:32 SAVE HC to HTML 242/300 -- Tennessee_Parole_Violation_Population_by_Type
+12:01:32 SAVE HC to HTML 243/300 -- Texas_Parole_Violation_Population_by_Type
+12:01:33 SAVE HC to HTML 244/300 -- Utah_Parole_Violation_Population_by_Type
+12:01:34 SAVE HC to HTML 245/300 -- Vermont_Parole_Violation_Population_by_Type
+12:01:34 SAVE HC to HTML 246/300 -- Virginia_Parole_Violation_Population_by_Type
+12:01:35 SAVE HC to HTML 247/300 -- Washington_Parole_Violation_Population_by_Type
+12:01:35 SAVE HC to HTML 248/300 -- West Virginia_Parole_Violation_Population_by_Type
+12:01:36 SAVE HC to HTML 249/300 -- Wisconsin_Parole_Violation_Population_by_Type
+12:01:37 SAVE HC to HTML 250/300 -- Wyoming_Parole_Violation_Population_by_Type
+12:01:37 SAVE HC to HTML 251/300 -- Alabama_Probation_Violation_Population_by_Type
+12:01:38 SAVE HC to HTML 252/300 -- Alaska_Probation_Violation_Population_by_Type
+12:01:38 SAVE HC to HTML 253/300 -- Arizona_Probation_Violation_Population_by_Type
+12:01:39 SAVE HC to HTML 254/300 -- Arkansas_Probation_Violation_Population_by_Type
+12:01:40 SAVE HC to HTML 255/300 -- California_Probation_Violation_Population_by_Type
+12:01:40 SAVE HC to HTML 256/300 -- Colorado_Probation_Violation_Population_by_Type
+12:01:41 SAVE HC to HTML 257/300 -- Connecticut_Probation_Violation_Population_by_Type
+12:01:42 SAVE HC to HTML 258/300 -- Delaware_Probation_Violation_Population_by_Type
+12:01:42 SAVE HC to HTML 259/300 -- Florida_Probation_Violation_Population_by_Type
+12:01:43 SAVE HC to HTML 260/300 -- Georgia_Probation_Violation_Population_by_Type
+12:01:44 SAVE HC to HTML 261/300 -- Hawaii_Probation_Violation_Population_by_Type
+12:01:44 SAVE HC to HTML 262/300 -- Idaho_Probation_Violation_Population_by_Type
+12:01:45 SAVE HC to HTML 263/300 -- Illinois_Probation_Violation_Population_by_Type
+12:01:45 SAVE HC to HTML 264/300 -- Indiana_Probation_Violation_Population_by_Type
+12:01:46 SAVE HC to HTML 265/300 -- Iowa_Probation_Violation_Population_by_Type
+12:01:47 SAVE HC to HTML 266/300 -- Kansas_Probation_Violation_Population_by_Type
+12:01:47 SAVE HC to HTML 267/300 -- Kentucky_Probation_Violation_Population_by_Type
+12:01:47 SAVE HC to HTML 268/300 -- Louisiana_Probation_Violation_Population_by_Type
+12:01:48 SAVE HC to HTML 269/300 -- Maine_Probation_Violation_Population_by_Type
+12:01:49 SAVE HC to HTML 270/300 -- Maryland_Probation_Violation_Population_by_Type
+12:01:49 SAVE HC to HTML 271/300 -- Massachusetts_Probation_Violation_Population_by_Type
+12:01:50 SAVE HC to HTML 272/300 -- Michigan_Probation_Violation_Population_by_Type
+12:01:50 SAVE HC to HTML 273/300 -- Minnesota_Probation_Violation_Population_by_Type
+12:01:51 SAVE HC to HTML 274/300 -- Mississippi_Probation_Violation_Population_by_Type
+12:01:52 SAVE HC to HTML 275/300 -- Missouri_Probation_Violation_Population_by_Type
+12:01:52 SAVE HC to HTML 276/300 -- Montana_Probation_Violation_Population_by_Type
+12:01:53 SAVE HC to HTML 277/300 -- Nebraska_Probation_Violation_Population_by_Type
+12:01:53 SAVE HC to HTML 278/300 -- Nevada_Probation_Violation_Population_by_Type
+12:01:54 SAVE HC to HTML 279/300 -- New Hampshire_Probation_Violation_Population_by_Type
+12:01:55 SAVE HC to HTML 280/300 -- New Jersey_Probation_Violation_Population_by_Type
+12:01:55 SAVE HC to HTML 281/300 -- New Mexico_Probation_Violation_Population_by_Type
+12:01:56 SAVE HC to HTML 282/300 -- New York_Probation_Violation_Population_by_Type
+12:01:57 SAVE HC to HTML 283/300 -- North Carolina_Probation_Violation_Population_by_Type
+12:01:57 SAVE HC to HTML 284/300 -- North Dakota_Probation_Violation_Population_by_Type
+12:01:58 SAVE HC to HTML 285/300 -- Ohio_Probation_Violation_Population_by_Type
+12:01:59 SAVE HC to HTML 286/300 -- Oklahoma_Probation_Violation_Population_by_Type
+12:01:59 SAVE HC to HTML 287/300 -- Oregon_Probation_Violation_Population_by_Type
+12:01:59 SAVE HC to HTML 288/300 -- Pennsylvania_Probation_Violation_Population_by_Type
+12:02:00 SAVE HC to HTML 289/300 -- Rhode Island_Probation_Violation_Population_by_Type
+12:02:01 SAVE HC to HTML 290/300 -- South Carolina_Probation_Violation_Population_by_Type
+12:02:01 SAVE HC to HTML 291/300 -- South Dakota_Probation_Violation_Population_by_Type
+12:02:02 SAVE HC to HTML 292/300 -- Tennessee_Probation_Violation_Population_by_Type
+12:02:02 SAVE HC to HTML 293/300 -- Texas_Probation_Violation_Population_by_Type
+12:02:03 SAVE HC to HTML 294/300 -- Utah_Probation_Violation_Population_by_Type
+12:02:05 SAVE HC to HTML 295/300 -- Vermont_Probation_Violation_Population_by_Type
+12:02:06 SAVE HC to HTML 296/300 -- Virginia_Probation_Violation_Population_by_Type
+12:02:07 SAVE HC to HTML 297/300 -- Washington_Probation_Violation_Population_by_Type
+12:02:07 SAVE HC to HTML 298/300 -- West Virginia_Probation_Violation_Population_by_Type
+12:02:08 SAVE HC to HTML 299/300 -- Wisconsin_Probation_Violation_Population_by_Type
+12:02:08 SAVE HC to HTML 300/300 -- Wyoming_Probation_Violation_Population_by_Type
 Warning messages:
 1: package ‘purrr’ was built under R version 4.4.2
 2: package ‘lubridate’ was built under R version 4.4.2
@@ -1206,5 +1158,5 @@ Warning messages:
 4: package ‘sf’ was built under R version 4.4.2
 5: package ‘jsonlite’ was built under R version 4.4.2
 6: package ‘geojsonsf’ was built under R version 4.4.2
-[1] "End run Mon Mar 17, 2025 at 17:14:12 CDT"
-Time difference of 27.74009 mins
+[1] "End run Fri Mar 21, 2025 at 12:02:09 CDT"
+Time difference of 31.46978 mins
