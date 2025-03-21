@@ -59,12 +59,12 @@ hex_map_note <- glue(
 standard_state_note_header <- "Key Questions to Consider"
 
 standard_state_note_text <- paste0(
-  "<br>", # match break before checked/unchecked boxes 
-  "<p>Questions:</p>", 
-  "<ul>", 
-  "<li>one</li>", 
-  "<li>two</li>", 
-  "<li>three</li>", 
-  "</ul>"
+  "<br>", # match break before checked/unchecked boxes in state notes 
+  "<ol>", 
+  "<li>How are state supervision policies contributing to changes in prison admissions from supervision violations, and what policy and practice changes can be made to address increases in prison admissions and populations (if needed)? </li>", 
+  "<li>What investments are being made in community-based programming and services that can provide alternatives to incarceration for technical supervision violations?</li>", 
+  "<li>How is the state measuring the effectiveness of policies aimed at reducing supervision violations and their impact on prison populations?</li>", 
+  "<li>    How do this state's data and policies compare to states with similar characteristics, and what best practices can be adopted from states that have been successful in reducing the number of people readmitted to prison from community supervision?</li>",
+  "</ol>"
 )
 
