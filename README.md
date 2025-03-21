@@ -43,29 +43,32 @@ trunk                    # production branch
 ```
 MCLCShiny 
 ├── app
-|   ├──  box          # box modules 
-|   ├── data          # data for shiny app 
-|   |   └── infogs    # infographs png files 
+|   ├── data          # rds files of data frames and highchart objs 
+|   |   └── plots     # pngs for download  
 |   ├── www             
-|   |   └── theme.R   # custom CSS for app  
-|   ├── app.R         # run app  
+|   |   ├── fonts     # folder with Graphik font used in app 
+|   |   └── theme.R   # custom CSS for app 
+|   |
 |   ├── colors. R     # assigned colors
 |   ├── dataframes.R  # loads converted data, fonts  
 |   ├── functions.R   # custom functions  
-|   ├── library.R     # load packages  
-|   ├── ui.R          # user interface  
-|   └── server.R      # server  
+|   |
+|   ├── global.R      # 1/3 app files: load packages/data  
+|   ├── ui.R          # 2/3 app files: user interface  
+|   └── server.R      # 3/3 app files: server 
 |
 ├── docs # folder with documentation files 
 |
 ├── logs # folder with log txt files 
 |
 ├── prep # folder for prep data/charts/imgs for app 
-|  ├── 0_shiny_prep.R   # run shiny prep
-|  ├── 1_fnc_library.R     # loads packages and custom functions 
-|  ├── 2_import.R          # imports MCLC data and shapefiles 
-|  ├── 3_highchart.R    # create and save highcharts for app
-|  └── 4_highchart_download.R # create and save highcharts with logo and labels for app
+|  ├── 0_shiny_prep.R        # run shiny prep, creates logs 
+|  ├── 2a_import_survey.R    # imports data and prepare for charts/tables 
+|  ├── 2b_import_text.R      # import text for state notes/missingness notes 
+|  ├── 3a_highchart_fnc.R    # functions/prep for creating highchart objects 
+|  ├── 3b_highchart_create.R # create highchart objects used in app 
+|  ├── 3c_highchart_html.R   # create highcharts for download, save as html
+|  └── 3d_highchart_png.R    # save htmls from 3c to pngs 
 |
 | # THIS FOLDER HAS NOT HAD PATHWAYS UPDATED; WILL NOT RUN AS IS 
 └── prep_rri          # folder for prep data/info for rri (race/ethnicity) infographics 
@@ -82,20 +85,40 @@ MCLCShiny
 
 After creating a clone, there are a few other steps you will need to take in order to run the app.  
 
-1. Download necessary package, look at `library.R` file for package list
-1. Create a new folder, called `data` within the `app` folder
-1. Run the `shiny_prep.R` file to create the data 
-    * *Note:* You may need to change your root folder variable depending on how you sync your SharePoint folder
-    * Open the `prep/box/ROOT.R` file, and edit the `sp` string to reflect your root folder 
-    * The root folder should be the string you would enter into the `csgjc::csg_sp_path()` function to get the pathway to the `MCLC Shiny App` folder on SharePoint 
-    * This will take ~15 minutes to run this folder (majority of the time is creating the infographic pngs) 
-    * Runnig this script will produce a log txt file 
-    
-After completing these steps you can run the app, either by opening `app.R`/`ui.R`/`server.R` and click the **Run App** button OR by entering `shiny::runApp()` into the console.
+* Download necessary packages and versions, `renv::restore()`  
+* Run the `prep/0_shiny_prep.R` file to create items need for app by doing the following steps
+  - data prep (<1min)
+    * description: import and prepare data for app 
+    * scripts: `2a_import_survey` and `2b_import_text` 
+    * log file: shiny_prep_log_**dataprep**.txt
+    * outputs: saves rds files within repo and on SharePoint 
+  - create documentation file and put version on SharePoint 
+  - hc_create (~2min) 
+    * description: pre-generates highchart objects (hex map, area charts, bar charts) for app
+    * scripts: `3a_highchart_fnc` and `3b_highchart_create`
+    * log file: shiny_prep_log_**hc_create**.txt  
+    * outputs: saves rds files within repo and on SharePoint 
+  - hc_html (~45min to 3 hours) 
+    * description: create new version of html objects that include data point labeling and the csg logo 
+    * scripts: `3a_highchart_fnc` and `3c_highchart_html`
+    * log file: shiny_prep_log_**hc_html**.txt  
+    * outputs: saves html files within repo only 
+    * *huge disparity on the length of time to run this code, depends on machine bandwidth* 
+  - hc_pngs (~30min ) 
+    * description: take the html objects create in previous step and take a screenshot and save as a pngs
+    * scripts: `3a_highchart_fnc` and `3d_highchart_png`
+    * log file: shiny_prep_log_**hc_pngs**.txt  
+    * outputs: saves png files within repo and on SharePoint  
+- Run app 
+  * open one of the main app files (`global.R`/`ui.R`/`server.R`) and click the **Run App** button 
+  * entering `shiny::runApp()` into the console
 
-**Notes**
+*Note on Pathway to SharePoint*
 
 - Must download csgjcr package. If you run into issues, make sure in your Renviron that CSG_SP_PATH = "your sharepoint path here" and GITHUB_PAT = "your token here" 
+-  You may need to change your root folder variable depending on how you sync your SharePoint folder
+- Open the `prep/box/ROOT.R` file, and edit the `sp` string to reflect your root folder 
+- The root folder should be the string you would enter into the `csgjc::csg_sp_path()` function to get the pathway to the `MCLC Shiny App` folder on SharePoint 
 
 
 # Shiny Releases 
