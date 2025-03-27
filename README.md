@@ -1,32 +1,70 @@
 # MCLCShiny
 
-Links current live version: 
+This projects conducts a survey to all 50 states asking for data on the number of supervision violations that result in an individual returning to prison.  
 
-`mclc_comms`
+Links current live version on shinyapps.io: `mclc_comms`
 
 - https://csgjc.shinyapps.io/mclc_comms/#mapexplorer  
 - https://csgjc.shinyapps.io/mclc_comms/#statedashboard 
 - https://csgjc.shinyapps.io/mclc_comms/#downloaddata  
 
 
-Website: [Supervision Violations and their Impact on Incarceration](https://projects.csgjusticecenter.org/supervision-violations-impact-on-incarceration/)
+App show on CSG Website: [Supervision Violations and their Impact on Incarceration](https://projects.csgjusticecenter.org/supervision-violations-impact-on-incarceration/)
 
 
-# Reports and Previous Names  
+Additional Documentation: `docs/gen_documentation.qmd`; resulting html on SharePoint: [50 State Revocations Project/MCLC Shiny App/SVII_Shiny_Documentation.html](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2FMCLC%20Shiny%20App%2FSVII%5FShiny%5FDocumentation%2Ehtml&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98&parent=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2FMCLC%20Shiny%20App)
 
-- Supervision Violations and their Impact on Incarceration 
-  * https://projects.csgjusticecenter.org/supervision-violations-impact-on-incarceration/
-  * Published Spring 2024 
+# Data, Reports, and Previous Names  
+
+
+## Data Collection in 2024/Publish in 2025
+*Supervision Violations and their Impact on Incarceration (SVII)*
+
+- Supervision Violations and their Impact on Incarceration (SVII) 
+- SharePoint Folder: [50 State Survey (2024)](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282024%29&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98)
+- request 2022-2023 data 
+- ask states to submit data via email in format of their choosing 
+- Survey code: [50_state_revocations/2024_survey](https://github.com/CSGJusticeCenter/50_state_revocations/tree/main/2024_survey)
+- App code: [MCLCShiny](https://github.com/CSGJusticeCenter/MCLCShiny) repository
+- Publish Report & Webtool: *will be the same url; hasn't been updated yet* [projects.csgjusticecenter.org/supervision-violations-impact-on-incarceration](https://projects.csgjusticecenter.org/supervision-violations-impact-on-incarceration/)
+  * app v3.0.00 expected to be published June 2025 (aggregate counts only) 
+  * Includes 2018-2023 data 
+
+
+## Data Collection in 2022/Publish in 2024
+*Supervision Violations and their Impact on Incarceration (SVII)*
+
+- SharePoint folder: [50 State Survey (2022)](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282022%29&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98)
+- original project name at was More Community Less Confinement (MCLC) 
+- request 2021 data 
+- states submit data via Google Sheet (a few states emailed Excel workbooks)
+- Survey code: [MCLC_Survey](https://github.com/CSGJusticeCenter/MCLC_survey) repository 
+- App code: [MCLCShiny](https://github.com/CSGJusticeCenter/MCLCShiny) repository
+- Publish Report & Webtool: [projects.csgjusticecenter.org/supervision-violations-impact-on-incarceration](https://projects.csgjusticecenter.org/supervision-violations-impact-on-incarceration/)
+  * [app v2.0.00, April 2024](https://github.com/CSGJusticeCenter/MCLCShiny/releases/tag/v2.0.00) <- updated language on hispanic RRI's from [v1.0.00, Feb 2024](https://github.com/CSGJusticeCenter/MCLCShiny/releases/tag/v1.0.00)
   * Includes 2018-2021 data 
-  * Shiny app: [MCLCShiny](https://github.com/CSGJusticeCenter/MCLCShiny/releases) repository
-- More Community Less Confinement (MCLC) 
-  * https://csgjusticecenter.org/publications/more-community-less-confinement/
-  * Includes 2018-2020 data 
-- 2019 - Confined and Costly 
-  * https://csgjusticecenter.org/publications/confined-costly/
-  * Includes 2017 data 
 
-# Structure 
+## Data Collection in 2020-2021/Publish in 2021-2022? 
+*More Community Less Confinement (MCLC)* 
+
+- SharePoint folder: [50 State Survey (2021)](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282021%29&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98) 
+  * request 2020 data?
+- SharePoint folder: [50 State Survey (2020)](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282020%29&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98)
+  * request 2018-2019 data, partial 2020 data 
+  * online survey 
+- Published Report: https://csgjusticecenter.org/publications/more-community-less-confinement/  
+  * Includes 2018-2020 data 
+
+
+## Earlier Cycles 
+*Confined and Costly (CC)* 
+
+- Published Report: https://csgjusticecenter.org/publications/confined-costly/
+- Includes 2017 data
+
+
+
+# Repo Structure 
 
 ## Branching Structure 
 
@@ -128,26 +166,6 @@ Releases are made up of 3 values and shown in the format of v0.0.00
 **First Number: `1`.0.00** - indicates version that is 'live' (e.g. shipped to client, publicly available on website)  
 **Second Number: 0.`1`.00** - indicates a version that was shared with the broader external working group  
 **Third Number: 0.0.`01`** - any time a new version is pushed to the R Shiny servers, but is not shared externally from research or live  
-
-# Data
-
-
-## Data Collection Cycles 
-
-- [50 State Survey (2024)](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282024%29&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98)
-  * request 2022-2023 data 
-  * ask states to submit data via email in format of their choosing 
-  * Survey code: [50_state_revocations/2024_survey](https://github.com/CSGJusticeCenter/50_state_revocations/tree/main/2024_survey)
-- [50 State Survey (2022)](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282022%29&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98)
-  * request 2021 data 
-  * states submit data via Google Sheet (a few states emailed Excel workbooks)
-  * Survey code: [MCLC_Survey](https://github.com/CSGJusticeCenter/MCLC_survey) repository 
-  * App code: [MCLCShiny](https://github.com/CSGJusticeCenter/MCLCShiny) repository
-- [50 State Survey (2021)](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282021%29&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98) 
-  * request 2020 data (?) 
-- [50 State Survey (2020)](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282020%29&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98)
-  * request 2018-2019 data, partial 2020 data 
-  * online survey 
 
 
 ## ARCHIVE: Data for Racial and Ethnic Disparites in Revocations 
