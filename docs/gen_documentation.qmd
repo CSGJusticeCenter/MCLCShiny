@@ -34,7 +34,13 @@ svii_agg <- readRDS("../prep/svii_agg.rds")
 - documentation on creation of `svii_main.rds` file: [50 State Revocations Project/50 State Survey (2024)/Data/raw/survey_documentation.html](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282024%29%2FData%2Fraw%2Fsurvey%5Fdocumentation%2Ehtml&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98&parent=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282024%29%2FData%2Fraw)
 - repo that creates `svii_main.rds`: [50_state_revocations](https://github.com/CSGJusticeCenter/50_state_revocations)
 - Data from the current survey is added to the data from previous surveys, the output files in the [combined](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282024%29%2FData%2Fraw%2Fcombined&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98) folder include data available from 2018-2023 
-- The previous survey data is pulled from [50 State Revocations Project/MCLC Shiny App/data/raw/mclc/mclc_data_2022_v9.xlsx](https://csgorg.sharepoint.com/:x:/r/sites/Team-JC-Research/_layouts/15/Doc.aspx?sourcedoc=%7B286F1BA7-7E51-42F5-893F-9ABCE4D04451%7D&file=mclc_data_2022_v9.xlsx&action=default&mobileredirect=true). This file was used as it's the the [file imported](https://github.com/CSGJusticeCenter/MCLCShiny/blob/323a8670ca2dac362bc7cc30f48697b9c4eb35de/import.R#L41) in the [v2.0.00 (Apr 2024)](https://github.com/CSGJusticeCenter/MCLCShiny/releases/tag/v2.0.00) of the app. 
+- The previous survey data is pulled from [50 State Revocations Project/MCLC Shiny App/data/raw/mclc/mclc_data_2022_v9.xlsx](https://csgorg.sharepoint.com/:x:/r/sites/Team-JC-Research/_layouts/15/Doc.aspx?sourcedoc=%7B286F1BA7-7E51-42F5-893F-9ABCE4D04451%7D&file=mclc_data_2022_v9.xlsx&action=default&mobileredirect=true). This is the [file imported](https://github.com/CSGJusticeCenter/MCLCShiny/blob/323a8670ca2dac362bc7cc30f48697b9c4eb35de/import.R#L41) in the [v2.0.00 (Apr 2024)](https://github.com/CSGJusticeCenter/MCLCShiny/releases/tag/v2.0.00) of the app. 
+
+# Data Pathway
+
+
+![Flow chart of Data Pathway](`r csg_sp_path("50 State Revocations Project/50 State Survey (2024)/Data/raw/graphics/MCLCShiny_prep_0_shiny_prep.png")`)
+
 
 
 
@@ -156,7 +162,7 @@ There were `r length(zero_22_states)` states that had 0 values: `r paste(zero_22
   * *WV resubmitted 2018-2021 values as a part of their 2022-2023, structure is consistent population parole metrics are not submitted, NA's for 2018-2023*
 
 
-### SVII Data (2018-2023) - zero values 
+### SVII Data (2022-2023) - zero values 
 
 
 In the most recent data collection (survey conducted in 2024, collecting data for 2022-2023), states were asked to submit data in whatever format they desired.  This lead to a lot fewer of not true 0's - if a state didn't have our couldn't measure a certain metric, it simply wasn't included in the submission.  
