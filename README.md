@@ -14,8 +14,13 @@ App show on CSG Website: [Supervision Violations and their Impact on Incarcerati
 
 Additional Documentation: `docs/gen_documentation.qmd`; resulting html on SharePoint: [50 State Revocations Project/MCLC Shiny App/SVII_Shiny_Documentation.html](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2FMCLC%20Shiny%20App%2FSVII%5FShiny%5FDocumentation%2Ehtml&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98&parent=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2FMCLC%20Shiny%20App)
 
-# Data, Reports, and Previous Names  
+# Staff 
 
+Data Collection Cycle 2024/Publish 2025: Seba, Martha, Jess GB, and Josh  
+Data Collection Cycle 2022/Publish 2024: Mari, Angie, Josh, Martha   
+
+
+# Data, Reports, and Previous Names  
 
 ## Data Collection in 2024/Publish in 2025
 *Supervision Violations and their Impact on Incarceration (SVII)*
@@ -23,7 +28,9 @@ Additional Documentation: `docs/gen_documentation.qmd`; resulting html on ShareP
 - Supervision Violations and their Impact on Incarceration (SVII) 
 - SharePoint Folder: [50 State Survey (2024)](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282024%29&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98)
 - request 2022-2023 data 
-- ask states to submit data via email in format of their choosing 
+- ask states to submit data via email in format of their choosing
+  * have multiple different file types and in many cases multiple files for each state
+  * have unique import file for each state since each state has a different way of providing data 
 - Survey code: [50_state_revocations/2024_survey](https://github.com/CSGJusticeCenter/50_state_revocations/tree/main/2024_survey)
 - App code: [MCLCShiny](https://github.com/CSGJusticeCenter/MCLCShiny) repository
 - Publish Report & Webtool: *will be the same url; hasn't been updated yet* [projects.csgjusticecenter.org/supervision-violations-impact-on-incarceration](https://projects.csgjusticecenter.org/supervision-violations-impact-on-incarceration/)
@@ -37,7 +44,12 @@ Additional Documentation: `docs/gen_documentation.qmd`; resulting html on ShareP
 - SharePoint folder: [50 State Survey (2022)](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282022%29&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98)
 - original project name at was More Community Less Confinement (MCLC) 
 - request 2021 data 
-- states submit data via Google Sheet (a few states emailed Excel workbooks)
+- states submit data via Google spreadsheet 
+  * have one spreadsheet per state; send states links to google spreadsheet 
+  * [Google Sheet Template](https://docs.google.com/spreadsheets/d/1JgiuQTz-ZLF5xByb3Wftq4GaTNCajsZ-gL79VDDmkPU/edit?gid=2093233864#gid=2093233864)
+  * A few states emailed Excel workbooks (could not access google products on work computers)
+  * Mari/Martha have google account and can access spreadsheets 
+  * Need to request a google account from IT, using CSG email 
 - Survey code: [MCLC_Survey](https://github.com/CSGJusticeCenter/MCLC_survey) repository 
 - App code: [MCLCShiny](https://github.com/CSGJusticeCenter/MCLCShiny) repository
 - Publish Report & Webtool: [projects.csgjusticecenter.org/supervision-violations-impact-on-incarceration](https://projects.csgjusticecenter.org/supervision-violations-impact-on-incarceration/)
