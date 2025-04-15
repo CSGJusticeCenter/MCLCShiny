@@ -388,10 +388,10 @@ ui <- fluidPage(
             id = "download-info",
             "To understand the impact of community supervision
             (i.e., probation, parole, post-release supervision) on state prison populations,
-            The Council of State Governments (CSG) Justice Center surveyed corrections
+            The Council of State Governments Justice Center surveyed corrections
             leaders in all 50 states. This project was supported by Arnold Ventures and
-            produced in partnership with the Correctional Leaders Association (CLA).
-            resulting data spans 6 years—from 2018 to 2023—and demonstrate how the number
+            produced in partnership with the Correctional Leaders Association.
+            Resulting data spans 5 years—from 2018 to 2023—and demonstrate how the number
             of people sent to prison for supervision violations changed."
           ), 
           br(),
