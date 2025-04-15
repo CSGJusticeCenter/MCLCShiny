@@ -247,15 +247,6 @@ ui <- fluidPage(
               br(), br(),
               fluidRow(
                 column(width = 1),
-                column( # probation title, notes (check boxes) and asterisks notes  
-                  width = 5, 
-                  div(id = "selected-state-note-subtitle", "Probation Metrics"),
-                  div(
-                    id = "selected-state-note", 
-                    htmlOutput("state_probation_notes"), 
-                    htmlOutput("state_probation_asterisks_notes")
-                    )
-                ), # column: probation title, notes (check boxes) and asterisks notes 
                 column( # parole title, notes (check boxes) and asterisks notes
                   width = 5, 
                   div(id = "selected-state-note-subtitle", "Parole/Post-Incarceration Metrics"),
@@ -265,6 +256,15 @@ ui <- fluidPage(
                     htmlOutput("state_parole_asterisks_notes")
                   )
                 ), # end column: parole title, notes (check boxes) and asterisks notes
+                column( # probation title, notes (check boxes) and asterisks notes  
+                  width = 5, 
+                  div(id = "selected-state-note-subtitle", "Probation Metrics"),
+                  div(
+                    id = "selected-state-note", 
+                    htmlOutput("state_probation_notes"), 
+                    htmlOutput("state_probation_asterisks_notes")
+                    )
+                ), # column: probation title, notes (check boxes) and asterisks notes 
                 column(width = 1)
               ), #end fluidRow
               fluidRow( # addl notes for states 
