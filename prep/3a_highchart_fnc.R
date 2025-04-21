@@ -423,7 +423,7 @@ fnc_hc_area <- function(this_type, this_state,
   which_opt <- area_opts |> 
     filter(
       type == this_type, 
-      state_name == this_state, 
+      state_name == this_state
     ) |> pull(n)
   
   message(glue("{format(Sys.time(), '%H:%M:%S')} \\
@@ -516,7 +516,7 @@ fnc_hc_bar <- function(this_type, this_supervision, this_state){
     filter(
       type == this_type, 
       supervision_type == this_supervision, 
-      state_name == this_state, 
+      state_name == this_state 
     ) |> pull(n)
   
   message(glue("{format(Sys.time(), '%H:%M:%S')} \\
