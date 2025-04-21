@@ -496,9 +496,6 @@ server <- function(input, output, session) {
   # Show graph download button or no button depending on state
   output$state_nt_button = renderUI({
     
-    downloadButton(outputId = 'save_state_bar_chart', "",
-                   class = "download-chart")
-    
     miss_text <- missingness_sentences |> 
       filter(state == input$state_report) |> 
       pull(paste0("supervision_violation_", tolower(input$adm_pop_report), "_graph"))
