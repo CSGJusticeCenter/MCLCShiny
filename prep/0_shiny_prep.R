@@ -131,5 +131,5 @@ closeAllConnections() # Close connection to log file
 end
 end - start 
 
-full_prep_end <- Syst.time() 
+full_prep_end <- Sys.time() 
 full_prep_end - full_prep_start
