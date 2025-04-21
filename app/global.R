@@ -91,7 +91,7 @@ yrchg_opts <- purrr::set_names(
       n_yrs = end_yr - str_yr, 
       display = paste0(
         str_yr, " - ", end_yr, ", ", 
-        ifelse(n_yrs == 1, 1, n_yrs+1), 
+        n_yrs, 
         " year", ifelse(n_yrs == 1, '', 's')
       )
     ) |> 

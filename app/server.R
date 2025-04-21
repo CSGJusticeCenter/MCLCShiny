@@ -466,7 +466,8 @@ server <- function(input, output, session) {
     out <- out$thiscol
     HTML(out)
   }) |>
-    bindCache(input$state_report)
+    bindCache(input$state_report, 
+              input$adm_pop_report)
 
   # Remove download button if no graph
   output$missing_data_nt_button <- renderText({
@@ -672,7 +673,8 @@ server <- function(input, output, session) {
     out <- out$thiscol
     HTML(out)
   }) |>
-    bindCache(input$state_report)
+    bindCache(input$state_report, 
+              input$adm_pop_report)
 
   # Show parole graph or missing data sentence depending on state
   output$parole_nt <- renderUI({
@@ -778,7 +780,8 @@ server <- function(input, output, session) {
     out <- out$thiscol
     HTML(out)
   }) |>
-    bindCache(input$state_report)
+    bindCache(input$state_report, 
+              input$adm_pop_report)
 
   # Show probation graph or missing data sentence depending on state
   output$probation_nt <- renderUI({

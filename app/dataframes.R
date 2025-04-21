@@ -44,12 +44,14 @@ for (x in hc_obj){
 
 # hex map notes ################################################################
 
+# link to another shiny tab 
+# https://stackoverflow.com/questions/34315485/linking-to-a-tab-or-panel-of-a-shiny-app
 hex_map_note <- glue(
   "Use caution when comparing years and states. In some states, data between \\
   different years cannot be compared due to changes in data availability, \\
   definitions, or methods. In some states, metrics represent only partial data. \\
   For instance, no probation data is included in the count of total technical violations. \\
-  See state reports for details about the data used for each state."
+  See <a href = '#statedashboard'>state reports</a> for details about the data used for each state."
 )
 
 
