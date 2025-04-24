@@ -61,7 +61,7 @@ formatted_notes <- notes |>
       "<p class = 'statetxt'>",  
       paste((unlist(addl_lst[!is.na(addl_lst)])), collapse = "</p><p class = 'statetxt'>"), 
       "</p>"
-    )
+    ) |> str_replace_all("\\n", "</p><p class = 'statetxt'>") 
   ) |> 
   select(
     state, 
