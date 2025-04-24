@@ -428,7 +428,7 @@ Always display the `S_` version of variables in the application so low counts ar
 List of data frames are saved as: `~JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/`**`NCRP_{NCRPLET}_REV_{POPTYPE}.RDS`**
 
 NCRPLET: A (Admissions) or N (year-end population)  
-POPTYPE: BJS (parole population), PUMS (community popualtion from PUMS census data), SC (community population from state characteristics data)
+POPTYPE: BJS (parole population), PUMS (community population from PUMS census data), SC (community population from state characteristics data)
 
 
 ### Example 
