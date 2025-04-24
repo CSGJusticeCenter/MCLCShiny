@@ -478,7 +478,7 @@ svii_table <- svii_explorer_table |>
   select(-text) |> 
   rename(text = data) |> 
   mutate(
-    text = fct_recode(text, `Technical Popualtion` = "Technical Violation Population")
+    text = fct_recode(text, `Technical Population` = "Technical Violation Population")
   ) |> 
   select(
     state_name, 
