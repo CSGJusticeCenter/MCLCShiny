@@ -252,10 +252,18 @@ subtext_no_probpar <- str_replace(subtext_no_par, "Parole", "[Probation/Parole]"
 |:-----:|:-----:|:-----:|:-----:| 
 | `!is.na(prob) & !is.na(par)` | `!is.na(tech_prob) & !is.na(tech_par)` | `!is.na(new_prob) & !is.na(new_par)` | `NA` |  
 | `is.na(prob) & is.na(par)`   | ` is.na(tech_prob) & is.na(tech_par)`  | `is.na(new_prob) & is.na(new_par)`   | `r subtext_nodata` |  
-| `!is.na(prob) &  is.na(par)` | `!is.na(tech_prob) &  is.na(tech_par)` | `!is.na(new_prob) &  is.na(new_par)` | `r subtext_no_par` | 
-| `is.na(prob)  & !is.na(par)` | `is.na(tech_prob)  & !is.na(tech_par)` | `is.na(new_prob)  & !is.na(new_par)` | `r subtext_no_prob`|
+| `!is.na(prob) &  is.na(par)`<br>`& supervision == prob` | `!is.na(tech_prob) &  is.na(tech_par)`<br>`& tech == tech_prob` | `!is.na(new_prob) &  is.na(new_par)`<br>`& new == new_prob` | `r subtext_no_par` | 
+| `is.na(prob)  & !is.na(par)`<br>`& supervision ==  par` | `is.na(tech_prob)  & !is.na(tech_par)`<br>`& tech ==  tech_par` | `is.na(new_prob)  & !is.na(new_par)`<br>`& new ==  new_par` | `r subtext_no_prob`|
+| else | else | else | OTHER | 
 : Conditions for Determining Subtitles for Value Boxes for a Specific Year 
 :::
+
+'OTHER' indicates some sort of special instance that requires individualized attention: 
+
+- IA: supervision = par + prob (but then prob is removed b/c prob == tech_prob); txt_supervision --> `r subtext_gen_partial`
+- IA: tech > tech_par but tech_prob == NA; rm subtitle 
+- KY: supervision value for previous years provided; prob is removed b/c prob = tech_prob; rm subtitle
+- MN: supervision value is provided; prob is removed b/c only have tech_prob; rm subtitle 
 
 <br> 
 After the subtitles are completed for the value boxes on a yearly basis, we need to determine the subtitles on a grouped basis (for 2018-2023 instead of for a single year). In order to determine the grouped subtitle, we look at the subtitle for each year of a given group (there should be 6 cells for each group, 1 for each year from 2018-2023).  

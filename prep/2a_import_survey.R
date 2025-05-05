@@ -148,9 +148,9 @@ svii_subtitle_vb <- svii_prep |>
     txt_supervision = ifelse(state_name == "Iowa" & type == "Population" & txt_supervision == "OTHER", subtext_gen_partial, txt_supervision), 
     # IA: tech > tech_par but tech_prob == NA; rm subtitle 
     txt_tech = ifelse(state_name == "Iowa" & type == "Population" & txt_tech == "OTHER", NA_character_, txt_tech), 
-    # KY: supervision value for previous years provided; prob is removed b/c prob = tech_prob
+    # KY: supervision value for previous years provided; prob is removed b/c prob = tech_prob; rm subtitle
     txt_supervision = ifelse(state_name == "Kentucky" & type == "Admissions" & txt_supervision == "OTHER", NA_character_, txt_supervision), 
-    # MN: supervision value is provided; prob is removed b/c only have tech_prob
+    # MN: supervision value is provided; prob is removed b/c only have tech_prob; rm sumbtitle
     txt_supervision = ifelse(state_name == "Minnesota" & type == "Population" & txt_supervision == "OTHER", NA_character_, txt_supervision), 
   )  |>
   # drop count values
