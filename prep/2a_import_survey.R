@@ -137,10 +137,10 @@ svii_subtitle_vb <- svii_prep |>
     )
   ) |> 
   # overrides/adjustments 
-  mutate(
-    # remove '(no probation data)* from tech for Iowa, tech = par_tech b/c prob_tech == 0 (which is converted to NA)
-    txt_tech = ifelse(state_name == "Iowa" & type == "Population", subtext_gen_partial, txt_tech)
-  ) |> 
+  # mutate(
+  #   # remove '(no probation data)* from tech for Iowa, tech = par_tech b/c prob_tech == 0 (which is converted to NA)
+  #   txt_tech = ifelse(state_name == "Iowa" & type == "Population", subtext_gen_partial, txt_tech)
+  # ) |> 
   # drop count values
   select(state_name, year, type, starts_with("txt_")) |>
   pivot_longer(c(txt_supervision, txt_tech, txt_new), names_to = "metric_abbr", values_to = "subtitle_vb") |>
