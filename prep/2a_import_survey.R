@@ -118,28 +118,53 @@ svii_subtitle_vb <- svii_prep |>
   janitor::clean_names() |> 
   mutate(
     txt_supervision  = case_when( # yearly designation, this is for the value boxes 
+       is.na(supervision) ~ NA_character_, 
       !is.na(prob) & !is.na(par) ~ NA_character_, 
-      is.na(prob) &  is.na(par) ~ subtext_nodata, 
-      !is.na(prob) &  is.na(par) ~ subtext_no_par, 
-      is.na(prob) & !is.na(par) ~ subtext_no_prob
+       is.na(prob) &  is.na(par) ~ subtext_nodata, 
+      !is.na(prob) &  is.na(par) & supervision == prob ~ subtext_no_par, 
+       is.na(prob) & !is.na(par) & supervision == par  ~ subtext_no_prob,
+      TRUE ~ "OTHER"
     ), 
     txt_tech  = case_when( # yearly designation, this is for the value boxes 
+       is.na(tech) ~ NA_character_, 
       !is.na(tech_prob) & !is.na(tech_par) ~ NA_character_, 
-      is.na(tech_prob) &  is.na(tech_par) ~ subtext_nodata, 
-      !is.na(tech_prob) &  is.na(tech_par) ~ subtext_no_par, 
-      is.na(tech_prob) & !is.na(tech_par) ~ subtext_no_prob
+       is.na(tech_prob) &  is.na(tech_par) ~ subtext_nodata, 
+      !is.na(tech_prob) &  is.na(tech_par) & tech == tech_prob ~ subtext_no_par, 
+       is.na(tech_prob) & !is.na(tech_par) & tech == tech_par  ~ subtext_no_prob,
+      TRUE ~ "OTHER"
     ), 
     txt_new  = case_when( # yearly designation, this is for the value boxes 
+      is.na(new) ~ NA_character_, 
       !is.na(new_prob) & !is.na(new_par) ~ NA_character_,  
-      is.na(new_prob) &  is.na(new_par) ~ subtext_nodata, 
-      !is.na(new_prob) &  is.na(new_par) ~ subtext_no_par, 
-      is.na(new_prob) & !is.na(new_par) ~ subtext_no_prob
+       is.na(new_prob) &  is.na(new_par) ~ subtext_nodata, 
+      !is.na(new_prob) &  is.na(new_par) & new == new_prob ~ subtext_no_par, 
+       is.na(new_prob) & !is.na(new_par) & new == new_par  ~ subtext_no_prob, 
+      TRUE ~ "OTHER"
     )
   ) |> 
+  # overrides/adjustments 
+  mutate(
+    # IA: supervision = par + prob (but then prob is removed b/c prob == tech_prob)
+    txt_supervision = ifelse(state_name == "Iowa" & type == "Population" & txt_supervision == "OTHER", subtext_gen_partial, txt_supervision), 
+    # IA: tech > tech_par but tech_prob == NA; rm subtitle 
+    txt_tech = ifelse(state_name == "Iowa" & type == "Population" & txt_tech == "OTHER", NA_character_, txt_tech), 
+    # KY: supervision value for previous years provided; prob is removed b/c prob = tech_prob; rm subtitle
+    txt_supervision = ifelse(state_name == "Kentucky" & type == "Admissions" & txt_supervision == "OTHER", NA_character_, txt_supervision), 
+    # MN: supervision value is provided; prob is removed b/c only have tech_prob; rm sumbtitle
+    txt_supervision = ifelse(state_name == "Minnesota" & type == "Population" & txt_supervision == "OTHER", NA_character_, txt_supervision), 
+  )  |>
   # drop count values
   select(state_name, year, type, starts_with("txt_")) |>
   pivot_longer(c(txt_supervision, txt_tech, txt_new), names_to = "metric_abbr", values_to = "subtitle_vb") |>
   mutate(metric_abbr = paste(tolower(str_sub(type, 1, 1)), str_sub(metric_abbr, 5, -1))) 
+
+# CHECK -- there should be no 'OTHER' is vb subtitles 
+
+if (nrow(filter(svii_subtitle_vb, subtitle_vb == "OTHER")) != 0){
+  check_vb_subtitles <- filter(svii_subtitle_vb, subtitle_vb == "OTHER")
+  stop("There are subtitles that need to be reviewed; some vb subtitles = OTHER")
+}
+
 
 svii_subtitle_areabar <- svii_subtitle_vb |> 
   group_by(state_name, type, metric_abbr) |> 
@@ -199,6 +224,9 @@ svii_subtitles <- full_join(
     ~ifelse(.x == subtext_nodata, NA_character_, .x)
   )) |> 
   select(state_name, year, metric_abbr, starts_with("subtitle"))
+
+
+
 
 
 # 6000 rows 
@@ -473,7 +501,7 @@ svii_table <- svii_explorer_table |>
   select(-text) |> 
   rename(text = data) |> 
   mutate(
-    text = fct_recode(text, `Technical Popualtion` = "Technical Violation Population")
+    text = fct_recode(text, `Technical Population` = "Technical Violation Population")
   ) |> 
   select(
     state_name, 
