@@ -140,3 +140,59 @@ state_reactable <- function(df, these_col_fill = colpal_fill, these_col_stroke =
     )
   )
 }
+
+
+
+
+
+demo_table_header <- function(text){
+  stringr::str_replace_all(text, c(
+    "Unknown s/g" = "Unknown", 
+    "Unknown r/e" = "Unknown", 
+    "AIAN" = "American Indian", 
+    "NHPI" = "Pacific Islander", 
+    "Two" = "Multiple"
+  ))
+  
+}
+
+
+
+demo_reactable <- function(df, metric_header = "Metric") {
+  # need width of reactable to be <= 995
+  # data (275) + demo cnts (9*85)  = 1000
+  
+  reactable(
+    df, 
+    style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"), 
+    theme = reactableTheme(
+      cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"), 
+      headerStyle = list(textAlign = "right")
+    ), 
+    compact = TRUE,
+    searchable = FALSE,
+    pagination = FALSE,
+    defaultColDef = colDef(
+      format = colFormat(separators = TRUE), 
+      header = function(value) demo_table_header(value), 
+      minWidth = 85, 
+      align = "right", 
+      na = "-", # using n dash; could also use longer m dash: "–"
+      headerVAlign = "bottom"
+    ),
+    columns = list(
+      data = colDef(
+        name = metric_header,
+        align = "left",
+        minWidth = 235,
+        width = 235, 
+        style = list(fontWeight = "bold")
+      ) 
+      # Hispanic = colDef(minWidth = 110), 
+      # AIAN = colDef(minWidth = 100), 
+      # NHPI = colDef(minWidth = 90), 
+      # Two = colDef(minWidth = 90), 
+      # `Unknown r/e` = colDef(minWidth = 100)
+    )
+  )
+}

@@ -5,7 +5,7 @@ ui <- fluidPage(
   theme = "theme.css", 
   # includeCSS("www/theme.css"), # include custom CSS
   navbarPage(
-    id = "navbarID",
+    id = "navbarID",  
     
     # Accessibility tags 
     tags$head(tags$title("Supervision Violations and Their Impact on Incarceration")),
@@ -181,7 +181,7 @@ ui <- fluidPage(
         
         # START PANELS (STATE TABS) --------------------------------------------
         tabsetPanel( # STATE TABS 
-          selected = "1", 
+          selected = "4", # should be 1 
           type = "tabs", 
           id = "tabsetpanel",
           # 1 overview -----------------------------------------------------
@@ -308,6 +308,21 @@ ui <- fluidPage(
               width = 12,
               align = "center",
               div(id = "reactable-table", reactableOutput("probation_table") |> svii_spinner() )
+            )), # column<fluidRow: Probation reactable table
+            br(), br()
+          ), # tabPanel
+          
+          # 4 Demographics ----------------------------------------------------
+          tabPanel(
+            value="4",
+            "Demographics",
+            br(),
+            fluidRow(column( # demographics reactable tables
+              width = 12,
+              align = "center",
+              div(id = "reactable-table", reactableOutput("demo_table_cnt")), 
+              div(id = "reactable-table", reactableOutput("demo_table_pop")), 
+              div(id = "reactable-table", reactableOutput("demo_table_perc")) 
             )), # column<fluidRow: Probation reactable table
             br(), br()
           ), # tabPanel

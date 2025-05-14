@@ -816,7 +816,65 @@ server <- function(input, output, session) {
   }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
+  
+  
+  # 4 DEMOGRAPHICS ----------------------------------------------------------------
 
+  # 4 tables (demographics) --------------------------------------------------------
+  output$demo_table_cnt <- renderReactable({
+    
+    svii_demo_table |> 
+      filter(
+        type == input$adm_pop_report, state_name == input$state_report, 
+        #type == "Admissions", state_name == "Alabama", 
+        year == 2023, group_cat == "race_ethnicity", 
+        display_type == "cnt"
+      ) |> 
+      select(data, group, display) |> 
+      arrange(data, group) |> 
+      tidyr::pivot_wider(names_from = group, values_from = display) |> 
+      demo_reactable()
+    
+  }) |>
+    bindCache(input$state_report,
+              input$adm_pop_report)
+  
+  
+  output$demo_table_pop <- renderReactable({
+
+    svii_demo_table |>
+      filter(
+        type == input$adm_pop_report, state_name == input$state_report,
+        year == 2023, group_cat == "race_ethnicity",
+      ) |>
+      select(group, display = pop) |>
+      distinct() |>
+      mutate(data = "Residents of State") |>
+      arrange(data, group) |>
+      pivot_wider(names_from = group, values_from = display) |>
+      demo_reactable(metric_header = "")
+
+  }) |>
+    bindCache(input$state_report,
+              input$adm_pop_report)
+
+
+  output$demo_table_perc <- renderReactable({
+
+    svii_demo_table |>
+      filter(
+        type == input$adm_pop_report, state_name == input$state_report,
+        year == 2023, group_cat == "race_ethnicity",
+        display_type == "perc"
+      ) |>
+      select(data, group, display) |>
+      arrange(data, group) |>
+      pivot_wider(names_from = group, values_from = display) |>
+      demo_reactable()
+
+  }) |>
+    bindCache(input$state_report,
+              input$adm_pop_report)
 
   # DOWNLOAD DATA ##############################################################
 

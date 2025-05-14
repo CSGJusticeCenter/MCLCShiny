@@ -9,6 +9,7 @@ obj_names <-  c(
   "svii_explorer", 
   "svii_explorer_table", 
   "svii_table", 
+  "svii_demo_table", 
   "svii_par", 
   "svii_prob", 
   "svii_valbox", 
