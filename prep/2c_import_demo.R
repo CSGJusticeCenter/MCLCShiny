@@ -356,4 +356,15 @@ admin$save_rds_twice(svii_demo_table, save_to_sp = save_RDS_to_sharepoint)
 #   demo_reactable()
 
 
+svii_demo_long <- svii_demo |> 
+  select(year, state_name, state_abbr, state_fips, data, metric_abbr, type, group, group_cat, cnt, perc, pop_total_n, pop_total_perc) |> 
+  pivot_longer(cols = c(cnt, perc, pop_total_n, pop_total_perc)) |> 
+  mutate(
+    var = ifelse(name %in% c("cnt", "perc"), "Metric", "Population"), 
+    valtype = ifelse(name %in% c("cnt", "pop_total_n"), "n", "perc")
+  ) |> 
+  select(-name) |> 
+  pivot_wider(names_from = valtype, values_from = value)
+
+
 
