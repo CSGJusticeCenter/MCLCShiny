@@ -85,7 +85,7 @@ these_states <- "NJ" #state.abb
 state_string <- these_states
 # always update hex maps (if one state changes, will affect hex map)
 # filter area/bar charts to only include states listed above 
-
+ifelse(length(these_states) == 50, "All states", state_string)
 
 sink(my_log, append = FALSE, type = "output") # Writing console output to log file
 sink(my_log, append = FALSE, type = "message")
