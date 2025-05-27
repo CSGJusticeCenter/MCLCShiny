@@ -91,7 +91,8 @@ area_opts_print <- area_opts |>
   )) |> 
   mutate(
     any_adj = ifelse(adj_y_sup != 0 | adj_y_tech != 0 | adj_y_new != 0, TRUE, FALSE )
-  ) 
+  ) |> 
+  filter(csgjcr::csg_state_convert(state_name, "name", "abbr") %in% these_states)
 
 
 state_area_html_lst <- pmap(
@@ -124,10 +125,14 @@ walk(
 
 # STATE BAR HTML DOWNLOAD ######################################################
 
+bar_opts_print <- bar_opts |> 
+  filter(csgjcr::csg_state_convert(state_name, "name", "abbr") %in% these_states) 
+  
+
 state_bar_html_lst <- pmap(
   # created in 3a_highchart_fnc.R file 
-  bar_opts |> 
-    select(type, supervision_type, state_name) |> 
+  bar_opts_print |> 
+    select(type, supervision_type, state_name) |>  
     as.list()
   , 
   function(type, supervision_type, state_name)
@@ -137,7 +142,7 @@ state_bar_html_lst <- pmap(
     # last version used default (11px); but have 2 more years so bars are smaller
     fnc_add_datalabels(label_fontSize = "9px")
 ) |> 
-  set_names(bar_opts$filename)
+  set_names(bar_opts_print$filename)
 
 
 # ~30 min

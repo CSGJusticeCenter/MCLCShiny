@@ -70,6 +70,7 @@ end
 end - start 
 
 
+
 ## Aggregate Plots HTMLs (used to created pngs for download) ###################
 # create pngs for users to download; time depends on bandwidth of computer
 # hex   72 items, ~10-30 min 
@@ -79,12 +80,18 @@ start <- Sys.time() #takes ~45 min-3 hours
 start
 paste("Should be done by:", format(start+120*60, "%X"))
 my_log <- file("logs/shiny_prep_log_hc_html.txt") # File name of output log
-
+# since HTML/PNG takes so long, can choose to only update for certain states 
+these_states <- "NJ" #state.abb
+state_string <- these_states
+# always update hex maps (if one state changes, will affect hex map)
+# filter area/bar charts to only include states listed above 
+ifelse(length(these_states) == 50, "All states", state_string)
 
 sink(my_log, append = FALSE, type = "output") # Writing console output to log file
 sink(my_log, append = FALSE, type = "message")
 print("== CREATE HTMLS =======================================================")
 print(paste("Last run", format(Sys.time(), "%a %b %e, %Y at %H:%M:%S %Z")))
+print(ifelse(length(these_states) == 50, "All states", state_string))
 # need to run 3a if haven't done so already 
 print("-- 3a_highchart_fnc ---------------------------------------------------")
 source("prep/3a_highchart_fnc.R", echo = TRUE)
