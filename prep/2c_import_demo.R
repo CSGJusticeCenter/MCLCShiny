@@ -218,7 +218,8 @@ ppus_par <- read_csv(
     White = 9, 
     Black = 10, 
     Hispanic = 11, 
-    Other = 12
+    Other = 12, 
+    `Unknown r/e` = 13
   ) |> 
   mutate(across(everything(), as.character)) |> 
   mutate(supervision_type = "Parole")
