@@ -821,18 +821,62 @@ server <- function(input, output, session) {
   # 4 DEMOGRAPHICS ----------------------------------------------------------------
 
   # 4 tables (demographics) --------------------------------------------------------
-  output$demo_table_cnt <- renderReactable({
+  output$demo_table_1 <- renderReactable({
     
-    svii_demo_table |> 
-      filter(
-        type == input$adm_pop_report, state_name == input$state_report, 
-        #type == "Admissions", state_name == "Alabama", 
-        year == 2023, group_cat == "race_ethnicity", 
-        display_type == "cnt"
-      ) |> 
-      select(data, group, display) |> 
-      arrange(data, group) |> 
-      tidyr::pivot_wider(names_from = group, values_from = display) |> 
+    bind_rows(
+      demo_tables$census |>
+        filter(
+          state_name == input$state_report,
+          group_cat == "race_ethnicity",
+          name == "perc"
+        ) |>
+        mutate(data = "State Population*") |> 
+        select(data, group, display) |>
+        arrange(data, group), 
+      demo_tables$svii |> 
+        filter(
+          type == input$adm_pop_report, state_name == input$state_report,
+          group_cat == "race_ethnicity",
+          name == "perc", 
+          word(metric_abbr, 2) == "total"
+        ) |> 
+        select(data, group, display) |> 
+        arrange(data, group) 
+    ) |>
+      tidyr::pivot_wider(names_from = group, values_from = display) |>
+      demo_reactable()
+
+  }) |>
+    bindCache(input$state_report,
+              input$adm_pop_report)
+  
+  
+  
+  output$demo_table_2 <- renderReactable({
+    
+    bind_rows(
+      demo_tables$ppus |>
+        filter(
+          state_name == input$state_report,
+          group_cat == "race_ethnicity",
+          name == "perc", 
+          supervision_type == "Both"
+        ) |>
+        mutate(data = "Supervision Population*") |> 
+        select(data, group, display) |>
+        arrange(data, group), 
+      demo_tables$svii |> 
+        filter(
+          type == input$adm_pop_report, state_name == input$state_report,
+          group_cat == "race_ethnicity",
+          name == "perc", 
+          word(metric_abbr, 2) != "total", 
+          supervision_type == "Both"
+        ) |> 
+        select(data, group, display) |> 
+        arrange(data, group) 
+    ) |>
+      tidyr::pivot_wider(names_from = group, values_from = display) |>
       demo_reactable()
     
   }) |>
@@ -840,41 +884,67 @@ server <- function(input, output, session) {
               input$adm_pop_report)
   
   
-  output$demo_table_pop <- renderReactable({
-
-    svii_demo_table |>
-      filter(
-        type == input$adm_pop_report, state_name == input$state_report,
-        year == 2023, group_cat == "race_ethnicity",
-      ) |>
-      select(group, display = pop) |>
-      distinct() |>
-      mutate(data = "Residents of State") |>
-      arrange(data, group) |>
-      pivot_wider(names_from = group, values_from = display) |>
-      demo_reactable(metric_header = "")
-
-  }) |>
-    bindCache(input$state_report,
-              input$adm_pop_report)
-
-
-  output$demo_table_perc <- renderReactable({
-
-    svii_demo_table |>
-      filter(
-        type == input$adm_pop_report, state_name == input$state_report,
-        year == 2023, group_cat == "race_ethnicity",
-        display_type == "perc"
-      ) |>
-      select(data, group, display) |>
-      arrange(data, group) |>
-      pivot_wider(names_from = group, values_from = display) |>
+  output$demo_table_3 <- renderReactable({
+    
+    bind_rows(
+      demo_tables$ppus |>
+        filter(
+          state_name == input$state_report,
+          group_cat == "race_ethnicity",
+          name == "perc", 
+          supervision_type == "Parole"
+        ) |>
+        mutate(data = "Parole Population*") |> 
+        select(data, group, display) |>
+        arrange(data, group), 
+      demo_tables$svii |> 
+        filter(
+          type == input$adm_pop_report, state_name == input$state_report,
+          group_cat == "race_ethnicity",
+          name == "perc", 
+          supervision_type == "Parole"
+        ) |> 
+        select(data, group, display) |> 
+        arrange(data, group) 
+    ) |>
+      tidyr::pivot_wider(names_from = group, values_from = display) |>
       demo_reactable()
-
+    
   }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
+  
+  
+  output$demo_table_4 <- renderReactable({
+    
+    bind_rows(
+      demo_tables$ppus |>
+        filter(
+          state_name == input$state_report,
+          group_cat == "race_ethnicity",
+          name == "perc", 
+          supervision_type == "Probation"
+        ) |>
+        mutate(data = "Probation Population*") |> 
+        select(data, group, display) |>
+        arrange(data, group), 
+      demo_tables$svii |> 
+        filter(
+          type == input$adm_pop_report, state_name == input$state_report,
+          group_cat == "race_ethnicity",
+          name == "perc", 
+          supervision_type == "Probation"
+        ) |> 
+        select(data, group, display) |> 
+        arrange(data, group) 
+    ) |>
+      tidyr::pivot_wider(names_from = group, values_from = display) |>
+      demo_reactable()
+    
+  }) |>
+    bindCache(input$state_report,
+              input$adm_pop_report)
+
 
   # DOWNLOAD DATA ##############################################################
 

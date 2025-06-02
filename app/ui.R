@@ -320,9 +320,14 @@ ui <- fluidPage(
             fluidRow(column( # demographics reactable tables
               width = 12,
               align = "center",
-              div(id = "reactable-table", reactableOutput("demo_table_cnt")), 
-              div(id = "reactable-table", reactableOutput("demo_table_pop")), 
-              div(id = "reactable-table", reactableOutput("demo_table_perc")) 
+              div(id = "selected-state-note-title", "State Population vs Total Prison Adm/Pop"), 
+              div(id = "reactable-table", reactableOutput("demo_table_1")), 
+              div(id = "selected-state-note-title", "Superivsion"), 
+              div(id = "reactable-table", reactableOutput("demo_table_2")), 
+              div(id = "selected-state-note-title", "Parole"), 
+              div(id = "reactable-table", reactableOutput("demo_table_3")), 
+              div(id = "selected-state-note-title", "Probation"), 
+              div(id = "reactable-table", reactableOutput("demo_table_4"))
             )), # column<fluidRow: Probation reactable table
             br(), br()
           ), # tabPanel

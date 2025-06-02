@@ -27,7 +27,15 @@ demo_cat <- bind_rows(
   read_excel(info_file, sheet = "race_ethnicity"), 
   read_excel(info_file, sheet = "sex_gender") 
 ) |> 
-  select(group_order = item, group, group_cat, group_name = long_name)
+  select(group_order = item, group, group_cat, group_name = long_name) |> 
+  add_row(
+    group_order = 0, group = "aggregate", group_cat = "aggregate", group_name = "Aggregate"
+  ) |> 
+  mutate(group_order_sep = group_order, 
+         group_order = ifelse(group_cat == "sex_gender", group_order_sep + 9, group_order_sep))
+
+
+saveRDS(demo_cat, "prep/demo_cat.rds")
 
 
 # CENSUS DATA ##################################################################
@@ -58,7 +66,7 @@ pep_state_20_23 <- read_csv(
       RACE ==   3  ~ "AIAN",
       RACE ==   4  ~ "Asian",
       RACE ==   5  ~ "NHPI", 
-      RACE ==   6  ~ "Two"
+      RACE ==   6  ~  "Two"
     )
   )
 
@@ -147,17 +155,17 @@ census_pop <- pop_state |>
     state_fips,
     group,
     group_cat,
-    pop_total_n = pop_total,
-    pop_adult_n = pop_adult
+    census_n = pop_total # pop_adult
   ) |> 
   filter(year %in% c(2022, 2023), state_name %in% state.name) |> 
-  arrange(state_name, year, group_cat, group) |> 
-  group_by(year, state_name) |> 
+  arrange(state_name, year, group_cat, group) |>
+  group_by(year, state_name) |>
   mutate(
-    pop_total_perc = pop_total_n/pop_total_n[group == "aggregate"], 
-    pop_adult_perc = pop_adult_n/pop_adult_n[group == "aggregate"], 
-  ) |> 
-  ungroup() 
+    census_perc = census_n/census_n[group == "aggregate"],
+  ) |>
+  ungroup()
+
+saveRDS(census_pop, "prep/census_pop.rds")
 
 # PPUS DATA ##################################################################  
 
@@ -251,13 +259,15 @@ ppus <- bind_rows(ppus_prob, ppus_par) |>
   ) |> 
   ungroup() |> 
   pivot_longer(cols = c(Probation, Parole, Both), names_to = "supervision_type", values_to = "n") |> 
-  select(state_name, supervision_type, group, group_cat, pop_total_n = n) |> 
-  arrange(state_name, supervision_type, group_cat, group) |> 
-  group_by(state_name, supervision_type) |> 
+  select(state_name, supervision_type, group, group_cat, ppus_n = n) |> 
+  arrange(state_name, supervision_type, group_cat, group) |>
+  group_by(state_name, supervision_type) |>
   mutate(
-    pop_total_perc = pop_total_n/pop_total_n[group == "aggregate"]
-  )
+    ppus_perc = ppus_n/ppus_n[group == "aggregate"]
+  ) |> 
+  ungroup()
 
+saveRDS(ppus, "prep/ppus.rds")
 
 # SVII DATA ##################################################################
 
@@ -303,44 +313,33 @@ SUPPRESSION_VALUE <- 5
 svii_demo_supp1 <- svii |> 
   filter(year %in% c(2022, 2023)) |> 
   select(year, state_name, state_abbr, state_fips, data, metric, type, group, group_cat, n, metric_abbr, supervision_type) |> 
-  # pull out aggregate count (used to calc demo proportions) 
-  # once cell values is pulled out of row, remove aggregate rows 
-  group_by(state_abbr, year, data) |> 
-  mutate(n_agg = n[group == "aggregate"])  |> 
-  ungroup() |> 
-  filter(group != "aggregate") |> 
-  # join with demo_cat df to get item orders (for factoring & display) 
-  # and also get long names (display names) 
-  left_join(demo_cat, by = c("group", "group_cat")) |> 
   # add data suppression if data point is < 5 --> use value of 5 
+  group_by(state_abbr, year, data) |> 
   mutate(
     supp_val = SUPPRESSION_VALUE, # any value LESS THAN the supp value is then replaced with the suppressed value 
-    case_when(
-      n < supp_val & n != 0 ~ tibble(n_cnt = supp_val, n_cnt_supp = TRUE), 
-      n >=supp_val | n == 0 ~ tibble(n_cnt = n,        n_cnt_supp = FALSE), 
-      is.na(n)              ~ tibble(n_cnt = NA_real_, n_cnt_supp = FALSE)
-    ), 
-    case_when(
-      n_agg < supp_val & n_agg != 0 ~ tibble(n_cnt_agg = supp_val, n_cnt_agg_supp = TRUE), 
-      n_agg >=supp_val | n_agg == 0 ~ tibble(n_cnt_agg = n_agg,    n_cnt_agg_supp = FALSE), 
-      is.na(n_agg)                  ~ tibble(n_cnt_agg = n_agg,    n_cnt_agg_supp = FALSE)
+    case_when( # only need to suppress demographic counts (not aggregate counts) 
+      group == "aggregate"  ~ tibble(svii_n = n       , svii_supp = FALSE), 
+      n < supp_val & n != 0 ~ tibble(svii_n = NA_real_, svii_supp = TRUE), 
+      n >=supp_val | n == 0 ~ tibble(svii_n = n,        svii_supp = FALSE), 
+      is.na(n)              ~ tibble(svii_n = NA_real_, svii_supp = FALSE)
     ), 
     supp_flag = case_when(
       # no suppression, using real data
-      n_cnt_supp == FALSE & n_cnt_agg_supp == FALSE & n_cnt == 0 & n_cnt_agg == 0 ~ 0.1, # both val & val_agg == 0  
-      n_cnt_supp == FALSE & n_cnt_agg_supp == FALSE & n_cnt == 0 & n_cnt_agg != 0 ~ 0.2, # val == 0 & val_agg != 0   
-      n_cnt_supp == FALSE & n_cnt_agg_supp == FALSE & n_cnt != 0 & n_cnt_agg != 0 ~ 0.3, # val != 0 & val_agg != 0 
-      n_cnt_supp == FALSE & n_cnt_agg_supp == TRUE  & n_cnt == 0 & n_cnt_agg != 0 ~ 0.4, # val == 0 & val_agg < supp_val 
+      svii_supp == FALSE & svii_n == 0 & svii_n[group == "aggregate"] == 0 ~ 0.1, 
+      svii_supp == FALSE & svii_n == 0 & svii_n[group == "aggregate"] != 0 ~ 0.2, 
+      svii_supp == FALSE & svii_n != 0 & svii_n[group == "aggregate"] != 0 ~ 0.3, 
       # suppressed data  
-      n_cnt_supp == TRUE & n_cnt_agg_supp == FALSE & n_cnt <  n_cnt_agg ~ 1.1,  
-      n_cnt_supp == TRUE & n_cnt_agg_supp == FALSE & n_cnt == n_cnt_agg ~ 1.2, 
-      n_cnt_supp == TRUE & n_cnt_agg_supp == TRUE  & n == n_agg         ~ 1.3,  
-      n_cnt_supp == TRUE & n_cnt_agg_supp == TRUE  & n != n_agg         ~ 1.4,  
+      svii_supp == TRUE & supp_val >  svii_n[group == "aggregate"] ~ 1.1,
+      svii_supp == TRUE & supp_val == svii_n[group == "aggregate"] ~ 1.2,
+      svii_supp == TRUE & supp_val <  svii_n[group == "aggregate"] ~ 1.3,
       # missing data 
-      is.na(n_cnt) & !is.na(n_cnt_agg) ~ 2.1, 
-      is.na(n_cnt) &  is.na(n_cnt_agg) ~ 2.2  
+      is.na(svii_n) & !is.na(svii_n[group == "aggregate"]) ~ 2.1,
+      is.na(svii_n) &  is.na(svii_n[group == "aggregate"]) ~ 2.2
     )
-  ) 
+  )  |> 
+  ungroup() 
+
+
 
 
 if (SUPPRESSION_VALUE != 0){
@@ -357,7 +356,12 @@ if (SUPPRESSION_VALUE != 0){
     mutate(
       n_cells_suppressed = sum(ifelse(trunc(supp_flag) == 1, TRUE, FALSE)),
     ) |> 
-    filter(n_cells_suppressed == 1, n >= SUPPRESSION_VALUE, !is.na(n)) |> 
+    # only interested in adding suppression if 
+    # (1) the number of cells suppressed are == 1 (but not aggregate,)
+    # (2) n value is greater than the suppression value (value would not be suppressed otherwise)
+    # (3) n value is NOT na
+    # (4) not part of the aggregate category 
+    filter(n_cells_suppressed == 1, n >= SUPPRESSION_VALUE, !is.na(n), group != "aggregate") |> 
     summarise(n_next_min = min(n), .groups = "drop") 
   
   
@@ -366,20 +370,32 @@ if (SUPPRESSION_VALUE != 0){
     left_join(svii_demo_next_min, by = join_by(year, state_name, data, group_cat)) |> 
     mutate(
       case_when(
-        is.na(n_next_min)                   ~ tibble(n_cnt = n_cnt,   supp_flag = supp_flag), 
-        !is.na(n_next_min) & n_next_min == n ~ tibble(n_cnt = n_cnt+5, supp_flag = 1.5,), 
-        !is.na(n_next_min) & n_next_min != n ~ tibble(n_cnt = n_cnt,   supp_flag = supp_flag), 
-        !is.na(n_next_min) & is.na(n_cnt)    ~ tibble(n_cnt = n_cnt,   supp_flag = supp_flag), 
+         is.na(n_next_min)                   ~ tibble(svii_n = svii_n,   supp_flag = supp_flag, svii_supp = svii_supp), 
+        !is.na(n_next_min) & n_next_min == n ~ tibble(svii_n = NA_real_, supp_flag = 1.4,       svii_supp = TRUE), 
+        !is.na(n_next_min) & n_next_min != n ~ tibble(svii_n = svii_n,   supp_flag = supp_flag, svii_supp = svii_supp),
+        !is.na(n_next_min) & is.na(svii_n)   ~ tibble(svii_n = svii_n,   supp_flag = supp_flag, svii_supp = svii_supp),
       )
-    ) 
+    ) |> 
+    # drop un-needed columns 
+    select(-n_next_min)
   
   # instances where the next min value is the same in multiple cells 
   # do you suppress 1 or both? -- CURRENTLY SUPPRESSING BOTH 
   # if only suppress 1, which one do you pick? 
+  n_1.4_unique <-  nrow(svii_demo_next_min)
+  n_1.4 <- nrow(filter(svii_demo_supp2, supp_flag == 1.4))
+  
+  
   svii_demo_supp2 |> 
-    filter(supp_flag == 1.5) |> 
-    count(year, state_name, data, group_cat) |> 
-    filter(n!=1) |> print(n=19)
+    filter(supp_flag == 1.4) |> 
+    group_by(year, state_name, data, group_cat) |> 
+    mutate(n_1.4 = sum(ifelse(supp_flag == 1.4, TRUE, FALSE))) |> 
+    ungroup() |> 
+    filter(n_1.4 != 1) |> 
+    select(year, state_abbr, data, group, n) |> 
+    mutate(grp = rep(c("group1", "group2"), (n_1.4 - n_1.4_unique))) |> 
+    pivot_wider(names_from = grp, values_from = group) |> 
+    arrange(desc(year), state_abbr, data)
   
 }
 
@@ -390,265 +406,72 @@ if (SUPPRESSION_VALUE == 0){
 
 
 svii_demo <- svii_demo_supp2 |> 
-  # create display values 
+  group_by(year, state_abbr, data) |> 
   mutate(
-    case_when(
-      # no suppression 
-      supp_flag == 0.1 ~ tibble(cnt = 0,        cnt_text = "0",             perc = 0,                 perc_text = NA_character_), 
-      supp_flag == 0.2 ~ tibble(cnt = 0,        cnt_text = "0",             perc = 0,                 perc_text = "0%"), 
-      supp_flag == 0.3 ~ tibble(cnt = n_cnt,    cnt_text = comma(n_cnt, 1), perc = n_cnt/n_cnt_agg,   perc_text = perc_display(n_cnt/n_cnt_agg, 1)), 
-      # suppression 
-      supp_flag == 1.1 ~ tibble(cnt = NA_real_, cnt_text = "*",             perc = n_cnt/n_cnt_agg,   perc_text = perc_display(n_cnt/n_cnt_agg, 1, '<', '*'),), 
-      supp_flag == 1.2 ~ tibble(cnt = NA_real_, cnt_text = "*",             perc = (n+0.5)/n_cnt_agg, perc_text = perc_display((n+0.5)/n_cnt_agg, 1, '<', '*')), 
-      supp_flag == 1.3 ~ tibble(cnt = NA_real_, cnt_text = "*",             perc = 1,                 perc_text = "100%"), 
-      supp_flag == 1.4 ~ tibble(cnt = NA_real_, cnt_text = "*",             perc =(n+0.5)/(n_agg+0.5),perc_text = perc_display((n+0.5)/(n_agg+0.5), 1, '<', '*')), 
-      supp_flag == 1.5 ~ tibble(cnt = NA_real_, cnt_text = "*",             perc = n_cnt/n_cnt_agg   ,perc_text = perc_display(n_cnt/n_cnt_agg, 1, '<', '*')), 
-      # missing data 
-      supp_flag > 2    ~ tibble(cnt = NA_real_, cnt_text = NA_character_)
-    ), 
+    svii_perc = case_when(
+      svii_n[group == "aggregate"] == 0 ~ NA_real_, 
+      TRUE ~ svii_n/svii_n[group == "aggregate"] 
+    )
   ) |> 
-  left_join(
-    census_pop, 
-    by = join_by(year, state_name, state_abbr, state_fips, group, group_cat)
-  ) 
-  
+  ungroup() 
   
 
+# save in prep folder as it's needed to create demo tab outputs  
+saveRDS(svii_demo, "prep/svii_demo.rds")
+#admin$save_rds_twice(svii_demo, save_to_sp = save_RDS_to_sharepoint)
 
 
 svii_demo_table <- svii_demo |> 
-  mutate(pop = perc_display(pop_total_perc, 1)) |> 
-  select(year, state_name, data, type, group, group_cat, cnt = cnt_text, perc = perc_text, pop, group_order) |> 
-  pivot_longer(cols = c(cnt, perc), values_to = "display", names_to = "display_type") |> 
-  mutate(group = fct_reorder(as.factor(group), group_order))
-
-admin$save_rds_twice(svii_demo_table, save_to_sp = save_RDS_to_sharepoint)
-
-
-# demo_table_header <- function(text){
-#   str_replace_all(text, c(
-#     "Unknown s/g" = "Unknown", 
-#     "Unknown r/e" = "Unknown", 
-#     "AIAN" = "American Indian", 
-#     "NHPI" = "Pacific Islander", 
-#     "Two" = "Multiple"
-#   ))
-#   
-# }
-# 
-# 
-# 
-# demo_reactable <- function(df) {
-#   # need width of reactable to be <= 995
-#   # data (275) + demo cnts (9*80)  = 995
-#   
-#   reactable(
-#     df, 
-#     style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"), 
-#     theme = reactableTheme(
-#       cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"), 
-#       headerStyle = list(textAlign = "right")
-#     ), 
-#     compact = TRUE,
-#     searchable = FALSE,
-#     pagination = FALSE,
-#     defaultColDef = colDef(
-#       format = colFormat(separators = TRUE), 
-#       header = function(value) demo_table_header(value), 
-#       minWidth = 80, 
-#       align = "right", 
-#       na = "-", # using n dash; could also use longer m dash: "–"
-#       headerVAlign = "bottom"
-#     ),
-#     columns = list(
-#       data = colDef(
-#         name = "Metric",
-#         align = "left",
-#         minWidth = 235,
-#         style = list(fontWeight = "bold")
-#       ), 
-#       Hispanic = colDef(minWidth = 110), 
-#       AIAN = colDef(minWidth = 100), 
-#       NHPI = colDef(minWidth = 90), 
-#       Two = colDef(minWidth = 90), 
-#       `Unknown r/e` = colDef(minWidth = 100)
-#     )
-#   )
-# }
-# 
-# 
-# 
-# 
-# svii_demo_table |> 
-#   filter(year == 2023, type == "Admissions", 
-#          state_name == "Alabama", group_cat == "race_ethnicity", 
-#          display_type == "cnt") |> 
-#   select(data, group, display) |> 
-#   arrange(data, group) |> 
-#   pivot_wider(names_from = group, values_from = display) |> 
-#   demo_reactable()
-# 
-# svii_demo_table |> 
-#   filter(year == 2023, type == "Admissions", 
-#          state_name == "Alabama", group_cat == "race_ethnicity") |>
-#   select(group, display = pop) |> 
-#   distinct() |> 
-#   mutate(data = "Residents of State") |> 
-#   arrange(data, group) |> 
-#   pivot_wider(names_from = group, values_from = display) |>
-#   demo_reactable()
-#   
-# 
-# 
-# 
-# svii_demo_table |> 
-#   filter(year == 2023, type == "Admissions", 
-#          state_name == "Alabama", group_cat == "race_ethnicity", 
-#          display_type == "perc") |> 
-#   select(data, group, display) |> 
-#   arrange(data, group) |> 
-#   pivot_wider(names_from = group, values_from = display) |> 
-#   demo_reactable()
-
-
-# svii_demo_long <- svii_demo |> 
-#   select(year, state_name, state_abbr, state_fips, data, metric_abbr, type, group, group_cat, cnt, perc, pop_total_n, pop_total_perc) |> 
-#   pivot_longer(cols = c(cnt, perc, pop_total_n, pop_total_perc)) |> 
-#   mutate(
-#     var = ifelse(name %in% c("cnt", "perc"), "Metric", "Population"), 
-#     valtype = ifelse(name %in% c("cnt", "pop_total_n"), "n", "perc")
-#   ) |> 
-#   select(-name) |> 
-#   pivot_wider(names_from = valtype, values_from = value)
-
-
-
-data_for_plot <- svii_demo |> 
-  select(
-    year, state_name, state_abbr, state_fips, data, metric_abbr, type, supervision_type, 
-    group, group_cat, supp_flag, 
-    cnt, perc, cnt_text, perc_text
-  ) |> 
+  filter(year == 2023) |> 
+  rename(cnt = svii_n, perc = svii_perc) |> 
+  pivot_longer(cols = c(cnt, perc)) |> 
   left_join(demo_cat, by = join_by(group, group_cat)) |> 
+  mutate(group = fct_reorder(factor(group), group_order)) |> 
   mutate(
-    perc = perc*100
-  )
-  
-
-
-
-svii_plot_df <- data_for_plot |> 
-  filter(state_abbr == "CA", year == 2023, group_cat == "race_ethnicity", type == "Population") |> 
-  mutate(
-    tooltip = paste0(
-      "<b>", data, ", ", year, ", ", group_name, "</b>", 
-      "<br>", 
-      cnt_text, 
-      "<br>", 
-      perc_text
-  
+    display = case_when(
+      trunc(supp_flag) == 1 ~ "*", 
+      is.na(value)   ~ NA_character_, 
+      name == "cnt"  ~ comma(value, 1), 
+      name == "perc" ~ perc_display(value, 1), 
     )
-  ) |> 
-  mutate(group = fct_reorder(as.factor(group), group_order))
+  ) 
 
 
-
-census_plot_df <- census_pop |> 
+census_demo_table <- census_pop |> 
+  filter(year == 2023) |> 
+  rename(cnt = census_n, perc = census_perc) |> 
+  pivot_longer(cols = c(cnt, perc)) |> 
   left_join(demo_cat, by = join_by(group, group_cat)) |> 
+  mutate(group = fct_reorder(factor(group), group_order)) |> 
   mutate(
-    x1 = group_order - 0.25, 
-    x2 = group_order + 0.25, 
-    x3 = group_order + 0.26,
-    y = pop_total_perc*100
-  ) |> 
-  mutate(tooltip = paste0("Census data percent", pop_total_perc)) |> 
-  pivot_longer(cols = c(x1, x2, x3), names_to = "xname", values_to = "x") |> 
-  mutate(y = ifelse(xname == "x3", NA, y)) |> 
-  filter(state_abbr == "CA", year == 2023, group_cat == "race_ethnicity") 
+    display = case_when(
+      is.na(value)   ~ NA_character_, 
+      name == "cnt"  ~ comma(value, 1), 
+      name == "perc" ~ perc_display(value, 1), 
+    )
+  ) 
 
-ppus_plot_df <- ppus |> 
-  ungroup() |> 
-  mutate(state_abbr = csg_state_convert(state_name, "name", "abbr")) |> 
+
+ppus_demo_table <- ppus |> 
+  rename(cnt = ppus_n, perc = ppus_perc) |> 
+  pivot_longer(cols = c(cnt, perc)) |> 
   left_join(demo_cat, by = join_by(group, group_cat)) |> 
+  mutate(group = fct_reorder(factor(group), group_order)) |> 
   mutate(
-    x1 = group_order - 0.25, 
-    x2 = group_order + 0.25, 
-    x3 = group_order + 0.26,
-    y = pop_total_perc*100
-  ) |> 
-  mutate(tooltip = paste0("PPUS ", supervision_type, " ", pop_total_perc)) |> 
-  pivot_longer(cols = c(x1, x2, x3), names_to = "xname", values_to = "x") |> 
-  mutate(y = ifelse(xname == "x3", NA, y)) |> 
-  filter(state_abbr == "CA", group_cat == "race_ethnicity") #, group %in% pull(tidyr::drop_na(svii_plot_df, perc), group))
+    display = case_when(
+      is.na(value)   ~ NA_character_, 
+      name == "cnt"  ~ comma(value, 1), 
+      name == "perc" ~ perc_display(value, 1), 
+    )
+  ) 
 
 
-
-# HC links
-# line types: 
-# https://jsfiddle.net/gh/get/library/pure/highcharts/highcharts/tree/master/samples/highcharts/plotoptions/series-dashstyle-all/
-
-# svii_plot_df |> 
-#   hchart(
-#     type = "scatter", 
-#     hcaes(x = group, y = perc)
-#   ) |> 
-#   hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) 
+demo_tables <- list(
+  "svii" = svii_demo_table, 
+  "census" = census_demo_table, 
+  "ppus" = ppus_demo_table
+)
 
 
-highchart() |> 
-  hc_add_series(
-    data = filter(svii_plot_df, !is.na(perc)), 
-    type = "scatter", 
-    hcaes(x = group_order, y = perc, group = data), 
-    color = "#ff000080"
-  ) |> 
-  hc_add_series(
-    data = census_plot_df,
-    name = "Census Population", 
-    type = "spline",
-    hcaes(x = x, y = y),
-    color = "black",
-    dashStyle = "Solid"  
-  ) |>
-  hc_add_series(
-    data = filter(ppus_plot_df, supervision_type == "Both"),
-    name = "Both Parole and Probation Population", 
-    type = "spline",
-    hcaes(x = x, y = y),
-    color = "black",
-    dashStyle = "ShortDash"
-  ) |>
-  hc_add_series(
-    data = filter(ppus_plot_df, supervision_type == "Probation"),
-    name = "Probation Population", 
-    type = "spline",
-    hcaes(x = x, y = y),
-    color = "black",
-    dashStyle = "ShortDot"
-  ) |>
-  hc_add_series(
-    data = filter(ppus_plot_df, supervision_type == "Parole"),
-    name = "Parole Population", 
-    type = "spline",
-    hcaes(x = x, y = y),
-    color = "black",
-    dashStyle = "ShortDashDot"
-  ) |>
-  hc_plotOptions(
-    series = list(animation = FALSE, cursor = "pointer"), 
-    spline = list(marker = list(enabled = FALSE, symbol = "square")), 
-    scatter = list(marker = list(symbol = "circle"))
-  ) |> 
-  hc_tooltip(formatter = JS("function(){return(this.point.tooltip)}")) |> 
-  hc_xAxis(
-    #https://stackoverflow.com/questions/53355795/replace-axis-labels-with-custom-in-highcharts-r
-    categories = c("1", filter(demo_cat, group_cat == "race_ethnicity")$group_name)
-  ) |> 
-  hc_yAxis(
-    labels = list(format = "{value}%"), 
-    min = 0, 
-    max = 100
-  )
-
-
+admin$save_rds_twice(demo_tables, save_to_sp = save_RDS_to_sharepoint)
 

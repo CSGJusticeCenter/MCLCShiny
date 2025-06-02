@@ -9,7 +9,6 @@ obj_names <-  c(
   "svii_explorer", 
   "svii_explorer_table", 
   "svii_table", 
-  "svii_demo_table", 
   "svii_par", 
   "svii_prob", 
   "svii_valbox", 
@@ -26,6 +25,8 @@ for (x in obj_names){
   rm(df)
   rm(x)
 }
+
+demo_tables <- readRDS("data/demo_tables.rds")
 
 
 # read highchart objects #######################################################
