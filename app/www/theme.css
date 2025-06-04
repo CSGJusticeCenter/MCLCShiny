@@ -13,6 +13,12 @@ General Styling (fonts and colors)
     font-weight: bold;
 }
 
+@font-face {
+    font-family: "Graphik";
+    src: local('Graphik'), url("fonts/GraphikMedium.ttf");
+    font-weight: 500;
+}
+
 
 :root {
  --accent_lite: #DDE3E9;
@@ -359,6 +365,17 @@ p.statetxt {
   text-align: left;
   font-style: italic;
   font-family: Graphik;
+}
+
+
+
+/* Styling for state note title */
+.demo-title {
+  text-align: center;
+  font-size: 30px;
+  font-family: Graphik;
+  font-weight: bold;
+  margin-top: 15px;
 }
 
 /* STATE DASHBOARD: other *****************************************************/

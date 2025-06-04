@@ -14,6 +14,7 @@ obj_names <-  c(
   "svii_valbox", 
   "svii_download", 
   "svii_yr", 
+  "svii_demo_table_prep", 
   # text - state overview notes 
   "formatted_notes", 
   "missingness_sentences" 
@@ -26,7 +27,6 @@ for (x in obj_names){
   rm(x)
 }
 
-demo_tables <- readRDS("data/demo_tables.rds")
 
 
 # read highchart objects #######################################################

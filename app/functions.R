@@ -158,12 +158,43 @@ demo_table_header <- function(text){
 
 
 
-demo_reactable <- function(df, metric_header = "Metric") {
+highlight_cell <- function(text){
+  
+  paste0(
+    "<span style = '", 
+    "color:", darkorange, ";", # colors.R -- use darkorange b/c orange does not pass contrast test
+    "font-weight: 500;", # set GraphikMedium to 500 in theme.css
+    "'>", 
+    text, 
+    "</span>"
+  )
+  
+}
+
+
+demo_reactable <- function(df) {
   # need width of reactable to be <= 995
   # data (275) + demo cnts (9*85)  = 1000
   
+  display_df <- df |> 
+    arrange(group, data) |> 
+    mutate(
+      data = case_when(
+        metric_abbr == "p total comp" ~ paste0(data, "<sup>1</sup>"), 
+        metric_abbr == "p par comp"   ~ paste0(data, "<sup>2</sup>"),
+        metric_abbr == "p prob comp"  ~ paste0(data, "<sup>3</sup>"), 
+        TRUE ~ data
+      ), 
+      prop = case_when(
+        highlight == TRUE ~ highlight_cell(prop), 
+        TRUE ~ prop
+      )
+    ) |> 
+    select(data, group, prop) |> 
+    pivot_wider(names_from = group, values_from = prop)
+  
   reactable(
-    df, 
+    display_df, 
     style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"), 
     theme = reactableTheme(
       cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"), 
@@ -178,15 +209,17 @@ demo_reactable <- function(df, metric_header = "Metric") {
       minWidth = 85, 
       align = "right", 
       na = "-", # using n dash; could also use longer m dash: "–"
-      headerVAlign = "bottom"
+      headerVAlign = "bottom", 
+      html = TRUE
     ),
     columns = list(
       data = colDef(
-        name = metric_header,
+        name = "Metric",
         align = "left",
         minWidth = 235,
         width = 235, 
-        style = list(fontWeight = "bold")
+        style = list(fontWeight = "bold"), 
+        html = TRUE
       ) 
       # Hispanic = colDef(minWidth = 110), 
       # AIAN = colDef(minWidth = 100), 
@@ -196,3 +229,4 @@ demo_reactable <- function(df, metric_header = "Metric") {
     )
   )
 }
+

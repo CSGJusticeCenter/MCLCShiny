@@ -32,7 +32,8 @@ demo_cat <- bind_rows(
     group_order = 0, group = "aggregate", group_cat = "aggregate", group_name = "Aggregate"
   ) |> 
   mutate(group_order_sep = group_order, 
-         group_order = ifelse(group_cat == "sex_gender", group_order_sep + 9, group_order_sep))
+         group_order = ifelse(group_cat == "sex_gender", group_order_sep + 9, group_order_sep)) |> 
+  select(group, group_cat, group_order)
 
 
 saveRDS(demo_cat, "prep/demo_cat.rds")
@@ -145,7 +146,7 @@ pop_state <- pop_by_sex_state |>
   mutate(group = "aggregate", group_cat = "aggregate")
 
 
-census_pop <- pop_state |>
+comp_census <- pop_state |>
   bind_rows(pop_by_sex_state, pop_by_race_eth_state) |>
   mutate(indicator = "Resident population") |>
   select(
@@ -157,15 +158,18 @@ census_pop <- pop_state |>
     group_cat,
     census_n = pop_total # pop_adult
   ) |> 
-  filter(year %in% c(2022, 2023), state_name %in% state.name) |> 
+  filter(year == 2023, state_name %in% state.name) |> 
   arrange(state_name, year, group_cat, group) |>
   group_by(year, state_name) |>
   mutate(
-    census_perc = census_n/census_n[group == "aggregate"],
+    comp = census_n/census_n[group == "aggregate"],
   ) |>
-  ungroup()
+  ungroup() |> 
+  mutate(comparison_source = "Census") |> 
+  filter(group != "aggregate") |> 
+  select(state_name, group, group_cat, comparison_source, comp)
 
-saveRDS(census_pop, "prep/census_pop.rds")
+saveRDS(comp_census, "prep/comp_census.rds")
 
 # PPUS DATA ##################################################################  
 
@@ -200,7 +204,7 @@ ppus_prob <- read_csv(
     `Unknown r/e` = 12
   ) |> 
   mutate(across(everything(), as.character)) |> 
-  mutate(supervision_type = "Probation")
+  mutate(comparison_source = "PPUS_Probation")
 
 # Appendix Table 13: Selected characteristics of adults on parole, by jurisdiction, 2022
 # - jr_data_library/data/raw/bjs/ppus/ppus22/ppus22t13.csv
@@ -222,13 +226,13 @@ ppus_par <- read_csv(
     `Unknown r/e` = 13
   ) |> 
   mutate(across(everything(), as.character)) |> 
-  mutate(supervision_type = "Parole")
+  mutate(comparison_source = "PPUS_Parole")
 
 
 
-ppus <- bind_rows(ppus_prob, ppus_par) |> 
+comp_ppus <- bind_rows(ppus_prob, ppus_par) |> 
   mutate(across(
-    c(-state, -supervision_type), 
+    c(-state, -comparison_source), 
     ~readr::parse_number(.x, na = c("", "NA", "..", "~"))
     # converts above listed into NA, converts <10 --> 10 
   )) |> 
@@ -240,7 +244,7 @@ ppus <- bind_rows(ppus_prob, ppus_par) |>
   ungroup() |> 
   filter(state_name %in% state.name) |> 
   select(-state, -footnote_start) |> 
-  pivot_longer(cols = -c(state_name, supervision_type), names_to = "group", values_to = "n") |> 
+  pivot_longer(cols = -c(state_name, comparison_source), names_to = "group", values_to = "n") |> 
   mutate(
     group_cat = case_when(
       group %in% filter(demo_cat, group_cat == "race_ethnicity")$group ~ "race_ethnicity", 
@@ -248,27 +252,13 @@ ppus <- bind_rows(ppus_prob, ppus_par) |>
       group == "aggregate" ~ "aggregate"
     )
   ) |> 
-  pivot_wider(names_from = supervision_type, values_from = n) |> 
-  rowwise() |> 
-  mutate(
-    Both = case_when(
-      !is.na(Parole) & !is.na(Probation) ~ Parole + Probation, 
-       is.na(Parole) &  is.na(Probation) ~ NA_real_, 
-      !is.na(Parole) &  is.na(Probation) ~ Parole, 
-       is.na(Parole) & !is.na(Probation) ~ Probation
-    )
-  ) |> 
+  group_by(state_name, comparison_source) |>
+  mutate(comp = n/n[group == "aggregate"]) |> 
   ungroup() |> 
-  pivot_longer(cols = c(Probation, Parole, Both), names_to = "supervision_type", values_to = "n") |> 
-  select(state_name, supervision_type, group, group_cat, ppus_n = n) |> 
-  arrange(state_name, supervision_type, group_cat, group) |>
-  group_by(state_name, supervision_type) |>
-  mutate(
-    ppus_perc = ppus_n/ppus_n[group == "aggregate"]
-  ) |> 
-  ungroup()
+  filter(group != "aggregate") |> 
+  select(state_name, group, group_cat, comparison_source, comp)
 
-saveRDS(ppus, "prep/ppus.rds")
+saveRDS(comp_ppus, "prep/comp_ppus.rds")
 
 # SVII DATA ##################################################################
 
@@ -276,203 +266,179 @@ saveRDS(ppus, "prep/ppus.rds")
 svii <- readRDS("prep/svii.rds") 
 
 
-perc_display <- function(prop, acc = 1, pref = NA, suff = NA){
-  
-  ndigits <- -log(acc, base = 10)
-  
-  val <- prop*100
-  rnd_val <- round(val, digits = ndigits)
-  
-  txt_val <- case_when(
-    val == 0 ~ "0%", 
-    val != 0 & rnd_val == 0 ~ glue("<{acc}%"), 
-    val != 0 & rnd_val != 0 ~ glue("{rnd_val}%")
-    
-  )
-  
-  txt_pref <- case_when(
-    # dont repeat carrot, would occur when using suppressed value results in a perc
-    # lower than the accuracy level 
-    # i.e. n = 4; n_cnt = 5, n_cnt_agg = 600 | 5/600 = 0.833% --> <1%
-     str_sub(txt_val, 1, 1) == "<" & pref == "<" ~ "", 
-    !is.na(pref) ~ pref, 
-    is.na(pref) ~ ""
-  )
-  
-  txt_suff <- ifelse(is.na(suff), "", suff)
-  
-  display <- paste0(txt_pref, txt_val, txt_suff)
-  
-  ifelse(is.na(prop), NA_character_, display)
-  
-}
 
-
-
-SUPPRESSION_VALUE <- 5
-
-svii_demo_supp1 <- svii |> 
-  filter(year %in% c(2022, 2023)) |> 
-  select(year, state_name, state_abbr, state_fips, data, metric, type, group, group_cat, n, metric_abbr, supervision_type) |> 
-  # add data suppression if data point is < 5 --> use value of 5 
-  group_by(state_abbr, year, data) |> 
+svii_demo <- svii |> 
+  filter(
+    year %in% c(2022, 2023), 
+    # do NOT show combined supervision numbers (par + prob) 
+    !word(metric_abbr, 2, -1) %in% c("supervision", "tech", "new")
+  ) |> 
+  select(year, state_name, state_abbr, state_fips, 
+         type, data, metric_abbr, group, group_cat, n) |> 
+  # create abbreviation for metrics that does NOT have type designation 
+  mutate(data_abbr = word(metric_abbr, 2, -1), .after = "data") |> 
+  # pivot wider so each year is it's own column 
+  pivot_wider(names_from = year, values_from = n) |> 
+  # create the combined n value (sum of 2022 & 2023) and determine flag 
+  mutate(case_when(
+    !is.na(`2022`) & !is.na(`2023`) ~ tibble(n = `2022` + `2023`, flag = 1), 
+    !is.na(`2022`) &  is.na(`2023`) ~ tibble(n = `2023`,          flag = 2), 
+     is.na(`2022`) & !is.na(`2023`) ~ tibble(n = `2022`,          flag = 3), 
+     is.na(`2022`) &  is.na(`2023`) ~ tibble(n = NA_real_,        flag = 4)
+  )) |> 
+  group_by(state_name, metric_abbr) |> 
+  # calculate the proportion of each metric 
   mutate(
-    supp_val = SUPPRESSION_VALUE, # any value LESS THAN the supp value is then replaced with the suppressed value 
-    case_when( # only need to suppress demographic counts (not aggregate counts) 
-      group == "aggregate"  ~ tibble(svii_n = n       , svii_supp = FALSE), 
-      n < supp_val & n != 0 ~ tibble(svii_n = NA_real_, svii_supp = TRUE), 
-      n >=supp_val | n == 0 ~ tibble(svii_n = n,        svii_supp = FALSE), 
-      is.na(n)              ~ tibble(svii_n = NA_real_, svii_supp = FALSE)
-    ), 
-    supp_flag = case_when(
-      # no suppression, using real data
-      svii_supp == FALSE & svii_n == 0 & svii_n[group == "aggregate"] == 0 ~ 0.1, 
-      svii_supp == FALSE & svii_n == 0 & svii_n[group == "aggregate"] != 0 ~ 0.2, 
-      svii_supp == FALSE & svii_n != 0 & svii_n[group == "aggregate"] != 0 ~ 0.3, 
-      # suppressed data  
-      svii_supp == TRUE & supp_val >  svii_n[group == "aggregate"] ~ 1.1,
-      svii_supp == TRUE & supp_val == svii_n[group == "aggregate"] ~ 1.2,
-      svii_supp == TRUE & supp_val <  svii_n[group == "aggregate"] ~ 1.3,
-      # missing data 
-      is.na(svii_n) & !is.na(svii_n[group == "aggregate"]) ~ 2.1,
-      is.na(svii_n) &  is.na(svii_n[group == "aggregate"]) ~ 2.2
-    )
-  )  |> 
-  ungroup() 
-
-
-
-
-if (SUPPRESSION_VALUE != 0){
-  # after suppression based on values only, check to see if there is only 1 
-  # suppressed value within a group 
-  # need at least 2 suppressed values so the user cannot back-calculate the value 
-  # i.e. 50 = 25 +21 + 4
-  # first we suppressed the 4 value b/c it's less than 5
-  # but we could still calculate that cell by pulling the aggregate value and subtracting 
-  # the non-suppressed cells 
-  # fix this by suppressing the next smalled cell: 50 = 25 + * +*
-  svii_demo_next_min <- svii_demo_supp1 |> 
-    group_by(year, state_name, data, group_cat) |>
-    mutate(
-      n_cells_suppressed = sum(ifelse(trunc(supp_flag) == 1, TRUE, FALSE)),
-    ) |> 
-    # only interested in adding suppression if 
-    # (1) the number of cells suppressed are == 1 (but not aggregate,)
-    # (2) n value is greater than the suppression value (value would not be suppressed otherwise)
-    # (3) n value is NOT na
-    # (4) not part of the aggregate category 
-    filter(n_cells_suppressed == 1, n >= SUPPRESSION_VALUE, !is.na(n), group != "aggregate") |> 
-    summarise(n_next_min = min(n), .groups = "drop") 
-  
-  
-  #suppress a secondary value if necessary, adjust supp_flag to 1.5 
-  svii_demo_supp2 <- svii_demo_supp1 |> 
-    left_join(svii_demo_next_min, by = join_by(year, state_name, data, group_cat)) |> 
-    mutate(
-      case_when(
-         is.na(n_next_min)                   ~ tibble(svii_n = svii_n,   supp_flag = supp_flag, svii_supp = svii_supp), 
-        !is.na(n_next_min) & n_next_min == n ~ tibble(svii_n = NA_real_, supp_flag = 1.4,       svii_supp = TRUE), 
-        !is.na(n_next_min) & n_next_min != n ~ tibble(svii_n = svii_n,   supp_flag = supp_flag, svii_supp = svii_supp),
-        !is.na(n_next_min) & is.na(svii_n)   ~ tibble(svii_n = svii_n,   supp_flag = supp_flag, svii_supp = svii_supp),
-      )
-    ) |> 
-    # drop un-needed columns 
-    select(-n_next_min)
-  
-  # instances where the next min value is the same in multiple cells 
-  # do you suppress 1 or both? -- CURRENTLY SUPPRESSING BOTH 
-  # if only suppress 1, which one do you pick? 
-  n_1.4_unique <-  nrow(svii_demo_next_min)
-  n_1.4 <- nrow(filter(svii_demo_supp2, supp_flag == 1.4))
-  
-  
-  svii_demo_supp2 |> 
-    filter(supp_flag == 1.4) |> 
-    group_by(year, state_name, data, group_cat) |> 
-    mutate(n_1.4 = sum(ifelse(supp_flag == 1.4, TRUE, FALSE))) |> 
-    ungroup() |> 
-    filter(n_1.4 != 1) |> 
-    select(year, state_abbr, data, group, n) |> 
-    mutate(grp = rep(c("group1", "group2"), (n_1.4 - n_1.4_unique))) |> 
-    pivot_wider(names_from = grp, values_from = group) |> 
-    arrange(desc(year), state_abbr, data)
-  
-}
-
-if (SUPPRESSION_VALUE == 0){
-  svii_demo_supp2 <- svii_demo_supp1
-}
-
-
-
-svii_demo <- svii_demo_supp2 |> 
-  group_by(year, state_abbr, data) |> 
-  mutate(
-    svii_perc = case_when(
-      svii_n[group == "aggregate"] == 0 ~ NA_real_, 
-      TRUE ~ svii_n/svii_n[group == "aggregate"] 
+    prop = case_when(
+      n[group == "aggregate"] == 0 ~ NA_real_, 
+      TRUE ~ n/n[group == "aggregate"] 
     )
   ) |> 
-  ungroup() 
+  ungroup() |> 
+  # no longer needs aggregate values 
+  filter(group != "aggregate") |> 
+  # add comparison source (which data should be compared to for RRI's) 
+  mutate(
+    comparison_source = case_when(
+      data_abbr == "total" ~ "Census", 
+      data_abbr %in% c("par",  "tech par",  "new par") ~ "PPUS_Parole", 
+      data_abbr %in% c("prob", "tech prob", "new prob")~ "PPUS_Probation"
+    )
+  ) |> 
+  # calculate RRI's for race_ethnicity only 
+  left_join(
+    bind_rows(comp_census, comp_ppus), 
+    by = join_by(state_name, group, group_cat, comparison_source)
+  ) |>
+  mutate(
+    rri = case_when(
+      !is.na(prop) & !is.na(comp) ~ prop/comp, 
+      TRUE ~ NA_real_
+    )
+  ) |> 
+  # update text (need to specify total prison admission/population) 
+  mutate(
+    data = fct_recode(
+      data, 
+      `Total Prison Admissions` = "Total Admissions",
+      `Total Prison Population` = "Total Population"
+    )
+  )
+
+
+display_data_text <- svii_demo |> 
+  distinct(type, metric_abbr, data_abbr, data) |> 
+  mutate(data_order = as.numeric(data)) |> 
+  # add rows for comparison populations 
+  # only for population section 
+  add_row(
+    type = "Population", 
+    metric_abbr = "p total comp", 
+    data_abbr = "total comp", 
+    data = "State Population", # display name 
+    data_order = 10.5 # want in from of p_total
+  ) |> 
+  add_row(
+    type = "Population", 
+    metric_abbr = "p prob comp", 
+    data_abbr = "prob comp", 
+    data = "State Probation Population", # display name 
+    data_order = 14.5 # want in from of p_total
+  ) |>
+  add_row(
+    type = "Population", 
+    metric_abbr = "p par comp", 
+    data_abbr = "par comp", 
+    data = "State Parole Population", # display name 
+    data_order = 17.5 # want in from of p_total
+  ) |> 
+  arrange(data_order) |> 
+  mutate(across(c(metric_abbr, data), ~fct_reorder(factor(.x), data_order)))
+
+ 
+
+## population highlight 
+svii_pop_highlight <- svii_demo |> 
+  filter(type == "Population") |> 
+  select(state_name, metric_abbr, group, group_cat, prop, comp, rri) |> 
+  mutate(
+    highlight = case_when(
+      is.na(rri) ~ FALSE, 
+      !is.na(rri) & rri <= 1 ~ FALSE, 
+      !is.na(rri) & rri >  1 ~ TRUE
+    ), 
+    .after = group_cat
+  )
+
+
+## admissions highlight 
+svii_adm_highlight <- svii_demo |> 
+  select(state_name, type, data_abbr, group, group_cat, prop) |> 
+  pivot_wider(names_from = type, values_from = prop) |> 
+  # highlight instances where admissions prop is greater than population proportion 
+  mutate(
+    highlight = case_when(
+      !is.na(Admissions) & !is.na(Population) & Admissions/Population >= 1 ~ TRUE, 
+      TRUE ~ FALSE 
+    )
+  ) |> 
+  mutate(metric_abbr = paste0("a ", data_abbr)) |> 
+  select(state_name, metric_abbr, group, group_cat, highlight, Admissions, Population)
+
+
+
+perc_display <- function(prop, acc = 1){
+  ndigits <- -log(acc, base = 10)
+  val <- prop*100
+  rnd_val <- round(val, digits = ndigits)
+  case_when(
+    val == 0 ~ "0%", 
+    val != 0 & rnd_val == 0 ~ glue("<{acc}%"), 
+    val != 0 & rnd_val != 0 ~ glue("{rnd_val}%"), 
+    !is.na(val) ~ NA_character_
+  )
+}
+
+svii_demo_table_prep <- svii_demo |> 
+  bind_rows(
+    comp_census                                                |> mutate(metric_abbr = "p total comp") |> rename(prop = comp), 
+    comp_ppus |> filter(comparison_source == "PPUS_Probation") |> mutate(metric_abbr = "p prob comp")  |> rename(prop = comp), 
+    comp_ppus |> filter(comparison_source == "PPUS_Parole")    |> mutate(metric_abbr = "p par comp")   |> rename(prop = comp) 
+  ) |> 
+  # join with demo categories to get set order 
+  left_join(demo_cat, by = join_by(group, group_cat)) |> 
+  select(-data, -type, -data_abbr) |> 
+  # join with data text to get set order 
+  left_join(display_data_text, by = join_by(metric_abbr)) |> 
+  # join with df's that specify if cell should be highlighted in some way 
+  left_join(
+    bind_rows(svii_adm_highlight, svii_pop_highlight) |> 
+      select(state_name, metric_abbr, group, group_cat, highlight), 
+    by = join_by(state_name, metric_abbr, group, group_cat)
+  ) |> 
+  mutate(
+    group       = fct_reorder(factor(group), group_order), 
+    metric_abbr = fct_reorder(factor(metric_abbr), data_order), 
+    data        = fct_reorder(factor(data), data_order)
+  ) |> 
+  arrange(state_name, group, metric_abbr) |> 
+  ## assign table number for easy filtering 
+  mutate(
+    table = case_when(
+      data_abbr %in% c("total comp", "total") ~ 1, 
+      data_abbr %in% c("par comp", "par", "tech par", "new par") ~ 2, 
+      data_abbr %in% c("prob comp", "prob", "tech prob", "new prob") ~ 3
+    )
+  ) |> 
+  ## adjust display value 
+  mutate(prop = perc_display(prop, acc = 1)) |> 
+  select(state_name, table, type, metric_abbr, group_cat, data, group, prop, highlight)  
   
 
-# save in prep folder as it's needed to create demo tab outputs  
-saveRDS(svii_demo, "prep/svii_demo.rds")
-#admin$save_rds_twice(svii_demo, save_to_sp = save_RDS_to_sharepoint)
+
+admin$save_rds_twice(svii_demo_table_prep, save_to_sp = save_RDS_to_sharepoint)
 
 
-svii_demo_table <- svii_demo |> 
-  filter(year == 2023) |> 
-  rename(cnt = svii_n, perc = svii_perc) |> 
-  pivot_longer(cols = c(cnt, perc)) |> 
-  left_join(demo_cat, by = join_by(group, group_cat)) |> 
-  mutate(group = fct_reorder(factor(group), group_order)) |> 
-  mutate(
-    display = case_when(
-      trunc(supp_flag) == 1 ~ "*", 
-      is.na(value)   ~ NA_character_, 
-      name == "cnt"  ~ comma(value, 1), 
-      name == "perc" ~ perc_display(value, 1), 
-    )
-  ) 
 
 
-census_demo_table <- census_pop |> 
-  filter(year == 2023) |> 
-  rename(cnt = census_n, perc = census_perc) |> 
-  pivot_longer(cols = c(cnt, perc)) |> 
-  left_join(demo_cat, by = join_by(group, group_cat)) |> 
-  mutate(group = fct_reorder(factor(group), group_order)) |> 
-  mutate(
-    display = case_when(
-      is.na(value)   ~ NA_character_, 
-      name == "cnt"  ~ comma(value, 1), 
-      name == "perc" ~ perc_display(value, 1), 
-    )
-  ) 
-
-
-ppus_demo_table <- ppus |> 
-  rename(cnt = ppus_n, perc = ppus_perc) |> 
-  pivot_longer(cols = c(cnt, perc)) |> 
-  left_join(demo_cat, by = join_by(group, group_cat)) |> 
-  mutate(group = fct_reorder(factor(group), group_order)) |> 
-  mutate(
-    display = case_when(
-      is.na(value)   ~ NA_character_, 
-      name == "cnt"  ~ comma(value, 1), 
-      name == "perc" ~ perc_display(value, 1), 
-    )
-  ) 
-
-
-demo_tables <- list(
-  "svii" = svii_demo_table, 
-  "census" = census_demo_table, 
-  "ppus" = ppus_demo_table
-)
-
-
-admin$save_rds_twice(demo_tables, save_to_sp = save_RDS_to_sharepoint)
 

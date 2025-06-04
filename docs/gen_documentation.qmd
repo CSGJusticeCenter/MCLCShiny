@@ -324,3 +324,31 @@ states_with_subtitles |>
   )
 ```
 :::
+
+
+## Demographic Tab 
+
+- SVII data -- combine two years of data and then calculate proportion for each metric
+  * instead of showing most recent year (2023) -- get average of 2 years 
+  * 2 years is not enough to establish trends so makes most sense to combine data 
+  * since only displaying percentages, and average over 2 years -- don't need to suppress data 
+- Census data -- use 2023 data, pull data and categorize to match BJS categories 
+- PPUS data -- only available for 2022 at the moment; only have 'White', 'Black', 'Hispanic', and 'Other' race categories 
+  * PPUS survey collect more categories for race/ethnicity but report only provides these 4 categories when breaking out values by jurisdiction (by state) 
+  
+
+Admissions 
+
+- only show SVII data percentages 
+- **highlight** cells where the corresponding population percentage is less than the admissions 
+  * Parole Violation Admissions for Group1 = 50%; Parole Violation Population for Group2 = 40% --> Highlight cell for Parole Violation Admissions for Group1 
+
+
+Population 
+
+- show SVII data and comparison populations (census and ppus) 
+- **highlight** cells where the corresponding comparison percentage is less than the SVII percentage 
+  * Parole Violation Population for Group1 = 40%; Total Parole Population (from PPUS) for Group1 = 35% --> Highlight cell for Parole Violation Population for Group1 
+  
+  
+

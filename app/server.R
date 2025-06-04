@@ -819,131 +819,57 @@ server <- function(input, output, session) {
   
   
   # 4 DEMOGRAPHICS ----------------------------------------------------------------
+  
+  
+  # 4 pretext ---------------------------------------------------------------------
+  
+  
 
   # 4 tables (demographics) --------------------------------------------------------
   output$demo_table_1 <- renderReactable({
-    
-    bind_rows(
-      demo_tables$census |>
-        filter(
-          state_name == input$state_report,
-          group_cat == "race_ethnicity",
-          name == "perc"
-        ) |>
-        mutate(data = "State Population*") |> 
-        select(data, group, display) |>
-        arrange(data, group), 
-      demo_tables$svii |> 
-        filter(
-          type == input$adm_pop_report, state_name == input$state_report,
-          group_cat == "race_ethnicity",
-          name == "perc", 
-          word(metric_abbr, 2) == "total"
-        ) |> 
-        select(data, group, display) |> 
-        arrange(data, group) 
-    ) |>
-      tidyr::pivot_wider(names_from = group, values_from = display) |>
+    svii_demo_table_prep |> 
+      filter(
+        state_name == input$state_report,
+        type == input$adm_pop_report,
+        group_cat == "race_ethnicity", 
+        table == 1
+    )  |>
       demo_reactable()
-
   }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
-  
-  
   
   output$demo_table_2 <- renderReactable({
-    
-    bind_rows(
-      demo_tables$ppus |>
-        filter(
-          state_name == input$state_report,
-          group_cat == "race_ethnicity",
-          name == "perc", 
-          supervision_type == "Both"
-        ) |>
-        mutate(data = "Supervision Population*") |> 
-        select(data, group, display) |>
-        arrange(data, group), 
-      demo_tables$svii |> 
-        filter(
-          type == input$adm_pop_report, state_name == input$state_report,
-          group_cat == "race_ethnicity",
-          name == "perc", 
-          word(metric_abbr, 2) != "total", 
-          supervision_type == "Both"
-        ) |> 
-        select(data, group, display) |> 
-        arrange(data, group) 
-    ) |>
-      tidyr::pivot_wider(names_from = group, values_from = display) |>
+    svii_demo_table_prep |> 
+      filter(
+        state_name == input$state_report,
+        type == input$adm_pop_report,
+        group_cat == "race_ethnicity", 
+        table == 2
+      )  |>
       demo_reactable()
-    
   }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
-  
   
   output$demo_table_3 <- renderReactable({
-    
-    bind_rows(
-      demo_tables$ppus |>
-        filter(
-          state_name == input$state_report,
-          group_cat == "race_ethnicity",
-          name == "perc", 
-          supervision_type == "Parole"
-        ) |>
-        mutate(data = "Parole Population*") |> 
-        select(data, group, display) |>
-        arrange(data, group), 
-      demo_tables$svii |> 
-        filter(
-          type == input$adm_pop_report, state_name == input$state_report,
-          group_cat == "race_ethnicity",
-          name == "perc", 
-          supervision_type == "Parole"
-        ) |> 
-        select(data, group, display) |> 
-        arrange(data, group) 
-    ) |>
-      tidyr::pivot_wider(names_from = group, values_from = display) |>
+    svii_demo_table_prep |> 
+      filter(
+        state_name == input$state_report,
+        type == input$adm_pop_report,
+        group_cat == "race_ethnicity", 
+        table == 3
+      )  |>
       demo_reactable()
-    
   }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
   
   
-  output$demo_table_4 <- renderReactable({
-    
-    bind_rows(
-      demo_tables$ppus |>
-        filter(
-          state_name == input$state_report,
-          group_cat == "race_ethnicity",
-          name == "perc", 
-          supervision_type == "Probation"
-        ) |>
-        mutate(data = "Probation Population*") |> 
-        select(data, group, display) |>
-        arrange(data, group), 
-      demo_tables$svii |> 
-        filter(
-          type == input$adm_pop_report, state_name == input$state_report,
-          group_cat == "race_ethnicity",
-          name == "perc", 
-          supervision_type == "Probation"
-        ) |> 
-        select(data, group, display) |> 
-        arrange(data, group) 
-    ) |>
-      tidyr::pivot_wider(names_from = group, values_from = display) |>
-      demo_reactable()
-    
-  }) |>
-    bindCache(input$state_report,
-              input$adm_pop_report)
+  
+  # 4 posttext ------------------------------------------------------------------
+  
+  
 
 
   # DOWNLOAD DATA ##############################################################
