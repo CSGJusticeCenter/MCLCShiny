@@ -47,6 +47,7 @@ saveRDS(demo_cat, "prep/demo_cat.rds")
 # - jr_data_library/data/raw/census/pep/sc-est2023-alldata6.csv
 # https://github.com/CSGJusticeCenter/jr_data_library/blob/develop/R/pull_clean/census/pep/clean_pep.R
 # https://github.com/CSGJusticeCenter/jr_data_library/blob/f1f42e52476fb303ac521dbff14ed7689fd3a3c1/R/pull_clean/census/pep/clean_pep.R#L1
+# https://www2.census.gov/programs-surveys/popest/datasets/2020-2023/state/asrh/
 pep_state_20_23 <- read_csv(
   csg_sp_path("JR_data_library/data/raw/census/pep/sc-est2023-alldata6.csv"),
   show_col_types = FALSE
@@ -267,6 +268,10 @@ svii <- readRDS("prep/svii.rds")
 
 
 
+PERC_ACC <- 1
+ndigits <- -log(PERC_ACC, base = 10)
+
+
 svii_demo <- svii |> 
   filter(
     year %in% c(2022, 2023), 
@@ -288,11 +293,13 @@ svii_demo <- svii |>
   )) |> 
   group_by(state_name, metric_abbr) |> 
   # calculate the proportion of each metric 
+  # calculate 'perc' rounded to the nearest percent 
   mutate(
     prop = case_when(
       n[group == "aggregate"] == 0 ~ NA_real_, 
       TRUE ~ n/n[group == "aggregate"] 
-    )
+    ), 
+    perc = round(prop*100, digits = ndigits), 
   ) |> 
   ungroup() |> 
   # no longer needs aggregate values 
@@ -305,62 +312,123 @@ svii_demo <- svii |>
       data_abbr %in% c("prob", "tech prob", "new prob")~ "PPUS_Probation"
     )
   ) |> 
-  # calculate RRI's for race_ethnicity only 
   left_join(
     bind_rows(comp_census, comp_ppus), 
     by = join_by(state_name, group, group_cat, comparison_source)
   ) |>
+  # create perc value that is rounded; pull out unknown percent 
+  group_by(state_name, metric_abbr) |> 
+  mutate(
+    compperc = round(comp*100, digits = ndigits) , 
+    compunk = case_when(
+      group_cat == "race_ethnicity" ~ compperc[group == "Unknown r/e"], 
+      group_cat == "sex_gender"     ~ compperc[group == "Unknown s/g"]
+    )
+  ) |> 
+  ungroup() |> 
+  # calculate RRI's with ROUNDED VALUES 
   mutate(
     rri = case_when(
-      !is.na(prop) & !is.na(comp) ~ prop/comp, 
+      group %in% c("Other", "Unknown r/e", "Unknown s/g", "Diverse") ~ NA_real_ , 
+      compperc == 0 ~ NA_real_, # if value is 0 --> CAN'T CALC RRI B/C CAN'T DIVIDE BY ZERO 
+      compunk > 15 ~ NA_real_, # if the unknown perc of comparison group is greater than 15% --> don't calc or highlight 
+      !is.na(perc) & !is.na(compperc) ~ perc/compperc, 
       TRUE ~ NA_real_
     )
   ) |> 
   # update text (need to specify total prison admission/population) 
   mutate(
-    data = fct_recode(
-      data, 
-      `Total Prison Admissions` = "Total Admissions",
-      `Total Prison Population` = "Total Population"
-    )
-  )
+    data_order = as.numeric(data), 
+    data = str_replace_all(data, c("Admissions" = "Prison Admissions", 
+                                   "Population" = "Prison Population")), 
+    data = fct_reorder(factor(data), data_order)
+  ) |> 
+  select(-data_order)
 
 
 display_data_text <- svii_demo |> 
   distinct(type, metric_abbr, data_abbr, data) |> 
   mutate(data_order = as.numeric(data)) |> 
   # add rows for comparison populations 
+  add_row(
+    type = "Admissions", 
+    metric_abbr = "a total comp", 
+    data_abbr = "total comp", 
+    data = "State Population", # display name 
+    data_order = 0.5 # want in front of a_total 
+  ) |> 
+  add_row(
+    type = "Admissions", 
+    metric_abbr = "a prob comp", 
+    data_abbr = "prob comp", 
+    data = "State Probation Population", # display name 
+    data_order = 1.5 # want in from of a_prob
+  ) |>
+  add_row(
+    type = "Admissions", 
+    metric_abbr = "a par comp", 
+    data_abbr = "par comp", 
+    data = "State Parole Population", # display name 
+    data_order = 4.5 # want in front of a_par
+  ) |> 
   # only for population section 
   add_row(
     type = "Population", 
     metric_abbr = "p total comp", 
     data_abbr = "total comp", 
     data = "State Population", # display name 
-    data_order = 10.5 # want in from of p_total
+    data_order = 7.5 # want in front of p_total
   ) |> 
   add_row(
     type = "Population", 
     metric_abbr = "p prob comp", 
     data_abbr = "prob comp", 
     data = "State Probation Population", # display name 
-    data_order = 14.5 # want in from of p_total
+    data_order = 8.5 # want in front of p_prob
   ) |>
   add_row(
     type = "Population", 
     metric_abbr = "p par comp", 
     data_abbr = "par comp", 
     data = "State Parole Population", # display name 
-    data_order = 17.5 # want in from of p_total
+    data_order = 11.5 # want in front of p_par
   ) |> 
   arrange(data_order) |> 
-  mutate(across(c(metric_abbr, data), ~fct_reorder(factor(.x), data_order)))
-
+  mutate(across(c(metric_abbr, data), ~fct_reorder(factor(.x), data_order))) 
  
+# svii_demo_table_prep ----------------------------------------------------------
 
-## population highlight 
-svii_pop_highlight <- svii_demo |> 
-  filter(type == "Population") |> 
-  select(state_name, metric_abbr, group, group_cat, prop, comp, rri) |> 
+
+# ## admissions highlight 
+# svii_adm_highlight <- svii_demo |> 
+#   select(state_name, type, data_abbr, group, group_cat, perc) |> 
+#   pivot_wider(names_from = type, values_from = perc) |> 
+#   # highlight instances where admissions perc is greater than population perc 
+#   mutate(
+#     highlight = case_when(
+#       Admissions/Population > 1 ~ TRUE, 
+#       TRUE ~ FALSE 
+#     )
+#   ) |> 
+#   mutate(metric_abbr = paste0("a ", data_abbr)) |> 
+#   select(state_name, metric_abbr, group, group_cat, highlight, Admissions, Population) 
+# 
+# ## population highlight 
+# svii_pop_highlight <- svii_demo |> 
+#   filter(type == "Population") |> 
+#   select(state_name, metric_abbr, group, group_cat, perc, compperc, rri) |> 
+#   mutate(
+#     highlight = case_when(
+#       is.na(rri) ~ FALSE, 
+#       !is.na(rri) & rri <= 1 ~ FALSE, 
+#       !is.na(rri) & rri >  1 ~ TRUE
+#     ), 
+#     .after = group_cat
+#   )
+
+
+svii_highlight <- svii_demo |> 
+  select(state_name, metric_abbr, group, group_cat, perc, compperc, rri) |> 
   mutate(
     highlight = case_when(
       is.na(rri) ~ FALSE, 
@@ -369,21 +437,6 @@ svii_pop_highlight <- svii_demo |>
     ), 
     .after = group_cat
   )
-
-
-## admissions highlight 
-svii_adm_highlight <- svii_demo |> 
-  select(state_name, type, data_abbr, group, group_cat, prop) |> 
-  pivot_wider(names_from = type, values_from = prop) |> 
-  # highlight instances where admissions prop is greater than population proportion 
-  mutate(
-    highlight = case_when(
-      !is.na(Admissions) & !is.na(Population) & Admissions/Population >= 1 ~ TRUE, 
-      TRUE ~ FALSE 
-    )
-  ) |> 
-  mutate(metric_abbr = paste0("a ", data_abbr)) |> 
-  select(state_name, metric_abbr, group, group_cat, highlight, Admissions, Population)
 
 
 
@@ -399,8 +452,12 @@ perc_display <- function(prop, acc = 1){
   )
 }
 
+
 svii_demo_table_prep <- svii_demo |> 
   bind_rows(
+    comp_census                                                |> mutate(metric_abbr = "a total comp") |> rename(prop = comp), 
+    comp_ppus |> filter(comparison_source == "PPUS_Probation") |> mutate(metric_abbr = "a prob comp")  |> rename(prop = comp), 
+    comp_ppus |> filter(comparison_source == "PPUS_Parole")    |> mutate(metric_abbr = "a par comp")   |> rename(prop = comp), 
     comp_census                                                |> mutate(metric_abbr = "p total comp") |> rename(prop = comp), 
     comp_ppus |> filter(comparison_source == "PPUS_Probation") |> mutate(metric_abbr = "p prob comp")  |> rename(prop = comp), 
     comp_ppus |> filter(comparison_source == "PPUS_Parole")    |> mutate(metric_abbr = "p par comp")   |> rename(prop = comp) 
@@ -412,7 +469,8 @@ svii_demo_table_prep <- svii_demo |>
   left_join(display_data_text, by = join_by(metric_abbr)) |> 
   # join with df's that specify if cell should be highlighted in some way 
   left_join(
-    bind_rows(svii_adm_highlight, svii_pop_highlight) |> 
+    #bind_rows(svii_adm_highlight, svii_pop_highlight) |> 
+    svii_highlight |> 
       select(state_name, metric_abbr, group, group_cat, highlight), 
     by = join_by(state_name, metric_abbr, group, group_cat)
   ) |> 
@@ -437,6 +495,207 @@ svii_demo_table_prep <- svii_demo |>
 
 
 admin$save_rds_twice(svii_demo_table_prep, save_to_sp = save_RDS_to_sharepoint)
+
+
+
+# TEXT -----------------------------------------------------------------------
+
+
+demo_rri_to_bullets <- function(STATE, TYPE, GROUPCAT){
+  
+  rri_list  <- svii_demo |> 
+    filter(state_name == STATE, type == TYPE, group_cat == GROUPCAT) |> 
+    #filter(state_name == "Alabama", type == "Admissions", group_cat == "race_ethnicity") 
+    filter(!is.na(rri) & round(rri, 1) > 1) |> 
+    arrange(desc(rri)) |>
+    top_n(2, rri) |>
+    mutate(
+      rri_text_group_name = case_when(
+        group == "White" ~ "White people", 
+        group == "Black" ~ "Black people", 
+        group == "Hispanic" ~ "Hispanic people", 
+        group == "AIAN" ~ "American Indian people", 
+        group == "Asian" ~ "Asian people", 
+        group == "NHPI" ~ "Pacific Islander people", 
+        group == "Male" ~ "Men", 
+        group == "Female" ~ "Women"
+      ), 
+      rri_text_adm_or_pop = case_when(
+        type == "Admissions" ~ "admitted to prison",
+        type == "Population" ~ "incarcerated"
+      ), 
+      rri_text_violation = case_when(
+        word(metric_abbr, 2, -1) == "total" ~ "",
+        word(metric_abbr, 2, -1) != "total" ~ paste0(" for a ", tolower(word(data, 1, -3)))
+      ),
+      rri_text_population = case_when(
+        comparison_source == "Census"         ~ paste0(state_name, " state population"),
+        comparison_source == "PPUS_Parole"    ~ paste0(state_name, " parole population"),
+        comparison_source == "PPUS_Probation" ~ paste0(state_name, " probation population"),
+      ),
+      RRI_TEXT = paste0(
+        rri_text_group_name,
+        " are ",
+        round(rri, digits = 1),
+        " times more likely to be ",
+        rri_text_adm_or_pop,
+        rri_text_violation,
+        " than their share of the ",
+        rri_text_population
+      )
+    ) |> 
+    pull(RRI_TEXT)
+  
+  
+  if (length(rri_list) == 0){
+    out <- "This state did not provide sufficent demographic data to determine any relative rates."
+  } else {
+    out <- paste0(
+      "<ul><li>", 
+      paste(rri_list, collapse = "</li><li>"), 
+      "</li></ul>"
+    )
+  }
+  
+}
+
+
+notes <- openxlsx::read.xlsx( # need to use openxlsx; formatting issue 
+  file.path(admin$sp_survey, "Data", "raw", "SVII_2024_Survey_Notes.xlsx"),
+  sheet = "DISPLAY_formatted_notes"
+) |> 
+  as_tibble() |> 
+  clean_names() |> 
+  select(state_name = state, race_ethnicity = race_ethnicity_notes, sex_gender = sex_gender_notes) |> 
+  pivot_longer(cols = -state_name, values_to = "state_notes", names_to = "group_cat") |> 
+    mutate(
+      state_notes = paste0(
+      "<div class = 'notetxt' style = 'text-align: left;'>", 
+      "<p>",  
+      ifelse(is.na(state_notes), "", state_notes), 
+      "</p></div>"
+    ) |> str_replace_all("\\n", "</p><p>") 
+  ) 
+
+
+
+
+make_link <- function(href, text){
+  
+  paste0(
+    "<a class = 'datasource' href = '", href, "' target = '_blank'>", 
+    text, 
+    "</a>"
+  )
+}
+
+
+# "https://www2.census.gov/programs-surveys/popest/datasets/2020-2023/state/asrh/", 
+census_link <- make_link(
+  "https://www.census.gov/data/datasets/time-series/demo/popest/2020s-state-detail.html", 
+  "U.S. Census Bureau American Community Survey, 2023"
+)
+
+
+ppus_link <- make_link(
+  "https://bjs.ojp.gov/library/publications/probation-and-parole-united-states-2022", 
+  "Probation and Parole in the United States, 2022"
+)
+
+demo_highlight_desc <- paste0(
+ # "<div class = 'notetxt' style = 'text-align: left;'>",
+  "<p><span class = 'highlight'>Bold orange text</span>", 
+  " indicates the percentage of a group for a superivsion metric", 
+  " is greater than the percentagae for the population group (top row)",
+  " and the percentage of unknown for the population group is less than 15%", 
+  "</p>"
+#  "</div>"
+)
+
+
+demo_posttext_source <- paste0(
+    "<div class = 'notetxt' style = 'text-align: left;'>",
+    demo_highlight_desc, 
+    "<p>Demographic percentages are created from combining the values for 2022 and 2023", 
+    " from each state and then calculating the percentage of each demographic group for a given metric.</p>", 
+    "<ol style = 'padding-left: 1em;'>", 
+    "<li>State population data is from ", census_link, "</li>", 
+    #"<br>", 
+    "<li>State parole population data is from the BJS report ", ppus_link, ", Appendix Table 13</li>", 
+    #"<br>", 
+    "<li>State probation population data is sourced from the BJS report ", ppus_link, ", Appendix Table 9</li>",  
+    "</ol>", 
+    "</div>"
+  )
+
+
+re_static_note <- paste0(
+  "<div class = 'notetxt' style = 'text-align: left; font-size: 0.9em !important;'>", 
+  "<p><i>", 
+  "States vary in how they collect and report information about race and ethnicity.<br>", 
+  "Some states use the race or ethnicity recorded by intake officers, ", 
+  "while other states allow individuals to identify their own race and ", 
+  "ethnicity.  Furthermore, some states combine race and ethnicity into ", 
+  "one category, while others separate them into two distinct items. ", 
+  "These differences can result in an incomplete count of Hispanic ", 
+  "individuals and those of mixed race in state reports. The US Census ", 
+  "allows individuals to self-identify their race and ethnicity ", 
+  "separately. The variation in practices across states and between ", 
+  "state and Federal data reporting systems may result in a deflated ", 
+  "RRI for Hispanic individuals. These differences can result in an ", 
+  "incomplete count of Hispanic individuals and those of mixed race in ", 
+  "state reports. Conversely, it can result in an overcount of people ", 
+  "of other races, especially non-Hispanic White people.", 
+  "</p></i>", 
+  "</div>"
+)
+
+
+sg_static_note <- paste0(
+  "<div class = 'notetxt' style = 'text-align: left; font-size: 0.9em !important;'>", 
+  "<p><i>", 
+  "States vary in how they collect and report information about sex and gender.<br>", 
+  "The majority of states only have two categories, usually 'Male' and 'Female'.", 
+
+  "</p></i>", 
+  "</div>"
+)
+
+svii_demo_text <- tidyr::crossing(
+  state_name = state.name, 
+  type = c("Admissions", "Population"), 
+  group_cat = c("race_ethnicity", "sex_gender")
+  ) |> 
+  left_join(notes, by = join_by(state_name, group_cat)) |> 
+  rowwise() |> 
+  mutate(
+    demo_rri_text = demo_rri_to_bullets(state_name, type, group_cat)
+  ) |> 
+  ungroup() |> 
+  mutate(
+    pretext =   paste0(
+      "<div class = 'notetxt' style = 'text-align: left;'>",
+      demo_rri_text, 
+      "</div>"
+    ), 
+    posttext = case_when(
+      group_cat == "sex_gender"     ~ paste0(state_notes, demo_posttext_source, sg_static_note),
+      group_cat == "race_ethnicity" ~ paste0(state_notes, demo_posttext_source, re_static_note)
+    )
+  ) |> 
+  ungroup() |> 
+  select(-state_notes)
+
+admin$save_rds_twice(svii_demo_text, save_to_sp = save_RDS_to_sharepoint)
+
+
+# KY 
+# MI  r/e 
+# NV - adm s/g 
+# NM - pop 
+# OH
+# RI - adm r/e
+
 
 
 

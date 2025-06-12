@@ -328,27 +328,66 @@ states_with_subtitles |>
 
 ## Demographic Tab 
 
-- SVII data -- combine two years of data and then calculate proportion for each metric
-  * instead of showing most recent year (2023) -- get average of 2 years 
-  * 2 years is not enough to establish trends so makes most sense to combine data 
-  * since only displaying percentages, and average over 2 years -- don't need to suppress data 
-- Census data -- use 2023 data, pull data and categorize to match BJS categories 
-- PPUS data -- only available for 2022 at the moment; only have 'White', 'Black', 'Hispanic', and 'Other' race categories 
-  * PPUS survey collect more categories for race/ethnicity but report only provides these 4 categories when breaking out values by jurisdiction (by state) 
-  
 
-Admissions 
-
-- only show SVII data percentages 
-- **highlight** cells where the corresponding population percentage is less than the admissions 
-  * Parole Violation Admissions for Group1 = 50%; Parole Violation Population for Group2 = 40% --> Highlight cell for Parole Violation Admissions for Group1 
+### SVII Demographics 
 
 
-Population 
-
-- show SVII data and comparison populations (census and ppus) 
-- **highlight** cells where the corresponding comparison percentage is less than the SVII percentage 
-  * Parole Violation Population for Group1 = 40%; Total Parole Population (from PPUS) for Group1 = 35% --> Highlight cell for Parole Violation Population for Group1 
+- combine two years of data and then calculate proportion for each metric
+- instead of showing most recent year (2023) -- use BOTH years of data 
+- add 2 years together and then calculate proportions 
+- 2 years is not enough to establish trends so makes most sense to combine data 
+- since only displaying percentages, and using 2 years -- don't need to suppress data 
+- display total prison adm/pop, probation violations & breakdowns, and parole violations & breakdowns -- exclude any combination of parole + probation (supervision violations, new offense violations, technical violations) 
   
   
+SVII calculation example: 
+
+| Group | 2022 n | 2023 n | 2022+2023 n | perc (shown on tool) | 
+|:---|----:|----:|----:|----:|
+| A | 5 | 8 | 13 | 27% | 
+| B | 8 | 9 | 17 | 35% | 
+| C | 7 | 11| 18 | 38% | 
+  
+### Census (State) Population  
+
+- use 2023 data, pull data and categorize to match BJS categories 
+- using **total** counts 
+- do we want to use adult counts?? 
+- use to compare to total prison adm/pop only 
+  
+
+### Parole/Probation Populations 
+
+- only available for 2022 at the moment
+- only have 'White', 'Black', 'Hispanic', and 'Other' race categories 
+- PPUS survey collect more categories for race/ethnicity but report only provides these 4 categories when breaking out values by jurisdiction (by state) 
+- Parole population compared to parole violations & breakdowns 
+- Probation population compared to probation violations & breakdowns 
+  
+
+### Highlight Cells 
+
+In the table, we want to highlight some of the SVII survey data when: 
+
+- the SVII percentage is greater than comparison population percentage for a given group 
+- this calculated/determined by: 
+  (1) rounding the percentages to the nearest 1% (so don't highlight 8.1% > 8.0% when both are rounded and displayed as 8%) 
+  (2) calculated relative rate (metric_perc/comparison_population_perc) 
+  (3) if relative rate is > 1 --> highlight cell  
+- exclude highlighting if the unknown category of the comparison population is > 15% (too much unknown to make a meaningful comparison) 
+
+
+| | Group A | Group B | Group C | Unknown Group | 
+|:---|----:|----:|----:|----:|
+| Comparison Population | 30% | 35% | 25% | 10% | 
+| SVII Metric | <span style='font-weight: bold; color: #7b3014;'>32%</span> | 34% | <span style='font-weight: bold; color: #7b3014;'>34%</span>  | - | 
+: Bold/Highlight cells where the metric percentage is greater than the comparison population for a given group
+<br>
+
+| | Group A | Group B | Group C | Unknown Group | 
+|:---|----:|----:|----:|----:|
+| Comparison Population | 25% | 30% | 25% | 20% | 
+| SVII Metric | 32% | 34% | 34% | - | 
+: Do not highlight cells if comparison population unknown group is greater than 15% 
+
 

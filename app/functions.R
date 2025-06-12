@@ -157,52 +157,52 @@ demo_table_header <- function(text){
 }
 
 
-
-highlight_cell <- function(text){
-  
-  paste0(
-    "<span style = '", 
-    "color:", darkorange, ";", # colors.R -- use darkorange b/c orange does not pass contrast test
-    "font-weight: 500;", # set GraphikMedium to 500 in theme.css
-    "'>", 
-    text, 
-    "</span>"
-  )
-  
-}
+# df <- svii_demo_table_prep |> 
+#   filter(state_name == "Alabama", type == "Population", group_cat == "race_ethnicity", table == 3)
 
 
-demo_reactable <- function(df) {
+demo_reactable <- function(df, metric_header = "Metric") {
   # need width of reactable to be <= 995
   # data (275) + demo cnts (9*85)  = 1000
   
   display_df <- df |> 
-    arrange(group, data) |> 
+    arrange(group, metric_abbr) |> 
     mutate(
       data = case_when(
-        metric_abbr == "p total comp" ~ paste0(data, "<sup>1</sup>"), 
-        metric_abbr == "p par comp"   ~ paste0(data, "<sup>2</sup>"),
-        metric_abbr == "p prob comp"  ~ paste0(data, "<sup>3</sup>"), 
+        word(metric_abbr, 2, 3) == "total comp" ~ paste0(data, "<sup>1</sup>"), 
+        word(metric_abbr, 2, 3) == "par comp"   ~ paste0(data, "<sup>2</sup>"),
+        word(metric_abbr, 2, 3) == "prob comp"  ~ paste0(data, "<sup>3</sup>"), 
         TRUE ~ data
       ), 
       prop = case_when(
-        highlight == TRUE ~ highlight_cell(prop), 
+        highlight == TRUE ~ paste0("<span class = 'highlight'>", prop, "</span>"), 
         TRUE ~ prop
       )
     ) |> 
     select(data, group, prop) |> 
     pivot_wider(names_from = group, values_from = prop)
   
+  greyout_row <- ifelse(str_detect(sort(df$metric_abbr)[1], "comp") == TRUE, 1, 0)
+  
   reactable(
     display_df, 
     style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"), 
     theme = reactableTheme(
       cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"), 
-      headerStyle = list(textAlign = "right")
+      headerStyle = list(fontWeight = "bold")
     ), 
     compact = TRUE,
     searchable = FALSE,
     pagination = FALSE,
+    sortable = FALSE, 
+    rowStyle = function(index){
+      if (index == 1){
+        list(
+          background = "rgba(0, 0, 0, 0.05)",
+          `border-bottom` = "thin solid",
+          `border-color` = "rgba(0, 0, 0, 0.10)")
+      }
+    },
     defaultColDef = colDef(
       format = colFormat(separators = TRUE), 
       header = function(value) demo_table_header(value), 
@@ -214,11 +214,11 @@ demo_reactable <- function(df) {
     ),
     columns = list(
       data = colDef(
-        name = "Metric",
+        name = metric_header,
         align = "left",
         minWidth = 235,
         width = 235, 
-        style = list(fontWeight = "bold"), 
+        style = list(fontWeight = "500"), 
         html = TRUE
       ) 
       # Hispanic = colDef(minWidth = 110), 

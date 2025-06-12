@@ -820,55 +820,64 @@ server <- function(input, output, session) {
   
   # 4 DEMOGRAPHICS ----------------------------------------------------------------
   
+  # Filter data
+  demo_text <- reactive({
+    svii_demo_text |> 
+      filter(
+        state_name == input$state_report,
+        type == input$adm_pop_report,
+        group_cat == input$demo_groupcat
+      ) 
+  }) |>
+    bindCache(input$state_report,
+              input$adm_pop_report, 
+              input$demo_groupcat)
   
+  
+  demo_tables<- reactive({
+    svii_demo_table_prep |> 
+      filter(
+        state_name == input$state_report,
+        type == input$adm_pop_report,
+        group_cat == input$demo_groupcat
+      ) 
+  }) |>
+    bindCache(input$state_report,
+              input$adm_pop_report, 
+              input$demo_groupcat)
+
   # 4 pretext ---------------------------------------------------------------------
   
-  
+  output$demo_pretext <-   renderUI({
+    HTML(demo_text()$pretext)
+  })
 
   # 4 tables (demographics) --------------------------------------------------------
   output$demo_table_1 <- renderReactable({
-    svii_demo_table_prep |> 
-      filter(
-        state_name == input$state_report,
-        type == input$adm_pop_report,
-        group_cat == "race_ethnicity", 
-        table == 1
-    )  |>
+    demo_tables() |> 
+      filter(table == 1) |> 
       demo_reactable()
-  }) |>
-    bindCache(input$state_report,
-              input$adm_pop_report)
+  }) 
   
   output$demo_table_2 <- renderReactable({
-    svii_demo_table_prep |> 
-      filter(
-        state_name == input$state_report,
-        type == input$adm_pop_report,
-        group_cat == "race_ethnicity", 
-        table == 2
-      )  |>
+    demo_tables() |> 
+      filter(table == 2) |> 
       demo_reactable()
-  }) |>
-    bindCache(input$state_report,
-              input$adm_pop_report)
+  }) 
   
   output$demo_table_3 <- renderReactable({
-    svii_demo_table_prep |> 
-      filter(
-        state_name == input$state_report,
-        type == input$adm_pop_report,
-        group_cat == "race_ethnicity", 
-        table == 3
-      )  |>
+    demo_tables() |> 
+      filter(table == 3) |> 
       demo_reactable()
-  }) |>
-    bindCache(input$state_report,
-              input$adm_pop_report)
+  }) 
   
   
   
   # 4 posttext ------------------------------------------------------------------
   
+  output$demo_posttext <-   renderUI({
+    HTML(demo_text()$posttext)
+  })
   
 
 

@@ -317,15 +317,34 @@ ui <- fluidPage(
             value="4",
             "Demographics",
             br(),
-            fluidRow(column( # demographics reactable tables
+            fluidRow(column( 
               width = 12,
               align = "center",
-              div(class = "demo-title", "Overall"), 
+              radioButtons(
+                inputId = "demo_groupcat", 
+                # label = div("Select a demographic group category:", style = "margin-bottom: 5px;"), 
+                label = NULL, 
+                choiceNames = list(
+                  tags$span(class = "demo-radio-cat", "Race and Ethnicity"), 
+                  tags$span(class = "demo-radio-cat", "Sex or Gender")
+                ), 
+                choiceValues = list("race_ethnicity", "sex_gender"), 
+                # choices = list(
+                #   "Race and Ethnicity" = "race_ethnicity", 
+                #   "Sex or Gender" = "sex_gender"
+                # ), 
+                inline = TRUE
+              ), 
+              htmlOutput("demo_pretext"), 
+              div(class = "table-title", "Overall"), 
               div(id = "reactable-table", reactableOutput("demo_table_1")), 
-              div(class = "demo-title", "Parole"), 
+              div(class = "table-title", "Parole"), 
               div(id = "reactable-table", reactableOutput("demo_table_2")), 
-              div(class = "demo-title", "Probation"), 
-              div(id = "reactable-table", reactableOutput("demo_table_3"))
+              div(class = "table-title", "Probation"), 
+              div(id = "reactable-table", reactableOutput("demo_table_3")),
+              br(), 
+              div(id = "selected-state-note-title", "Notes"), 
+              htmlOutput("demo_posttext"), 
             )), # column<fluidRow: Probation reactable table
             br(), br()
           ), # tabPanel

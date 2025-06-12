@@ -23,6 +23,7 @@ General Styling (fonts and colors)
 :root {
  --accent_lite: #DDE3E9;
  --accent_blue: #004270;
+ --accent_darkorange: #7b3014
 }
 
 
@@ -368,29 +369,35 @@ p.statetxt {
 }
 
 
-
-/* Styling for state note title */
-.demo-title {
-  text-align: center;
-  font-size: 30px;
-  font-family: Graphik;
-  font-weight: bold;
-  margin-top: 15px;
-}
-
 /* STATE DASHBOARD: other *****************************************************/
 
-/* Various title and subtitle styles */
-div.retxt {
+
+/* Styling for demographic titles */
+.table-title {
+  text-align: left;
+  font-size: 22px;
   font-family: Graphik;
-  font-size: 1em;
-  margin-top: 10px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 5px;
 }
+
 
 div.notetxt {
   font-family: Graphik;
   font-size: 1em;
   margin-top: 10px;
+}
+
+
+a.datasource {
+  color: var(--accent_blue) !important; 
+}
+
+span.highlight {
+  font-family: Graphik;
+  font-weight: 500;
+  color: var(--accent_darkorange); /* use darkorange b/c orange does not pass contrast test */
 }
 
 h3.nodata {
@@ -475,6 +482,22 @@ ul.calctxt {
 input[type=checkbox] {
   accent-color: #004270;
 }
+
+/* styling for radio buttons -- .shiny-input-radiogroup*/ 
+.shiny-input-radiogroup {
+  font-family: Graphik;
+}
+
+span.demo-radio-cat {
+  font-size: 1.15em !important;
+  font-weight: 500 !important;
+}
+
+/* color of selected radio button */ 
+input[type=radio]{
+  accent-color: #004270; 
+}
+
 
 
 /* Blue background when checkbox is checked */
