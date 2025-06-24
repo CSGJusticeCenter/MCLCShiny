@@ -2,7 +2,7 @@ full_prep_start <- Sys.time()
 
 ## Data Prep ###################################################################
 
-start <- Sys.time() #takes ~<1 min 
+start <- Sys.time() #takes ~2 min 
 start
 paste("Should be done by:", format(start+1*60, "%X"))
 my_log <- file("logs/shiny_prep_log_dataprep.txt") # File name of output log
@@ -17,6 +17,8 @@ print("-- 2a_import_survey ---------------------------------------------------")
 source("prep/2a_import_survey.R", echo = TRUE)
 print("-- 2b_import_text -----------------------------------------------------")
 source("prep/2b_import_text.R", echo = TRUE)
+print("-- 2c_import_demo -----------------------------------------------------")
+source("prep/2c_import_demo.R", echo = TRUE)
 warnings()
 end <- Sys.time()
 print(paste("End run", format(end, "%a %b %e, %Y at %H:%M:%S %Z")))

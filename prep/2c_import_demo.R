@@ -147,6 +147,38 @@ pop_state <- pop_by_sex_state |>
   mutate(group = "aggregate", group_cat = "aggregate")
 
 
+# pop_state |>
+#   bind_rows(pop_by_sex_state, pop_by_race_eth_state) |>
+#   mutate(indicator = "Resident population") |>
+#   select(
+#     year,
+#     state_name,
+#     state_abbr,
+#     state_fips,
+#     group,
+#     group_cat,
+#     pop_adult, 
+#     pop_total
+#   ) |> 
+#   filter(year == 2023, state_name %in% state.name) |>
+#   arrange(state_name, year, group_cat, group) |>
+#   group_by(year, state_name) |>
+#   mutate(
+#     total = 100*round(pop_total/pop_total[group == "aggregate"], 2),
+#     adult = 100*round(pop_adult/pop_adult[group == "aggregate"], 2), 
+#     comp = round(total - adult, 0)
+#   ) |>
+#   ungroup() |> 
+#   count(comp) |> 
+#   mutate(
+#     perc = (n/sum(n))*100
+#   )
+
+# 60% adult = total when rounded to the nearest percentage 
+# majority of differences are +/-1% (~24%)
+
+
+
 comp_census <- pop_state |>
   bind_rows(pop_by_sex_state, pop_by_race_eth_state) |>
   mutate(indicator = "Resident population") |>
