@@ -36,8 +36,6 @@ demo_cat <- bind_rows(
   select(group, group_cat, group_order)
 
 
-saveRDS(demo_cat, "prep/demo_cat.rds")
-
 
 # CENSUS DATA ##################################################################
 
@@ -202,10 +200,10 @@ comp_census <- pop_state |>
   filter(group != "aggregate") |> 
   select(state_name, group, group_cat, comparison_source, comp)
 
-saveRDS(comp_census, "prep/comp_census.rds")
 
 # PPUS DATA ##################################################################  
 
+# https://www.ojp.gov/library/publications/probation-and-parole-united-states-2022
 # there is no 'supervision' by jurisdiction
 # parole + probation > supervision 
 # Table 1: Adults under community supervision, 2012-2022
@@ -291,8 +289,6 @@ comp_ppus <- bind_rows(ppus_prob, ppus_par) |>
   filter(group != "aggregate") |> 
   select(state_name, group, group_cat, comparison_source, comp)
 
-saveRDS(comp_ppus, "prep/comp_ppus.rds")
-
 # SVII DATA ##################################################################
 
 # svii is not needed on repo, but is for creation of demo tables 
@@ -304,7 +300,7 @@ PERC_ACC <- 1
 ndigits <- -log(PERC_ACC, base = 10)
 
 
-svii_demo <- svii |> 
+svii_demo <- svii |>
   filter(
     year %in% c(2022, 2023), 
     # do NOT show combined supervision numbers (par + prob) 
@@ -319,8 +315,8 @@ svii_demo <- svii |>
   # create the combined n value (sum of 2022 & 2023) and determine flag 
   mutate(case_when(
     !is.na(`2022`) & !is.na(`2023`) ~ tibble(n = `2022` + `2023`, flag = 1), 
-    !is.na(`2022`) &  is.na(`2023`) ~ tibble(n = `2023`,          flag = 2), 
-     is.na(`2022`) & !is.na(`2023`) ~ tibble(n = `2022`,          flag = 3), 
+    !is.na(`2022`) &  is.na(`2023`) ~ tibble(n = `2022`,          flag = 2), 
+     is.na(`2022`) & !is.na(`2023`) ~ tibble(n = `2023`,          flag = 3), 
      is.na(`2022`) &  is.na(`2023`) ~ tibble(n = NA_real_,        flag = 4)
   )) |> 
   group_by(state_name, metric_abbr) |> 
@@ -330,6 +326,12 @@ svii_demo <- svii |>
     prop = case_when(
       n[group == "aggregate"] == 0 ~ NA_real_, 
       TRUE ~ n/n[group == "aggregate"] 
+    ),
+    # state specific calculations
+    prop = case_when(
+      # NC did not provide gender breakout for a_total in 2022; just use 2023 values to calc percent 
+      state_abbr == "NC" & group %in% c("Female", "Male") & metric_abbr == "a total" ~ `2023`/`2023`[group == "aggregate"], 
+      TRUE ~ prop
     ), 
     perc = round(prop*100, digits = ndigits), 
   ) |> 
@@ -376,6 +378,12 @@ svii_demo <- svii |>
     data = fct_reorder(factor(data), data_order)
   ) |> 
   select(-data_order)
+
+# save in prep folder as it's needed to create demo tab outputs  
+saveRDS(svii_demo, "prep/svii_demo.rds")
+
+# save version on sp but don't save on repo; don't need to use in app 
+admin$save_rds_twice(svii_demo, save_to_repo = FALSE, save_to_sp = save_RDS_to_sharepoint)
 
 
 display_data_text <- svii_demo |> 

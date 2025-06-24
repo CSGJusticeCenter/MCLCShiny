@@ -24,7 +24,8 @@ library(tidyverse)
 library(csgjcr)
 
 
-svii_agg <- readRDS("../prep/svii_agg.rds")
+svii_agg  <- readRDS("../prep/svii_agg.rds")
+svii_demo <- readRDS("../prep/svii_demo.rds")
 ```
 
 
@@ -36,12 +37,13 @@ svii_agg <- readRDS("../prep/svii_agg.rds")
 - Data from the current survey is added to the data from previous surveys, the output files in the [combined](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282024%29%2FData%2Fraw%2Fcombined&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98) folder include data available from 2018-2023 
 - The previous survey data is pulled from [50 State Revocations Project/MCLC Shiny App/data/raw/mclc/mclc_data_2022_v9.xlsx](https://csgorg.sharepoint.com/:x:/r/sites/Team-JC-Research/_layouts/15/Doc.aspx?sourcedoc=%7B286F1BA7-7E51-42F5-893F-9ABCE4D04451%7D&file=mclc_data_2022_v9.xlsx&action=default&mobileredirect=true). This is the [file imported](https://github.com/CSGJusticeCenter/MCLCShiny/blob/323a8670ca2dac362bc7cc30f48697b9c4eb35de/import.R#L41) in the [v2.0.00 (Apr 2024)](https://github.com/CSGJusticeCenter/MCLCShiny/releases/tag/v2.0.00) of the app. 
 
-# Data Pathway
+# Data Pathway Flow Chart
 
 
 ![Flow chart of Data Pathway](`r csg_sp_path("50 State Revocations Project/50 State Survey (2024)/Data/raw/graphics/MCLCShiny_prep_0_shiny_prep.png")`)
 
 
+*Need to edit this flow chart? drawio files are located here: [50 State Revocations Project/50 State Survey (2024)/Data/raw/graphics](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2F50%20State%20Survey%20%282024%29%2FData%2Fraw%2Fgraphics&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98&ct=1652815580832&or=Teams%2DHL&ga=1). Download software from [drawio.com](https://www.drawio.com/).* 
 
 
 # Data Management 
@@ -122,8 +124,16 @@ zero_22_instances <- mclc_2022_survey |>
 zero_22_states <- unique(zero_22_instances$state)
 
 ## table data for state 
-# mclc_2022_survey |> filter(state == zero_22_states[3]) |>
+# mclc_2022_survey |> filter(state == zero_22_states[7]) |>
 #   select(state, year, metric_abbr, n) |>
+#   arrange(year) |>
+#   pivot_wider(names_from = year, values_from = n) |>
+#   arrange(metric_abbr)
+# 
+# 
+# svii_agg |> filter(state_name == zero_22_states[7]) |>
+#   mutate(metric_abbr = factor(metric_abbr, levels = levels(mclc_2022_survey$metric_abbr))) |> 
+#   select(state_name, year, metric_abbr, n) |>
 #   arrange(year) |>
 #   pivot_wider(names_from = year, values_from = n) |>
 #   arrange(metric_abbr)
@@ -133,33 +143,33 @@ There were `r length(zero_22_states)` states that had 0 values: `r paste(zero_22
 
 
 - **Alabama**
-  * provided 0's for population new offense violation metrics for 2018-2021
+  * provided 0's for population new offense violation metrics for 2018-2021 (`p new`, `p new par`, `p new prob`)
   * AL population data includes only the subset of individuals for technical violations (not new violations) 
   * ***UPDATE: in 2022-2023, AL provided population new offense violation metrics***
 - **Illinois**
   * provided 0's for all probation metrics for 2018-2021
   * IL probation is run by a separate organization (Administrative Office of the Illinois Courts) - DOC is unable to provide probation data 
-  * *Metrics that were 0's in 2018-2021 were not submitted in 2022-2023, NA's for 2018-2023*
+  * *Metrics that were 0's in 2018-2021 were not submitted in 2022-2023 --> NA's for 2018-2023*
 - **Maine**
-  * provided 0's for admissions parole data for 2018-2020
+  * provided 0's for admissions parole data for 2018-2020 (`a par`, `a tech par`, `a new par`)
   * ME provide NA's for metrics in 2021; ME does not have parole (abolished in 1976)
-  * *Metrics that were 0's in 2018-2021 were not submitted in 2022-2023, NA's for 2018-2023*
+  * *Metrics that were 0's in 2018-2021 were not submitted in 2022-2023 --> NA's for 2018-2023*
 - **Michigan**
-  * provided 0's for population probation metrics and population new offense metrics
+  * provided 0's for population probation metrics and population new offense metrics (`p new`, `p prob`, `p tech prob`, `p new prob`, `p new par`)
   * MI can't provide probation data or new offense data on population - MI only tracks people with technical parole violations in prison populations 
-  * *Metrics that were 0's in 2018-2021 were not submitted in 2022-2023, NA's for 2018-2023*
+  * *Metrics that were 0's in 2018-2021 were not submitted in 2022-2023 --> NA's for 2018-2023*
 - **Minnesota**
   * provided 0's for `p new prob`, provided NA values for `a new prob`
   * MN can't provide probation breakdown 
-  * *Metrics that were 0's in 2018-2021 were not submitted in 2022-2023, NA's for 2018-2023*
+  * *Metrics that were 0's in 2018-2021 were not submitted in 2022-2023 --> NA's for 2018-2023*
 - **Washington**
   * provided 0's for all probation metrics
   * All "community custody" supervision trends reported in the post-release/parole sections
   * ***UPDATED: in 2022-2023 WA provided all probation metrics***
 - **West Virginia**
-  * provided 0's for population parole data
+  * provided 0's for population parole data (`p par`, `p tech par`, `p new par`)
   * prison population does not identify people who were previously on parole 
-  * *WV resubmitted 2018-2021 values as a part of their 2022-2023, structure is consistent population parole metrics are not submitted, NA's for 2018-2023*
+  * *WV resubmitted 2018-2021 values as a part of their 2022-2023, structure is consistent population parole metrics are not submitted --> NA's for 2018-2023*
 
 
 ### SVII Data (2022-2023) - zero values 
@@ -326,10 +336,10 @@ states_with_subtitles |>
 :::
 
 
-## Demographic Tab 
+# Demographic Tab 
 
 
-### SVII Demographics 
+## SVII Demographics 
 
 
 - combine two years of data and then calculate proportion for each metric
@@ -344,28 +354,236 @@ SVII calculation example:
 
 | Group | 2022 n | 2023 n | 2022+2023 n | perc (shown on tool) | 
 |:---|----:|----:|----:|----:|
-| A | 5 | 8 | 13 | 27% | 
-| B | 8 | 9 | 17 | 35% | 
-| C | 7 | 11| 18 | 38% | 
+| A | 5 | 8 | 5+8 = 13 | 13/48 = 27%| 
+| B | 8 | 9 | 8+9 = 17 | 17/48 = 35%| 
+| C | 7 | 11| 7+11 = 18 | 18/48 = 38% | 
+| Aggregate | 20 |  28| 20+28 = 48 | | 
+
+
+### `svii_demo` 
+
+`svii_demo` is a data frame that is created from the general `svii` data frame.  Then, from the `svii_demo` object, the `svii_demo_tabel_prep` is created which is the actual values to be displayed in the app.  
+
+Total rows: 9100 = 50 states * 13 groups * 14 metrics 
+
+- 13 groups 
+  * 9 R/E (AIAN, Asian, Black, Hispanic, NHPI, Other, Two, Unknown r/e)
+  * 4 S/G (Diverse, Female, Male, Unknown s/g) 
+- 14 metrics: for R/E only showing total, probation metrics, and parole metrics (skipping total supervision, new, tech, unknowns, and non-supervision)
+
+
+Newly created columns: 
+
+- `2022` and `2023` - the integer values (or NA) for a given state and group for the specific year 
+- `n` = `2022` + `2023` (combined value) 
+- `flag` - flag, see [SVII Demo Flags](#svii-demo-flags) section for more information 
+- `prop` = `n`/(aggregate value for given group/state/year); if prop == 0 then convert prop to NA 
+- `perc` = percentage value of prop (prop*100); rounded to the nearest percent (i.e. prop = 0.397, perc = 40) 
+- `comparison_source` = which data set should be used to compare the SVII metric 
+  * `a total`/`p total` = Census data 
+  * parole data = PPUS_Parole 
+  * probation data = PPUS_Probation 
+- `comp` = comparison proportion value 
+- `compperc` = percentage value of comp (comp*100); runded to the nearest percent 
+- `compunk` = percentage value of comp for unknown race/ethnicity or sex/gender 
+  * used for PPUS comparison (there are no 'unknown' in census data) 
+  * used to determine if a comparison is plausable 
+  * **if unknown group is greater than 15% --> don't calc RRI, don't highlight cells**
+- `rri` = 
+  * group %in% c("Other", "Unknown r/e", "Unknown s/g", "Diverse") ~ NA_real_  
+  * compperc == 0 ~ NA_real_; if value is 0 --> CAN'T CALC RRI B/C CAN'T DIVIDE BY ZERO 
+  * compunk > 15 ~ NA_real_; if the unknown perc of comparison group is greater than 15% --> don't calc or highlight 
+  * !is.na(perc) & !is.na(compperc) ~ perc/compperc, 
+
+
+
+
+### SVII Demo Flags  
+
+
+```{r}
+svii_demo |> 
+  count(flag) |> 
+  mutate(
+    desc = c("both years have a value", "only 2022 is available", "only 2023 is available", "both years are NA"), 
+    `2022` = c("$\\mathbb{Z}$", "$\\mathbb{Z}$", "NA", "NA"), 
+    `2023` = c("$\\mathbb{Z}$", "NA", "$\\mathbb{Z}$", "NA"), 
+    .before = n
+  ) |> 
+  rename(obs = n) |> 
+  mutate(perc = scales::percent(obs/sum(obs), accuracy = 0.1)) |> 
+  knitr::kable()
+
+```
+
+\*Note: $\mathbb{Z}$ = integers  
+
+<br> 
+- Concerned if states have a mix of 2,3 with 1 and 4 
+- If a state is only 1 & 4 --> mirror data availability for 2022 and 2023.  
+- If a state has a mix, concern that some rows are using 2 years of data and others are using 1 year of data.  
+- Check manually for each state that has at least one row (metric x group) that has a flag of 2 or 3   
+
+```{r}
+states_with_mix_flags <- svii_demo |> 
+  group_by(state_name) |> 
+  count(flag) |> 
+  ungroup() |> 
+  pivot_wider(names_from = flag, values_from = n) |> 
+  select(state_name, `1`, `2`, `3`, `4`) |> 
+  filter(!is.na(`2`) | !is.na(`3`)) |> 
+  pull(state_name)
+```
+
+There are `r length(states_with_mix_flags)` states with flags of 2 and/or 3: `r paste(states_with_mix_flags, collapse = ", ")`
+
+```{r}
+# svii_demo |> 
+#   filter(state_name == states_with_mix_flags[8]) |> 
+#   filter(!flag %in% c(1, 4))
+```
+
+
+::: {style='font-size:0.8em;'}
+::: {.grid}
+
+::: {.g-col-6}
+
+- 1 **Florida** - ok, leave as is
+  * no prob/par population data for Asian in 2022; have values of 0/1 in 2023
+  * data submission only included the category of Asian in 2023 population data
+  * assume, due to low counts in 2023, that there were no observations in 2022 
+- 2 **Georgia** - ok, leave as is
+  * no p_total data for NHPI IN 2022; value of 2 in 2023
+  * NHPI is a category that was listed in 2023 and not listed in 2022
+  * assume, due to low counts in 2023, that there were no observations in 2022
+- 3 **Hawaii** - ok, leave as is
+  * no a_tech_par/a_new_par data for AIAN in 2022, values of 0/3 in 2023
+  * data submission include AIAN in 2023 table but not in 2022 table 
+  * assume, due to low counts in 2023, that there were no observations in 2022 
+  * leave as is 
+- 4 **Illinois** - ok, leave as is
+  * no a_new_par data for AIAN in 2022, value of 3 in 2023
+  * no a_new_par/p_new_par data for Unknown r/e in 2022, values of 4/2 in 2023
+  * IL data is pulled from public data set that includes all observations 
+  * assume that there were no observations in 2022
+- 5 **Iowa** - ok, leave as is
+  * no data for Unknown s/g in 2022, values of 0/2/4 in 2023
+  * Iowa submission included a column for unknown' gender in 2023, but excluded column in 2022
+  * assume that there were no observations in 2022
+- 6 **Kansas** - ok, leave as is
+  * no data for Unknown r/e in 2023, values of 0/1/2/4 in 2022
+  * Kansas submission included a column for 'unknown r/e in 2022, but excluded the column in 2023
+  * assume that there were no observations in 2022
+- 7 **Kentucky** - ok, leave as is
+  * did not respond to survey, data comes from BJS NPS data; BJS NPS data only available for 2022
+- 8 **<span style='background:yellow;'>Louisiana -- low counts in supervision metrics, don't show up in total</span>**
+  * no data for a_total for NHPI/Two in 2022, values in 2023 are 0 
+  * in data submission, LA had columns for NHPI and Two 
+  * for a_total in 2022, left those cells blank instead of putting in value
+  * 2022 admissions: 
+    - NHPI has 0's in all other admissions cells 
+    - Two has a value of 3 under a breakout of new offense parole, so would expect to see a value in the top left (a_total) category
+    - however the current breakout of R/E (with NA's in NHPI and Two) = sum of S/G values 
+    - the count of 3 would be ~0.02% of the total admissions 
+  * ***concerning that the value for Two is not placed in the a_total cell, but since it represents such a small proportion of admissions, leave as is*** 
+
+:::
+
+```{r}
+# svii_demo |>
+#   filter(state_name == states_with_mix_flags[17]) |>
+#   filter(!flag %in% c(1, 4))
+```
+
+::: {.g-col-6}
+
+- 9 **Massachusetts** - ok, leave as is 
+  * no a_par/a_tech_par for Asian in 2023; values of 2/3 in 2022 
+  * column of 'Asian/Pacific Islander' is in the MA submission, but the a_tech_par cell in 2023 is blank 
+  * assume that a_par is removed because one of the submetrics is NA 
+  * all other cells that are not blank (except for a_total) are values of 0
+  * assume there were no observations in 2023
+- 10 **Nebraska** - ok, leave as is 
+  * no data for a_par/a_tech_par/a_new_par for NHPI in 2023; values of 0/1 in 2022
+  * NE submission included 'Pacific Islander' column in 2022 but not in 2023
+  * assume there were no observations in 2023 
+- 11 **<span style='background:yellow;'>North Carolina -- ONLY USE 2023 DATA FOR MALE/FEMALE A_TOTAL</span>**
+  * Male/Female, NHPI, Asian have missing values in 2022; Male/Female have high counts (00s and 000s) in 2023
+  * **NC did not provide Male/Female breakdown for a_total in 2022 but did in 2023; ONLY USE 2023 COUNTS TO CALC PROP/PERC FOR A_TOTAL MALE/FEMALE**
+  * ~~can calc Male/Female a_supervision, a_tech, a_new, a_prob, a_par from data provided~~; completed in [50_state_revocations](https://github.com/CSGJusticeCenter/50_state_revocations/commit/06b8fe704bda40da2c99303d585cbde4ec2f8ba4) repo 
+  * missing data in one year for NHPI/Asian for prob/tech_prob/new_par; values are 0/1; assume low counts in NA year 
+- 12 **Ohio** - ok, leave as is
+  * did not respond to survey, data comes from BJS NPS data; BJS NPS data only available for 2022
+- 13 **Oregon** - ok, leave as is 
+  * mix of 2022/2023 with one year being NA and the other being 1/2/3
+  * Oregon provided count data on a year x supervision x revocation type x sex x race
+  * if there weren't any values for a given cell, assume there were no observations 
+- 14 **Rhode Island** - ok, leave as is 
+  * mix of 2022/2023 with one year being NA and the other being 0/1 for Asian/AIAN/Other
+  * row with race category was either include/excluded in tables 
+  * assume that if category is excluded, due to no obseravtions that year 
+- 15 **South Carolina** - ok, leave as is 
+  * missing data in 2022 for a_total/a_prob/p_total for NHPI/Other; 2023 values are 1/2 
+  * SC provided tables by admission type x supervision x race x ethnicity x sex x age 
+  * if there weren't any values for a given cell (i.e. a_total NHPI), assume there were no observations 
+- 16 **Tennessee** - ok, leave as is 
+  * 2022 values for Unknown r/e for admissions prob/par values are NA; all values for 2023 are 0
+  * unknown category was included in admissions 2023 and population; always had values of 0
+  * assume no observations in 2022
+- 17 **Washington** - ok, leave as is 
+  * NA in 2022 Other a_new_par; value of 0 in 2023 
+  * cell was left blank in 2022; all other supervision metric cells are 0 or 2
+  * assume no observations in 2022
+:::
+
+::: 
+
+:::
   
-### Census (State) Population  
+## Census (State) Population  
 
 - use 2023 data, pull data and categorize to match BJS categories 
 - using **total** counts 
 - do we want to use adult counts?? 
 - use to compare to total prison adm/pop only 
+
+Why  re-import data instead of just using the cenus_pep_state.rds data already available in the jr_data_library/analysis folder?  
+Because need to seperate Asian and Pacific Islander; in the jr_data_library/analysis version these two categories are combined.  
+
+
+### raw data files 
+
+- jr_data_library/data/raw/census/pep/sc-est2009-alldata6-all.csv
+- jr_data_library/data/raw/census/pep/sc-est2019-alldata6.csv
+- jr_data_library/data/raw/census/pep/sc-est2023-alldata6.csv
+
+### Links 
+
+Link to [jr_data_library clean_pep (census data)](https://github.com/CSGJusticeCenter/jr_data_library/blob/develop/R/pull_clean/census/pep/clean_pep.R); [permalink](https://github.com/CSGJusticeCenter/jr_data_library/blob/f1f42e52476fb303ac521dbff14ed7689fd3a3c1/R/pull_clean/census/pep/clean_pep.R#L1)
+
+Download data sets from census: [census.gov/programs-surveys/popest/datasets/2020-2023/state/asrh/](https://www2.census.gov/programs-surveys/popest/datasets/2020-2023/state/asrh/)
   
 
-### Parole/Probation Populations 
+## Parole/Probation Populations 
 
 - only available for 2022 at the moment
 - only have 'White', 'Black', 'Hispanic', and 'Other' race categories 
 - PPUS survey collect more categories for race/ethnicity but report only provides these 4 categories when breaking out values by jurisdiction (by state) 
 - Parole population compared to parole violations & breakdowns 
 - Probation population compared to probation violations & breakdowns 
-  
 
-### Highlight Cells 
+### raw data files 
+
+- jr_data_library/data/raw/bjs/ppus/ppus22/ppus22t09.csv (Appendix Table 09: Select characteristics of adults on probation, by jurisdiction, 2022)
+- jr_data_library/data/raw/bjs/ppus/ppus22/ppus22t13.csv (Appendix Table 13: Selected characteristics of adults on parole, by jurisdiction, 2022)
+
+### Links 
+
+Link to [Probation and Parole in the United States, 2022](https://www.ojp.gov/library/publications/probation-and-parole-united-states-2022) report on BJS's website.  
+
+
+## Highlight Cells 
 
 In the table, we want to highlight some of the SVII survey data when: 
 

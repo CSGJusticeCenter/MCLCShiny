@@ -95,6 +95,8 @@ svii <- readRDS(file.path(admin$sp_survey, "Data/raw/combined/svii_main.rds")) |
                      formattable::comma(n, digits = 0), "<br>")
   ) 
 
+# save version on sp but don't save on repo; don't need to use in app 
+admin$save_rds_twice(svii, save_to_repo = FALSE, save_to_sp = save_RDS_to_sharepoint)
 
 # save in prep folder as it's needed to create demo tab outputs  
 saveRDS(svii, "prep/svii.rds")
