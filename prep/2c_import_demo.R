@@ -198,7 +198,7 @@ comp_census <- pop_state |>
   ungroup() |> 
   mutate(comparison_source = "Census") |> 
   filter(group != "aggregate") |> 
-  select(state_name, group, group_cat, comparison_source, comp)
+  select(state_name, group, group_cat, comparison_source, ncomp = census_n, comp)
 
 
 # PPUS DATA ##################################################################  
@@ -287,7 +287,7 @@ comp_ppus <- bind_rows(ppus_prob, ppus_par) |>
   mutate(comp = n/n[group == "aggregate"]) |> 
   ungroup() |> 
   filter(group != "aggregate") |> 
-  select(state_name, group, group_cat, comparison_source, comp)
+  select(state_name, group, group_cat, comparison_source, ncomp = n, comp)
 
 # SVII DATA ##################################################################
 
@@ -300,7 +300,8 @@ PERC_ACC <- 1
 ndigits <- -log(PERC_ACC, base = 10)
 
 
-svii_demo <- svii |>
+# filter and set flags 
+svii_demo_prep1 <- svii |>
   filter(
     year %in% c(2022, 2023), 
     # do NOT show combined supervision numbers (par + prob) 
@@ -337,7 +338,11 @@ svii_demo <- svii |>
   ) |> 
   ungroup() |> 
   # no longer needs aggregate values 
-  filter(group != "aggregate") |> 
+  filter(group != "aggregate") 
+
+
+# comparison sources added 
+svii_demo_prep2 <- svii_demo_prep1 |> 
   # add comparison source (which data should be compared to for RRI's) 
   mutate(
     comparison_source = case_when(
@@ -360,16 +365,6 @@ svii_demo <- svii |>
     )
   ) |> 
   ungroup() |> 
-  # calculate RRI's with ROUNDED VALUES 
-  mutate(
-    rri = case_when(
-      group %in% c("Other", "Unknown r/e", "Unknown s/g", "Diverse") ~ NA_real_ , 
-      compperc == 0 ~ NA_real_, # if value is 0 --> CAN'T CALC RRI B/C CAN'T DIVIDE BY ZERO 
-      compunk > 15 ~ NA_real_, # if the unknown perc of comparison group is greater than 15% --> don't calc or highlight 
-      !is.na(perc) & !is.na(compperc) ~ perc/compperc, 
-      TRUE ~ NA_real_
-    )
-  ) |> 
   # update text (need to specify total prison admission/population) 
   mutate(
     data_order = as.numeric(data), 
@@ -378,6 +373,37 @@ svii_demo <- svii |>
     data = fct_reorder(factor(data), data_order)
   ) |> 
   select(-data_order)
+
+# calculate RRI's 
+svii_demo <- svii_demo_prep2 |> 
+  # calculate comparison to population percent 
+  mutate(
+    comp_to_pop_perc = case_when(
+      group %in% c("Other", "Unknown r/e", "Unknown s/g", "Diverse") ~ NA_real_ ,
+      # if value is 0 --> CAN'T CALC RRI B/C CAN'T DIVIDE BY ZERO
+      compperc == 0 & comp != 0 & perc > comp ~ prop/comp, 
+      compperc == 0 & comp != 0 & perc <= comp ~ NA_real_, 
+      # if the unknown perc of comparison group is greater than 15% --> don't calc or highlight
+      compunk > 15 ~ NA_real_, 
+      # MOST CASES --> use the rounded values to calcualte the comparison 
+      !is.na(perc) & !is.na(compperc) ~ perc/compperc,
+      TRUE ~ NA_real_
+    )
+  )  |>
+  # calculate RRI with comparison group 
+  group_by(state_name, metric_abbr) |> 
+  mutate(
+    rate = ((n/2)/ncomp)*1e5, 
+    rri = case_when(
+      group %in% c("Other", "Unknown r/e", "Unknown s/g", "Diverse") ~ NA_real_ , 
+      comp  == 0 ~ NA_real_, # if value is 0 --> CAN'T CALC RRI B/C CAN'T DIVIDE BY ZERO 
+      # compunk > 15 ~ NA_real_, # if the unknown perc of comparison group is greater than 15% --> don't calc or highlight 
+      group_cat == "race_ethnicity" ~ rate/rate[group == "White"], 
+      group_cat == "sex_gender" ~ rate/rate[group == "Female"]
+    )
+  ) |> 
+  ungroup() 
+
 
 # save in prep folder as it's needed to create demo tab outputs  
 saveRDS(svii_demo, "prep/svii_demo.rds")
@@ -438,42 +464,13 @@ display_data_text <- svii_demo |>
  
 # svii_demo_table_prep ----------------------------------------------------------
 
-
-# ## admissions highlight 
-# svii_adm_highlight <- svii_demo |> 
-#   select(state_name, type, data_abbr, group, group_cat, perc) |> 
-#   pivot_wider(names_from = type, values_from = perc) |> 
-#   # highlight instances where admissions perc is greater than population perc 
-#   mutate(
-#     highlight = case_when(
-#       Admissions/Population > 1 ~ TRUE, 
-#       TRUE ~ FALSE 
-#     )
-#   ) |> 
-#   mutate(metric_abbr = paste0("a ", data_abbr)) |> 
-#   select(state_name, metric_abbr, group, group_cat, highlight, Admissions, Population) 
-# 
-# ## population highlight 
-# svii_pop_highlight <- svii_demo |> 
-#   filter(type == "Population") |> 
-#   select(state_name, metric_abbr, group, group_cat, perc, compperc, rri) |> 
-#   mutate(
-#     highlight = case_when(
-#       is.na(rri) ~ FALSE, 
-#       !is.na(rri) & rri <= 1 ~ FALSE, 
-#       !is.na(rri) & rri >  1 ~ TRUE
-#     ), 
-#     .after = group_cat
-#   )
-
-
 svii_highlight <- svii_demo |> 
-  select(state_name, metric_abbr, group, group_cat, perc, compperc, rri) |> 
+  select(state_name, metric_abbr, group, group_cat, perc, compperc, val = comp_to_pop_perc) |> 
   mutate(
     highlight = case_when(
-      is.na(rri) ~ FALSE, 
-      !is.na(rri) & rri <= 1 ~ FALSE, 
-      !is.na(rri) & rri >  1 ~ TRUE
+      is.na(val) ~ FALSE, 
+      !is.na(val) & val <= 1 ~ FALSE, 
+      !is.na(val) & val >  1 ~ TRUE
     ), 
     .after = group_cat
   )
@@ -541,63 +538,92 @@ admin$save_rds_twice(svii_demo_table_prep, save_to_sp = save_RDS_to_sharepoint)
 # TEXT -----------------------------------------------------------------------
 
 
-demo_rri_to_bullets <- function(STATE, TYPE, GROUPCAT){
+demo_rri_to_bullets <- svii_demo |> 
+  select(state_name, state_abbr, metric_abbr, group, group_cat, comparison_source, rri) |> 
+  # drop comparison groups 
+  filter(!group %in% c("White", "Female", "Other", "Unknown r/e", "Unknown s/g")) |> 
+  tidyr::drop_na(rri) |> 
+  mutate(group = factor(group, levels = demo_cat$group)) |> 
+  arrange(state_name, metric_abbr, group) |> 
+  mutate(
+    group_text = case_when(
+      group == "White" ~ "White people", 
+      group == "Black" ~ "Black people", 
+      group == "Hispanic" ~ "Hispanic people", 
+      group == "AIAN" ~ "American Indian people", 
+      group == "Asian" ~ "Asian people", 
+      group == "NHPI" ~ "Pacific Islander people", 
+      group == "Male" ~ "Males", 
+      group == "Female" ~ "females" 
+    ), 
+    comp_group = case_when(
+      group_cat == "race_ethnicity" ~ "White people", 
+      group_cat == "sex_gender" ~ "females"
+    ), 
+    val = case_when(
+      rri > 1 ~ comma(rri, accuracy = 0.1, suffix = " times more"), 
+      rri < 1 ~ percent(1-rri, accuracy = 1, suffix = "% less")
+    ), 
+    type_text = case_when(
+      word(metric_abbr, 1) == "a" ~ "admitted to prison", 
+      word(metric_abbr, 1) == "p" ~ "incarcerated"
+    ), 
+    metric_text = case_when(
+      word(metric_abbr, 2, -1) == "total" ~ "", 
+      word(metric_abbr, 2, -1) == "par"       ~ " for a parole violation", 
+      word(metric_abbr, 2, -1) == "tech par"  ~ " for a technical offense parole violation", 
+      word(metric_abbr, 2, -1) == "new par"   ~ " for a new offense parole violation", 
+      word(metric_abbr, 2, -1) == "prob"      ~ " for a probation violation", 
+      word(metric_abbr, 2, -1) == "tech prob" ~ " for a technical offense probation violation", 
+      word(metric_abbr, 2, -1) == "new prob"  ~ " for a new offense probation violation"
+    ), 
+    bulletpoint = glue("{group_text} are {val} likely to be {type_text}{metric_text} than {comp_group}")
+  ) |> 
+  select(state_name, state_abbr, metric_abbr, group, group_cat, comparison_source, rri, bulletpoint) 
+
+
+vec_to_bullets <- function(STATE, TYPE, CAT, COMP_GROUP){
   
-  rri_list  <- svii_demo |> 
-    filter(state_name == STATE, type == TYPE, group_cat == GROUPCAT) |> 
-    #filter(state_name == "Alabama", type == "Admissions", group_cat == "race_ethnicity") 
-    filter(!is.na(rri) & round(rri, 1) > 1) |> 
-    arrange(desc(rri)) |>
-    top_n(2, rri) |>
-    mutate(
-      rri_text_group_name = case_when(
-        group == "White" ~ "White people", 
-        group == "Black" ~ "Black people", 
-        group == "Hispanic" ~ "Hispanic people", 
-        group == "AIAN" ~ "American Indian people", 
-        group == "Asian" ~ "Asian people", 
-        group == "NHPI" ~ "Pacific Islander people", 
-        group == "Male" ~ "Men", 
-        group == "Female" ~ "Women"
-      ), 
-      rri_text_adm_or_pop = case_when(
-        type == "Admissions" ~ "admitted to prison",
-        type == "Population" ~ "incarcerated"
-      ), 
-      rri_text_violation = case_when(
-        word(metric_abbr, 2, -1) == "total" ~ "",
-        word(metric_abbr, 2, -1) != "total" ~ paste0(" for a ", tolower(word(data, 1, -3)))
-      ),
-      rri_text_population = case_when(
-        comparison_source == "Census"         ~ paste0(state_name, " state population"),
-        comparison_source == "PPUS_Parole"    ~ paste0(state_name, " parole population"),
-        comparison_source == "PPUS_Probation" ~ paste0(state_name, " probation population"),
-      ),
-      RRI_TEXT = paste0(
-        rri_text_group_name,
-        " are ",
-        round(rri, digits = 1),
-        " times more likely to be ",
-        rri_text_adm_or_pop,
-        rri_text_violation,
-        " than their share of the ",
-        rri_text_population
-      )
+  vec <- demo_rri_to_bullets |> 
+    filter(
+      state_name == STATE, 
+      word(metric_abbr, 1) == tolower(str_sub(TYPE, 1, 1)), 
+      group_cat == CAT, 
+      comparison_source == COMP_GROUP, 
     ) |> 
-    pull(RRI_TEXT)
+    # put the metric number, in case lower metrics are only available 
+    # want to select those 
+    # if all data is available, we only want to 'lower' number metrics 
+    # (factor level first/top) metrics 
+    # want to group by group 
+    mutate(metric_n = as.numeric(metric_abbr)) |> 
+    group_by(group) |> 
+    top_n(-1, metric_n) |> 
+    ungroup() |> 
+    pull(bulletpoint)
   
   
-  if (length(rri_list) == 0){
-    out <- "This state did not provide sufficent demographic data to determine any relative rates."
+  if (length(vec) == 0){
+    out <- paste(STATE, "did not have sufficent demographic data to determine any relative rates.")
   } else {
     out <- paste0(
       "<ul><li>", 
-      paste(rri_list, collapse = "</li><li>"), 
+      paste(vec, collapse = "</li><li>"), 
       "</li></ul>"
     )
   }
   
+  paste0(
+    "<div class = 'notetxt' style = 'text-align: left'>",
+    out, 
+    "</div>"
+  )
+
+  
 }
+
+
+
 
 
 notes <- openxlsx::read.xlsx( # need to use openxlsx; formatting issue 
@@ -647,7 +673,7 @@ demo_highlight_desc <- paste0(
   "<p><span class = 'highlight'>Bold orange text</span>", 
   " indicates the percentage of a group for a superivsion metric", 
   " is greater than the percentagae for the population group (top row)",
-  " and the percentage of unknown for the population group is less than 15%", 
+  " and the percentage of unknown for the population group is less than 15%.", 
   "</p>"
 #  "</div>"
 )
@@ -655,7 +681,7 @@ demo_highlight_desc <- paste0(
 
 demo_posttext_source <- paste0(
     "<div class = 'notetxt' style = 'text-align: left;'>",
-    demo_highlight_desc, 
+    "<span class = 'notesubtitle'>Data Sources and Calculations</span>", 
     "<p>Demographic percentages are created from combining the values for 2022 and 2023", 
     " from each state and then calculating the percentage of each demographic group for a given metric.</p>", 
     "<ol style = 'padding-left: 1em;'>", 
@@ -665,6 +691,13 @@ demo_posttext_source <- paste0(
     #"<br>", 
     "<li>State probation population data is sourced from the BJS report ", ppus_link, ", Appendix Table 9</li>",  
     "</ol>", 
+    demo_highlight_desc, 
+    "<p>", 
+    "Relative Rate Index (RRI) are shown in bullet points when data is available. RRI's are calculated by ", 
+    "first calculating the rates for each group by taking the count for each group and dividing it by ", 
+    "the population for each group (state population, parole population or probation population). ", 
+    "Then rates are divided by rate for the comparison group to get the relative rate index.", 
+    "</p>", 
     "</div>"
   )
 
@@ -709,21 +742,17 @@ svii_demo_text <- tidyr::crossing(
   left_join(notes, by = join_by(state_name, group_cat)) |> 
   rowwise() |> 
   mutate(
-    demo_rri_text = demo_rri_to_bullets(state_name, type, group_cat)
+    pretext1 = vec_to_bullets(state_name, type, group_cat, "Census"), 
+    pretext2 = vec_to_bullets(state_name, type, group_cat, "PPUS_Parole"), 
+    pretext3 = vec_to_bullets(state_name, type, group_cat, "PPUS_Probation"), 
   ) |> 
   ungroup() |> 
   mutate(
-    pretext =   paste0(
-      "<div class = 'notetxt' style = 'text-align: left;'>",
-      demo_rri_text, 
-      "</div>"
-    ), 
     posttext = case_when(
       group_cat == "sex_gender"     ~ paste0(state_notes, demo_posttext_source, sg_static_note),
       group_cat == "race_ethnicity" ~ paste0(state_notes, demo_posttext_source, re_static_note)
     )
   ) |> 
-  ungroup() |> 
   select(-state_notes)
 
 admin$save_rds_twice(svii_demo_text, save_to_sp = save_RDS_to_sharepoint)

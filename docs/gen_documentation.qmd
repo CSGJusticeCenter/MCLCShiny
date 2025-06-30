@@ -204,13 +204,6 @@ when looking at **aggregate** data there are only 17 instances of a 0 value.
 
 Originally, code that replaced 0's with NA was a part of the data prep for the shiny app (`2a_import_survey.R`).  This code has been removed because it's not longer needed: (1) converting the necessary 0's to NA's in the old MCLC 2018-2021 data is already completed in [50_state_revocations/2024_survey/survey/admin.R](https://github.com/CSGJusticeCenter/50_state_revocations/blob/cc36061888e519af02beb84fc90f736a99d9709f/2024_survey/survey/admin.R#L82-L107) and (2) values of 0 that will go into the aggregate version of the app have alrady been check (text above).  
 
-::: {.callout-note}
-## Demographic Breakdown App: Need Systematic Review of 0's
-- I remember some state providing a table where sometimes where were blanks and sometimes 0's
-- will want to review data to make sure it 'make sense' for each of the demographic breakdowns 
-- race/ethnicity breakdowns will be the most likely to have issues, as certain categories have very low counts 
-:::
-
 
 ### Links 
 
@@ -583,15 +576,15 @@ Download data sets from census: [census.gov/programs-surveys/popest/datasets/202
 Link to [Probation and Parole in the United States, 2022](https://www.ojp.gov/library/publications/probation-and-parole-united-states-2022) report on BJS's website.  
 
 
-## Highlight Cells 
+## Highlight Cells - Compare to Population Percentage 
 
 In the table, we want to highlight some of the SVII survey data when: 
 
 - the SVII percentage is greater than comparison population percentage for a given group 
 - this calculated/determined by: 
   (1) rounding the percentages to the nearest 1% (so don't highlight 8.1% > 8.0% when both are rounded and displayed as 8%) 
-  (2) calculated relative rate (metric_perc/comparison_population_perc) 
-  (3) if relative rate is > 1 --> highlight cell  
+  (2) calculated `comp_to_pop_perc` (metric_perc/comparison_population_perc) 
+  (3) if `comp_to_pop_perc` > 1 --> highlight cell  
 - exclude highlighting if the unknown category of the comparison population is > 15% (too much unknown to make a meaningful comparison) 
 
 
@@ -607,5 +600,93 @@ In the table, we want to highlight some of the SVII survey data when:
 | Comparison Population | 25% | 30% | 25% | 20% | 
 | SVII Metric | 32% | 34% | 34% | - | 
 : Do not highlight cells if comparison population unknown group is greater than 15% 
+
+
+## RRI - Comparison Population   
+
+Relative Rate Index with Comparison Group
+
+
+1. Calculate rate: group_metric_n / group_comp_population_n 
+2. Calculate RRI: rate/rate[group == White/Female]
+
+
+Put text above each of the tables: 
+
+
+<span style='font-weight: bold; font-size: 1.5em;'>[GROUP_TEXT] are [VAL] likely to be [TYPE_TEXT] [METRIC_TEXT] than [COMP_GROUP]</span> 
+
+Only do for the r/e and s/g categories listed below (don't do for Other r/e category or Unknown categories)
+
+If no RRI's can be calculated:  
+
+***[STATE] did not have sufficent demographic data to determine any relative rates.*** 
+
+
+::: {.grid} 
+
+::: {.g-col-4}
+
+| `group` | [GROUP_TEXT] | 
+|:---|:----|
+|`White` | White people | 
+|`Black`  | Black people |  
+|`Hispanic` | Hispanic people| 
+|`AIAN` | American Indian people| 
+|`Asian` |Asian people|
+|`NHPI` | Pacific Islander people|
+|`Male` | Males| 
+|`Female` | females\* | 
+
+\*Note: females are not capitalized, the word 'Males' is capitalized because it's at the front of the sentence 
+
+:::
+
+::: {.g-col-4}
+
+| `group_cat` | [COMP_GROUP] | 
+|:--------|:----------|
+| race_ethnicity | White people | 
+| sex_gender | females | 
+  
+  
+| `rri` | [VAL] | 
+|:--------|:------|
+| `rri > 1` | `rri`: "#.# times more" |
+| `rri < 1` | `1-rri`: "#% less" | 
+  
+  
+| `data_type` | [TYPE_TEXT] 
+|:-----|:-------------|
+| Admissions | admitted | 
+| Population | incarcerated | 
+
+:::
+
+::: {.g-col-4}
+
+| `metric_abbr` | [METRIC_TEXT] 
+|:-----|:-------------|
+| total    |  "" |  
+| par      | " for a parole violation" 
+| tech par | " for a technical offense parole violation" | 
+| new par  | " for a new offense parole violation" | 
+| prob     | " for a probation violation" | 
+| tech prob| " for a technical offense probation violation" | 
+| new prob | " for a new offense probation violation" | 
+
+
+:::
+
+
+:::
+
+
+For Parole and Probation sections 
+
+- default is to shown par/prob RRI's 
+- if par/prob is NOT available but tech_par/tech_prob is available --> show tech_par/tech_prob RRI's 
+- if par/prob AND tech_par/tech_prob is NOT available but new_par/new_prob is available --> show new_par/new_prob
+
 
 

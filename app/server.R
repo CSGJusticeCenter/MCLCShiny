@@ -848,8 +848,16 @@ server <- function(input, output, session) {
 
   # 4 pretext ---------------------------------------------------------------------
   
-  output$demo_pretext <-   renderUI({
-    HTML(demo_text()$pretext)
+  output$demo_pretext1 <-   renderUI({
+    HTML(demo_text()$pretext1)
+  })
+  
+  output$demo_pretext2 <-   renderUI({
+    HTML(demo_text()$pretext2)
+  })
+  
+  output$demo_pretext3 <-   renderUI({
+    HTML(demo_text()$pretext3)
   })
 
   # 4 tables (demographics) --------------------------------------------------------
