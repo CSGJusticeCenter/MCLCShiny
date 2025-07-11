@@ -1,94 +1,72 @@
-#######################################
-# Project: MCLCShiny
-# File: dataframes.R
-# Authors: Mari Roberts
-# Date last updated: July 19, 2023 (MAR)
-# Description:
-#    Load data files created in import.R, assign colors, and fonts
-#######################################
 
-#______________________________________________________
-# read in R data
+# read data frames of data (count/change) and text #############################
 # must be in local repo to publish app
-#______________________________________________________
 
 states <- state.name
 
-load(file = "data/adm_pop_long.rds")
-load(file = "data/mclc_explorer.rds")
-load(file = "data/mclc_explorer_table.rds")
-load(file = "data/vb_adm_pop.rds")
-load(file = "data/state_table.rds")
-load(file = "data/parole_table.rds")
-load(file = "data/probation_table.rds")
-load(file = "data/hex_gj.rds")
-load(file = "data/parole_notes.rds")
-load(file = "data/probation_notes.rds")
-load(file = "data/parole_asterisks_notes.rds")
-load(file = "data/probation_asterisks_notes.rds")
-load(file = "data/additional_notes.rds")
-load(file = "data/csg.rds")
+obj_names <-  c(
+  # data (counts/changes/etc)  
+  "svii_explorer", 
+  "svii_explorer_table", 
+  "svii_table", 
+  "svii_par", 
+  "svii_prob", 
+  "svii_valbox", 
+  "svii_download", 
+  "svii_yr", 
+  # text - state overview notes 
+  "formatted_notes", 
+  "missingness_sentences" 
+)
 
-load(file = "data/missingness_sentences.rds")
-load(file = "data/disparities_definitions.rds")
+for (x in obj_names){
+  df <- readRDS(paste0("data/", x, ".rds")) |> tibble::as_tibble()
+  assign(x, df)
+  rm(df)
+  rm(x)
+}
 
-load(file = "data/nt_na_adm.rds")
-load(file = "data/nt_na_pop.rds")
-load(file = "data/nt_not_na_adm.rds")
-load(file = "data/nt_not_na_pop.rds")
 
-load(file = "data/parole_na_adm.rds")
-load(file = "data/parole_na_pop.rds")
-load(file = "data/parole_not_na_adm.rds")
-load(file = "data/parole_not_na_pop.rds")
+# read highchart objects #######################################################
 
-load(file = "data/probation_na_adm.rds")
-load(file = "data/probation_na_pop.rds")
-load(file = "data/probation_not_na_adm.rds")
-load(file = "data/probation_not_na_pop.rds")
+hc_obj <-  c(
+  "natl_hex_lst", 
+  "state_area_lst", 
+  "state_bar_lst" 
+)
 
-rridata <- readRDS("data/NCRP_RRI_tables.RDS")
+for (x in hc_obj){
+  df <- readRDS(paste0("data/", x, ".rds")) 
+  assign(x, df)
+  rm(df)
+  rm(x)
+}
 
-# consistent state note on each state report
-state_note <- c('Whether an incarceration is the result of a new offense or technical violation is often difficult and problematic to delineate, even in states with available data. Most states do not consider a supervision violation to be the result of a new offense unless a new felony conviction is present, meaning technical violations may include misdemeanor convictions or new arrests. "Prison" includes county jail if the county was reimbursed by the state for a person’s incarceration, which occurs in some, but not all, states. Supervision violations may include revocations (i.e., unsuccessful terminations of a supervision and completion of a sentence in prison or jail) or short-term sanctions (i.e., probation or parole jurisdiction is maintained and the person is incarcerated for a short period of time in prison or jail). Not all states impose or include short-term sanctions in their count of supervision violations.')
+# hex map notes ################################################################
 
-#______________________________________________________
-# read in highcharts
-# must be in local repo to publish app
-#______________________________________________________
+# link to another shiny tab 
+# https://stackoverflow.com/questions/34315485/linking-to-a-tab-or-panel-of-a-shiny-app
+hex_map_note <- glue(
+  "Use caution when comparing years and states. In some states, data between \\
+  different years cannot be compared due to changes in data availability, \\
+  definitions, or methods. In some states, metrics represent only partial data. \\
+  For instance, no probation data is included in the count of total technical violations. \\
+  See <a href = '#statedashboard'>state reports</a> for details about the data used for each state."
+)
 
-load(file = "data/adm_pop_maps.rds")
 
-load(file = "data/all_state_area_adm.rds")
-load(file = "data/all_state_area_pop.rds")
-load(file = "data/all_state_bar_adm.rds")
-load(file = "data/all_state_bar_pop.rds")
-load(file = "data/parole_bar_adm.rds")
-load(file = "data/parole_bar_pop.rds")
-load(file = "data/probation_bar_adm.rds")
-load(file = "data/probation_bar_pop.rds")
+# standard state note to display for all states ###############################
 
-#______________________________________________________
-# read in reactable tables
-# must be in local repo to publish app
-#______________________________________________________
 
-# not working because of library issue (htmlwidgets)
-load(file = "data/state_reactable_adm.rds")
-load(file = "data/state_reactable_pop.rds")
-load(file = "data/parole_reactable_adm.rds")
-load(file = "data/parole_reactable_pop.rds")
-load(file = "data/probation_reactable_adm.rds")
-load(file = "data/probation_reactable_pop.rds")
+standard_state_note_header <- "Key Questions to Consider"
 
-#______________________________________________________
-# colors TBD
-#______________________________________________________
+standard_state_note_text <- paste0(
+  "<br>", # match break before checked/unchecked boxes in state notes 
+  "<ol>", 
+  "<li>How are state supervision policies contributing to changes in prison admissions from supervision violations, and what policy and practice changes can be made to address increases in prison admissions and populations (if needed)? </li>", 
+  "<li>What investments are being made in community-based programming and services that can provide alternatives to incarceration for technical supervision violations?</li>", 
+  "<li>How is the state measuring the effectiveness of policies aimed at reducing supervision violations and their impact on prison populations?</li>", 
+  "<li>    How do this state's data and policies compare to states with similar characteristics, and what best practices can be adopted from states that have been successful in reducing the number of people readmitted to prison from community supervision?</li>",
+  "</ol>"
+)
 
-source("colors.R")
-
-#______________________________________________________
-# fonts
-#______________________________________________________
-
-default_fonts <- c("Graphik")
