@@ -83,7 +83,7 @@ start
 paste("Should be done by:", format(start+120*60, "%X"))
 my_log <- file("logs/shiny_prep_log_hc_html.txt") # File name of output log
 # since HTML/PNG takes so long, can choose to only update for certain states 
-these_states <- "NJ" #state.abb
+these_states <- state.abb
 state_string <- these_states
 # always update hex maps (if one state changes, will affect hex map)
 # filter area/bar charts to only include states listed above 
