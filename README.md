@@ -10,7 +10,7 @@ Links current live version on shinyapps.io: `mclc_comms`
 
 App show on CSG Website: [Supervision Violations and their Impact on Incarceration](https://projects.csgjusticecenter.org/supervision-violations-impact-on-incarceration/)
 
-Additional Documentation: `docs/gen_documentation.qmd`; resulting html on SharePoint: [50 State Revocations Project/MCLC Shiny App/SVII_Shiny_Documentation.html](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2FMCLC%20Shiny%20App%2FSVII%5FShiny%5FDocumentation%2Ehtml&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98&parent=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2FMCLC%20Shiny%20App)
+Additional Documentation: [`docs/gen_documentation.qmd`](https://github.com/CSGJusticeCenter/MCLCShiny/blob/trunk/docs/gen_documentation.qmd); resulting html on SharePoint: [50 State Revocations Project/MCLC Shiny App/SVII_Shiny_Documentation.html](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?ct=1652815580832&or=Teams%2DHL&ga=1&id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2FMCLC%20Shiny%20App%2FSVII%5FShiny%5FDocumentation%2Ehtml&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98&parent=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2FMCLC%20Shiny%20App)
 
 
 # Staff 
@@ -83,7 +83,7 @@ SharePoint folders listed below are sub folders of [JC Research - Documents/50 S
   * *minimal information/files in this folder*; likely related to covid issues -- appears there was no data collection from states housed in this folder 
 - survey code: [cc_survey](https://github.com/CSGJusticeCenter/cc_survey) 
 
-## Alpha $\alpha$: Published in 2019
+## Alpha $\alpha$: Publish in 2019
 *Confined and Costly (CC)* 
 
 |   |         |
