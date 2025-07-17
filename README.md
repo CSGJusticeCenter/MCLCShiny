@@ -16,7 +16,7 @@ Additional Documentation: `docs/gen_documentation.qmd`; resulting html on ShareP
 
 # Staff 
 
-Data Collection Cycle 2024/Publish 2025: Seba, Martha, Jess GB, and Josh  
+Data Collection Cycle 2024/Publish 2025: Martha, Jess GB; (Seba & Josh until May 2025) 
 Data Collection Cycle 2022/Publish 2024: Mari, Angie, Josh, Martha   
 
 
@@ -34,7 +34,8 @@ Data Collection Cycle 2022/Publish 2024: Mari, Angie, Josh, Martha
 - Survey code: [50_state_revocations/2024_survey](https://github.com/CSGJusticeCenter/50_state_revocations/tree/main/2024_survey)
 - App code: [MCLCShiny](https://github.com/CSGJusticeCenter/MCLCShiny) repository
 - Publish Report & Webtool: *will be the same url; hasn't been updated yet* [projects.csgjusticecenter.org/supervision-violations-impact-on-incarceration](https://projects.csgjusticecenter.org/supervision-violations-impact-on-incarceration/)
-  * app v3.0.00 expected to be published June 2025 (aggregate counts only) 
+  * app v3.0.00 expected to be published July 2025 (aggregate counts only) 
+  * app v4.0.00 expected to be published by Dec 2025 (demographic tab on state dashboard with race/ethnicity & sex/gender)
   * Includes 2018-2023 data 
 
 
@@ -137,9 +138,9 @@ After creating a clone, there are a few other steps you will need to take in ord
 
 * Download necessary packages and versions, `renv::restore()`  
 * Run the `prep/0_shiny_prep.R` file to create items need for app by doing the following steps
-  - data prep (<1min)
+  - data prep (1-2 min)
     * description: import and prepare data for app 
-    * scripts: `2a_import_survey` and `2b_import_text` 
+    * scripts: `2a_import_survey`, `2b_import_text`, and `2c_import_demo.R`
     * log file: shiny_prep_log_**dataprep**.txt
     * outputs: saves rds files within repo and on SharePoint 
   - create documentation file and put version on SharePoint 
@@ -153,7 +154,7 @@ After creating a clone, there are a few other steps you will need to take in ord
     * scripts: `3a_highchart_fnc` and `3c_highchart_html`
     * log file: shiny_prep_log_**hc_html**.txt  
     * outputs: saves html files within repo only 
-    * *huge disparity on the length of time to run this code, depends on machine bandwidth* 
+    * *huge disparity on the length of time to run this code, depends on machine bandwidth; its faster if you start shiny_prep with a new session of R* 
   - hc_pngs (~30min ) 
     * description: take the html objects create in previous step and take a screenshot and save as a pngs
     * scripts: `3a_highchart_fnc` and `3d_highchart_png`
