@@ -87,7 +87,7 @@ ui <- fluidPage(
         div( # HEx MAP 
           class = "row",
           align = "center",
-          div(class = "hidden-xs hidden-sm",
+          div(class = "hidden-xs hidden-sm", #hex map will be hidden on xs and sm widow (mobile) 
             #id = "hex-map",
             highchartOutput("hex_map", height = 600, width = "100%") |> svii_spinner()
           ) # end div 
@@ -97,7 +97,7 @@ ui <- fluidPage(
           align = "left",
           div(style = "font-family: Graphik;", HTML(hex_map_note)) # obj created in dataframes.R 
         ), # end column HEX MAP NOTE
-        div( # HEX MAP TABLE TITLE/HEADER
+        div( # TABLE TITLE
           class = "row",
           align = "center",
           div(
@@ -105,11 +105,11 @@ ui <- fluidPage(
             br(),  
             textOutput("selected_map_table")
           ) # end div 
-        ), # end column HEX MAP TABLE 
+        ), # end column TABLE TITLE 
         br(),
         # tags$head(tags$style(HTML("thead{color: #004270; font-size: 16px}"))),
         div(# HEX MAP TABLE 
-          class = "row", 
+          class = "row fixwidth", 
           align = "center",
           div(
             id = "reactable-table",
