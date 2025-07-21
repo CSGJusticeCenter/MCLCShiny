@@ -23,7 +23,8 @@ data <- read_csv(file.path(
   select(state_name, category = Category, color = ...12) |> 
   fill(color, .direction = "down") |> 
   mutate(
-    category = factor(category, levels = c("Staying Low", "Creeping Upward", "Back to Baseline", "Sharp Increase"))
+    category = factor(category, levels = c("Staying Low", "Creeping Upward", "Back to Baseline", "Sharp Increase")), 
+    category = fct_recode(category, `Creeping Upward to Baseline` = "Creeping Upward")
   ) 
 
 color_df <- data |> distinct(category, color) |> 
@@ -67,12 +68,12 @@ p1 <- plotdf |>
 p1
 
 ggsave(filename = file.path(this_path, 
-    "Data for main map 2025_fordesigner(CATEGORIES FOR V3)opt1.png"), 
+    "main_map_opt1.png"), 
     plot = p1, 
     width = 8, 
     height = 5.5)
 
-file.show(file.path(this_path, "Data for main map 2025_fordesigner(CATEGORIES FOR V3)opt1.png"))
+file.show(file.path(this_path, "main_map_opt1.png"))
 
 
 ## OPTION 2
@@ -110,12 +111,12 @@ p2
 
 
 ggsave(filename = file.path(this_path, 
-       "Data for main map 2025_fordesigner(CATEGORIES FOR V3)opt2.png"), 
+       "main_map_opt2.png"), 
        plot = p2, 
        width = 8, 
        height = 5.5)
 
-file.show(file.path(this_path, "Data for main map 2025_fordesigner(CATEGORIES FOR V3)opt2.png"))
+file.show(file.path(this_path, "main_map_opt2.png"))
 
 
 ## OPTION 3
@@ -166,12 +167,12 @@ p3
 
 
 ggsave(filename = file.path(this_path, 
-       "Data for main map 2025_fordesigner(CATEGORIES FOR V3)opt3.png"), 
+       "main_map_opt3.png"), 
        plot = p3, 
        width = 8, 
        height = 5.5)
 
-file.show(file.path(this_path, "Data for main map 2025_fordesigner(CATEGORIES FOR V3)opt3.png"))
+file.show(file.path(this_path, "main_map_opt3.png"))
 
 
 
@@ -225,11 +226,11 @@ p4
 
 
 ggsave(filename = file.path(this_path, 
-                            "Data for main map 2025_fordesigner(CATEGORIES FOR V3)opt4.png"), 
+                            "main_map_opt4.png"), 
        plot = p4, 
        width = 8, 
        height = 5.5)
 
-file.show(file.path(this_path, "Data for main map 2025_fordesigner(CATEGORIES FOR V3)opt4.png"))
+file.show(file.path(this_path, "main_map_opt4.png"))
 
 
