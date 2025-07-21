@@ -174,3 +174,62 @@ ggsave(filename = file.path(this_path,
 file.show(file.path(this_path, "Data for main map 2025_fordesigner(CATEGORIES FOR V3)opt3.png"))
 
 
+
+
+## OPTION 4
+
+p4 <- ggplot(plotdf) + 
+  #dummy legend for NA values, also add border (put first so can add other boarders onto it )
+  geom_sf(                                                      fill = NA,        aes(color = "NA")) + 
+  geom_sf(data = filter(plotdf, category == "Staying Low"), aes(fill = category), color = "#dedede") + 
+  geom_sf(data = filter(plotdf, category != "Staying Low"), aes(fill = category), color = "#8c8c8c") + 
+  geom_sf(data = filter(plotdf, is.na(category)),               fill = "#DEDEDE", color = "#8c8c8c") + 
+  scale_fill_manual(
+    values = c("#26456E", "#C7E8F5", "#FAEC71", "#D6C246"), 
+    name = NULL, 
+    guide = guide_legend(override.aes = list(color = "white"))
+  ) + 
+  geom_sf_text(
+    data = filter(plotdf, category != "Staying Low" | is.na(category)), 
+    aes(label = abbr_usps), 
+    color = "#333333", 
+    family = "Graphik", 
+    fontface = "bold", 
+  ) +
+  geom_sf_text(
+    data = filter(plotdf, category == "Staying Low"), 
+    aes(label = abbr_usps), 
+    color = "white", 
+    family = "Graphik", 
+    fontface = "bold", 
+  ) +
+  scale_color_manual( #dummy legend for NA color 
+    name = "   ", 
+    values = "#DEDEDE", # color four outline 
+    labels = 'N/A', 
+  ) +
+  guides(
+    fill  = guide_legend(order = 1, override.aes = list(color = "white"))
+    , color = guide_legend(override.aes = list(fill = "#DEDEDE"))
+  ) +
+  theme_void() + 
+  theme(
+    text = element_text(family = "Graphik"), 
+    legend.position = "top", 
+    # add this so don't have transparent background in png
+    plot.background = element_rect(fill = "white", color = "white")
+  )
+
+
+p4
+
+
+ggsave(filename = file.path(this_path, 
+                            "Data for main map 2025_fordesigner(CATEGORIES FOR V3)opt4.png"), 
+       plot = p4, 
+       width = 8, 
+       height = 5.5)
+
+file.show(file.path(this_path, "Data for main map 2025_fordesigner(CATEGORIES FOR V3)opt4.png"))
+
+
