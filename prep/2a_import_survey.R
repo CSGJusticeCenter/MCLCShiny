@@ -1,5 +1,5 @@
 
-save_RDS_to_sharepoint <- FALSE 
+save_RDS_to_sharepoint <- TRUE 
 
 
 box::use(

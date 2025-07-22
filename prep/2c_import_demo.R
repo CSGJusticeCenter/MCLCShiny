@@ -1,6 +1,6 @@
 
 
-save_RDS_to_sharepoint <- FALSE 
+save_RDS_to_sharepoint <- TRUE 
 
 
 box::use(
@@ -203,22 +203,47 @@ comp_census <- pop_state |>
 
 # PPUS DATA ##################################################################  
 
-# https://www.ojp.gov/library/publications/probation-and-parole-united-states-2022
+# https://www.ojp.gov/library/publications/probation-and-parole-united-states-2023
 # there is no 'supervision' by jurisdiction
 # parole + probation > supervision 
-# Table 1: Adults under community supervision, 2012-2022
-# Adults on Supervision at year end 2022: 3,668,800
-# Adults on Probation at year end 2022: 2,990,900
-# Adults on Parole at year end 2022: 698,800
-# probation (2,990,900) + parole (698,800) = 3,689,700 > supervision (3,668,800)
-# diff = 20,900; ~0.6% of reported supervision value 
+# Table 1: Adults under community supervision, 2013-2023
+# Adults on Supervision at year end 2023: 3,772,000
+# Adults on Probation at year end 2023: 3,103,400
+# Adults on Parole at year end 2023: 680,400
+# probation (3,103,400) + parole (680,400) = 3,783,800 > supervision (3,772,000)
+# diff = 11,800; ~0.3% of reported supervision value 
+# there are some states (ex. MN) where someone can be on BOTH prob & parole 
 
 
-
-# Appendix Table 09: Select characteristics of adults on probation, by jurisdiction, 2022
-# - jr_data_library/data/raw/bjs/ppus/ppus22/ppus22t09.csv
+# Appendix Table 10: Selected characteristics of adults on probation, by jurisdiction, 2023
+# - jr_data_library/data/raw/bjs/ppus/ppus23/ppus23t10.csv
 ppus_prob <- read_csv(
-  csg_sp_path("JR_data_library/data/raw/bjs/ppus/ppus22/ppus22at09.csv"), 
+  csg_sp_path("JR_data_library/data/raw/bjs/ppus/ppus23/ppus23at10.csv"), 
+  show_col_types = FALSE, 
+  skip = 11
+) |> 
+  select(
+    state = 2, 
+    aggregate = 3, 
+    Male = 4, 
+    Female = 5, 
+    unknown_sg = 6, 
+    notasked_sg = 7, 
+    White = 9, 
+    Black = 10, 
+    Hispanic = 11, 
+    Other = 12, 
+    unknown_re = 13, 
+    notasked_re = 14
+  ) |> 
+  mutate(across(everything(), as.character)) |> 
+  mutate(comparison_source = "PPUS_Probation")
+
+
+# Appendix Table 13: Selected characteristics of adults on parole, by jurisdiction, 2023
+# - jr_data_library/data/raw/bjs/ppus/ppus23/ppus23t13.csv
+ppus_par <- read_csv(
+  csg_sp_path("JR_data_library/data/raw/bjs/ppus/ppus23/ppus23at13.csv"), 
   show_col_types = FALSE, 
   skip = 11
 ) |> 
@@ -235,32 +260,10 @@ ppus_prob <- read_csv(
     `Unknown r/e` = 12
   ) |> 
   mutate(across(everything(), as.character)) |> 
-  mutate(comparison_source = "PPUS_Probation")
-
-# Appendix Table 13: Selected characteristics of adults on parole, by jurisdiction, 2022
-# - jr_data_library/data/raw/bjs/ppus/ppus22/ppus22t13.csv
-ppus_par <- read_csv(
-  csg_sp_path("JR_data_library/data/raw/bjs/ppus/ppus22/ppus22at13.csv"), 
-  show_col_types = FALSE, 
-  skip = 11
-) |> 
-  select(
-    state = 2, 
-    aggregate = 3, 
-    Male = 5, 
-    Female = 6, 
-    `Unknown s/g` = 7, 
-    White = 9, 
-    Black = 10, 
-    Hispanic = 11, 
-    Other = 12, 
-    `Unknown r/e` = 13
-  ) |> 
-  mutate(across(everything(), as.character)) |> 
   mutate(comparison_source = "PPUS_Parole")
 
 
-
+# combine probation and parole data 
 comp_ppus <- bind_rows(ppus_prob, ppus_par) |> 
   mutate(across(
     c(-state, -comparison_source), 
@@ -268,14 +271,36 @@ comp_ppus <- bind_rows(ppus_prob, ppus_par) |>
     # converts above listed into NA, converts <10 --> 10 
   )) |> 
   rowwise() |> 
+  # remove footnotes, to get clean state names 
   mutate(
     footnote_start = stringr::str_locate(state, "/")[[1]], 
     state_name = str_sub(state, 1, ifelse(is.na(footnote_start), -1, footnote_start-1)), 
   ) |> 
   ungroup() |> 
+  # only include 50 states 
   filter(state_name %in% state.name) |> 
   select(-state, -footnote_start) |> 
+  # combine Unknown/Not reported & Not asked into single variable (Unknown) 
+  # only for probation 
+  rowwise() |> 
+  mutate(
+    `Unknown s/g` = case_when(
+      comparison_source == "PPUS_Parole" ~ `Unknown s/g`, 
+      is.na(unknown_sg) & is.na(notasked_sg) ~ NA_real_, 
+      TRUE ~ sum(c(unknown_sg, notasked_sg), na.rm = TRUE)
+    ), 
+    `Unknown r/e` = case_when(
+      comparison_source == "PPUS_Parole" ~ `Unknown r/e`, 
+      is.na(unknown_re) & is.na(notasked_re) ~ NA_real_, 
+      TRUE ~ sum(c(unknown_re, notasked_re), na.rm = TRUE)
+    )
+  ) |> 
+  ungroup() |> 
+  # drop 2 variables that were combined into single unknown variable 
+  select(-c(unknown_re, notasked_re, unknown_sg, notasked_sg)) |> 
+  # pivot longer 
   pivot_longer(cols = -c(state_name, comparison_source), names_to = "group", values_to = "n") |> 
+  # assign group_category 
   mutate(
     group_cat = case_when(
       group %in% filter(demo_cat, group_cat == "race_ethnicity")$group ~ "race_ethnicity", 
@@ -283,6 +308,7 @@ comp_ppus <- bind_rows(ppus_prob, ppus_par) |>
       group == "aggregate" ~ "aggregate"
     )
   ) |> 
+  # calculate proportions for each state and demographic group 
   group_by(state_name, comparison_source) |>
   mutate(comp = n/n[group == "aggregate"]) |> 
   ungroup() |> 
@@ -664,8 +690,8 @@ census_link <- make_link(
 
 
 ppus_link <- make_link(
-  "https://bjs.ojp.gov/library/publications/probation-and-parole-united-states-2022", 
-  "Probation and Parole in the United States, 2022"
+  "https://bjs.ojp.gov/library/publications/probation-and-parole-united-states-2023", 
+  "Probation and Parole in the United States, 2023"
 )
 
 demo_highlight_desc <- paste0(
@@ -689,7 +715,8 @@ demo_posttext_source <- paste0(
     #"<br>", 
     "<li>State parole population data is from the BJS report ", ppus_link, ", Appendix Table 13</li>", 
     #"<br>", 
-    "<li>State probation population data is sourced from the BJS report ", ppus_link, ", Appendix Table 9</li>",  
+    "<li>State probation population data is sourced from the BJS report ", ppus_link, ", Appendix Table 10</li>", 
+    "<ul><li>The 'Unknown' category is a combination of the 'Unknown/not reported' and 'Not asked' columns in Appendix Table 10</li><ul>", 
     "</ol>", 
     demo_highlight_desc, 
     "<p>", 

@@ -560,7 +560,7 @@ Download data sets from census: [census.gov/programs-surveys/popest/datasets/202
 
 ## Parole/Probation Populations 
 
-- only available for 2022 at the moment
+- use 2023 data
 - only have 'White', 'Black', 'Hispanic', and 'Other' race categories 
 - PPUS survey collect more categories for race/ethnicity but report only provides these 4 categories when breaking out values by jurisdiction (by state) 
 - Parole population compared to parole violations & breakdowns 
@@ -568,12 +568,21 @@ Download data sets from census: [census.gov/programs-surveys/popest/datasets/202
 
 ### raw data files 
 
-- jr_data_library/data/raw/bjs/ppus/ppus22/ppus22t09.csv (Appendix Table 09: Select characteristics of adults on probation, by jurisdiction, 2022)
-- jr_data_library/data/raw/bjs/ppus/ppus22/ppus22t13.csv (Appendix Table 13: Selected characteristics of adults on parole, by jurisdiction, 2022)
+- jr_data_library/data/raw/bjs/ppus/ppus23/ppus23t10.csv (Appendix Table 10: Selected characteristics of adults on probation, by jurisdiction, 2023)
+- jr_data_library/data/raw/bjs/ppus/ppus23/ppus23t13.csv (Appendix Table 13: Selected characteristics of adults on parole, by jurisdiction, 2023)
+
+::: {.callout-note}
+## Unknown/Not Reported + Not Asked
+In the 2023 PPUS report, a new column was added to the **Selected characteristics of adults on probation** table.  
+The parole table (and previous versions of the probation table) only had a single Unknown column (called "Unknown/not reported").  The 2023 reported add a column to the probation table called "Not asked".  
+
+In order to make the data consistent for both parole and probation; the probation table take the "Unkown/not reported" and combines it with the "Not asked" to get a single Unknown value for demographic breakouts.  
+
+:::
 
 ### Links 
 
-Link to [Probation and Parole in the United States, 2022](https://www.ojp.gov/library/publications/probation-and-parole-united-states-2022) report on BJS's website.  
+Link to [Probation and Parole in the United States, 2023](https://www.ojp.gov/library/publications/probation-and-parole-united-states-2023) report on BJS's website.  
 
 
 ## Highlight Cells - Compare to Population Percentage 
