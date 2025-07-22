@@ -36,9 +36,9 @@ SharePoint folders listed below are sub folders of [JC Research - Documents/50 S
 
 |   |         |
 |:-----|:---------------|  
-| Published Product | *will be the same url; hasn't been updated yet*<br>[Report and Webtool: Supervision Violations and their Impact on Incarceration](https://projects.csgjusticecenter.org/supervision-violations-impact-on-incarceration/) | 
+| Published Product | [Report and Webtool: Supervision Violations and their Impact on Incarceration](https://projects.csgjusticecenter.org/supervision-violations-impact-on-incarceration/) | 
 | Data Years Included | 2018-2023 | 
-| Releases | app v4.0.00, expected by Dec 2025 (demographic tab on state dashboard)<br>app v3.0.00, expected by July 2025 (aggregate counts only)| 
+| Releases | app v4.0.00, expected by Dec 2025, demographic tab on state dashboard<br>[app v3.0.00, July 2025, aggregate counts only](https://github.com/CSGJusticeCenter/MCLCShiny/releases/tag/v3.0.00)| 
 | Data Collection Time frame | June 2024 - February 2025 |  
 | Requested Data | 2022 and 2023: supervision data (demographic breakouts of data), cost of incarceration, also request discretionary parole data which was used on different project | 
 | Data Collection Format | ask states to submit data via email in format of their choosing<br>* have multiple different file types and in many cases multiple files for each state<br>* have unique import file for each state since each state has a different way of providing data | 
