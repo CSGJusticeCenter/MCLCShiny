@@ -335,13 +335,11 @@ ui <- fluidPage(
                 # ), 
                 inline = TRUE
               ), 
-              div(class = "table-title", "Overall"), 
+              htmlOutput("demo_pretext0"), 
               htmlOutput("demo_pretext1"), 
               div(id = "reactable-table", reactableOutput("demo_table_1")), 
-              div(class = "table-title", "Parole"), 
               htmlOutput("demo_pretext2"), 
               div(id = "reactable-table", reactableOutput("demo_table_2")), 
-              div(class = "table-title", "Probation"), 
               htmlOutput("demo_pretext3"), 
               div(id = "reactable-table", reactableOutput("demo_table_3")),
               br(), 
@@ -355,90 +353,6 @@ ui <- fluidPage(
       ) # div row app-body 
     ), # tabPanel: STATE TABS 
     
-    # DOWNLOAD DATA ############################################################
-    tabPanel("downloaddata",
-      # download data header ---------------------------------------------------
-      div(class = "header",
-        div(class = "row fixwidth", # this is REQUIRED to remove extra spacing
-          column( # SELECT STATE(S)
-            width = 3, 
-            align = "center",
-            class = "input-col",
-            labeled_input('input-btn', "",
-              pickerInput(inputId = 'download_state',
-                width = "100%",
-                choices = NULL,
-                selected = NULL,
-                multiple = TRUE,
-                div(style = "font-weight: bold", "Select State(s)"),
-                options = list(`actions-box` = TRUE, style = "picker-style")
-              ) #pickerInput
-            ) # labeled_input 
-          ), # column: SELECT STATES
-          column( # SELECT METRIC(S)
-            width = 3, 
-            align = "center", 
-            class = "input-col",
-            labeled_input('input-btn', "",
-              pickerInput(inputId = 'download_metric',
-                width = "100%",
-                choices = NULL,
-                selected = NULL,
-                multiple = TRUE,
-                div(style = "font-weight: bold", "Select Metric(s)"),
-                options = list(`actions-box` = TRUE, style = "picker-style")
-              ) #pickerInput 
-            ) #labeled_input
-          ), # column: SELECT METRIC(S)
-          column( # SELECT YEAR(S)
-            width = 3, 
-            align = "center", 
-            class = "input-col",
-            labeled_input('input-btn', "",
-              pickerInput(inputId = 'download_year',
-                width = "100%",
-                choices = NULL,
-                selected = NULL,
-                multiple = TRUE,
-                div(style = "font-weight: bold", "Select Year(s)"), 
-                options = list(`actions-box` = TRUE, style = "picker-style")
-              ) #pickerInput
-            ) #labeled_input 
-          ), # column: SELECT YEAR(S)
-          column( # DOWNLOAD DATA BUTTON 
-            width = 3, 
-            align = "center", 
-            class = "input-col",
-            downloadButton(outputId = 'save_data', "Download Data", class = "download-btn-lg")
-          ) # column: DOWNLOAD DATA BUTTON 
-        ) # div row fixwidth
-      ), # div header
-      br(),
-      
-      # download data app body ---------------------------------------------------
-      div(class = "row app-body", 
-        div(
-          class = "row fixwidth", 
-          align="center", 
-          style = "max-width: 790px !important;", # table has a min width of 790px 
-          div(id = "download-title", "Download Data"), 
-          br(),
-          div(
-            id = "download-info",
-            "To understand the impact of community supervision
-            (i.e., probation, parole, post-release supervision) on state prison populations,
-            The Council of State Governments Justice Center surveyed corrections
-            leaders in all 50 states. This project was supported by Arnold Ventures and
-            produced in partnership with the Correctional Leaders Association.
-            Resulting data spans 5 years—from 2018 to 2023—and demonstrate how the number
-            of people sent to prison for supervision violations changed."
-          ), 
-          br(),
-          div(id = "selected-download-table", reactableOutput("selected_download_table"))
-        ), # end div row fixwidth 
-        br(), br()
-      ) # end div: row app body 
-    ) # end tabPanel: download data 
 
 # GLOBAL END (FOOTER) ######################################################
 )) # end navbarPage<fluidPage
