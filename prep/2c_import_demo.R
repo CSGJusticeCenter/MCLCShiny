@@ -434,6 +434,41 @@ svii_demo <- svii_demo_prep2 |>
 # save in prep folder as it's needed to create demo tab outputs  
 saveRDS(svii_demo, "prep/svii_demo.rds")
 
+
+# export csv of RRI's 
+svii_demo |> 
+  # join with demo categories to get set order 
+  left_join(demo_cat, by = join_by(group, group_cat)) |> 
+  mutate(
+    group = fct_reorder(factor(group), group_order), 
+  ) |> 
+  arrange(state_name, data, group) |> 
+  select(state_name, state_abbr, data, group, rri) |> 
+  # filter out White/Female (comparison groups) 
+  # filter out Other/Unknown/Diverse categories (not showing RRI's)
+  filter(!group %in% c(
+    "White", "Female", 
+    "Other", "Unknown r/e", "Unknown s/g", "Diverse")
+  ) |> 
+  mutate(
+    # round RRI's to 2 decimals
+    rri = round(rri, digits = 2), 
+    # adjust group names to match table headers 
+    # table headers are adjusted using a function in the app
+    group =   stringr::str_replace_all(group, c(
+      "AIAN" = "American Indian",
+      "NHPI" = "Pacific Islander",
+      "Two" = "Multiple"
+    ))
+  ) |> 
+  pivot_wider(names_from = group, values_from = rri) |> 
+  readr::write_csv(file = file.path(admin$sp_data, "svii_rri.csv"))
+
+
+
+
+
+
 # save version on sp but don't save on repo; don't need to use in app 
 admin$save_rds_twice(svii_demo, save_to_repo = FALSE, save_to_sp = save_RDS_to_sharepoint)
 
