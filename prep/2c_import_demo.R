@@ -582,6 +582,7 @@ demo_rri_text_prep <- svii_demo |>
       group == "AIAN" ~ "American Indians", 
       group == "Asian" ~ "Asians", 
       group == "NHPI" ~ "Pacific Islanders", 
+      group == "Two" ~ "Multiracial people", 
       group == "Male" ~ "Males", 
       group == "Female" ~ "females" 
     ), 
