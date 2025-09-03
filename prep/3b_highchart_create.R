@@ -1,4 +1,6 @@
 
+save_RDS_to_sharepoint <- TRUE 
+
 # assumes 3a_highchart_fnc has been run 
 
 # NATL HEX MAPS DISPLAY ########################################################
@@ -19,7 +21,7 @@ natl_hex_lst  <-
     }) #end of lev2
   }) #end of lev1
 
-admin$save_rds_twice(natl_hex_lst)
+admin$save_rds_twice(natl_hex_lst, save_to_sp = save_RDS_to_sharepoint)
 
 
 
@@ -38,7 +40,7 @@ state_area_lst <-
       }) #end of lev2
     }) #end of lev2=1
 
-admin$save_rds_twice(state_area_lst)
+admin$save_rds_twice(state_area_lst, save_to_sp = save_RDS_to_sharepoint)
 
 
 # STATE BAR DISPLAY ############################################################
@@ -60,11 +62,11 @@ state_bar_lst <-
       }) #end of lev2
     }) #end of lev1
 
-admin$save_rds_twice(state_bar_lst)
+admin$save_rds_twice(state_bar_lst, save_to_sp = save_RDS_to_sharepoint)
 
 
 
-
+rm(save_RDS_to_sharepoint)
 
 
 

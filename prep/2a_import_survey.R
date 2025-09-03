@@ -632,3 +632,7 @@ svii_download <- svii_agg |>
   mutate(across(c(state, year), as.character)) 
 
 admin$save_rds_twice(svii_download, save_to_sp = save_RDS_to_sharepoint)
+
+
+
+rm(save_RDS_to_sharepoint)

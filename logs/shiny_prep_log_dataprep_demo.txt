@@ -1,5 +1,7 @@
 [1] "== DATA PREP =========================================================="
-[1] "Last run Mon Jul 28, 2025 at 14:05:07 CDT"
+[1] "Last run Wed Sep  3, 2025 at 13:09:14 CDT"
+
+> save_RDS_to_sharepoint <- TRUE 
 
 > box::use(
 +   ./box/admin, 
@@ -21,9 +23,9 @@
 +     c(probation_metrics, parole_metrics), 
 +     ~paste0("<p class = 'statet ..." ... [TRUNCATED] 
 
-> admin$save_rds_twice(formatted_notes)
-G3;2025-07-28 14:05:08 CDT-- export formatted_notes to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/formatted_notes.rds
-gG3;2025-07-28 14:05:08 CDT-- export formatted_notes to: app/data/formatted_notes.rds
+> admin$save_rds_twice(formatted_notes, save_to_sp = save_RDS_to_sharepoint)
+G3;export formatted_notes to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/formatted_notes.rds
+gG3;export formatted_notes to: app/data/formatted_notes.rds
 g
 > # MISSING-NESS NOTES -----------------------------------------------------------
 > # Reformat data about probation and parole being abolished
@@ -31,10 +33,12 @@
 New names:
 • `` -> `...9`
 
-> admin$save_rds_twice(missingness_sentences)
-G3;2025-07-28 14:05:08 CDT-- export missingness_sentences to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/missingness_sentences.rds
-gG3;2025-07-28 14:05:08 CDT-- export missingness_sentences to: app/data/missingness_sentences.rds
-g[1] "-- 2c_import_demo -----------------------------------------------------"
+> admin$save_rds_twice(missingness_sentences, save_to_sp = save_RDS_to_sharepoint)
+G3;export missingness_sentences to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/missingness_sentences.rds
+gG3;export missingness_sentences to: app/data/missingness_sentences.rds
+g
+> rm(save_RDS_to_sharepoint)
+[1] "-- 2c_import_demo -----------------------------------------------------"
 
 > save_RDS_to_sharepoint <- TRUE  
 
@@ -59,7 +63,7 @@ New names:
 > 
 > # raw data files
 > # - jr_data_library/data/raw/census/pep/sc- .... [TRUNCATED] 
-indexing sc-est2023-alldata6.csv [================================================-----------------------------------------------------------------------------------------------------------------------------] 2.15GB/s, eta:  0sindexing sc-est2023-alldata6.csv [===========================================================================================================================================================================] 589.76MB/s, eta:  0s                                                                                                                                                                                                                                   indexing sc-est2023-alldata6.csv [===========================================================================================================================================================================] 581.46MB/s, eta:  0s                                                                                                                                                                                                                                   
+indexing sc-est2023-alldata6.csv [========================--------------------------------------------------------------------------------------] 2.15GB/s, eta:  0sindexing sc-est2023-alldata6.csv [============================================================================================================] 622.98MB/s, eta:  0s                                                                                                                                                                    
 > # function to clean and reshape from wide to long
 > # right now each column is a year of estimates, but we want years to be rows
 > # this will work  .... [TRUNCATED] 
@@ -105,7 +109,7 @@ New names:
 > # PPUS DATA ##################################################################  
 > 
 > # https://www.ojp.gov/library/publications/probation-and-parol .... [TRUNCATED] 
-indexing ppus23at10.csv [====================================================================================================================================================================================] 564.95MB/s, eta:  0s                                                                                                                                                                                                                                   New names:
+indexing ppus23at10.csv [=====================================================================================================================] 618.76MB/s, eta:  0s                                                                                                                                                                    New names:
 • `` -> `...2`
 • `Unknown/not reported` -> `Unknown/not reported...6`
 • `Not asked/c` -> `Not asked/c...7`
@@ -115,7 +119,7 @@ New names:
 
 > # Appendix Table 13: Selected characteristics of adults on parole, by jurisdiction, 2023
 > # - jr_data_library/data/raw/bjs/ppus/ppus23/ppus23t13.cs .... [TRUNCATED] 
-indexing ppus23at13.csv [====================================================================================================================================================================================] 796.70MB/s, eta:  0s                                                                                                                                                                                                                                   New names:
+indexing ppus23at13.csv [=====================================================================================================================] 818.23MB/s, eta:  0s                                                                                                                                                                    New names:
 • `` -> `...2`
 • `Unknown/not reported` -> `Unknown/not reported...6`
 • `` -> `...7`
@@ -188,9 +192,14 @@ New names:
 > # save in prep folder as it's needed to create demo tab outputs  
 > saveRDS(svii_demo, "prep/svii_demo.rds")
 
+> # export csv of RRI's 
+> svii_demo |> 
++   # join with demo categories to get set order 
++   left_join(demo_cat, by = join_by(group, group_cat)) |>  .... [TRUNCATED] 
+wrote 1.20kB in  0s, 80.02MB/s                                                                                                                                                                  wrote 2.15GB in  0s, 2.15GB/s                                                                                                                                                                  
 > # save version on sp but don't save on repo; don't need to use in app 
 > admin$save_rds_twice(svii_demo, save_to_repo = FALSE, save_to_sp = save_RDS .... [TRUNCATED] 
-G3;2025-07-28 14:05:12 CDT-- export svii_demo to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_demo.rds
+G3;export svii_demo to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_demo.rds
 g
 > display_data_text <- svii_demo |> 
 +   distinct(type, metric_abbr, data_abbr, data) |> 
@@ -213,8 +222,8 @@ New names:
 +     comp_census                                                |> mutate(metric_abbr = "a tot ..." ... [TRUNCATED] 
 
 > admin$save_rds_twice(svii_demo_table_prep, save_to_sp = save_RDS_to_sharepoint)
-G3;2025-07-28 14:05:12 CDT-- export svii_demo_table_prep to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_demo_table_prep.rds
-gG3;2025-07-28 14:05:12 CDT-- export svii_demo_table_prep to: app/data/svii_demo_table_prep.rds
+G3;export svii_demo_table_prep to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_demo_table_prep.rds
+gG3;export svii_demo_table_prep to: app/data/svii_demo_table_prep.rds
 g
 > # TEXT -----------------------------------------------------------------------
 > 
@@ -279,7 +288,9 @@ New names:
 +   group_cat = c("race_ethnicity", "sex ..." ... [TRUNCATED] 
 
 > admin$save_rds_twice(svii_demo_text, save_to_sp = save_RDS_to_sharepoint)
-G3;2025-07-28 14:05:55 CDT-- export svii_demo_text to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_demo_text.rds
-gG3;2025-07-28 14:05:55 CDT-- export svii_demo_text to: app/data/svii_demo_text.rds
-g[1] "End run Mon Jul 28, 2025 at 14:05:55 CDT"
-Time difference of 48.08821 secs
+G3;export svii_demo_text to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_demo_text.rds
+gG3;export svii_demo_text to: app/data/svii_demo_text.rds
+g
+> rm(save_RDS_to_sharepoint)
+[1] "End run Wed Sep  3, 2025 at 13:09:58 CDT"
+Time difference of 43.40772 secs

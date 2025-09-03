@@ -948,10 +948,4 @@ svii_demo_text <- tidyr::crossing(
 admin$save_rds_twice(svii_demo_text, save_to_sp = save_RDS_to_sharepoint)
 
 
-
-
-
-
-
-
-
+rm(save_RDS_to_sharepoint)
