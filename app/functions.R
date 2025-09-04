@@ -151,7 +151,8 @@ demo_table_header <- function(text){
     "Unknown r/e" = "Unknown", 
     "AIAN" = "American Indian", 
     "NHPI" = "Pacific Islander", 
-    "Two" = "Multiple"
+    "Two" = "Multiple", 
+    "Asian" = "Asian American"
   ))
   
 }
@@ -169,9 +170,9 @@ demo_reactable <- function(df, metric_header = "Metric") {
     arrange(group, metric_abbr) |> 
     mutate(
       data = case_when(
-        word(metric_abbr, 2, 3) == "total comp" ~ paste0(data, "<sup>1</sup>"), 
-        word(metric_abbr, 2, 3) == "par comp"   ~ paste0(data, "<sup>2</sup>"),
-        word(metric_abbr, 2, 3) == "prob comp"  ~ paste0(data, "<sup>3</sup>"), 
+        word(metric_abbr, 2, 3) == "total comp" ~ paste0(data, "<sup>2</sup>"), 
+        word(metric_abbr, 2, 3) == "par comp"   ~ paste0(data, "<sup>3</sup>"),
+        word(metric_abbr, 2, 3) == "prob comp"  ~ paste0(data, "<sup>4</sup>"), 
         TRUE ~ data
       ), 
       prop = case_when(
