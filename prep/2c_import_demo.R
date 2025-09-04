@@ -435,6 +435,8 @@ svii_demo <- svii_demo_prep2 |>
 saveRDS(svii_demo, "prep/svii_demo.rds")
 
 
+if (save_RDS_to_sharepoint == TRUE){
+
 # export csv of RRI's 
 svii_demo |> 
   # join with demo categories to get set order 
@@ -464,7 +466,7 @@ svii_demo |>
   pivot_wider(names_from = group, values_from = rri) |> 
   readr::write_csv(file = file.path(admin$sp_data, "svii_rri.csv"))
 
-
+} 
 
 
 
@@ -473,6 +475,7 @@ svii_demo |>
 admin$save_rds_twice(svii_demo, save_to_repo = FALSE, save_to_sp = save_RDS_to_sharepoint)
 
 
+# table names and order to display 
 display_data_text <- svii_demo |> 
   distinct(type, metric_abbr, data_abbr, data) |> 
   mutate(data_order = as.numeric(data)) |> 
@@ -521,6 +524,16 @@ display_data_text <- svii_demo |>
     data_order = 11.5 # want in front of p_par
   ) |> 
   arrange(data_order) |> 
+  ## update names shown in table 
+  mutate(
+    data = case_when(
+      metric_abbr == "a par" ~ "Total Parole Violation Prison Admissions", 
+      metric_abbr == "p par" ~ "Total Parole Violation Prison Population", 
+      metric_abbr == "a prob"~ "Total Probation Violation Prison Admissions", 
+      metric_abbr == "p prob"~ "Total Probation Violation Prison Population", 
+      TRUE ~ data
+    )
+  ) |> 
   mutate(across(c(metric_abbr, data), ~fct_reorder(factor(.x), data_order))) 
  
 # svii_demo_table_prep ----------------------------------------------------------
@@ -567,7 +580,6 @@ svii_demo_table_prep <- svii_demo |>
   left_join(display_data_text, by = join_by(metric_abbr)) |> 
   # join with df's that specify if cell should be highlighted in some way 
   left_join(
-    #bind_rows(svii_adm_highlight, svii_pop_highlight) |> 
     svii_highlight |> 
       select(state_name, metric_abbr, group, group_cat, highlight), 
     by = join_by(state_name, metric_abbr, group, group_cat)
@@ -615,7 +627,7 @@ demo_rri_text_prep <- svii_demo |>
       group == "Black" ~ "Black people", 
       group == "Hispanic" ~ "Hispanic people", 
       group == "AIAN" ~ "American Indians", 
-      group == "Asian" ~ "Asians", 
+      group == "Asian" ~ "Asian Americans", 
       group == "NHPI" ~ "Pacific Islanders", 
       group == "Two" ~ "Multiracial people", 
       group == "Male" ~ "Males", 
@@ -650,15 +662,14 @@ demo_rri_text_prep <- svii_demo |>
     ), 
     comp_group = case_when(
       group_cat == "race_ethnicity" ~ "White people's", 
-      group_cat == "sex_gender" ~ "females'"
+      group_cat == "sex_gender" ~ "the female population's"
     ), 
     prebullet_text = case_when(
-      metric_abbr == "a total" ~ glue("<i>Compared to {comp_group} prison admission rate relative to their <b>community representation:</b></i>"), 
-      metric_abbr == "p total" ~ glue("<i>Compared to {comp_group} prison population rate relative to their <b>community representation:</b></i>"), 
+      metric_abbr == "a total" ~ glue("<i>Compared to {comp_group} prison admission rate relative to their <b>community representation in {state_name}:</b></i>"), 
+      metric_abbr == "p total" ~ glue("<i>Compared to {comp_group} prison population rate relative to their <b>community representation in {state_name}:</b></i>"), 
       word(metric_abbr, -1) == "par"  ~ glue("<i>Compared to {comp_group} rate <b>among those on parole:</b></i>"),
       word(metric_abbr, -1) == "prob" ~ glue("<i>Compared to {comp_group} rate <b>among those on probation:</b></i>"),
     )
-
   ) |> 
   select(state_name, state_abbr, metric_abbr, group, group_cat, comparison_source, 
          rri, section_header, prebullet_text, bulletpoint) 
@@ -673,7 +684,7 @@ make_pretext_on_rri <- function(CAT, TYPE){
   
   comp_group1 <- case_when(
     CAT == "race_ethnicity" ~ "White people's", 
-    CAT == "sex_gender" ~ "females'"
+    CAT == "sex_gender" ~ "the female population"
   )
   
   comp_group2 <- case_when(
@@ -682,10 +693,11 @@ make_pretext_on_rri <- function(CAT, TYPE){
   )
   
   comp_group3 <- case_when(
-    CAT == "race_ethnicity" ~ "White people", 
-    CAT == "sex_gender" ~ "females"
+    CAT == "race_ethnicity" ~ "the White people", 
+    CAT == "sex_gender" ~ "the female population"
   )
-
+  
+  comp_group4 <- comp_group2
   
   rate_text1 <- case_when(
     TYPE == "Admissions" ~ "prison admissions rates", 
@@ -707,22 +719,34 @@ make_pretext_on_rri <- function(CAT, TYPE){
     TYPE == "Population" ~ "incarcerated"
   )
   
+  type_text3 <- case_when(
+      TYPE == "Admissions" ~ "admissions to prison", 
+      TYPE == "Population" ~ "incarceration"
+  )
+  
   paste0(
     "<div class = 'notetxt' style = 'text-align: left;'>",
     "<span class = 'notesubtitle'>Understanding Relative Incarceration Rates</span>", 
-    "<p>This analysis compares ", rate_text1, " across ", category_text," groups relative ",
+    "<p>This analysis compares ", rate_text1, " across ", category_text," groups<sup>1</sup>; relative ",
     "to their representation in the population of interest, using ", comp_group1, " rate as the baseline. ", 
     "These population-adjusted comparisons reveal true disparites by accounting ", 
-    "for different group sizes in the community", 
+    "for different group sizes in the community. See below for how the numbers were calculated: ", 
     "<ul>", 
-    "<li>Step 1: Calculate each group's ", rate_text2," by dividing the number of ", 
-      type_text1, " by that group's total population", "</li>",
-    "<li>Step 2: Create Relative Rate Indices (RRIs) by dividing each group's rate by the ",
+    "<li><b>Step 1:</b> We calculated each group's ", rate_text2," by dividing their number of ", 
+      type_text1, " by that group's total population in the community.", "</li>",
+    "<li><b>Step 2:</b> We then calculated Relative Rate Indices (RRIs)* by dividing each group's rate by the ",
       comp_group2, " population's rate", "</li>", 
-    "<li>Results: RRIs show how many times more or less likely each group is to be ", type_text2," compared to ", 
-      comp_group3, "</li>", 
-    "<li>Format: Multiplers like 4&#215 mean four times higher than the rate for the ", comp_group2, " population; ", 
-      "percentages like 79% less mean below the rate in the ", comp_group2, " population" ,
+    "<li><b>Results:</b> RRIs show how many times more or less likely each group is to be ", type_text2," compared to ", 
+      comp_group3, "An RRI greater than 1 indicates a higher likelihood of ", type_text3, " relative to ", 
+      comp_group3, ", while a an RRI lower than 1 indicates a lower likelihood.<br>", 
+    "A note on format:<br>", 
+      "<i>Multiplers:</i> When multipliers are included in a sentence, ", 
+       "it means the group's rate is x times higher than the comparison population. ", 
+       "Ex: \"4&#215\" more means that group is four times higher than the rate for ", comp_group4, " population.<br>", 
+       "<i>Percentages:</i> When percentages are included in a sentence, ", 
+       "it means the group’s rate is x percentage lower than the comparison population. ", 
+       "Ex: \"79%\" less means the group’s rate is lower than the ", comp_group4, " population by that percentage. ", 
+    "</li>", 
     "</ul>", 
     "</p>",
     "</div>"
@@ -843,43 +867,71 @@ demo_highlight_desc <- paste0(
   "<p><span class = 'highlight'>Bold orange text</span>", 
   " indicates that a group’s percentage within a supervision metric is greater ", 
   "than that group’s percentage within the comparison population (top row). ", 
-  "Cells will not be highlighted if 15% or more of the comparison population is unknown.", 
+  "Cells are not highlighted if 15% or more of the comparison population is unknown.", 
   "</p>"
 #  "</div>"
 )
+
 
 
 make_posttext_section <- function(CAT, TYPE){
   
 
   comp_group_text <- case_when(
-    CAT == "race_ethnicity" ~ "White people", 
-    CAT == "sex_gender" ~ "females"
+    CAT == "race_ethnicity" ~ "the White population", 
+    CAT == "sex_gender" ~ "the female population"
   )
   
   type_text <- tolower(TYPE)
+  
+  disclaimer_text <- case_when(
+    CAT == "race_ethnicity" ~ paste0(
+      "States vary in how they collect and report information about race and ethnicity. ", 
+      "Some states use the race or ethnicity recorded by officers at intake, ", 
+      "while other states allow people to identify their own race and ethnicity. ", 
+      "Furthermore, some states combine race and ethnicity into one category, ", 
+      "while others separate them into two distinct items. ", 
+      "These differences can result in an incomplete count of the Hispanic ", 
+      "population and people of mixed race in state reports. ", 
+      "Additionally, the U.S. Census allows people to self-identify their race and ethnicity separately. ", 
+      "Therefore, the variation in practices across states and between ", 
+      "state and federal data reporting systems may result in a deflated ", 
+      "RRI for Hispanic individuals. ", 
+      "These differences can result in an incomplete count of the Hispanic ", 
+      "population and people of mixed race in state reports. ", 
+      "Conversely, it can result in an overcount of people of other races, especially non-Hispanic White people."
+    ), 
+    CAT == "sex_gender" ~ paste0(
+      "States vary in how they collect and report information about sex and gender. ",
+      "However, the majority of states only have two categories within their data, usually 'male' and 'female.' ", 
+      "These differences can result in an incomplete count of people who do not identify as either."
+    )
+  )
   
   
  paste0(
     "<div class = 'notetxt' style = 'text-align: left;'>",
     "<span class = 'notesubtitle'>Data Sources and Calculations</span>", 
-    "<p>Demographic percentages are created from combining the values for 2022 and 2023", 
-    " from each state and then calculating the percentage of each demographic group for a given metric.</p>", 
+    "<p>", 
+      "Demographic percentages are created from combining the values for 2022 and 2023 ", 
+      "from each state and then calculating the percentage of each demographic group for a given metric.", 
+    "</p>", 
     "<ol style = 'padding-left: 1em;'>", 
-    "<li>State population data is from ", census_link, "</li>", 
-    #"<br>", 
-    "<li>State parole population data is from the BJS report ", ppus_link, ", Appendix Table 13</li>", 
-    #"<br>", 
-    "<li>State probation population data is sourced from the BJS report ", ppus_link, ", Appendix Table 10</li>", 
-    "<ul><li>The 'Unknown' category is a combination of the 'Unknown/not reported' and 'Not asked' columns in Appendix Table 10</li><ul>", 
+    "<li>", disclaimer_text, "</li>", 
+    "<li>State population data is from ", census_link, ".</li>", 
+    "<li>State parole population data is from the Bureau of Justice Statics (BJS) report, ", ppus_link, ", Appendix Table 13.</li>", 
+    "<li>State probation population data is from the BJS report, ", ppus_link, ", Appendix Table 10.</li>", 
+    "<ul><li>The 'Unknown' category is a combination of the 'Unknown/not reported' and 'Not asked' columns in Appendix Table 10.</li><ul>", 
     "</ol>", 
     demo_highlight_desc, 
     "<p>", 
-    "When available, the Relative Rate Index (RRI) values are show as bullet points. ", 
-    "These values help show how different group compare to a reference group, here ", comp_group_text, ". ", 
-    "To calculate it, we first find the rate for each group by dividing the number of events (e.g., prison ", type_text,") ", 
-    "by that group’s share of the population (e.g., state population, parole or probation population). ", 
-    "Then, we divide the group rate by the comparison group rate, resulting in a simple number that shows whether a group is over or underrepresented.", 
+    "*When available, the RRI values are shown as bullet points. These values ", 
+    "help demonstrate how different groups compare to a reference group, here ", 
+    comp_group_text, ". To calculate the RRI, we first found the rate for each ", 
+    "group by dividing the number of events (ex: prison ", type_text, ") by that group’s ", 
+    "share of the population (ex: state population, parole or probation population). ", 
+    "Then, we divided each group rate by the comparison group rate, ", 
+    "resulting in a simple number that shows whether a group is over or underrepresented.", 
     "</p>", 
     "</div>"
   )
@@ -888,37 +940,7 @@ make_posttext_section <- function(CAT, TYPE){
 }
 
 
-re_static_note <- paste0(
-  "<div class = 'notetxt' style = 'text-align: left; font-size: 0.9em !important;'>", 
-  "<p><i>", 
-  "States vary in how they collect and report information about race and ethnicity.<br>", 
-  "Some states use the race or ethnicity recorded by intake officers, ", 
-  "while other states allow individuals to identify their own race and ", 
-  "ethnicity.  Furthermore, some states combine race and ethnicity into ", 
-  "one category, while others separate them into two distinct items. ", 
-  "These differences can result in an incomplete count of Hispanic ", 
-  "individuals and those of mixed race in state reports. The US Census ", 
-  "allows individuals to self-identify their race and ethnicity ", 
-  "separately. The variation in practices across states and between ", 
-  "state and Federal data reporting systems may result in a deflated ", 
-  "RRI for Hispanic individuals. These differences can result in an ", 
-  "incomplete count of Hispanic individuals and those of mixed race in ", 
-  "state reports. Conversely, it can result in an overcount of people ", 
-  "of other races, especially non-Hispanic White people.", 
-  "</p></i>", 
-  "</div>"
-)
 
-
-sg_static_note <- paste0(
-  "<div class = 'notetxt' style = 'text-align: left; font-size: 0.9em !important;'>", 
-  "<p><i>", 
-  "States vary in how they collect and report information about sex and gender.<br>", 
-  "The majority of states only have two categories, usually 'Male' and 'Female'.", 
-
-  "</p></i>", 
-  "</div>"
-)
 
 
 
@@ -939,11 +961,11 @@ svii_demo_text <- tidyr::crossing(
   ungroup() |> 
   mutate(
     posttext = case_when(
-      group_cat == "sex_gender"     ~ paste0(state_notes, demo_post_text, sg_static_note),
-      group_cat == "race_ethnicity" ~ paste0(state_notes, demo_post_text, re_static_note)
-    )
+      group_cat == "sex_gender"     ~ paste0(state_notes, demo_post_text),
+      group_cat == "race_ethnicity" ~ paste0(state_notes, demo_post_text)
+    ), 
   ) |> 
-  select(-state_notes, -demo_post_text)
+  select( -demo_post_text)
 
 admin$save_rds_twice(svii_demo_text, save_to_sp = save_RDS_to_sharepoint)
 
