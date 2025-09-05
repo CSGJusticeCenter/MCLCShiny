@@ -2,7 +2,7 @@
 
 save_RDS_to_sharepoint <- TRUE  
 
-
+# load box modules and packages/functions 
 box::use(
   ./box/admin, 
   csgjcr[...], 
@@ -20,7 +20,7 @@ box::use(
   tidyr[pivot_longer, pivot_wider]
 )
 
-
+# pull demographic categories 
 info_file <- file.path(admin$sp_survey, "Data/raw", "survey_metrics_and_categories.xlsx")
 
 demo_cat <- bind_rows(
@@ -46,8 +46,8 @@ demo_cat <- bind_rows(
 # https://github.com/CSGJusticeCenter/jr_data_library/blob/develop/R/pull_clean/census/pep/clean_pep.R
 # https://github.com/CSGJusticeCenter/jr_data_library/blob/f1f42e52476fb303ac521dbff14ed7689fd3a3c1/R/pull_clean/census/pep/clean_pep.R#L1
 # https://www2.census.gov/programs-surveys/popest/datasets/2020-2023/state/asrh/
-pep_state_20_23 <- read_csv(
-  csg_sp_path("JR_data_library/data/raw/census/pep/sc-est2023-alldata6.csv"),
+pep_state_20_24 <- read_csv(
+  csg_sp_path("JR_data_library/data/raw/census/pep/sc-est2024-alldata6.csv"),
   show_col_types = FALSE
 ) |> 
   mutate(
@@ -102,12 +102,12 @@ clean_pep <- function(df, group_var, var_name) {
 # include all sex, not all ethnicities and summarize by combined race and ethnicity
 # ORIGIN == 0: all ethnicities, ORIGIN == 1: Not Hispannic, ORIGIN == 2: Hispanic
 # so we want to remove the ORIGIN == 0 records because we don't want to double count
-total_pop_by_race_eth <- pep_state_20_23 |>
+total_pop_by_race_eth <- pep_state_20_24 |>
   filter(sex == "Total", ORIGIN != 0) |>
   clean_pep(race_eth, "pop_total")
 
 # include all sex, not all ethnicities, adults only and summarize by combined race and ethnicity
-adult_pop_by_race_eth <- pep_state_20_23 |>
+adult_pop_by_race_eth <- pep_state_20_24 |>
   filter(sex == "Total", ORIGIN != 0, adult) |>
   clean_pep(race_eth, "pop_adult")
 
@@ -121,12 +121,12 @@ pop_by_race_eth_state <- total_pop_by_race_eth |>
 
 
 # include not all sex, all ethnicities and summarize by sex
-total_pop_by_sex <- pep_state_20_23 |>
+total_pop_by_sex <- pep_state_20_24 |>
   filter(sex != "Total", ORIGIN == 0) |>
   clean_pep(sex, "pop_total")
 
 # include not all sex, all ethnicities, adults only and summarize by sex
-adult_pop_by_sex <- pep_state_20_23 |>
+adult_pop_by_sex <- pep_state_20_24 |>
   filter(sex != "Total", ORIGIN == 0, adult) |>
   clean_pep(sex, "pop_adult")
 
@@ -321,10 +321,8 @@ comp_ppus <- bind_rows(ppus_prob, ppus_par) |>
 svii <- readRDS("prep/svii.rds") 
 
 
-
 PERC_ACC <- 1
 ndigits <- -log(PERC_ACC, base = 10)
-
 
 # filter and set flags 
 svii_demo_prep1 <- svii |>
@@ -564,6 +562,7 @@ perc_display <- function(prop, acc = 1){
 }
 
 
+# create text values that will be dsipalyed in tables 
 svii_demo_table_prep <- svii_demo |> 
   bind_rows(
     comp_census                                                |> mutate(metric_abbr = "a total comp") |> rename(prop = comp), 
@@ -610,10 +609,11 @@ admin$save_rds_twice(svii_demo_table_prep, save_to_sp = save_RDS_to_sharepoint)
 
 # TEXT -----------------------------------------------------------------------
 
+# prep for bullet points of RRI values 
 demo_rri_text_prep <- svii_demo |> 
   select(state_name, state_abbr, metric_abbr, group, group_cat, comparison_source, rri) |> 
   filter(
-    # drop comparison groups 
+    # drop comparison groups and Other/Unknown groups 
     !group %in% c("White", "Female", "Other", "Unknown r/e", "Unknown s/g"), 
     # drop metrics that are not features in tables 
     !metric_abbr %in% c("a new", "p new", "a tech", "p tech", "a supervision", "p supervision"), 
@@ -633,9 +633,19 @@ demo_rri_text_prep <- svii_demo |>
       group == "Male" ~ "Males", 
       group == "Female" ~ "females" 
     ), 
+    rri.0 = round(rri, digits = 1), # round to 1 digits (for display when rri > 1)
+    rri.00 = round(rri, digits = 2), # round to 2 digits (for display when rri < 1)
     val = case_when(
-      rri > 1 ~ comma(rri, accuracy = 0.1, suffix = "&#215 more"), 
-      rri < 1 ~ percent(1-rri, accuracy = 1, suffix = "% less")
+      rri == 0 ~ NA_character_, 
+      ## when rounded rri == 1 --> "as likely as"
+      rri.0 == 1 ~ "as", 
+      ## when values rounded to integer (i.e. 2.0, 3.0) --> #x more
+      rri > 1 & floor(rri.0) == rri.0 ~ comma(rri.0, accuracy = 1,   suffix = "&#215 more"),
+      ## when value rounded; not to an integer (i.e. 2.1, 3.3) --> #.#x more
+      rri > 1 & floor(rri.0) != rri.0 ~ comma(rri.0, accuracy = 0.1, suffix = "&#215 more"),
+      ## when value is < 1 --> (1-#)% less
+      rri < 1 & rri.00 != 0 ~ percent(1-rri.00, accuracy = 1, suffix = "% less"),
+      rri < 1 & rri.00 == 0 ~ "99% less"
     ), 
     type_text = case_when(
       word(metric_abbr, 1) == "a" ~ "admitted to prison", 
@@ -667,12 +677,12 @@ demo_rri_text_prep <- svii_demo |>
     prebullet_text = case_when(
       metric_abbr == "a total" ~ glue("<i>Compared to {comp_group} prison admission rate relative to their <b>community representation in {state_name}:</b></i>"), 
       metric_abbr == "p total" ~ glue("<i>Compared to {comp_group} prison population rate relative to their <b>community representation in {state_name}:</b></i>"), 
-      word(metric_abbr, -1) == "par"  ~ glue("<i>Compared to {comp_group} rate <b>among those on parole:</b></i>"),
-      word(metric_abbr, -1) == "prob" ~ glue("<i>Compared to {comp_group} rate <b>among those on probation:</b></i>"),
+      word(metric_abbr, -1) == "par"  ~ glue("<i>Compared to {comp_group} rate <b>among those on parole in {state_name}:</b></i>"),
+      word(metric_abbr, -1) == "prob" ~ glue("<i>Compared to {comp_group} rate <b>among those on probation in {state_name}:</b></i>"),
     )
   ) |> 
   select(state_name, state_abbr, metric_abbr, group, group_cat, comparison_source, 
-         rri, section_header, prebullet_text, bulletpoint) 
+         rri, val, section_header, prebullet_text, bulletpoint) 
 
 
 make_pretext_on_rri <- function(CAT, TYPE){
@@ -740,12 +750,14 @@ make_pretext_on_rri <- function(CAT, TYPE){
       comp_group3, "An RRI greater than 1 indicates a higher likelihood of ", type_text3, " relative to ", 
       comp_group3, ", while a an RRI lower than 1 indicates a lower likelihood.<br>", 
     "A note on format:<br>", 
-      "<i>Multiplers:</i> When multipliers are included in a sentence, ", 
+      "<ul>", 
+      "<li><i>Multiplers:</i> When multipliers are included in a sentence, ", 
        "it means the group's rate is x times higher than the comparison population. ", 
-       "Ex: \"4&#215\" more means that group is four times higher than the rate for ", comp_group4, " population.<br>", 
-       "<i>Percentages:</i> When percentages are included in a sentence, ", 
+       "Ex: \"4&#215\" more means that group is four times higher than the rate for ", comp_group4, " population.</li>", 
+       "<li><i>Percentages:</i> When percentages are included in a sentence, ", 
        "it means the group’s rate is x percentage lower than the comparison population. ", 
-       "Ex: \"79%\" less means the group’s rate is lower than the ", comp_group4, " population by that percentage. ", 
+       "Ex: \"79%\" less means the group’s rate is lower than the ", comp_group4, " population by that percentage.</li>", 
+      "</ul>", 
     "</li>", 
     "</ul>", 
     "</p>",
@@ -756,8 +768,20 @@ make_pretext_on_rri <- function(CAT, TYPE){
 }
 
 
-
-
+## which states DON'T use top metrics 
+## i.e. if parole is not available, but technical parole is --> use those values for bullet points 
+# demo_rri_text_prep |> 
+#   filter(!is.na(rri) & rri != 0) |> 
+#   mutate(metric_n = as.numeric(metric_abbr), type = word(metric_abbr, 1)) |> 
+#   group_by(state_name, type, group_cat, comparison_source) |> 
+#   top_n(-1, metric_n) |> 
+#   ungroup() |> 
+#   distinct(state_name, metric_abbr, comparison_source) |> 
+#   # instances where not using 'top' metric in section 
+#   filter(!metric_abbr %in% c(
+#     "a total", "a prob", "a par", 
+#     "p total", "p prob", "p par"
+#   ))
 
 make_vec_to_bullets <- function(STATE, TYPE, CAT, COMP_GROUP){
   
@@ -771,7 +795,8 @@ make_vec_to_bullets <- function(STATE, TYPE, CAT, COMP_GROUP){
   
   vec <- df |> 
     # drop an instances where RRI is not available 
-    tidyr::drop_na(rri) |>
+    # remove NA and when rri = 0; RRI = 0 means state submitted a data count of 0 for that group 
+    filter(!is.na(rri) & rri != 0) |> 
     # put the metric number, in case lower metrics are only available 
     # want to select those 
     # if all data is available, we only want to 'lower' number metrics 
@@ -850,10 +875,9 @@ make_link <- function(href, text){
 }
 
 
-# "https://www2.census.gov/programs-surveys/popest/datasets/2020-2023/state/asrh/", 
 census_link <- make_link(
   "https://www.census.gov/data/datasets/time-series/demo/popest/2020s-state-detail.html", 
-  "U.S. Census Bureau American Community Survey, 2023"
+  "U.S. Census Bureau State Population by Characteristics, 2023"
 )
 
 

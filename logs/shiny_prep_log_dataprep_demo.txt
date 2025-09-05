@@ -1,5 +1,5 @@
 [1] "== DATA PREP =========================================================="
-[1] "Last run Wed Sep  3, 2025 at 13:09:14 CDT"
+[1] "Last run Fri Sep  5, 2025 at 14:43:34 CDT"
 
 > save_RDS_to_sharepoint <- TRUE 
 
@@ -30,7 +30,7 @@
 > # MISSING-NESS NOTES -----------------------------------------------------------
 > # Reformat data about probation and parole being abolished
 > # Lo .... [TRUNCATED] 
-New names:
+-/                                                                                                                                                                                                       /                                                                                                                                                                                                       -                                                                                                                                                                                                       New names:
 • `` -> `...9`
 
 > admin$save_rds_twice(missingness_sentences, save_to_sp = save_RDS_to_sharepoint)
@@ -42,15 +42,15 @@ New names:
 
 > save_RDS_to_sharepoint <- TRUE  
 
+> # load box modules and packages/functions 
 > box::use(
 +   ./box/admin, 
 +   csgjcr[...], 
 +   dplyr[...], 
 +   forcats[fct_recode, fct_reorder],
-+   glue[glue], 
-+   htmltools[...], 
-+   janit .... [TRUNCATED] 
++  .... [TRUNCATED] 
 
+> # pull demographic categories 
 > info_file <- file.path(admin$sp_survey, "Data/raw", "survey_metrics_and_categories.xlsx")
 
 > demo_cat <- bind_rows(
@@ -58,12 +58,12 @@ New names:
 +   read_excel(info_file, sheet = "sex_gender") 
 + ) |> 
 +   select(gro .... [TRUNCATED] 
-
+-/                                                                                                                                                                                                       /                                                                                                                                                                                                       -                                                                                                                                                                                                       -/                                                                                                                                                                                                       /                                                                                                                                                                                                       -                                                                                                                                                                                                       
 > # CENSUS DATA ##################################################################
 > 
 > # raw data files
 > # - jr_data_library/data/raw/census/pep/sc- .... [TRUNCATED] 
-indexing sc-est2023-alldata6.csv [========================--------------------------------------------------------------------------------------] 2.15GB/s, eta:  0sindexing sc-est2023-alldata6.csv [============================================================================================================] 622.98MB/s, eta:  0s                                                                                                                                                                    
+indexing sc-est2024-alldata6.csv [=================================================--------------------------------------------------------------------------------------------------] 2.15GB/s, eta:  0sindexing sc-est2024-alldata6.csv [=================================================================================================================================================] 689.21MB/s, eta:  0s                                                                                                                                                                                                         
 > # function to clean and reshape from wide to long
 > # right now each column is a year of estimates, but we want years to be rows
 > # this will work  .... [TRUNCATED] 
@@ -72,7 +72,7 @@ New names:
 > # ORIGIN == 0: all ethnicities, ORIGIN == 1: Not Hispannic, OR .... [TRUNCATED] 
 
 > # include all sex, not all ethnicities, adults only and summarize by combined race and ethnicity
-> adult_pop_by_race_eth <- pep_state_20_23 |>
+> adult_pop_by_race_eth <- pep_state_20_24 |>
 +   f .... [TRUNCATED] 
 
 > # combine total, adult, juv pop by race and ethnicity
@@ -81,12 +81,12 @@ New names:
 +   bind_rows(adult_pop_ .... [TRUNCATED] 
 
 > # include not all sex, all ethnicities and summarize by sex
-> total_pop_by_sex <- pep_state_20_23 |>
+> total_pop_by_sex <- pep_state_20_24 |>
 +   filter(sex != "Total", ORIGIN == 0) |>
 +    .... [TRUNCATED] 
 
 > # include not all sex, all ethnicities, adults only and summarize by sex
-> adult_pop_by_sex <- pep_state_20_23 |>
+> adult_pop_by_sex <- pep_state_20_24 |>
 +   filter(sex != "Total", ORIGIN  .... [TRUNCATED] 
 
 > # combine total pop and adult pop by sex
@@ -109,7 +109,7 @@ New names:
 > # PPUS DATA ##################################################################  
 > 
 > # https://www.ojp.gov/library/publications/probation-and-parol .... [TRUNCATED] 
-indexing ppus23at10.csv [=====================================================================================================================] 618.76MB/s, eta:  0s                                                                                                                                                                    New names:
+indexing ppus23at10.csv [==========================================================================================================================================================] 683.89MB/s, eta:  0s                                                                                                                                                                                                         New names:
 • `` -> `...2`
 • `Unknown/not reported` -> `Unknown/not reported...6`
 • `Not asked/c` -> `Not asked/c...7`
@@ -119,7 +119,7 @@ New names:
 
 > # Appendix Table 13: Selected characteristics of adults on parole, by jurisdiction, 2023
 > # - jr_data_library/data/raw/bjs/ppus/ppus23/ppus23t13.cs .... [TRUNCATED] 
-indexing ppus23at13.csv [=====================================================================================================================] 818.23MB/s, eta:  0s                                                                                                                                                                    New names:
+indexing ppus23at13.csv [==========================================================================================================================================================] 720.82MB/s, eta:  0s                                                                                                                                                                                                         New names:
 • `` -> `...2`
 • `Unknown/not reported` -> `Unknown/not reported...6`
 • `` -> `...7`
@@ -192,19 +192,21 @@ New names:
 > # save in prep folder as it's needed to create demo tab outputs  
 > saveRDS(svii_demo, "prep/svii_demo.rds")
 
-> # export csv of RRI's 
-> svii_demo |> 
+> if (save_RDS_to_sharepoint == TRUE){
++ 
++ # export csv of RRI's 
++ svii_demo |> 
 +   # join with demo categories to get set order 
-+   left_join(demo_cat, by = join_by(group, group_cat)) |>  .... [TRUNCATED] 
-wrote 1.20kB in  0s, 80.02MB/s                                                                                                                                                                  wrote 2.15GB in  0s, 2.15GB/s                                                                                                                                                                  
++   left_join(dem .... [TRUNCATED] 
+wrote 1.20kB in  0s, 79.96MB/s                                                                                                                                                                                                       wrote 2.15GB in  0s, 2.15GB/s                                                                                                                                                                                                       
 > # save version on sp but don't save on repo; don't need to use in app 
 > admin$save_rds_twice(svii_demo, save_to_repo = FALSE, save_to_sp = save_RDS .... [TRUNCATED] 
 G3;export svii_demo to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_demo.rds
 g
+> # table names and order to display 
 > display_data_text <- svii_demo |> 
 +   distinct(type, metric_abbr, data_abbr, data) |> 
-+   mutate(data_order = as.numeric(data)) |> 
-+   # add rows .... [TRUNCATED] 
++   mutate(data_order  .... [TRUNCATED] 
 
 > # svii_demo_table_prep ----------------------------------------------------------
 > 
@@ -217,9 +219,10 @@ New names:
 +   rnd_val <- round(val, digits = ndigits)
 +   cas .... [TRUNCATED] 
 
+> # create text values that will be dsipalyed in tables 
 > svii_demo_table_prep <- svii_demo |> 
 +   bind_rows(
-+     comp_census                                                |> mutate(metric_abbr = "a tot ..." ... [TRUNCATED] 
++     comp_census                      .... [TRUNCATED] 
 
 > admin$save_rds_twice(svii_demo_table_prep, save_to_sp = save_RDS_to_sharepoint)
 G3;export svii_demo_table_prep to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_demo_table_prep.rds
@@ -227,8 +230,8 @@ New names:
 g
 > # TEXT -----------------------------------------------------------------------
 > 
-> demo_rri_text_prep <- svii_demo |> 
-+   select(state_name, state .... [TRUNCATED] 
+> # prep for bullet points of RRI values 
+> demo_rri_text_prep <-  .... [TRUNCATED] 
 
 > make_pretext_on_rri <- function(CAT, TYPE){
 +   
@@ -236,12 +239,9 @@ New names:
 +     CAT == "race_ethnicity" ~ "racial", 
 +     CAT == "sex_gender ..." ... [TRUNCATED] 
 
-> make_vec_to_bullets <- function(STATE, TYPE, CAT, COMP_GROUP){
-+   
-+   df <- demo_rri_text_prep |> 
-+     filter(
-+       state_name == STATE, 
-+   .... [TRUNCATED] 
+> ## which states DON'T use top metrics 
+> ## i.e. if parole is not available, but technical parole is --> use those values for bullet points 
+> # dem .... [TRUNCATED] 
 
 > notes <- openxlsx::read.xlsx( # need to use openxlsx; formatting issue 
 +   file.path(admin$sp_survey, "Data", "raw", "SVII_2024_Survey_Notes.xlsx") .... [TRUNCATED] 
@@ -253,9 +253,9 @@ New names:
 +     text, 
 +     "</a ..." ... [TRUNCATED] 
 
-> # "https://www2.census.gov/programs-surveys/popest/datasets/2020-2023/state/asrh/", 
 > census_link <- make_link(
-+   "https://www.census.gov/data/da ..." ... [TRUNCATED] 
++   "https://www.census.gov/data/datasets/time-series/demo/popest/2020s-state-detail.html", 
++   "U.S. Census Bureau State ..." ... [TRUNCATED] 
 
 > ppus_link <- make_link(
 +   "https://bjs.ojp.gov/library/publications/probation-and-parole-united-states-2023", 
@@ -269,18 +269,8 @@ New names:
 +   
 + 
 +   comp_group_text <- case_when(
-+     CAT == "race_ethnicity" ~ "White people", 
-+     CAT = .... [TRUNCATED] 
-
-> re_static_note <- paste0(
-+   "<div class = 'notetxt' style = 'text-align: left; font-size: 0.9em !important;'>", 
-+   "<p><i>", 
-+   "States vary i ..." ... [TRUNCATED] 
-
-> sg_static_note <- paste0(
-+   "<div class = 'notetxt' style = 'text-align: left; font-size: 0.9em !important;'>", 
-+   "<p><i>", 
-+   "States vary i ..." ... [TRUNCATED] 
++     CAT == "race_ethnicity" ~ "the White population", 
++   .... [TRUNCATED] 
 
 > svii_demo_text <- tidyr::crossing(
 +   state_name = state.name, 
@@ -292,5 +282,5 @@ New names:
 gG3;export svii_demo_text to: app/data/svii_demo_text.rds
 g
 > rm(save_RDS_to_sharepoint)
-[1] "End run Wed Sep  3, 2025 at 13:09:58 CDT"
-Time difference of 43.40772 secs
+[1] "End run Fri Sep  5, 2025 at 14:44:20 CDT"
+Time difference of 46.1622 secs
