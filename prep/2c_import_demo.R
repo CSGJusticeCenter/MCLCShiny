@@ -663,7 +663,7 @@ demo_rri_text_prep <- svii_demo |>
       word(metric_abbr, 2, -1) == "new prob"  ~ paste0(bulletpoint, " for a new offense probation violation")
     ), 
     section_header = case_when(
-      metric_abbr == "a total" ~ "Prison Admisisons", 
+      metric_abbr == "a total" ~ "Prison Admissions", 
       metric_abbr == "p total" ~ "Prison Population", 
       metric_abbr %in% c("a par", "a new par", "a tech par") ~ "Parole Violations Readmissions", 
       metric_abbr %in% c("p par", "p new par", "p tech par") ~ "Parole Violations Population", 
