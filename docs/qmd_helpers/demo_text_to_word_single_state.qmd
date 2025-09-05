@@ -1,0 +1,234 @@
+---
+title: "helper -- individual state " 
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r}
+this_state <- state_list[i]
+```
+
+
+```{r}
+pull_specific_text <- function(type, cat, var_to_pull){
+  text <- demo_text |> 
+    filter(
+      state_name == this_state, 
+      type == !!type, 
+      group_cat == !!cat
+    ) |> 
+    pull(all_of(var_to_pull)) 
+  
+ ifelse(
+   text != "<div class = 'notetxt' style = 'text-align: left;'><p></p></div>", 
+   text,
+   "_[state did not have any notes, will show as blank on dashboard]_"
+   ) |>  
+    # replace character for times 
+    str_replace_all(pattern = "&#215", replacement = "&times;") |> 
+    # replace bold 
+    str_replace_all(pattern = "<b>|</b>", replacement = "**") |> 
+    # replace italic 
+    str_replace_all(pattern = "<i>|</i>", replacement = "_") |>
+    # replace bullet points 
+    str_replace_all(pattern  = "<li>", replacement = "- ") |> 
+    str_replace_all(pattern = "</li>", replacement = " \n") |> 
+    # make title 
+    str_replace_all(pattern = "<div class='table-title'>", replacement = "#### ") |> 
+    # clean up;
+    str_remove_all(pattern = "</div>") |> 
+    str_replace_all(pattern = "<div class = 'notetxt' style = 'text-align: left'>", replacement = "  \n") |> 
+    # pull out 
+    glue()
+}
+
+pull_specific_table <- function(type, cat, table){
+  table <- demo_table |> 
+    arrange(group, metric_abbr) |>
+    filter(
+      state_name == this_state, 
+      type == !!type, 
+      group_cat == !!cat, 
+      table == !!table
+    ) |> 
+    arrange(group, metric_abbr) |> 
+    mutate(
+      Metric = as.character(data), 
+      prop = case_when(
+        highlight == TRUE ~ paste0("**", prop, "**"), 
+        TRUE ~ prop
+      ), 
+      group = case_when(
+        group == "Unknown s/g" ~ "Unknown", 
+        group == "Unknown r/e" ~ "Unknown", 
+        group == "AIAN" ~ "American Indian", 
+        group == "NHPI" ~ "Pacific Islander", 
+        group == "Asian" ~ "Asian American", 
+        group == "Two" ~ "Multiple", 
+        TRUE ~ group
+      )
+    ) |> 
+    select(Metric, group, prop) |> 
+    pivot_wider(names_from = group, values_from = prop) |> 
+    mutate(across(all_of(everything()), \(x) ifelse(is.na(x), "-", x))) 
+  
+  table |> 
+    knitr::kable(align = "lrrrrrrrrr", col.names = paste0("**", names(table), "**")) 
+}
+```
+
+\newpage 
+
+# `r this_state`
+
+## State Specific Notes 
+
+**Race and Ethnicity**  
+
+```{r}
+#| results: asis
+pull_specific_text("Population", "race_ethnicity", "state_notes")
+```
+
+  
+**Sex or gender**  
+
+```{r}
+#| results: asis
+pull_specific_text("Population", "sex_gender", "state_notes")
+```
+
+\newpage 
+
+`r this_state` cont. 
+
+## R/E Admissions 
+
+```{r}
+#| results: asis
+pull_specific_text("Admissions", "race_ethnicity", "pretext1")
+```
+
+```{r}
+pull_specific_table("Admissions", "race_ethnicity", 1)
+```
+
+```{r}
+#| results: asis
+pull_specific_text("Admissions", "race_ethnicity", "pretext2")
+```
+
+```{r}
+pull_specific_table("Admissions", "race_ethnicity", 2)
+```
+
+```{r}
+#| results: asis
+pull_specific_text("Admissions", "race_ethnicity", "pretext3")
+```
+
+```{r}
+pull_specific_table("Admissions", "race_ethnicity", 3)
+```
+
+\newpage 
+
+`r this_state` cont.
+
+## R/E Population 
+
+```{r}
+#| results: asis
+pull_specific_text("Population", "race_ethnicity", "pretext1")
+```
+
+```{r}
+pull_specific_table("Population", "race_ethnicity", 1)
+```
+
+```{r}
+#| results: asis
+pull_specific_text("Population", "race_ethnicity", "pretext2")
+```
+
+```{r}
+pull_specific_table("Population", "race_ethnicity", 2)
+```
+
+```{r}
+#| results: asis
+pull_specific_text("Population", "race_ethnicity", "pretext3")
+```
+
+```{r}
+pull_specific_table("Population", "race_ethnicity", 3)
+```
+
+\newpage 
+
+`r this_state` cont.
+
+## S/G Admissions 
+
+```{r}
+#| results: asis
+pull_specific_text("Admissions", "sex_gender", "pretext1")
+```
+
+```{r}
+pull_specific_table("Admissions", "sex_gender", 1)
+```
+
+```{r}
+#| results: asis
+pull_specific_text("Admissions", "sex_gender", "pretext2")
+```
+
+```{r}
+pull_specific_table("Admissions", "sex_gender", 2)
+```
+
+```{r}
+#| results: asis
+pull_specific_text("Admissions", "sex_gender", "pretext3")
+```
+
+```{r}
+pull_specific_table("Admissions", "sex_gender", 3)
+```
+
+\newpage 
+
+`r this_state` cont.
+
+## S/G Population 
+
+```{r}
+#| results: asis
+pull_specific_text("Population", "sex_gender", "pretext1")
+```
+
+```{r}
+pull_specific_table("Population", "sex_gender", 1)
+```
+
+```{r}
+#| results: asis
+pull_specific_text("Population", "sex_gender", "pretext2")
+```
+
+```{r}
+pull_specific_table("Population", "sex_gender", 2)
+```
+
+```{r}
+#| results: asis
+pull_specific_text("Population", "sex_gender", "pretext3")
+```
+
+```{r}
+pull_specific_table("Population", "sex_gender", 3)
+```
+
+
