@@ -703,7 +703,7 @@ make_pretext_on_rri <- function(CAT, TYPE){
   )
   
   comp_group3 <- case_when(
-    CAT == "race_ethnicity" ~ "the White people", 
+    CAT == "race_ethnicity" ~ "the White population", 
     CAT == "sex_gender" ~ "the female population"
   )
   
@@ -737,7 +737,7 @@ make_pretext_on_rri <- function(CAT, TYPE){
   paste0(
     "<div class = 'notetxt' style = 'text-align: left;'>",
     "<span class = 'notesubtitle'>Understanding Relative Incarceration Rates</span>", 
-    "<p>This analysis compares ", rate_text1, " across ", category_text," groups<sup>1</sup>; relative ",
+    "<p>This analysis compares ", rate_text1, " across ", category_text," groups<sup>1</sup> relative ",
     "to their representation in the population of interest, using ", comp_group1, " rate as the baseline. ", 
     "These population-adjusted comparisons reveal true disparites by accounting ", 
     "for different group sizes in the community. See below for how the numbers were calculated: ", 
@@ -745,15 +745,15 @@ make_pretext_on_rri <- function(CAT, TYPE){
     "<li><b>Step 1:</b> We calculated each group's ", rate_text2," by dividing their number of ", 
       type_text1, " by that group's total population in the community.", "</li>",
     "<li><b>Step 2:</b> We then calculated Relative Rate Indices (RRIs)* by dividing each group's rate by the ",
-      comp_group2, " population's rate", "</li>", 
+      comp_group2, " population's rate.", "</li>", 
     "<li><b>Results:</b> RRIs show how many times more or less likely each group is to be ", type_text2," compared to ", 
-      comp_group3, "An RRI greater than 1 indicates a higher likelihood of ", type_text3, " relative to ", 
-      comp_group3, ", while a an RRI lower than 1 indicates a lower likelihood.<br>", 
+      comp_group3, ". An RRI greater than 1 indicates a higher likelihood of ", type_text3, " relative to ", 
+      comp_group3, ", while an RRI lower than 1 indicates a lower likelihood.<br>", 
     "A note on format:<br>", 
       "<ul>", 
       "<li><i>Multiplers:</i> When multipliers are included in a sentence, ", 
        "it means the group's rate is x times higher than the comparison population. ", 
-       "Ex: \"4&#215\" more means that group is four times higher than the rate for ", comp_group4, " population.</li>", 
+       "Ex: \"4&#215\" more means that group is four times higher than the rate for the ", comp_group4, " population.</li>", 
        "<li><i>Percentages:</i> When percentages are included in a sentence, ", 
        "it means the group’s rate is x percentage lower than the comparison population. ", 
        "Ex: \"79%\" less means the group’s rate is lower than the ", comp_group4, " population by that percentage.</li>", 
