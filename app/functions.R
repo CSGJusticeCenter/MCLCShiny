@@ -151,7 +151,7 @@ demo_table_header <- function(text){
     "Unknown r/e" = "Unknown", 
     "AIAN" = "American Indian", 
     "NHPI" = "Pacific Islander", 
-    "Two" = "Multiple", 
+    "Two" = "Multiracial", 
     "Asian" = "Asian American"
   ))
   
