@@ -11,6 +11,21 @@ this_state <- state_list[i]
 
 
 ```{r}
+
+convert_html_link_to_md <- function(text){
+  
+  if (str_detect(text, "a href")){
+      html_link <- str_sub(text, str_locate(text, "a href=")[1,1]-1, str_locate(text, "</a>")[1, 2])
+    url <- str_sub(html_link, str_locate(html_link, "href=")[1,2]+2, str_locate(html_link, "'>")[1, 1]-1)
+    txt <- str_sub(html_link, str_locate(html_link, "'>")[1,2]+1, str_locate(html_link, "</a>")[1, 1]-1)
+    md_link <- paste0("[", txt, "](", url, ")")
+    str_replace(text, html_link, md_link)
+  } else {
+    text 
+  }
+  
+}
+
 pull_specific_text <- function(type, cat, var_to_pull){
   text <- demo_text |> 
     filter(
@@ -39,6 +54,8 @@ pull_specific_text <- function(type, cat, var_to_pull){
     # clean up;
     str_remove_all(pattern = "</div>") |> 
     str_replace_all(pattern = "<div class = 'notetxt' style = 'text-align: left'>", replacement = "  \n") |> 
+    # update link from html format to md 
+    convert_html_link_to_md() |> 
     # pull out 
     glue()
 }
@@ -65,7 +82,7 @@ pull_specific_table <- function(type, cat, table){
         group == "AIAN" ~ "American Indian", 
         group == "NHPI" ~ "Pacific Islander", 
         group == "Asian" ~ "Asian American", 
-        group == "Two" ~ "Multiple", 
+        group == "Two" ~ "Multiracial", 
         TRUE ~ group
       )
     ) |> 

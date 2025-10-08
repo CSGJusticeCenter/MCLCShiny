@@ -23,15 +23,14 @@ demo_table <- readRDS("../app/data/svii_demo_table_prep.rds")
 demo_text  <- readRDS("../app/data/svii_demo_text.rds")
 ```
 
-
 ```{r}
 #| label: individual-states
 #| results: asis
-#| eval: true     
+#| eval: true    
 state_list <- state.name # to run all states takes 2 min
 lev2_st <- vector(mode = "list", length = length(state_list))
 for (i in seq_along(state_list)) {
-  lev2_st[[i]] <- knitr::knit_child("qmd_helpers/demo_text_to_word_single_state.qmd", quiet = TRUE, envir = environment())
+  lev2_st[[i]] <- knitr::knit_child("qmd_helpers/demo_text_to_word_single_state_notes_only.qmd", quiet = TRUE, envir = environment())
 }
 
 cat(unlist(lev2_st), sep = '\n')
