@@ -1,0 +1,81 @@
+---
+title: "helper -- individual state " 
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r}
+this_state <- state_list[i]
+```
+
+
+```{r}
+
+convert_html_link_to_md <- function(text){
+  
+  if (str_detect(text, "a href")){
+      html_link <- str_sub(text, str_locate(text, "a href=")[1,1]-1, str_locate(text, "</a>")[1, 2])
+    url <- str_sub(html_link, str_locate(html_link, "href=")[1,2]+2, str_locate(html_link, "'>")[1, 1]-1)
+    txt <- str_sub(html_link, str_locate(html_link, "'>")[1,2]+1, str_locate(html_link, "</a>")[1, 1]-1)
+    md_link <- paste0("[", txt, "](", url, ")")
+    str_replace(text, html_link, md_link)
+  } else {
+    text 
+  }
+  
+}
+
+pull_specific_text <- function(type, cat, var_to_pull){
+  text <- demo_text |> 
+    filter(
+      state_name == this_state, 
+      type == !!type, 
+      group_cat == !!cat
+    ) |> 
+    pull(all_of(var_to_pull)) 
+  
+ ifelse(
+   text != "<div class = 'notetxt' style = 'text-align: left;'><p></p></div>", 
+   text,
+   "_[state did not have any notes, will show as blank on dashboard]_"
+   ) |>  
+    # replace character for times 
+    str_replace_all(pattern = "&#215", replacement = "&times;") |> 
+    # replace bold 
+    str_replace_all(pattern = "<b>|</b>", replacement = "**") |> 
+    # replace italic 
+    str_replace_all(pattern = "<i>|</i>", replacement = "_") |>
+    # replace bullet points 
+    str_replace_all(pattern  = "<li>", replacement = "- ") |> 
+    str_replace_all(pattern = "</li>", replacement = " \n") |> 
+    # make title 
+    str_replace_all(pattern = "<div class='table-title'>", replacement = "#### ") |> 
+    # clean up;
+    str_remove_all(pattern = "</div>") |> 
+    str_replace_all(pattern = "<div class = 'notetxt' style = 'text-align: left'>", replacement = "  \n") |> 
+    # update link from html format to md 
+    convert_html_link_to_md() |> 
+    # pull out 
+    glue()
+}
+
+```
+
+# `r this_state`
+
+**Race and Ethnicity**  
+
+```{r}
+#| results: asis
+pull_specific_text("Population", "race_ethnicity", "state_notes")
+```
+
+  
+**Sex or gender**  
+
+```{r}
+#| results: asis
+pull_specific_text("Population", "sex_gender", "state_notes")
+```
+

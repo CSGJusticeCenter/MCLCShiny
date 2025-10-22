@@ -27,7 +27,7 @@ sp_data_raw <- csgjcr::csg_sp_path(file.path(ROOT$sp, "MCLC Shiny App/data/raw")
 #' @return log message
 #' @export
 mylog <- function(text){
-  message(paste0(format(Sys.time(), "%Y-%m-%d %H:%M:%S %Z"), "-- ", text)) 
+  message(text) 
 }
 
 

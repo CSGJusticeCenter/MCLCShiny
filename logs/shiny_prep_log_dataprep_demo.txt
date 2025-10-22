@@ -1,0 +1,286 @@
+[1] "== DATA PREP =========================================================="
+[1] "Last run Wed Oct  8, 2025 at 11:11:54 CDT"
+
+> save_RDS_to_sharepoint <- TRUE 
+
+> box::use(
++   ./box/admin, 
++   dplyr[...], 
++   janitor[clean_names], 
++   openxlsx[read.xlsx], 
++   readxl[read_excel], 
++   stringr[str_replace,  .... [TRUNCATED] 
+
+> notes_spreadsheet <- file.path(admin$sp_survey, "Data", "raw", "SVII_2024_Survey_Notes.xlsx")
+
+> # file.path(admin$sp_data_raw, "notes/states_notes_no_data_text.xlsx") # old location 
+> 
+> # STATE NOTES (DISPLALY FORMATED NOTES) ---------------- .... [TRUNCATED] 
+
+> formatted_notes <- notes |> 
++   # prob/par notes 
++   mutate(across(
++     c(probation_metrics, parole_metrics), 
++     ~paste0("<p class = 'statet ..." ... [TRUNCATED] 
+
+> admin$save_rds_twice(formatted_notes, save_to_sp = save_RDS_to_sharepoint)
+G3;export formatted_notes to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/formatted_notes.rds
+gG3;export formatted_notes to: app/data/formatted_notes.rds
+g
+> # MISSING-NESS NOTES -----------------------------------------------------------
+> # Reformat data about probation and parole being abolished
+> # Lo .... [TRUNCATED] 
+New names:
+• `` -> `...9`
+
+> admin$save_rds_twice(missingness_sentences, save_to_sp = save_RDS_to_sharepoint)
+G3;export missingness_sentences to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/missingness_sentences.rds
+gG3;export missingness_sentences to: app/data/missingness_sentences.rds
+g
+> rm(save_RDS_to_sharepoint)
+[1] "-- 2c_import_demo -----------------------------------------------------"
+
+> save_RDS_to_sharepoint <- TRUE  
+
+> # load box modules and packages/functions 
+> box::use(
++   ./box/admin, 
++   csgjcr[...], 
++   dplyr[...], 
++   forcats[fct_recode, fct_reorder],
++  .... [TRUNCATED] 
+
+> # pull demographic categories 
+> info_file <- file.path(admin$sp_survey, "Data/raw", "survey_metrics_and_categories.xlsx")
+
+> demo_cat <- bind_rows(
++   read_excel(info_file, sheet = "race_ethnicity"), 
++   read_excel(info_file, sheet = "sex_gender") 
++ ) |> 
++   select(gro .... [TRUNCATED] 
+
+> # CENSUS DATA ##################################################################
+> 
+> # raw data files
+> # - jr_data_library/data/raw/census/pep/sc- .... [TRUNCATED] 
+indexing sc-est2024-alldata6.csv [===================================----------------------------------------------------------------------------------------------------------------------] 2.15GB/s, eta:  0sindexing sc-est2024-alldata6.csv [=======================================================================================================================================================] 549.97MB/s, eta:  0s                                                                                                                                                                                                               
+> # function to clean and reshape from wide to long
+> # right now each column is a year of estimates, but we want years to be rows
+> # this will work  .... [TRUNCATED] 
+
+> # include all sex, not all ethnicities and summarize by combined race and ethnicity
+> # ORIGIN == 0: all ethnicities, ORIGIN == 1: Not Hispannic, OR .... [TRUNCATED] 
+
+> # include all sex, not all ethnicities, adults only and summarize by combined race and ethnicity
+> adult_pop_by_race_eth <- pep_state_20_24 |>
++   f .... [TRUNCATED] 
+
+> # combine total, adult, juv pop by race and ethnicity
+> # pivot to wide
+> pop_by_race_eth_state <- total_pop_by_race_eth |>
++   bind_rows(adult_pop_ .... [TRUNCATED] 
+
+> # include not all sex, all ethnicities and summarize by sex
+> total_pop_by_sex <- pep_state_20_24 |>
++   filter(sex != "Total", ORIGIN == 0) |>
++    .... [TRUNCATED] 
+
+> # include not all sex, all ethnicities, adults only and summarize by sex
+> adult_pop_by_sex <- pep_state_20_24 |>
++   filter(sex != "Total", ORIGIN  .... [TRUNCATED] 
+
+> # combine total pop and adult pop by sex
+> # pivot to wide
+> pop_by_sex_state <- total_pop_by_sex |>
++   bind_rows(adult_pop_by_sex) |>
++   pivot_wi .... [TRUNCATED] 
+
+> # aggregate state by sex to total population for state
+> pop_state <- pop_by_sex_state |>
++   group_by(year, state_name, state_abbr, state_fips) |>
+ .... [TRUNCATED] 
+
+> # pop_state |>
+> #   bind_rows(pop_by_sex_state, pop_by_race_eth_state) |>
+> #   mutate(indicator = "Resident population") |>
+> #   select(
+> #      .... [TRUNCATED] 
+
+> # PPUS DATA ##################################################################  
+> 
+> # https://www.ojp.gov/library/publications/probation-and-parol .... [TRUNCATED] 
+indexing ppus23at10.csv [================================================================================================================================================================] 564.95MB/s, eta:  0s                                                                                                                                                                                                               New names:
+• `` -> `...2`
+• `Unknown/not reported` -> `Unknown/not reported...6`
+• `Not asked/c` -> `Not asked/c...7`
+• `` -> `...8`
+• `Unknown/not reported` -> `Unknown/not reported...13`
+• `Not asked/c` -> `Not asked/c...14`
+
+> # Appendix Table 13: Selected characteristics of adults on parole, by jurisdiction, 2023
+> # - jr_data_library/data/raw/bjs/ppus/ppus23/ppus23t13.cs .... [TRUNCATED] 
+indexing ppus23at13.csv [================================================================================================================================================================] 644.14MB/s, eta:  0s                                                                                                                                                                                                               New names:
+• `` -> `...2`
+• `Unknown/not reported` -> `Unknown/not reported...6`
+• `` -> `...7`
+• `Unknown/not reported` -> `Unknown/not reported...12`
+• `` -> `...13`
+• `` -> `...14`
+• `` -> `...15`
+• `` -> `...16`
+• `` -> `...17`
+• `` -> `...18`
+• `` -> `...19`
+• `` -> `...20`
+• `` -> `...21`
+• `` -> `...22`
+• `` -> `...23`
+• `` -> `...24`
+• `` -> `...25`
+• `` -> `...26`
+• `` -> `...27`
+• `` -> `...28`
+• `` -> `...29`
+• `` -> `...30`
+• `` -> `...31`
+• `` -> `...32`
+• `` -> `...33`
+• `` -> `...34`
+• `` -> `...35`
+• `` -> `...36`
+• `` -> `...37`
+• `` -> `...38`
+• `` -> `...39`
+• `` -> `...40`
+• `` -> `...41`
+• `` -> `...42`
+• `` -> `...43`
+• `` -> `...44`
+• `` -> `...45`
+
+> # combine probation and parole data 
+> comp_ppus <- bind_rows(ppus_prob, ppus_par) |> 
++   mutate(across(
++     c(-state, -comparison_source), 
++    .... [TRUNCATED] 
+
+> # SVII DATA ##################################################################
+> 
+> # svii is not needed on repo, but is for creation of demo tables .... [TRUNCATED] 
+
+> PERC_ACC <- 1
+
+> ndigits <- -log(PERC_ACC, base = 10)
+
+> # filter and set flags 
+> svii_demo_prep1 <- svii |>
++   filter(
++     year %in% c(2022, 2023), 
++     # do NOT show combined supervision numbers (p .... [TRUNCATED] 
+
+> # comparison sources added 
+> svii_demo_prep2 <- svii_demo_prep1 |> 
++   # add comparison source (which data should be compared to for RRI's) 
++   m .... [TRUNCATED] 
+
+> # calculate RRI's 
+> svii_demo <- svii_demo_prep2 |> 
++   # calculate comparison to population percent 
++   mutate(
++     comp_to_pop_perc = case_wh .... [TRUNCATED] 
+
+> # save in prep folder as it's needed to create demo tab outputs  
+> saveRDS(svii_demo, "prep/svii_demo.rds")
+
+> if (save_RDS_to_sharepoint == TRUE){
++ 
++ # export csv of RRI's 
++ svii_demo |> 
++   # join with demo categories to get set order 
++   left_join(dem .... [TRUNCATED] 
+wrote 1.20kB in  0s, 75.18MB/s                                                                                                                                                                                                             wrote 2.15GB in  0s, 2.15GB/s                                                                                                                                                                                                             
+> # save version on sp but don't save on repo; don't need to use in app 
+> admin$save_rds_twice(svii_demo, save_to_repo = FALSE, save_to_sp = save_RDS .... [TRUNCATED] 
+G3;export svii_demo to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_demo.rds
+g
+> # table names and order to display 
+> display_data_text <- svii_demo |> 
++   distinct(type, metric_abbr, data_abbr, data) |> 
++   mutate(data_order  .... [TRUNCATED] 
+
+> # svii_demo_table_prep ----------------------------------------------------------
+> 
+> svii_highlight <- svii_demo |> 
++   select(state_name, metric .... [TRUNCATED] 
+
+> perc_display <- function(prop, acc = 1){
++   ndigits <- -log(acc, base = 10)
++   val <- prop*100
++   rnd_val <- round(val, digits = ndigits)
++   cas .... [TRUNCATED] 
+
+> # create text values that will be dsipalyed in tables 
+> svii_demo_table_prep <- svii_demo |> 
++   bind_rows(
++     comp_census                      .... [TRUNCATED] 
+
+> admin$save_rds_twice(svii_demo_table_prep, save_to_sp = save_RDS_to_sharepoint)
+G3;export svii_demo_table_prep to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_demo_table_prep.rds
+gG3;export svii_demo_table_prep to: app/data/svii_demo_table_prep.rds
+g
+> # TEXT -----------------------------------------------------------------------
+> 
+> # prep for bullet points of RRI values 
+> demo_rri_text_prep <-  .... [TRUNCATED] 
+
+> make_pretext_on_rri <- function(CAT, TYPE){
++   
++   category_text <- case_when(
++     CAT == "race_ethnicity" ~ "racial", 
++     CAT == "sex_gender ..." ... [TRUNCATED] 
+
+> ## which states DON'T use top metrics 
+> ## i.e. if parole is not available, but technical parole is --> use those values for bullet points 
+> # dem .... [TRUNCATED] 
+
+> notes <- openxlsx::read.xlsx( # need to use openxlsx; formatting issue 
++   file.path(admin$sp_survey, "Data", "raw", "SVII_2024_Survey_Notes.xlsx") .... [TRUNCATED] 
+
+> make_link <- function(href, text){
++   
++   paste0(
++     "<a class = 'datasource' href = '", href, "' target = '_blank'>", 
++     text, 
++     "</a ..." ... [TRUNCATED] 
+
+> census_link <- make_link(
++   "https://www.census.gov/data/datasets/time-series/demo/popest/2020s-state-detail.html", 
++   "U.S. Census Bureau State ..." ... [TRUNCATED] 
+
+> ppus_link <- make_link(
++   "https://bjs.ojp.gov/library/publications/probation-and-parole-united-states-2023", 
++   "Probation and Parole in the Un ..." ... [TRUNCATED] 
+
+> demo_highlight_desc <- paste0(
++  # "<div class = 'notetxt' style = 'text-align: left;'>",
++   "<p><span class = 'highlight'>Bold orange text</span> ..." ... [TRUNCATED] 
+
+> make_posttext_section <- function(CAT, TYPE){
++   
++ 
++   comp_group_text <- case_when(
++     CAT == "race_ethnicity" ~ "the White population", 
++   .... [TRUNCATED] 
+
+> svii_demo_text <- tidyr::crossing(
++   state_name = state.name, 
++   type = c("Admissions", "Population"), 
++   group_cat = c("race_ethnicity", "sex ..." ... [TRUNCATED] 
+
+> admin$save_rds_twice(svii_demo_text, save_to_sp = save_RDS_to_sharepoint)
+G3;export svii_demo_text to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_demo_text.rds
+gG3;export svii_demo_text to: app/data/svii_demo_text.rds
+g
+> rm(save_RDS_to_sharepoint)
+[1] "End run Wed Oct  8, 2025 at 11:12:44 CDT"
+Time difference of 50.32008 secs
