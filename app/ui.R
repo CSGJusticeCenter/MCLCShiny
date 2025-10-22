@@ -181,7 +181,7 @@ ui <- fluidPage(
         
         # START PANELS (STATE TABS) --------------------------------------------
         tabsetPanel( # STATE TABS 
-          selected = "4", # should be 1 
+          selected = "1", 
           type = "tabs", 
           id = "tabsetpanel",
           # 1 overview -----------------------------------------------------
