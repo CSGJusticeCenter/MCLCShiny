@@ -7,7 +7,7 @@ format:
     page-layout: full
     echo: false 
 params: 
-  state: "New Jersey" 
+  state: "Vermont" 
 editor_options: 
   chunk_output_type: console
 ---
