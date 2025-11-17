@@ -163,8 +163,8 @@ demo_table_header <- function(text){
 
 
 demo_reactable <- function(df, metric_header = "Metric") {
-  # need width of reactable to be <= 995
-  # data (275) + demo cnts (9*85)  = 1000
+  # need width of reactable to be <= 1040
+  # data (275) + demo cnts (8*84) + Two/multiracial (86) = 1033
   
   display_df <- df |> 
     arrange(group, metric_abbr) |> 
@@ -207,7 +207,7 @@ demo_reactable <- function(df, metric_header = "Metric") {
     defaultColDef = colDef(
       format = colFormat(separators = TRUE), 
       header = function(value) demo_table_header(value), 
-      minWidth = 85, 
+      minWidth = 84, 
       align = "right", 
       na = "-", # using n dash; could also use longer m dash: "–"
       headerVAlign = "bottom", 
@@ -221,11 +221,11 @@ demo_reactable <- function(df, metric_header = "Metric") {
         width = 235, 
         style = list(fontWeight = "500"), 
         html = TRUE
-      ) 
+      ), 
       # Hispanic = colDef(minWidth = 110), 
       # AIAN = colDef(minWidth = 100), 
       # NHPI = colDef(minWidth = 90), 
-      # Two = colDef(minWidth = 90), 
+      Two = colDef(minWidth = 86) # need a little more space for 'Multiracial' text 
       # `Unknown r/e` = colDef(minWidth = 100)
     )
   )
