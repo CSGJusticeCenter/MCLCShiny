@@ -1,5 +1,5 @@
 [1] "== DATA PREP =========================================================="
-[1] "Last run Mon Nov 17, 2025 at 11:55:43 CST"
+[1] "Last run Fri Dec 12, 2025 at 15:36:06 CST"
 [1] "-- 2a_import_survey ---------------------------------------------------"
 
 > save_RDS_to_sharepoint <- TRUE 
@@ -257,5 +257,5 @@ New names:
 gG3;export missingness_sentences to: app/data/missingness_sentences.rds
 g
 > rm(save_RDS_to_sharepoint)
-[1] "End run Mon Nov 17, 2025 at 11:55:50 CST"
-Time difference of 7.05095 secs
+[1] "End run Fri Dec 12, 2025 at 15:36:13 CST"
+Time difference of 7.033652 secs

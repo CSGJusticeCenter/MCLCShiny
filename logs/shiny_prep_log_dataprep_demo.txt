@@ -1,5 +1,5 @@
 [1] "== DATA PREP =========================================================="
-[1] "Last run Mon Nov 17, 2025 at 11:56:24 CST"
+[1] "Last run Fri Dec 12, 2025 at 15:36:25 CST"
 
 > save_RDS_to_sharepoint <- TRUE 
 
@@ -63,7 +63,7 @@ New names:
 > 
 > # raw data files
 > # - jr_data_library/data/raw/census/pep/sc- .... [TRUNCATED] 
-indexing sc-est2024-alldata6.csv [=========================================----------------------------------------------------------------------------------------------------------------------] 2.15GB/s, eta:  0sindexing sc-est2024-alldata6.csv [=============================================================================================================================================================] 614.57MB/s, eta:  0s                                                                                                                                                                                                                     indexing sc-est2024-alldata6.csv [=============================================================================================================================================================] 611.68MB/s, eta:  0s                                                                                                                                                                                                                     
+indexing sc-est2024-alldata6.csv [==================================-----------------------------------------------------------------------------------------------] 2.15GB/s, eta:  0sindexing sc-est2024-alldata6.csv [===============================================================================================================================] 595.94MB/s, eta:  0s                                                                                                                                                                                       
 > # function to clean and reshape from wide to long
 > # right now each column is a year of estimates, but we want years to be rows
 > # this will work  .... [TRUNCATED] 
@@ -109,7 +109,7 @@ New names:
 > # PPUS DATA ##################################################################  
 > 
 > # https://www.ojp.gov/library/publications/probation-and-parol .... [TRUNCATED] 
-indexing ppus23at10.csv [======================================================================================================================================================================] 618.76MB/s, eta:  0s                                                                                                                                                                                                                     New names:
+indexing ppus23at10.csv [========================================================================================================================================] 440.47MB/s, eta:  0s                                                                                                                                                                                       New names:
 • `` -> `...2`
 • `Unknown/not reported` -> `Unknown/not reported...6`
 • `Not asked/c` -> `Not asked/c...7`
@@ -119,7 +119,7 @@ New names:
 
 > # Appendix Table 13: Selected characteristics of adults on parole, by jurisdiction, 2023
 > # - jr_data_library/data/raw/bjs/ppus/ppus23/ppus23t13.cs .... [TRUNCATED] 
-indexing ppus23at13.csv [======================================================================================================================================================================] 398.35MB/s, eta:  0s                                                                                                                                                                                                                     New names:
+indexing ppus23at13.csv [========================================================================================================================================] 818.23MB/s, eta:  0s                                                                                                                                                                                       New names:
 • `` -> `...2`
 • `Unknown/not reported` -> `Unknown/not reported...6`
 • `` -> `...7`
@@ -198,7 +198,7 @@ New names:
 + svii_demo |> 
 +   # join with demo categories to get set order 
 +   left_join(dem .... [TRUNCATED] 
-wrote 1.20kB in  0s, 44.58MB/s                                                                                                                                                                                                                   wrote 2.15GB in  0s, 2.15GB/s                                                                                                                                                                                                                   
+wrote 1.20kB in  0s, 79.96MB/s                                                                                                                                                                                     wrote 2.15GB in  0s, 2.15GB/s                                                                                                                                                                                     
 > # save version on sp but don't save on repo; don't need to use in app 
 > admin$save_rds_twice(svii_demo, save_to_repo = FALSE, save_to_sp = save_RDS .... [TRUNCATED] 
 G3;export svii_demo to: C:/Users/meichlersmith/The Council of State Governments/JC Research - Documents/50 State Revocations Project/MCLC Shiny App/data/analysis/svii_demo.rds
@@ -282,5 +282,5 @@ New names:
 gG3;export svii_demo_text to: app/data/svii_demo_text.rds
 g
 > rm(save_RDS_to_sharepoint)
-[1] "End run Mon Nov 17, 2025 at 11:57:10 CST"
-Time difference of 45.50165 secs
+[1] "End run Fri Dec 12, 2025 at 15:37:16 CST"
+Time difference of 50.802 secs
