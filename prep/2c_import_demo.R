@@ -555,14 +555,15 @@ perc_display <- function(prop, acc = 1){
   rnd_val <- round(val, digits = ndigits)
   case_when(
     val == 0 ~ "0%", 
-    val != 0 & rnd_val == 0 ~ glue("<{acc}%"), 
-    val != 0 & rnd_val != 0 ~ glue("{rnd_val}%"), 
+    val != 0   & rnd_val == 0   ~ glue("<{acc}%"), 
+    val != 100 & rnd_val == 100 ~ glue(">{(100-acc)}%"), 
+    val != 0   & rnd_val != 0   ~ glue("{rnd_val}%"), 
     !is.na(val) ~ NA_character_
   )
 }
 
 
-# create text values that will be dsipalyed in tables 
+# create text values that will be displayed in tables 
 svii_demo_table_prep <- svii_demo |> 
   bind_rows(
     comp_census                                                |> mutate(metric_abbr = "a total comp") |> rename(prop = comp), 
