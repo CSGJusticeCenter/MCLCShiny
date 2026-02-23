@@ -6,7 +6,6 @@ Links current live version on shinyapps.io: `mclc_comms`
 
 - https://csgjc.shinyapps.io/mclc_comms/#mapexplorer  
 - https://csgjc.shinyapps.io/mclc_comms/#statedashboard 
-- https://csgjc.shinyapps.io/mclc_comms/#downloaddata  
 
 App show on CSG Website: [Supervision Violations and their Impact on Incarceration](https://projects.csgjusticecenter.org/supervision-violations-impact-on-incarceration/)
 
@@ -15,7 +14,7 @@ Additional Documentation: [`docs/gen_documentation.qmd`](https://github.com/CSGJ
 
 # Staff 
 
-| Staff/Version<br>Published  |Alpha $\alpha$<br>2019|Beta $\beta$<br>2021|Gamma $\gamma$<br>2024|Delta $\delta$<br>2025| 
+| Staff/Version<br>Published  |Alpha $\alpha$<br>2019|Beta $\beta$<br>2021|Gamma $\gamma$<br>2024|Delta $\delta$<br>2025-2026| 
 |:-----                    |:---:         |:---:       |:---:         |:---:         |
 |**Jessica Saunders**      | x            | x          |x             | **x**        | 
 |**Martha Eichlersmith**   | -            | -          |x             | **x**        | 
@@ -31,14 +30,14 @@ Additional Documentation: [`docs/gen_documentation.qmd`](https://github.com/CSGJ
 
 SharePoint folders listed below are sub folders of [JC Research - Documents/50 State Revocation Project](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98&ct=1652815580832&or=Teams%2DHL&ga=1).
 
-## Delta $\delta$: Publish in 2025
+## Delta $\delta$: Publish in 2025 & 2026
 *Supervision Violations and their Impact on Incarceration (SVII)*  
 
 |   |         |
 |:-----|:---------------|  
 | Published Product | [Report and Webtool: Supervision Violations and their Impact on Incarceration](https://projects.csgjusticecenter.org/supervision-violations-impact-on-incarceration/) | 
 | Data Years Included | 2018-2023 | 
-| Releases | app v4.0.00, expected by Dec 2025, demographic tab on state dashboard<br>[app v3.0.00, July 2025, aggregate counts only](https://github.com/CSGJusticeCenter/MCLCShiny/releases/tag/v3.0.00)| 
+| Releases | [app v4.0.00, Feb 2026, demographic tab on state dashboard](https://github.com/CSGJusticeCenter/MCLCShiny/releases/tag/v4.0.00)<br>[app v3.0.00, July 2025, aggregate counts only](https://github.com/CSGJusticeCenter/MCLCShiny/releases/tag/v3.0.00)| 
 | Data Collection Time frame | June 2024 - February 2025 |  
 | Requested Data | 2022 and 2023: supervision data (demographic breakouts of data), cost of incarceration, also request discretionary parole data which was used on different project | 
 | Data Collection Format | ask states to submit data via email in format of their choosing<br>* have multiple different file types and in many cases multiple files for each state<br>* have unique import file for each state since each state has a different way of providing data | 
@@ -134,13 +133,8 @@ MCLCShiny
 |  ├── 3c_highchart_html.R   # create highcharts for download, save as html
 |  └── 3d_highchart_png.R    # save htmls from 3c to pngs 
 |
-| # THIS FOLDER HAS NOT HAD PATHWAYS UPDATED; WILL NOT RUN AS IS 
-└── prep_rri          # folder for prep data/info for rri (race/ethnicity) infographics 
-    ├── box           # box modules for preping R/E data 
-    ├── infographics  # exploration data 
-    ├── run_save.R    # shiny prep for R/E infographs & tables
-    ├── shiny_prep.R  # run shiny prep (for rri info only) 
-    |...              # various files for exploration/documentation 
+| 
+└── zArchive # old code, no longer in use 
 ```
 
 
