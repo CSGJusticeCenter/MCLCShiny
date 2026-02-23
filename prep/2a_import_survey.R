@@ -20,16 +20,13 @@ display_metric_par  <- c("new par" , "tech par" , "par")
 display_metric_prob <- c("new prob", "tech prob", "prob")
 
 
+# **svii* | preping data universal to be used in aggregate & demo tabs -----
 
-# **svii_agg** | all aggregate data ---------------------------------------------------
-
-svii_prep <- readRDS(file.path(admin$sp_survey, "Data/raw/combined/svii_main.rds")) |> 
-  # filter to only include aggregate data 
-  filter(group == "aggregate") |> 
+svii <- readRDS(file.path(admin$sp_survey, "Data/raw/combined/svii_main.rds")) |> 
   # remove variables that will not be displayed in app at all 
   filter(word(metric_abbr, 2, -1) %in% c(display_metric_natl, display_metric_par, display_metric_prob)) |> 
   # remove columns that aren't relevant 
-  select(-c(group, group_cat, time_period, FY_end)) |> 
+  select(-c(time_period, FY_end)) |> 
   # create new metric_long column; metric will be the 'displayed' 
   # create new columns (data and metric) to match previous iteration 
   mutate(metric_long = metric, .before = metric) |> 
@@ -60,9 +57,9 @@ svii_prep <- readRDS(file.path(admin$sp_survey, "Data/raw/combined/svii_main.rds
     ),
     data = fct_reorder(factor(data), as.numeric(metric_long), .na_rm = FALSE), 
   ) |> 
-  select(starts_with("state"), year, data, metric, type, n, starts_with("metric_")) |> 
+  select(starts_with("state"), year, data, metric, type, group, group_cat, n, starts_with("metric_")) |> 
   arrange(state_name, metric_abbr, year) |> 
-  group_by(state_name, metric_abbr) |> 
+  group_by(state_name, metric_abbr, group) |> 
   # calculate yearly change 
   mutate(
     chg1yr = ifelse(
@@ -97,6 +94,20 @@ svii_prep <- readRDS(file.path(admin$sp_survey, "Data/raw/combined/svii_main.rds
                      type, "<br>",
                      formattable::comma(n, digits = 0), "<br>")
   ) 
+
+# save version on sp but don't save on repo; don't need to use in app 
+admin$save_rds_twice(svii, save_to_repo = FALSE, save_to_sp = save_RDS_to_sharepoint)
+
+# save in prep folder as it's needed to create demo tab outputs  
+saveRDS(svii, "prep/svii.rds")
+
+
+# **svii_agg** | all aggregate data ---------------------------------------------------
+
+svii_prep <- svii |> 
+  # filter to only include aggregate data 
+  filter(group == "aggregate") |> 
+  select(-c(group, group_cat))
 
 # if total is equal to probation or parole, then indicate that the total only includes
 #   probation or parole
@@ -621,3 +632,7 @@ svii_download <- svii_agg |>
   mutate(across(c(state, year), as.character)) 
 
 admin$save_rds_twice(svii_download, save_to_sp = save_RDS_to_sharepoint)
+
+
+
+rm(save_RDS_to_sharepoint)

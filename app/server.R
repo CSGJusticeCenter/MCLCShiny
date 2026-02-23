@@ -816,97 +816,81 @@ server <- function(input, output, session) {
   }) |>
     bindCache(input$state_report,
               input$adm_pop_report)
-
-
-  # DOWNLOAD DATA ##############################################################
-
-  # Select multiple years
-  filteredYears <- reactive({
-    unique(svii_download$year)
-  })
-  observeEvent(filteredYears(), {
-    updatePickerInput(session, inputId = 'download_year',
-                      label = 'Select Year(s)',
-                      choices = filteredYears(),
-                      selected = filteredYears())
-  })
-
-  # Select multiple state
-  filteredState <- reactive({
-    unique(svii_download$state)
-  })
-  observeEvent(filteredState(), {
-    updatePickerInput(session, inputId = 'download_state',
-                      label = 'Select State(s)',
-                      choices = filteredState(),
-                      selected = filteredState())
-  })
-
-  # Select multiple metrics
-  filteredMetric <- reactive({
-    unique(svii_download$metric)
-  })
-  observeEvent(filteredMetric(), {
-    updatePickerInput(session, inputId = 'download_metric',
-                      label = 'Select Metric(s)',
-                      choices = filteredMetric(),
-                      selected = filteredMetric())
-  })
-
-  # Filter data depending on user input
-  df_download_table <- reactive({
-    svii_download |>
-      filter(year %in% input$download_year) |>
-      filter(state %in% input$download_state) |>
-      filter(metric %in% input$download_metric) |>
-      arrange(state, year)
+  
+  
+  # 4 DEMOGRAPHICS ----------------------------------------------------------------
+  
+  # Filter data
+  demo_text <- reactive({
+    svii_demo_text |> 
+      filter(
+        state_name == input$state_report,
+        type == input$adm_pop_report,
+        group_cat == input$demo_groupcat
+      ) 
   }) |>
-    bindCache(input$download_year,
-              input$download_state,
-              input$download_metric)
+    bindCache(input$state_report,
+              input$adm_pop_report, 
+              input$demo_groupcat)
+  
+  
+  demo_tables<- reactive({
+    svii_demo_table_prep |> 
+      filter(
+        state_name == input$state_report,
+        type == input$adm_pop_report,
+        group_cat == input$demo_groupcat
+      ) 
+  }) |>
+    bindCache(input$state_report,
+              input$adm_pop_report, 
+              input$demo_groupcat)
 
-  # Save data as csv
-  output$save_data <- downloadHandler(
-    filename = function() {
-      paste("MCLC_", Sys.Date(), ".csv", sep = "")
-    },
-    content = function(con) {
-      write.csv(df_download_table(), con,
-                row.names = FALSE)
-    }
-  )
+  # 4 pretext ---------------------------------------------------------------------
 
-  # Reactable table of MCLC data for download
-  output$selected_download_table <- renderReactable({
-
-    df1 <- df_download_table() |>
-      mutate(state = factor(state))
-
-    reactable(df1,
-              style = list(fontFamily = "Graphik, sans-serif",
-                           fontSize = "1.4rem"),
-              theme = reactableTheme(cellStyle = list(display = "flex",
-                                                      flexDirection = "column",
-                                                      justifyContent = "center")),
-              defaultColDef = colDef(format = colFormat(separators = TRUE),
-                                     align = "left"),
-              compact = TRUE,
-              fullWidth = FALSE,
-              defaultPageSize = 50,
-              columns = list(
-                state  = colDef(name = "State",
-                                align = "left",
-                                style = list(fontWeight = "bold"),
-                                minWidth = 200),
-                metric = colDef(name = "Metric",
-                                minWidth = 370),
-                year   = colDef(name = "Year",
-                                minWidth = 110),
-                total  = colDef(na = "–",
-                                name = "Total",
-                                align = "right",
-                                minWidth = 110,
-                                filterable = FALSE)))
+  output$demo_pretext0 <-   renderUI({
+    HTML(demo_text()$pretext0)
   })
+    
+  output$demo_pretext1 <-   renderUI({
+    HTML(demo_text()$pretext1)
+  })
+  
+  output$demo_pretext2 <-   renderUI({
+    HTML(demo_text()$pretext2)
+  })
+  
+  output$demo_pretext3 <-   renderUI({
+    HTML(demo_text()$pretext3)
+  })
+
+  # 4 tables (demographics) --------------------------------------------------------
+  output$demo_table_1 <- renderReactable({
+    demo_tables() |> 
+      filter(table == 1) |> 
+      demo_reactable()
+  }) 
+  
+  output$demo_table_2 <- renderReactable({
+    demo_tables() |> 
+      filter(table == 2) |> 
+      demo_reactable()
+  }) 
+  
+  output$demo_table_3 <- renderReactable({
+    demo_tables() |> 
+      filter(table == 3) |> 
+      demo_reactable()
+  }) 
+  
+  
+  
+  # 4 posttext ------------------------------------------------------------------
+  
+  output$demo_posttext <-   renderUI({
+    HTML(demo_text()$posttext)
+  })
+  
+
 
 } # END SERVER 

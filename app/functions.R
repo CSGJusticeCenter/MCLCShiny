@@ -140,3 +140,94 @@ state_reactable <- function(df, these_col_fill = colpal_fill, these_col_stroke =
     )
   )
 }
+
+
+
+
+
+demo_table_header <- function(text){
+  stringr::str_replace_all(text, c(
+    "Unknown s/g" = "Unknown", 
+    "Unknown r/e" = "Unknown", 
+    "AIAN" = "American Indian", 
+    "NHPI" = "Pacific Islander", 
+    "Two" = "Multiracial", 
+    "Asian" = "Asian American"
+  ))
+  
+}
+
+
+# df <- svii_demo_table_prep |> 
+#   filter(state_name == "Alabama", type == "Population", group_cat == "race_ethnicity", table == 3)
+
+
+demo_reactable <- function(df, metric_header = "Metric") {
+  # need width of reactable to be <= 1040
+  # data (275) + demo cnts (8*84) + Two/multiracial (86) = 1033
+  
+  display_df <- df |> 
+    arrange(group, metric_abbr) |> 
+    mutate(
+      data = case_when(
+        word(metric_abbr, 2, 3) == "total comp" ~ paste0(data, "<sup>2</sup>"), 
+        word(metric_abbr, 2, 3) == "par comp"   ~ paste0(data, "<sup>3</sup>"),
+        word(metric_abbr, 2, 3) == "prob comp"  ~ paste0(data, "<sup>4</sup>"), 
+        TRUE ~ data
+      ), 
+      prop = case_when(
+        highlight == TRUE ~ paste0("<span class = 'highlight'>", prop, "</span>"), 
+        TRUE ~ prop
+      )
+    ) |> 
+    select(data, group, prop) |> 
+    pivot_wider(names_from = group, values_from = prop)
+  
+  greyout_row <- ifelse(str_detect(sort(df$metric_abbr)[1], "comp") == TRUE, 1, 0)
+  
+  reactable(
+    display_df, 
+    style = list(fontFamily = "Graphik, sans-serif", fontSize = "1.4rem"), 
+    theme = reactableTheme(
+      cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center"), 
+      headerStyle = list(fontWeight = "bold")
+    ), 
+    compact = TRUE,
+    searchable = FALSE,
+    pagination = FALSE,
+    sortable = FALSE, 
+    rowStyle = function(index){
+      if (index == 1){
+        list(
+          background = "rgba(0, 0, 0, 0.05)",
+          `border-bottom` = "thin solid",
+          `border-color` = "rgba(0, 0, 0, 0.10)")
+      }
+    },
+    defaultColDef = colDef(
+      format = colFormat(separators = TRUE), 
+      header = function(value) demo_table_header(value), 
+      minWidth = 84, 
+      align = "right", 
+      na = "-", # using n dash; could also use longer m dash: "–"
+      headerVAlign = "bottom", 
+      html = TRUE
+    ),
+    columns = list(
+      data = colDef(
+        name = metric_header,
+        align = "left",
+        minWidth = 235,
+        width = 235, 
+        style = list(fontWeight = "500"), 
+        html = TRUE
+      ), 
+      # Hispanic = colDef(minWidth = 110), 
+      # AIAN = colDef(minWidth = 100), 
+      # NHPI = colDef(minWidth = 90), 
+      Two = colDef(minWidth = 86) # need a little more space for 'Multiracial' text 
+      # `Unknown r/e` = colDef(minWidth = 100)
+    )
+  )
+}
+

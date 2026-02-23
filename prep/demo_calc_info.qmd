@@ -1,0 +1,176 @@
+---
+title: "SVII Demographic Calculations - `r params$state`"
+editor: source
+self-contained: true 
+format: 
+  html:
+    page-layout: full
+    echo: false 
+params: 
+  state: "Vermont" 
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| include: false 
+state <- params$state
+```
+
+
+```{r}
+#| message: false
+#| warning: false 
+library(tidyverse)
+library(DT)
+library(scales)
+```
+
+
+RRI's are calculated by looking at the rate for a given group (Black, AIAN, Hispanic) divided by the rate for a comparison group.
+
+For race and ethnicity the comparison group is White.  For sex and gender, the comparison group is Female.  
+
+$$
+\texttt{rri}_{\text{metric, group}} = \frac{\texttt{rate}_{\text{metric, group}}}{\texttt{rate}_{\text{metric, White/Female}}} 
+$$
+Rates are calculated by taking the average value from 2022 and 2023 for a given group and dividing it by the comparison population.  
+
+The comparison population for total prison admissions and total prison population is U.S. Census data for `r state`.  
+The comparison population for probation and parole metrics is the BJS Probation and Parole in the United States report, which details probation and parole populations broken out by demographics for `r state`.  
+
+**RRI Text in Bullet Points** 
+
+- If `rri` > 1 then text is: `rri`X more likely ...   
+- If `rri` < 1 then text is: ((1-`rri`)*100)% less likely ...   
+- If `rri` = 1 then text is: as likely ... 
+
+```{r}
+svii_demo <- readRDS("./svii_demo.rds") |> 
+  filter(state_name == state)
+```
+
+
+## Counts and Percent Values  
+
+- `n` = `2022` + `2023` (combined value of 2022 and 2023 values) 
+- `perc` = percent of `n` divided by the aggregate value for a given metric, rounded to the nearest percent; values from 0-100; **these values are displayed in the tables** 
+  * Example for Total Prison Admissions 
+  * Total Prison Admissions, Female, `n`: `r pull(filter(svii_demo, metric_abbr == "a total", group == "Female")[,"2022"], 1)` (Female, 2022) + `r pull(filter(svii_demo, metric_abbr == "a total", group == "Female")[,"2023"], 1)` (Female, 2023) = `r pull(filter(svii_demo, metric_abbr == "a total", group == "Female"), n)`  
+  * Total Prison Admissions, Male, `n`: `r comma(pull(filter(svii_demo, metric_abbr == "a total", group == "Male")[,"2022"], 1))` (Male, 2022) + `r comma(pull(filter(svii_demo, metric_abbr == "a total", group == "Male")[,"2023"], 1))` (Male, 2023) = `r comma(pull(filter(svii_demo, metric_abbr == "a total", group == "Male"), n))`    
+  * Total Prison Admissions, Female, `perc`: (`r comma(pull(filter(svii_demo, metric_abbr == "a total", group == "Female"), n))`/(`r comma(pull(filter(svii_demo, metric_abbr == "a total", group == "Female"), n))`+`r comma(pull(filter(svii_demo, metric_abbr == "a total", group == "Male"), n))`))*100 -> round to nearest integer = `r pull(filter(svii_demo, metric_abbr == "a total", group == "Female"), perc)`
+- `cp` refers to the comparison population that is displayed in the table, values are Census, PPUS_Parole, and PPUS_Probation
+  * for total admissions and total prison population, the comparison population is `r state` population data which comes from the [U.S. Census Population Estimate Project (PEP)](https://www.census.gov/programs-surveys/popest.html) 
+  * for parole and probation metrics, the comparison population is the `r state`'s parole and probation population data which comes from the BJS report [Probation and Parole in the United States, 2023](https://www.ojp.gov/library/publications/probation-and-parole-united-states-2023) (Probation population data from Appendix Table 10, Parole population data from Appendix Table 13)
+- `n_cp` is the count value for the comparison population for a given group (i.e. Probation Population, `r state`, Black People)  
+- `perc_cp` = percent of `n_cp` divided by the aggregate value for a given comparison population; **these values are displayed in the top row of the tables**
+  * Example for Census data
+  * `r state` Population, Female, `n_cp`: `r comma(pull(filter(svii_demo, metric_abbr == "a total", group == "Female"), ncomp))`  
+  * `r state` Population , Male, `n_cp`: `r comma(pull(filter(svii_demo, metric_abbr == "a total", group == "Male"), ncomp))`  
+  * `r state` Population Female, `perc_cp`: (`r comma(pull(filter(svii_demo, metric_abbr == "a total", group == "Female"), ncomp))`/(`r comma(pull(filter(svii_demo, metric_abbr == "a total", group == "Female"), ncomp))`+`r comma(pull(filter(svii_demo, metric_abbr == "a total", group == "Male"), ncomp))`))*100 -> round to nearest integer = `r pull(filter(svii_demo, metric_abbr == "a total", group == "Female"), compperc)`
+  * values that round to 0 are displayed as "<1%" on the web tool 
+- `perc_cp_unk` is the percent of the comparison population that is unknown for a given demographic breakdown; this is only listed in the BJS PPUS report.  If a given group category has a percent unknown of greater than 15%, RRI's are not calculated.  
+
+## Rate and RRI Calculations 
+
+$$
+\texttt{rate}_{\text{metric, group}} = \frac{\texttt{n}_{\text{metric, group}}/2}{\texttt{n\_cp}_{\text{metric, group}}} \times 100,000
+$$
+
+- `rate` = rate per 100,000 when comparing the the average value to the comparison population; `n` is divided by 2 to get the average value for `2022` and `2023`
+  * Example for Total Prison Admissions, AIAN 
+  * Total Prison Admissions, AIAN, `n` = `r comma(pull(filter(svii_demo, metric_abbr == "a total", group == "AIAN"), n))`  
+  * AIAN population in `r state`, `n_cp` = `r comma(pull(filter(svii_demo, metric_abbr == "a total", group == "AIAN"), ncomp))` 
+  * Rate of AIAN Total Prison Admissions per 100,000, `rate`: ([`r comma(pull(filter(svii_demo, metric_abbr == "a total", group == "AIAN"), n))`/2]/`r comma(pull(filter(svii_demo, metric_abbr == "a total", group == "AIAN"), ncomp))`) * 100,000 = `r round(pull(filter(svii_demo, metric_abbr == "a total", group == "AIAN"), rate), 0)`
+
+$$
+\texttt{rri}_{\text{metric, group}} = \frac{\texttt{rate}_{\text{metric, group}}}{\texttt{rate}_{\text{metric, White/Female}}} 
+$$
+  
+- `rri` = divide the `rate` for a given group by the `rate` for the comparison group (for race and ethnicity, the comparison group is White and the sex or gender the comparison group is Female)
+  * Example for Total Prison Admissions, AIAN 
+  * AIAN, `rate` = `r round(pull(filter(svii_demo, metric_abbr == "a total", group == "AIAN"), rate), 0)`
+  * Comparison group rate, `rate_cg`= `r round(pull(filter(svii_demo, metric_abbr == "a total", group == "White"), rate), 0)`
+  * `rri` = `r round(pull(filter(svii_demo, metric_abbr == "a total", group == "AIAN"), rate), 0)`/`r round(pull(filter(svii_demo, metric_abbr == "a total", group == "White"), rate), 0)` --> rounded to 1 decimal = `r round(pull(filter(svii_demo, metric_abbr == "a total", group == "AIAN"), rri), 1)`
+  
+**RRI Text in Bullet Points** 
+
+- If `rri` > 1 then text is: `rri`X more likely ...   
+- If `rri` < 1 then text is: ((1-`rri`)*100)% less likely ...   
+- If `rri` = 1 then text is: as likely ... 
+
+## Table 
+
+The table below shows all of the values.  Please note that the `rate` and `rate_cg` are shown rounded to the nearest decimal to make viewing easier.  Additionally, the `perc` and `perc_cp` values are rounded to the nearest percent, some of the the values are small enough to round to 0 - in these cases, the values shown on the web tool will be "<1%".  
+
+AIAN: American Indian  
+NHPI: Pacific Islander  
+
+```{r}
+
+
+svii_rri <- svii_demo |> 
+  group_by(state_name, metric_abbr) |> 
+  mutate(
+    rate_compgroup = case_when(
+      group_cat == "race_ethnicity" ~ rate[group == "White"], 
+      group_cat == "sex_gender" ~ rate[group == "Female"]
+    ), 
+    .after = rate
+  ) |> 
+  ungroup() |> 
+  select(
+    metric = data, 
+    group, 
+    group_cat, 
+    `2022`, 
+    `2023`, 
+    n, 
+    perc, 
+    cp = comparison_source, 
+    n_cp = ncomp, 
+    perc_cp = compperc, 
+    perc_cp_unk = compunk, 
+    rate, 
+    rate_cg = rate_compgroup, 
+    rri
+  ) |> 
+  filter(
+    !is.na(n), 
+    !group %in% c("Other", "Diverse", "Unknown r/e", "Unknown s/g")
+  ) |> 
+  arrange(metric)
+
+# https://stackoverflow.com/questions/58526047/customizing-how-datatables-displays-missing-values-in-shiny
+rowCallback <- c(
+    "function(row, data){",
+    "  for(var i=0; i<data.length; i++){",
+    "    if(data[i] === null){",
+    "      $('td:eq('+i+')', row).html('NA')",
+    "        .css({'color': 'rgb(151,151,151)', 'font-style': 'italic'});",
+    "    }",
+    "  }",
+    "}"  
+  )
+
+svii_rri |> 
+  DT::datatable(
+    rownames = FALSE, 
+    options = list(
+      initComplete = JS(
+        "function(settings, json) {",
+        "$(this.api().table().header()).css({'font-size': '80%'});",
+        "}"
+      ), 
+      rowCallback = JS(rowCallback)
+    )
+  ) |> 
+  DT::formatStyle(columns = c(1:ncol(svii_rri)), fontSize = '80%') |> 
+  DT::formatRound(columns = c("rate", "rate_cg"), digits = 0) |> 
+  DT::formatRound(columns = c("rri"), digits = 1) |> 
+  DT::formatRound(columns = c("n", "2022", "2023", "n_cp"), digits = 0)
+
+
+
+```
+

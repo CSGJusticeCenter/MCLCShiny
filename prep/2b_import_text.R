@@ -1,4 +1,6 @@
 
+save_RDS_to_sharepoint <- TRUE 
+
 box::use(
   ./box/admin, 
   dplyr[...], 
@@ -70,7 +72,7 @@ formatted_notes <- notes |>
     additional_notes
   ) 
 
-admin$save_rds_twice(formatted_notes)
+admin$save_rds_twice(formatted_notes, save_to_sp = save_RDS_to_sharepoint)
 
 
 
@@ -103,6 +105,7 @@ missingness_sentences <- read_excel(
 
 
 
-admin$save_rds_twice(missingness_sentences)
+admin$save_rds_twice(missingness_sentences, save_to_sp = save_RDS_to_sharepoint)
 
 
+rm(save_RDS_to_sharepoint)
