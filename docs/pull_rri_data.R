@@ -12,7 +12,8 @@ svii_demo <- readRDS("prep/svii_demo.rds")
 
 svii_demo |> 
   filter(group_cat == "sex_gender") |> 
-  select(state_name, type, data, group, n_avg = n/2, prop, comparison_source, 
+  mutate(n_avg = n/2) |> 
+  select(state_name, type, data, group, n_avg, prop, comparison_source, 
          ncomp, rate, rri) |> 
   readr::write_csv(file = file.path(admin$sp_data, "svii_rri_sex_gender.csv"))
 
