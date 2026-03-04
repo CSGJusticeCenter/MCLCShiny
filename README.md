@@ -187,9 +187,31 @@ Releases are made up of 3 values and shown in the format of v0.0.00
 **Third Number: 0.0.`01`** - any time a new version is pushed to the R Shiny servers, but is not shared externally from research or live  
 
 
+## Push to shinyapps.io 
+
+- Connect to shinyapps.io account (need to login to shiny account and get token) -- only needs to be done once 
+- Open up one of the app files (`global.R`, `server.R`, or `ui.R`)
+- In the top right corner of the window there should be a box called "Publish"
+  * if you have published the app previously, it may say "Republish" and include of list of previously published titles, you can just select one of these
+  * if you are publishing app for the first time, specify the title you want to use 
+  * the title represents the unique part of the url: `https://csgjc.shinyapps.io/[TITLE]` 
+- update information in the [JC Research - Documents\\50 State Revocations Project\\MCLC Shiny App\\app_versions](https://csgorg.sharepoint.com/sites/Team-JC-Research/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FTeam%2DJC%2DResearch%2FShared%20Documents%2F50%20State%20Revocations%20Project%2FMCLC%20Shiny%20App%2Fapp%5Fversions&viewid=134e5f2c%2Df80c%2D46ef%2D8491%2D1eac7193eb98&ct=1652815580832&or=Teams%2DHL) folder 
+  * github release information saved as a pdf with version number by updating [template_versions.docx](https://csgorg.sharepoint.com/:w:/r/sites/Team-JC-Research/_layouts/15/Doc.aspx?sourcedoc=%7B40A87C81-3D43-43D4-BEF2-A3383F75FDE7%7D&file=template_versions.docx&action=default&mobileredirect=true) and saving as pdf 
+  * update [app_names_version.xlsx](https://csgorg.sharepoint.com/:x:/r/sites/Team-JC-Research/_layouts/15/Doc.aspx?sourcedoc=%7B2F3024A9-D331-4C51-85D5-72D242BA9605%7D&file=app_names_versions.xlsx&action=default&mobileredirect=true) with app title and date 
+- Once published, create a github release that specifies 
+  * date/time app was published 
+  * branch 
+  * latest commit
+  * shiny account
+  * app name (title)
+  * quick notes on changes 
+  * *this text should be copied from the version pdf created in the previous step)* 
+  
+
+
 # Other Data 
 
-In addition to the data direclty from the state, this tool also uses other publically available data on the demographic tab on the state dashboards. 
+In addition to the data directly from the state, this tool also uses other publicly available data on the demographic tab on the state dashboards. 
 
 ## Census Pep 
 
